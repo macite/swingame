@@ -518,7 +518,7 @@ implementation
 
   procedure HandleTouchEvent(const fingers : FingerArray; down, up: Boolean);
   var
-    i, toRemoveIdx: Integer;
+    i: Integer;
   begin
     _justTouched := _justTouched or down;
     for i := 0 to High(fingers) do

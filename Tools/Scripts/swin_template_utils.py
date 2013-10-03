@@ -180,8 +180,10 @@ def bndl_vsproj(specificdist_folder, dist_dict):
     sgsdk_dest = os.path.join(specificdist_folder, 'lib', 'SGSDK.dll')
     
     # print sgsdk, sgsdk_dest
-    
-    run_bash('mv', [sgsdk, sgsdk_dest] )
+    if os.path.exists(sgsdk):
+      run_bash('mv', [sgsdk, sgsdk_dest] )
+    else:
+      print >> sys.stderr, 'Missing Windows DLL for C# projects'
 
 def pkg_vs_installer(dist_dict, tmp_dir, to_dir):
     """Package up the SwinGame C# installer"""

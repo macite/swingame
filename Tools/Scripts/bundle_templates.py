@@ -111,6 +111,16 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
             
 
         if "Mac OS X" in dist_dict['os']:
+            #
+            # NASTY HACK... make this neater at some stage
+            #
+            if not os.path.exists(specificdist_folder+"lib/mac"):
+                os.makedirs(specificdist_folder+"lib/mac")
+            if not os.path.exists(specificdist_folder+"lib/sdl13/mac"):
+                os.makedirs(specificdist_folder+"lib/sdl13/mac")
+            if not os.path.exists(specificdist_folder+"lib/godly/mac"):
+                os.makedirs(specificdist_folder+"lib/godly/mac")
+
             if dist_dict['staticsgsdk']:
                 # Copy staticlibs
                 if not os.path.exists(dist_source_folder+"bin/mac/sgsdk-sdl13.a"):

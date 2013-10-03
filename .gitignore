@@ -5,3 +5,4 @@ CoreSDK/out.log
 CoreSDK/Trace.log
 CoreSDK/trace.gdb
 .DS_Store
+*.pyc

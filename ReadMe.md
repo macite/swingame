@@ -21,7 +21,10 @@ SwinGame SDK is divided into multiple sections:
 
 ## Building SwinGame
 
-Requires bash and Python 2.6
+Requires 
+- bash
+- Python 2.6
+- C# Compiler (mono)
 
 All the libraries are built from the command line (using bash - install MSYS on windows).
 
