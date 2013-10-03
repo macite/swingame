@@ -7,6 +7,9 @@
 # Copyright (c) 2009 Swinburne. All rights reserved.
 # """
 # 
+
+import generated_folders
+
 import logging
 import sys
 import os

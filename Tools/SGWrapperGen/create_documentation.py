@@ -9,6 +9,8 @@ Copyright (c) 2010 Swinburne University of Technology. All rights reserved.
 
 #TODO: use "tags" (instead of "doc_group" for  )
 
+import generated_folders
+
 import logging, sys, re, time, subprocess
 
 from sg import parser_runner

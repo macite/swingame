@@ -7,6 +7,8 @@ Created by Andrew Cain on 2009-06-02.
 Copyright (c) 2009 __MyCompanyName__. All rights reserved.
 """
 
+import generated_folders
+
 import logging
 import sys
 import os
