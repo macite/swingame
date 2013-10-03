@@ -1,0 +1,29 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 0
+y: 0
+//width
+w: 150
+//height
+h: 30
+//active bmp
+a: mapeditor_editorSelect.png
+//inactive bmp
+i: mapeditor_editorSelect.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+// label data
+r: 5, -3, 80, 30, label, edit,courier,l, Edit 
+
+r: 80, -3, 145, 30, label, DropDown1, courier,l, Map

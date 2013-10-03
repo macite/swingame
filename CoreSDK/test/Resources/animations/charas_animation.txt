@@ -1,0 +1,31 @@
+SwinGame Animation #v1
+
+//Frames are declared with an f: and contain
+//the following comma separated values
+//ID,CELL,DUR,NEXT
+f:16,1,10,
+f:17,4,10,
+f:18,7,10,
+f:19,10,10,
+
+
+//Multi-frame: ranges are in[]
+//[a-b] = numbers from a to b inclusive
+//[a,b,c] = explicit values
+//[a-b,c] = combination
+m:[0-3],[1,2,1,0],10,0
+m:[4-7],[4,5,4,3],10,4
+m:[8-11],[7,8,7,6],10,8
+m:[12-15],[10,11,10,9],10,12
+
+//sounds
+
+//identifiers
+i:MoveUp,0
+i:MoveRight,4
+i:MoveDown,8
+i:MoveLeft,12
+i:StatUp,16
+i:StatRight,17
+i:StatDown,18
+i:StatLeft,19

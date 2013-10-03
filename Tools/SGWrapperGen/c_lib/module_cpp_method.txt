@@ -1,0 +1,8 @@
+#ifdef __cplusplus
+
+void %(name_lower)s(%(params)s)
+{
+    %(calls.name)s(%(calls.args)s);
+}
+
+#endif

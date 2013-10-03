@@ -1,0 +1,11 @@
+// TextBox Panel
+
+x: 0
+y: 339
+w: 150
+h: 260
+b: textBoxPanel
+d: False
+v: False
+
+// Regions

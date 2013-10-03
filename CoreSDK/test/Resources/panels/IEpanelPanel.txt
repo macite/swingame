@@ -1,0 +1,43 @@
+// Panel Panel
+
+x: 0
+y: 40
+w: 150
+h: 299
+b: panelPanel
+a: panelPanelActive
+i: panelPanelInactive
+d: False
+v: False
+
+//  Regions
+
+// Labels
+r: 8, 11, 78, 21, Label, PanelXLabel, GUIMainFont, r, X Value =
+r: 8, 42, 78, 21, Label, PanelYLabel, GUIMainFont, r, Y Value =
+r: 8, 74, 78, 21, Label, PanelWidthLabel, GUIMainFont, r, Width =
+r: 8, 106, 78, 21, Label, PanelHeightLabel, GUIMainFont, r, Height =
+r: 8, 232, 110, 21, Label, PanelDraggableLabel, GUIMainFont, r, Draggable =
+
+//Bitmaplabels
+r: 8, 145, 56, 21, Label, StandardBitmapLabel, GUIMainFont, r, Image
+r: 8, 172, 56, 21, Label, ActiveBitmapLabel, GUIMainFont, r, Image
+r: 8, 199, 56, 21, Label, InactiveBitmapLabel, GUIMainFont, r, Image
+
+// Buttons
+r: 41, 257, 72, 21, Button, DrawButton
+
+//Textboxes
+//X, Y, Width, Height
+r: 93,  11, 49, 21, TextBox, PanelX,      GUIMainFont, 5, l, 0
+r: 93,  42, 49, 21, TextBox, PanelY,      GUIMainFont, 5, l, 0
+r: 93,  74, 49, 21, TextBox, PanelWidth,  GUIMainFont, 5, l, 500
+r: 93, 106, 49, 21, TextBox, PanelHeight, GUIMainFont, 5, l, 300
+
+//Bitmaps
+r: 66,  145, 76, 22, TextBox, ImageS,      GUIMainFont, 50, l, Standard.png
+r: 66,  172, 76, 22, TextBox, ImageA,      GUIMainFont, 50, l, Active.png
+r: 66,  199, 76, 22, TextBox, ImageI,      GUIMainFont, 50, l, Inactive.png
+
+//CheckBox
+r: 120, 232, 21, 19, Checkbox, Draggable, false

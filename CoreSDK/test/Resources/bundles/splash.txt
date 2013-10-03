@@ -1,0 +1,8 @@
+//
+// This loads all of the resourced used by the splash screen
+//
+BITMAP,Swinburne,Swinburne.jpg
+BITMAP,SwinGameAni,SwinGameAni.png,256,42,4,14,56
+FONT,LoadingFont,cour.ttf,8
+FONT,SwinGameText,maven_pro_regular.ttf,14
+ANIM,Startup,startup.txt

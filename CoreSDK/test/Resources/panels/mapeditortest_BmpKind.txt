@@ -1,0 +1,26 @@
+// Panel Version: 1
+
+
+
+// Panel data:
+x: 0
+y: 495
+//width
+w: 150
+//height
+h: 70
+//active bmp
+a: mapeditor_values_a.png
+//inactive bmp
+i: mapeditor_values.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+r: 5, 0, 125, 30, label, b.DefaulKind.header,courierMedium,l, Default Kind
+r: 15, 30, 120, 15, textbox, Tb.DefaultKind.Kind, courierSmall, 20, l, 
+
+r: 45, 45, 70, 30, label,b.DefaultKind.Assign,courierMedium,l,Assign 

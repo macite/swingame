@@ -1,0 +1,49 @@
+SwinGame Character #v1
+//Character Template
+
+//Name 						STRING
+n:TestDude
+
+//Type STRING
+t:Badass
+
+//CellInfo WIDTH||HEIGHT||COLS||ROWS||COUNT
+//c:48,64,3,4,12
+
+//Bitmaps 				COUNT || LIST OF BITMAPS
+b:Body,corpolupo1.png
+b:Pants,pantalonighiaccio.png
+b:Tail,coda.png
+b:Face,facelupo3.png
+b:WTF,3_skeleton_hair.png
+
+//AnimationScript
+a:charas_animation.txt
+
+//Directions INITIAL || COUNT || NAMES
+d:0,4,Up,Down,Left,Right
+
+//States 							INITIAL || COUNT || NAMES
+s:0,2,Stationary,Move,0
+
+//ShownLayers
+l:t,t,t,t,t
+
+//StateDirection Details
+sd:Stationary,Up,StatUp,[4,0,1,2,3]
+sd:Stationary,Down,StatDown,[2,0,1,3,4]
+sd:Stationary,Left,StatLeft,[0,1,2,3,4]
+sd:Stationary,Right,StatRight,[0,1,2,3,4]
+sd:Move,Up,MoveUp,[4,0,1,2,3]
+sd:Move,Down,MoveDown,[2,0,1,3,4]
+sd:Move,Left,MoveLeft,[0,1,2,3,4]
+sd:Move,Right,MoveRight,[0,1,2,3,4]
+
+//Values					NAME || VALUE
+v:Health,500
+
+//AngleParameters -180 to 180
+p:Up,-135,-44
+p:Down,45,134
+p:Left,135,-134
+p:Right,-45,44

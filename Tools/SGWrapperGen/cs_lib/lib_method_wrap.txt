@@ -1,0 +1,26 @@
+
+[System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+public static %(return_type)s(%(params)s)
+{
+    #if DEBUG
+    try
+    {
+    #endif
+        %(pre_call)s%(the_call)s;%(post_call)s
+    #if DEBUG
+    }
+    catch (Exception exc)
+    {
+        throw new SwinGameException(exc.Message);
+    }
+    finally
+    {
+      if (DLL_sg_Utils_ExceptionOccured() != 0)
+      {
+          StringBuilder sb = new StringBuilder(2048);
+          DLL_sg_Utils_ExceptionMessage(sb);
+          throw new SwinGameException(sb.ToString());
+      }
+    }
+    #endif
+}

@@ -1,0 +1,27 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+
+//TODO: putbitmap in this panel so that list draws over everythign else.
+
+// Panel data:
+x: 250
+y: 30
+//width
+w: 80
+//height
+h: 60
+//active bmp
+a: mapeditor_dropdown.png
+//inactive bmp
+i: mapeditor_dropdown.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+r: 0,0, 80, 60, list, dD.displayList, 1, 4, -1, courierSmall, l, 0, v, mapeditor_scroll.png

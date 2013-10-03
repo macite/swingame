@@ -1,0 +1,4 @@
+BITMAP,WhacAMole,mole_animtion.png,245,163,4,2,8
+BITMAP,Kapow,kapow.png,240,210,1,1,1
+ANIM,WhacAMole_temp,WhacAMole.txt
+ANIM,Kapow_temp,Kapow.txt

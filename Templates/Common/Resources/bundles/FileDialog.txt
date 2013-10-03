@@ -1,0 +1,12 @@
+// 32x32 images for files and folders
+BITMAP,fdFile,fdFile.png
+BITMAP,fdFolder,fdFolder.png
+
+// Font for text in dialog
+FONT,fdDialogText,cour.ttf,12
+
+// Sound effect played on error
+SOUND,fdDialogError,error.wav
+
+// The actual panel
+PANEL,fdFileDialog,FileDialog.txt

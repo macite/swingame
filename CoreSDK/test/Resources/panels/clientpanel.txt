@@ -1,0 +1,31 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 350
+y: 15
+//width
+w: 320
+//height
+h: 150
+//Draggable
+d: true
+v: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+r: 10, 10, 150, 30, Label, ServerLbl, courier, l, 
+r: 10, 35, 150, 30, Label, ServerPortLbl, courier, l, Socket
+r: 10, 70, 150, 30, Label, ClientStatusLbl, courier, l, Status
+
+r: 110, 10, 200, 30, Textbox, ServerVal, courier, 15, l,127.0.0.1
+r: 110, 35, 200, 30, Textbox, ServerPortVal, courier, 5, l,2000
+r: 110, 70, 200, 30, Label, ClientStatusVal, courier, l,Idle
+
+r: 100,  100, 150, 30, Button, ConnectBtn
+r: 120,  100, 200, 30, Label, ConnLbl, courier, l, Connect

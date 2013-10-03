@@ -1,0 +1,11 @@
+
+[System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+public static implicit operator Vector(Point2D v)
+{
+    Vector result;
+    
+    result._x = v._x;
+    result._y = v._y;
+    
+    return result;
+}

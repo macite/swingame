@@ -1,0 +1,14 @@
+
+%(type)s[%(params)s]
+{
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    get
+    {
+        return _data[%(idxs)s];
+    }
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    set
+    {
+        _data[%(idxs)s] = value;
+    }
+}

@@ -1,0 +1,34 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 0
+y: 250
+//width
+w: 150
+//height
+h: 125
+//active bmp
+a: mapeditor_kind_a.png
+//inactive bmp
+i: mapeditor_kind.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+r: 5, 0, 150, 30, label, Lbl.Panel.Header,courierMedium, l,Kinds 
+
+r: 15,25, 120, 60, list, lst.Kind, 1, 3, -1, courierSmall, l, 12, v, mapeditor_scroll.png
+
+r: 15,90, 120, 15, textbox, tB.Kind.Name, courierSmall, 20, l, 
+
+r: 18, 105, 40, 20, label, b.Kind.Add,courierMedium, l, Add 
+
+r: 70, 105, 70, 20, label, b.Kind.Remove,courierMedium, l, Remove

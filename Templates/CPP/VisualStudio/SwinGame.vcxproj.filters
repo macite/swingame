@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\SwinGame">
+      <UniqueIdentifier>{27782678-8af3-4f60-89f9-138a9b76d893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SwinGame">
+      <UniqueIdentifier>{7d5a85b4-51f3-492a-8947-51e8ff2e9434}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Animations.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Audio.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Camera.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Characters.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Colors.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Geometry.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Graphics.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Images.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Input.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Networking.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Physics.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Resources.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Utils.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\SGSDK.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Sprites.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Text.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\Timers.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\UserInterface.cpp">
+      <Filter>Source Files\SwinGame</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\Geometry.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Graphics.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Images.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Input.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Networking.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Physics.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Animations.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Audio.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Camera.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Characters.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Colors.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Utils.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Resources.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\SGSDK.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Sprites.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\SwinGame.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Text.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Timers.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\Types.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\UserInterface.h">
+      <Filter>Header Files\SwinGame</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,26 @@
+<VSContent xmlns="http://schemas.microsoft.com/developer/vscontent/2005">
+    <Content>
+        <FileName>SwinGame C# Project.zip</FileName>
+        <DisplayName>SwinGame C# Project Template</DisplayName>
+        <Description>A C# project template to get you started with SwinGame.</Description>
+        <FileContentType>VSTemplate</FileContentType>
+        <ContentVersion>1.0</ContentVersion>
+        <Attributes>
+            <Attribute name="ProjectType" value="Visual C#"/>
+            <Attribute name="ProjectSubType" value="SwinGame"/>
+            <Attribute name="TemplateType" value="Project"/>
+        </Attributes>
+    </Content>
+    <Content>
+        <FileName>SwinGame C# Class.zip</FileName>
+        <DisplayName>SwinGame C# Class Template</DisplayName>
+        <Description>Provides a useful template for adding classes to your C# SwinGame.</Description>
+        <FileContentType>VSTemplate</FileContentType>
+        <ContentVersion>1.0</ContentVersion>
+        <Attributes>
+            <Attribute name="ProjectType" value="Visual C#"/>
+            <Attribute name="ProjectSubType" value="SwinGame"/>
+            <Attribute name="TemplateType" value="Item"/>
+        </Attributes>
+    </Content>
+</VSContent>

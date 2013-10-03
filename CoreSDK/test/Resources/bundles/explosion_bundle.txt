@@ -1,0 +1,4 @@
+BITMAP,explosionBmp,explosion_pro.png, 72, 72, 6, 7, 40
+ANIM,explosionScrpt,explosion.txt
+SOUND,boom,boom.wav
+SOUND,moob,moob.wav

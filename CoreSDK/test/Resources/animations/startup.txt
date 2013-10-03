@@ -1,0 +1,67 @@
+SwinGame Animation #v1
+
+//
+// This animation file contains the SwinGame splash screen
+// animation. 
+//
+
+//Frames are declared with an f: and contain
+//the following comma separated values
+//
+//f: ID,CELL,DUR,NEXT
+//
+// ID   = the frame number (must be unique in this file)
+// CELL = the cell number to play at this frame from the bitmap
+// DUR  = the duration to play this cell for (number of updates)
+// NEXT = the next frame number (or empty for no next frame)
+// 
+// The frames/cells can be expressed as ranges:
+//  [a-b]   = numbers from a to b inclusive
+//  [a,b,c] = explicit values
+//  [a-b,c] = combination
+
+// frames 0-5 are the fade in of [I]
+f:[0-5],[0-5],1,6
+
+// frame 6 is [I] and plays for 5 updates
+f:6,6,5,7
+
+// frames 7-19, play the expanding [  I ]
+f:[7-19],[7-19],1,20
+
+//frame 20 is [SWIN] (there for 24 updates)
+f:20,20,24,21
+
+//frame 21-31 is to [SWIN    ]
+f:[21-31],[21-31],1,32
+
+//frame 32 is widest [SWIN    ] with a short delay
+f:32,32,35,33
+
+//frames 33-43 spinning GAME
+f:[33-43],[33-43],1,44
+
+//frame 44 is [SWINGAME] (delay)
+f:44,44,30,45
+
+//frame 45- is shrinking back to [I]
+f:[45-55],[45-55],1,56
+
+// frame 56 is back to the [I] (cell 6) and plays for 5 updates
+f:56,6,30,57
+
+// frames 57-62 are the fade out of [I] (= fade in reversed) ... nothing follows
+f:[57-62],[5-0],1,
+
+
+
+//sounds
+//
+//s:ID,SND,filename
+s:0,SwinGameStart,SwinGameStart.wav
+
+//Animation identifiers.
+//
+//i:NAME,ID-START
+i:splash,0
+i:splash-debug,0

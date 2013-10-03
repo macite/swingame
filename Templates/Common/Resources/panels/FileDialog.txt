@@ -1,0 +1,49 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 200
+y: 150
+w: 400
+h: 300
+d: true
+b: FileDialog_Background.png
+a: FileDialog_Active.png
+i: FileDialog_Inactive.png
+
+// Region data
+// Format: r: x, y, w, h, kind
+r:  11, 11, 70, 20, Label, FileEntryLabel, fdDialogText, l, Open
+r:  11, 42, 70, 20, Label, FixedLabel1, fdDialogText, l, Path
+
+r:  92, 11, 297, 20, TextBox, PathTextbox, fdDialogText, 1024, l, File Path
+
+r: 319, 275, 70, 20, Button, OkButton
+r: 319, 275, 70, 20, Label, OkLabel, fdDialogText, c, Open
+
+r: 238, 275, 70, 20, Button, CancelButton
+r: 238, 275, 70, 20, Label, CancelLabel, fdDialogText, c, Cancel
+
+r:  11, 273, 227, 20, Label, ErrorLabel, fdDialogText, l, 
+
+// Lists are loaded as a region with the following format:
+// r: x, y, w, h, 5, ListID, Columns, Rows, ActiveItem, fontID, alignment, scrollSize, scrollKind, scrollBmp
+// x, y, w, h = area of region
+// 5          = the identifier for lists
+// listId     = the lists name
+// columns    = the columns in the list
+// rows       = the rows in the list
+//              Note: The area for the list items is calculated from the region's area the rows/cols and scrollSize
+// ActiveItem = the item active at start (-1 for none)
+// fontId     = the name of the font to use for this list's items
+// alignment  = The list font alignment
+// scrollSize = the size (width and height) of the scroll bar
+// scrollKind = v for vertical or h for horizontal
+// scrollBmp  = n for no bitmap, or the bitmap name
+
+r: 11, 73, 379, 190, List, FilesList, 1, 10, -1, fdDialogText, l, 10, v, FileDialog_Scroll.png
+r: 92, 42, 297,  29, List, PathList,  3,  1, -1, fdDialogText, c,  8, h, FileDialog_ScrollSmall.png

@@ -1,0 +1,65 @@
+SwinGame Animation #v1
+
+//Multi-frame: ranges are in[]
+//[a-b] = numbers from a to b inclusive
+//[a,b,c] = explicit values
+//[a-b,c] = combination
+
+m:[0-3],[0-3],12,
+m:[4-7],[4-7],12,
+m:[8-11],[8-11],12,
+m:[12-15],[12-15],12,
+
+m:[16-19],[15-12],12,
+m:[20-23],[11-8],12,
+m:[24-27],[7-4],12,
+m:[28-31],[3-0],12,
+
+//dance move
+m:[32-39],[4-11],12,40
+m:[40-47],[4-11],12,48
+m:[48,49,50,51],[0,4,8,12],20,52
+m:[52,53,54,55],[1,5,9,13],20,56
+m:[56-71],[0-15],12,72
+m:[72-75],[0-3],12,76
+m:[76-79],[12-15],12,80
+m:[80-95],[0-15],12,96
+m:[96,97,98,99],[1,5,9,13],20,100
+m:[100,101,102,103],[12,8,4,0],20,
+
+//single frames
+f:104,0,1,
+f:105,4,1,
+f:106,8,1,
+f:107,12,1,
+
+//sound
+s:0,boing,comedy_boing.wav
+s:4,boing,comedy_boing.wav
+s:8,boing,comedy_boing.wav
+s:12,boing,comedy_boing.wav
+
+s:16,MoonWalkFront,breakdance.wav
+s:20,MoonWalkFront,breakdance.wav
+s:24,MoonWalkFront,breakdance.wav
+s:28,MoonWalkFront,breakdance.wav
+
+s:32,dance,dancingFrog.wav
+
+//identifiers
+i:WalkFront,0
+i:WalkLeft,4
+i:WalkRight,8
+i:WalkBack,12
+
+i:MoonWalkFront,16
+i:MoonWalkLeft,20
+i:MoonWalkRight,24
+i:MoonWalkBack,28
+
+i:Dance,32
+
+i:StandFront,16
+i:StandLeft,17
+i:StandRight,18
+i:StandBack,19

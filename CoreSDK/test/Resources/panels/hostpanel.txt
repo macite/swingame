@@ -1,0 +1,31 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 15
+y: 15
+//width
+w: 320
+//height
+h: 150
+//Draggable
+d: true
+v: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+r: 10, 10, 100, 30, Label, MyIPLbl, courier, l, My IP
+r: 10, 35, 200, 30, Label, MyPortLbl, courier, l, Port
+r: 10, 70, 200, 30, Label, HostStatusLbl, courier, l, Status
+
+r: 110, 10, 200, 30, Label, MyIPVal, courier, l, ?
+r: 110, 35, 200, 30, Textbox, MyPortVal, courier, 5, l, 2000
+r: 110, 70, 200, 30, Label, HostStatusVal, courier, l, Idle
+
+r: 100,  100, 150, 30, Button, HostBtn
+r: 120,  100, 200, 30, Label, HostLbl, courier, l, Connect

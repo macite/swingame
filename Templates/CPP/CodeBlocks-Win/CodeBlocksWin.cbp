@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SwinGame CodeBlocks" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin\Debug\SwinGame CodeBlocks" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after='xcopy &quot;.\Resources&quot; &quot;.\bin\Debug\Resources&quot; /D /E /C /R /I /K /Y' />
+					<Add after='xcopy &quot;.\lib\win\*.dll&quot; &quot;.\bin\Debug\&quot; /D /E /C /R /I /K /Y' />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin\Release\SwinGame CodeBlocks" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<ExtraCommands>
+					<Add after='xcopy &quot;.\Resources&quot; &quot;.\bin\Release\Resources&quot; /D /E /C /R /I /K /Y' />
+					<Add after='xcopy &quot;.\lib\win\*.dll&quot; &quot;.\bin\Release\&quot; /D /E /C /R /I /K /Y' />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++0x" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="lib" />
+		</Compiler>
+		<Linker>
+			<Add option="-static-libgcc" />
+			<Add library="lib\win\SGSDK.dll" />
+		</Linker>
+		<Unit filename="lib\Animations.cpp" />
+		<Unit filename="lib\Animations.h" />
+		<Unit filename="lib\Audio.cpp" />
+		<Unit filename="lib\Audio.h" />
+		<Unit filename="lib\Camera.cpp" />
+		<Unit filename="lib\Camera.h" />
+		<Unit filename="lib\Characters.cpp" />
+		<Unit filename="lib\Characters.h" />
+		<Unit filename="lib\Colors.cpp" />
+		<Unit filename="lib\Colors.h" />
+		<Unit filename="lib\Geometry.cpp" />
+		<Unit filename="lib\Geometry.h" />
+		<Unit filename="lib\Graphics.cpp" />
+		<Unit filename="lib\Graphics.h" />
+		<Unit filename="lib\Images.cpp" />
+		<Unit filename="lib\Images.h" />
+		<Unit filename="lib\Input.cpp" />
+		<Unit filename="lib\Input.h" />
+		<Unit filename="lib\Networking.cpp" />
+		<Unit filename="lib\Networking.h" />
+		<Unit filename="lib\Physics.cpp" />
+		<Unit filename="lib\Physics.h" />
+		<Unit filename="lib\Resources.cpp" />
+		<Unit filename="lib\Resources.h" />
+		<Unit filename="lib\SGSDK.cpp" />
+		<Unit filename="lib\SGSDK.h" />
+		<Unit filename="lib\Sprites.cpp" />
+		<Unit filename="lib\Sprites.h" />
+		<Unit filename="lib\SwinGame.h" />
+		<Unit filename="lib\Text.cpp" />
+		<Unit filename="lib\Text.h" />
+		<Unit filename="lib\Timers.cpp" />
+		<Unit filename="lib\Timers.h" />
+		<Unit filename="lib\Types.h" />
+		<Unit filename="lib\UserInterface.cpp" />
+		<Unit filename="lib\UserInterface.h" />
+		<Unit filename="lib\Utils.cpp" />
+		<Unit filename="lib\Utils.h" />
+		<Unit filename="src\main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

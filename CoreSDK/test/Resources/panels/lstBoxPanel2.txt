@@ -1,0 +1,31 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 0
+y: 180
+//width
+w: 320
+//height
+h: 60
+//active bmp
+a: ButtonForListBoxActive.png
+// Background Image
+b: ButtonForListBox.png
+//inactive bmp
+i: ButtonForListBox.png
+//Draggable
+d: true
+v: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+r: 18, 14, 44, 32, Button, Button1
+r: 80, 14, 44, 32, Button, Button2
+r: 142, 14, 44, 32, Button, Button3
+r: 204, 14, 44, 32, Button, Button4
+r: 260, 14, 44, 32, Button, Button5

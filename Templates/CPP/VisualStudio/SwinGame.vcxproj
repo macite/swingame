@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7284FBB9-998E-4B74-AB3E-7E1E5076E275}</ProjectGuid>
+    <RootNamespace>SwinGame</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir)\lib</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)lib\win" "$(OutDir)" /E /I /Y
+xcopy "$(ProjectDir)Resources" "$(OutDir)Resources" /E /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\lib</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy "$(ProjectDir)lib\win" "$(OutDir)" /E /I /Y
+xcopy "$(ProjectDir)Resources" "$(OutDir)Resources" /E /I /Y</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="lib\Animations.cpp" />
+    <ClCompile Include="lib\Audio.cpp" />
+    <ClCompile Include="lib\Camera.cpp" />
+    <ClCompile Include="lib\Characters.cpp" />
+    <ClCompile Include="lib\Colors.cpp" />
+    <ClCompile Include="lib\Geometry.cpp" />
+    <ClCompile Include="lib\Graphics.cpp" />
+    <ClCompile Include="lib\Images.cpp" />
+    <ClCompile Include="lib\Input.cpp" />
+    <ClCompile Include="lib\Networking.cpp" />
+    <ClCompile Include="lib\Physics.cpp" />
+    <ClCompile Include="lib\Resources.cpp" />
+    <ClCompile Include="lib\SGSDK.cpp" />
+    <ClCompile Include="lib\Sprites.cpp" />
+    <ClCompile Include="lib\Text.cpp" />
+    <ClCompile Include="lib\Timers.cpp" />
+    <ClCompile Include="lib\UserInterface.cpp" />
+    <ClCompile Include="lib\Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="lib\Animations.h" />
+    <ClInclude Include="lib\Audio.h" />
+    <ClInclude Include="lib\Camera.h" />
+    <ClInclude Include="lib\Characters.h" />
+    <ClInclude Include="lib\Colors.h" />
+    <ClInclude Include="lib\Geometry.h" />
+    <ClInclude Include="lib\Graphics.h" />
+    <ClInclude Include="lib\Images.h" />
+    <ClInclude Include="lib\Input.h" />
+    <ClInclude Include="lib\Networking.h" />
+    <ClInclude Include="lib\Physics.h" />
+    <ClInclude Include="lib\Resources.h" />
+    <ClInclude Include="lib\SGSDK.h" />
+    <ClInclude Include="lib\Sprites.h" />
+    <ClInclude Include="lib\SwinGame.h" />
+    <ClInclude Include="lib\Text.h" />
+    <ClInclude Include="lib\Timers.h" />
+    <ClInclude Include="lib\Types.h" />
+    <ClInclude Include="lib\UserInterface.h" />
+    <ClInclude Include="lib\Utils.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

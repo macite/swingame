@@ -1,0 +1,12 @@
+// Button Panel
+
+x: 0
+y: 339
+w: 150
+h: 260
+b: buttonPanel
+a: buttonPanel
+d: False
+v: False
+
+// Regions

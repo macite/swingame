@@ -1,0 +1,15 @@
+
+%(field_type)s
+{
+    get
+    {
+        _StructData = %(property_name)s; //get the value
+        return _StructData.%(field_name)s;
+    }
+    set
+    {
+        _StructData = %(property_name)s; //get the value
+        _StructData.%(field_name)s = value;
+        %(property_name)s = _StructData;
+    }
+}

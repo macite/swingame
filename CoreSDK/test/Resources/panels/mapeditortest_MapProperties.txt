@@ -1,0 +1,55 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 0
+y: 30
+//width
+w: 150
+//height
+h: 220
+//active bmp
+a: mapeditor_properties_a.png
+//inactive bmp
+i: mapeditor_properties.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+r: 5, 0, 150, 30, label, Lbl.Panel.Header,courierMedium,l,Map Properties 
+
+//layer label
+r: 5, 25, 80, 15, label, Lbl.Map.Width,courierSmall, l, Width  
+//layer tBox
+r: 5, 40, 140, 15, textbox, tB.Map.Width, courierSmall, 20, l, 0
+//width label
+r: 5, 55, 80, 15, label, Lbl.Map.Height,courierSmall, l, Height 
+//width tBox
+r: 5, 70, 140, 15, textbox, tB.Map.Height, courierSmall, 20, l, 0
+//heightlabel
+r: 5, 85, 80, 15, label, Lbl.Map.Layers, courierSmall,l, Layers
+//height tBox
+r: 5, 100, 140, 15, textbox, tB.Map.Layers, courierSmall, 20, l, 0
+//twidth label
+r: 5, 115, 80, 15, label, Lbl.Map.TileWidth,courierSmall, l, Tile Width
+//twidth tBox
+r: 5, 130, 140, 15, textbox, tB.Map.TileWidth, courierSmall, 20, l, 0
+//theight label
+r: 5, 145, 80, 15, label, Lbl.Map.TileHeight, courierSmall, l, Tile Height 
+//theight tBox
+r: 5, 158, 140, 15, textbox, tB.Map.TileHeight, courierSmall, 20, l, 0
+//isometric label
+r: 5, 180, 60, 15, label, Lbl.Map.Isometric,courierSmall, l, Isometric 
+//isometric cbox
+r: 70, 180, 15, 15, checkbox, cB.Map.Isometric, false
+
+r: 16, 195, 60, 25, label, b.Map.Apply,courierMedium, l, Apply
+
+r: 88, 195, 60, 25, label, b.Map.Reset,courierMedium, l, Reset 

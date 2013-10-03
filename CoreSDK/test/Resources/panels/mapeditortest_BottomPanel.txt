@@ -1,0 +1,27 @@
+// Panel Version: 1
+
+
+
+// Panel data:
+x: 0
+y: 565
+//width
+w: 800
+//height
+h: 33
+//active bmp
+a: mapeditor_bottomPanel.png
+//inactive bmp
+i: mapeditor_bottomPanel.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+r: 95, 5, 60, 23, label, b.Map.New,courierMedium,l,New
+r: 555, 5, 60, 23, label, b.Map.Load,courierMedium,l,Load 
+
+
+r: 695, 5, 80, 23, label, b.Map.Save,courierMedium,l,Save 

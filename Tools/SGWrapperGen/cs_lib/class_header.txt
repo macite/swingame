@@ -1,0 +1,4 @@
+/// <summary> %(doc)s </summary> %(module_attr)s
+public %(static)sclass %(name)s
+{
+  

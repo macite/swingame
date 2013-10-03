@@ -1,0 +1,91 @@
+-- SGWrapperGen Meta Comments --
+
+ ====================================
+ = Library and Module Meta Comments =
+ ====================================
+
+
+/// @lib
+/// @lib name
+
+All functions/procedures in SwinGame headers must have @lib.
+If the function/procedure is overloaded in Pascal this must be given a unique name (/// @lib name).
+
+This defines the name of the function/procedure in SGSDK.dll
+
+
+/// @sn name:%s blah:%s
+
+This maps the Pascal name to Objective C, sn = special name
+Format has one %s per parameter.
+This is needed if there is more than one parameter in the fn/proc.
+
+
+/// @doc_idx 1
+
+This orders the documentation for overloaded functions. Put a low number for the easy to use versions, and higher numbers for special cases. For example, easy to use fill rect with x, y, w, h so doc_idx 1
+
+
+/// @param name comment
+
+Add a comment for the parameter with the given name
+
+
+ ===============================
+ = Class Related Meta Comments =
+ ===============================
+
+/// @class SoundEffect
+
+This associates the method with a class in the wrappers. After this the next comments are associated with this class
+
+
+/// @dispose
+
+This is the destructor for the object.
+
+
+/// @constructor
+
+This creates the object (must be a function that returns a pointer to the new object)
+
+
+/// @getter name
+/// @setter name
+
+Defines a property. getting must have a single parameter (the object) and return the value. Setter must have 2 parameters, one object and one value.
+
+
+/// @self 1
+
+Indicates the position of the self parameter for the method. Defaults to 1.
+
+
+/// @method Play
+
+The name of the method, can only be once for overloaded methods.
+
+
+/// @overload Play PlayWithLoops
+
+The overloaded name of the method, for languages that dont support overloaded methods. First value is method overloaded, second is a unique name for this method if overloads not supported.
+
+
+/// @csn initWithName:%s fromFile:%s
+
+The Objective C version of the method. One %s per parameter for the method ( = one less than method | = same number for constructors [must be init...] )
+
+
+ ==================================
+ = Old comments not really needed =
+ ==================================
+
+/// @uname PlaySoundEffectWithLoop
+
+This use is no longer needed... was there for use with /// @lib call_other(params)
+
+
+/// @doc_detail
+
+No longer used
+

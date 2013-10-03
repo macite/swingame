@@ -1,0 +1,17 @@
+private %(property_name)sClass _%(property_name)sClassInstance = null;
+
+public %(property_name)sClass %(property_name)s
+{
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    get
+    {
+        if (_%(property_name)sClassInstance == null)
+          _%(property_name)sClassInstance = new %(property_name)sClass(this.Pointer);
+        return _%(property_name)sClassInstance;
+    }
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    set
+    {
+        value.SetDataFor(this.Pointer);
+    }
+}

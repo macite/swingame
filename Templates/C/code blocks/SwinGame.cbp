@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="SwinGame" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug (win)">
+				<Option platforms="Windows;" />
+				<Option output="bin\Debug\SwinGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add directory="lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="xcopy /E /Y Resources bin\Debug\Resources\" />
+					<Add after="xcopy /Y lib\*.dll bin\Debug\" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release (win)">
+				<Option platforms="Windows;" />
+				<Option output="bin\Release\SwinGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add directory="lib" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="xcopy /E /Y Resources bin\Release\Resources\" />
+					<Add after="xcopy /Y lib\*.dll bin\Release\" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Debug (unix)">
+				<Option platforms="Unix;" />
+				<Option output="bin\Debug\SwinGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Debug\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<ExtraCommands>
+					<Add after="cp -r Resources bin/Debug/" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release (unix)">
+				<Option output="bin\Release\SwinGame" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp -r Resources bin/Release/" />
+					<Add after="cp -p -f lib/*.dll bin/Release/" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add directory="lib" />
+			<Add directory="src" />
+		</Compiler>
+		<Linker>
+			<Add library="sgsdk" />
+		</Linker>
+		<Unit filename="Resources\SwinGame.icns">
+			<Option target="Release (win)" />
+			<Option target="Release (unix)" />
+		</Unit>
+		<Unit filename="Resources\SwinGame.ico" />
+		<Unit filename="Resources\fonts\arial.ttf" />
+		<Unit filename="Resources\fonts\cour.ttf" />
+		<Unit filename="Resources\images\SplashBack.jpg" />
+		<Unit filename="Resources\images\SwinGame.jpg" />
+		<Unit filename="Resources\images\SwinGameAni.jpg" />
+		<Unit filename="Resources\images\Swinburne.jpg" />
+		<Unit filename="Resources\images\loader_empty.png" />
+		<Unit filename="Resources\images\loader_full.png" />
+		<Unit filename="Resources\sounds\SwinGameStart.ogg" />
+		<Unit filename="Resources\splash.txt" />
+		<Unit filename="lib\Audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Audio.h" />
+		<Unit filename="lib\Camera.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Camera.h" />
+		<Unit filename="lib\Colors.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Colors.h" />
+		<Unit filename="lib\Utils.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Utils.h" />
+		<Unit filename="lib\Geometry.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Geometry.h" />
+		<Unit filename="lib\Graphics.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Graphics.h" />
+		<Unit filename="lib\Input.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Input.h" />
+		<Unit filename="lib\Physics.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Physics.h" />
+		<Unit filename="lib\Resources.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Resources.h" />
+		<Unit filename="lib\SDL.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\SDL_gfx.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\SDL_image.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\SDL_mixer.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\SDL_ttf.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\SGSDK.h" />
+		<Unit filename="lib\Sprites.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Sprites.h" />
+		<Unit filename="lib\SwinGame.h" />
+		<Unit filename="lib\Text.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\Text.h" />
+		<Unit filename="lib\TileMap.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="lib\TileMap.h" />
+		<Unit filename="lib\Types.h" />
+		<Unit filename="lib\jpeg.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libSDL_gfx.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libfreetype-6.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libimpsdl.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libimpsdl_gfx.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libimpsdl_image.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libimpsdl_mixer.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libimpsdl_ttf.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libimpsmpeg.a">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="lib\libogg-0.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libpng12-0.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libtiff-3.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libvorbis-0.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\libvorbisfile-3.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\ogg.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\sgsdk.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\smpeg.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="lib\zlib1.dll">
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Unit filename="src\main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src\swingame.rc">
+			<Option compilerVar="WINDRES" />
+			<Option target="Debug (win)" />
+			<Option target="Release (win)" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

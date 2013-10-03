@@ -1,0 +1,1 @@
+%(name)s name {$IFDEF DARWIN}'_%(name)s'{$ELSE}'%(name)s'{$ENDIF},

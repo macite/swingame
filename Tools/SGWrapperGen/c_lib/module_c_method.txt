@@ -1,0 +1,5 @@
+void %(uname_lower)s(%(params)s)
+{
+    %(calls.name)s(%(calls.args)s);
+}
+

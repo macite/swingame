@@ -1,0 +1,5 @@
+%(return_type)s %(uname_lower)s(%(params)s)
+{
+    return %(the_call)s;
+}
+

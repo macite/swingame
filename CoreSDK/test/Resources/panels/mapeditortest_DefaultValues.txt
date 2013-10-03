@@ -1,0 +1,36 @@
+// Panel Version: 1
+
+
+
+// Panel data:
+x: 0
+y: 375
+//width
+w: 150
+//height
+h: 190
+//active bmp
+a: mapeditor_values_a.png
+//inactive bmp
+i: mapeditor_values.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+r: 5, 0, 120, 30, label, b.Value.header,courierMedium,l,Value of
+r: 5, 15, 60, 30, label, b.Value.KindSelected,courierMedium,l,
+
+r: 15,40, 120, 60, list, lst.Values, 1, 3, -1, courierSmall, l, 12, v, mapeditor_scroll.png
+
+r: 15, 110, 120, 15, textbox, tB.Values.Name, courierSmall, 20, l, 
+
+r: 18, 125, 60, 25, label, b.Values.Add,courierMedium, l, Add 
+
+r: 78, 125, 70, 25, label, b.Values.Remove,courierMedium, l, Remove
+
+r: 15, 150, 120, 15, textbox, Tb.Map.Value, courierSmall, 20, l, 
+
+r: 45, 165, 70, 30, label,b.Values.Assign,courierMedium,l,Assign 

@@ -1,0 +1,42 @@
+
+/// <summary>
+/// This class is used to provide access to
+/// the individual components of the %(struct_type)s to the 
+/// C# code.
+/// </summary>
+[System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+public class %(property_name)sClass
+{
+    private IntPtr Pointer;
+    private %(struct_type)s _StructData;
+
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    internal %(property_name)sClass(IntPtr ptr)
+    {
+        Pointer = ptr;
+    }
+
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    internal %(property_name)sClass(%(struct_type)s data)
+    {
+        _StructData = data;
+    }
+
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    internal void SetDataFor(IntPtr ptr)
+    {
+        Pointer = ptr;
+        this.%(property_name)s = _StructData;
+    }
+    
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    public static implicit operator %(struct_type)s(%(property_name)sClass value)
+    {
+        return value.%(property_name)s;
+    }
+    
+    [System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+    public static implicit operator %(property_name)sClass (%(struct_type)s value)
+    {
+        return new %(property_name)sClass(value);
+    }

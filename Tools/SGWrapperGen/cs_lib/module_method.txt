@@ -1,0 +1,8 @@
+/// <summary>
+/// %(doc)s
+/// </summary>
+[System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+%(public)s%(static)s%(override)s%(return_type)s%(params)s%(base_const)s
+{%(vars)s
+    %(pre_call)s%(the_call)s;%(post_call)s
+}

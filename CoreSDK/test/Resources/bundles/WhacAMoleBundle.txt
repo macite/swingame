@@ -1,0 +1,12 @@
+BITMAP,WhacAMole,mole_animtion.png,245,163,4,2,8
+BITMAP,Kapow,kapow.png
+BITMAP,bgImage,whac-a-mole-background.png
+BITMAP,progressEmpty,progress_emptyVertical.png
+BITMAP,progressFull,progress_fullVertical.png
+BITMAP,life,heart.png
+
+ANIM,WhacAMole_temp,WhacAMole.txt
+ANIM,Kapow_temp,Kapow.txt
+
+MUSIC,WhacMusic,Wack a Mole Music 3.ogg
+FONT,scoreFont,LeagueGothic.otf,32

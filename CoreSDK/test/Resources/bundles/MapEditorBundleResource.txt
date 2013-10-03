@@ -1,0 +1,9 @@
+FONT,courierLarge,cour.ttf,40
+FONT,courier,cour.ttf,28
+FONT,courierMedium,cour.ttf,16
+FONT,courierSmall,cour.ttf,10
+BITMAP,testImageInactive,testerface.png
+BITMAP,testImageActive,testerfaceActive.png
+BITMAP,hat,santa_hat.gif
+BITMAP,sword,sword.jpg
+BITMAP,cape,cape.jpg

@@ -1,0 +1,9 @@
+SwinGame Animation #v1
+
+f:0,0,1,
+
+//sounds
+s:0,splattt,splattt.wav
+
+//identifiers
+i:Kapow,0

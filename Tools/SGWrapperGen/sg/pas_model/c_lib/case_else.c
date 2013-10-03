@@ -1,0 +1,2 @@
+default:
+%(statements)s

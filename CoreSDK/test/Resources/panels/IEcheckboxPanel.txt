@@ -1,0 +1,16 @@
+// Checkbox Panel
+
+x: 0
+y: 339
+w: 150
+h: 260
+b: checkBoxPanel
+a: checkBoxPanelActive
+d: False
+v: False
+
+// Checkbox
+r: 121, 34, 21, 20, CheckBox, CBInitialState, false
+
+// Label
+r: 15, 34, 97, 20, Label, CBInitialStateLabel, GUIMainFont, r, Initial State =

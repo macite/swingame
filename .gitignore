@@ -1,0 +1,7 @@
+Dist
+Generated
+CoreSDK/bin
+CoreSDK/out.log
+CoreSDK/Trace.log
+CoreSDK/trace.gdb
+.DS_Store

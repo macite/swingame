@@ -1,0 +1,39 @@
+// Region Panel
+
+x: 0
+y: 40
+w: 150
+h: 299
+b: regionPanel
+a: regionPanelActive
+d: False
+v: True
+
+//RadioGroups
+r: 9,  10,  16, 17,RadioGroup, RBButton,       KindRadio
+r: 9,  31,  16, 17,RadioGroup, RBLabel,        KindRadio
+r: 9,  52,  16, 17,RadioGroup, RBCheckBox,     KindRadio
+r: 9,  73,  16, 17,RadioGroup, RBRadioGroup,   KindRadio
+r: 9,  94,  16, 17,RadioGroup, RBTextBox,      KindRadio
+r: 9,  115, 16, 17,RadioGroup, RBList,         KindRadio
+
+// Labels
+r: 35, 8,   90, 17, Label, RBButtonLabel,       GUIMainFont, l,  Button
+r: 35, 29,  90, 17, Label, RBLabelLabel,        GUIMainFont, l,  Label
+r: 35, 50,  90, 17, Label, RBCheckBoxLabel,     GUIMainFont, l,  CheckBox
+r: 35, 71,  90, 17, Label, RBRadioGroupLabel,   GUIMainFont, l,  RadioButton
+r: 35, 92,  90, 17, Label, RBTextBoxLabel,      GUIMainFont, l,  TextBox
+r: 35, 113, 90, 17, Label, RBListLabel,         GUIMainFont, l,  List
+
+r: 9,  147, 70, 18, Label, TBRegionNameLabel,   GUIMainFont, r,  Name =
+r: 9,  179, 70, 18, Label, TBRegionXLabel,      GUIMainFont, r,  X =
+r: 9,  209, 70, 18, Label, TBRegionYLabel,      GUIMainFont, r,  Y =
+r: 9,  240, 70, 18, Label, TBRegionWidthLabel,  GUIMainFont, r,  Width =
+r: 9,  270, 70, 18, Label, TBRegionHeightLabel, GUIMainFont, r,  Height =
+
+// TextBoxes
+r: 86, 147, 45, 18, TextBox, TBRegionName,      GUIMainFont, 50, l, Name
+r: 86, 179, 45, 18, TextBox, TBRegionX,         GUIMainFont, 5,  l, X
+r: 86, 209, 45, 18, TextBox, TBRegionY,         GUIMainFont, 5,  l, Y
+r: 86, 240, 45, 18, TextBox, TBRegionWidth,     GUIMainFont, 5,  l, Width
+r: 86, 270, 45, 18, TextBox, TBRegionHeight,    GUIMainFont, 5,  l, Height

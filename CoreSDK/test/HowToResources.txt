@@ -1,0 +1,173 @@
+* HowToAllowTheUserToCloseTheWindow
+* HowToCenterCameraOnASprite
+images/ufo.png
+* HowToChangeTheMassOfSprites
+images/earth.png
+images/asteroid.png
+* HowToCollideASpriteWithATriangle
+images/ball_small.png
+* HowToCollideASpriteWithRectangle
+images/ball_small.png
+* HowToCollideSpritesWithTheWindowEdge
+images/asteroid.png
+* HowToCollideSpriteWithLines
+images/ball_small.png
+* HowToCollideTwoSprites
+images/earth.png
+images/asteroid.png
+* HowToControlMusic
+sounds/game.ogg
+sounds/diving-turtle.mp3
+sounds/fast.mp3
+sounds/gentle-thoughts-1.mp3
+sounds/morning-workout.mp3
+sounds/saber.ogg
+* HowToControlSound
+sounds/chipmunk.ogg
+sounds/bells.ogg
+sounds/camera.ogg
+sounds/comedy_boing.ogg
+sounds/dinosaur.ogg
+sounds/dog_bark.ogg
+* HowToControlTheGameSpeed
+bundles/dance_bundle.txt
+images/Frog.png
+images/Lizard.png
+animations/kermit.txt
+animations/startup.txt
+* HowToCreateAnAnimation
+bundles/explosion_bundle.txt
+images/explosion_pro.png
+animations/explosion.txt
+sounds/boom.wav
+sounds/moob.wav
+* HowToCreateASprite
+images/ball_small.png
+* HowToCreateMultipleAnimationsFromOneScript
+bundles/explosion_bundle.txt
+images/explosion_pro.png
+animations/explosion.txt
+sounds/boom.wav
+sounds/moob.wav
+* HowToCreateP2P
+bundles/MainMenu.txt
+fonts/cour.ttf
+fonts/cour.ttf
+fonts/cour.ttf
+images/testerface.png
+images/testerfaceActive.png
+images/santa_hat.gif
+images/sword.jpg
+images/cape.jpg
+panels/hostpanel.txt
+panels/clientpanel.txt
+panels/ChatWindowPanel.txt
+* HowToCreateProgressBar
+images/progress_empty.png
+images/progress_full.png
+* HowToCreateTCPProgram
+* HowToCreateUDPProgram
+* HowToDetectCollisionBetweenSprites
+images/ball_small.png
+* HowToDetectShapeCollision
+* HowToDrawABitmap
+images/rocket_large.png
+* HowToDrawAnAnimation
+bundles/explosion_bundle.txt
+images/explosion_pro.png
+animations/explosion.txt
+sounds/boom.wav
+sounds/moob.wav
+* HowToDrawAPanel
+panels/panelwithlabel.txt
+* HowToDrawBitmap
+images/frog.png
+* HowToDrawCustomText
+* HowToDrawFramesPerSecond
+* HowToDrawOnScreen
+* HowToDrawPrimitiveShapes
+* HowToDrawRandomShapes
+* HowToDrawSimpleText
+* HowToDrawSomethingToTheScreen
+* HowToExploreUsingCamera
+* HowToModelShapeUsingRecord
+* HowToMoveAPanel
+panels/panelwithlabel.txt
+* HowToMoveAShape
+* HowToMoveASprite
+images/ball_small.png
+* HowToMoveCameraToDifferentPoints
+* HowToMoveSpriteUsingAnimation
+bundles/dance_bundle.txt
+images/Frog.png
+images/Lizard.png
+animations/kermit.txt
+animations/startup.txt
+* HowToMoveSpriteWithKeyboardInput
+images/ball_small.png
+* HowToPlayMusic
+sounds/diving-turtle.mp3
+* HowToPlaySoundEffect
+sounds/chipmunk.ogg
+* HowToReadingTextToScreen
+* HowToRespondToKeystrokes
+* HowToRespondToMouseClickAndPosition
+* HowToUseAnimationWithMultipleSprites
+bundles/dance_bundle.txt
+images/Frog.png
+images/Lizard.png
+animations/kermit.txt
+animations/startup.txt
+* HowToUseBundles
+bundles/how_to_bundles.txt
+images/red_explosion.png
+animations/RedExplosion.txt
+fonts/hara.ttf
+sounds/breakdance.wav
+sounds/dancingFrog.wav
+* HowToUseButton
+panels/buttonPanel1.txt
+images/buttonActive.png
+images/button.png
+images/button.png
+panels/buttonPanel2.txt
+* HowToUseGameTimer
+* HowToUseListBox
+bundles/MainMenu.txt
+fonts/cour.ttf
+fonts/cour.ttf
+fonts/cour.ttf
+images/testerface.png
+images/testerfaceActive.png
+images/santa_hat.gif
+images/sword.jpg
+images/cape.jpg
+sounds/LoadMusic
+sounds/game.ogg
+sounds/diving-turtle.mp3
+sounds/fast.mp3
+sounds/gentle-thoughts-1.mp3
+sounds/morning-workout.mp3
+sounds/saber.ogg
+sounds/chipmunk.ogg
+sounds/bells.ogg
+sounds/camera.ogg
+sounds/comedy_boing.ogg
+sounds/dinosaur.ogg
+sounds/dog_bark.ogg
+images/lstBoxPanel
+images/lstBoxPanel
+images/lstBoxPanel
+panels/lstBoxPanel.txt
+images/ButtonForListBoxActive.png
+images/ButtonForListBox.png
+images/ButtonForListBox.png
+panels/lstBoxPanel2.txt
+* HowToUseRadioButton
+images/CheckBoxActiveWithOutText.png
+images/CheckBoxWithOutText.png
+images/CheckBoxWithOutText.png
+panels/radioPanel.txt
+* HowToUseVectorToDetermineAPath
+images/planet.png
+images/ufo.png

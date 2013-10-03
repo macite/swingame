@@ -1,0 +1,4 @@
+BITMAP,FrogBmp,Frog.png, 73, 105, 4, 4, 16
+BITMAP,LizardBmp,Lizard.png, 56, 56, 4, 4, 16
+ANIM,WalkingScript,kermit.txt
+ANIM,Startup,startup.txt

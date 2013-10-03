@@ -1,0 +1,21 @@
+To create the Delphi SDK do the following:
+
+1: Open SwinGameSDK.dpr with Turbo Delphi
+2: Compile project
+3: Copy DLLs to SDK folder (use build tool if configured)
+4: Close SwinGameSDK.dpr
+
+5: Run copy_delphi_common.cmd (in SwinGameSDK\SDKs\Pascal\Win)
+
+NOTES: 
+
+The command for the build tool from 3 is:
+
+cp $PROJECTPATH\..\lib\win\*.dll $PROJECTPATH..\..\SDKs\Pascal\Win\Delphi\lib
+
+
+To distribute: 
+
+Copy to Desktop
+Remove .svn folders
+Archive

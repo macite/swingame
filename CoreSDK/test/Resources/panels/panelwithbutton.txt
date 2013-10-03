@@ -1,0 +1,50 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 15
+y: 15
+//width
+w: 680
+//height
+h: 400
+//active bmp
+a: testerfaceActive.png
+// Background Image
+b: testerface.png
+//inactive bmp
+i: testerface.png
+//Draggable
+d: true
+v: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+r: 255, 310, 150, 30, Button, Button1
+
+r: 360, 30, 280, 25, Label, Label1, courier, l, Hello World
+
+r: 30, 150, 30, 30, CheckBox, Checkbox1, false
+r: 30, 200, 30, 30, CheckBox, Checkbox2, false
+
+//Radiobutton r: x, y, w, h, 3, GroupID
+
+r: 30, 250, 25, 25,RadioGroup, radButton1,RadioGroup1
+
+r: 80, 250, 25, 25,RadioGroup, radButton2,RadioGroup1
+
+r: 120, 250, 25, 25,RadioGroup, radButton3,RadioGroup1
+
+r: 170, 250, 25, 25,RadioGroup, radButton4,RadioGroup1
+
+//Textbox r: x, y, w, h, Textbox, TextboxID, fontID, LengthLimit, InitialisedText
+
+r: 385, 165, 290, 40, Textbox, TextBox1, courier, 16, l, test text box
+
+//List
+
+r: 101,50, 205, 157, List, List1, 1, 4, -1, courier, l, 12, v, scrollbutton.png

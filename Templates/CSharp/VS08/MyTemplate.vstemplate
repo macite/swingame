@@ -1,0 +1,81 @@
+<VSTemplate Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>SwinGame C# Project</Name>
+    <Description>A Template to create a SwinGame using C#</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>
+    </ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>SwinGame 3.0 C# Project</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>__TemplateIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="MyGame.csproj" File="MyGame.csproj" ReplaceParameters="true">
+      <Folder Name="lib" TargetFolderName="lib">
+        <ProjectItem ReplaceParameters="false" TargetFileName="jpeg.dll">jpeg.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libfreetype-6.dll">libfreetype-6.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libogg-0.dll">libogg-0.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libpng12-0.dll">libpng12-0.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libpng13.dll">libpng13.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libtiff-3.dll">libtiff-3.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libvorbis-0.dll">libvorbis-0.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="libvorbisfile-3.dll">libvorbisfile-3.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="mikmod.dll">mikmod.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="ogg.dll">ogg.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL.dll">SDL.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL_net.dll">SDL_net.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL_gfx.dll">SDL_gfx.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL_image.dll">SDL_image.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL_mixer.dll">SDL_mixer.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SDL_ttf.dll">SDL_ttf.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SGSDK.dll">SGSDK.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="smpeg.dll">smpeg.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SwinGame.dll">SwinGame.dll</ProjectItem>
+        <ProjectItem ReplaceParameters="false" TargetFileName="zlib1.dll">zlib1.dll</ProjectItem>
+      </Folder>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      </Folder>
+      <Folder Name="Resources" TargetFolderName="Resources">
+        <Folder Name="animations" TargetFolderName="animations">
+          <ProjectItem ReplaceParameters="true" TargetFileName="startup.txt">startup.txt</ProjectItem>
+        </Folder>
+        <Folder Name="bundles" TargetFolderName="bundles">
+          <ProjectItem ReplaceParameters="true" TargetFileName="FileDialog.txt">FileDialog.txt</ProjectItem>
+          <ProjectItem ReplaceParameters="true" TargetFileName="splash.txt">splash.txt</ProjectItem>
+        </Folder>
+        <Folder Name="fonts" TargetFolderName="fonts">
+          <ProjectItem ReplaceParameters="false" TargetFileName="arial.ttf">arial.ttf</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="cour.ttf">cour.ttf</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="maven_pro_regular.ttf">maven_pro_regular.ttf</ProjectItem>
+        </Folder>
+        <Folder Name="images" TargetFolderName="images">
+          <ProjectItem ReplaceParameters="false" TargetFileName="fdFile.png">fdFile.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="fdFolder.png">fdFolder.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="FileDialog_Active.png">FileDialog_Active.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="FileDialog_Background.png">FileDialog_Background.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="FileDialog_Inactive.png">FileDialog_Inactive.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="FileDialog_Scroll.png">FileDialog_Scroll.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="FileDialog_ScrollSmall.png">FileDialog_ScrollSmall.png</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="Swinburne.jpg">Swinburne.jpg</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="SwinGameAni.png">SwinGameAni.png</ProjectItem>
+        </Folder>
+        <Folder Name="panels" TargetFolderName="panels">
+          <ProjectItem ReplaceParameters="true" TargetFileName="FileDialog.txt">FileDialog.txt</ProjectItem>
+        </Folder>
+        <Folder Name="sounds" TargetFolderName="sounds">
+          <ProjectItem ReplaceParameters="false" TargetFileName="error.wav">error.wav</ProjectItem>
+          <ProjectItem ReplaceParameters="false" TargetFileName="SwinGameStart.wav">SwinGameStart.wav</ProjectItem>
+        </Folder>
+        <ProjectItem ReplaceParameters="false" TargetFileName="SwinGame.ico">SwinGame.ico</ProjectItem>
+      </Folder>
+      <Folder Name="src" TargetFolderName="src">
+        <ProjectItem ReplaceParameters="true" TargetFileName="GameMain.cs">GameMain.cs</ProjectItem>
+      </Folder>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

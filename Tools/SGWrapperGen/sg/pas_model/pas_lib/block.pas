@@ -1,0 +1,2 @@
+%(declarations)s
+%(statement)s

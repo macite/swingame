@@ -1,0 +1,20 @@
+SwinGame Animation #v1
+
+//dig up sequence... frames 0-3
+f:[0-3],[0-3],1,
+//dig down sequence... frames 3 back to 0
+f:[4-7],[3-0],1,
+//hidden is frame 0
+f:8,0,1,
+//mole shown
+f:[9-12],[3,3,3,3],1,
+
+//sounds
+s:0,digUp,digup.wav
+s:4,digDown,digdown.wav
+
+//identifiers
+i:MoleUp,0
+i:Mole,9
+i:MoleDown,4
+i:Hide,8

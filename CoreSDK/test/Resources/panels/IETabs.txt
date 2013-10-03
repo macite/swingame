@@ -1,0 +1,14 @@
+// Upper tabs
+
+x: 0
+y: 0
+w: 150
+h: 40
+b: tabsPanelPanel
+a: tabsPanelRegion
+d: False
+v: False
+
+//RadioGroup
+r: 0, 16, 75, 24,RadioGroup, PanelTab, UpperTabs
+r: 75, 16, 75, 24,RadioGroup, RegionTab, UpperTabs

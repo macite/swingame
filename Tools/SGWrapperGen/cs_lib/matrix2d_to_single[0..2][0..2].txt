@@ -1,0 +1,14 @@
+
+[System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+public static implicit operator float[,](Matrix2D m)
+{
+    return m._data;
+}
+
+[System.Diagnostics.DebuggerNonUserCode(), System.Diagnostics.DebuggerStepThrough()]
+public static implicit operator Matrix2D(float[,] data)
+{
+    Matrix2D result;
+    result._data = data;
+    return result;
+}

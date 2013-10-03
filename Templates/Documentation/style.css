@@ -1,0 +1,66 @@
+
+body, th { font-family: Arial; }
+td, th { border: 1px solid #888}
+table {border-collapse: collapse;}
+th {padding: 0 0.5em; }
+.none {background-color: #DDD; }
+tr:hover td, tr:hover td { background-color: #FFD}
+.problem td {padding: 0 0.5em }
+a img {border: none}
+.note { font-weight: bold; color: blue}
+.min { font-weight: bold; color: red}
+.max { font-weight: bold; color: red}
+.left { text-align: left; }
+
+body {
+  background: #FFF url(low_cog.gif) no-repeat;
+  background-attachment: fixed;
+  background-position: right bottom;
+}
+
+.details-link { font-size: 0.5em }
+
+#toc, #toc ul, #toc li {border: none; padding: 0; margin: 0; }
+#toc { background: #fafafa; width: 10em; float: right; border: None}
+#toc ul, #toc li { list-style-type: none; font-size: 8pt;}
+#toc li li {display:block; padding-left: 1em}
+#toc a {
+  border-bottom: 1px solid #555;
+  border-left: 3px solid #555; 
+  text-decoration: none; background: white; 
+  display: block; padding: 1px;
+  color: #000; 
+}
+#toc a:hover {background: #eef;}
+
+.method, .type {border-top: 1px solid #55F; padding: 1em; }
+.sig {background: #F5F5F5; display: inline}
+
+.sig, .pname, .ptype, .rtype, .code, .langkey { font-family: monospace; font-size: 1.1em }
+.pname, .pmod, .langkey { font-weight: bold }
+.pmod { color: #505 }
+.langkey { display: block; width: 5em; float: left; margin-top: 0.2em;  height: 1.1em}
+a.code { text-decoration: none;}
+
+h3 {padding: 0; margin: 0;}
+dl { /* background: #FAFAFA*/ }
+dl dl { border: 0;}
+dt {font-weight: bold}
+dd dt {font-weight: normal }
+
+#footer { background: #eee; color: #500;font-size: 0.8em; clear: both; margin-top: 2em;}
+
+#topnav { background: #eee; font-size: 0.8em; padding: 0; }
+#topnav ul, #topnav li {list-style-type: none; margin: 0; padding: 0 }
+#topnav li {display: inline; margin: 0 2em; }
+#topnav a { color: #500; }
+#topnav .current {text-decoration: none; font-weight: bold; }
+
+.info {color: #005; background: #eee; font-size: 0.8em }
+
+.methods, #typelist li {font-family: monospace; }
+#typelist li { list-style-type: none; display: block; float: left; width: 18em}
+
+.usedby { font-size: 0.9em }
+.usedby .code { padding: 0 0.3em;}
+.usedby .code:hover { text-decoration: underline; background-color: #DDD; }

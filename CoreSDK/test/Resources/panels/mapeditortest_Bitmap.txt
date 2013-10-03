@@ -1,0 +1,63 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 0
+y: 30
+//width
+w: 150
+//height
+h: 270
+//active bmp
+//a: mapeditor_Bitmap.png
+//inactive bmp
+//i: mapeditor_Bitmap.png
+//Draggable
+d: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+
+// label data
+r: 80, 240, 65, 20, label, b.Bitmap.Add,courierMedium,l,Add
+r: 5, 0, 80, 15, label, l.BitmapType,courierSmall,l, Bitmap Type 
+
+r: 5, 15, 60, 30, label, dD.BitmapTypeIndicator, courierSmall,l, Cell
+
+//layer label
+r: 5, 30, 80, 15, label, Lbl.CellWidth,courierSmall, l, Cell Width  
+//layer tBox
+r: 5, 45, 140, 15, textbox, tB.CellWidth, courierSmall, 20, l, 0
+//width label
+r: 5, 60, 80, 15, label, Lbl.CellHeight,courierSmall, l, Cell Height 
+//width tBox
+r: 5, 76, 140, 15, textbox, tB.CellHeight, courierSmall, 20, l, 0
+//heightlabel
+r: 5, 90, 80, 15, label, Lbl.CellCount, courierSmall,l, Cell Count
+//height tBox
+r: 5, 105, 140, 15, textbox, tB.CellCount, courierSmall, 20, l, 0
+//twidth label
+r: 5, 120, 80, 15, label, Lbl.CellRow,courierSmall, l, Cell Row
+//twidth tBox
+r: 5, 135, 140, 15, textbox, tB.CellRow, courierSmall, 20, l, 0
+//theight label
+r: 5, 150, 80, 15, label, Lbl.CellCol, courierSmall, l, Cell Columns 
+//theight tBox
+r: 5, 165, 140, 15, textbox, tB.CellCol, courierSmall, 20, l, 0
+
+r: 5, 180, 140, 15, label, Lbl.CellRange,courierSmall, l, Cell Range 
+//twidth tBox
+r: 5, 195, 140, 15, textbox, tB.CellRange, courierSmall, 20, l, 0
+//theight label
+r: 5, 210, 150, 15, label, Lbl.Path, courierSmall, l, Path to Bitmap
+//theight tBox
+r: 5, 225, 140, 15, textbox, tB.Bitmap.Path, courierSmall, 20, l, 
+
+
+r: 5, 240, 65, 20, label, b.Bitmap.Browse,courierMedium,l,Browse
+

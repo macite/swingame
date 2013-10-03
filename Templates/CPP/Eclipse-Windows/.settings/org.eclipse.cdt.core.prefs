@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+environment/project/cdt.managedbuild.config.gnu.cross.exe.debug.480177374/PATH/delimiter=;
+environment/project/cdt.managedbuild.config.gnu.cross.exe.debug.480177374/PATH/operation=replace
+environment/project/cdt.managedbuild.config.gnu.cross.exe.debug.480177374/PATH/value=c\:\\MinGW\\bin;c\:\\Program Files\\MinGW\\bin;C\:\\Program Files\\eclipse-cpp;C\:/Program Files/Java/jre7/bin/client;C\:/Program Files/Java/jre7/bin;C\:/Program Files/Java/jre7/lib/i386;C\:\\Program Files\\Parallels\\Parallels Tools\\Applications;C\:\\Windows\\system32;C\:\\Windows;C\:\\Windows\\System32\\Wbem;C\:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C\:\\FPC\\2.4.2\\bin\\i386-Win32;c\:\\python27;C\:\\Windows\\Microsoft.NET\\Framework\\v2.0.50727;C\:\\Program Files\\GtkSharp\\2.12\\bin
+environment/project/cdt.managedbuild.config.gnu.cross.exe.debug.480177374/append=true
+environment/project/cdt.managedbuild.config.gnu.cross.exe.debug.480177374/appendContributed=true

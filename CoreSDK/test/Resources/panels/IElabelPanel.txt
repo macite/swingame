@@ -1,0 +1,25 @@
+// Label Panel
+
+x: 0
+y: 339
+w: 150
+h: 260
+b: labelPanel
+a: labelPanelActive
+d: False
+v: False
+
+// Regions
+//Textboxes
+r: 79, 41, 65, 24, Textbox, TBLabelFont,    GUIMainFont, 25, l, Font
+r: 79, 77, 65, 24, Textbox, TBLabelInitText,  GUIMainFont, 25, l, Initial Text
+
+//RadioGroup
+r: 120, 117, 23, 23, RadioGroup, RadioAlignLeft, AlignRadio
+r: 120, 142, 23, 23, RadioGroup, RadioAlignCenter, AlignRadio
+r: 120, 167, 23, 23, RadioGroup, RadioAlignRight, AlignRadio
+
+//Label r: 15, 34, 97, 20, Label, CBInitialStateLabel, GUIMainFont, r, Initial State =
+r: 60, 117, 50, 23, Label, AlignLeft, GUIMainFont, r, Left
+r: 60, 142, 50, 23, Label, AlignCenter, GUIMainFont, r, Center
+r: 60, 167, 50, 23, Label, AlignRight, GUIMainFont, r, Right

@@ -1,0 +1,27 @@
+// Panel Version: 1
+
+// Load bitmaps for the panel 
+// b: name,filename
+// b:main_menu_bmp,main_menu.png
+// Load Fonts for labels before creating panels.
+
+// Panel data:
+x: 15
+y: 170
+//width
+w: 480
+//height
+h: 400
+//Draggable
+d: true
+v: false
+
+// Region data
+// Format: r: x, y, w, h, kind
+
+r: 10, 10, 100, 30, Label, MsgLbl, courier, l, Message
+
+r: 110, 10, 365, 30, Textbox, MsgVal, courier, 15, l, 
+
+//List
+r: 0, 50, 480, 350, List, MsgList, 1, 10, -1, courierLarge, l, 12, v, scrollbutton.png

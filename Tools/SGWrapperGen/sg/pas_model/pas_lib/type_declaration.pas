@@ -1,0 +1,2 @@
+type
+%(declaration)s

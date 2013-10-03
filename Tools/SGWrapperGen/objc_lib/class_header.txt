@@ -1,0 +1,21 @@
+#import <Foundation/NSObject.h>
+#import <Foundation/NSString.h>
+#import <Foundation/NSArray.h>
+
+#import "Types.h"
+%(imports)s
+
+@interface SG%(name)s : NSObject
+{
+  %(fields)s
+}
+%(static_method_headers)s
+
+%(init_headers)s
+%(dealloc_headers)s
+
+%(property_synthesizes)s
+
+%(method_headers)s
+
+@end

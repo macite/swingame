@@ -1,0 +1,20 @@
+The following instructions tell you how to build and install SwinGameSDK.
+
+On Linux:
+
+To build without installing run ./build.sh from the terminal.
+To build and install run sudo ./build.sh -i
+
+On Mac:
+
+To build without installing run ./build.sh from the terminal.
+To build and install in your user account run ./build.sh -i
+To build and install for all users run sudo ./build.sh -i
+
+On Windows:
+
+Building and installing from source requires msys. Download and install MSys (http://www.mingw.org/).
+
+To build without installing run ./build.sh from the terminal.
+To build and install run sudo ./build.sh -i
+
