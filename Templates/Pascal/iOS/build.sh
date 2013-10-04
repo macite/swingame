@@ -9,10 +9,13 @@
 #   ipad=true
 # fi
 
+export PATH=${PATH}:/usr/local/bin/
+
 # Get path to script - ensure we start here
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
 APP_PATH=`cd "$APP_PATH"; pwd` 
 cd "$APP_PATH"
+
 
 FULL_APP_PATH=$APP_PATH
 APP_PATH="."
@@ -232,7 +235,20 @@ if [ $? != 0 ]; then
     exit 1;
 fi
 
-open "${GAME_NAME}.xcodeproj"
+echo "  ... Preparing App"
+killall -c waxsim 2>/dev/null
+xcodebuild -project iOS.xcodeproj -target iOS -sdk iphonesimulator7.0 -arch i386 -configuration Debug > ${LOG_FILE} 2> ${LOG_FILE}
+if [ $? != 0 ]; then
+    echo 'Failed to create app'
+    cat out.log
+    exit 1;
+fi
+
+echo "  ... Opening App"
+./tools/waxsim -s 7.0 ./build/Debug-iphonesimulator/iOS.app > ${LOG_FILE} 2> ${LOG_FILE} &
+osascript ./tools/ShowSimulator.scpt > ${LOG_FILE} 2> ${LOG_FILE}
+
+# open "${GAME_NAME}.xcodeproj"
 
 echo "--------------------------------------------------"
 echo "Finished!"
