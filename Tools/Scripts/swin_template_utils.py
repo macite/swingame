@@ -96,25 +96,26 @@ def run_bash(script_name, opts):
         
         quit()
 
-def copy_without_svn(src,dest,overwrite = True):
-    """tree copy without svn and copy symbolic links. Overwrite delete destination tree from root..."""
+def copy_without_git(src,dest,overwrite = True):
+    """tree copy without git and copy symbolic links. Overwrite delete destination tree from root..."""
     
     if(os.path.isdir(dest) and overwrite):
         # print("    Cleaning %s" % dest)
         swin_shutil.rmtree(dest,ignore_errors = True)
         
     # print ("    Copying %s to %s" % (src,dest))
-    swin_shutil.copytree(src,dest,symlinks = True,ignore = swin_shutil.ignore_patterns(".svn"))
+    swin_shutil.copytree(src,dest,symlinks = True,ignore =
+        swin_shutil.ignore_patterns(".git*"))
 
-def flat_copy_without_svn(src, dest):
-    """copy every file not in svn into a flat destination."""
+def flat_copy_without_git(src, dest):
+    """copy every file not in git into a flat destination."""
     # print("    Copying all files in %s to %s" % (src, dest))
     if(not os.path.isdir(dest)):
         os.mkdir(dest)
 
     for root, dirs, files in os.walk(src):
         for f in files:
-            if(root.find('.svn') == -1):
+            if(root.find('.git*') == -1):
                 fullpath = os.path.join(root, f)
                 swin_shutil.copy(fullpath,dest)
 
@@ -225,7 +226,7 @@ def pkg_vs_installer(dist_dict, tmp_dir, to_dir):
     os.makedirs(tmp_vs_dir)
     
     # Copy in template files
-    copy_without_svn(vs_temp_folder, tmp_vs_dir)
+    copy_without_git(vs_temp_folder, tmp_vs_dir)
     
     # Create the project zip
     os.chdir(to_dir)

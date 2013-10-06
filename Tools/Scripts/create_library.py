@@ -50,12 +50,12 @@ def copy_coresdk_to_dist_source():
     dist_source_lib_folder =        dist_source_folder + "lib/"
     dist_source_staticlib_folder =  dist_source_folder + "staticlib/"
     
-    copy_without_svn(template_source_folder, dist_source_folder)
-    copy_without_svn(lib_folder, dist_source_lib_folder, overwrite = False)
-    copy_without_svn(staticlib_folder, dist_source_staticlib_folder, overwrite = False)
-    flat_copy_without_svn(generated_source_folder, dist_source_src_folder)
-    flat_copy_without_svn(lib_src_folder, dist_source_src_folder)
-    flat_copy_without_svn(src_folder, dist_source_src_folder)
+    copy_without_git(template_source_folder, dist_source_folder)
+    copy_without_git(lib_folder, dist_source_lib_folder, overwrite = False)
+    copy_without_git(staticlib_folder, dist_source_staticlib_folder, overwrite = False)
+    flat_copy_without_git(generated_source_folder, dist_source_src_folder)
+    flat_copy_without_git(lib_src_folder, dist_source_src_folder)
+    flat_copy_without_git(src_folder, dist_source_src_folder)
 
 
 _sgsdk_creation_script_options = {

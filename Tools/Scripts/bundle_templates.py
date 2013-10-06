@@ -33,7 +33,7 @@ def create_docs():
     
     os.makedirs(docs_dist_dir)
     
-    copy_without_svn(docs_gen_dir, docs_dist_dir)
+    copy_without_git(docs_gen_dir, docs_dist_dir)
 
 
 #assembles the files for the dist folder
@@ -60,33 +60,33 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
     
     #clean dist folder
     # print("\n  Copying common files...")
-    copy_without_svn(common_template_folder, specificdist_folder)
+    copy_without_git(common_template_folder, specificdist_folder)
     
     # print("\n  Copying %s common files..." % language)
     # print common_lang_template_folder
-    copy_without_svn(common_lang_template_folder, specificdist_folder, overwrite = False)
+    copy_without_git(common_lang_template_folder, specificdist_folder, overwrite = False)
     
     # print("\n  Copying %s specific files..." % name)
-    copy_without_svn(specific_template_folder, specificdist_folder, overwrite = False)
+    copy_without_git(specific_template_folder, specificdist_folder, overwrite = False)
     
     # print("\n  Copying %s generated files..." % language)
-    copy_without_svn(generated_folder, specific_dist_lib_folder, overwrite = False)
+    copy_without_git(generated_folder, specific_dist_lib_folder, overwrite = False)
     
     # print("\n  Copying lib files...")
     if copy_lib_dir:
         lib_folder =    coresdk_folder + copy_lib_dir
-        copy_without_svn(lib_folder, specific_dist_lib_folder, overwrite = False)
+        copy_without_git(lib_folder, specific_dist_lib_folder, overwrite = False)
     else:
         for lib_from, lib_to in dist_dict['libs']:
             lib_from_full = os.path.join(coresdk_folder, lib_from)
             lib_to_full = os.path.join(specificdist_folder, lib_to)
             
             # print("\n Copying %s to %s " % (lib_from_full, lib_to_full))
-            copy_without_svn(lib_from_full, lib_to_full, overwrite = False)
+            copy_without_git(lib_from_full, lib_to_full, overwrite = False)
     
     if language == "Pascal":
-        flat_copy_without_svn(lib_src_folder, specific_dist_lib_folder)
-        flat_copy_without_svn(src_folder, specific_dist_lib_folder)
+        flat_copy_without_git(lib_src_folder, specific_dist_lib_folder)
+        flat_copy_without_git(src_folder, specific_dist_lib_folder)
     
     # print("--------------------------------------------------")
     
@@ -98,7 +98,7 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
             if not os.path.exists(dist_source_folder+"bin/win"):
                 print >> sys.stderr, 'Missing Windows dll from', dist_source_folder+"bin/win"
             else:    
-                copy_without_svn(dist_source_folder+"bin/win", specificdist_folder+"lib/win", overwrite = False)
+                copy_without_git(dist_source_folder+"bin/win", specificdist_folder+"lib/win", overwrite = False)
             
         if "iOS" in dist_dict['os']:
             if dist_dict['staticsgsdk']:
@@ -143,16 +143,16 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
                     print >> sys.stderr, 'Missing SwinGame framework for mac'
                 else:
                     # Copy frameworks
-                    copy_without_svn(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/mac/SGSDK.framework")
+                    copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/mac/SGSDK.framework")
                     
-                    copy_without_svn(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/sdl13/mac/SGSDK.framework")
+                    copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/sdl13/mac/SGSDK.framework")
                     cur = os.getcwd()
                     os.chdir(specificdist_folder+"lib/sdl13/mac/SGSDK.framework/Versions")
                     # print os.getcwd()
                     os.remove('Current')
                     os.symlink('./%sbadass' % sg_version, 'Current')
                     
-                    copy_without_svn(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/godly/mac/SGSDK.framework")
+                    copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/godly/mac/SGSDK.framework")
                     os.chdir(specificdist_folder+"lib/godly/mac/SGSDK.framework/Versions")
                     # print os.getcwd()
                     os.remove('Current')
