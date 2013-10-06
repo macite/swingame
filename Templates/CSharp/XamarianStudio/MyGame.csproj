@@ -20,7 +20,7 @@
     <AssemblyName>MyGame</AssemblyName>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="%SystemRoot%\Microsoft.NET\Framework\v3.5\MsBuild.exe ${ProjectName}.csproj /target:CopyFiles" externalConsole="True"/>
+        <Command type="AfterBuild" command="%SystemRoot%\Microsoft.NET\Framework\v3.5\MsBuild.exe MyGame.csproj /target:CopyFiles /p:ToolsVersion=3.5;Configuration=Debug-Windows;Platform=x86;OutDir=$(OutDir)" externalConsole="True"/>
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
