@@ -26,11 +26,11 @@ from lang_pas import create_pas_code_for_file
 # Settings and global data ...
 #==============================================================================
 
-def get_svn_version():
+def get_version():
     try:
-        lines = subprocess.Popen("svn info",shell=True, stdout=subprocess.PIPE).stdout.readlines()
-        result = lines[4].split()[1].strip() # eg. "Revision: 12345"
-        print " Documenting svn Revision", result
+        lines = subprocess.Popen("git rev-list HEAD",shell=True, stdout=subprocess.PIPE).stdout.readlines()
+        result = str(len(lines)) # eg. "Revision: 12345"
+        print " Documenting Revision", result
     except:
         print "Except..."
         result = "1284" # rough guess...
@@ -39,7 +39,7 @@ def get_svn_version():
 OUT_PATH        = "../../Generated/Documentation"
 HTML_OUT_PATH   = OUT_PATH + '/html'
 SQL_OUT_PATH    = OUT_PATH + '/sql'
-SVN_VERSION     = get_svn_version()
+VERSION         = get_version()
 
 #global menu types array
 _MENU_TYPES = []
@@ -55,12 +55,12 @@ _nolink_types = (
 
 def source_url(text):
     '''Break up a standard source code line string and return a URL to the code.
-    ie. url="http://code.google. ... /[filename]?r=[SVN_VERSION]#[line_no]"
+    ie. url="http://code.google. ... /[filename]?r=[VERSION]#[line_no]"
     '''
     bits = text.split()
     line_no = bits[3]
     fname = bits[5].split('/')[-1].strip()
-    return _google_base_url + fname + "?r=" + SVN_VERSION + '#' + line_no    
+    return _google_base_url + fname + "?r=" + VERSION + '#' + line_no    
 
 
 #==============================================================================
@@ -154,7 +154,7 @@ class APIDocWriter(object):
 %(body)s
 
 <div id="footer">
-Generated %(datetime)s for svn version %(svnversion)s
+Generated %(datetime)s for svn version %(version)s
 </div>
 <script>
     $(".method_details").hide();
@@ -194,7 +194,7 @@ Generated %(datetime)s for svn version %(svnversion)s
             'body': '\n'.join(self.body),
             # footer details
             'datetime': time.strftime('%Y-%m-%d %H:%M:%S'), 
-            'svnversion': SVN_VERSION,
+            'version': VERSION,
         } )
         file_writer.close()
 
