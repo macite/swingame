@@ -154,7 +154,7 @@ class APIDocWriter(object):
 %(body)s
 
 <div id="footer">
-Generated %(datetime)s for svn version %(version)s
+Generated %(datetime)s for version %(version)s
 </div>
 <script>
     $(".method_details").hide();
