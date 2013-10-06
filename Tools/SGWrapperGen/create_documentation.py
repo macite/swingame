@@ -29,11 +29,11 @@ from lang_pas import create_pas_code_for_file
 def get_version():
     try:
         lines = subprocess.Popen("git rev-list HEAD",shell=True, stdout=subprocess.PIPE).stdout.readlines()
-        result = str(len(lines)) # eg. "Revision: 12345"
+        result = lines[0] # eg. "Revision: 12345"
         print " Documenting Revision", result
     except:
         print "Except..."
-        result = "1284" # rough guess...
+        result = "0917c4732d8da9c2876a06217ff991881f5729c7" # initial commit 
     return result
 
 OUT_PATH        = "../../Generated/Documentation"
@@ -45,7 +45,7 @@ VERSION         = get_version()
 _MENU_TYPES = []
 _Menu_Items = []
 _Types_Items = []
-_google_base_url = "http://code.google.com/p/swingamesdk/source/browse/trunk/CoreSDK/src/"
+_github_url = "http://github.com/macite/swingame/blob/%s/CoreSDK/src/%s#L%s"
 
 # List the pascal types that we do not want to document and link to
 _nolink_types = (
@@ -60,7 +60,7 @@ def source_url(text):
     bits = text.split()
     line_no = bits[3]
     fname = bits[5].split('/')[-1].strip()
-    return _google_base_url + fname + "?r=" + VERSION + '#' + line_no    
+    return _github_url %(VERSION, fname, line_no)
 
 
 #==============================================================================
