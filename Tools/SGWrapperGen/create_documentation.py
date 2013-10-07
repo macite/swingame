@@ -71,98 +71,10 @@ class APIDocWriter(object):
     '''Base class for presentation API documentation providing html template
     features including consistent header/footer details, toc and style links
     '''
-    
-    _html = '''<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-<title>%(title)s</title>
-<link rel="stylesheet" href="style.css" type="text/css" />
-%(css)s
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script>
-    function toggleMethodDetails(method_uname)
-    {
-        sel = "#body" + method_uname;
-        if ($(sel).is(':visible'))
-        {
-            $(sel).hide(500);
-            $("#toggle" + method_uname)[0].innerHTML = "show details";
-        }
-        else
-        {
-            $(sel).show(500);
-            $("#toggle" + method_uname)[0].innerHTML = "hide details";
-        }
-    }
+    templateFile = open('documentation_template.html', 'r')
+    _html = templateFile.read()  
+    templateFile.close() 
 
-    function toggleMethods(method_name)
-    {
-        sel = "#" + method_name;
-        if ($(sel).is(':visible'))
-        {
-            $(sel).hide(500);
-            $("#lnk" + method_name)[0].innerHTML = "[show]";
-        }
-        else
-        {
-            $(sel).show(500);
-            $("#lnk" + method_name)[0].innerHTML = "[hide]";
-        }
-    }
-
-    
-    function toggleAlternateDetails(method_uname)
-    {
-        sel = ".alt" + method_uname;
-        if ($(sel).is(':visible'))
-        {
-            $(sel).hide(500);
-            $("#alt" + method_uname)[0].innerHTML = "show other version";
-        }
-        else
-        {
-            $(sel).show(500);
-            $("#alt" + method_uname)[0].innerHTML = "hide other versions";
-        }
-    }
-    
-    function toggleShownMethods()
-    {   
-        sel = ".details"
-        if ($(sel).is(':visible'))
-        {
-            $(sel).hide(500);
-            $("#toggleShownMethods")[0].innerHTML = "show all methods";
-        }
-        else
-        {
-            $(sel).show(500);
-            $("#toggleShownMethods")[0].innerHTML = "show main methods";
-        }
-    }
-</script>
-</head>
-<body>
-
-<h1>%(title)s</h1>
-
-<!-- %(toc)s -->
-
-%(desc)s
-
-%(body)s
-
-<div id="footer">
-Generated %(datetime)s for version %(version)s
-</div>
-<script>
-    $(".method_details").hide();
-</script>
-</body>
-</html>
-
-'''
     def __init__(self):
         # keep track of standard document information and unique content
         self.title = ''
@@ -568,7 +480,7 @@ class UnitPresenter(object):
         
         # url = source_url(method.meta_comment_line_details),
         # out_doc.append(
-        # '<p><a href="url" target="new" href="%s">Source URL</a></p>' % 
+        # '<p><a hren="url" target="new" href="%s">Source URL</a></p>' % 
         # 
         # )
         
@@ -576,7 +488,7 @@ class UnitPresenter(object):
         #TODO: add @see details to 
         info = []
         # link to pascal source file
-        info.append('<li><a target="new" href="%s">source code</a></li>' % source_url(method.meta_comment_line_details))
+        info.append('<li><a target="new" href="%s">source code</a></li>' % source_url(method.file_line_details))
         # tags / document group details?
         if method.doc_group:
             info.append('<li>tags: %s</li>' % method.doc_group) 
@@ -848,7 +760,7 @@ def create_types_doc(idcollection):
         
 
         info = []
-        info.append('<li><a href="%s" target="new">source code</a></li>' % source_url(obj.data_type.meta_comment_line_details))
+        info.append('<li><a href="%s" target="new">source code</a></li>' % source_url(obj.data_type.file_line_details))
         # tags / document group details?
         if obj.doc_group:
             info.append('<li>tags: %s</li>' % obj.doc_group) 

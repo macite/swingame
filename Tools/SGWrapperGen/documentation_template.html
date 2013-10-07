@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>%(title)s</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+%(css)s
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+    function toggleMethodDetails(method_uname)
+    {
+        sel = "#body" + method_uname;
+        if ($(sel).is(':visible'))
+        {
+            $(sel).hide(500);
+            $("#toggle" + method_uname)[0].innerHTML = "show details";
+        }
+        else
+        {
+            $(sel).show(500);
+            $("#toggle" + method_uname)[0].innerHTML = "hide details";
+        }
+    }
+
+    function toggleMethods(method_name)
+    {
+        sel = "#" + method_name;
+        if ($(sel).is(':visible'))
+        {
+            $(sel).hide(500);
+            $("#lnk" + method_name)[0].innerHTML = "[show]";
+        }
+        else
+        {
+            $(sel).show(500);
+            $("#lnk" + method_name)[0].innerHTML = "[hide]";
+        }
+    }
+
+    
+    function toggleAlternateDetails(method_uname)
+    {
+        sel = ".alt" + method_uname;
+        if ($(sel).is(':visible'))
+        {
+            $(sel).hide(500);
+            $("#alt" + method_uname)[0].innerHTML = "show other version";
+        }
+        else
+        {
+            $(sel).show(500);
+            $("#alt" + method_uname)[0].innerHTML = "hide other versions";
+        }
+    }
+    
+    function toggleShownMethods()
+    {   
+        sel = ".details"
+        if ($(sel).is(':visible'))
+        {
+            $(sel).hide(500);
+            $("#toggleShownMethods")[0].innerHTML = "show all methods";
+        }
+        else
+        {
+            $(sel).show(500);
+            $("#toggleShownMethods")[0].innerHTML = "show main methods";
+        }
+    }
+</script>
+</head>
+<body>
+
+<h1>%(title)s</h1>
+
+<!-- %(toc)s -->
+
+%(desc)s
+
+%(body)s
+
+<div id="footer">
+Generated %(datetime)s for version %(version)s
+</div>
+<script>
+    $(".method_details").hide();
+</script>
+</body>
+</html>
+
