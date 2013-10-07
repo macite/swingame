@@ -237,7 +237,10 @@ doCompile()
     fi
     
     ${VBNC_BIN} ${VBNC_FLAGS} ${VB_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]vb$` >> ${LOG_FILE}
-    if [ $? != 0 ]; then echo "Error compiling."; exit 1; fi
+    if [ $? != 0 ]; then 
+      [[ -e out.log ]] && cat out.log
+      echo "Error compiling."; exit 1; 
+    fi
 }
 
 doLinuxPackage()
