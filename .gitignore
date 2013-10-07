@@ -8,3 +8,6 @@ CoreSDK/trace.gdb
 .*~
 *.pyc
 *.swp
+/Templates/**/bin
+/Templates/**/temp
+/Templates/**/*.log
