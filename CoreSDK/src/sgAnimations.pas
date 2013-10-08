@@ -450,7 +450,7 @@ interface
     function AnimationEnteredFrame(anim: Animation): Boolean;
     
     /// Returns the amount of time spent in the current frame. When this exceeds
-    /// the frame's duration the animation moves to the next frame.
+    /// the frames duration the animation moves to the next frame.
     /// 
     /// @lib
     /// 
@@ -891,6 +891,7 @@ begin
     path := FilenameToResource(name, AnimationResource);
     if not FileExists(path) then
     begin
+        RaiseWarning('Unable to locate ' + name + ' animation file at ' + filename);
         result := nil;
         exit;
     end;

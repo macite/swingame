@@ -277,7 +277,7 @@ interface
   /// @method ActiveLayer  
   procedure SetActiveLayer(c: Character);
   
-  /// Update the animation of the character depending on its direction. Returns true
+  /// Update the animation of the character depending on it's direction. Returns true
   /// if the direction was changed and false if it was no changed
   ///
   /// @lib
@@ -286,7 +286,7 @@ interface
   /// @method UpdateDirectionAnimation 
   function UpdateDirectionAnimation(c: Character) : Boolean;
   
-  ///Update the animation of the character depending on its direction, including updating
+  ///Update the animation of the character depending on it's direction, including updating
   ///When the character's state goes stationary
   ///
   /// @lib
@@ -321,7 +321,7 @@ interface
 // Handle Character Drawing
 //---------------------------------------------------------------------------
   
-  /// Draw Character that changes state when its velocity is 0 to be the stationary
+  /// Draw Character that changes state when it's velocity is 0 to be the stationary
   /// state which is specified.
   ///
   /// @lib
@@ -962,7 +962,7 @@ implementation
       filename := PathToResource(filename, CharacterResource);
       if not FileExists(filename) then
       begin
-        RaiseException('Unable to locate Character ' + filename);
+        RaiseWarning('Unable to locate Character ' + filename);
         exit;
       end;
     end;

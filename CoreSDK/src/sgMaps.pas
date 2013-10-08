@@ -1111,7 +1111,7 @@ interface
       filename := PathToResource(filename, MapResource);
       if not FileExists(filename) then
       begin
-        RaiseException('Unable to locate sound m ' + filename);
+        RaiseWarning('Unable to locate map ' + filename);
         exit;
       end;
     end;

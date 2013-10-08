@@ -4224,7 +4224,7 @@ begin
     pathToFile := PathToResource(filename, PanelResource);
     if not FileExists(pathToFile) then
     begin
-      RaiseWarning('Unable to locate panel ' + filename);
+      RaiseWarning('Unable to locate panel ' + filename + ' at ' + pathToFile);
       result := nil;
       exit;
     end;

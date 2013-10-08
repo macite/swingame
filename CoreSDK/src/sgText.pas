@@ -693,7 +693,9 @@ implementation
     function _DoLoadFont(fontName: String; size: Longint): Font;
     var
       filename: String;
+      originalFilename: String; 
     begin
+      originalFilename := ''; 
       {$IFDEF TRACE}
         TraceEnter('sgText', '_DoLoadFont(', fontName + ' ' + IntToStr(size));
       {$ENDIF}
@@ -705,11 +707,12 @@ implementation
         
         if not FileExists(filename) then
         begin
+          originalFilename := filename; 
           filename := filename + '.ttf';
           
           if not FileExists(filename) then
           begin
-            RaiseWarning('Unable to locate font ' + fontName);
+            RaiseWarning('Unable to locate font ' + fontName + ' at ' + originalFilename);
             result := nil;
             exit;
           end;
