@@ -1,13 +1,14 @@
 #!/bin/bash
 
-
-# declare variables
-
-# if [ "${1}" = "-iphone" ]; then
-#   iphone=true
-# elif [ "${1}" = "-ipad" ]; then
-#   ipad=true
-# fi
+# ---------------------------------------
+# This script compiles and installs the 
+# SwinGame projects for the iPhone/iPad.
+# The game is then run in the Simulator.
+#
+# In Sublime Text you can run this using
+# the "command + b" keys
+#
+#---------------------------------------
 
 export PATH=${PATH}:/usr/local/bin/
 
@@ -21,6 +22,8 @@ FULL_APP_PATH=$APP_PATH
 APP_PATH="."
 
 GAME_NAME=${FULL_APP_PATH##*/}
+
+GAME_NAME=`echo $GAME_NAME | sed 's/ /_/g'` 
 
 OUT_DIR="${APP_PATH}/bin"
 LIB_DIR="${APP_PATH}/lib/godly/ios"
@@ -237,7 +240,9 @@ fi
 
 echo "  ... Preparing App"
 killall -c waxsim 2>/dev/null
-xcodebuild -project iOS.xcodeproj -target iOS -sdk iphonesimulator7.0 -arch i386 -configuration Debug > ${LOG_FILE} 2> ${LOG_FILE}
+xcodebuild -project "${GAME_NAME}.xcodeproj" -target "${GAME_NAME}" -sdk iphonesimulator -arch i386 -configuration Release clean > ${LOG_FILE} 2> ${LOG_FILE}
+xcodebuild -project "${GAME_NAME}.xcodeproj" -target "${GAME_NAME}" -sdk iphonesimulator -arch i386 -configuration Debug clean > ${LOG_FILE} 2> ${LOG_FILE}
+xcodebuild -project "${GAME_NAME}.xcodeproj" -target "${GAME_NAME}" -sdk iphonesimulator -arch i386 -configuration Debug > ${LOG_FILE} 2> ${LOG_FILE}
 if [ $? != 0 ]; then
     echo 'Failed to create app'
     cat out.log
@@ -245,7 +250,7 @@ if [ $? != 0 ]; then
 fi
 
 echo "  ... Opening App"
-./tools/waxsim -s 7.0 ./build/Debug-iphonesimulator/iOS.app > ${LOG_FILE} 2> ${LOG_FILE} &
+./tools/waxsim "./build/Debug-iphonesimulator/${GAME_NAME}.app" > ${LOG_FILE} 2> ${LOG_FILE} &
 osascript ./tools/ShowSimulator.scpt > ${LOG_FILE} 2> ${LOG_FILE}
 
 # open "${GAME_NAME}.xcodeproj"
