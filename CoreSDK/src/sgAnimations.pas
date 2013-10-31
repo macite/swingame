@@ -868,8 +868,9 @@ var
         end;
     end;
     
-    procedure VerifyVersion();
+    function VerifyVersion(): Boolean;
     begin
+        result := false;
         if EOF(input) then exit;
         line := '';
         
@@ -881,7 +882,11 @@ var
         
         //Verify that the line has the right version
         if line <> 'SwinGame Animation #v1' then 
-            RaiseException('Error in animation ' + filename + '. Animation files must start with "SwinGame Animation #v1"');
+        begin
+            RaiseWarning('Error in animation ' + filename + '. Animation files must start with "SwinGame Animation #v1"');
+            exit;
+        end;
+        result := true;
     end;
 begin
     {$IFDEF TRACE}
@@ -904,9 +909,13 @@ begin
     Assign(input, path);
     Reset(input);
     
-    VerifyVersion();
-    
     try
+        if not VerifyVersion() then
+        begin
+            RaiseWarning('Error loading animation script: ' + path);
+            exit
+        end;
+
         while not EOF(input) do
         begin
             lineNo := lineNo + 1;
@@ -1010,7 +1019,11 @@ begin
     
     tmp := _Animations.values[name];
     if assigned(tmp) then result := AnimationScript(tResourceContainer(tmp).Resource)
-    else result := nil;
+    else
+    begin
+        result := nil;
+        RaiseWarning('Unable to locate AnimationScript named ' + name);
+    end; 
     
     {$IFDEF TRACE}
         TraceExit('sgAnimations', 'AnimationScriptNamed', HexStr(result));
@@ -1168,11 +1181,11 @@ begin
     if script = nil then exit;
         
     idx := IndexOf(script^.animationIds, identifier);
-	if (idx < 0) or (idx > High(script^.animations)) then
+    if (idx < 0) or (idx > High(script^.animations)) then
     begin
-		RaiseWarning('Unable to create animation "' + identifier + '" from script ' + script^.name);
-		exit;
-	end;
+        RaiseWarning('Unable to create animation "' + identifier + '" from script ' + script^.name);
+        exit;
+    end;
 
     result := CreateAnimation(idx, script, withSound);
 end;
