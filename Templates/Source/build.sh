@@ -28,8 +28,8 @@ APP_PATH="."
 # Step 3: Setup options
 #
 EXTRA_OPTS="-O3 -fPIC -Sewn -vwn -dSWINGAME_LIB"
-VERSION_NO=3.033
-VERSION=3.033
+VERSION_NO=3.0
+VERSION=3.0
 CLEAN="N"
 INSTALL="N"
 
@@ -574,6 +574,7 @@ then
         SDK_FLAGS=""
         HAS_LION=false
         OS_VER=`sw_vers -productVersion | awk -F . '{print $1"."$2}'`
+        OS_VER_MINOR=`sw_vers -productVersion | awk -F . '{print $2}'`
         XCODE_PREFIX=''
         
         if [ -d /Applications/Xcode.app/Contents ]; then
@@ -600,22 +601,16 @@ then
         if [ $OS_VER = '10.6' ]; then
             HAS_SNOW_LEOPARD_SDK=true
         fi
-        
-        if [ $OS_VER = '10.7' ]; then
+
+        if [ $OS_VER_MINOR -ge "7" ]; then
+            # Is Lion or later = has PIE
             HAS_LION=true
-            PAS_FLAGS="$PAS_FLAGS -WM10.7"
-            SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX10.7.sdk"
-            if [ ! -d ${SDK_PATH} ]; then
-                echo "Unable to locate MacOS SDK."
-                exit -1
-            fi
-            SDK_FLAGS="-syslibroot ${SDK_PATH} -macosx_version_min 10.7"
         fi
         
-        if [ $OS_VER = '10.8' ]; then
-            HAS_LION=true
+        if [ $HAS_LION = true ]; then
             PAS_FLAGS="$PAS_FLAGS -WM10.7"
-            SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX10.8.sdk"
+
+            SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX${OS_VER}.sdk"
             if [ ! -d ${SDK_PATH} ]; then
                 echo "Unable to locate MacOS SDK."
                 exit -1
