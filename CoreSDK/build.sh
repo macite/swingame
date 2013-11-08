@@ -448,7 +448,13 @@ then
         HAS_LEOPARD_SDK=false
         HAS_LION=false
         OS_VER=`sw_vers -productVersion | awk -F . '{print $1"."$2}'`
+        OS_VER_MINOR=`sw_vers -productVersion | awk -F . '{print $2}'`
         
+        if [ $OS_VER_MINOR -ge "7" ]; then
+            # Is Lion or later = has PIE
+            HAS_LION=true
+        fi
+
         if [ -f /usr/libexec/as/ppc/as ]; then
             HAS_PPC=true
         fi
@@ -461,14 +467,6 @@ then
             HAS_LEOPARD_SDK=true
         fi
         
-        if [ $OS_VER = '10.7' ]; then
-            HAS_LION=true
-        fi
-
-        if [ $OS_VER = '10.8' ]; then
-            HAS_LION=true
-        fi
-
         if [ $HAS_LION = true ]; then
             if (( ($FPC_MAJOR_VER == 2) && ($FPC_MINOR_VER == 6) && (FPC_LESSR_VER == 0) )); then
                 PAS_FLAGS="$PAS_FLAGS -k-macosx_version_min -k10.7 -k-no_pie"
