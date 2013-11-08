@@ -40,28 +40,33 @@ _type_switcher = {
 
 
     
-    'resolutionarray':  'resolutionPtr',
-    'fingerarray':      'FingerPtr',
-    'longintarray':     'LongintPtr',
-    'bitmaparray':      'BitmapPtr',
-    'point2darray':     'Point2DPtr',
-    'trianglearray':    'TrianglePtr',
-        
-    'spriteendingaction': 'SpriteEndingAction',
+    'resolutionarray':          'ResolutionPtr',
+    'fingerarray':              'FingerPtr',
+    'longintarray':             'LongintPtr',
+    'bitmaparray':              'BitmapPtr',
+    'point2darray':             'Point2DPtr',
+    'trianglearray':            'TrianglePtr',
+    'spriteeventhandlerarray':  'SpriteEventHandlerPtr',
+    'stringarray':              'StringPtr',
+
+    'spriteendingaction':       'SpriteEndingAction',
     'circle': 'Circle',
     'map': 'Map',
     'maptag': 'MapTag',
     'spritekind': 'SpriteKind',
-    'freenotifier': 'FreeNotifier',
-    
+
+    # Function Pointers
+    'freenotifier':             'FreeNotifier',
+    'spriteeventhandler':       'SpriteEventHandler',
+
+    #...
     'shapeprototype': 'ShapePrototype',
     'character': 'Character',
     'shape': 'Shape',
     
-    'shapekind': 'ShapeKind',
-    'animation': 'Animation',
-    'animationscript': 'AnimationScript',
-    'stringarray': 'StringPtr',
+    'shapekind':            'ShapeKind',
+    'animation':            'Animation',
+    'animationscript':      'AnimationScript',
     'collisiontestkind':    'CollisionTestKind',
     
     'bitmapcell':           'BitmapCell',
@@ -86,6 +91,8 @@ _type_switcher = {
     'messageptr'        :   'MessagePtr',
     'connection'        :   'Connection',
     'arduinodevice'     :   'ArduinoDevice',
+
+
 }
  
 

@@ -8,6 +8,9 @@
 // Change History:
 //
 // Version 3.0:
+// - 2013-11-08: Andrew : Add Sprite Event Details
+//
+// ... long missing history --sadface--
 // - 2010-01-13: Aaron  : Changed function pointer of ShapeDrawingFn to accept offset
 // - 2009-12-18: Andrew : Moved to new sprite format.
 // - 2009-12-15: Andrew : Updated animation handling to use new NamedIndexCollection.
@@ -397,34 +400,18 @@ interface
         AABBCollisions
       );
     
-    /// @struct SpriteData
-    /// @via_pointer
-    SpriteData = packed record
-      name:             String;               // The name of the sprite for resource management
-      
-      layerIds:         NamedIndexCollection; // The name <-> ids mapping for layers
-      layers:           BitmapArray;      // Layers of the sprites
-      visibleLayers:    LongintArray;     // The indexes of the visible layers
-      layerOffsets:     Point2DArray;     // Offsets from drawing the layers
-      
-      values:           SingleArray;              // Values associated with this sprite
-      valueIds:         NamedIndexCollection;         // The name <-> ids mappings for values
-      
-      animationInfo:    Animation;          // The data used to animate this sprite
-      animationScript:  AnimationScript;  // The template for this sprite's animations
-      
-      position:         Point2D;                      // The game location of the sprite
-      velocity:         Vector;                       // The velocity of the sprite
-      
-      collisionKind:    CollisionTestKind;       //The kind of collisions used by this sprite
-      collisionBitmap:  Bitmap;                // The bitmap used for collision testing (default to first image)
-        
-      backupCollisionBitmap:  Bitmap;         // Cache for rotated sprites
-      cacheImage:             Bitmap;
-      
-      //add later -> 
-      //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape
-    end;
+    /// This enumeration contains a list of all of the different kinds of
+    /// events that a Sprite can raise. When the event is raised the assocated
+    /// SpriteEventKind value passed to the event handler to indicate the
+    /// kind of event that has occurred.
+    ///
+    /// @enum SpriteEventKind
+    SpriteEventKind = ( 
+      SpriteArrivedEvent,            // Sprite has arrived at the end of a move
+      SpriteAnimationEndedEvent,     // The Sprite's animation has ended (not looped)
+      SpriteTouchedEvent,            // The Sprite was touched
+      SpriteClickedEvent             // The Sprite was touched
+    );
 
     /// Sprites are used to represent Sprites drawn to the screen. Create a
     /// sprite using the CreateSprite function, and free it when complete with
@@ -436,6 +423,55 @@ interface
     /// @pointer_wrapper
     /// @field pointer: ^SpriteData
     Sprite = ^SpriteData;
+
+    /// The SpriteEventHandler function pointer is used when you want to register
+    /// to receive events from a Sprite.
+    ///
+    /// @type SpriteEventHandler
+    SpriteEventHandler = procedure (s: Sprite; evt: SpriteEventKind); 
+
+    /// @type SpriteEventHandlerArray
+    /// @array_wrapper
+    /// @field data: array of SpriteEventHandler
+    SpriteEventHandlerArray = array of SpriteEventHandler;
+
+
+    /// @struct SpriteData
+    /// @via_pointer
+    SpriteData = packed record
+      name:             String;               // The name of the sprite for resource management
+      
+      layerIds:         NamedIndexCollection; // The name <-> ids mapping for layers
+      layers:           BitmapArray;          // Layers of the sprites
+      visibleLayers:    LongintArray;         // The indexes of the visible layers
+      layerOffsets:     Point2DArray;         // Offsets from drawing the layers
+      
+      values:           SingleArray;          // Values associated with this sprite
+      valueIds:         NamedIndexCollection; // The name <-> ids mappings for values
+      
+      animationInfo:    Animation;            // The data used to animate this sprite
+      animationScript:  AnimationScript;      // The template for this sprite's animations
+      
+      position:         Point2D;              // The game location of the sprite
+      velocity:         Vector;               // The velocity of the sprite
+      
+      collisionKind:    CollisionTestKind;    //The kind of collisions used by this sprite
+      collisionBitmap:  Bitmap;               // The bitmap used for collision testing (default to first image)
+        
+      backupCollisionBitmap:  Bitmap;         // Cache for rotated sprites
+      cacheImage:             Bitmap;         // ...
+      
+      isMoving:     Boolean;                  // Used for events to indicate the sprite is moving
+      destination:  Point2D;                  // The destination the sprite is moving to
+      movingVec:    Vector;                   // The sprite's movement vector
+      arriveInSec:  Single;                   // Amount of time in seconds to arrive at point
+      lastUpdate:   Longint;                  // Time of last update
+
+      evts:  SpriteEventHandlerArray;         // The call backs listening for sprite events
+
+      //add later -> 
+      //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape
+    end;
 
     /// @struct TimerData
     /// @via_pointer

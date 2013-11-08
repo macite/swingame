@@ -35,6 +35,7 @@ _array_copy_data = {
     'stringarray':  'String',
     'trianglearray':  'Triangle',
     'fingerarray':  'Finger',
+    'spriteeventhandlerarray':  'SpriteEventHandler',
 }
 
 # # dictionary for start of method names for copying fixed

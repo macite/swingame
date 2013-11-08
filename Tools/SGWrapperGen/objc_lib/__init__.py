@@ -58,9 +58,10 @@ _type_switcher = {
         'color': 'color',
         
         #function pointers
-        'freenotifier':     'free_notifier',
-        'shapedrawingfn':   'shape_drawing_fn',
-        'guieventcallback':  'guievent_callback',
+        'freenotifier':         'free_notifier',
+        'spriteeventhandler':   'sprite_event_handler',
+        'shapedrawingfn':       'shape_drawing_fn',
+        'guieventcallback':     'guievent_callback',
         
         #Enums
         'resourcekind':         'resource_kind',

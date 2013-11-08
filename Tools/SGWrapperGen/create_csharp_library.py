@@ -212,10 +212,14 @@ _type_switcher = {
         'guielementkind':       'GUIElementKind %s',
         'eventkind':          'EventKind %s',
         'filedialogselecttype':          'FileDialogSelectType %s',
+        'spriteeventkind': 'SpriteEventKind %s',
+
         'messageptr':          'void *%s',
+
         
         #Functions
         'freenotifier': 'FreeNotifier %s',
+        'spriteeventhandler': 'SpriteEventHandler %s',
         'guieventcallback':  'GUIEventCallback %s',
     },
     'const' : {
@@ -514,6 +518,7 @@ _adapter_type_switcher = {
         
         #Functions
         'freenotifier': 'FreeNotifier %s',
+        'spriteeventhandler': 'SpriteEventHandler %s',
         'guieventcallback': 'GUIEventCallback %s',
     },
     #No modifier and for the actual library call
@@ -586,6 +591,7 @@ _adapter_type_switcher = {
         
         #Functions
         'freenotifier': 'FreeNotifier %s',
+        'spriteeventhandler': 'SpriteEventHandler %s',
         'guieventcallback': 'GUIEventCallback %s',
     },
     'const' : {

@@ -188,15 +188,16 @@ _type_dictionary_creation_data = [
     {
         'identifiers': [
             ('pointer',         'void *'),
-            ('freenotifier',    'free_notifier '),
             ('animationframe',  'animation_frame'),
+            ('freenotifier',    'free_notifier'),
             ('guieventcallback',  'guievent_callback'),
+            ('spriteeventhandler',  'sprite_event_handler'),
             
         ],
         '_type_switcher': {
             None:       '#2# ',
             'var':      '#2# *',
-            'var-cpp':      '#2# &',
+            'var-cpp':  '#2# &',
             'out':      '#2# ',
             'return':   '#2#',
         },
@@ -226,16 +227,17 @@ _type_dictionary_creation_data = [
     # array types
     {
         'identifiers': [
-            ('linesarray',     'lines_array '),
-            ('stringarray',     'string_array '),
-            ('point2darray',    'point2d *'),
-            ('longintarray',    'int32_t *'),
-            ('trianglearray',   'triangle_array '),
-            ('bitmaparray',     'bitmap *'),
-            ('singlearray',     'float *'),
-            ('pointer[0..n - 1]',   'void *'),
-            ('fingerarray',   'finger_array '),
-            ('resolutionarray',   'resolution_array '),
+            ('linesarray',              'lines_array '),
+            ('stringarray',             'string_array '),
+            ('point2darray',            'point2d *'),
+            ('longintarray',            'int32_t *'),
+            ('trianglearray',           'triangle_array '),
+            ('bitmaparray',             'bitmap *'),
+            ('singlearray',             'float *'),
+            ('pointer[0..n - 1]',       'void *'),
+            ('fingerarray',             'finger_array '),
+            ('resolutionarray',         'resolution_array '),
+            ('spriteeventhandlerarray', 'sprite_event_handler_array '),
         ],
         '_type_switcher': {
             None:       '#2#',
@@ -354,7 +356,7 @@ _type_dictionary_creation_data = [
             ('region[0..n - 1]',                        'region **'),
             ('resolution[0..n - 1]',                    'resolution *'),
             ('finger[0..n - 1]',                        'finger *'),
-
+            ('spriteeventhandler[0..n - 1]',            'sprite_event_handler *'),
           
             ('point2d[0..2]',                           'point2d %s[3]'),
             ('single[0..2][0..2]',                      'float %s[3][3]'),
