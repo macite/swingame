@@ -7,6 +7,7 @@
 // Change History:
 //
 // Version 3.0:
+// - 2013-11-12: Andrew : Updated Sprite constructors
 // - 2013-11-08: Andrew : Add Sprite Event Details
 //
 // ... long missing history --sadface--
@@ -58,6 +59,16 @@ interface
   /// @constructor
   /// @csn initWithBitmap:%s
   function CreateSprite(layer: Bitmap): Sprite; overload;
+
+  /// Creates a sprite. The bitmapName is used to indicate the bitmap the sprite will use, and the 
+  /// animationName is used to indicate which AnimationScript to use.
+  ///
+  /// @lib CreateSpriteWithBitmapAndAnimationName
+  /// 
+  /// @class Sprite
+  /// @constructor
+  /// @csn initWithBitmapNamed:%s animationScriptNamed:%s
+  function CreateSprite(bitmapName, animationName: String): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -228,7 +239,7 @@ interface
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s
   function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
-  
+
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   /// pixel level collisions, no animation, and the specified layer have name.
@@ -1690,6 +1701,11 @@ implementation
   begin
     result := CreateSprite(layer, 'layer0', ani);
   end;
+
+  function CreateSprite(bitmapName, animationName: String): Sprite; overload;
+  begin
+    result := CreateSprite(BitmapNamed(bitmapName), AnimationScriptNamed(animationName));
+  end;
   
   function CreateSprite(layer: Bitmap; ani: AnimationScript; x, y: Single): Sprite; overload;
   begin
@@ -2184,7 +2200,7 @@ implementation
           SpriteRaiseEvent(s, SpriteTouchedEvent);
         end;
       {$ELSE}
-        if CircleCircleCollision(SpriteCollisionCircle(s), CircleAt(MouseX(), MouseY(), 1)) then
+        if MouseClicked(LeftButton) and CircleCircleCollision(SpriteCollisionCircle(s), CircleAt(MouseX(), MouseY(), 1)) then
         begin
           SpriteRaiseEvent(s, SpriteClickedEvent);  
         end;
