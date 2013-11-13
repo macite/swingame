@@ -11,7 +11,7 @@ Copyright (c) 2010 Swinburne University of Technology. All rights reserved.
 
 import generated_folders
 
-import logging, sys, re, time, subprocess
+import logging, sys, re, time, subprocess, os
 
 from sg import parser_runner
 from sg.sg_cache import logger, find_or_add_file
@@ -71,7 +71,8 @@ class APIDocWriter(object):
     '''Base class for presentation API documentation providing html template
     features including consistent header/footer details, toc and style links
     '''
-    templateFile = open('documentation_template.html', 'r')
+    (path, script_file) = os.path.split(sys.modules[__name__].__file__)
+    templateFile = open(os.path.join(path, 'documentation_template.html'), 'r')
     _html = templateFile.read()  
     templateFile.close() 
 
