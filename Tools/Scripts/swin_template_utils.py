@@ -67,7 +67,7 @@ def run_python(script_name, base_path=python_script_dir):
     
     if proc.returncode != 0:
         print "Error running script: ", script_name
-        print out
+        print out, err
         quit()
 
 def run_bash(script_name, opts):

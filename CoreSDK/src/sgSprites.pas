@@ -7,6 +7,7 @@
 // Change History:
 //
 // Version 3.0:
+// - 2013-11-13: Andrew : Add Sprite Packs
 // - 2013-11-12: Andrew : Updated Sprite constructors
 // - 2013-11-08: Andrew : Add Sprite Event Details
 //
@@ -951,6 +952,19 @@ interface
 // Drawing code
 //---------------------------------------------------------------------------
   
+  /// Draws the sprite at its location in the world. This is effected by the
+  /// position of the camera and the sprites current location.
+  ///
+  /// This is the standard routine for drawing sprites to the screen and should be
+  /// used in most cases.
+  ///
+  /// @lib DrawSpriteOffsetXY(s, 0, 0)
+  /// @uname DrawSprite
+  /// 
+  /// @class Sprite
+  /// @method Draw
+  procedure DrawSprite(s : Sprite); overload;
+
   /// Draws the sprite at its position in the game offset by a given amount. Only
   /// use this method when you want to draw the sprite displaced from its location
   /// in your game. Otherwise you should change the sprite's location and then
@@ -975,21 +989,7 @@ interface
   /// @class Sprite
   /// @overload Draw DrawOffsetPoint
   /// @csn drawOffset:%s
-  procedure DrawSprite(s : Sprite; const position: Point2D); overload;
-  
-  /// Draws the sprite at its location in the world. This is effected by the
-  /// position of the camera and the sprites current location.
-  ///
-  /// This is the standard routine for drawing sprites to the screen and should be
-  /// used in most cases.
-  ///
-  /// @lib DrawSpriteOffsetXY(s, 0, 0)
-  /// @uname DrawSprite
-  /// 
-  /// @class Sprite
-  /// @method Draw
-  procedure DrawSprite(s : Sprite); overload;
-  
+  procedure DrawSprite(s : Sprite; const position: Point2D); overload;  
   
   
 //---------------------------------------------------------------------------
@@ -1608,6 +1608,52 @@ interface
   /// @getter Name
   function SpriteName(sprt: Sprite): String;
   
+
+//---------------------------------------------------------------------------
+// Sprite Packs
+//---------------------------------------------------------------------------
+
+  /// Draws all of the sprites in the current Sprite pack. Packs can be
+  /// switched to select between different sets of sprites.
+  ///
+  /// @lib 
+  procedure DrawAllSprites();
+
+  /// Update all of the sprites in the current Sprite pack. 
+  ///
+  /// @lib
+  procedure UpdateAllSprites(); overload;
+
+  /// Update all of the sprites in the current Sprite pack, passing in a
+  /// percentage value to indicate the percentage to update.
+  ///
+  /// @lib UpdateAllSpritesPct
+  procedure UpdateAllSprites(pct: Single); overload;
+
+  /// Create a new SpritePack with a given name. This pack can then be 
+  /// selected and used to control which sprites are drawn/updated in
+  /// the calls to DrawAllSprites and UpdateAllSprites.
+  ///
+  /// @lib
+  procedure CreateSpritePack(name: String);
+
+  /// Indicates if a given SpritePack has already been created.
+  ///
+  /// @lib
+  function HasSpritePack(name: String): Boolean;
+
+  /// Selects the named SpritePack (if it has been created). The
+  /// selected SpritePack determines which sprites are drawn and updated
+  /// with the DrawAllSprites and UpdateAllSprites code.
+  ///
+  /// @lib
+  procedure SelectSpritePack(name: String);
+
+  /// Returns the name of the currently selected SpritePack.
+  ///
+  /// @lib
+  function CurrentSpritePack(): String;
+
   
   
 //=============================================================================
@@ -1615,14 +1661,16 @@ implementation
   uses
     Classes, SysUtils, Math, // System
     stringhash,
-    sgNamedIndexCollection, //libsrc
+    sgNamedIndexCollection, SpritePack, //libsrc
     sgAnimations, sgGraphics, sgGeometry, sgPhysics, sgInput, sgCamera, sgShared, sgResources, sgImages, sgTrace, sgTimers; //SwinGame
 //=============================================================================
 
   var
     _GlobalSpriteEventHandlers: array of SpriteEventHandler;
     _Sprites: TStringHash;
+    _SpritePacks: TStringHash;
     _spriteTimer: Timer;
+    _CurrentPack: TSpritePack;
   
   const
     MASS_IDX      = 0;  // The index of the sprite's mass value
@@ -1918,10 +1966,13 @@ implementation
     // WriteLn('Adding for ', name, ' ', HexStr(obj));
     if not _Sprites.setValue(name, obj) then
     begin
-        RaiseException('** Leaking: Caused by loading Sprite created twice, ' + name);
+        RaiseWarning('** Leaking: Caused by loading Sprite created twice, ' + name);
         result := nil;
         exit;
     end;
+
+    result^.pack := _CurrentPack;
+    _CurrentPack.AddSprite(result);
   end;
   
   function HasSprite(name: String): Boolean;
@@ -2063,6 +2114,8 @@ implementation
       // Remove from hashtable
       // WriteLn('Freeing Sprite named: ', s^.name);
       _Sprites.remove(s^.name).Free();
+
+      TSpritePack(s^.pack).RemoveSprite(s);
       
       //Dispose sprite
       CallFreeNotifier(s);
@@ -3151,6 +3204,69 @@ implementation
     end;
   end;
 
+//---------------------------------------------------------------------------
+// Sprite Packs
+//---------------------------------------------------------------------------
+
+  // Duplicate for the UpdateSprite for use in UpdateAllSprites... as it
+  // currently does not select the correct overload.
+  procedure _UpdateSpritePct(s: Sprite; pct: Single);
+  begin
+    UpdateSprite(s, pct);  
+  end;
+
+  procedure DrawAllSprites();
+  begin
+    _CurrentPack.CallForAllSprites(@DrawSprite);
+  end;
+
+  procedure UpdateAllSprites(pct: Single); overload;
+  begin
+    _CurrentPack.CallForAllSprites(@_UpdateSpritePct, pct);
+  end;
+
+  procedure UpdateAllSprites(); overload;
+  begin
+    UpdateAllSprites(1.0);
+  end;
+
+  procedure CreateSpritePack(name: String);
+  begin
+    if not HasSpritePack(name) then
+    begin
+      _CurrentPack := TSpritePack.Create(name);
+      _CurrentPack.AddPackTo(_SpritePacks);
+    end
+    else
+    begin
+      RaiseWarning('The SpritePack ' + name + ' already exists');
+    end;
+  end;
+
+  function HasSpritePack(name: String): Boolean;
+  begin
+    result := _SpritePacks.ContainsKey(name);
+  end;
+
+  function CurrentSpritePack(): String;
+  begin
+    result := _CurrentPack.Name;
+  end;
+
+  procedure SelectSpritePack(name: String);
+  begin
+    if HasSpritePack(name) then
+    begin
+      _CurrentPack := TSpritePack(_SpritePacks.Values[name]);
+    end
+    else
+    begin
+      RaiseWarning('No SpritePack named ' + name + ' to select.');
+    end;
+  end;
+
+
+
 
 
 //=============================================================================
@@ -3160,6 +3276,10 @@ implementation
     InitialiseSwinGame();
     
     _Sprites := TStringHash.Create(False, 16384);
+    _SpritePacks := TStringHash.Create(False, 50);
+
+    _CurrentPack := TSpritePack.Create('Default');
+    _CurrentPack.AddPackTo(_SpritePacks);
 
     // Sprite movement timer - all sprites movement is timed from this
     _spriteTimer := CreateTimer('*SG* SpriteTimer');

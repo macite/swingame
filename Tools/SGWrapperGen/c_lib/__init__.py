@@ -192,6 +192,9 @@ _type_dictionary_creation_data = [
             ('freenotifier',    'free_notifier'),
             ('guieventcallback',  'guievent_callback'),
             ('spriteeventhandler',  'sprite_event_handler'),
+            ('spritefunction',       'sprite_function'),
+            ('spritesinglefunction', 'sprite_single_function'),
+
             
         ],
         '_type_switcher': {

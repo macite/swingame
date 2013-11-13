@@ -430,6 +430,21 @@ interface
     /// @type SpriteEventHandler
     SpriteEventHandler = procedure (s: Sprite; evt: SpriteEventKind); 
 
+    /// SpriteFunctions are used with SpritePacks to provide a procedure to be
+    /// called for each of the Sprites in the SpritePack.
+    ///
+    /// @type SpriteFunction
+    SpriteFunction = procedure(s: Sprite);
+
+    /// SpriteSingleFunctions are used with SpritePacks to provide a procedure to be
+    /// called for each of the Sprites in the SpritePack. This version allows a 
+    /// single value to be passed as a parameter along with the call.
+    ///
+    /// @type SpriteSingleFunction
+    SpriteSingleFunction = procedure(s: Sprite; val: Single);
+
+    /// An array of SpriteEventHandlers used internally by Sprites.
+    ///
     /// @type SpriteEventHandlerArray
     /// @array_wrapper
     /// @field data: array of SpriteEventHandler
@@ -467,7 +482,9 @@ interface
       arriveInSec:  Single;                   // Amount of time in seconds to arrive at point
       lastUpdate:   Longint;                  // Time of last update
 
-      evts:  SpriteEventHandlerArray;         // The call backs listening for sprite events
+      evts: SpriteEventHandlerArray;          // The call backs listening for sprite events
+
+      pack: Pointer;                          // Points the the SpritePack that contains this sprite        
 
       //add later -> 
       //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape

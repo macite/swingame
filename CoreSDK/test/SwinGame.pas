@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2013-07-23 16:23:04.726958
+// SwinGame.pas was generated on 2013-11-13 21:53:05.078497
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -83,9 +83,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   type CollisionTestKind = sgTypes.CollisionTestKind;
 
-  type SpriteData = sgTypes.SpriteData;
+  type SpriteEventKind = sgTypes.SpriteEventKind;
 
   type Sprite = sgTypes.Sprite;
+
+  type SpriteEventHandler = sgTypes.SpriteEventHandler;
+
+  type SpriteFunction = sgTypes.SpriteFunction;
+
+  type SpriteSingleFunction = sgTypes.SpriteSingleFunction;
+
+  type SpriteEventHandlerArray = sgTypes.SpriteEventHandlerArray;
+
+  type SpriteData = sgTypes.SpriteData;
 
   type TimerData = sgTypes.TimerData;
 
@@ -178,7 +188,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   function AnimationEnteredFrame(anim: Animation): Boolean; overload;
 
   // Returns the amount of time spent in the current frame. When this exceeds
-  // the frame's duration the animation moves to the next frame.
+  // the frames duration the animation moves to the next frame.
   function AnimationFrameTime(anim: Animation): Single; overload;
 
   // The index of the animation within the animation template that has the supplied name.
@@ -764,7 +774,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draws the character's sprite with no additional functionality
   procedure DrawCharacterSprite(c: Character); overload;
 
-  // Draw Character that changes state when its velocity is 0 to be the stationary
+  // Draw Character that changes state when it's velocity is 0 to be the stationary
   // state which is specified.
   procedure DrawCharacterWithStationary(c: Character; stationaryState: Longint; state: Longint); overload;
 
@@ -799,11 +809,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Toggles whether or not the layer at the specified index is drawn or not
   procedure ToggleLayerVisibility(c: Character; index: Longint); overload;
 
-  // Update the animation of the character depending on its direction. Returns true
+  // Update the animation of the character depending on it's direction. Returns true
   // if the direction was changed and false if it was no changed
   function UpdateDirectionAnimation(c: Character): Boolean; overload;
 
-  // Update the animation of the character depending on its direction, including updating
+  // Update the animation of the character depending on it's direction, including updating
   //When the character's state goes stationary
   function UpdateDirectionAnimationWithStationary(c: Character; state: Longint; newState: Longint): Boolean; overload;
 
@@ -2674,6 +2684,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // resources.
   procedure SetAppPath(path: String; withExe: Boolean); overload;
 
+  // Register a procedure to be called when an events occur on any sprite.
+  procedure CallOnSpriteEvent(handler: SpriteEventHandler); overload;
+
   // Returns the center point of the passed in Sprite. This is based on the Sprite's 
   // Position, Width and Height.
   function CenterPoint(s: Sprite): Point2D; overload;
@@ -2706,6 +2719,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   //
   // This version of the constructor will assign a default name to the sprite for resource management purposes.
   function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
+
+  // Creates a sprite. The bitmapName is used to indicate the bitmap the sprite will use, and the 
+  // animationName is used to indicate which AnimationScript to use.
+  function CreateSprite(bitmapName: String; animationName: String): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2806,6 +2823,18 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
   function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
 
+  // Create a new SpritePack with a given name. This pack can then be 
+  // selected and used to control which sprites are drawn/updated in
+  // the calls to DrawAllSprites and UpdateAllSprites.
+  procedure CreateSpritePack(name: String); overload;
+
+  // Returns the name of the currently selected SpritePack.
+  function CurrentSpritePack(): String; overload;
+
+  // Draws all of the sprites in the current Sprite pack. Packs can be
+  // switched to select between different sets of sprites.
+  procedure DrawAllSprites(); overload;
+
   // Draws the sprite at its location in the world. This is effected by the
   // position of the camera and the sprites current location.
   //
@@ -2832,6 +2861,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // This checks against all sprites, those loaded without a name
   // are assigned a default.
   function HasSprite(name: String): Boolean; overload;
+
+  // Indicates if a given SpritePack has already been created.
+  function HasSpritePack(name: String): Boolean; overload;
 
   // Moves the sprite as indicated by its velocity. You can call this directly ot 
   // alternatively, this action is performed when the sprite is updated using
@@ -2865,6 +2897,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // specified ``name``.
   procedure ReleaseSprite(name: String); overload;
 
+  // Selects the named SpritePack (if it has been created). The
+  // selected SpritePack determines which sprites are drawn and updated
+  // with the DrawAllSprites and UpdateAllSprites code.
+  procedure SelectSpritePack(name: String); overload;
+
   // Adds a new layer to the sprite.
   function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint; overload;
 
@@ -2889,6 +2926,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Sends the layer specified to the front in the visible layer order.
   procedure SpriteBringLayerToFront(s: Sprite; visibleLayer: Longint); overload;
+
+  // Register a procedure to call when events occur on the sprite.
+  procedure SpriteCallOnEvent(s: Sprite; handler: SpriteEventHandler); overload;
 
   // Gets a circle in the bounds of the base layer of the indicated sprite.
   function SpriteCircle(s: Sprite): Circle; overload;
@@ -2988,6 +3028,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Physics. The mass of two colliding sprites will determine the relative
   // velocitys after the collision.
   function SpriteMass(s: Sprite): Single; overload;
+
+  // This procedure starts the sprite moving to the indicated
+  // destination point, over a specified number of seconds. When the 
+  // sprite arrives it will raise the SpriteArrived event.
+  procedure SpriteMoveTo(s: Sprite; const pt: Point2D; takingSeconds: Longint); overload;
 
   // Returns the name of the sprite. This name is used for resource management
   // and can be used to interact with the sprite in various routines.
@@ -3126,6 +3171,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // if the first cell of the animation has a sound.
   procedure SpriteStartAnimation(s: Sprite; idx: Longint; withSound: Boolean); overload;
 
+  // Removes an event handler from the sprite, stopping events from this 
+  // Sprite calling the indicated method.
+  procedure SpriteStopCallingOnEvent(s: Sprite; handler: SpriteEventHandler); overload;
+
   // Toggle the visibility of the specified layer of the sprite.
   procedure SpriteToggleLayerVisible(s: Sprite; id: Longint); overload;
 
@@ -3172,6 +3221,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Returns the Y position of the Sprite.
   function SpriteY(s: Sprite): Single; overload;
 
+  // Removes an global event handler, stopping events calling the indicated procedure.
+  procedure StopCallingOnSpriteEvent(handler: SpriteEventHandler); overload;
+
+  // Update all of the sprites in the current Sprite pack.
+  procedure UpdateAllSprites(); overload;
+
+  // Update all of the sprites in the current Sprite pack, passing in a
+  // percentage value to indicate the percentage to update.
+  procedure UpdateAllSprites(pct: Single); overload;
+
   // Update the position and animation details of the Sprite.
   // This will play a sound effect if the new cell of the animation
   // has a sound.
@@ -3199,16 +3258,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // has a sound.
   procedure UpdateSpriteAnimation(s: Sprite); overload;
 
+  // Update the animation details of the Sprite.
+  // This will play a sound effect if the new cell of the animation
+  // has a sound and withSound is true.
+  procedure UpdateSpriteAnimation(s: Sprite; withSound: Boolean); overload;
+
   // Update the animation details of the Sprite by a 
   // given percentage of a single unit of movement/animation.
   // This will play a sound effect if the new cell of the animation
   // has a sound.
   procedure UpdateSpriteAnimation(s: Sprite; pct: Single); overload;
-
-  // Update the animation details of the Sprite.
-  // This will play a sound effect if the new cell of the animation
-  // has a sound and withSound is true.
-  procedure UpdateSpriteAnimation(s: Sprite; withSound: Boolean); overload;
 
   // Update the position and animation details of the Sprite by a 
   // given percentage of a single unit of movement/animation.
@@ -7757,6 +7816,11 @@ implementation
     sgResources.SetAppPath(path,withExe);
   end;
 
+  procedure CallOnSpriteEvent(handler: SpriteEventHandler); overload;
+  begin
+    sgSprites.CallOnSpriteEvent(handler);
+  end;
+
   function CenterPoint(s: Sprite): Point2D; overload;
   begin
     result := sgSprites.CenterPoint(s);
@@ -7780,6 +7844,11 @@ implementation
   function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(layer,pt);
+  end;
+
+  function CreateSprite(bitmapName: String; animationName: String): Sprite; overload;
+  begin
+    result := sgSprites.CreateSprite(bitmapName,animationName);
   end;
 
   function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
@@ -7862,6 +7931,21 @@ implementation
     result := sgSprites.CreateSprite(name,layers,layerNames,ani);
   end;
 
+  procedure CreateSpritePack(name: String); overload;
+  begin
+    sgSprites.CreateSpritePack(name);
+  end;
+
+  function CurrentSpritePack(): String; overload;
+  begin
+    result := sgSprites.CurrentSpritePack();
+  end;
+
+  procedure DrawAllSprites(); overload;
+  begin
+    sgSprites.DrawAllSprites();
+  end;
+
   procedure DrawSprite(s: Sprite); overload;
   begin
     sgSprites.DrawSprite(s);
@@ -7885,6 +7969,11 @@ implementation
   function HasSprite(name: String): Boolean; overload;
   begin
     result := sgSprites.HasSprite(name);
+  end;
+
+  function HasSpritePack(name: String): Boolean; overload;
+  begin
+    result := sgSprites.HasSpritePack(name);
   end;
 
   procedure MoveSprite(s: Sprite); overload;
@@ -7922,6 +8011,11 @@ implementation
     sgSprites.ReleaseSprite(name);
   end;
 
+  procedure SelectSpritePack(name: String); overload;
+  begin
+    sgSprites.SelectSpritePack(name);
+  end;
+
   function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint; overload;
   begin
     result := sgSprites.SpriteAddLayer(s,newLayer,layerName);
@@ -7955,6 +8049,11 @@ implementation
   procedure SpriteBringLayerToFront(s: Sprite; visibleLayer: Longint); overload;
   begin
     sgSprites.SpriteBringLayerToFront(s,visibleLayer);
+  end;
+
+  procedure SpriteCallOnEvent(s: Sprite; handler: SpriteEventHandler); overload;
+  begin
+    sgSprites.SpriteCallOnEvent(s,handler);
   end;
 
   function SpriteCircle(s: Sprite): Circle; overload;
@@ -8110,6 +8209,11 @@ implementation
   function SpriteMass(s: Sprite): Single; overload;
   begin
     result := sgSprites.SpriteMass(s);
+  end;
+
+  procedure SpriteMoveTo(s: Sprite; const pt: Point2D; takingSeconds: Longint); overload;
+  begin
+    sgSprites.SpriteMoveTo(s,pt,takingSeconds);
   end;
 
   function SpriteName(sprt: Sprite): String; overload;
@@ -8302,6 +8406,11 @@ implementation
     sgSprites.SpriteStartAnimation(s,idx,withSound);
   end;
 
+  procedure SpriteStopCallingOnEvent(s: Sprite; handler: SpriteEventHandler); overload;
+  begin
+    sgSprites.SpriteStopCallingOnEvent(s,handler);
+  end;
+
   procedure SpriteToggleLayerVisible(s: Sprite; id: Longint); overload;
   begin
     sgSprites.SpriteToggleLayerVisible(s,id);
@@ -8377,6 +8486,21 @@ implementation
     result := sgSprites.SpriteY(s);
   end;
 
+  procedure StopCallingOnSpriteEvent(handler: SpriteEventHandler); overload;
+  begin
+    sgSprites.StopCallingOnSpriteEvent(handler);
+  end;
+
+  procedure UpdateAllSprites(); overload;
+  begin
+    sgSprites.UpdateAllSprites();
+  end;
+
+  procedure UpdateAllSprites(pct: Single); overload;
+  begin
+    sgSprites.UpdateAllSprites(pct);
+  end;
+
   procedure UpdateSprite(s: Sprite); overload;
   begin
     sgSprites.UpdateSprite(s);
@@ -8402,14 +8526,14 @@ implementation
     sgSprites.UpdateSpriteAnimation(s);
   end;
 
-  procedure UpdateSpriteAnimation(s: Sprite; pct: Single); overload;
-  begin
-    sgSprites.UpdateSpriteAnimation(s,pct);
-  end;
-
   procedure UpdateSpriteAnimation(s: Sprite; withSound: Boolean); overload;
   begin
     sgSprites.UpdateSpriteAnimation(s,withSound);
+  end;
+
+  procedure UpdateSpriteAnimation(s: Sprite; pct: Single); overload;
+  begin
+    sgSprites.UpdateSpriteAnimation(s,pct);
   end;
 
   procedure UpdateSpriteAnimation(s: Sprite; pct: Single; withSound: Boolean); overload;

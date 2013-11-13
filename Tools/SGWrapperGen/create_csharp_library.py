@@ -219,7 +219,9 @@ _type_switcher = {
         
         #Functions
         'freenotifier': 'FreeNotifier %s',
-        'spriteeventhandler': 'SpriteEventHandler %s',
+        'spriteeventhandler':   'SpriteEventHandler %s',
+        'spritefunction':       'SpriteFunction %s',
+        'spritesinglefunction': 'SpriteSingleFunction %s',
         'guieventcallback':  'GUIEventCallback %s',
     },
     'const' : {
@@ -517,9 +519,11 @@ _adapter_type_switcher = {
         'filedialogselecttype': 'FileDialogSelectType %s',
         
         #Functions
-        'freenotifier': 'FreeNotifier %s',
-        'spriteeventhandler': 'SpriteEventHandler %s',
-        'guieventcallback': 'GUIEventCallback %s',
+        'freenotifier':         'FreeNotifier %s',
+        'spriteeventhandler':   'SpriteEventHandler %s',
+        'spritefunction':       'SpriteFunction %s',
+        'spritesinglefunction': 'SpriteSingleFunction %s',
+        'guieventcallback':     'GUIEventCallback %s',
     },
     #No modifier and for the actual library call
     'lib_': {
@@ -590,9 +594,12 @@ _adapter_type_switcher = {
         'filedialogselecttype': 'FileDialogSelectType %s',
         
         #Functions
-        'freenotifier': 'FreeNotifier %s',
-        'spriteeventhandler': 'SpriteEventHandler %s',
-        'guieventcallback': 'GUIEventCallback %s',
+        'freenotifier':         'FreeNotifier %s',
+        'spriteeventhandler':   'SpriteEventHandler %s',
+        'spritefunction':       'SpriteFunction %s',
+        'spritesinglefunction': 'SpriteSingleFunction %s',
+
+        'guieventcallback':     'GUIEventCallback %s',
     },
     'const' : {
         'point2d':      'ref Point2D %s',

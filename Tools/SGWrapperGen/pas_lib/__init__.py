@@ -58,6 +58,9 @@ _type_switcher = {
     # Function Pointers
     'freenotifier':             'FreeNotifier',
     'spriteeventhandler':       'SpriteEventHandler',
+    'spritefunction':           'SpriteFunction',
+    'spritesinglefunction':     'SpriteSingleFunction',
+
 
     #...
     'shapeprototype': 'ShapePrototype',
