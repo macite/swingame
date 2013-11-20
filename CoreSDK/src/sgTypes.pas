@@ -314,13 +314,13 @@ interface
     /// @struct BitmapData
     /// @via_pointer
     BitmapData = packed record
-      filename, name     : String;         // Used for locating bitmaps during load/freeing
-      surface            : Pointer;   // The actual bitmap image
+      filename, name     : String;      // Used for locating bitmaps during load/freeing
+      surface            : Pointer;     // The actual bitmap image
       
-      width              : Longint;        // The width of the bitmap
-      height             : Longint;        // The height of the bitmap
-      TextureWidthRatio  : Single;        //bmp width / texture width
-      TextureHeightRatio : Single;      //bmp height /texture height
+      width              : Longint;     //  The width of the bitmap
+      height             : Longint;     //  The height of the bitmap
+      TextureWidthRatio  : Single;      //  bmp width / texture width
+      TextureHeightRatio : Single;      //  bmp height /texture height
       
       //Used for bitmaps that are made up of cells
       cellW                : Longint;    // The width of a cell
@@ -330,7 +330,7 @@ interface
       cellCount            : Longint;    // The total number of cells in the bitmap
       
       nonTransparentPixels : Array of Array of Boolean;  // Pixel mask used for pixel level collisions
-      clipStack            : Array of Rectangle;                    // The clipping rectangle history for the bitmap
+      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
     end;
 
     /// The bitmap type is a pointer to a BitmapData. The BitmapData record

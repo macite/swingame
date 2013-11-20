@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		942DBED2183C1DBA00876830 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBED1183C1DBA00876830 /* main.cpp */; };
+		942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED3183C202F00876830 /* Cocoa.framework */; };
+		942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED5183C203900876830 /* ForceFeedback.framework */; };
+		942DBEE7183C217B00876830 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEE5183C213300876830 /* Carbon.framework */; };
+		942DBEE8183C217E00876830 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEE1183C211C00876830 /* OpenGL.framework */; };
+		942DBEE9183C218000876830 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEDF183C211100876830 /* IOKit.framework */; };
+		942DBEEA183C218300876830 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEDD183C210400876830 /* AudioToolbox.framework */; };
+		942DBEEB183C218600876830 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED9183C20E500876830 /* AudioUnit.framework */; };
+		942DBEEC183C218A00876830 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED7183C207F00876830 /* CoreAudio.framework */; };
+		942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEED183C2A2800876830 /* sgBackendUtils.cpp */; };
+		942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */; };
+		942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF7183C558500876830 /* SGSDL2Utils.cpp */; };
 		9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */; };
 		9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9471BD9D183B717900BE3771 /* SGSDL2Core.h */; };
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
@@ -22,7 +34,6 @@
 		9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB2183B732800BE3771 /* libSDL2.a */; };
 		9471BDBF183B732800BE3771 /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB3183B732800BE3771 /* libwebp.a */; };
 		9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BD8C183B6E5700BE3771 /* libsgsdl2.a */; };
-		9471BDCF183B75A100BE3771 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BDCE183B75A100BE3771 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -38,6 +49,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
+		942DBED3183C202F00876830 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		942DBED5183C203900876830 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
+		942DBED7183C207F00876830 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		942DBED9183C20E500876830 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
+		942DBEDB183C20F600876830 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		942DBEDD183C210400876830 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		942DBEDF183C211100876830 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		942DBEE1183C211C00876830 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		942DBEE5183C213300876830 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
+		942DBEED183C2A2800876830 /* sgBackendUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sgBackendUtils.cpp; path = ../../../Core/src/sgBackendUtils.cpp; sourceTree = "<group>"; };
+		942DBEEE183C2A2800876830 /* sgBackendUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sgBackendUtils.h; path = ../../../Core/src/sgBackendUtils.h; sourceTree = "<group>"; };
+		942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Graphics.cpp; path = ../../src/SGSDL2Graphics.cpp; sourceTree = "<group>"; };
+		942DBEF2183C327800876830 /* SGSDL2Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Graphics.h; path = ../../src/SGSDL2Graphics.h; sourceTree = "<group>"; };
+		942DBEF6183C3DFA00876830 /* sgBackendTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sgBackendTypes.h; path = ../../../Core/include/sgBackendTypes.h; sourceTree = "<group>"; };
+		942DBEF7183C558500876830 /* SGSDL2Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Utils.cpp; path = ../../src/SGSDL2Utils.cpp; sourceTree = "<group>"; };
+		942DBEF8183C558500876830 /* SGSDL2Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Utils.h; path = ../../src/SGSDL2Utils.h; sourceTree = "<group>"; };
 		9471BD8C183B6E5700BE3771 /* libsgsdl2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsgsdl2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9471BD93183B6FA200BE3771 /* sgInterfaces.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sgInterfaces.h; path = ../../../Core/include/sgInterfaces.h; sourceTree = "<group>"; };
 		9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Core.cpp; path = ../../src/SGSDL2Core.cpp; sourceTree = "<group>"; };
@@ -55,7 +83,6 @@
 		9471BDB2183B732800BE3771 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../lib/mac/libSDL2.a; sourceTree = "<group>"; };
 		9471BDB3183B732800BE3771 /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebp.a; path = ../../lib/mac/libwebp.a; sourceTree = "<group>"; };
 		9471BDC4183B737000BE3771 /* SGSDL2Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SGSDL2Test; sourceTree = BUILT_PRODUCTS_DIR; };
-		9471BDCE183B75A100BE3771 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Test/src/main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +109,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942DBEEA183C218300876830 /* AudioToolbox.framework in Frameworks */,
+				942DBEEB183C218600876830 /* AudioUnit.framework in Frameworks */,
+				942DBEEC183C218A00876830 /* CoreAudio.framework in Frameworks */,
+				942DBEE7183C217B00876830 /* Carbon.framework in Frameworks */,
+				942DBEE8183C217E00876830 /* OpenGL.framework in Frameworks */,
+				942DBEE9183C218000876830 /* IOKit.framework in Frameworks */,
+				942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */,
+				942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */,
 				9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,7 +131,6 @@
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
 				9471BD94183B6FA900BE3771 /* Core */,
-				9471BDC5183B737000BE3771 /* SGSDL2Test */,
 				9471BD8D183B6E5700BE3771 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +147,7 @@
 		9471BD94183B6FA900BE3771 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				942DBEED183C2A2800876830 /* sgBackendUtils.cpp */,
 				9471BD95183B6FB600BE3771 /* Include */,
 			);
 			name = Core;
@@ -121,7 +156,9 @@
 		9471BD95183B6FB600BE3771 /* Include */ = {
 			isa = PBXGroup;
 			children = (
+				942DBEEE183C2A2800876830 /* sgBackendUtils.h */,
 				9471BD93183B6FA200BE3771 /* sgInterfaces.h */,
+				942DBEF6183C3DFA00876830 /* sgBackendTypes.h */,
 			);
 			name = Include;
 			sourceTree = "<group>";
@@ -139,6 +176,10 @@
 			children = (
 				9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */,
 				9471BD9D183B717900BE3771 /* SGSDL2Core.h */,
+				942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */,
+				942DBEF2183C327800876830 /* SGSDL2Graphics.h */,
+				942DBEF7183C558500876830 /* SGSDL2Utils.cpp */,
+				942DBEF8183C558500876830 /* SGSDL2Utils.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -146,6 +187,7 @@
 		9471BDA0183B727700BE3771 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				942DBED1183C1DBA00876830 /* main.cpp */,
 			);
 			name = Test;
 			sourceTree = "<group>";
@@ -153,6 +195,15 @@
 		9471BDA1183B72A900BE3771 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				942DBEE5183C213300876830 /* Carbon.framework */,
+				942DBEE1183C211C00876830 /* OpenGL.framework */,
+				942DBEDF183C211100876830 /* IOKit.framework */,
+				942DBEDD183C210400876830 /* AudioToolbox.framework */,
+				942DBEDB183C20F600876830 /* CoreGraphics.framework */,
+				942DBED9183C20E500876830 /* AudioUnit.framework */,
+				942DBED7183C207F00876830 /* CoreAudio.framework */,
+				942DBED5183C203900876830 /* ForceFeedback.framework */,
+				942DBED3183C202F00876830 /* Cocoa.framework */,
 				9471BDA8183B732800BE3771 /* libFLAC.a */,
 				9471BDA9183B732800BE3771 /* libfreetype.a */,
 				9471BDAA183B732800BE3771 /* libmikmod.a */,
@@ -167,14 +218,6 @@
 				9471BDB3183B732800BE3771 /* libwebp.a */,
 			);
 			name = Libraries;
-			sourceTree = "<group>";
-		};
-		9471BDC5183B737000BE3771 /* SGSDL2Test */ = {
-			isa = PBXGroup;
-			children = (
-				9471BDCE183B75A100BE3771 /* main.cpp */,
-			);
-			path = SGSDL2Test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -257,6 +300,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
+				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
+				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
 				9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,7 +311,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9471BDCF183B75A100BE3771 /* main.cpp in Sources */,
+				942DBED2183C1DBA00876830 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +390,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					../../external/SDL/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
@@ -356,6 +407,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					../../external/SDL/include,
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
@@ -371,6 +427,10 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -378,6 +438,10 @@
 		9471BDCC183B737000BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -401,6 +465,7 @@
 				9471BD92183B6E5700BE3771 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9471BDCA183B737000BE3771 /* Build configuration list for PBXNativeTarget "SGSDL2Test" */ = {
 			isa = XCConfigurationList;
@@ -409,6 +474,7 @@
 				9471BDCC183B737000BE3771 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

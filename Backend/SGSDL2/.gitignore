@@ -1,3 +1,5 @@
 bin
 tmp
+external/SDL*
+external/setup.log
 projects/sgsdl2/DerivedData/*
