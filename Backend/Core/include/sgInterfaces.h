@@ -76,6 +76,8 @@ extern "C" {
         
         sg_drawing_proc * draw_triangle;
         sg_drawing_proc * fill_triangle;
+        
+        sg_drawing_proc * draw_pixel;
 
     } sg_graphics_interface;
     

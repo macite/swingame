@@ -19,6 +19,8 @@
 		942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEED183C2A2800876830 /* sgBackendUtils.cpp */; };
 		942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */; };
 		942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF7183C558500876830 /* SGSDL2Utils.cpp */; };
+		942DBF2B183CA8D200876830 /* test_draw_point.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBF29183CA8D200876830 /* test_draw_point.cpp */; };
+		942DBF2C183CA8D200876830 /* test_draw_point.h in Headers */ = {isa = PBXBuildFile; fileRef = 942DBF2A183CA8D200876830 /* test_draw_point.h */; };
 		9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */; };
 		9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9471BD9D183B717900BE3771 /* SGSDL2Core.h */; };
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
@@ -66,6 +68,8 @@
 		942DBEF6183C3DFA00876830 /* sgBackendTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sgBackendTypes.h; path = ../../../Core/include/sgBackendTypes.h; sourceTree = "<group>"; };
 		942DBEF7183C558500876830 /* SGSDL2Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Utils.cpp; path = ../../src/SGSDL2Utils.cpp; sourceTree = "<group>"; };
 		942DBEF8183C558500876830 /* SGSDL2Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Utils.h; path = ../../src/SGSDL2Utils.h; sourceTree = "<group>"; };
+		942DBF29183CA8D200876830 /* test_draw_point.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_draw_point.cpp; path = ../../../Test/src/test_draw_point.cpp; sourceTree = "<group>"; };
+		942DBF2A183CA8D200876830 /* test_draw_point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_draw_point.h; path = ../../../Test/src/test_draw_point.h; sourceTree = "<group>"; };
 		9471BD8C183B6E5700BE3771 /* libsgsdl2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsgsdl2.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		9471BD93183B6FA200BE3771 /* sgInterfaces.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sgInterfaces.h; path = ../../../Core/include/sgInterfaces.h; sourceTree = "<group>"; };
 		9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Core.cpp; path = ../../src/SGSDL2Core.cpp; sourceTree = "<group>"; };
@@ -188,6 +192,8 @@
 			isa = PBXGroup;
 			children = (
 				942DBED1183C1DBA00876830 /* main.cpp */,
+				942DBF29183CA8D200876830 /* test_draw_point.cpp */,
+				942DBF2A183CA8D200876830 /* test_draw_point.h */,
 			);
 			name = Test;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
+				942DBF2C183CA8D200876830 /* test_draw_point.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,6 +307,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942DBF2B183CA8D200876830 /* test_draw_point.cpp in Sources */,
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,

@@ -21,7 +21,7 @@ typedef struct sg_window_be
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
 {
-    sg_drawing_surface  result = { SGDS_Unknown, NULL};
+    sg_drawing_surface  result = { SGDS_Unknown, NULL };
 
     sg_window_be *      window_be;
     
@@ -61,7 +61,6 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
 
     result._data = window_be;
 
-    
     return result;
 }
 
@@ -155,28 +154,6 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
 // Surface ops
 //
 
-SDL_Surface * sgsdl2_create_surface(int width, int height)
-{
-    Uint32 rmask, gmask, bmask, amask;
-
-    /* SDL interprets each pixel as a 32-bit number, so our masks must depend
-       on the endianness (byte order) of the machine */
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
-#else
-    rmask = 0x000000ff;
-    gmask = 0x0000ff00;
-    bmask = 0x00ff0000;
-    amask = 0xff000000;
-#endif
-
-    return SDL_CreateRGBSurface(0, width, height, 32,
-                                   rmask, gmask, bmask, amask);
-}
-
 Uint32 _to_gfx_color(color clr)
 {
     byte r, g, b, a;
@@ -238,7 +215,7 @@ void sgsdl2_draw_triangle(sg_drawing_surface *surface, color clr, float *data, i
 {
     if ( ! surface || ! surface->_data || data_sz != 6) return;
 
-    // 6 points:
+    // 6 values = 3 points
     int x1 = (int)data[0], y1 = (int)data[1];
     int x2 = (int)data[2], y2 = (int)data[3];
     int x3 = (int)data[4], y3 = (int)data[4];
@@ -263,7 +240,7 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
 {
     if ( ! surface || ! surface->_data || data_sz != 6) return;
     
-    // 6 points:
+    // 6 values = 3 points
     float x1 = data[0], y1 = data[1];
     float x2 = data[2], y2 = data[3];
     float x3 = data[4], y3 = data[4];
@@ -287,6 +264,42 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
     
 }
 
+//
+// Pixel
+//
+
+void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 2) return;
+    
+    // 2 values = 1 point
+    int x1 = (int)data[0], y1 = (int)data[1];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+        {
+            SDL_Rect rect = { x1, y1, 1, 1 };
+            
+            sgsdl2_set_renderer_color(window_be, clr);
+            
+            SDL_RenderFillRect(window_be->renderer, &rect);
+
+// For some reason the following does not work :(
+// when multisample is 1, but without multisample 1
+// double buffer causes flicker
+//
+//            sgsdl2_set_renderer_color(window_be, clr);
+//            SDL_RenderDrawPoint(window_be->renderer, x1, y1);
+            break;
+        }
+        default:
+            break;
+    }
+    
+}
 
 void sgsdl2_load_graphics_fns(sg_interface * functions)
 {
@@ -298,5 +311,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.fill_aabb_rect = &sgsdl2_fill_aabb_rect;
     functions->graphics.draw_triangle = &sgsdl2_draw_triangle;
     functions->graphics.fill_triangle = &sgsdl2_fill_triangle;
+    functions->graphics.draw_pixel = &sgsdl2_draw_pixel;
 }
 

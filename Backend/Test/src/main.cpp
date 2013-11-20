@@ -42,19 +42,33 @@ void test_colors(sg_drawing_surface *window)
     cout << "Testing Colors - R,G,B,W" << endl;
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(50);
+    _sg_functions->utils.delay(500);
 
-    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(50);
-
-    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(50);
+    _sg_functions->utils.delay(500);
 
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(50);
+    _sg_functions->utils.delay(1000);
+    
+    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+    
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+
+
+    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+    
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+
+    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
 }
 
 color random_color()
@@ -156,6 +170,36 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
     }
 }
 
+void test_pixels(sg_drawing_surface *window_arr, int sz)
+{
+    color clr = { 0.0, 0.0, 0.0, 1.0 };
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        _sg_functions->graphics.refresh_window(&window_arr[w]);
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        for (int w = 0; w < sz; w++)
+        {
+            for (int j = 0; j < 100; j++)
+            {
+                float data[] = {
+                    rand() / (float)RAND_MAX * 800,
+                    rand() / (float)RAND_MAX * 600
+                };
+
+                _sg_functions->graphics.draw_pixel(&window_arr[w], clr, data, 2 );
+            }
+            
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+}
+
+
 
 bool test_basic_drawing()
 {
@@ -165,6 +209,7 @@ bool test_basic_drawing()
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
     test_colors(&window);
+    test_pixels( &window, 1);
     test_rects( &window, 1);
     test_triangles( &window, 1);
     
@@ -189,6 +234,7 @@ bool test_window_operations()
     
     test_rects(w, 2);
     test_triangles(w, 2);
+    test_pixels(w, 2);
     
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
@@ -196,8 +242,13 @@ bool test_window_operations()
     return true;
 }
 
+#include "test_draw_point.h"
+
 int main(int argc, const char * argv[])
 {
+//    test_draw_point();
+//    return 0;
+    
     cout << "Starting driver backend test" << endl;
     
     if ( ! test_core_functions() )
@@ -210,7 +261,7 @@ int main(int argc, const char * argv[])
     if ( ! test_basic_drawing() )
     {
         cout << "Basic drawing failed with error: " << endl;
-        cout << _sg_functions->current_error << endl;
+        //cout << _sg_functions->current_error << endl;
         return -1;
     }
     
