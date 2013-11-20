@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>3661E5CC-39E5-4292-BBCB-772B560A8BF7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>sgsdl2</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>15B99517-2F7E-4059-8259-2D07BD228788</key>
+		<string>https://github.com/macite/swingame.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Backend/SGSDL2/projects/sgsdl2/sgsdl2.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>15B99517-2F7E-4059-8259-2D07BD228788</key>
+		<string>../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/macite/swingame.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>15B99517-2F7E-4059-8259-2D07BD228788</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>15B99517-2F7E-4059-8259-2D07BD228788</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SwinGame</string>
+		</dict>
+	</array>
+</dict>
+</plist>

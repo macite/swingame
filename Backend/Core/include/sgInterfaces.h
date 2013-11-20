@@ -31,69 +31,56 @@ extern "C" {
     typedef void (sg_drawing_surface_proc)(sg_drawing_surface *);
     typedef void (sg_single_uint32param_proc)(unsigned int ms);
     
-    
+    //
+    // Utility relation functions
+    //
+    // - delay = Function to delay by a specified number of milliseconds.
+    //
     typedef struct sg_utils_interface
     {
-        //
-        // Function to delay by a specified number of milliseconds.
-        //
         sg_single_uint32param_proc *delay;
         
     } sg_utils_interface;
     
+    
+    //
+    // Graphics related functions.
+    //
+    // - open_window = Open a new window and return its details.
+    // - close_drawing_surface = Close a previously open drawing surface (window/bitmap/etc)
+    //
     typedef struct sg_graphics_interface
     {
-        //
-        // Open a new window and return its details.
-        //
-        sg_new_surface_fn *open_window;
-        
-        //
-        // Close a previously open drawing surface
-        //
-        sg_drawing_surface_proc *close_drawing_surface;
-        
+        sg_new_surface_fn       * open_window;
+        sg_drawing_surface_proc * close_drawing_surface;
     } sg_graphics_interface;
     
+    
+    //
+    // All sg functions.
+    //
+    // - has_error (data) = is there currently an error
+    // - current_error (data) = A pointer to the current error message. This error
+    //                          is managed by the driver and must not be freed by
+    //                          the driver's user.
+    // - graphics (data) = Functions associated with windows and drawing
+    // - utils (data) = Functions associated with utilities
+    //
+    // - init = The init procedure is called when the SwinGame starts and should
+    //          be used to initialise the underlying system.
+    //
     typedef struct sg_interface
     {
-        //
-        // This defines the version of the structure to allow
-        // future expansion. This should be checked before
-        // the structure is initialised.
-        //
-        int version;
-        
-        //
-        // features stores the features supported by the
-        // loaded interface.
-        //
-        sg_interface_features features;
-        
-        //
-        // is there currently an error
-        //
         bool has_error;
-        
-        //
-        // A pointer to the current error message. This error
-        // is managed by the driver and must not be freed by
-        // the driver's user.
-        //
         const char *    current_error;
-        
-        //
-        // The init procedure is called when the SwinGame starts
-        // and should be used to initialise the underlying system.
-        //
-        sg_empty_procedure *init;
-        
+
         //
         // function pointers by functionality
         //
         sg_graphics_interface graphics;
         sg_utils_interface utils;
         
+        sg_empty_procedure *init;
     } sg_interface;
 
     
@@ -101,7 +88,7 @@ extern "C" {
     // All sg backends need to implement a load function that can be
     // called to load the function pointers for the frontend to use.
     //
-    sg_interface * load_sg();
+    sg_interface * sg_load();
 
     
 #ifdef __cplusplus

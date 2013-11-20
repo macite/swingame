@@ -43,7 +43,7 @@ void init_sgsdk2()
 extern "C"
 {
     
-sg_interface * load_sg()
+sg_interface * sg_load()
 {
     clear_functions();
     

@@ -23,7 +23,7 @@ bool test_core_functions()
     cout << "Testing Core Functions!" << endl;
     
     cout << "Calling load_sg..." << endl;
-    _sg_functions = load_sg();
+    _sg_functions = sg_load();
     
     if ( !_sg_functions )
     {
