@@ -30,8 +30,8 @@ void init_sgsdk2()
         return;
     }
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);

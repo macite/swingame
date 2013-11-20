@@ -248,7 +248,7 @@ int main(int argc, const char * argv[])
 {
 //    test_draw_point();
 //    return 0;
-    
+
     cout << "Starting driver backend test" << endl;
     
     if ( ! test_core_functions() )

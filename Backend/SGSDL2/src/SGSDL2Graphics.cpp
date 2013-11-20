@@ -16,6 +16,7 @@ typedef struct sg_window_be
 {
     SDL_Window *    window;
     SDL_Renderer *  renderer;
+    SDL_Texture *   backing;
 } sg_window_be;
 
 
@@ -48,11 +49,15 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     window_be->renderer = SDL_CreateRenderer(window_be->window,
                                              -1,
-                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
+                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
     
     SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
     SDL_RenderClear(window_be->renderer);
     SDL_RenderPresent(window_be->renderer);
+    
+    window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, width, height);
+    
+    SDL_SetRenderTarget(window_be->renderer, window_be->backing);
     
     result.kind = SGDS_Window;
     
@@ -146,6 +151,11 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
     if ( window_be )
     {
         SDL_RenderPresent(window_be->renderer);
+        SDL_SetRenderTarget(window_be->renderer, NULL);
+        
+        SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
+        SDL_RenderPresent(window_be->renderer);
+        SDL_SetRenderTarget(window_be->renderer, window_be->backing);
     }
 }
 
@@ -281,18 +291,19 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int 
     switch (surface->kind) {
         case SGDS_Window:
         {
-            SDL_Rect rect = { x1, y1, 1, 1 };
-            
-            sgsdl2_set_renderer_color(window_be, clr);
-            
-            SDL_RenderFillRect(window_be->renderer, &rect);
+// The following works with multisampling on... use if we
+// want multisampling... otherwise use the following
+//
+//            SDL_Rect rect = { x1, y1, 1, 1 };
+//            sgsdl2_set_renderer_color(window_be, clr);
+//            SDL_RenderFillRect(window_be->renderer, &rect);
 
 // For some reason the following does not work :(
 // when multisample is 1, but without multisample 1
 // double buffer causes flicker
 //
-//            sgsdl2_set_renderer_color(window_be, clr);
-//            SDL_RenderDrawPoint(window_be->renderer, x1, y1);
+            sgsdl2_set_renderer_color(window_be, clr);
+            SDL_RenderDrawPoint(window_be->renderer, x1, y1);
             break;
         }
         default:
