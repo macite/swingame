@@ -40,23 +40,23 @@ bool test_core_functions()
 void test_colors(sg_drawing_surface *window)
 {
     cout << "Testing Colors - R,G,B,W,Ralpha" << endl;
-    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 0.0, 0.0, 1.0);
+    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
 
-    _sg_functions->graphics.clear_drawing_surface(window, 0.0, 1.0, 0.0, 1.0);
+    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
 
-    _sg_functions->graphics.clear_drawing_surface(window, 0.0, 0.0, 1.0, 1.0);
+    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
 
-    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 1.0, 1.0, 1.0);
+    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(2000);
 
-    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 0.0, 0.0, 0.2);
+    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 0.2});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(1500);
 }

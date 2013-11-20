@@ -27,10 +27,16 @@ extern "C" {
         SGV_INIT = 0x01
     } sg_interface_version;
     
+    typedef struct color
+    {
+        float r, g, b, a;
+    } color;
+    
     typedef void (sg_empty_procedure)( void );
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
-    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *, float r, float g, float b, float a );
+    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *, color clr );
+    typedef void (sg_drawing_proc)( sg_drawing_surface *, color clr, float *data, int data_sz );
 
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
 
