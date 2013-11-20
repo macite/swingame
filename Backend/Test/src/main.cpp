@@ -44,7 +44,7 @@ bool test_basic_drawing()
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
-    _sg_functions->utils.delay(2000);
+    _sg_functions->utils.delay(500);
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -59,7 +59,13 @@ bool test_window_operations()
     w1 = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w2 = _sg_functions->graphics.open_window("Window 2", 300, 300);
     
-    _sg_functions->utils.delay(2000);
+    if ( w1.width != 800 ) cout << " >> Error with w1 width! " << w1.width << endl;
+    if ( w2.width != 300 ) cout << " >> Error with w2 width! " << w2.width << endl;
+    
+    if ( w1.height != 600 ) cout << " >> Error with w1 height! " << w1.height << endl;
+    if ( w2.height != 300 ) cout << " >> Error with w2 height! " << w2.height << endl;
+    
+    _sg_functions->utils.delay(500);
     
     _sg_functions->graphics.close_drawing_surface(&w1);
     _sg_functions->graphics.close_drawing_surface(&w2);

@@ -29,6 +29,8 @@ enum sg_drawing_surface_kind
 typedef struct sg_drawing_surface
 {
     sg_drawing_surface_kind kind;
+    int width;
+    int height;
     
     // private data used by the backend
     void * _data;

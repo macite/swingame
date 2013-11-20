@@ -54,7 +54,12 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     SDL_RenderPresent(window_be->renderer);
     
     result.kind = SGDS_Window;
+    
+    result.width = width;
+    result.height = height;
+
     result._data = window_be;
+
     
     return result;
 }
