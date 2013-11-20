@@ -35,8 +35,8 @@ extern "C" {
     typedef void (sg_empty_procedure)( void );
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
-    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *, color clr );
-    typedef void (sg_drawing_proc)( sg_drawing_surface *, color clr, float *data, int data_sz );
+    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
+    typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
 
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
 
@@ -60,6 +60,7 @@ extern "C" {
     // - close_drawing_surface = Close a previously open drawing surface (window/bitmap/etc)
     // - refresh_window = Present window to user
     // - clear_drawing_surface = Clear the screen or bitmap
+    // - draw_aabb_rect = an axis aligned bounding box
     //
     typedef struct sg_graphics_interface
     {
@@ -69,6 +70,9 @@ extern "C" {
         sg_drawing_surface_proc * refresh_window;
         
         sg_drawing_surface_clr_proc * clear_drawing_surface;
+        
+        sg_drawing_proc * draw_aabb_rect;
+        sg_drawing_proc * fill_aabb_rect;
 
     } sg_graphics_interface;
     

@@ -37,7 +37,7 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
                                          SDL_WINDOWPOS_CENTERED,
                                          width,
                                          height,
-                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI );
+                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     
     if ( ! window_be->window)
     {
@@ -47,7 +47,7 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     window_be->renderer = SDL_CreateRenderer(window_be->window,
                                              -1,
-                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
     
     SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
     SDL_RenderClear(window_be->renderer);
@@ -123,6 +123,8 @@ void sgsdl2_clear_window(sg_drawing_surface *window, color clr)
 
 void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, color clr)
 {
+    if ( ! surface ) return;
+    
     switch (surface->kind)
     {
         case SGDS_Window:
@@ -147,12 +149,47 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
     }
 }
 
+void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface ) return;
+    if ( data_sz != 4 ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    if ( window_be )
+    {
+        SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
+        sgsdl2_set_renderer_color(window_be, clr);
+        
+        SDL_RenderDrawRect(window_be->renderer, &rect);
+    }
+}
+
+void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface ) return;
+    if ( data_sz != 4 ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    if ( window_be )
+    {
+        SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
+        sgsdl2_set_renderer_color(window_be, clr);
+        
+        SDL_RenderFillRect(window_be->renderer, &rect);
+    }
+}
+
 void sgsdl2_load_graphics_fns(sg_interface * functions)
 {
     functions->graphics.open_window = &sgsdl2_open_window;
     functions->graphics.close_drawing_surface = &sgsdl2_close_drawing_surface;
     functions->graphics.refresh_window = &sgsdl2_refresh_window;
     functions->graphics.clear_drawing_surface = &sgsdl2_clear_drawing_surface;
-
+    functions->graphics.draw_aabb_rect = &sgsdl2_draw_aabb_rect;
+    functions->graphics.fill_aabb_rect = &sgsdl2_fill_aabb_rect;
 }
 

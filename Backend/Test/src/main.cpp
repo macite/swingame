@@ -39,26 +39,74 @@ bool test_core_functions()
 
 void test_colors(sg_drawing_surface *window)
 {
-    cout << "Testing Colors - R,G,B,W,Ralpha" << endl;
+    cout << "Testing Colors - R,G,B,W" << endl;
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(500);
+    _sg_functions->utils.delay(50);
 
     _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(500);
+    _sg_functions->utils.delay(50);
 
     _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(500);
+    _sg_functions->utils.delay(50);
 
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(2000);
+    _sg_functions->utils.delay(50);
+}
 
-    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 0.2});
-    _sg_functions->graphics.refresh_window(window);
-    _sg_functions->utils.delay(1500);
+color random_color()
+{
+    return {    rand() / (float)RAND_MAX,
+                rand() / (float)RAND_MAX,
+                rand() / (float)RAND_MAX,
+                rand() / (float)RAND_MAX
+            };
+}
+
+void test_rects(sg_drawing_surface *window_arr, int sz)
+{
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+   
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+                            rand() / (float)RAND_MAX * 600,
+                            rand() / (float)RAND_MAX * 100,
+                            rand() / (float)RAND_MAX * 100
+                        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.draw_aabb_rect(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 100,
+            rand() / (float)RAND_MAX * 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.fill_aabb_rect(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
 }
 
 bool test_basic_drawing()
@@ -69,6 +117,7 @@ bool test_basic_drawing()
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
     test_colors(&window);
+    test_rects( &window, 1);
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -79,20 +128,20 @@ bool test_window_operations()
 {
     cout << "Testing Window Operations!" << endl;
 
-    sg_drawing_surface w1, w2;
-    w1 = _sg_functions->graphics.open_window("Window 1", 800, 600);
-    w2 = _sg_functions->graphics.open_window("Window 2", 300, 300);
+    sg_drawing_surface w[2];
+    w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
+    w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
     
-    if ( w1.width != 800 ) cout << " >> Error with w1 width! " << w1.width << endl;
-    if ( w2.width != 300 ) cout << " >> Error with w2 width! " << w2.width << endl;
+    if ( w[0].width != 800 ) cout << " >> Error with w[0] width! " << w[0].width << endl;
+    if ( w[1].width != 300 ) cout << " >> Error with w[1] width! " << w[1].width << endl;
     
-    if ( w1.height != 600 ) cout << " >> Error with w1 height! " << w1.height << endl;
-    if ( w2.height != 300 ) cout << " >> Error with w2 height! " << w2.height << endl;
+    if ( w[0].height != 600 ) cout << " >> Error with w[0] height! " << w[0].height << endl;
+    if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
     
-    _sg_functions->utils.delay(500);
+    test_rects(w, 2);
     
-    _sg_functions->graphics.close_drawing_surface(&w1);
-    _sg_functions->graphics.close_drawing_surface(&w2);
+    _sg_functions->graphics.close_drawing_surface(&w[0]);
+    _sg_functions->graphics.close_drawing_surface(&w[1]);
 
     return true;
 }
