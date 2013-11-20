@@ -101,9 +101,57 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
     }
 }
 
+void sgsdl2_set_renderer_color(sg_window_be *window_be, float r, float g, float b, float a)
+{
+    if ( window_be && window_be->renderer )
+    {
+        SDL_SetRenderDrawColor(window_be->renderer, r * 255, g * 255, b * 255, a * 255);
+    }
+}
+
+void sgsdl2_clear_window(sg_drawing_surface *window, float r, float g, float b, float a)
+{
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)window->_data;
+    
+    if ( window_be )
+    {
+        sgsdl2_set_renderer_color(window_be, r, g, b, a);
+        SDL_RenderClear(window_be->renderer);
+    }
+}
+
+void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, float r, float g, float b, float a)
+{
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+            sgsdl2_clear_window(surface, r, g, b, a);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void sgsdl2_refresh_window(sg_drawing_surface *window)
+{
+    if ( (! window) || window->kind != SGDS_Window ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)window->_data;
+    
+    if ( window_be )
+    {
+        SDL_RenderPresent(window_be->renderer);
+    }
+}
+
 void sgsdl2_load_graphics_fns(sg_interface * functions)
 {
     functions->graphics.open_window = &sgsdl2_open_window;
     functions->graphics.close_drawing_surface = &sgsdl2_close_drawing_surface;
+    functions->graphics.refresh_window = &sgsdl2_refresh_window;
+    functions->graphics.clear_drawing_surface = &sgsdl2_clear_drawing_surface;
 }
 

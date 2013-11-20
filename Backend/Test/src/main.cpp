@@ -37,6 +37,30 @@ bool test_core_functions()
     return false == _sg_functions->has_error;
 }
 
+void test_colors(sg_drawing_surface *window)
+{
+    cout << "Testing Colors - R,G,B,W,Ralpha" << endl;
+    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 0.0, 0.0, 1.0);
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+
+    _sg_functions->graphics.clear_drawing_surface(window, 0.0, 1.0, 0.0, 1.0);
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+
+    _sg_functions->graphics.clear_drawing_surface(window, 0.0, 0.0, 1.0, 1.0);
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(500);
+
+    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 1.0, 1.0, 1.0);
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(2000);
+
+    _sg_functions->graphics.clear_drawing_surface(window, 1.0, 0.0, 0.0, 0.2);
+    _sg_functions->graphics.refresh_window(window);
+    _sg_functions->utils.delay(1500);
+}
+
 bool test_basic_drawing()
 {
     cout << "Testing Basic Drawing!" << endl;
@@ -44,7 +68,7 @@ bool test_basic_drawing()
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
-    _sg_functions->utils.delay(500);
+    test_colors(&window);
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
