@@ -73,6 +73,9 @@ extern "C" {
         
         sg_drawing_proc * draw_aabb_rect;
         sg_drawing_proc * fill_aabb_rect;
+        
+        sg_drawing_proc * draw_triangle;
+        sg_drawing_proc * fill_triangle;
 
     } sg_graphics_interface;
     

@@ -394,6 +394,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../external/SDL/include,
+					../../external/SDL_gfx,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -411,6 +412,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../external/SDL/include,
+					../../external/SDL_gfx,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
