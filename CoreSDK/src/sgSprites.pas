@@ -807,6 +807,21 @@ interface
   /// @csn startAnimation:%s withSound:%s
   procedure SpriteStartAnimation(s: Sprite; idx: Longint; withSound: Boolean); overload;
   
+  /// Returns the name of the Sprite's current animation.
+  /// 
+  /// @lib SpriteAnimationName
+  /// @sn spriteAnimationName:%s
+  /// 
+  /// @class Sprite
+  /// @method animationName
+  function SpriteAnimationName(s: Sprite): String;
+
+
+
+//---------------------------------------------------------------------------
+// Sprite Update code
+//---------------------------------------------------------------------------
+    
   /// Update the position and animation details of the Sprite.
   /// This will play a sound effect if the new cell of the animation
   /// has a sound.
@@ -1630,6 +1645,11 @@ interface
   /// @lib UpdateAllSpritesPct
   procedure UpdateAllSprites(pct: Single); overload;
 
+  /// Call the supplied function for all sprites.
+  ///
+  /// @lib
+  procedure CallForAllSprites(fn: SpriteFunction);
+
   /// Create a new SpritePack with a given name. This pack can then be 
   /// selected and used to control which sprites are drawn/updated in
   /// the calls to DrawAllSprites and UpdateAllSprites.
@@ -1954,6 +1974,7 @@ implementation
     result^.cacheImage              := nil;
 
     // Event details
+    result^.announcedAnimationEnd := false;
     result^.isMoving := false;
     result^.destination := PointAt(0,0);
     result^.movingVec := VectorTo(0,0);
@@ -2111,11 +2132,11 @@ implementation
       s^.collisionBitmap := nil;
       s^.backupCollisionBitmap := nil;
       
+      TSpritePack(s^.pack).RemoveSprite(s);
+      
       // Remove from hashtable
       // WriteLn('Freeing Sprite named: ', s^.name);
       _Sprites.remove(s^.name).Free();
-
-      TSpritePack(s^.pack).RemoveSprite(s);
       
       //Dispose sprite
       CallFreeNotifier(s);
@@ -2155,6 +2176,7 @@ implementation
     if s = nil then exit;
     
     RestartAnimation(s^.animationInfo, withSound);
+    if not SpriteAnimationHasEnded(s) then s^.announcedAnimationEnd := false;
   end;
   
   procedure SpriteStartAnimation(s: Sprite; named: String);
@@ -2188,17 +2210,25 @@ implementation
   begin
     if not Assigned(s) then exit;
     if not Assigned(s^.animationScript) then exit;
-	if (idx < 0) or (idx > High(s^.animationScript^.animations)) then
+    if (idx < 0) or (idx > High(s^.animationScript^.animations)) then
     begin
-		RaiseWarning('Unable to create animation no. ' + IntToStr(idx) + ' for sprite ' + s^.name + ' from script ' + s^.animationScript^.name);
-		exit;
-	end;
+		  RaiseWarning('Unable to create animation no. ' + IntToStr(idx) + ' for sprite ' + s^.name + ' from script ' + s^.animationScript^.name);
+		  exit;
+    end;
     
     if Assigned(s^.animationInfo) then
       AssignAnimation(s^.animationInfo, idx, s^.animationScript, withSound)
     else
       s^.animationInfo := CreateAnimation(idx, s^.animationScript, withSound);
+
+    if not SpriteAnimationHasEnded(s) then s^.announcedAnimationEnd := false;
     // WriteLn('Sprite Animation: ', HexStr(s^.animationInfo));
+  end;
+
+  function SpriteAnimationName(s: Sprite): String;
+  begin
+    if Assigned(s) then result := AnimationName(s^.animationInfo)
+    else result := '';
   end;
   
   procedure UpdateSpriteAnimation(s: Sprite); overload;
@@ -2259,8 +2289,9 @@ implementation
         end;
       {$ENDIF}
 
-      if SpriteAnimationHasEnded(s) then
+      if SpriteAnimationHasEnded(s) and (not s^.announcedAnimationEnd) then
       begin
+        s^.announcedAnimationEnd := true;
         SpriteRaiseEvent(s, SpriteAnimationEndedEvent);
       end;
     end;
@@ -3223,6 +3254,11 @@ implementation
   procedure UpdateAllSprites(pct: Single); overload;
   begin
     _CurrentPack.CallForAllSprites(@_UpdateSpritePct, pct);
+  end;
+
+  procedure CallForAllSprites(fn: SpriteFunction);
+  begin
+    _CurrentPack.CallForAllSprites(fn);
   end;
 
   procedure UpdateAllSprites(); overload;

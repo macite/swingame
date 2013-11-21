@@ -86,6 +86,11 @@ interface
   /// @method Start
   procedure StartTimer(toStart: Timer);
   
+  /// Start a timer recording the time that has passed.
+  ///
+  /// @lib StartTimerNamed
+  procedure StartTimer(name: String);
+
   /// Stop the timer. The time is reset to 0 and you must
   /// recall start to begin the timer ticking again.
   /// 
@@ -94,6 +99,13 @@ interface
   /// @class Timer
   /// @method Stop
   procedure StopTimer(toStop: Timer);
+
+  /// Stop the timer. The time is reset to 0 and you must
+  /// recall start to begin the timer ticking again.
+  /// 
+  /// @lib StopTimerNamed
+  procedure StopTimer(name: String);
+
   
   /// Pause the timer, getting ticks from a paused timer
   /// will continue to return the same time.
@@ -103,6 +115,12 @@ interface
   /// @class Timer
   /// @method Pause
   procedure PauseTimer(toPause: Timer);
+
+  /// Pause the timer, getting ticks from a paused timer
+  /// will continue to return the same time.
+  /// 
+  /// @lib PauseTimerNamed
+  procedure PauseTimer(name: String);
   
   /// Resumes a paused timer.
   ///
@@ -111,6 +129,12 @@ interface
   /// @class Timer
   /// @method Resume
   procedure ResumeTimer(toUnpause: Timer);
+
+  /// Resumes a paused timer.
+  ///
+  /// @lib ResumeTimerNamed
+  procedure ResumeTimer(name: String);
+
   
   /// Resets the time of a given timer
   ///
@@ -119,6 +143,12 @@ interface
   /// @class Timer
   /// @method Reset
   procedure ResetTimer(tmr: Timer);
+
+  /// Resets the time of a given timer
+  ///
+  /// @lib ResetTimerNamed
+  procedure ResetTimer(name: String);
+
   
   /// Gets the number of ticks (milliseconds) that have passed since the timer
   /// was started/reset. When paused the timer's ticks will not advance until
@@ -129,6 +159,13 @@ interface
   /// @class Timer
   /// @getter Ticks
   function TimerTicks(toGet: Timer): Longword;
+
+  /// Gets the number of ticks (milliseconds) that have passed since the timer
+  /// was started/reset. When paused the timer's ticks will not advance until
+  /// the timer is once again resumed.
+  ///
+  /// @lib TimerTicksNamed
+  function TimerTicks(name: String): Longword;
   
   
   
@@ -194,12 +231,21 @@ begin
   {$ENDIF}
 end;
 
+procedure ResetTimer(name: String);
+begin
+  ResetTimer(TimerNamed(name));
+end;
+
 procedure ResetTimer(tmr: Timer);
 begin
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ResetTimer');
   {$ENDIF}
-  if Assigned(tmr) then tmr^.startTicks := TimerDriver.GetTicks();
+  if Assigned(tmr) then
+  begin
+     tmr^.startTicks := TimerDriver.GetTicks();
+     tmr^.pausedTicks := 0;
+  end; 
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ResetTimer');
   {$ENDIF}
@@ -281,6 +327,11 @@ begin
 end;
 
 
+procedure StartTimer(name: String);
+begin
+  StartTimer(TimerNamed(name));
+end;
+
 procedure StartTimer(toStart: Timer);
 begin
   {$IFDEF TRACE}
@@ -299,6 +350,11 @@ begin
   {$ENDIF}
 end;
 
+procedure StopTimer(name: String);
+begin
+  StopTimer(TimerNamed(name));
+end;
+
 procedure StopTimer(toStop: Timer);
 begin
   {$IFDEF TRACE}
@@ -313,6 +369,11 @@ begin
   {$IFDEF TRACE}
     TraceExit('sgTimers', 'StopTimer');
   {$ENDIF}
+end;
+
+procedure PauseTimer(name: String);
+begin
+  PauseTimer(TimerNamed(name));
 end;
 
 procedure PauseTimer(toPause: Timer);
@@ -334,6 +395,11 @@ begin
   {$ENDIF}
 end;
 
+procedure ResumeTimer(name: String);
+begin
+  ResumeTimer(TimerNamed(name));
+end;
+
 procedure ResumeTimer(toUnpause: Timer);
 begin
   {$IFDEF TRACE}
@@ -352,6 +418,11 @@ begin
   {$IFDEF TRACE}
     TraceExit('sgTimers', 'ResumeTimer');
   {$ENDIF}
+end;
+
+function TimerTicks(name: String): Longword;
+begin
+  result := TimerTicks(TimerNamed(name));
 end;
 
 function TimerTicks(toGet: Timer): Longword;

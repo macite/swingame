@@ -8,13 +8,24 @@ interface
 	uses sgTypes, stringhash;
 
 	type
+		SpriteArray = array of Sprite;
+
 		// The container for the SpritePacks, allowing it to be
 		// stored in a HashTable
 		//
 	    TSpritePack = class(TObject)
 	    private
-	      _sprites: array of Sprite;
+	      _sprites: SpriteArray;
+
+	      // Copy of _sprites for looping code to use
+	      // this allows _sprites to change due to 
+	      // user actions on the callback without
+	      // it affecting the loop
+	      _spritesBk: SpriteArray;
 	      _name: String;
+	      _inLoop, _spritesChanged: Boolean;
+
+	      procedure EndLoop();
 
 	    public
 	      constructor Create(name: String);
@@ -39,13 +50,18 @@ implementation
 		inherited Create();
 
 		_name := name;
+		_inLoop := false;
+		_spritesChanged := false;
+
 		SetLength(_sprites, 0);
+		SetLength(_spritesBk, 0);
 	end;
 
 	destructor TSpritePack.Destroy();
 	begin
 		// At this point sprites are not owned by their SpritePack... maybe they should be
 		SetLength(_sprites, 0);
+		SetLength(_spritesBk, 0);
 		inherited Destroy();
 	end;
 
@@ -61,9 +77,30 @@ implementation
 	end;
 
 	procedure TSpritePack.AddSprite(s: Sprite);
+	 procedure AddOp(var arr: SpriteArray);
+	 begin
+	 	SetLength(arr, Length(arr) + 1);
+		arr[High(arr)] := s;
+	 end;
 	begin
-		SetLength(_sprites, Length(_sprites) + 1);
-		_sprites[High(_sprites)] := s;
+		AddOp(_sprites);
+		AddOp(_spritesBk); // allow add in loops
+	end;
+
+	procedure TSpritePack.EndLoop();
+	var
+		i: Integer;
+	begin
+		_inLoop := false;
+		if _spritesChanged then
+		begin
+			SetLength(_spritesBk, Length(_sprites));
+			for i := 0 to High(_spritesBk) do
+			begin
+				_spritesBk[i] := _sprites[i];
+			end;
+			_spritesChanged := false;
+		end;
 	end;
 
 	procedure TSpritePack.RemoveSprite(s: Sprite);
@@ -86,31 +123,42 @@ implementation
 			exit;
 		end;
 
+		if _inLoop then _spritesChanged := true;
+
 		for i := removeIdx to High(_sprites) - 1 do
 		begin
 			_sprites[i] := _sprites[i + 1];
+			if not _inLoop then _spritesBk[i] := _spritesBk[i + 1];
 		end;
+
 		SetLength(_sprites, Length(_sprites) - 1);
+		if not _inLoop then SetLength(_spritesBk, Length(_spritesBk) - 1);
 	end;
 
 	procedure TSpritePack.CallForAllSprites(fn: SpriteFunction);
 	var
 		i: Integer;
 	begin
-		for i := 0 to High(_sprites) do
+		_inLoop := true;
+
+		for i := 0 to High(_spritesBk) do
 		begin
-			fn(_sprites[i]);
+			fn(_spritesBk[i]);
 		end;
+		EndLoop();
 	end;
 
 	procedure TSpritePack.CallForAllSprites(fn: SpriteSingleFunction; val: Single);
 	var
 		i: Integer;
+		arr: array of Sprite;
 	begin
-		for i := 0 to High(_sprites) do
+		_inLoop := true;
+		for i := 0 to High(_spritesBk) do
 		begin
-			fn(_sprites[i], val);
+			fn(_spritesBk[i], val);
 		end;
+		EndLoop();
 	end;
 	
 end.

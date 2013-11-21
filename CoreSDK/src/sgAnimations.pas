@@ -79,7 +79,7 @@ interface
     
     /// The name of the animation within the animation template at the specified index.
     ///
-    /// @lib
+    /// @lib AnimationScriptAnimationName
     /// @sn animationScript:%s nameOfAnimation:%s
     ///
     /// @class AnimationScript
@@ -89,6 +89,16 @@ interface
     /// @doc_details
     function AnimationName(temp: AnimationScript; idx: Longint): String;
     
+    /// The name of the animation currently being played.
+    ///
+    /// @lib 
+    /// @sn nameOfAnimation:%s
+    ///
+    /// @class Animation
+    /// @getter Name
+    ///
+    /// @doc_details
+    function AnimationName(temp: Animation): String;
     
     
 //----------------------------------------------------------------------------
@@ -1225,7 +1235,9 @@ begin
         _RemoveAnimation(anim^.script, anim);   // remove from old script
         _AddAnimation(script, anim);            // add to new script
     end;
+
     anim^.firstFrame        := script^.frames[script^.animations[idx]];
+    anim^.animationName     := AnimationName(script, idx); 
     RestartAnimation(anim, withSound);
 end;
 
@@ -1431,6 +1443,12 @@ function AnimationName(temp: AnimationScript; idx: Longint): String;
 begin
     if not assigned(temp) then result := ''
     else result := NameAt(temp^.animationIds, idx);
+end;
+
+function AnimationName(temp: Animation): String;
+begin
+    if not assigned(temp) then result := ''
+    else result := temp^.animationName;
 end;
 
 //=============================================================================
