@@ -453,6 +453,33 @@ void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int
 
 
 //
+// Lines
+//
+
+void sgsdl2_draw_line(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 4) return;
+    
+    // 4 values = 2 points
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int x2 = (int)data[2], y2 = (int)data[3];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+            sgsdl2_set_renderer_color(window_be, clr);
+            SDL_RenderDrawLine(window_be->renderer, x1, y1, x2, y2);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+//
 // Load
 //
 
@@ -472,5 +499,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.fill_ellipse = &sgsdl2_fill_ellipse;
     functions->graphics.draw_pixel = &sgsdl2_draw_pixel;
     functions->graphics.read_pixel = &sgsdl2_read_pixel;
+    functions->graphics.draw_line = &sgsdl2_draw_line;
 }
 

@@ -86,6 +86,7 @@ extern "C" {
         sg_drawing_proc * fill_ellipse;
         
         sg_drawing_proc * draw_pixel;
+        sg_drawing_proc * draw_line;
 
         sg_surface_color_fn * read_pixel;
 

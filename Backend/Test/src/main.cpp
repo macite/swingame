@@ -307,6 +307,29 @@ void test_ellipses(sg_drawing_surface *window_arr, int sz)
     }
 }
 
+void test_lines(sg_drawing_surface *window_arr, int sz)
+{
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.draw_line(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+}
+
 
 
 
@@ -323,6 +346,7 @@ bool test_basic_drawing()
     test_triangles( &window, 1);
     test_circles( &window, 1);
     test_ellipses( &window, 1);
+    test_lines( &window, 1);
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -348,6 +372,7 @@ bool test_window_operations()
     test_pixels(w, 2);
     test_circles(w, 2);
     test_ellipses(w, 2);
+    test_lines(w, 2);
     
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
