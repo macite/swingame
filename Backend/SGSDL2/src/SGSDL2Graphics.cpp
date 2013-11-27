@@ -17,6 +17,8 @@ typedef struct sg_window_be
     SDL_Window *    window;
     SDL_Renderer *  renderer;
     SDL_Texture *   backing;
+    bool            clipped;
+    SDL_Rect        clip;
 } sg_window_be;
 
 
@@ -58,6 +60,9 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, width, height);
     
     SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+    
+    window_be->clipped = false;
+    window_be->clip = {0,0,0,0};
     
     result.kind = SGDS_Window;
     
@@ -156,6 +161,10 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
         SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
         SDL_RenderPresent(window_be->renderer);
         SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+        if ( window_be->clipped )
+        {
+            SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
+        }
     }
 }
 
@@ -377,7 +386,7 @@ color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
                                     &rect,
                                     SDL_PIXELFORMAT_RGBA8888,
                                     &clr, 
-                                    4 * surface->width * surface->height );
+                                    4 * surface->width );
             result.a = (clr & 0x000000ff) / 255.0f;
             result.r = ((clr & 0xff000000) >> 24) / 255.0f;
             result.g = ((clr & 0x00ff0000) >> 16) / 255.0f;
@@ -480,6 +489,81 @@ void sgsdl2_draw_line(sg_drawing_surface *surface, color clr, float *data, int d
 
 
 //
+// Clipping
+//
+
+void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 4) return;
+    
+    // 4 values = 1 point w + h
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int w = (int)data[2], h = (int)data[3];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+        {
+            window_be->clipped = true;
+            window_be->clip = { x1, y1, w, h };
+            SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
+//            SDL_Rect rect = { x1, y1, w, h };
+//            std::cout << "Clip " << SDL_RenderSetClipRect(window_be->renderer, &rect);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
+{
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            window_be->clipped = false;
+            SDL_RenderSetClipRect(window_be->renderer, NULL);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+
+//
+// To Pixels
+//
+void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
+{
+    if ( ! surface || ! surface->_data || surface->width * surface->height != sz) return;
+
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            SDL_Rect rect = {0, 0, surface->width, surface->height};
+            SDL_RenderReadPixels(window_be->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, surface->width * 4);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+//
 // Load
 //
 
@@ -500,5 +584,8 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.draw_pixel = &sgsdl2_draw_pixel;
     functions->graphics.read_pixel = &sgsdl2_read_pixel;
     functions->graphics.draw_line = &sgsdl2_draw_line;
+    functions->graphics.set_clip_rect = &sgsdl2_set_clip_rect;
+    functions->graphics.clear_clip_rect = &sgsdl2_clear_clip_rect;
+    functions->graphics.to_pixels = &sgsdl2_to_pixels;
 }
 

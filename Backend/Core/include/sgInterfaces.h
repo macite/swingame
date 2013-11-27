@@ -41,6 +41,8 @@ extern "C" {
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
 
     typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
+    
+    typedef void (sg_to_pixel_array_fn)( sg_drawing_surface *surface, int *pixels, int sz );
 
     
     //
@@ -89,6 +91,11 @@ extern "C" {
         sg_drawing_proc * draw_line;
 
         sg_surface_color_fn * read_pixel;
+        
+        sg_drawing_proc * set_clip_rect;
+        sg_drawing_surface_proc * clear_clip_rect;
+        
+        sg_to_pixel_array_fn * to_pixels;
 
     } sg_graphics_interface;
     

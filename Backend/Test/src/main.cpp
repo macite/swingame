@@ -220,6 +220,28 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
             _sg_functions->graphics.refresh_window(&window_arr[w]);
         }
     }
+    
+    for (int w = 0; w < sz; w++)
+    {
+        int sz = window_arr[w].width * window_arr[w].height;
+        int pixels[sz];
+        
+        _sg_functions->graphics.to_pixels(&window_arr[w], pixels, sz);
+        
+        int count = 0;
+        for (int x = 0; x < window_arr[w].width; x++)
+        {
+            for (int y = 0; y < window_arr[w].height; y++)
+            {
+                if  ( pixels[x + y * window_arr[w].width] == 0xffffffff ) count++;
+            }
+        }
+        cout << "Window " << w << " has " << count << " white pixels" << endl;
+        
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        _sg_functions->graphics.refresh_window(&window_arr[w]);
+    }
+
 }
 
 
@@ -330,6 +352,29 @@ void test_lines(sg_drawing_surface *window_arr, int sz)
     }
 }
 
+void test_clip(sg_drawing_surface *window_arr, int sz)
+{
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 0.0, 1.0, 1.0});
+        
+        float data[] = {    window_arr[w].width * 0.2f,
+                            window_arr[w].height * 0.2f,
+                            window_arr[w].width * 0.6f,
+                            window_arr[w].height * 0.6f };
+        _sg_functions->graphics.set_clip_rect(&window_arr[w], {0.0f}, data, 4);
+        
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    test_rects(window_arr, sz);
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_clip_rect(&window_arr[w]);
+    }
+}
+
 
 
 
@@ -341,6 +386,7 @@ bool test_basic_drawing()
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
     test_colors(&window);
+    test_clip( &window, 1);
     test_pixels( &window, 1);
     test_rects( &window, 1);
     test_triangles( &window, 1);
@@ -367,12 +413,14 @@ bool test_window_operations()
     if ( w[0].height != 600 ) cout << " >> Error with w[0] height! " << w[0].height << endl;
     if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
     
+    test_clip(w, 2);
     test_rects(w, 2);
     test_triangles(w, 2);
     test_pixels(w, 2);
     test_circles(w, 2);
     test_ellipses(w, 2);
     test_lines(w, 2);
+    test_clip(w, 2);
     
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
