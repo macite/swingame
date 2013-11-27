@@ -151,7 +151,6 @@ implementation
 	procedure TSpritePack.CallForAllSprites(fn: SpriteSingleFunction; val: Single);
 	var
 		i: Integer;
-		arr: array of Sprite;
 	begin
 		_inLoop := true;
 		for i := 0 to High(_spritesBk) do
