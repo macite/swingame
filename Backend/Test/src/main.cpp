@@ -43,6 +43,15 @@ void test_colors(sg_drawing_surface *window)
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
+    
+    color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+
+    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "Should be 1, 0, 0, 1" << endl;
+    
+    clr = _sg_functions->graphics.read_pixel(window, -10, -10);
+    cout << " Color at -10,-10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "Should be 0, 0, 0, 0" << endl;
 
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
@@ -51,9 +60,19 @@ void test_colors(sg_drawing_surface *window)
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(1000);
     
+    clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+    
+    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "Should be 1, 1, 1, 1" << endl;
+    
     _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
+    
+    clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+    
+    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "Should be 0, 1, 0, 1" << endl;
     
     _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(500);
@@ -128,6 +147,10 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        float data[] = {0.0f, 599.0f, 799.0f, 599.0f, 400.0f, 1.0f};
+        _sg_functions->graphics.draw_triangle(&window_arr[w], {1.0,0,0,1.0}, data, 6 );
+        _sg_functions->graphics.refresh_window(&window_arr[w]);
+
     }
     
     for (int i = 0; i < 300; i++)
@@ -200,6 +223,92 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
 }
 
 
+void test_circles(sg_drawing_surface *window_arr, int sz)
+{
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.draw_circle(&window_arr[w], random_color(), data, 3 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.fill_circle(&window_arr[w], random_color(), data, 3 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+}
+
+void test_ellipses(sg_drawing_surface *window_arr, int sz)
+{
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 100,
+            rand() / (float)RAND_MAX * 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.draw_ellipse(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < 300; i++)
+    {
+        float data[] = {    rand() / (float)RAND_MAX * 800,
+            rand() / (float)RAND_MAX * 600,
+            rand() / (float)RAND_MAX * 100,
+            rand() / (float)RAND_MAX * 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.fill_ellipse(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+}
+
+
+
 
 bool test_basic_drawing()
 {
@@ -212,6 +321,8 @@ bool test_basic_drawing()
     test_pixels( &window, 1);
     test_rects( &window, 1);
     test_triangles( &window, 1);
+    test_circles( &window, 1);
+    test_ellipses( &window, 1);
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -235,6 +346,8 @@ bool test_window_operations()
     test_rects(w, 2);
     test_triangles(w, 2);
     test_pixels(w, 2);
+    test_circles(w, 2);
+    test_ellipses(w, 2);
     
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);

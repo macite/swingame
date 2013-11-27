@@ -40,6 +40,8 @@ extern "C" {
 
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
 
+    typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
+
     
     //
     // Utility relation functions
@@ -76,8 +78,16 @@ extern "C" {
         
         sg_drawing_proc * draw_triangle;
         sg_drawing_proc * fill_triangle;
+
+        sg_drawing_proc * draw_circle;
+        sg_drawing_proc * fill_circle;
+
+        sg_drawing_proc * draw_ellipse;
+        sg_drawing_proc * fill_ellipse;
         
         sg_drawing_proc * draw_pixel;
+
+        sg_surface_color_fn * read_pixel;
 
     } sg_graphics_interface;
     

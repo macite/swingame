@@ -621,17 +621,17 @@ implementation
 
 	procedure LoadSDL13GraphicsDriver();
 	begin
-    GraphicsDriver.GetPixel32               := @GetPixel32Procedure;
-    GraphicsDriver.PutPixel                 := @PutPixelProcedure;		
-    GraphicsDriver.FillTriangle             := @FillTriangleProcedure; // #
-    GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure; // #		
-    GraphicsDriver.FillCircle               := @FillCircleProcedure;
-    GraphicsDriver.DrawCircle               := @DrawCircleProcedure;		
-    GraphicsDriver.FillEllipse              := @FillEllipseProcedure;
-    GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;		
+    GraphicsDriver.GetPixel32               := @GetPixel32Procedure;    // # (done)
+    GraphicsDriver.PutPixel                 := @PutPixelProcedure;		  // #
+    GraphicsDriver.FillTriangle             := @FillTriangleProcedure;  // #
+    GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;  // #		
+    GraphicsDriver.FillCircle               := @FillCircleProcedure;    // #
+    GraphicsDriver.DrawCircle               := @DrawCircleProcedure;		// #
+    GraphicsDriver.FillEllipse              := @FillEllipseProcedure;   // #
+    GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;		// #
     GraphicsDriver.FillRectangle            := @FillRectangleProcedure; // #
-    GraphicsDriver.DrawLine                 := @DrawLineProcedure;
-    GraphicsDriver.SetPixelColor            := @SetPixelColorProcedure;
+    GraphicsDriver.DrawLine                 := @DrawLineProcedure;      
+    GraphicsDriver.SetPixelColor            := @SetPixelColorProcedure; // - (not needed)
     GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure; // #
     GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;
     GraphicsDriver.ResetClip                := @ResetClipProcedure;

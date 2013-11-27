@@ -228,7 +228,7 @@ void sgsdl2_draw_triangle(sg_drawing_surface *surface, color clr, float *data, i
     // 6 values = 3 points
     int x1 = (int)data[0], y1 = (int)data[1];
     int x2 = (int)data[2], y2 = (int)data[3];
-    int x3 = (int)data[4], y3 = (int)data[4];
+    int x3 = (int)data[4], y3 = (int)data[5];
     
     sg_window_be * window_be;
     window_be = (sg_window_be *)surface->_data;
@@ -253,7 +253,7 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
     // 6 values = 3 points
     float x1 = data[0], y1 = data[1];
     float x2 = data[2], y2 = data[3];
-    float x3 = data[4], y3 = data[4];
+    float x3 = data[4], y3 = data[5];
     
     sg_window_be * window_be;
     window_be = (sg_window_be *)surface->_data;
@@ -273,6 +273,53 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
     }
     
 }
+
+//
+//  Ellipse
+//
+
+void sgsdl2_draw_ellipse(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 4) return;
+    
+    // 4 values = 1 point w + h
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int w = (int)data[2], h = (int)data[3];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+            ellipseColor(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), _to_gfx_color(clr));
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void sgsdl2_fill_ellipse(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 4) return;
+    
+    // 4 values = 1 point w + h
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int w = (int)data[2], h = (int)data[3];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+            filledEllipseColor(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), _to_gfx_color(clr));
+            break;
+            
+        default:
+            break;
+    }
+}
+
 
 //
 // Pixel
@@ -312,6 +359,103 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int 
     
 }
 
+
+color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
+{
+    color result = {0,0,0,0};
+    int clr = 0;
+    SDL_Rect rect = {x,y, 1, 1};
+
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) 
+    {
+        case SGDS_Window:
+        {
+            SDL_RenderReadPixels(   window_be->renderer,
+                                    &rect,
+                                    SDL_PIXELFORMAT_RGBA8888,
+                                    &clr, 
+                                    4 * surface->width * surface->height );
+            result.a = (clr & 0x000000ff) / 255.0f;
+            result.r = ((clr & 0xff000000) >> 24) / 255.0f;
+            result.g = ((clr & 0x00ff0000) >> 16) / 255.0f;
+            result.b = ((clr & 0x0000ff00) >> 8) / 255.0f;
+            break;
+        }
+        default:
+            break;
+    }
+
+    return result;
+}
+
+
+//
+// Circles
+//
+
+void sgsdl2_draw_circle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 3) return;
+    
+    // 3 values = 1 point + radius
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int r = (int)data[2];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+            //sgsdl2_set_renderer_color(window_be, clr);
+            
+            circleColor(            window_be->renderer,
+                        (Sint16)    x1,
+                        (Sint16)    y1,
+                        (Sint16)    r,
+                                    _to_gfx_color(clr) );
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface || ! surface->_data || data_sz != 3) return;
+    
+    // 3 values = 1 point + radius
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int r = (int)data[2];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind) {
+        case SGDS_Window:
+            //sgsdl2_set_renderer_color(window_be, clr);
+            
+            filledCircleColor(            window_be->renderer,
+                              (Sint16)    x1,
+                              (Sint16)    y1,
+                              (Sint16)    r,
+                              _to_gfx_color(clr) );
+            break;
+            
+        default:
+            break;
+    }
+    
+}
+
+
+//
+// Load
+//
+
 void sgsdl2_load_graphics_fns(sg_interface * functions)
 {
     functions->graphics.open_window = &sgsdl2_open_window;
@@ -322,6 +466,11 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.fill_aabb_rect = &sgsdl2_fill_aabb_rect;
     functions->graphics.draw_triangle = &sgsdl2_draw_triangle;
     functions->graphics.fill_triangle = &sgsdl2_fill_triangle;
+    functions->graphics.draw_circle = &sgsdl2_draw_circle;
+    functions->graphics.fill_circle = &sgsdl2_fill_circle;
+    functions->graphics.draw_ellipse = &sgsdl2_draw_ellipse;
+    functions->graphics.fill_ellipse = &sgsdl2_fill_ellipse;
     functions->graphics.draw_pixel = &sgsdl2_draw_pixel;
+    functions->graphics.read_pixel = &sgsdl2_read_pixel;
 }
 
