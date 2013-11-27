@@ -100,6 +100,8 @@ extern "C" {
         sg_to_pixel_array_proc * to_pixels;
         
         sg_surface_bool_proc * show_border;
+        
+        sg_surface_bool_proc * show_fullscreen;
 
     } sg_graphics_interface;
     

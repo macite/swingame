@@ -509,8 +509,6 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
             window_be->clipped = true;
             window_be->clip = { x1, y1, w, h };
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
-//            SDL_Rect rect = { x1, y1, w, h };
-//            std::cout << "Clip " << SDL_RenderSetClipRect(window_be->renderer, &rect);
             break;
         }
             
@@ -529,7 +527,9 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
         case SGDS_Window:
         {
             window_be->clipped = false;
+            window_be->clip = { 0, 0, surface->width, surface->height };
             SDL_RenderSetClipRect(window_be->renderer, NULL);
+            SDL_RenderPresent(window_be->renderer);
             break;
         }
             
@@ -588,6 +588,27 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
     }
 }
 
+void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
+{
+    if ( ! surface || ! surface->_data ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            SDL_SetWindowFullscreen(window_be->window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+
 //
 // Load
 //
@@ -613,5 +634,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.clear_clip_rect = &sgsdl2_clear_clip_rect;
     functions->graphics.to_pixels = &sgsdl2_to_pixels;
     functions->graphics.show_border = &sgsdl2_show_border;
+    functions->graphics.show_fullscreen = &sgsdl2_show_fullscreen;
 }
 
