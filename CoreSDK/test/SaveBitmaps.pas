@@ -2,9 +2,7 @@ program SaveBitmaps;
 //{IFNDEF UNIX} {r GameLauncher.res} {ENDIF}
 uses
   sysutils,
-  sgTypes, sgAudio, sgText, sgGraphics, sgResources,
-  sgCamera, sgGeometry, sgImages, sgInput, sgPhysics, 
-  sgSprites, sgTimers;
+  SwinGame;
 
 procedure Main();
 var
@@ -13,6 +11,7 @@ begin
   OpenAudio();
   
   OpenGraphicsWindow('Save Bitmap', 640, 480);
+  LoadDefaultColors();
   
   bmp := CreateBitmap(100, 100);
   

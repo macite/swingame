@@ -1846,8 +1846,14 @@ implementation
   
   procedure DrawRectangle(dest: Bitmap; clr: Color; filled : Boolean; xPos, yPos, width, height : Longint); overload;
   begin
+    {$IFDEF TRACE}
+      TraceEnter('sgGraphics', 'DrawRectangle', 'onto: ' + HexStr(dest) + ' clr: ' + IntToStr(clr) + ' at ' + IntToStr(xPos) + ',' + IntToStr(yPos) + ' ' + IntToStr(width) + 'x' + IntToStr(height));
+    {$ENDIF}
     if filled then FillRectangle(dest, clr, xPos, yPos, width, height)
     else DrawRectangle(dest, clr, xPos, yPos, width, height);
+    {$IFDEF TRACE}
+      TraceExit('sgGraphics', 'DrawRectangle');
+    {$ENDIF}
   end;
 
   procedure DrawRectangle(dest: Bitmap; clr : Color; xPos, yPos, width, height : Longint); overload;
