@@ -37,14 +37,15 @@ extern "C" {
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
     typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
     typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
+    typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, bool value );
+    typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
+    
+    typedef void (sg_surface_size_proc)( sg_drawing_surface *surface, int width, int height );
 
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
 
     typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
-    typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, bool value );
-    
-    typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
 
     
     //
@@ -102,6 +103,8 @@ extern "C" {
         sg_surface_bool_proc * show_border;
         
         sg_surface_bool_proc * show_fullscreen;
+        
+        sg_surface_size_proc * resize;
 
     } sg_graphics_interface;
     

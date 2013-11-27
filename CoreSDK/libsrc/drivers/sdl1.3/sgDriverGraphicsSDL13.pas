@@ -635,7 +635,7 @@ implementation
     GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure; // #
     GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;  // #
     GraphicsDriver.ResetClip                := @ResetClipProcedure;         // #
-    GraphicsDriver.SetVideoModeFullScreen   := @SetVideoModeFullScreenProcedure;    
+    GraphicsDriver.SetVideoModeFullScreen   := @SetVideoModeFullScreenProcedure;    // # show_fullscreen  
     GraphicsDriver.SetVideoModeNoFrame      := @SetVideoModeNoFrameProcedure;       // # show_border 
     GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;  // #
     GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;          // #

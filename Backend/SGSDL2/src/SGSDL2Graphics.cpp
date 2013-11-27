@@ -608,6 +608,28 @@ void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
     }
 }
 
+void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
+{
+    if ( ! surface || ! surface->_data ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            SDL_SetWindowSize(window_be->window, width, height);
+            surface->width = width;
+            surface->height = height;
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
 
 //
 // Load
@@ -635,5 +657,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.to_pixels = &sgsdl2_to_pixels;
     functions->graphics.show_border = &sgsdl2_show_border;
     functions->graphics.show_fullscreen = &sgsdl2_show_fullscreen;
+    functions->graphics.resize = &sgsdl2_resize;
 }
 

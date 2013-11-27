@@ -412,6 +412,9 @@ bool test_basic_drawing()
     
     test_triangles( &window, 1);
     test_circles( &window, 1);
+    
+    _sg_functions->graphics.resize(&window, 320, 240);
+    
     test_ellipses( &window, 1);
     test_lines( &window, 1);
     
@@ -466,12 +469,12 @@ int main(int argc, const char * argv[])
         return -1;
     }
 
-//    if ( ! test_basic_drawing() )
-//    {
-//        cout << "Basic drawing failed with error: " << endl;
-//        //cout << _sg_functions->current_error << endl;
-//        return -1;
-//    }
+    if ( ! test_basic_drawing() )
+    {
+        cout << "Basic drawing failed with error: " << endl;
+        //cout << _sg_functions->current_error << endl;
+        return -1;
+    }
     
     test_window_operations();
     
