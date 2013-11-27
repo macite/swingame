@@ -563,6 +563,31 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
     }
 }
 
+
+//
+// Window change functions...
+//
+
+void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
+{
+    if ( ! surface || ! surface->_data ) return;
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
 //
 // Load
 //
@@ -587,5 +612,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.set_clip_rect = &sgsdl2_set_clip_rect;
     functions->graphics.clear_clip_rect = &sgsdl2_clear_clip_rect;
     functions->graphics.to_pixels = &sgsdl2_to_pixels;
+    functions->graphics.show_border = &sgsdl2_show_border;
 }
 

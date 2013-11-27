@@ -407,6 +407,8 @@ bool test_window_operations()
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
     
+    _sg_functions->graphics.show_border(&w[0], false);
+    
     if ( w[0].width != 800 ) cout << " >> Error with w[0] width! " << w[0].width << endl;
     if ( w[1].width != 300 ) cout << " >> Error with w[1] width! " << w[1].width << endl;
     

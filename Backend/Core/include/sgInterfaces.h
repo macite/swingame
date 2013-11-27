@@ -42,7 +42,9 @@ extern "C" {
 
     typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
-    typedef void (sg_to_pixel_array_fn)( sg_drawing_surface *surface, int *pixels, int sz );
+    typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, bool value );
+    
+    typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
 
     
     //
@@ -95,7 +97,9 @@ extern "C" {
         sg_drawing_proc * set_clip_rect;
         sg_drawing_surface_proc * clear_clip_rect;
         
-        sg_to_pixel_array_fn * to_pixels;
+        sg_to_pixel_array_proc * to_pixels;
+        
+        sg_surface_bool_proc * show_border;
 
     } sg_graphics_interface;
     
