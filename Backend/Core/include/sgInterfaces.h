@@ -46,6 +46,7 @@ extern "C" {
 
     typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
+    typedef sg_system_data * (sg_system_data_fn)();
 
     
     //
@@ -132,6 +133,8 @@ extern "C" {
         //
         sg_graphics_interface graphics;
         sg_utils_interface utils;
+        
+        sg_system_data_fn *read_system_data;
         
         sg_empty_procedure *init;
     } sg_interface;

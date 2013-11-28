@@ -639,7 +639,7 @@ implementation
     GraphicsDriver.SetVideoModeNoFrame      := @SetVideoModeNoFrameProcedure;       // # show_border 
     GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;  // #
     GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;          // #
-    GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;
+    GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;      // #
     GraphicsDriver.SaveImage                := @SaveImageProcedure;             // - use to_pixels
     GraphicsDriver.RefreshScreen            := @RefreshScreenProcedure;         // #
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
@@ -651,6 +651,6 @@ implementation
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -
-    GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;
+    GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;  // # 
 	end;
 end.

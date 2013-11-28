@@ -16,8 +16,16 @@
 
 using namespace std;
 
+sg_system_data _sgsdk_system_data = { 0 };
+
+void sgsdk_setup_displays();
+
 void init_sgsdk2()
 {
+    static bool done_init = false;
+    if ( done_init ) return;
+    done_init = true;
+    
     clear_error();
     
     if ( -1 == SDL_Init( SDL_INIT_EVERYTHING ) )
@@ -40,6 +48,75 @@ void init_sgsdk2()
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
+    
+    sgsdk_setup_displays();
+}
+
+void sgsdk2_setup_display(int idx, sg_display &disp)
+{
+    SDL_DisplayMode mode;
+    SDL_Rect rect;
+    
+    disp.name = SDL_GetDisplayName(idx);
+    
+    SDL_GetCurrentDisplayMode(idx, &mode);
+    disp.width = mode.w;
+    disp.height = mode.h;
+    
+    SDL_GetDisplayBounds(idx, &rect);
+    disp.x = rect.x;
+    disp.y = rect.y;
+    
+    disp.num_modes = 0;
+    disp.modes = NULL;
+    int max_modes = SDL_GetNumDisplayModes(idx);
+    if ( max_modes < 1 ) return;
+    bool add;
+    
+    for (int i = 0; i < max_modes; i++)
+    {
+        SDL_GetDisplayMode(idx, i, &mode);
+        add = true;
+        
+        for ( int m = 0; m < disp.num_modes; m++)
+        {
+            if ( disp.modes[m].width == mode.w && disp.modes[m].height == mode.h )
+            {
+                add = false;
+                break;
+            }
+        }
+        
+        if ( add )
+        {
+            disp.num_modes++;
+            sg_mode * new_modes = (sg_mode*) realloc(disp.modes, disp.num_modes * sizeof(sg_mode));
+            if ( new_modes == NULL )
+            {
+                set_error_state("Out of memory loading video modes.");
+                return; //TODO: add error!
+            }
+            disp.modes = new_modes;
+            disp.modes[disp.num_modes - 1].width = mode.w;
+            disp.modes[disp.num_modes - 1].height = mode.h;
+        }
+    }
+}
+
+void sgsdk_setup_displays()
+{
+    _sgsdk_system_data.num_displays = SDL_GetNumVideoDisplays();
+    _sgsdk_system_data.displays = (sg_display *)malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays);
+    
+    for (int i = 0; i < _sgsdk_system_data.num_displays; i++)
+    {
+        sgsdk2_setup_display(i, _sgsdk_system_data.displays[i]);
+    }
+}
+
+sg_system_data * sgsdk2_read_system_data()
+{
+    return &_sgsdk_system_data;
 }
 
 extern "C"
@@ -50,6 +127,7 @@ sg_interface * sg_load()
     clear_functions();
     
     _functions.init = &init_sgsdk2;
+    _functions.read_system_data = &sgsdk2_read_system_data;
     
     sgsdl2_load_graphics_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);

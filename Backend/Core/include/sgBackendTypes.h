@@ -36,4 +36,29 @@ typedef struct sg_drawing_surface
     void * _data;
 } sg_drawing_surface;
 
+
+typedef struct sg_mode
+{
+    int width, height;
+} sg_mode;
+
+typedef struct sg_display
+{
+    const char *    name;
+    int             x, y;
+    int             width, height;
+    int             num_modes;
+    sg_mode *       modes;
+    
+    // private data used by the backend
+    void * _data;
+} sg_display;
+
+typedef struct sg_system_data
+{
+    int         num_displays;
+    sg_display  * displays;
+    
+} sg_system_data;
+
 #endif

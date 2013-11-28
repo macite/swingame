@@ -453,6 +453,24 @@ bool test_window_operations()
     return true;
 }
 
+void output_system_details()
+{
+    sg_system_data *data = _sg_functions->read_system_data();
+    
+    cout << "Display count: " << data->num_displays << endl;
+    
+    for (int i = 0; i < data->num_displays; i++)
+    {
+        cout << "  -> Display[" << i << "] = " << data->displays[i].name << endl;
+        cout << "     " << data->displays[i].width << " x " << data->displays[i].height << " at " << data->displays[i].x << "," << data->displays[i].y << endl;
+        cout << "     Modes:" << endl;
+        for (int m = 0; m < data->displays[i].num_modes; m++)
+        {
+            cout << "           " << data->displays[i].modes[m].width << " x " << data->displays[i].modes[m].height << endl;
+        }
+    }
+}
+
 #include "test_draw_point.h"
 
 int main(int argc, const char * argv[])
@@ -468,6 +486,9 @@ int main(int argc, const char * argv[])
         cout << _sg_functions->current_error << endl;
         return -1;
     }
+    
+    output_system_details();
+    return 0;
 
     if ( ! test_basic_drawing() )
     {
