@@ -12,7 +12,9 @@
 #include "sgBackendUtils.h"
 
 #include "SGSDL2Graphics.h"
+#include "SGSDL2Audio.h"
 #include "SGSDL2Utils.h"
+
 
 using namespace std;
 
@@ -48,6 +50,8 @@ void init_sgsdk2()
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
+    
+    sgsdl2_init_audio();
     
     sgsdk_setup_displays();
 }

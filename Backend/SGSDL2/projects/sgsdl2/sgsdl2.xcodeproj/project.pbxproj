@@ -35,6 +35,8 @@
 		9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB2183B732800BE3771 /* libSDL2.a */; };
 		9471BDBF183B732800BE3771 /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB3183B732800BE3771 /* libwebp.a */; };
 		9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BD8C183B6E5700BE3771 /* libsgsdl2.a */; };
+		9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C6981847566500B71B41 /* SGSDL2Audio.cpp */; };
+		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -86,6 +88,8 @@
 		9471BDB2183B732800BE3771 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../lib/mac/libSDL2.a; sourceTree = "<group>"; };
 		9471BDB3183B732800BE3771 /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebp.a; path = ../../lib/mac/libwebp.a; sourceTree = "<group>"; };
 		9471BDC4183B737000BE3771 /* SGSDL2Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SGSDL2Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		9499C6981847566500B71B41 /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Audio.cpp; sourceTree = "<group>"; };
+		9499C6991847566500B71B41 /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Audio.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +181,8 @@
 		9471BD97183B70ED00BE3771 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				9499C6981847566500B71B41 /* SGSDL2Audio.cpp */,
+				9499C6991847566500B71B41 /* SGSDL2Audio.h */,
 				9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */,
 				9471BD9D183B717900BE3771 /* SGSDL2Core.h */,
 				942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */,
@@ -233,6 +239,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
+				9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */,
 				942DBF2C183CA8D200876830 /* test_draw_point.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -309,6 +316,7 @@
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
+				9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */,
 				9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -401,10 +409,11 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../external/SDL/include,
 					../../external/SDL_gfx,
+					../../external/SDL_mixer,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
+					../../lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -419,10 +428,11 @@
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					../../external/SDL/include,
 					../../external/SDL_gfx,
+					../../external/SDL_mixer,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
+					../../lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
