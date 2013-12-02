@@ -379,19 +379,101 @@ void test_clip(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0f, 0.0, 1.0f});
     }
     
-    _sg_functions->utils.delay(500);
+    _sg_functions->utils.delay(2000);
     
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_clip_rect(&window_arr[w]);
 //        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0f, 0.0, 1.0f});
-        _sg_functions->graphics.refresh_window(&window_arr[w]);
+//        _sg_functions->graphics.refresh_window(&window_arr[w]);
 //        _sg_functions->utils.delay(100);
     }
 
 }
 
+bool test_positions(sg_drawing_surface *window_arr, int sz)
+{
+    for (int i = 0; i < sz; i++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1.0, 1.0, 1.0, 1.0});
+        
+        float data[] = {0.0f, 0.0f, 50.0f, 50.0f};
+        float data1[] = {window_arr[i].width - 50.0f, 0.0f, 50.0f, 50.0f};
+        float data2[] = {0.0f, window_arr[i].height - 50.0f, 50.0f, 50.0f};
+        float data3[] = {window_arr[i].width - 50.0f, window_arr[i].height - 50.0f, 50.0f, 50.0f};
+        
+        _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {1.0f, 0.0f, 0.0f, 1.0f}, data,  4);
+        _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {0.0f, 1.0f, 0.0f, 1.0f}, data1,  4);
+        _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {0.0f, 0.0f, 1.0f, 1.0f}, data2,  4);
+        _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {0.0f, 0.0f, 0.0f, 1.0f}, data3,  4);
+        
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+    }
 
+    _sg_functions->utils.delay(2000);
+    
+    return true;
+}
+
+bool test_alpha(sg_drawing_surface *window_arr, int sz)
+{
+    for (int i = 0; i < sz; i++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1.0, 1.0, 1.0, 1.0});
+        
+        float data[] = {0.0f, 0.0f, window_arr[i].width / 11.0f, window_arr[i].height * 1.0f};
+
+        for (int j = 0; j < 11; j++)
+        {
+            data[0] = j * data[2];
+            _sg_functions->graphics.fill_ellipse(&window_arr[i], {1.0f, 0.0f, 0.0f, 0.1f * j}, data,  4);
+        }
+        
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+    }
+    
+    _sg_functions->utils.delay(2000);
+    
+    return true;
+}
+
+void test_resize(sg_drawing_surface * window_arr, int sz)
+{
+    for (int i = 0; i < sz; i++)
+    {
+        int w, h;
+        w = window_arr[i].width;
+        h = window_arr[i].height;
+        
+        _sg_functions->graphics.resize(&window_arr[i], 320, 240);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(500);
+        
+        _sg_functions->graphics.resize(&window_arr[i], 640, 480);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(500);
+
+        _sg_functions->graphics.resize(&window_arr[i], 800, 600);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(500);
+        
+        _sg_functions->graphics.resize(&window_arr[i], 1024, 768);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(1000);
+        
+        _sg_functions->graphics.resize(&window_arr[i], w, h);
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1.0f, 1.0f, 1.0f, 1.0f});
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(500);
+    }
+
+}
 
 
 bool test_basic_drawing()
@@ -400,12 +482,16 @@ bool test_basic_drawing()
     
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
-    
-    _sg_functions->graphics.show_fullscreen(&window, true);
-    
+
     test_colors(&window);
+    test_positions(&window, 1);
+    test_alpha(&window, 1);
+
     test_clip( &window, 1);
     test_pixels( &window, 1);
+    
+    _sg_functions->graphics.show_fullscreen(&window, true);
+
     test_rects( &window, 1);
     
     _sg_functions->graphics.show_fullscreen(&window, false);
@@ -413,7 +499,7 @@ bool test_basic_drawing()
     test_triangles( &window, 1);
     test_circles( &window, 1);
     
-    _sg_functions->graphics.resize(&window, 320, 240);
+    test_resize(&window, 1);
     
     test_ellipses( &window, 1);
     test_lines( &window, 1);
@@ -488,7 +574,6 @@ int main(int argc, const char * argv[])
     }
     
     output_system_details();
-    return 0;
 
     if ( ! test_basic_drawing() )
     {

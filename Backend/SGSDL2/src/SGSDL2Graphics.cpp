@@ -56,10 +56,13 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
     SDL_RenderClear(window_be->renderer);
     SDL_RenderPresent(window_be->renderer);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
     
-    window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_TARGET, width, height);
+    window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
     
     SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderClear(window_be->renderer);
     
     window_be->clipped = false;
     window_be->clip = {0,0,0,0};
@@ -161,30 +164,13 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
         SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
         SDL_RenderPresent(window_be->renderer);
         SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+        SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
         if ( window_be->clipped )
         {
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
         }
     }
 }
-
-
-//
-// Surface ops
-//
-
-Uint32 _to_gfx_color(color clr)
-{
-    byte r, g, b, a;
-    
-    r = 255 * clr.r;
-    g = 255 * clr.g;
-    b = 255 * clr.b;
-    a = 255 * clr.a;
-    
-    return (r << 24) | (g << 16) | (b << 8) | a;
-}
-
 
 
 //
@@ -269,14 +255,20 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
     
     switch (surface->kind) {
         case SGDS_Window:
-            filledTrigonColor(window_be->renderer,
+        {
+            Uint8 a = (Uint8)(clr.a * 255);
+            filledTrigonRGBA(window_be->renderer,
                               x1, y1,
                               x2, y2,
                               x3, y3,
-                              _to_gfx_color(clr)
+                              (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a
                               );
+            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+            {
+                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            }
             break;
-            
+        }
         default:
             break;
     }
@@ -300,9 +292,16 @@ void sgsdl2_draw_ellipse(sg_drawing_surface *surface, color clr, float *data, in
     
     switch (surface->kind) {
         case SGDS_Window:
-            ellipseColor(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), _to_gfx_color(clr));
+        {
+            Uint8 a = (Uint8)(clr.a * 255);
+            ellipseRGBA(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+
+            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+            {
+                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            }
             break;
-            
+        }
         default:
             break;
     }
@@ -321,9 +320,18 @@ void sgsdl2_fill_ellipse(sg_drawing_surface *surface, color clr, float *data, in
     
     switch (surface->kind) {
         case SGDS_Window:
-            filledEllipseColor(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), _to_gfx_color(clr));
-            break;
+        {
+            Uint8 a = (Uint8)(clr.a * 255);
             
+            filledEllipseRGBA(window_be->renderer, (Sint16)x1 + w / 2, (Sint16)y1 + h / 2, (Sint16)(w / 2), (Sint16)(h / 2), (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+
+            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+            {
+                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            }
+
+            break;
+        }
         default:
             break;
     }
@@ -418,15 +426,20 @@ void sgsdl2_draw_circle(sg_drawing_surface *surface, color clr, float *data, int
     
     switch (surface->kind) {
         case SGDS_Window:
-            //sgsdl2_set_renderer_color(window_be, clr);
+        {
+            Uint8 a = (Uint8)(clr.a * 255);
             
-            circleColor(            window_be->renderer,
+            circleRGBA(            window_be->renderer,
                         (Sint16)    x1,
                         (Sint16)    y1,
                         (Sint16)    r,
-                                    _to_gfx_color(clr) );
+                                    (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
+            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+            {
+                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            }
             break;
-            
+        }
         default:
             break;
     }
@@ -445,15 +458,22 @@ void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int
     
     switch (surface->kind) {
         case SGDS_Window:
-            //sgsdl2_set_renderer_color(window_be, clr);
+        {
+            Uint8 a = (Uint8)(clr.a * 255);
             
-            filledCircleColor(            window_be->renderer,
+            filledCircleRGBA(            window_be->renderer,
                               (Sint16)    x1,
                               (Sint16)    y1,
                               (Sint16)    r,
-                              _to_gfx_color(clr) );
+                              (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
+
+            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+            {
+                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            }
+
             break;
-            
+        }
         default:
             break;
     }
@@ -507,7 +527,9 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
         case SGDS_Window:
         {
             window_be->clipped = true;
-            window_be->clip = { x1, y1, w, h };
+            //HACK: Current hack to fix SDL clip rect error
+            window_be->clip = { x1, surface->height - h + y1, w, h };
+            //Should be: window_be->clip = { x1, y1, w, h };
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
             break;
         }
@@ -619,9 +641,42 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
     {
         case SGDS_Window:
         {
+            SDL_Rect dst = {0, 0, surface->width, surface->height};
+
+            // Get old backing texture
+            SDL_Texture * old = window_be->backing;
+            
+            // Set renderer to draw onto window
+            SDL_SetRenderTarget(window_be->renderer, NULL);
+            
+            // Change window size
             SDL_SetWindowSize(window_be->window, width, height);
             surface->width = width;
             surface->height = height;
+            
+            // Clear new window surface
+            SDL_RenderSetClipRect(window_be->renderer, NULL);
+            SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
+
+            SDL_RenderClear(window_be->renderer);
+            
+            // Create new backing
+            window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+            
+            SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+            SDL_RenderClear(window_be->renderer);
+            
+            SDL_RenderCopy(window_be->renderer, old, NULL, &dst);
+            
+            // Restore clipping
+            if ( window_be->clipped )
+            {
+                SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
+            }
+            
+            // Delete old backing texture
+            SDL_DestroyTexture(old);
+            
             break;
         }
             
