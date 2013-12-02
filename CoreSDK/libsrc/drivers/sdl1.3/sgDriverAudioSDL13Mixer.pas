@@ -278,9 +278,9 @@ implementation
       soundChannels[i] := nil;
     end;
     //WriteLn('Loading SDL_Mixer Audio Driver...');
-    AudioDriver.LoadSoundEffect := @LoadSoundEffectProcedure;   
-    AudioDriver.OpenAudio := @OpenAudioProcedure;
-    AudioDriver.CloseAudio := @CloseAudioProcedure;
+    AudioDriver.LoadSoundEffect := @LoadSoundEffectProcedure;   // # 
+    AudioDriver.OpenAudio := @OpenAudioProcedure;               // #
+    AudioDriver.CloseAudio := @CloseAudioProcedure;             // #
     AudioDriver.SetMusicVolume := @SetMusicVolumeProcedure;
     AudioDriver.GetMusicVolume := @GetMusicVolumeProcedure;
     AudioDriver.GetError := @GetErrorProcedure;

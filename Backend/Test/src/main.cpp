@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include "sgInterfaces.h"
+#include "test_audio.h"
 
 #define SHAPE_COUNT 60
 
@@ -627,6 +628,10 @@ int main(int argc, const char * argv[])
     }
     
     output_system_details();
+    
+    test_audio();
+    return 0;
+    
 
     if ( ! test_basic_drawing() )
     {

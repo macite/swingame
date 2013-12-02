@@ -61,4 +61,23 @@ typedef struct sg_system_data
     
 } sg_system_data;
 
+
+enum sg_sound_kind
+{
+    SGSD_UNKNOWN = 0,
+    SGSD_SOUND_EFFECT = 1,
+    SGSD_MUSIC = 2
+};
+
+//
+// Sound data is an audio chunk the user can play.
+//
+typedef struct sg_sound_data
+{
+    sg_sound_kind kind;
+    
+    // private data used by backend
+    void * data;
+} sg_sound_data;
+
 #endif

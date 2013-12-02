@@ -37,6 +37,8 @@
 		9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BD8C183B6E5700BE3771 /* libsgsdl2.a */; };
 		9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C6981847566500B71B41 /* SGSDL2Audio.cpp */; };
 		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
+		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
+		9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C69D184C5F2B00B71B41 /* test_audio.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -90,6 +92,9 @@
 		9471BDC4183B737000BE3771 /* SGSDL2Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SGSDL2Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		9499C6981847566500B71B41 /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		9499C6991847566500B71B41 /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Audio.h; sourceTree = "<group>"; };
+		9499C69C184C5F2B00B71B41 /* test_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_audio.cpp; path = ../../../Test/src/test_audio.cpp; sourceTree = "<group>"; };
+		9499C69D184C5F2B00B71B41 /* test_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_audio.h; path = ../../../Test/src/test_audio.h; sourceTree = "<group>"; };
+		9499C6A0184C630E00B71B41 /* test.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.ogg; path = ../../../Test/Resources/test.ogg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -196,9 +201,12 @@
 		9471BDA0183B727700BE3771 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				9499C6A0184C630E00B71B41 /* test.ogg */,
 				942DBED1183C1DBA00876830 /* main.cpp */,
 				942DBF29183CA8D200876830 /* test_draw_point.cpp */,
 				942DBF2A183CA8D200876830 /* test_draw_point.h */,
+				9499C69C184C5F2B00B71B41 /* test_audio.cpp */,
+				9499C69D184C5F2B00B71B41 /* test_audio.h */,
 			);
 			name = Test;
 			sourceTree = "<group>";
@@ -241,6 +249,7 @@
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
 				9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */,
 				942DBF2C183CA8D200876830 /* test_draw_point.h in Headers */,
+				9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +322,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */,
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,

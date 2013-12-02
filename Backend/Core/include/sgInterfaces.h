@@ -33,6 +33,7 @@ extern "C" {
     } color;
     
     typedef void (sg_empty_procedure)( void );
+    
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
     typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
@@ -50,6 +51,11 @@ extern "C" {
 
     
     //
+    //
+    //
+    typedef sg_sound_data (sg_sound_load_fn)(const char *filename, sg_sound_kind kind);
+    
+    //
     // Utility relation functions
     //
     // - delay = Function to delay by a specified number of milliseconds.
@@ -60,6 +66,15 @@ extern "C" {
         
     } sg_utils_interface;
     
+    
+    typedef struct sg_audio_interface
+    {
+        sg_empty_procedure * open_audio;
+        sg_empty_procedure * close_audio;
+        
+        sg_sound_load_fn * load_sound_effect;
+        
+    } sg_audio_interface;
     
     //
     // Graphics related functions.
@@ -135,6 +150,7 @@ extern "C" {
         //
         // function pointers by functionality
         //
+        sg_audio_interface audio;
         sg_graphics_interface graphics;
         sg_utils_interface utils;
         

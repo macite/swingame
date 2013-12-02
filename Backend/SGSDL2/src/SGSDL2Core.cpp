@@ -133,6 +133,7 @@ sg_interface * sg_load()
     _functions.init = &init_sgsdk2;
     _functions.read_system_data = &sgsdk2_read_system_data;
     
+    sgsdl2_load_audio_fns(&_functions);
     sgsdl2_load_graphics_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     
