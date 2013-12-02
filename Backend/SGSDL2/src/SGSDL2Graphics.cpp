@@ -212,6 +212,84 @@ void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, 
 }
 
 
+// Rectangle points are...
+//
+//   0 ..... 1
+//   .       .
+//   .       .
+//   .       .
+//   2 ..... 3
+//
+void sgsdl2_draw_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface ) return;
+    if ( data_sz != 8 ) return;
+    
+    // 8 values = 4 points
+    int x1 = (int)data[0], y1 = (int)data[1];
+    int x2 = (int)data[2], y2 = (int)data[3];
+    int x3 = (int)data[4], y3 = (int)data[5];
+    int x4 = (int)data[6], y4 = (int)data[7];
+
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    if ( window_be )
+    {
+        sgsdl2_set_renderer_color(window_be, clr);
+        
+        SDL_RenderDrawLine(window_be->renderer, x1, y1, x2, y2);
+        SDL_RenderDrawLine(window_be->renderer, x1, y1, x3, y3);
+        SDL_RenderDrawLine(window_be->renderer, x4, y4, x2, y2);
+        SDL_RenderDrawLine(window_be->renderer, x4, y4, x3, y3);
+    }
+}
+
+// Rectangle points are...
+//
+//   0 ..... 1
+//   .       .
+//   .       .
+//   .       .
+//   2 ..... 3
+//
+void sgsdl2_fill_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( ! surface ) return;
+    if ( data_sz != 8 ) return;
+    
+    // 8 values = 4 points
+    Sint16 x[4], y[4];
+    
+    x[0] = (int)data[0];
+    x[1] = (int)data[2];
+    x[2] = (int)data[6];    // Swap last 2 for SDL_gfx order
+    x[3] = (int)data[4];
+
+    y[0] = (int)data[1];
+    y[1] = (int)data[3];
+    y[2] = (int)data[7];    // Swap last 2 for SDL_gfx order
+    y[3] = (int)data[5];
+    
+    sg_window_be * window_be;
+    window_be = (sg_window_be *)surface->_data;
+    
+    if ( window_be )
+    {
+        Uint8 a = (Uint8)(clr.a * 255);
+        filledPolygonRGBA(window_be->renderer, x, y, 4, (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
+        {
+            SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+        }
+
+    }
+}
+
+
+
 //
 //  Triangles
 //
@@ -696,6 +774,8 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.close_drawing_surface = &sgsdl2_close_drawing_surface;
     functions->graphics.refresh_window = &sgsdl2_refresh_window;
     functions->graphics.clear_drawing_surface = &sgsdl2_clear_drawing_surface;
+    functions->graphics.draw_rect = &sgsdl2_draw_rect;
+    functions->graphics.fill_rect = &sgsdl2_fill_rect;
     functions->graphics.draw_aabb_rect = &sgsdl2_draw_aabb_rect;
     functions->graphics.fill_aabb_rect = &sgsdl2_fill_aabb_rect;
     functions->graphics.draw_triangle = &sgsdl2_draw_triangle;

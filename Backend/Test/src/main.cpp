@@ -10,6 +10,8 @@
 
 #include "sgInterfaces.h"
 
+#define SHAPE_COUNT 60
+
 using namespace std;
 
 sg_interface * _sg_functions = NULL;
@@ -106,7 +108,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
    
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
                             rand() / (float)RAND_MAX * 600,
@@ -126,7 +128,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -140,6 +142,57 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
             _sg_functions->graphics.refresh_window(&window_arr[w]);
         }
     }
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < SHAPE_COUNT; i++)
+    {
+        float x, y;
+        
+        x = rand() / (float)RAND_MAX * 800;
+        y = rand() / (float)RAND_MAX * 600;
+        
+        float data[] = {
+            x, y,
+            x + 100, y,
+            x, y + 100,
+            x + 100, y + 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.draw_rect(&window_arr[w], random_color(), data, 8 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+    
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+    }
+    
+    for (int i = 0; i < SHAPE_COUNT; i++)
+    {
+        float x = rand() / (float)RAND_MAX * 800;
+        float y = rand() / (float)RAND_MAX * 600;
+        
+        float data[] = {
+            x, y,
+            x + 100, y,
+            x, y + 100,
+            x + 100, y + 100
+        };
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.fill_rect(&window_arr[w], random_color(), data, 8 );
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+
 }
 
 void test_triangles(sg_drawing_surface *window_arr, int sz)
@@ -153,7 +206,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
 
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -175,7 +228,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -203,7 +256,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.refresh_window(&window_arr[w]);
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         for (int w = 0; w < sz; w++)
         {
@@ -252,7 +305,7 @@ void test_circles(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -271,7 +324,7 @@ void test_circles(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -293,7 +346,7 @@ void test_ellipses(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -313,7 +366,7 @@ void test_ellipses(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -336,7 +389,7 @@ void test_lines(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
     }
     
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < SHAPE_COUNT; i++)
     {
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
@@ -484,17 +537,17 @@ bool test_basic_drawing()
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
 
     test_colors(&window);
-    test_positions(&window, 1);
-    test_alpha(&window, 1);
-
-    test_clip( &window, 1);
-    test_pixels( &window, 1);
-    
-    _sg_functions->graphics.show_fullscreen(&window, true);
+//    test_positions(&window, 1);
+//    test_alpha(&window, 1);
+//
+//    test_clip( &window, 1);
+//    test_pixels( &window, 1);
+//    
+//    _sg_functions->graphics.show_fullscreen(&window, true);
 
     test_rects( &window, 1);
     
-    _sg_functions->graphics.show_fullscreen(&window, false);
+//    _sg_functions->graphics.show_fullscreen(&window, false);
     
     test_triangles( &window, 1);
     test_circles( &window, 1);
