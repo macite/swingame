@@ -43,6 +43,7 @@
 		94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821643184DE39200C89CBE /* libsmpeg2.a */; };
 		94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821645184DE3BC00C89CBE /* 280.mp3 */; };
 		94821648184DE7F600C89CBE /* energize_my_mind.mod in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821647184DE7F100C89CBE /* energize_my_mind.mod */; };
+		9482164B184DE9DD00C89CBE /* superman_1.mid in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9482164A184DE9D800C89CBE /* superman_1.mid */; };
 		9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C6981847566500B71B41 /* SGSDL2Audio.cpp */; };
 		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
 		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
@@ -57,6 +58,7 @@
 			dstSubfolderSpec = 6;
 			files = (
 				94821585184C701400C89CBE /* error.wav in CopyFiles */,
+				9482164B184DE9DD00C89CBE /* superman_1.mid in CopyFiles */,
 				94821586184C701700C89CBE /* test.ogg in CopyFiles */,
 				94821648184DE7F600C89CBE /* energize_my_mind.mod in CopyFiles */,
 				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
@@ -110,6 +112,7 @@
 		94821643184DE39200C89CBE /* libsmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsmpeg2.a; path = ../../lib/mac/libsmpeg2.a; sourceTree = "<group>"; };
 		94821645184DE3BC00C89CBE /* 280.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 280.mp3; path = ../../../Test/Resources/280.mp3; sourceTree = "<group>"; };
 		94821647184DE7F100C89CBE /* energize_my_mind.mod */ = {isa = PBXFileReference; lastKnownFileType = file; name = energize_my_mind.mod; path = ../../../Test/Resources/energize_my_mind.mod; sourceTree = "<group>"; };
+		9482164A184DE9D800C89CBE /* superman_1.mid */ = {isa = PBXFileReference; lastKnownFileType = audio.midi; name = superman_1.mid; path = ../../../Test/Resources/superman_1.mid; sourceTree = "<group>"; };
 		9499C6981847566500B71B41 /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		9499C6991847566500B71B41 /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Audio.h; sourceTree = "<group>"; };
 		9499C69C184C5F2B00B71B41 /* test_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_audio.cpp; path = ../../../Test/src/test_audio.cpp; sourceTree = "<group>"; };
@@ -269,6 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				94821645184DE3BC00C89CBE /* 280.mp3 */,
+				9482164A184DE9D800C89CBE /* superman_1.mid */,
 				94821647184DE7F100C89CBE /* energize_my_mind.mod */,
 				9482162A184D955800C89CBE /* 30248__streety__sword7.flac */,
 				94821583184C6FE800C89CBE /* error.wav */,

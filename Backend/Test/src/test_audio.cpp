@@ -62,5 +62,13 @@ void test_audio()
     
     _sg_functions->utils.delay(3000);
     
+    sg_sound_data sound_midi = _sg_functions->audio.load_sound_effect("superman_1.mid", SGSD_MUSIC);
+    
+    cout << "Loaded music MIDI ... " << ( sound_midi.data ? "SUCCESS" : "FAILED") << endl;
+    
+    _sg_functions->audio.play_sound_effect(&sound_midi, 0, 1.0f);
+    
+    _sg_functions->utils.delay(5000);
+    
     _sg_functions->audio.close_audio();
 }
