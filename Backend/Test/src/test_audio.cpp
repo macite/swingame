@@ -77,6 +77,9 @@ void test_audio()
     
     _sg_functions->utils.delay(5000);
     
+    cout << "Midi is " << (_sg_functions->audio.sound_playing(&sound_midi) > 0 ? "Playing" : "Not Playing") << endl;
+    cout << "Wav is " << (_sg_functions->audio.sound_playing(&sound) > 0 ? "Playing" : "Not Playing") << endl;
+    
     _sg_functions->audio.close_sound_data(&sound);
     _sg_functions->audio.close_sound_data(&sound_flac);
     _sg_functions->audio.close_sound_data(&sound_midi);

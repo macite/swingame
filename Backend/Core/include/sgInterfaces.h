@@ -62,6 +62,9 @@ extern "C" {
     
     // Sound data procedure
     typedef void (sg_sound_data_proc)(sg_sound_data *sound);
+
+    // Sound data float function
+    typedef float (sg_sound_float_fn)(sg_sound_data *sound);
     
     
     
@@ -86,6 +89,8 @@ extern "C" {
         sg_sound_data_proc *    close_sound_data;
         
         sg_play_sound_fn   *    play_sound;
+        
+        sg_sound_float_fn  *    sound_playing;
         
     } sg_audio_interface;
     

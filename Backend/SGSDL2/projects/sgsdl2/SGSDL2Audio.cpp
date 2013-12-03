@@ -14,6 +14,7 @@
 #define SG_MAX_CHANNELS 64
 
 Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
+Mix_Music * _current_music;
 
 extern sg_system_data _sgsdk_system_data;
 
@@ -118,11 +119,43 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
         {
             Mix_PlayMusic((Mix_Music *)sound->data, loops);
             Mix_VolumeMusic((int)volume * 128);
+            _current_music = (Mix_Music *)sound->data;
             break;
         }
         default:
             break;
     }
+}
+
+float sgsdl2_sound_playing(sg_sound_data * sound)
+{
+    if ( ! sound ) {
+        return 0.0f;
+    }
+    
+    switch (sound->kind)
+    {
+        case SGSD_SOUND_EFFECT:
+        {
+            for (int i = 0; i < SG_MAX_CHANNELS; i++)
+            {
+                if ( sound->data == _sgsdl2_sound_channels[i] && Mix_Playing( i ) )
+                {
+                    return 1.0f;
+                }
+            }
+            break;
+        }
+        case SGSD_MUSIC:
+        {
+            if ( _current_music == sound->data && Mix_PlayingMusic() ) return 1.0f;
+        }
+            
+        default:
+            break;
+    }
+    
+    return 0.0f;
 }
 
 void sgsdl2_load_audio_fns(sg_interface *functions)
@@ -132,5 +165,6 @@ void sgsdl2_load_audio_fns(sg_interface *functions)
     functions->audio.load_sound_data = & sgsdl2_load_sound_data;
     functions->audio.play_sound = & sgsdl2_play_sound;
     functions->audio.close_sound_data = & sgsdl_close_sound_data;
+    functions->audio.sound_playing = &sgsdl2_sound_playing;
 }
 
