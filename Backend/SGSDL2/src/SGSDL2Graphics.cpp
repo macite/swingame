@@ -43,6 +43,8 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
                                          height,
                                          SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     
+    result._data = window_be;
+    
     if ( ! window_be->window)
     {
         set_error_state(SDL_GetError());
@@ -71,8 +73,6 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     result.width = width;
     result.height = height;
-
-    result._data = window_be;
 
     return result;
 }

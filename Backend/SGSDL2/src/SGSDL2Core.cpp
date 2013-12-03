@@ -98,6 +98,9 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
             if ( new_modes == NULL )
             {
                 set_error_state("Out of memory loading video modes.");
+                free(disp.modes);
+                disp.modes = NULL;
+                disp.num_modes = 0;
                 return; //TODO: add error!
             }
             disp.modes = new_modes;
