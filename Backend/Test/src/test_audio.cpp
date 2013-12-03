@@ -52,7 +52,15 @@ void test_audio()
     
     _sg_functions->audio.play_sound_effect(&sound_mp3, 0, 1.0f);
     
-    _sg_functions->utils.delay(2000);
+    _sg_functions->utils.delay(3000);
+    
+    sg_sound_data sound_mod = _sg_functions->audio.load_sound_effect("energize_my_mind.mod", SGSD_MUSIC);
+    
+    cout << "Loaded music MOD ... " << ( sound_mod.data ? "SUCCESS" : "FAILED") << endl;
+    
+    _sg_functions->audio.play_sound_effect(&sound_mod, 0, 1.0f);
+    
+    _sg_functions->utils.delay(3000);
     
     _sg_functions->audio.close_audio();
 }
