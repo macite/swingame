@@ -86,9 +86,12 @@ void sgsdl2_close_window(sg_drawing_surface *window)
     {
         SDL_DestroyRenderer(window_be->renderer);
         SDL_DestroyWindow(window_be->window);
+        SDL_DestroyTexture(window_be->backing);
+        
         
         window_be->renderer = NULL;
         window_be->window = NULL;
+        window_be->backing = NULL;
         free(window_be);
         
         window->_data = NULL;
