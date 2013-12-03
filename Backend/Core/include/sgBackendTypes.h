@@ -54,10 +54,20 @@ typedef struct sg_display
     void * _data;
 } sg_display;
 
+typedef struct sg_audiospec
+{
+    int audio_rate;
+    int audio_format;
+    int audio_channels;
+    int times_opened;
+
+} sg_audiospec;
+
 typedef struct sg_system_data
 {
-    int         num_displays;
-    sg_display  * displays;
+    int             num_displays;
+    sg_display    * displays;
+    sg_audiospec    audio_specs;
     
 } sg_system_data;
 

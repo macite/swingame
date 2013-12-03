@@ -13,10 +13,17 @@
 using namespace std;
 
 extern sg_interface * _sg_functions;
+extern sg_system_data _sgsdk_system_data;
 
 void test_audio()
 {
     _sg_functions->audio.open_audio();
+    
+    printf("Opened audio at %d Hz %d bit %s\n", _sgsdk_system_data.audio_specs.audio_rate,
+           (_sgsdk_system_data.audio_specs.audio_format&0xFF),
+           (_sgsdk_system_data.audio_specs.audio_channels > 2) ? "surround" :
+           (_sgsdk_system_data.audio_specs.audio_channels > 1) ? "stereo" : "mono");
+
     
     cout << "Audio open ... " << (_sg_functions->has_error ? "FAILED" : "SUCCESS") << endl;
     _sg_functions->utils.delay(500);
@@ -52,7 +59,7 @@ void test_audio()
     
     _sg_functions->audio.play_sound_effect(&sound_mp3, 0, 1.0f);
     
-    _sg_functions->utils.delay(3000);
+    _sg_functions->utils.delay(4000);
     
     sg_sound_data sound_mod = _sg_functions->audio.load_sound_effect("energize_my_mind.mod", SGSD_MUSIC);
     

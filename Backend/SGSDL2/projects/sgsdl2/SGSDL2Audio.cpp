@@ -11,11 +11,16 @@
 #include "SDL_Mixer.h"
 #include "sgBackendUtils.h"
 
-Mix_Chunk * _sgsdl2_sound_channels[64];
+#define SG_MAX_CHANNELS 64
+
+Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
+
+extern sg_system_data _sgsdk_system_data;
+
 
 void sgsdl2_init_audio()
 {
-    Mix_Init(MIX_INIT_OGG);
+    Mix_Init(~0);
 }
 
 void sgsdl2_open_audio()
@@ -25,23 +30,24 @@ void sgsdl2_open_audio()
         set_error_state("Unable to load audio. Mix_OpenAudio failed.");
         return;
     }
-    int audio_rate;
-    Uint16 audio_format;
-    int audio_channels;
 
-    Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
-    printf("Opened audio at %d Hz %d bit %s\n", audio_rate,
-           (audio_format&0xFF),
-           (audio_channels > 2) ? "surround" :
-           (audio_channels > 1) ? "stereo" : "mono");
-
+    Uint16 format;
+    Mix_QuerySpec(&_sgsdk_system_data.audio_specs.audio_rate, &format, &_sgsdk_system_data.audio_specs.audio_channels);
+    _sgsdk_system_data.audio_specs.times_opened++;
+    _sgsdk_system_data.audio_specs.audio_format = format;
     
-    Mix_AllocateChannels(64);
+    Mix_AllocateChannels(SG_MAX_CHANNELS);
 }
 
 void sgsdl2_close_audio()
 {
     Mix_CloseAudio();
+    _sgsdk_system_data.audio_specs.times_opened--;
+    if ( 0 == _sgsdk_system_data.audio_specs.times_opened )
+    {
+        sg_audiospec empty = { 0 };
+        _sgsdk_system_data.audio_specs = empty;
+    }
 }
 
 sg_sound_data sgsdl2_load_sound_effect(const char * filename, sg_sound_kind kind)
@@ -79,7 +85,7 @@ void sgsdl2_play_sound_effect(sg_sound_data * sound, int loops, float volume)
         {
             Mix_Chunk *effect = (Mix_Chunk*) sound->data;
             int channel = Mix_PlayChannel( -1, effect, loops);
-            if (channel >= 0 && channel < 64)
+            if (channel >= 0 && channel < SG_MAX_CHANNELS)
             {
                 Mix_Volume(channel, (int)(volume * 128));
                 _sgsdl2_sound_channels[channel] = effect;   // record which channel is playing the effect
