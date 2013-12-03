@@ -51,9 +51,16 @@ extern "C" {
 
     
     //
+    // Sound related function pointers
     //
-    //
+    
+    // Load functions
     typedef sg_sound_data (sg_sound_load_fn)(const char *filename, sg_sound_kind kind);
+    
+    // Play functions
+    typedef void (sg_play_sound_fn)(sg_sound_data *sound, int loops, float volume);
+    
+    
     
     //
     // Utility relation functions
@@ -73,6 +80,8 @@ extern "C" {
         sg_empty_procedure * close_audio;
         
         sg_sound_load_fn * load_sound_effect;
+        
+        sg_play_sound_fn * play_sound_effect;
         
     } sg_audio_interface;
     

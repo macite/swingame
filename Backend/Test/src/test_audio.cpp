@@ -21,10 +21,30 @@ void test_audio()
     cout << "Audio open ... " << (_sg_functions->has_error ? "FAILED" : "SUCCESS") << endl;
     _sg_functions->utils.delay(500);
     
-    sg_sound_data sound = _sg_functions->audio.load_sound_effect("test.ogg", SGSD_SOUND_EFFECT);
+    sg_sound_data sound = _sg_functions->audio.load_sound_effect("error.wav", SGSD_SOUND_EFFECT);
     
-    cout << "Loaded sound effect ... " << (sound.data ? "FAILED" : "SUCCESS") << endl;
+    cout << "Loaded sound effect ... " << ( sound.data ? "SUCCESS" : "FAILED") << endl;
     
+    _sg_functions->audio.play_sound_effect(&sound, 0, 1.0f);
+    
+    _sg_functions->utils.delay(2000);
+
+    sg_sound_data sound_ogg = _sg_functions->audio.load_sound_effect("test.ogg", SGSD_SOUND_EFFECT);
+    
+    cout << "Loaded sound effect OGG ... " << ( sound_ogg.data ? "SUCCESS" : "FAILED") << endl;
+    
+    _sg_functions->audio.play_sound_effect(&sound_ogg, 0, 1.0f);
+
+    _sg_functions->utils.delay(2000);
+
+    
+    sg_sound_data sound_flac = _sg_functions->audio.load_sound_effect("30248__streety__sword7.flac", SGSD_SOUND_EFFECT);
+    
+    cout << "Loaded sound effect FLAC ... " << ( sound_ogg.data ? "SUCCESS" : "FAILED") << endl;
+    
+    _sg_functions->audio.play_sound_effect(&sound_flac, 0, 1.0f);
+    
+    _sg_functions->utils.delay(2000);
     
     _sg_functions->audio.close_audio();
 }

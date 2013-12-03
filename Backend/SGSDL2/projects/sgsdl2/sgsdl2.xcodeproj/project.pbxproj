@@ -25,7 +25,6 @@
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
 		9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA9183B732800BE3771 /* libfreetype.a */; };
 		9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAA183B732800BE3771 /* libmikmod.a */; };
-		9471BDB7183B732800BE3771 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAB183B732800BE3771 /* libogg.a */; };
 		9471BDB8183B732800BE3771 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAC183B732800BE3771 /* libpng.a */; };
 		9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAD183B732800BE3771 /* libSDL2_gfx.a */; };
 		9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAE183B732800BE3771 /* libSDL2_image.a */; };
@@ -35,6 +34,12 @@
 		9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB2183B732800BE3771 /* libSDL2.a */; };
 		9471BDBF183B732800BE3771 /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB3183B732800BE3771 /* libwebp.a */; };
 		9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BD8C183B6E5700BE3771 /* libsgsdl2.a */; };
+		94821585184C701400C89CBE /* error.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821583184C6FE800C89CBE /* error.wav */; };
+		94821586184C701700C89CBE /* test.ogg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9499C6A0184C630E00B71B41 /* test.ogg */; };
+		94821627184CA04300C89CBE /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821624184CA04200C89CBE /* libogg.a */; };
+		94821628184CA04300C89CBE /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821625184CA04200C89CBE /* libvorbis.a */; };
+		94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821626184CA04300C89CBE /* libvorbisfile.a */; };
+		9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9482162A184D955800C89CBE /* 30248__streety__sword7.flac */; };
 		9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C6981847566500B71B41 /* SGSDL2Audio.cpp */; };
 		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
 		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
@@ -44,12 +49,15 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		9471BDC2183B737000BE3771 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 6;
 			files = (
+				94821585184C701400C89CBE /* error.wav in CopyFiles */,
+				94821586184C701700C89CBE /* test.ogg in CopyFiles */,
+				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -80,7 +88,6 @@
 		9471BDA8183B732800BE3771 /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = ../../lib/mac/libFLAC.a; sourceTree = "<group>"; };
 		9471BDA9183B732800BE3771 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../../lib/mac/libfreetype.a; sourceTree = "<group>"; };
 		9471BDAA183B732800BE3771 /* libmikmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmikmod.a; path = ../../lib/mac/libmikmod.a; sourceTree = "<group>"; };
-		9471BDAB183B732800BE3771 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../../lib/mac/libogg.a; sourceTree = "<group>"; };
 		9471BDAC183B732800BE3771 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../../lib/mac/libpng.a; sourceTree = "<group>"; };
 		9471BDAD183B732800BE3771 /* libSDL2_gfx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_gfx.a; path = ../../lib/mac/libSDL2_gfx.a; sourceTree = "<group>"; };
 		9471BDAE183B732800BE3771 /* libSDL2_image.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_image.a; path = ../../lib/mac/libSDL2_image.a; sourceTree = "<group>"; };
@@ -90,6 +97,11 @@
 		9471BDB2183B732800BE3771 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../lib/mac/libSDL2.a; sourceTree = "<group>"; };
 		9471BDB3183B732800BE3771 /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebp.a; path = ../../lib/mac/libwebp.a; sourceTree = "<group>"; };
 		9471BDC4183B737000BE3771 /* SGSDL2Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SGSDL2Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		94821583184C6FE800C89CBE /* error.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = error.wav; path = ../../../Test/Resources/error.wav; sourceTree = "<group>"; };
+		94821624184CA04200C89CBE /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../../lib/mac/libogg.a; sourceTree = "<group>"; };
+		94821625184CA04200C89CBE /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = ../../lib/mac/libvorbis.a; sourceTree = "<group>"; };
+		94821626184CA04300C89CBE /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = ../../lib/mac/libvorbisfile.a; sourceTree = "<group>"; };
+		9482162A184D955800C89CBE /* 30248__streety__sword7.flac */ = {isa = PBXFileReference; lastKnownFileType = file; name = 30248__streety__sword7.flac; path = ../../../Test/Resources/30248__streety__sword7.flac; sourceTree = "<group>"; };
 		9499C6981847566500B71B41 /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		9499C6991847566500B71B41 /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Audio.h; sourceTree = "<group>"; };
 		9499C69C184C5F2B00B71B41 /* test_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_audio.cpp; path = ../../../Test/src/test_audio.cpp; sourceTree = "<group>"; };
@@ -102,14 +114,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
 				9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */,
 				9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */,
-				9471BDB7183B732800BE3771 /* libogg.a in Frameworks */,
 				9471BDB8183B732800BE3771 /* libpng.a in Frameworks */,
 				9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */,
 				9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */,
+				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
 				9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */,
+				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				9471BDBC183B732800BE3771 /* libSDL2_net.a in Frameworks */,
 				9471BDBD183B732800BE3771 /* libSDL2_ttf.a in Frameworks */,
 				9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */,
@@ -201,7 +215,7 @@
 		9471BDA0183B727700BE3771 /* Test */ = {
 			isa = PBXGroup;
 			children = (
-				9499C6A0184C630E00B71B41 /* test.ogg */,
+				94821584184C6FF000C89CBE /* Resources */,
 				942DBED1183C1DBA00876830 /* main.cpp */,
 				942DBF29183CA8D200876830 /* test_draw_point.cpp */,
 				942DBF2A183CA8D200876830 /* test_draw_point.h */,
@@ -224,9 +238,11 @@
 				942DBED5183C203900876830 /* ForceFeedback.framework */,
 				942DBED3183C202F00876830 /* Cocoa.framework */,
 				9471BDA8183B732800BE3771 /* libFLAC.a */,
+				94821624184CA04200C89CBE /* libogg.a */,
+				94821625184CA04200C89CBE /* libvorbis.a */,
+				94821626184CA04300C89CBE /* libvorbisfile.a */,
 				9471BDA9183B732800BE3771 /* libfreetype.a */,
 				9471BDAA183B732800BE3771 /* libmikmod.a */,
-				9471BDAB183B732800BE3771 /* libogg.a */,
 				9471BDAC183B732800BE3771 /* libpng.a */,
 				9471BDAD183B732800BE3771 /* libSDL2_gfx.a */,
 				9471BDAE183B732800BE3771 /* libSDL2_image.a */,
@@ -237,6 +253,16 @@
 				9471BDB3183B732800BE3771 /* libwebp.a */,
 			);
 			name = Libraries;
+			sourceTree = "<group>";
+		};
+		94821584184C6FF000C89CBE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9482162A184D955800C89CBE /* 30248__streety__sword7.flac */,
+				94821583184C6FE800C89CBE /* error.wav */,
+				9499C6A0184C630E00B71B41 /* test.ogg */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -414,6 +440,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -424,6 +454,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../../lib/mac,
+					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -433,6 +464,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -443,6 +478,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../../lib/mac,
+					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -451,6 +487,10 @@
 		9471BDCB183B737000BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
+				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -459,6 +499,7 @@
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
+				LD_RUNPATH_SEARCH_PATHS = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -466,10 +507,15 @@
 		9471BDCC183B737000BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
+				LD_RUNPATH_SEARCH_PATHS = .;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
