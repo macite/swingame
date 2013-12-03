@@ -57,6 +57,11 @@ sg_sound_data sgsdl2_load_sound_effect(const char * filename, sg_sound_kind kind
             result.data = Mix_LoadWAV(filename);
             break;
         }
+        case SGSD_MUSIC:
+        {
+            result.data = Mix_LoadMUS(filename);
+            break;
+        }
         default:
             break;
     }
@@ -81,7 +86,12 @@ void sgsdl2_play_sound_effect(sg_sound_data * sound, int loops, float volume)
             }
             break;
         }
-            
+        case SGSD_MUSIC:
+        {
+            Mix_PlayMusic((Mix_Music *)sound->data, loops);
+            Mix_VolumeMusic((int)volume * 128);
+            break;
+        }
         default:
             break;
     }

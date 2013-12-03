@@ -46,5 +46,13 @@ void test_audio()
     
     _sg_functions->utils.delay(2000);
     
+    sg_sound_data sound_mp3 = _sg_functions->audio.load_sound_effect("280.mp3", SGSD_MUSIC);
+    
+    cout << "Loaded music MP3 ... " << ( sound_mp3.data ? "SUCCESS" : "FAILED") << endl;
+    
+    _sg_functions->audio.play_sound_effect(&sound_mp3, 0, 1.0f);
+    
+    _sg_functions->utils.delay(2000);
+    
     _sg_functions->audio.close_audio();
 }

@@ -40,6 +40,8 @@
 		94821628184CA04300C89CBE /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821625184CA04200C89CBE /* libvorbis.a */; };
 		94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821626184CA04300C89CBE /* libvorbisfile.a */; };
 		9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9482162A184D955800C89CBE /* 30248__streety__sword7.flac */; };
+		94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94821643184DE39200C89CBE /* libsmpeg2.a */; };
+		94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821645184DE3BC00C89CBE /* 280.mp3 */; };
 		9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C6981847566500B71B41 /* SGSDL2Audio.cpp */; };
 		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
 		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
@@ -56,6 +58,7 @@
 				94821585184C701400C89CBE /* error.wav in CopyFiles */,
 				94821586184C701700C89CBE /* test.ogg in CopyFiles */,
 				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
+				94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,6 +105,8 @@
 		94821625184CA04200C89CBE /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = ../../lib/mac/libvorbis.a; sourceTree = "<group>"; };
 		94821626184CA04300C89CBE /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = ../../lib/mac/libvorbisfile.a; sourceTree = "<group>"; };
 		9482162A184D955800C89CBE /* 30248__streety__sword7.flac */ = {isa = PBXFileReference; lastKnownFileType = file; name = 30248__streety__sword7.flac; path = ../../../Test/Resources/30248__streety__sword7.flac; sourceTree = "<group>"; };
+		94821643184DE39200C89CBE /* libsmpeg2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsmpeg2.a; path = ../../lib/mac/libsmpeg2.a; sourceTree = "<group>"; };
+		94821645184DE3BC00C89CBE /* 280.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = 280.mp3; path = ../../../Test/Resources/280.mp3; sourceTree = "<group>"; };
 		9499C6981847566500B71B41 /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		9499C6991847566500B71B41 /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Audio.h; sourceTree = "<group>"; };
 		9499C69C184C5F2B00B71B41 /* test_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_audio.cpp; path = ../../../Test/src/test_audio.cpp; sourceTree = "<group>"; };
@@ -121,6 +126,7 @@
 				9471BDB8183B732800BE3771 /* libpng.a in Frameworks */,
 				9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */,
 				9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */,
+				94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */,
 				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
 				9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */,
 				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
@@ -240,6 +246,7 @@
 				9471BDA8183B732800BE3771 /* libFLAC.a */,
 				94821624184CA04200C89CBE /* libogg.a */,
 				94821625184CA04200C89CBE /* libvorbis.a */,
+				94821643184DE39200C89CBE /* libsmpeg2.a */,
 				94821626184CA04300C89CBE /* libvorbisfile.a */,
 				9471BDA9183B732800BE3771 /* libfreetype.a */,
 				9471BDAA183B732800BE3771 /* libmikmod.a */,
@@ -258,6 +265,7 @@
 		94821584184C6FF000C89CBE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				94821645184DE3BC00C89CBE /* 280.mp3 */,
 				9482162A184D955800C89CBE /* 30248__streety__sword7.flac */,
 				94821583184C6FE800C89CBE /* error.wav */,
 				9499C6A0184C630E00B71B41 /* test.ogg */,
