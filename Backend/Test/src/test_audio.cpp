@@ -23,7 +23,7 @@ void test_audio()
     
     sg_sound_data sound = _sg_functions->audio.load_sound_effect("error.wav", SGSD_SOUND_EFFECT);
     
-    cout << "Loaded sound effect ... " << ( sound.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded sound effect WAV ... " << ( sound.data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound_effect(&sound, 0, 1.0f);
     
