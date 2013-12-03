@@ -50,7 +50,7 @@ void sgsdl2_close_audio()
     }
 }
 
-sg_sound_data sgsdl2_load_sound_effect(const char * filename, sg_sound_kind kind)
+sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
 {
     sg_sound_data result = { SGSD_UNKNOWN, NULL } ;
     
@@ -75,7 +75,29 @@ sg_sound_data sgsdl2_load_sound_effect(const char * filename, sg_sound_kind kind
     return result;
 }
 
-void sgsdl2_play_sound_effect(sg_sound_data * sound, int loops, float volume)
+void sgsdl_close_sound_data(sg_sound_data * sound )
+{
+    if ( ! sound ) return;
+    
+    switch (sound->kind)
+    {
+        case SGSD_MUSIC:
+            Mix_FreeMusic((Mix_Music*)sound->data);
+            break;
+        
+        case SGSD_SOUND_EFFECT:
+            Mix_FreeChunk((Mix_Chunk*)sound->data);
+            break;
+            
+        default:
+            break;
+    }
+    
+    sound->kind = SGSD_UNKNOWN;
+    sound->data = NULL;
+}
+
+void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
 {
     if ( (!sound) || (!sound->data) ) return;
     
@@ -107,7 +129,8 @@ void sgsdl2_load_audio_fns(sg_interface *functions)
 {
     functions->audio.open_audio = & sgsdl2_open_audio;
     functions->audio.close_audio = & sgsdl2_close_audio;
-    functions->audio.load_sound_effect = & sgsdl2_load_sound_effect;
-    functions->audio.play_sound_effect = & sgsdl2_play_sound_effect;
+    functions->audio.load_sound_data = & sgsdl2_load_sound_data;
+    functions->audio.play_sound = & sgsdl2_play_sound;
+    functions->audio.close_sound_data = & sgsdl_close_sound_data;
 }
 

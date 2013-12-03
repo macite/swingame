@@ -60,6 +60,9 @@ extern "C" {
     // Play functions
     typedef void (sg_play_sound_fn)(sg_sound_data *sound, int loops, float volume);
     
+    // Sound data procedure
+    typedef void (sg_sound_data_proc)(sg_sound_data *sound);
+    
     
     
     //
@@ -76,12 +79,13 @@ extern "C" {
     
     typedef struct sg_audio_interface
     {
-        sg_empty_procedure * open_audio;
-        sg_empty_procedure * close_audio;
+        sg_empty_procedure *    open_audio;
+        sg_empty_procedure *    close_audio;
         
-        sg_sound_load_fn * load_sound_effect;
+        sg_sound_load_fn   *    load_sound_data;
+        sg_sound_data_proc *    close_sound_data;
         
-        sg_play_sound_fn * play_sound_effect;
+        sg_play_sound_fn   *    play_sound;
         
     } sg_audio_interface;
     
