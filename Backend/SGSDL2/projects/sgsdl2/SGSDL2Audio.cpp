@@ -51,7 +51,7 @@ void sgsdl2_close_audio()
     }
 }
 
-int sgsdl_get_channel(sg_sound_data *sound)
+int sgsdl2_get_channel(sg_sound_data *sound)
 {
     for (int i = 0; i < SG_MAX_CHANNELS; i++)
     {
@@ -90,7 +90,7 @@ sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
     return result;
 }
 
-void sgsdl_close_sound_data(sg_sound_data * sound )
+void sgsdl2_close_sound_data(sg_sound_data * sound )
 {
     if ( ! sound ) return;
     
@@ -124,7 +124,7 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
             int channel = Mix_PlayChannel( -1, effect, loops);
             if (channel >= 0 && channel < SG_MAX_CHANNELS)
             {
-                Mix_Volume(channel, (int)(volume * 128));
+                Mix_Volume(channel, (int)(volume * MIX_MAX_VOLUME));
                 _sgsdl2_sound_channels[channel] = effect;   // record which channel is playing the effect
             }
             break;
@@ -132,7 +132,7 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
         case SGSD_MUSIC:
         {
             Mix_PlayMusic((Mix_Music *)sound->data, loops);
-            Mix_VolumeMusic((int)volume * 128);
+            Mix_VolumeMusic((int)volume * MIX_MAX_VOLUME);
             _current_music = (Mix_Music *)sound->data;
             break;
         }
@@ -151,7 +151,7 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
     {
         case SGSD_SOUND_EFFECT:
         {
-            int idx = sgsdl_get_channel(sound);
+            int idx = sgsdl2_get_channel(sound);
             return ( idx >= 0 && idx < SG_MAX_CHANNELS ? 1.0f : 0.0f );
         }
         case SGSD_MUSIC:
@@ -202,7 +202,7 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
     {
         case SGSD_SOUND_EFFECT:
         {
-            int channel = sgsdl_get_channel(sound);
+            int channel = sgsdl2_get_channel(sound);
             Mix_FadeOutChannel(channel, ms);
             break;
         }
@@ -218,15 +218,126 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
     }
 }
 
+void sgsdl2_fade_all_sound_effects_out(int ms)
+{
+    Mix_FadeOutChannel(-1, ms);
+}
+
+void sgsdl2_fade_music_out(int ms)
+{
+    Mix_FadeOutMusic(ms);
+}
+
+void sgsdl2_set_music_vol(float vol)
+{
+    Mix_VolumeMusic( (int) MIX_MAX_VOLUME * vol );
+}
+
+float sgsdl2_music_vol()
+{
+    return Mix_VolumeMusic(-1) / (float)MIX_MAX_VOLUME;
+}
+
+float sgsdl2_sound_volume(sg_sound_data *sound)
+{
+    if ( ! sound ) return 0.0f;
+    
+    switch (sound->kind)
+    {
+        case SGSD_MUSIC:
+            if ( _current_music == sound->data ) return sgsdl2_music_vol();
+            break;
+        case SGSD_SOUND_EFFECT:
+            return Mix_VolumeChunk((Mix_Chunk *)sound->data, -1) / (float)MIX_MAX_VOLUME;
+        default:
+            break;
+    }
+    
+    return 0.0f;
+}
+
+void sgsdl2_set_sound_volume(sg_sound_data *sound, float vol)
+{
+    if ( !sound ) return;
+    
+    switch (sound->kind)
+    {
+        case SGSD_MUSIC:
+            if ( _current_music == sound->data )
+                sgsdl2_set_music_vol(vol);
+            break;
+            
+        case SGSD_SOUND_EFFECT:
+            Mix_VolumeChunk((Mix_Chunk *)sound->data, (int)(vol * MIX_MAX_VOLUME));
+        
+        default:
+            break;
+    }
+}
+
+void sgsdl2_pause_music()
+{
+    Mix_PauseMusic();
+}
+
+void sgsdl2_resume_music()
+{
+    if ( Mix_PausedMusic() )
+    {
+        Mix_ResumeMusic();
+    }
+}
+
+void sgsdl2_stop_music()
+{
+    Mix_HaltMusic();
+}
+
+void sgsdl2_stop_sound(sg_sound_data *sound)
+{
+    if ( ! sound ) return;
+    
+    switch (sound->kind)
+    {
+        case SGSD_MUSIC:
+            if ( _current_music == sound->data ) sgsdl2_stop_music();
+            break;
+        
+        case SGSD_SOUND_EFFECT:
+        {
+            for (int i = 0; i < SG_MAX_CHANNELS; i++)
+            {
+                if ( _sgsdl2_sound_channels[i] == sound->data )
+                {
+                    Mix_HaltChannel(i);
+                }
+            }
+            break;
+        }
+        default:
+            break;
+    }
+}
+
 void sgsdl2_load_audio_fns(sg_interface *functions)
 {
     functions->audio.open_audio = & sgsdl2_open_audio;
     functions->audio.close_audio = & sgsdl2_close_audio;
     functions->audio.load_sound_data = & sgsdl2_load_sound_data;
     functions->audio.play_sound = & sgsdl2_play_sound;
-    functions->audio.close_sound_data = & sgsdl_close_sound_data;
+    functions->audio.close_sound_data = & sgsdl2_close_sound_data;
     functions->audio.sound_playing = &sgsdl2_sound_playing;
     functions->audio.fade_in = &sgsdl2_fade_in;
     functions->audio.fade_out = &sgsdl2_fade_out;
+    functions->audio.fade_music_out = &sgsdl2_fade_music_out;
+    functions->audio.fade_all_sound_effects_out = &sgsdl2_fade_all_sound_effects_out;
+    functions->audio.set_music_vol = &sgsdl2_set_music_vol;
+    functions->audio.music_vol = &sgsdl2_music_vol;
+    functions->audio.sound_volume = &sgsdl2_sound_volume;
+    functions->audio.set_sound_volume = &sgsdl2_set_sound_volume;
+    functions->audio.pause_music =  & sgsdl2_pause_music;
+    functions->audio.resume_music = & sgsdl2_resume_music;
+    functions->audio.stop_music =   & sgsdl2_stop_music;
+    functions->audio.stop_sound =   & sgsdl2_stop_sound;
 }
 

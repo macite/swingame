@@ -17,6 +17,8 @@ extern sg_system_data _sgsdk_system_data;
 
 void test_audio()
 {
+    _sg_functions->audio.resume_music();
+
     _sg_functions->audio.open_audio();
     
     printf("Opened audio at %d Hz %d bit %s\n", _sgsdk_system_data.audio_specs.audio_rate,
@@ -67,7 +69,22 @@ void test_audio()
     
     _sg_functions->audio.play_sound(&sound_mod, 0, 1.0f);
     
-    _sg_functions->utils.delay(3000);
+    _sg_functions->utils.delay(1000);
+    _sg_functions->audio.set_music_vol(0.25f);
+    _sg_functions->utils.delay(1500);
+    _sg_functions->audio.set_sound_volume(&sound_mod, 0.75f);
+    _sg_functions->utils.delay(1500);
+
+    cout << "Testing pause" << endl;
+    _sg_functions->audio.pause_music();
+    _sg_functions->utils.delay(1000);
+    cout << "Testing resume" << endl;
+    _sg_functions->audio.resume_music();
+    _sg_functions->utils.delay(1000);
+    cout << "Testing stop" << endl;
+    _sg_functions->audio.stop_music();
+    _sg_functions->utils.delay(1000);
+    
     
     sg_sound_data sound_midi = _sg_functions->audio.load_sound_data("superman_1.mid", SGSD_MUSIC);
     
@@ -101,8 +118,21 @@ void test_audio()
     
     _sg_functions->utils.delay(1500);
 
+    _sg_functions->audio.play_sound(&sound_ogg, 0, 1.0f);
+    cout << "OGG volume is " << _sg_functions->audio.sound_volume(&sound_ogg) << endl;
+    _sg_functions->audio.set_sound_volume(&sound_ogg, 0.25f);
+    cout << "OGG volume is " << _sg_functions->audio.sound_volume(&sound_ogg) << endl;
     
+    _sg_functions->utils.delay(1500);
     
+    cout << "Play OGG lots" << endl;
+    for (int i = 0; i < 100; i++)
+    {
+        _sg_functions->audio.play_sound(&sound_ogg, 0, 1 - 0.01f * i );
+        _sg_functions->utils.delay(50);
+    }
+    cout << "Stop OGG!" << endl;
+     _sg_functions->audio.stop_sound(&sound_ogg);
     
     
     _sg_functions->audio.close_sound_data(&sound);

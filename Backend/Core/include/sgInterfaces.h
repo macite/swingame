@@ -72,6 +72,13 @@ extern "C" {
     // Fade out procedure
     typedef void (sg_sound_fade_out_proc)(sg_sound_data *sound, int ms);
 
+    typedef void (sg_sound_float_proc)(sg_sound_data *sound, float val);
+    typedef void (sg_intp_proc)( int ms );
+    typedef void (sg_floatp_proc)( float val );
+    
+    typedef float (sg_float_fn)( );
+    
+    typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     
     
     
@@ -101,6 +108,22 @@ extern "C" {
         
         sg_sound_fade_proc      *    fade_in;
         sg_sound_fade_out_proc  *    fade_out;
+        
+        sg_intp_proc        *   fade_music_out;
+        sg_intp_proc        *   fade_all_sound_effects_out;
+        
+        sg_floatp_proc      *   set_music_vol;
+        
+        sg_float_fn         *   music_vol;
+        
+        sg_float_soundp_fn  *   sound_volume;
+        sg_sound_float_proc *   set_sound_volume;
+        
+        sg_empty_procedure  *   pause_music;
+        sg_empty_procedure  *   resume_music;
+        sg_empty_procedure  *   stop_music;
+        
+        sg_sound_data_proc  *   stop_sound;
         
     } sg_audio_interface;
     
