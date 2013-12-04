@@ -66,6 +66,13 @@ extern "C" {
     // Sound data float function
     typedef float (sg_sound_float_fn)(sg_sound_data *sound);
     
+    // Fade in procedure
+    typedef void (sg_sound_fade_proc)(sg_sound_data *sound, int loops, int ms);
+
+    // Fade out procedure
+    typedef void (sg_sound_fade_out_proc)(sg_sound_data *sound, int ms);
+
+    
     
     
     //
@@ -82,15 +89,18 @@ extern "C" {
     
     typedef struct sg_audio_interface
     {
-        sg_empty_procedure *    open_audio;
-        sg_empty_procedure *    close_audio;
+        sg_empty_procedure      *    open_audio;
+        sg_empty_procedure      *    close_audio;
         
-        sg_sound_load_fn   *    load_sound_data;
-        sg_sound_data_proc *    close_sound_data;
+        sg_sound_load_fn        *    load_sound_data;
+        sg_sound_data_proc      *    close_sound_data;
         
-        sg_play_sound_fn   *    play_sound;
+        sg_play_sound_fn        *    play_sound;
         
-        sg_sound_float_fn  *    sound_playing;
+        sg_sound_float_fn       *    sound_playing;
+        
+        sg_sound_fade_proc      *    fade_in;
+        sg_sound_fade_out_proc  *    fade_out;
         
     } sg_audio_interface;
     

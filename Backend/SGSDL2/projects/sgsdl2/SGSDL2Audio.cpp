@@ -51,6 +51,20 @@ void sgsdl2_close_audio()
     }
 }
 
+int sgsdl_get_channel(sg_sound_data *sound)
+{
+    for (int i = 0; i < SG_MAX_CHANNELS; i++)
+    {
+        if ( _sgsdl2_sound_channels[i] == sound->data && Mix_Playing(i) )
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
 sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
 {
     sg_sound_data result = { SGSD_UNKNOWN, NULL } ;
@@ -137,14 +151,8 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
     {
         case SGSD_SOUND_EFFECT:
         {
-            for (int i = 0; i < SG_MAX_CHANNELS; i++)
-            {
-                if ( sound->data == _sgsdl2_sound_channels[i] && Mix_Playing( i ) )
-                {
-                    return 1.0f;
-                }
-            }
-            break;
+            int idx = sgsdl_get_channel(sound);
+            return ( idx >= 0 && idx < SG_MAX_CHANNELS ? 1.0f : 0.0f );
         }
         case SGSD_MUSIC:
         {
@@ -158,6 +166,58 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
     return 0.0f;
 }
 
+void sgsdl2_fade_in(sg_sound_data *sound, int loops, int ms)
+{
+    if ( !sound ) return;
+    
+    switch (sound->kind)
+    {
+        case SGSD_SOUND_EFFECT:
+        {
+            int channel;
+            channel = Mix_FadeInChannel(-1, (Mix_Chunk *)sound->data, loops, ms);
+            if ( channel >= 0 && channel < SG_MAX_CHANNELS )
+            {
+                _sgsdl2_sound_channels[channel] = (Mix_Chunk *)sound->data;
+            }
+            break;
+        }
+            
+        case SGSD_MUSIC:
+        {
+            Mix_FadeInMusic((Mix_Music *)sound->data, loops, ms);
+            _current_music = (Mix_Music *)sound->data;
+        }
+            
+        default:
+            break;
+    }
+}
+
+void sgsdl2_fade_out(sg_sound_data *sound, int ms)
+{
+    if ( !sound ) return;
+    
+    switch (sound->kind)
+    {
+        case SGSD_SOUND_EFFECT:
+        {
+            int channel = sgsdl_get_channel(sound);
+            Mix_FadeOutChannel(channel, ms);
+            break;
+        }
+            
+        case SGSD_MUSIC:
+        {
+            if ( _current_music == sound->data )
+                Mix_FadeOutMusic(ms);
+        }
+            
+        default:
+            break;
+    }
+}
+
 void sgsdl2_load_audio_fns(sg_interface *functions)
 {
     functions->audio.open_audio = & sgsdl2_open_audio;
@@ -166,5 +226,7 @@ void sgsdl2_load_audio_fns(sg_interface *functions)
     functions->audio.play_sound = & sgsdl2_play_sound;
     functions->audio.close_sound_data = & sgsdl_close_sound_data;
     functions->audio.sound_playing = &sgsdl2_sound_playing;
+    functions->audio.fade_in = &sgsdl2_fade_in;
+    functions->audio.fade_out = &sgsdl2_fade_out;
 }
 

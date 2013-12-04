@@ -80,6 +80,31 @@ void test_audio()
     cout << "Midi is " << (_sg_functions->audio.sound_playing(&sound_midi) > 0 ? "Playing" : "Not Playing") << endl;
     cout << "Wav is " << (_sg_functions->audio.sound_playing(&sound) > 0 ? "Playing" : "Not Playing") << endl;
     
+    
+    cout << "Fade in MOD" << endl;
+    _sg_functions->audio.fade_in(&sound_mod, 0, 2000);
+    
+    _sg_functions->utils.delay(3000);
+    
+    cout << "Fade out MOD" << endl;
+    _sg_functions->audio.fade_out(&sound_mod, 2000);
+    
+    _sg_functions->utils.delay(3000);
+
+    cout << "Fade in OGG" << endl;
+    _sg_functions->audio.fade_in(&sound_ogg, 0, 200);
+    
+    _sg_functions->utils.delay(200);
+    
+    cout << "Fade out OGG" << endl;
+    _sg_functions->audio.fade_out(&sound_ogg, 200);
+    
+    _sg_functions->utils.delay(1500);
+
+    
+    
+    
+    
     _sg_functions->audio.close_sound_data(&sound);
     _sg_functions->audio.close_sound_data(&sound_flac);
     _sg_functions->audio.close_sound_data(&sound_midi);
@@ -89,3 +114,7 @@ void test_audio()
     
     _sg_functions->audio.close_audio();
 }
+
+
+
+
