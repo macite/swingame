@@ -609,6 +609,8 @@ void output_system_details()
             cout << "           " << data->displays[i].modes[m].width << " x " << data->displays[i].modes[m].height << endl;
         }
     }
+    
+    cout << "Time is " << _sg_functions->utils.get_ticks() << endl;
 }
 
 #include "test_draw_point.h"

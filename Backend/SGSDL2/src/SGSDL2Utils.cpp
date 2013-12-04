@@ -15,7 +15,13 @@ void sgsdl2_delay(unsigned int ms)
     SDL_Delay(ms);
 }
 
+unsigned int sgsdl2_get_ticks()
+{
+    return SDL_GetTicks();
+}
+
 void sgsdl2_load_util_fns(sg_interface *functions)
 {
     functions->utils.delay = &sgsdl2_delay;
+    functions->utils.get_ticks = &sgsdl2_get_ticks;
 }

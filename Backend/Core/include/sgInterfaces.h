@@ -81,6 +81,11 @@ extern "C" {
     typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     
     
+    //
+    // Utility related
+    //
+    typedef unsigned int  (uint_fn)();
+    
     
     //
     // Utility relation functions
@@ -89,7 +94,8 @@ extern "C" {
     //
     typedef struct sg_utils_interface
     {
-        sg_single_uint32param_proc *delay;
+        sg_single_uint32param_proc *    delay;
+        uint_fn *   get_ticks;
         
     } sg_utils_interface;
     

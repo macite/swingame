@@ -30,7 +30,7 @@ implementation
 	
 	procedure LoadSDL13TimerDriver();
 	begin
-		TimerDriver.Delay := @DelayProcedure;
+		TimerDriver.Delay := @DelayProcedure;		//#
 		TimerDriver.GetTicks := @GetTicksProcedure;
 	end;
 end.

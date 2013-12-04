@@ -94,6 +94,9 @@ void test_audio()
     
     _sg_functions->utils.delay(5000);
     
+    // Check setting midi volume - based on previously identified issues with Windows
+    _sg_functions->audio.set_music_vol(0.5f);
+    
     cout << "Midi is " << (_sg_functions->audio.sound_playing(&sound_midi) > 0 ? "Playing" : "Not Playing") << endl;
     cout << "Wav is " << (_sg_functions->audio.sound_playing(&sound) > 0 ? "Playing" : "Not Playing") << endl;
     
