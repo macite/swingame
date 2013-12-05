@@ -296,8 +296,8 @@ implementation
     AudioDriver.SoundEffectPlaying := @SoundEffectPlayingProcedure;     // #
     AudioDriver.MusicPlaying := @MusicPlayingProcedure;         // #
     AudioDriver.PauseMusic := @PauseMusicProcedure;             // #
-    AudioDriver.ResumeMusic := @ResumeMusicProcedure;
-    AudioDriver.StopMusic := @StopMusicProcedure;
-    AudioDriver.StopSoundEffect := @StopSoundEffectProcedure;
+    AudioDriver.ResumeMusic := @ResumeMusicProcedure;           // #
+    AudioDriver.StopMusic := @StopMusicProcedure;               // #
+    AudioDriver.StopSoundEffect := @StopSoundEffectProcedure;   // #
   end;
 end.

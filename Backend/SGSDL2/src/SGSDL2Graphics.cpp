@@ -19,7 +19,247 @@ typedef struct sg_window_be
     SDL_Texture *   backing;
     bool            clipped;
     SDL_Rect        clip;
+    int             idx;
 } sg_window_be;
+
+typedef struct sg_bitmap_be
+{
+    // 1 texture per open window
+    SDL_Texture **  texture;
+    SDL_Surface *   surface;
+    bool            clipped;
+    SDL_Rect        clip;
+} sg_bitmap_be;
+
+
+sg_window_be ** _sgsdl2_open_windows = NULL;
+int _sgsdl2_num_open_windows = 0;
+
+sg_bitmap_be ** _sgsdl2_open_bitmaps = NULL;
+int _sgsdl2_num_open_bitmaps = 0;
+
+//--------------------------------------------------------------------------------------
+//
+// Window and Bitmap store functions
+//
+//--------------------------------------------------------------------------------------
+
+bool _sgsdl2_has_initial_window = false;
+sg_window_be * _sgsdl2_initial_window = NULL;
+
+// The initial window is a hidden window that is always "open"
+// This allows drawing without the user having to open a window initially.
+void _sgsdl2_create_initial_window()
+{
+    _sgsdl2_has_initial_window = true;
+    _sgsdl2_initial_window = (sg_window_be *) malloc(sizeof(sg_window_be));
+    _sgsdl2_initial_window->window = SDL_CreateWindow("SGSDL2_Hidden_Window",
+                                         0, 0, 1, 1,
+                                         SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN );
+    
+    if ( ! _sgsdl2_initial_window->window )
+    {
+        set_error_state(SDL_GetError());
+        exit(-1);
+    }
+    
+    _sgsdl2_initial_window->renderer = SDL_CreateRenderer(_sgsdl2_initial_window->window,
+                                                         -1,
+                                                         SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
+    
+    SDL_SetRenderDrawBlendMode(_sgsdl2_initial_window->renderer, SDL_BLENDMODE_BLEND);
+    
+    std::cout << "Initial Renderer is " << _sgsdl2_initial_window->renderer << std::endl;
+    
+    // You cannot draw onto this window!
+    _sgsdl2_initial_window->backing = NULL;
+    
+    _sgsdl2_initial_window->clipped = false;
+    _sgsdl2_initial_window->clip = {0,0,0,0};
+    
+    // Add the first window
+    if (_sgsdl2_open_windows)
+    {
+        // error windows exist!
+        exit(-1);
+    }
+    _sgsdl2_open_windows = (sg_window_be**)malloc(sizeof(sg_window_be *));
+    _sgsdl2_open_windows[0] = _sgsdl2_initial_window;
+    _sgsdl2_initial_window->idx = 0;
+    _sgsdl2_num_open_windows = 1;
+}
+
+//
+// Add a window to the array of windows, and update all textures so
+// they can be drawn to this window
+//
+void _sgsdl2_add_window(sg_window_be * window)
+{
+    if ( ! _sgsdl2_has_initial_window ) _sgsdl2_create_initial_window();
+    
+    // expand array
+    _sgsdl2_num_open_windows++;
+    
+    sg_window_be ** windows = NULL;
+    windows = (sg_window_be**)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+    if ( windows == NULL )
+    {
+        // out of memory exception!
+        exit(-1);
+    }
+    _sgsdl2_open_windows = windows;
+    
+    int idx = _sgsdl2_num_open_windows - 1; // get idx for later use
+    windows[idx] = window;
+    window->idx = idx;
+    
+    // create textures for new window
+    
+    SDL_Texture ** textures = NULL;
+    sg_bitmap_be *current_bmp;
+    
+    for (int i = 0; i < _sgsdl2_num_open_bitmaps; i++)
+    {
+        current_bmp = _sgsdl2_open_bitmaps[i];
+        
+        // expand texture array in bitmap
+        textures = (SDL_Texture**)realloc(current_bmp->texture, sizeof(SDL_Texture*) * _sgsdl2_num_open_windows);
+        if ( !textures ) exit (-1); // out of memory
+
+        current_bmp->texture = textures;
+        current_bmp->texture[idx] = SDL_CreateTextureFromSurface(window->renderer, current_bmp->surface );
+    }
+}
+
+void _sgsdl2_remove_window(sg_window_be * window_be)
+{
+    int idx = window_be->idx;
+    if ( idx < 0 || idx >= _sgsdl2_num_open_windows || _sgsdl2_open_windows[idx] != window_be)
+    {
+        std::cout << "error in window close - incorrect idx" << std::endl;
+        exit(-1);
+    }
+    
+    // Remove all of the textures for this window
+    for (int bmp_idx = 0; bmp_idx < _sgsdl2_num_open_bitmaps; bmp_idx++)
+    {
+        // Delete the relevant texture
+        SDL_DestroyTexture(_sgsdl2_open_bitmaps[bmp_idx]->texture[idx]);
+        
+        // shuffle left from idx
+        for (int i = idx; i < _sgsdl2_num_open_windows - 1; i++)
+        {
+            _sgsdl2_open_bitmaps[bmp_idx]->texture[i] = _sgsdl2_open_bitmaps[bmp_idx]->texture[i + 1];
+        }
+        // Change size of array
+        _sgsdl2_open_bitmaps[bmp_idx]->texture = (SDL_Texture**)realloc(_sgsdl2_open_bitmaps[bmp_idx]->texture, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_windows - 1);
+    }
+    
+    // Shuffle all windows left from idx
+    for (int i = idx; i < _sgsdl2_num_open_windows - 1; i++)
+    {
+        _sgsdl2_open_windows[i] = _sgsdl2_open_windows[i + 1];
+        _sgsdl2_open_windows[i]->idx--; // adjust index
+        if ( i != _sgsdl2_open_windows[i]->idx ) {
+            std::cout << "error in window close!" << std::endl;
+            exit(-1);
+        }
+    }
+    // resize windows array
+    _sgsdl2_num_open_windows--;
+    std::cout << "windows open " << _sgsdl2_num_open_windows << std::endl;
+    if (_sgsdl2_num_open_windows > 0)
+    {
+        _sgsdl2_open_windows = (sg_window_be **)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+    }
+    else
+    {
+        free(_sgsdl2_open_windows);
+        _sgsdl2_open_windows = NULL;
+    }
+
+}
+
+void _sgsdl2_destroy_window(sg_window_be *window_be)
+{
+    _sgsdl2_remove_window(window_be);
+    
+    SDL_DestroyRenderer(window_be->renderer);
+    SDL_DestroyWindow(window_be->window);
+    if (window_be->backing)
+    {
+        SDL_DestroyTexture(window_be->backing);
+    }
+    
+    window_be->idx = -1;
+    window_be->renderer = NULL;
+    window_be->window = NULL;
+    window_be->backing = NULL;
+    
+    free(window_be);
+}
+
+//
+// Add the bitmap to the array to allow it to be added to future windows opened
+//
+void _sgsdl2_add_bitmap(sg_bitmap_be *bmp)
+{
+    _sgsdl2_num_open_bitmaps++;
+    sg_bitmap_be **new_arr = (sg_bitmap_be **)realloc(_sgsdl2_open_bitmaps, _sgsdl2_num_open_bitmaps);
+    
+    if (!new_arr) exit(-1); // out of memory
+    
+    _sgsdl2_open_bitmaps = new_arr;
+    new_arr[_sgsdl2_num_open_bitmaps-1] = bmp;
+}
+
+//
+// Remove the bitmap...
+//
+void _sgsdl2_remove_bitmap(sg_bitmap_be *bitmap_be)
+{
+    int idx = -1;
+    for (idx = 0; idx < _sgsdl2_num_open_bitmaps; idx++)
+    {
+        if ( _sgsdl2_open_bitmaps[idx] == bitmap_be ) break;
+    }
+    
+    if ( idx < 0 || idx >= _sgsdl2_num_open_bitmaps )
+    {
+        //unable to locate bitmap being closed!
+        exit(-1);
+    }
+    
+    // Shuffle bitmaps left
+    for (int i = idx; idx < _sgsdl2_num_open_bitmaps -1; i++)
+    {
+        _sgsdl2_open_bitmaps[i] = _sgsdl2_open_bitmaps[i + 1];
+    }
+    
+    // Remove the bitmap
+    _sgsdl2_num_open_bitmaps--;
+    if (_sgsdl2_num_open_bitmaps > 0)
+    {
+        _sgsdl2_open_bitmaps = (sg_bitmap_be**)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
+    }
+    else
+    {
+        free(_sgsdl2_open_bitmaps);
+        _sgsdl2_open_bitmaps = NULL;
+    }
+    
+    if ( _sgsdl2_num_open_bitmaps > 0 && ! _sgsdl2_num_open_bitmaps )
+    {
+        // Error reducing memory allocation?
+        exit(-1);
+    }
+}
+
+//--------------------------------------------------------------------------------------
+//
+// Window functions
+//
+//--------------------------------------------------------------------------------------
 
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
@@ -43,17 +283,20 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
                                          height,
                                          SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     
-    result._data = window_be;
-    
-    if ( ! window_be->window)
+    if ( ! window_be->window )
     {
         set_error_state(SDL_GetError());
+        free ( window_be );
         return result;
     }
+    
+    result._data = window_be;
     
     window_be->renderer = SDL_CreateRenderer(window_be->window,
                                              -1,
                                              SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
+    
+    std::cout << "Renderer is " << window_be->renderer << std::endl;
     
     SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
     SDL_RenderClear(window_be->renderer);
@@ -73,28 +316,41 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     result.width = width;
     result.height = height;
+    
+    _sgsdl2_add_window(window_be);
 
     return result;
 }
 
-void sgsdl2_close_window(sg_drawing_surface *window)
+void _sgsdl2_close_window(sg_drawing_surface *window)
 {
+    // window assumed to be ok - private
     sg_window_be * window_be;
     window_be = (sg_window_be *)window->_data;
     
     if ( window_be )
     {
-        SDL_DestroyRenderer(window_be->renderer);
-        SDL_DestroyWindow(window_be->window);
-        SDL_DestroyTexture(window_be->backing);
+        _sgsdl2_destroy_window(window_be);
+    }
+}
+
+void _sgsdl2_close_bitmap(sg_drawing_surface *bitmap)
+{
+    // bitmap assumed to be ok - private
+    sg_bitmap_be *bitmap_be = (sg_bitmap_be *)bitmap->_data;
+    
+    if (bitmap_be)
+    {
+        _sgsdl2_remove_bitmap(bitmap_be);
         
+        for (int bmp_idx = 0; bmp_idx < _sgsdl2_num_open_windows; bmp_idx++)
+        {
+            SDL_DestroyTexture(bitmap_be->texture[bmp_idx]);
+        }
         
-        window_be->renderer = NULL;
-        window_be->window = NULL;
-        window_be->backing = NULL;
-        free(window_be);
+        SDL_FreeSurface(bitmap_be->surface);
         
-        window->_data = NULL;
+        free(bitmap_be);
     }
 }
 
@@ -109,12 +365,19 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
     switch (surface->kind)
     {
         case SGDS_Window:
-            sgsdl2_close_window(surface);
+            _sgsdl2_close_window(surface);
+            break;
+        
+        case SGDS_Bitmap:
+            _sgsdl2_close_bitmap(surface);
             break;
             
         default:
             break;
     }
+    
+    surface->kind = SGDS_Unknown;
+    surface->_data = NULL;
 }
 
 void sgsdl2_set_renderer_color(sg_window_be *window_be, color clr)
@@ -796,5 +1059,94 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.show_border = &sgsdl2_show_border;
     functions->graphics.show_fullscreen = &sgsdl2_show_fullscreen;
     functions->graphics.resize = &sgsdl2_resize;
+}
+
+
+
+//--------------------------------------------------------------------------------------
+//
+// Images
+//
+//--------------------------------------------------------------------------------------
+
+#include "SDL_image.h"
+
+
+sg_drawing_surface sgsdl2_create_bitmap(const char * title, int width, int height)
+{
+    if ( ! _sgsdl2_has_initial_window ) _sgsdl2_create_initial_window();
+    
+    sg_drawing_surface result = { SGDS_Unknown, NULL };
+    
+    
+    result.kind = SGDS_Bitmap;
+    
+    return result;
+}
+
+sg_drawing_surface sgsdl2_load_bitmap(const char * filename, sg_drawing_surface *wind)
+{
+    if ( ! _sgsdl2_has_initial_window ) _sgsdl2_create_initial_window();
+    
+    sg_drawing_surface result = { SGDS_Unknown, NULL };
+    
+    SDL_Surface *surface;
+    
+    surface = IMG_Load(filename);
+    
+    if ( ! surface ) {
+        return result;
+    }
+    
+    sg_bitmap_be *data = (sg_bitmap_be *)malloc(sizeof(sg_bitmap_be));
+    
+    result._data = data;
+    
+    sg_window_be * window = (sg_window_be *) wind->_data;
+    
+    // Allocate space for one texture per window
+    data->texture = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * _sgsdl2_num_open_windows);
+    
+    for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+    {
+        // Create a texture for each window
+        data->texture[i] = SDL_CreateTextureFromSurface(window->renderer, surface);
+    }
+    
+    data->surface = surface;
+    
+    result.kind = SGDS_Bitmap;
+    
+    _sgsdl2_add_bitmap(data);
+    
+    return result;
+}
+
+void sgsdl2_draw_bitmap(sg_drawing_surface * src, sg_drawing_surface * dst, int x, int y )
+{
+    //assume dst = window for now...
+    
+    SDL_Renderer *renderer = ((sg_window_be *)dst->_data)->renderer;
+    int idx = ((sg_window_be *)dst->_data)->idx;
+    SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[idx];
+    
+    SDL_Rect dstrect = { x, y, 100, 50};
+    SDL_RenderCopy(renderer, srcT, NULL, &dstrect);
+}
+
+void sgsdl2_load_image_fns(sg_interface *functions)
+{
+    //    functions->image.create_bitmap = &sgsdl2_create_bitmap;
+    functions->image.load_bitmap = &sgsdl2_load_bitmap;
+    functions->image.draw_bitmap = & sgsdl2_draw_bitmap;
+}
+
+void sgsdl2_finalise_graphics()
+{
+    // Close all windows - in reverse order
+    for (int i = _sgsdl2_num_open_windows - 1; i >= 0; i--)
+    {
+        _sgsdl2_destroy_window(_sgsdl2_open_windows[i]);
+    }
 }
 

@@ -530,6 +530,8 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 }
 
 
+sg_drawing_surface img;
+
 bool test_basic_drawing()
 {
     cout << "Testing Basic Drawing!" << endl;
@@ -537,18 +539,24 @@ bool test_basic_drawing()
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
 
+    img = _sg_functions->image.load_bitmap("on_med.png", &window);
+    
+    _sg_functions->image.draw_bitmap( &img, &window, 0, 0);
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->utils.delay(3000);
+    
     test_colors(&window);
-//    test_positions(&window, 1);
-//    test_alpha(&window, 1);
-//
-//    test_clip( &window, 1);
-//    test_pixels( &window, 1);
-//    
-//    _sg_functions->graphics.show_fullscreen(&window, true);
+    test_positions(&window, 1);
+    test_alpha(&window, 1);
+
+    test_clip( &window, 1);
+    test_pixels( &window, 1);
+    
+    _sg_functions->graphics.show_fullscreen(&window, true);
 
     test_rects( &window, 1);
     
-//    _sg_functions->graphics.show_fullscreen(&window, false);
+    _sg_functions->graphics.show_fullscreen(&window, false);
     
     test_triangles( &window, 1);
     test_circles( &window, 1);
@@ -578,6 +586,15 @@ bool test_window_operations()
     
     if ( w[0].height != 600 ) cout << " >> Error with w[0] height! " << w[0].height << endl;
     if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
+    
+    _sg_functions->image.draw_bitmap( &img, &w[0], 0, 0);
+    _sg_functions->graphics.refresh_window(&w[0]);
+
+    _sg_functions->image.draw_bitmap( &img, &w[1], 0, 0);
+    _sg_functions->graphics.refresh_window(&w[1]);
+
+    _sg_functions->utils.delay(3000);
+
     
     test_clip(w, 2);
     test_pixels(w, 2);
@@ -615,11 +632,22 @@ void output_system_details()
 
 #include "test_draw_point.h"
 
+int * leak()
+{
+    int *p = (int*)malloc(sizeof(int) * 1024);
+    int a = 0;
+    for (int i = 0; i < 1024; i++)
+    {
+        *(p+i) = i;
+        a += *(p+i);
+        cout << a << endl;
+    }
+    
+    return p;
+}
+
 int main(int argc, const char * argv[])
 {
-//    test_draw_point();
-//    return 0;
-
     cout << "Starting driver backend test" << endl;
     
     if ( ! test_core_functions() )
@@ -631,10 +659,6 @@ int main(int argc, const char * argv[])
     
     output_system_details();
     
-    test_audio();
-    return 0;
-    
-
     if ( ! test_basic_drawing() )
     {
         cout << "Basic drawing failed with error: " << endl;
@@ -644,7 +668,13 @@ int main(int argc, const char * argv[])
     
     test_window_operations();
     
+    _sg_functions->graphics.close_drawing_surface(&img);
+    
+    test_audio();
+    
+    _sg_functions->finalise();
     cout << "Success" << endl;
+    
     return 0;
 }
 

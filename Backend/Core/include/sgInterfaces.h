@@ -87,6 +87,15 @@ extern "C" {
     typedef unsigned int  (uint_fn)();
     
     
+    
+    //
+    // Image related
+    //
+    typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title, sg_drawing_surface *window);
+    
+    typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dest, int x, int y );
+    
+    
     //
     // Utility relation functions
     //
@@ -100,6 +109,27 @@ extern "C" {
     } sg_utils_interface;
     
     
+    //
+    // Image related functions
+    //
+    // - creating and loading bitmaps
+    // - drawing bitmaps
+    //
+    typedef struct sg_image_interface
+    {
+        sg_new_surface_fn * create_bitmap;
+        
+        sg_load_surface_fn * load_bitmap;
+        
+        sg_drawing_surface_surface_proc * draw_bitmap;
+        
+    } sg_image_interface;
+    
+    //
+    // Audio related functions
+    //
+    // - loading and playing sound effects and music
+    //
     typedef struct sg_audio_interface
     {
         sg_empty_procedure      *    open_audio;
@@ -207,13 +237,15 @@ extern "C" {
         //
         // function pointers by functionality
         //
-        sg_audio_interface audio;
-        sg_graphics_interface graphics;
-        sg_utils_interface utils;
+        sg_audio_interface      audio;
+        sg_graphics_interface   graphics;
+        sg_image_interface      image;
+        sg_utils_interface      utils;
         
         sg_system_data_fn *read_system_data;
         
         sg_empty_procedure *init;
+        sg_empty_procedure *finalise;
     } sg_interface;
 
     

@@ -298,8 +298,8 @@ implementation
     
 	procedure LoadSDL13ImagesDriver();
 	begin
-		ImagesDriver.InitBitmapColors                         := @InitBitmapColorsProcedure;
-		ImagesDriver.SurfaceExists                            := @SurfaceExistsProcedure;
+		ImagesDriver.InitBitmapColors                         := @InitBitmapColorsProcedure;    // - remove do in create_bitmap
+		ImagesDriver.SurfaceExists                            := @SurfaceExistsProcedure;       // - driver should check
 		ImagesDriver.CreateBitmap                             := @CreateBitmapProcedure;
 		ImagesDriver.DoLoadBitmap                             := @DoLoadBitmapProcedure;
 		ImagesDriver.FreeSurface                              := @FreeSurfaceProcedure;

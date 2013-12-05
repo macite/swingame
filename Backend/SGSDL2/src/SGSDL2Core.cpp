@@ -22,7 +22,7 @@ sg_system_data _sgsdk_system_data = { 0 };
 
 void sgsdk_setup_displays();
 
-void init_sgsdk2()
+void init_sgsdl2()
 {
     static bool done_init = false;
     if ( done_init ) return;
@@ -121,9 +121,23 @@ void sgsdk_setup_displays()
     }
 }
 
-sg_system_data * sgsdk2_read_system_data()
+sg_system_data * sgsdl2_read_system_data()
 {
     return &_sgsdk_system_data;
+}
+
+void sgsdl2_finalise()
+{
+    sgsdl2_finalise_graphics();
+
+    for (int i = 0; i < _sgsdk_system_data.num_displays; i++)
+    {
+        free(_sgsdk_system_data.displays[i].modes);
+    }
+    
+    free(_sgsdk_system_data.displays);
+    
+    SDL_Quit();
 }
 
 extern "C"
@@ -133,11 +147,13 @@ sg_interface * sg_load()
 {
     clear_functions();
     
-    _functions.init = &init_sgsdk2;
-    _functions.read_system_data = &sgsdk2_read_system_data;
+    _functions.init = &init_sgsdl2;
+    _functions.read_system_data = &sgsdl2_read_system_data;
+    _functions.finalise = &sgsdl2_finalise;
     
     sgsdl2_load_audio_fns(&_functions);
     sgsdl2_load_graphics_fns(&_functions);
+    sgsdl2_load_image_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     
     return &_functions;
