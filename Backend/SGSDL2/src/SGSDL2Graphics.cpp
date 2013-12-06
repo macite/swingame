@@ -47,7 +47,7 @@ int _sgsdl2_num_open_bitmaps = 0;
 //
 //--------------------------------------------------------------------------------------
 
-void _sgsdl2_restore_default_render_target(sg_window_be *window_be)
+void _sgsdl2_restore_default_render_target(sg_window_be *window_be, sg_bitmap_be *from_bmp)
 {
     SDL_SetRenderTarget(window_be->renderer, window_be->backing);
     SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
@@ -55,11 +55,15 @@ void _sgsdl2_restore_default_render_target(sg_window_be *window_be)
     {
         SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
     }
+    else if ( from_bmp && from_bmp->clipped )
+    {
+        SDL_RenderSetClipRect(window_be->renderer, NULL);
+    }
 }
 
-void _sgsdl2_restore_default_render_target(int window_idx)
+void _sgsdl2_restore_default_render_target(int window_idx, sg_bitmap_be *from_bmp)
 {
-    _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[window_idx]);
+    _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[window_idx], from_bmp);
 }
 
 void _sgsdl2_set_renderer_target(int window_idx, sg_bitmap_be *target)
@@ -100,7 +104,7 @@ void _sgsdl2_make_drawable(sg_bitmap_be *bitmap)
         // Destroy old
         SDL_DestroyTexture(orig_tex);
         
-        _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[i]);
+        _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[i], bitmap);
     }
     
     // Remove surface
@@ -541,7 +545,7 @@ void _sgsdl2_clear_bitmap(sg_drawing_surface *bitmap, color clr)
             
             _sgsdl2_do_clear(renderer, clr);
             
-            _sgsdl2_restore_default_render_target(window);
+            _sgsdl2_restore_default_render_target(window, bitmap_be);
         }
     }
 }
@@ -579,7 +583,7 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
         
         SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
         SDL_RenderPresent(window_be->renderer);
-        _sgsdl2_restore_default_render_target(window_be);
+        _sgsdl2_restore_default_render_target(window_be, NULL);
     }
 }
 
@@ -620,7 +624,7 @@ void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, 
                 
                 SDL_RenderDrawRect(renderer, &rect);
                 
-                _sgsdl2_restore_default_render_target(window);
+                _sgsdl2_restore_default_render_target(window, bitmap_be);
             }
             break;
         }
@@ -673,7 +677,7 @@ void _sgsdl2_complete_render(sg_drawing_surface *surface, int idx)
             break;
         case SGDS_Bitmap:
             if (idx >= 0 && idx < _sgsdl2_num_open_windows)
-                _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[idx]);
+                _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[idx], (sg_bitmap_be *)surface->_data);
             break;
         default:
             break;
@@ -1341,7 +1345,7 @@ sg_drawing_surface sgsdl2_create_bitmap(const char * title, int width, int heigh
         _sgsdl2_set_renderer_target(i, data);
         SDL_SetRenderDrawColor(_sgsdl2_open_windows[i]->renderer, 255, 255, 255, 255);
         SDL_RenderClear(_sgsdl2_open_windows[i]->renderer);
-        _sgsdl2_restore_default_render_target(i);
+        _sgsdl2_restore_default_render_target(i, data);
     }
     
     _sgsdl2_add_bitmap(data);
