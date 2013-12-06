@@ -303,14 +303,14 @@ implementation
 		ImagesDriver.CreateBitmap                             := @CreateBitmapProcedure;        // #
 		ImagesDriver.DoLoadBitmap                             := @DoLoadBitmapProcedure;        // #
 		ImagesDriver.FreeSurface                              := @FreeSurfaceProcedure;         // #
-		ImagesDriver.MakeOpaque                               := @MakeOpaqueProcedure;
-		ImagesDriver.SetOpacity                               := @SetOpacityProcedure;
-		ImagesDriver.SameBitmap                               := @SameBitmapProcedure;
-		ImagesDriver.BlitSurface                              := @BlitSurfaceProcedure;
-		ImagesDriver.MakeTransparent                          := @MakeTransparentProcedure;
+		ImagesDriver.MakeOpaque                               := @MakeOpaqueProcedure;          // - not needed
+		ImagesDriver.SetOpacity                               := @SetOpacityProcedure;          // - not needed
+		ImagesDriver.SameBitmap                               := @SameBitmapProcedure;          // - not needed ??
+		ImagesDriver.BlitSurface                              := @BlitSurfaceProcedure;         // #
+		ImagesDriver.MakeTransparent                          := @MakeTransparentProcedure;     // -
 		ImagesDriver.RotateScaleSurface                       := @RotateScaleSurfaceProcedure;
-		ImagesDriver.ClearSurface                             := @ClearSurfaceProcedure;
-		ImagesDriver.OptimiseBitmap                           := @OptimiseBitmapProcedure;
-		ImagesDriver.SetNonAlphaPixels                        := @SetNonAlphaPixelsProcedure;
+		ImagesDriver.ClearSurface                             := @ClearSurfaceProcedure;        // #
+		ImagesDriver.OptimiseBitmap                           := @OptimiseBitmapProcedure;      // -
+		ImagesDriver.SetNonAlphaPixels                        := @SetNonAlphaPixelsProcedure;   // -
 	end;
 end.

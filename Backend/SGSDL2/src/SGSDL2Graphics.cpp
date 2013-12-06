@@ -222,7 +222,6 @@ void _sgsdl2_add_window(sg_window_be * window)
             SDL_SetRenderTarget(orig_renderer, orig_tex);
             SDL_RenderReadPixels(orig_renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, 4 * w);
             
-            
             SDL_Texture *tex = SDL_CreateTexture(window->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
             SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
             
@@ -591,35 +590,112 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
 
 void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
 {
-    if ( ! surface ) return;
+    if ( (! surface) || (! surface->_data) ) return;
     if ( data_sz != 4 ) return;
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
     
-    if ( window_be )
+    switch (surface->kind)
     {
-        SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
-        sgsdl2_set_renderer_color(window_be, clr);
+        case SGDS_Window:
+        {
+            sg_window_be * window_be = (sg_window_be *)surface->_data;
+            sgsdl2_set_renderer_color(window_be, clr);
+            
+            SDL_RenderDrawRect(window_be->renderer, &rect);
+            
+            break;
+        }
+        case SGDS_Bitmap:
+        {
+            sg_bitmap_be *bitmap_be = (sg_bitmap_be *)surface->_data;
+            if ( ! bitmap_be->drawable ) _sgsdl2_make_drawable( bitmap_be );
+            
+            for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+            {
+                sg_window_be *window = _sgsdl2_open_windows[i];
+                SDL_Renderer *renderer = window->renderer;
+                
+                _sgsdl2_set_renderer_target(i, bitmap_be);
+                
+                SDL_RenderDrawRect(renderer, &rect);
+                
+                _sgsdl2_restore_default_render_target(window);
+            }
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+int _sgsdl2_renderer_count(sg_drawing_surface *surface)
+{
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+            return 1;
+        case SGDS_Bitmap:
+            return _sgsdl2_num_open_windows;
+        default:
+            return 0;
+    }
+}
+
+SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface *surface, int idx)
+{
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+            return ((sg_window_be *)surface->_data)->renderer;
         
-        SDL_RenderDrawRect(window_be->renderer, &rect);
+        case SGDS_Bitmap:
+        {
+            sg_bitmap_be *bitmap_be = (sg_bitmap_be *)surface->_data;
+            if ( ! bitmap_be->drawable ) _sgsdl2_make_drawable( bitmap_be );
+            _sgsdl2_set_renderer_target(idx, bitmap_be);
+            
+            if (idx >= 0 && idx < _sgsdl2_num_open_windows)
+                return _sgsdl2_open_windows[idx]->renderer;
+            else return NULL;
+        }
+        default:
+            return NULL;
+    }
+}
+
+void _sgsdl2_complete_render(sg_drawing_surface *surface, int idx)
+{
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+            break;
+        case SGDS_Bitmap:
+            if (idx >= 0 && idx < _sgsdl2_num_open_windows)
+                _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[idx]);
+            break;
+        default:
+            break;
     }
 }
 
 void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
 {
-    if ( ! surface ) return;
+    if ( (! surface) || (! surface->_data)  ) return;
     if ( data_sz != 4 ) return;
+    SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    if ( window_be )
+    for (int i = 0; i < count; i++)
     {
-        SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
-        sgsdl2_set_renderer_color(window_be, clr);
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+
+        SDL_RenderFillRect(renderer, &rect);
         
-        SDL_RenderFillRect(window_be->renderer, &rect);
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -634,7 +710,7 @@ void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, 
 //
 void sgsdl2_draw_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
 {
-    if ( ! surface ) return;
+    if ( (! surface) || ! surface->_data ) return;
     if ( data_sz != 8 ) return;
     
     // 8 values = 4 points
@@ -642,19 +718,20 @@ void sgsdl2_draw_rect(sg_drawing_surface *surface, color clr, float *data, int d
     int x2 = (int)data[2], y2 = (int)data[3];
     int x3 = (int)data[4], y3 = (int)data[5];
     int x4 = (int)data[6], y4 = (int)data[7];
-
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    if ( window_be )
+    for (int i = 0; i < count; i++)
     {
-        sgsdl2_set_renderer_color(window_be, clr);
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+        SDL_RenderDrawLine(renderer, x1, y1, x3, y3);
+        SDL_RenderDrawLine(renderer, x4, y4, x2, y2);
+        SDL_RenderDrawLine(renderer, x4, y4, x3, y3);
         
-        SDL_RenderDrawLine(window_be->renderer, x1, y1, x2, y2);
-        SDL_RenderDrawLine(window_be->renderer, x1, y1, x3, y3);
-        SDL_RenderDrawLine(window_be->renderer, x4, y4, x2, y2);
-        SDL_RenderDrawLine(window_be->renderer, x4, y4, x3, y3);
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -684,19 +761,20 @@ void sgsdl2_fill_rect(sg_drawing_surface *surface, color clr, float *data, int d
     y[2] = (int)data[7];    // Swap last 2 for SDL_gfx order
     y[3] = (int)data[5];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    if ( window_be )
+    for (int i = 0; i < count; i++)
     {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
         Uint8 a = (Uint8)(clr.a * 255);
-        filledPolygonRGBA(window_be->renderer, x, y, 4, (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+        filledPolygonRGBA(renderer, x, y, 4, (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
         
         if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -715,19 +793,18 @@ void sgsdl2_draw_triangle(sg_drawing_surface *surface, color clr, float *data, i
     int x2 = (int)data[2], y2 = (int)data[3];
     int x3 = (int)data[4], y3 = (int)data[5];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
-            sgsdl2_set_renderer_color(window_be, clr);
-            SDL_RenderDrawLine(window_be->renderer, x1, y1, x2, y2);
-            SDL_RenderDrawLine(window_be->renderer, x2, y2, x3, y3);
-            SDL_RenderDrawLine(window_be->renderer, x3, y3, x1, y1);
-            break;
-            
-        default:
-            break;
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+        
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+        SDL_RenderDrawLine(renderer, x2, y2, x3, y3);
+        SDL_RenderDrawLine(renderer, x3, y3, x1, y1);
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -740,29 +817,27 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
     float x2 = data[2], y2 = data[3];
     float x3 = data[4], y3 = data[5];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
     
-    switch (surface->kind) {
-        case SGDS_Window:
+    int count = _sgsdl2_renderer_count(surface);
+    
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        Uint8 a = (Uint8)(clr.a * 255);
+        filledTrigonRGBA(renderer,
+                         x1, y1,
+                         x2, y2,
+                         x3, y3,
+                         (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a
+                         );
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            Uint8 a = (Uint8)(clr.a * 255);
-            filledTrigonRGBA(window_be->renderer,
-                              x1, y1,
-                              x2, y2,
-                              x3, y3,
-                              (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a
-                              );
-            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
-            {
-                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-            }
-            break;
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-        default:
-            break;
+        
+        _sgsdl2_complete_render(surface, i);
     }
-    
 }
 
 //
@@ -777,23 +852,23 @@ void sgsdl2_draw_ellipse(sg_drawing_surface *surface, color clr, float *data, in
     int x1 = (int)data[0], y1 = (int)data[1];
     int w = (int)data[2], h = (int)data[3];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        Uint8 a = (Uint8)(clr.a * 255);
+        ellipseRGBA( renderer,
+                    (Sint16)x1 + w / 2, (Sint16)y1 + h / 2,
+                    (Sint16)(w / 2), (Sint16)(h / 2),
+                    (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            Uint8 a = (Uint8)(clr.a * 255);
-            ellipseRGBA(window_be->renderer, (Sint16)x1, (Sint16)y1, (Sint16)(w / 2), (Sint16)(h / 2), (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
-
-            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
-            {
-                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-            }
-            break;
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-        default:
-            break;
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -805,25 +880,23 @@ void sgsdl2_fill_ellipse(sg_drawing_surface *surface, color clr, float *data, in
     int x1 = (int)data[0], y1 = (int)data[1];
     int w = (int)data[2], h = (int)data[3];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        Uint8 a = (Uint8)(clr.a * 255);
+        filledEllipseRGBA(renderer,
+                          (Sint16)x1 + w / 2, (Sint16)y1 + h / 2,
+                          (Sint16)(w / 2), (Sint16)(h / 2),
+                          (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            Uint8 a = (Uint8)(clr.a * 255);
-            
-            filledEllipseRGBA(window_be->renderer, (Sint16)x1 + w / 2, (Sint16)y1 + h / 2, (Sint16)(w / 2), (Sint16)(h / 2), (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a);
-
-            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
-            {
-                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-            }
-
-            break;
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-        default:
-            break;
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -839,29 +912,27 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int 
     // 2 values = 1 point
     int x1 = (int)data[0], y1 = (int)data[1];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
-        {
-// The following works with multisampling on... use if we
-// want multisampling... otherwise use the following
-//
-//            SDL_Rect rect = { x1, y1, 1, 1 };
-//            sgsdl2_set_renderer_color(window_be, clr);
-//            SDL_RenderFillRect(window_be->renderer, &rect);
-
-// For some reason the following does not work :(
-// when multisample is 1, but without multisample 1
-// double buffer causes flicker
-//
-            sgsdl2_set_renderer_color(window_be, clr);
-            SDL_RenderDrawPoint(window_be->renderer, x1, y1);
-            break;
-        }
-        default:
-            break;
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+        
+        // The following works with multisampling on... use if we
+        // want multisampling... otherwise use the following
+        //
+        //            SDL_Rect rect = { x1, y1, 1, 1 };
+        //            sgsdl2_set_renderer_color(window_be, clr);
+        //            SDL_RenderFillRect(window_be->renderer, &rect);
+        
+        // For some reason the following does not work :(
+        // when multisample is 1, but without multisample 1
+        // double buffer causes flicker
+        //
+        SDL_RenderDrawPoint(renderer, x1, y1);
+        
+        _sgsdl2_complete_render(surface, i);
     }
     
 }
@@ -872,28 +943,21 @@ color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
     color result = {0,0,0,0};
     int clr = 0;
     SDL_Rect rect = {x,y, 1, 1};
-
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
     
-    switch (surface->kind) 
-    {
-        case SGDS_Window:
-        {
-            SDL_RenderReadPixels(   window_be->renderer,
-                                    &rect,
-                                    SDL_PIXELFORMAT_RGBA8888,
-                                    &clr, 
-                                    4 * surface->width );
-            result.a = (clr & 0x000000ff) / 255.0f;
-            result.r = ((clr & 0xff000000) >> 24) / 255.0f;
-            result.g = ((clr & 0x00ff0000) >> 16) / 255.0f;
-            result.b = ((clr & 0x0000ff00) >> 8) / 255.0f;
-            break;
-        }
-        default:
-            break;
-    }
+    if ( ! surface || ! surface->_data ) return result;
+
+    SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, 0);
+    SDL_RenderReadPixels(renderer,
+                         &rect,
+                         SDL_PIXELFORMAT_RGBA8888,
+                         &clr,
+                         4 * surface->width );
+    result.a = (clr & 0x000000ff) / 255.0f;
+    result.r = ((clr & 0xff000000) >> 24) / 255.0f;
+    result.g = ((clr & 0x00ff0000) >> 16) / 255.0f;
+    result.b = ((clr & 0x0000ff00) >> 8) / 255.0f;
+    
+    _sgsdl2_complete_render(surface, 0);
 
     return result;
 }
@@ -911,27 +975,25 @@ void sgsdl2_draw_circle(sg_drawing_surface *surface, color clr, float *data, int
     int x1 = (int)data[0], y1 = (int)data[1];
     int r = (int)data[2];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        Uint8 a = (Uint8)(clr.a * 255);
+
+        circleRGBA(renderer,
+                   (Sint16)    x1,
+                   (Sint16)    y1,
+                   (Sint16)    r,
+                   (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            Uint8 a = (Uint8)(clr.a * 255);
-            
-            circleRGBA(             window_be->renderer,
-                        (Sint16)    x1,
-                        (Sint16)    y1,
-                        (Sint16)    r,
-                                    (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
-            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
-            {
-                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-            }
-            break;
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-        default:
-            break;
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -943,31 +1005,26 @@ void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int
     int x1 = (int)data[0], y1 = (int)data[1];
     int r = (int)data[2];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        Uint8 a = (Uint8)(clr.a * 255);
+        
+        filledCircleRGBA( renderer,
+                         (Sint16)    x1,
+                         (Sint16)    y1,
+                         (Sint16)    r,
+                         (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
+        
+        if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
         {
-            Uint8 a = (Uint8)(clr.a * 255);
-            
-            filledCircleRGBA(            window_be->renderer,
-                              (Sint16)    x1,
-                              (Sint16)    y1,
-                              (Sint16)    r,
-                              (Uint8)(clr.r * 255), (Uint8)(clr.g * 255), (Uint8)(clr.b * 255), a );
-
-            if ( a == 255 ) // SDL_Gfx changes renderer state ... undo change here
-            {
-                SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-            }
-
-            break;
+            SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
         }
-        default:
-            break;
+        
+        _sgsdl2_complete_render(surface, i);
     }
-    
 }
 
 
@@ -983,17 +1040,16 @@ void sgsdl2_draw_line(sg_drawing_surface *surface, color clr, float *data, int d
     int x1 = (int)data[0], y1 = (int)data[1];
     int x2 = (int)data[2], y2 = (int)data[3];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
+    int count = _sgsdl2_renderer_count(surface);
     
-    switch (surface->kind) {
-        case SGDS_Window:
-            sgsdl2_set_renderer_color(window_be, clr);
-            SDL_RenderDrawLine(window_be->renderer, x1, y1, x2, y2);
-            break;
-            
-        default:
-            break;
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+        
+        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -1010,18 +1066,27 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
     int x1 = (int)data[0], y1 = (int)data[1];
     int w = (int)data[2], h = (int)data[3];
     
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
-    
     switch (surface->kind) {
         case SGDS_Window:
         {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+
             window_be->clipped = true;
             //HACK: Current hack to fix SDL clip rect error
             window_be->clip = { x1, surface->height - h + y1, w, h };
             //Should be: window_be->clip = { x1, y1, w, h };
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
             break;
+        }
+        case SGDS_Bitmap:
+        {
+            sg_bitmap_be * bitmap_be;
+            bitmap_be = (sg_bitmap_be *)surface->_data;
+            
+            bitmap_be->clipped = true;
+            //HACK: Current hack to fix SDL clip rect error
+            bitmap_be->clip = { x1, surface->height - h + y1, w, h };
         }
             
         default:
@@ -1031,17 +1096,36 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
 
 void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
 {
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)surface->_data;
-    
     switch (surface->kind)
     {
         case SGDS_Window:
         {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+            
             window_be->clipped = false;
             window_be->clip = { 0, 0, surface->width, surface->height };
             SDL_RenderSetClipRect(window_be->renderer, NULL);
             SDL_RenderPresent(window_be->renderer);
+            break;
+        }
+        case SGDS_Bitmap:
+        {
+            sg_bitmap_be * bitmap_be;
+            bitmap_be = (sg_bitmap_be *)surface->_data;
+            
+            bitmap_be->clipped = false;
+            bitmap_be->clip = { 0, 0, surface->width, surface->height };
+            
+            int count = _sgsdl2_renderer_count(surface);
+            
+            for (int i = 0; i < count; i++)
+            {
+                SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+                SDL_RenderPresent(renderer);
+                _sgsdl2_complete_render(surface, i);
+            }
+
             break;
         }
             
@@ -1282,15 +1366,13 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename, sg_drawing_surface 
     
     result._data = data;
     
-    sg_window_be * window = (sg_window_be *) wind->_data;
-    
     // Allocate space for one texture per window
     data->texture = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * _sgsdl2_num_open_windows);
     
     for (int i = 0; i < _sgsdl2_num_open_windows; i++)
     {
         // Create a texture for each window
-        data->texture[i] = SDL_CreateTextureFromSurface(window->renderer, surface);
+        data->texture[i] = SDL_CreateTextureFromSurface(_sgsdl2_open_windows[i]->renderer, surface);
     }
     
     data->surface = surface;
@@ -1309,17 +1391,38 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename, sg_drawing_surface 
 
 void sgsdl2_draw_bitmap(sg_drawing_surface * src, sg_drawing_surface * dst, int x, int y )
 {
-    //assume dst = window for now...
-    
-    SDL_Renderer *renderer = ((sg_window_be *)dst->_data)->renderer;
-    int idx = ((sg_window_be *)dst->_data)->idx;
-    SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[idx];
-    
+    if ( ! src || ! dst || src->kind != SGDS_Bitmap )
+    {
+        return;
+    }
+
+    // Get size
     int w, h;
+    SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[0];
     SDL_QueryTexture(srcT, NULL, NULL, &w, &h);
     
     SDL_Rect dstrect = { x, y, w, h};
-    SDL_RenderCopy(renderer, srcT, NULL, &dstrect);
+    
+    int count = _sgsdl2_renderer_count(dst);
+    
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(dst, i);
+        
+        // if its a window, dont use the renderer index to get the texture
+        if (dst->kind == SGDS_Window)
+        {
+            int idx = ((sg_window_be *)dst->_data)->idx;
+            
+            srcT = ((sg_bitmap_be *)src->_data)->texture[ idx ];
+        }
+        else
+            srcT = ((sg_bitmap_be *)src->_data)->texture[ i ];
+        
+        SDL_RenderCopy(renderer, srcT, NULL, &dstrect);
+        
+        _sgsdl2_complete_render(dst, i);
+    }
 }
 
 void sgsdl2_load_image_fns(sg_interface *functions)

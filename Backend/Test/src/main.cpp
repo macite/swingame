@@ -40,11 +40,27 @@ bool test_core_functions()
     return false == _sg_functions->has_error;
 }
 
+sg_drawing_surface *_bmp_wnd = NULL;
+
+void refresh_or_draw(sg_drawing_surface *surf)
+{
+    if (surf->kind == SGDS_Window)
+    {
+        _sg_functions->graphics.refresh_window(surf);
+    }
+    else
+    {
+        _sg_functions->image.draw_bitmap(surf, _bmp_wnd, 10, 10);
+        _sg_functions->graphics.refresh_window(_bmp_wnd);
+    }
+}
+
+
 void test_colors(sg_drawing_surface *window)
 {
     cout << "Testing Colors - R,G,B,W" << endl;
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
     
     color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
@@ -56,11 +72,11 @@ void test_colors(sg_drawing_surface *window)
     cout << " Color at -10,-10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
     cout << "Should be 0, 0, 0, 0" << endl;
 
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
 
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(500);
     
     clr = _sg_functions->graphics.read_pixel(window, 10, 10);
@@ -69,7 +85,7 @@ void test_colors(sg_drawing_surface *window)
     cout << "Should be 1, 1, 1, 1" << endl;
     
     _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
     
     clr = _sg_functions->graphics.read_pixel(window, 10, 10);
@@ -77,19 +93,19 @@ void test_colors(sg_drawing_surface *window)
     cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
     cout << "Should be 0, 1, 0, 1" << endl;
     
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
 
 
     _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
     
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
 
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
-    _sg_functions->graphics.refresh_window(window);
+    refresh_or_draw(window);
     _sg_functions->utils.delay(200);
 }
 
@@ -120,7 +136,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_aabb_rect(&window_arr[w], random_color(), data, 4 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 
@@ -140,7 +156,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.fill_aabb_rect(&window_arr[w], random_color(), data, 4 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -166,7 +182,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_rect(&window_arr[w], random_color(), data, 8 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -190,7 +206,7 @@ void test_rects(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.fill_rect(&window_arr[w], random_color(), data, 8 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 
@@ -203,7 +219,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         float data[] = {0.0f, 599.0f, 799.0f, 599.0f, 400.0f, 1.0f};
         _sg_functions->graphics.draw_triangle(&window_arr[w], {1.0,0,0,1.0}, data, 6 );
-        _sg_functions->graphics.refresh_window(&window_arr[w]);
+        refresh_or_draw(&window_arr[w]);
 
     }
     
@@ -220,7 +236,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_triangle(&window_arr[w], random_color(), data, 6 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -242,7 +258,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.fill_triangle(&window_arr[w], random_color(), data, 6 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 }
@@ -254,7 +270,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
-        _sg_functions->graphics.refresh_window(&window_arr[w]);
+        refresh_or_draw(&window_arr[w]);
     }
     
     for (int i = 0; i < SHAPE_COUNT; i++)
@@ -271,7 +287,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
                 _sg_functions->graphics.draw_pixel(&window_arr[w], clr, data, 2 );
             }
             
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -293,7 +309,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
         cout << "Window " << w << " has " << count << " white pixels" << endl;
         
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
-        _sg_functions->graphics.refresh_window(&window_arr[w]);
+        refresh_or_draw(&window_arr[w]);
     }
 
 }
@@ -316,7 +332,7 @@ void test_circles(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_circle(&window_arr[w], random_color(), data, 3 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -335,7 +351,7 @@ void test_circles(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.fill_circle(&window_arr[w], random_color(), data, 3 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 }
@@ -358,7 +374,7 @@ void test_ellipses(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_ellipse(&window_arr[w], random_color(), data, 4 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
@@ -378,7 +394,7 @@ void test_ellipses(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.fill_ellipse(&window_arr[w], random_color(), data, 4 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 }
@@ -401,13 +417,15 @@ void test_lines(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.draw_line(&window_arr[w], random_color(), data, 4 );
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
+            refresh_or_draw(&window_arr[w]);
         }
     }
 }
 
 void test_clip(sg_drawing_surface *window_arr, int sz)
 {
+    cout << "Testing Clipping" << endl;
+    
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 0.0, 1.0, 1.0});
@@ -425,7 +443,7 @@ void test_clip(sg_drawing_surface *window_arr, int sz)
             _sg_functions->graphics.set_clip_rect(&window_arr[w], {0.0f}, data, 4);
             _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0f - c * 0.1f, 0.0, 0.0, 1.0});
         }
-        _sg_functions->graphics.refresh_window(&window_arr[w]);
+        refresh_or_draw(&window_arr[w]);
         
         data[2] = window_arr[w].width * 0.4;
         data[3] = window_arr[w].height * 0.4;
@@ -433,14 +451,11 @@ void test_clip(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0f, 0.0, 1.0f});
     }
     
-    _sg_functions->utils.delay(2000);
+    _sg_functions->utils.delay(3000);
     
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_clip_rect(&window_arr[w]);
-//        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0f, 0.0, 1.0f});
-//        _sg_functions->graphics.refresh_window(&window_arr[w]);
-//        _sg_functions->utils.delay(100);
     }
 
 }
@@ -461,7 +476,7 @@ bool test_positions(sg_drawing_surface *window_arr, int sz)
         _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {0.0f, 0.0f, 1.0f, 1.0f}, data2,  4);
         _sg_functions->graphics.fill_aabb_rect(&window_arr[i], {0.0f, 0.0f, 0.0f, 1.0f}, data3,  4);
         
-        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        refresh_or_draw(&window_arr[i]);
     }
 
     _sg_functions->utils.delay(2000);
@@ -483,7 +498,7 @@ bool test_alpha(sg_drawing_surface *window_arr, int sz)
             _sg_functions->graphics.fill_ellipse(&window_arr[i], {1.0f, 0.0f, 0.0f, 0.1f * j}, data,  4);
         }
         
-        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        refresh_or_draw(&window_arr[i]);
     }
     
     _sg_functions->utils.delay(2000);
@@ -566,7 +581,7 @@ bool test_basic_drawing()
     test_ellipses( &window, 1);
     test_lines( &window, 1);
     
-    img2 = _sg_functions->image.create_bitmap("testbmp1", 50, 100);
+    img2 = _sg_functions->image.create_bitmap("testbmp1", 100, 50);
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
     _sg_functions->image.draw_bitmap(&img2, &window, 50, 50);
     _sg_functions->graphics.refresh_window(&window);
@@ -574,23 +589,22 @@ bool test_basic_drawing()
 
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
     
-    int sz = 50 * 100;
-    int pixels[ sz ];
-    _sg_functions->graphics.to_pixels(&img2, pixels, sz);
-    
-    for (int i = 0; i < sz; i++)
-    {
-        cout << std::hex << pixels[i] << " ";
-        if (i % 50 == 0) {
-            cout << endl;
-        }
-    }
-    
     _sg_functions->image.draw_bitmap(&img, &window, 100, 100);
     _sg_functions->image.draw_bitmap(&img2, &window, 100, 100);
     _sg_functions->graphics.refresh_window(&window);
     _sg_functions->utils.delay(3000);
 
+//    int sz = 100 * 50;
+//    int pixels[ sz ];
+//    _sg_functions->graphics.to_pixels(&img2, pixels, sz);
+//    
+//    for (int i = 0; i < sz; i++)
+//    {
+//        cout << std::hex << pixels[i] << " ";
+//        if ( (i+1) % 100 == 0) {
+//            cout << endl;
+//        }
+//    }
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -637,6 +651,47 @@ bool test_window_operations()
 
     return true;
 }
+
+bool test_bitmap_dest_drawing()
+{
+    cout << "Testing Drawing to Bitmap!" << endl;
+    
+    sg_drawing_surface window;
+    window = _sg_functions->graphics.open_window("Drawing to Bitmap", 800, 600);
+    _bmp_wnd = &window;
+    
+    sg_drawing_surface bmp = _sg_functions->image.create_bitmap("Dst", 640, 480);
+    
+    _sg_functions->image.draw_bitmap( &img, &bmp, 0, 0);
+    refresh_or_draw(&bmp);
+    _sg_functions->utils.delay(3000);
+    
+    test_colors(&bmp);
+    test_positions(&bmp, 1);
+    test_alpha(&bmp, 1);
+    
+    test_clip( &bmp, 1);
+    test_pixels( &bmp, 1);
+    
+    test_rects( &bmp, 1);
+    
+    test_triangles( &bmp, 1);
+    test_circles( &bmp, 1);
+    
+    test_ellipses( &bmp, 1);
+    test_lines( &bmp, 1);
+    
+    _sg_functions->image.draw_bitmap(&img2, &bmp, 50, 50);
+    refresh_or_draw(&bmp);
+    _sg_functions->utils.delay(3000);
+    
+    _sg_functions->graphics.close_drawing_surface(&bmp);
+    _sg_functions->graphics.close_drawing_surface(&window);
+    _bmp_wnd = NULL;
+    
+    return false == _sg_functions->has_error;
+}
+
 
 void output_system_details()
 {
@@ -694,7 +749,9 @@ int main(int argc, const char * argv[])
         return -1;
     }
     
-    test_window_operations();
+    //test_window_operations();
+    
+    test_bitmap_dest_drawing();
     
     _sg_functions->graphics.close_drawing_surface(&img);
     _sg_functions->graphics.close_drawing_surface(&img2);
