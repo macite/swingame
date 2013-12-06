@@ -300,9 +300,9 @@ implementation
 	begin
 		ImagesDriver.InitBitmapColors                         := @InitBitmapColorsProcedure;    // - remove do in create_bitmap
 		ImagesDriver.SurfaceExists                            := @SurfaceExistsProcedure;       // - driver should check
-		ImagesDriver.CreateBitmap                             := @CreateBitmapProcedure;
-		ImagesDriver.DoLoadBitmap                             := @DoLoadBitmapProcedure;
-		ImagesDriver.FreeSurface                              := @FreeSurfaceProcedure;
+		ImagesDriver.CreateBitmap                             := @CreateBitmapProcedure;        // #
+		ImagesDriver.DoLoadBitmap                             := @DoLoadBitmapProcedure;        // #
+		ImagesDriver.FreeSurface                              := @FreeSurfaceProcedure;         // #
 		ImagesDriver.MakeOpaque                               := @MakeOpaqueProcedure;
 		ImagesDriver.SetOpacity                               := @SetOpacityProcedure;
 		ImagesDriver.SameBitmap                               := @SameBitmapProcedure;
