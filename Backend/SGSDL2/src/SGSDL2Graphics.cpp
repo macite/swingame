@@ -29,6 +29,8 @@ typedef struct sg_bitmap_be
     SDL_Surface *   surface;
     bool            clipped;
     SDL_Rect        clip;
+    
+    bool            drawable; // can be drawn on
 } sg_bitmap_be;
 
 
@@ -37,6 +39,78 @@ int _sgsdl2_num_open_windows = 0;
 
 sg_bitmap_be ** _sgsdl2_open_bitmaps = NULL;
 int _sgsdl2_num_open_bitmaps = 0;
+
+
+//--------------------------------------------------------------------------------------
+//
+// Functions to work with renderer targets - switching targets etc
+//
+//--------------------------------------------------------------------------------------
+
+void _sgsdl2_restore_default_render_target(sg_window_be *window_be)
+{
+    SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+    if ( window_be->clipped )
+    {
+        SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
+    }
+}
+
+void _sgsdl2_restore_default_render_target(int window_idx)
+{
+    _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[window_idx]);
+}
+
+void _sgsdl2_set_renderer_target(int window_idx, sg_bitmap_be *target)
+{
+    sg_window_be * window_be = _sgsdl2_open_windows[window_idx];
+    SDL_SetRenderTarget(window_be->renderer, target->texture[window_idx]);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+    if ( target->clipped )
+    {
+        SDL_RenderSetClipRect(window_be->renderer, &target->clip);
+    }
+}
+
+void _sgsdl2_make_drawable(sg_bitmap_be *bitmap)
+{
+    // recreate all textures with target access
+    
+    int access, w, h;
+    
+    for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_open_windows[i]->renderer;
+        
+        SDL_Texture *orig_tex = bitmap->texture[i];
+        
+        SDL_QueryTexture(orig_tex, NULL, &access, &w, &h);
+        
+        if ( access == SDL_TEXTUREACCESS_TARGET ) continue; // already target
+        
+        // Create new texture
+        SDL_Texture *tex = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+        bitmap->texture[i] = tex;
+        
+        // Draw onto new texture
+        SDL_SetRenderTarget(renderer, tex);
+        SDL_RenderCopy(renderer, orig_tex, NULL, NULL);
+        
+        // Destroy old
+        SDL_DestroyTexture(orig_tex);
+        
+        _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[i]);
+    }
+    
+    // Remove surface
+    SDL_FreeSurface(bitmap->surface);
+    bitmap->surface = NULL;
+    
+    // Set drawable
+    bitmap->drawable = true;
+}
+
 
 //--------------------------------------------------------------------------------------
 //
@@ -53,9 +127,9 @@ void _sgsdl2_create_initial_window()
 {
     _sgsdl2_has_initial_window = true;
     _sgsdl2_initial_window = (sg_window_be *) malloc(sizeof(sg_window_be));
-    _sgsdl2_initial_window->window = SDL_CreateWindow("SGSDL2_Hidden_Window",
+    _sgsdl2_initial_window->window = SDL_CreateWindow("",
                                          0, 0, 1, 1,
-                                         SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN );
+                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN ); //TODO: Log SDL issue re drawing using hidden windows
     
     if ( ! _sgsdl2_initial_window->window )
     {
@@ -127,7 +201,38 @@ void _sgsdl2_add_window(sg_window_be * window)
         if ( !textures ) exit (-1); // out of memory
 
         current_bmp->texture = textures;
-        current_bmp->texture[idx] = SDL_CreateTextureFromSurface(window->renderer, current_bmp->surface );
+        
+        // if the surface exists, use that to create the new bitmap... otherwise extract from texture
+        if (current_bmp->surface)
+        {
+            current_bmp->texture[idx] = SDL_CreateTextureFromSurface(window->renderer, current_bmp->surface );
+        }
+        else
+        {
+            // Read from initial window
+            void *pixels;
+            int w, h;
+            
+            SDL_Texture *orig_tex = current_bmp->texture[0];
+            
+            SDL_QueryTexture(orig_tex, NULL, NULL, &w, &h);
+            pixels = malloc(4 * w * h);
+            
+            SDL_Renderer *orig_renderer = _sgsdl2_open_windows[0]->renderer;
+            SDL_SetRenderTarget(orig_renderer, orig_tex);
+            SDL_RenderReadPixels(orig_renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, 4 * w);
+            
+            
+            SDL_Texture *tex = SDL_CreateTexture(window->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+
+            SDL_UpdateTexture(tex, NULL, pixels, 4 * w);
+            free(pixels);
+            
+            current_bmp->texture[idx] = tex;
+            
+            // Restore default target
+            SDL_SetRenderTarget(orig_renderer, NULL);
+        }
     }
 }
 
@@ -205,7 +310,7 @@ void _sgsdl2_destroy_window(sg_window_be *window_be)
 void _sgsdl2_add_bitmap(sg_bitmap_be *bmp)
 {
     _sgsdl2_num_open_bitmaps++;
-    sg_bitmap_be **new_arr = (sg_bitmap_be **)realloc(_sgsdl2_open_bitmaps, _sgsdl2_num_open_bitmaps);
+    sg_bitmap_be **new_arr = (sg_bitmap_be **)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
     
     if (!new_arr) exit(-1); // out of memory
     
@@ -388,15 +493,42 @@ void sgsdl2_set_renderer_color(sg_window_be *window_be, color clr)
     }
 }
 
-void sgsdl2_clear_window(sg_drawing_surface *window, color clr)
+void _sgsdl2_do_clear(SDL_Renderer *renderer, color clr)
+{
+    SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+    SDL_RenderClear(renderer);
+}
+
+void _sgsdl2_clear_window(sg_drawing_surface *window, color clr)
 {
     sg_window_be * window_be;
     window_be = (sg_window_be *)window->_data;
     
     if ( window_be )
     {
-        sgsdl2_set_renderer_color(window_be, clr);
-        SDL_RenderClear(window_be->renderer);
+        _sgsdl2_do_clear(window_be->renderer, clr);
+    }
+}
+
+void _sgsdl2_clear_bitmap(sg_drawing_surface *bitmap, color clr)
+{
+    sg_bitmap_be * bitmap_be = (sg_bitmap_be *)bitmap->_data;
+    
+    if ( bitmap_be )
+    {
+        if ( ! bitmap_be->drawable ) _sgsdl2_make_drawable( bitmap_be );
+        
+        for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+        {
+            sg_window_be *window = _sgsdl2_open_windows[i];
+            SDL_Renderer *renderer = window->renderer;
+            
+            _sgsdl2_set_renderer_target(i, bitmap_be);
+            
+            _sgsdl2_do_clear(renderer, clr);
+            
+            _sgsdl2_restore_default_render_target(window);
+        }
     }
 }
 
@@ -407,7 +539,11 @@ void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, color clr)
     switch (surface->kind)
     {
         case SGDS_Window:
-            sgsdl2_clear_window(surface, clr);
+            _sgsdl2_clear_window(surface, clr);
+            break;
+        
+        case SGDS_Bitmap:
+            _sgsdl2_clear_bitmap(surface, clr);
             break;
             
         default:
@@ -429,12 +565,7 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
         
         SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
         SDL_RenderPresent(window_be->renderer);
-        SDL_SetRenderTarget(window_be->renderer, window_be->backing);
-        SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-        if ( window_be->clipped )
-        {
-            SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
-        }
+        _sgsdl2_restore_default_render_target(window_be);
     }
 }
 
@@ -1078,9 +1209,29 @@ sg_drawing_surface sgsdl2_create_bitmap(const char * title, int width, int heigh
     
     sg_drawing_surface result = { SGDS_Unknown, NULL };
     
-    
     result.kind = SGDS_Bitmap;
     
+    sg_bitmap_be *data = (sg_bitmap_be *)malloc(sizeof(sg_bitmap_be));
+    
+    result._data = data;
+
+    data->clipped = false;
+    data->clip = {0, 0, width, height};
+    data->drawable = true;
+    data->surface = NULL;
+    data->texture = (SDL_Texture**)malloc(sizeof(SDL_Texture*) * _sgsdl2_num_open_windows);
+    
+    for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+    {
+        data->texture[i] = SDL_CreateTexture(_sgsdl2_open_windows[i]->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+        
+        _sgsdl2_set_renderer_target(i, data);
+        SDL_SetRenderDrawColor(_sgsdl2_open_windows[i]->renderer, 255, 255, 255, 255);
+        SDL_RenderClear(_sgsdl2_open_windows[i]->renderer);
+        _sgsdl2_restore_default_render_target(i);
+    }
+    
+    _sgsdl2_add_bitmap(data);
     return result;
 }
 
@@ -1130,13 +1281,16 @@ void sgsdl2_draw_bitmap(sg_drawing_surface * src, sg_drawing_surface * dst, int 
     int idx = ((sg_window_be *)dst->_data)->idx;
     SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[idx];
     
-    SDL_Rect dstrect = { x, y, 100, 50};
+    int w, h;
+    SDL_QueryTexture(srcT, NULL, NULL, &w, &h);
+    
+    SDL_Rect dstrect = { x, y, w, h};
     SDL_RenderCopy(renderer, srcT, NULL, &dstrect);
 }
 
 void sgsdl2_load_image_fns(sg_interface *functions)
 {
-    //    functions->image.create_bitmap = &sgsdl2_create_bitmap;
+    functions->image.create_bitmap = &sgsdl2_create_bitmap;
     functions->image.load_bitmap = &sgsdl2_load_bitmap;
     functions->image.draw_bitmap = & sgsdl2_draw_bitmap;
 }

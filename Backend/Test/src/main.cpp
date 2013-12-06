@@ -530,7 +530,7 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 }
 
 
-sg_drawing_surface img;
+sg_drawing_surface img, img2;
 
 bool test_basic_drawing()
 {
@@ -566,6 +566,13 @@ bool test_basic_drawing()
     test_ellipses( &window, 1);
     test_lines( &window, 1);
     
+    img2 = _sg_functions->image.create_bitmap("testbmp1", 100, 200);
+    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
+    _sg_functions->image.draw_bitmap(&img2, &window, 50, 50);
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->utils.delay(3000);
+
+    
     _sg_functions->graphics.close_drawing_surface(&window);
     
     return false == _sg_functions->has_error;
@@ -588,9 +595,11 @@ bool test_window_operations()
     if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
     
     _sg_functions->image.draw_bitmap( &img, &w[0], 0, 0);
+    _sg_functions->image.draw_bitmap( &img2, &w[0], 50, 50);
     _sg_functions->graphics.refresh_window(&w[0]);
 
     _sg_functions->image.draw_bitmap( &img, &w[1], 0, 0);
+    _sg_functions->image.draw_bitmap( &img2, &w[1], 50, 50);
     _sg_functions->graphics.refresh_window(&w[1]);
 
     _sg_functions->utils.delay(3000);
