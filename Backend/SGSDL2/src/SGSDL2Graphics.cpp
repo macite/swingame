@@ -503,14 +503,6 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
     surface->_data = NULL;
 }
 
-void sgsdl2_set_renderer_color(sg_window_be *window_be, color clr)
-{
-    if ( window_be && window_be->renderer )
-    {
-        SDL_SetRenderDrawColor(window_be->renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
-    }
-}
-
 void _sgsdl2_do_clear(SDL_Renderer *renderer, color clr)
 {
     SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
@@ -587,65 +579,9 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
     }
 }
 
-
 //
-//  Rectangles
+// Renderer functions - switch between bmp and window
 //
-
-void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
-{
-    if ( (! surface) || (! surface->_data) ) return;
-    if ( data_sz != 4 ) return;
-    
-    SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
-    
-    switch (surface->kind)
-    {
-        case SGDS_Window:
-        {
-            sg_window_be * window_be = (sg_window_be *)surface->_data;
-            sgsdl2_set_renderer_color(window_be, clr);
-            
-            SDL_RenderDrawRect(window_be->renderer, &rect);
-            
-            break;
-        }
-        case SGDS_Bitmap:
-        {
-            sg_bitmap_be *bitmap_be = (sg_bitmap_be *)surface->_data;
-            if ( ! bitmap_be->drawable ) _sgsdl2_make_drawable( bitmap_be );
-            
-            for (int i = 0; i < _sgsdl2_num_open_windows; i++)
-            {
-                sg_window_be *window = _sgsdl2_open_windows[i];
-                SDL_Renderer *renderer = window->renderer;
-                
-                _sgsdl2_set_renderer_target(i, bitmap_be);
-                
-                SDL_RenderDrawRect(renderer, &rect);
-                
-                _sgsdl2_restore_default_render_target(window, bitmap_be);
-            }
-            break;
-        }
-            
-        default:
-            break;
-    }
-}
-
-int _sgsdl2_renderer_count(sg_drawing_surface *surface)
-{
-    switch (surface->kind)
-    {
-        case SGDS_Window:
-            return 1;
-        case SGDS_Bitmap:
-            return _sgsdl2_num_open_windows;
-        default:
-            return 0;
-    }
-}
 
 SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface *surface, int idx)
 {
@@ -653,7 +589,7 @@ SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface *surface, int idx)
     {
         case SGDS_Window:
             return ((sg_window_be *)surface->_data)->renderer;
-        
+            
         case SGDS_Bitmap:
         {
             sg_bitmap_be *bitmap_be = (sg_bitmap_be *)surface->_data;
@@ -681,6 +617,44 @@ void _sgsdl2_complete_render(sg_drawing_surface *surface, int idx)
             break;
         default:
             break;
+    }
+}
+
+int _sgsdl2_renderer_count(sg_drawing_surface *surface)
+{
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+            return 1;
+        case SGDS_Bitmap:
+            return _sgsdl2_num_open_windows;
+        default:
+            return 0;
+    }
+}
+
+
+//
+//  Rectangles
+//
+
+void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+{
+    if ( (! surface) || (! surface->_data) ) return;
+    if ( data_sz != 4 ) return;
+    
+    SDL_Rect rect = { (int)data[0], (int)data[1], (int)data[2], (int)data[3] };
+    
+    int count = _sgsdl2_renderer_count(surface);
+    
+    for (int i = 0; i < count; i++)
+    {
+        SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+        SDL_SetRenderDrawColor(renderer, clr.r * 255, clr.g * 255, clr.b * 255, clr.a * 255);
+        
+        SDL_RenderDrawRect(renderer, &rect);
+        
+        _sgsdl2_complete_render(surface, i);
     }
 }
 
@@ -927,7 +901,6 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int 
         // want multisampling... otherwise use the following
         //
         //            SDL_Rect rect = { x1, y1, 1, 1 };
-        //            sgsdl2_set_renderer_color(window_be, clr);
         //            SDL_RenderFillRect(window_be->renderer, &rect);
         
         // For some reason the following does not work :(
