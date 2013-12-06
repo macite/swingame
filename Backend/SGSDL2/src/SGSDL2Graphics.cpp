@@ -362,6 +362,28 @@ void _sgsdl2_remove_bitmap(sg_bitmap_be *bitmap_be)
     }
 }
 
+void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
+{
+    _sgsdl2_remove_bitmap(bitmap_be);
+    
+    for (int bmp_idx = 0; bmp_idx < _sgsdl2_num_open_windows; bmp_idx++)
+    {
+        SDL_DestroyTexture(bitmap_be->texture[bmp_idx]);
+    }
+    free(bitmap_be->texture);
+    
+    if (bitmap_be->surface)
+    {
+        SDL_FreeSurface(bitmap_be->surface);
+    }
+
+    bitmap_be->surface = NULL;
+    bitmap_be->texture = NULL;
+    
+    free(bitmap_be);
+}
+
+
 //--------------------------------------------------------------------------------------
 //
 // Window functions
@@ -448,20 +470,7 @@ void _sgsdl2_close_bitmap(sg_drawing_surface *bitmap)
     
     if (bitmap_be)
     {
-        _sgsdl2_remove_bitmap(bitmap_be);
-        
-        for (int bmp_idx = 0; bmp_idx < _sgsdl2_num_open_windows; bmp_idx++)
-        {
-            SDL_DestroyTexture(bitmap_be->texture[bmp_idx]);
-        }
-        
-        SDL_FreeSurface(bitmap_be->surface);
-        free(bitmap_be->texture);
-        
-        bitmap_be->surface = NULL;
-        bitmap_be->texture = NULL;
-        
-        free(bitmap_be);
+        _sgsdl2_destroy_bitmap(bitmap_be);
     }
 }
 
@@ -1322,6 +1331,12 @@ void sgsdl2_load_image_fns(sg_interface *functions)
 
 void sgsdl2_finalise_graphics()
 {
+    // Close all bitmaps - in reverse order
+    for (int i = _sgsdl2_num_open_bitmaps - 1; i >= 0; i--)
+    {
+        _sgsdl2_destroy_bitmap(_sgsdl2_open_bitmaps[i]);
+    }
+    
     // Close all windows - in reverse order
     for (int i = _sgsdl2_num_open_windows - 1; i >= 0; i--)
     {
