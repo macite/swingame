@@ -11,3 +11,6 @@ CoreSDK/trace.gdb
 /Templates/**/bin
 /Templates/**/temp
 /Templates/**/*.log
+*.out
+*.a
+*.gch
