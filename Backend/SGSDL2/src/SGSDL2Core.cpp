@@ -14,6 +14,7 @@
 #include "SGSDL2Graphics.h"
 #include "SGSDL2Audio.h"
 #include "SGSDL2Utils.h"
+#include "SGSDL2Input.h"
 
 
 using namespace std;
@@ -156,6 +157,7 @@ sg_interface * sg_load()
     sgsdl2_load_audio_fns(&_functions);
     sgsdl2_load_graphics_fns(&_functions);
     sgsdl2_load_image_fns(&_functions);
+    sgsdl2_load_input_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     
     return &_functions;

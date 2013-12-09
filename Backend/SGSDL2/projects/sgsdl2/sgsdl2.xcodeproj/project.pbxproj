@@ -49,6 +49,8 @@
 		9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C6991847566500B71B41 /* SGSDL2Audio.h */; };
 		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
 		9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C69D184C5F2B00B71B41 /* test_audio.h */; };
+		94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94BF146C18530C79004191DF /* SGSDL2Input.cpp */; };
+		94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF146D18530C79004191DF /* SGSDL2Input.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -121,6 +123,8 @@
 		9499C69C184C5F2B00B71B41 /* test_audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_audio.cpp; path = ../../../Test/src/test_audio.cpp; sourceTree = "<group>"; };
 		9499C69D184C5F2B00B71B41 /* test_audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_audio.h; path = ../../../Test/src/test_audio.h; sourceTree = "<group>"; };
 		9499C6A0184C630E00B71B41 /* test.ogg */ = {isa = PBXFileReference; lastKnownFileType = file; name = test.ogg; path = ../../../Test/Resources/test.ogg; sourceTree = "<group>"; };
+		94BF146C18530C79004191DF /* SGSDL2Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Input.cpp; path = ../../src/SGSDL2Input.cpp; sourceTree = "<group>"; };
+		94BF146D18530C79004191DF /* SGSDL2Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Input.h; path = ../../src/SGSDL2Input.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +227,8 @@
 				942DBEF2183C327800876830 /* SGSDL2Graphics.h */,
 				942DBEF7183C558500876830 /* SGSDL2Utils.cpp */,
 				942DBEF8183C558500876830 /* SGSDL2Utils.h */,
+				94BF146C18530C79004191DF /* SGSDL2Input.cpp */,
+				94BF146D18530C79004191DF /* SGSDL2Input.h */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -292,6 +298,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */,
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
 				9499C69B1847566500B71B41 /* SGSDL2Audio.h in Headers */,
 				942DBF2C183CA8D200876830 /* test_draw_point.h in Headers */,
@@ -372,6 +379,7 @@
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
+				94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */,
 				9499C69A1847566500B71B41 /* SGSDL2Audio.cpp in Sources */,
 				9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */,
 			);

@@ -91,12 +91,13 @@ implementation
         case SDL_EventType(event._type) of
           SDL_TextInput                    :lKeys[High(lKeys)].lTmpUniCode := LongInt(event.text.text[0]);
           SDL_QUIT_EVENT                   :DoQuit();
-          SDL_KEYDOWN                      :begin
-                                              SetLength(lKeys, Length(lKeys) + 1);
-                                              lKeys[High(lKeys)].lKeyCode := LongInt(event.key.keysym.sym);
-                                              lKeys[High(lKeys)].lTmpUniCode := LongInt(event.key.keysym.unicode);
-                                              lKeys[High(lKeys)].lSendKeyCode := True;
-                                            end;
+          SDL_KEYDOWN                      :HandleKeydownEvent(LongInt(event.key.keysym.sym), LongInt(event.key.keysym.unicode));
+          // begin
+          //                                     SetLength(lKeys, Length(lKeys) + 1);
+          //                                     lKeys[High(lKeys)].lKeyCode := LongInt(event.key.keysym.sym);
+          //                                     lKeys[High(lKeys)].lTmpUniCode := LongInt(event.key.keysym.unicode);
+          //                                     lKeys[High(lKeys)].lSendKeyCode := True;
+          //                                   end;
           SDL_KEYUP                        :HandleKeyupEvent(event.key.keysym.sym);
           SDL_MOUSEBUTTONUP                :ProcessMouseEvent(event.button.button); 
           {$IFDEF IOS}
@@ -107,8 +108,8 @@ implementation
           {$ENDIF}
         end;
       end;
-      for i := Low(lKeys) to High(lKeys) do
-        HandleKeydownEvent(lKeys[i].lKeyCode, lKeys[i].lTmpUniCode);
+      // for i := Low(lKeys) to High(lKeys) do
+      //   HandleKeydownEvent(lKeys[i].lKeyCode, lKeys[i].lTmpUniCode);
     end;
 
   
@@ -147,7 +148,7 @@ implementation
 
     InputDriver.IsKeyPressed          := @IsKeyPressedProcedure;
     InputDriver.CheckQuit             := @CheckQuitProcedure;
-    InputDriver.ProcessEvents         := @ProcessEventsProcedure;
+    InputDriver.ProcessEvents         := @ProcessEventsProcedure;           // ...
     InputDriver.GetKeyState           := @GetKeyStateProcedure;
     InputDriver.GetMouseState         := @GetMouseStateProcedure;
     InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;

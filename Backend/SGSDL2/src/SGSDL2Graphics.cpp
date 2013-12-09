@@ -12,33 +12,30 @@
 #include "SDL2_gfxPrimitives.h"
 #include "sgBackendUtils.h"
 
-typedef struct sg_window_be
-{
-    SDL_Window *    window;
-    SDL_Renderer *  renderer;
-    SDL_Texture *   backing;
-    bool            clipped;
-    SDL_Rect        clip;
-    int             idx;
-} sg_window_be;
-
-typedef struct sg_bitmap_be
-{
-    // 1 texture per open window
-    SDL_Texture **  texture;
-    SDL_Surface *   surface;
-    bool            clipped;
-    SDL_Rect        clip;
-    
-    bool            drawable; // can be drawn on
-} sg_bitmap_be;
-
 
 sg_window_be ** _sgsdl2_open_windows = NULL;
 int _sgsdl2_num_open_windows = 0;
 
 sg_bitmap_be ** _sgsdl2_open_bitmaps = NULL;
 int _sgsdl2_num_open_bitmaps = 0;
+
+//
+// Misc
+//
+sg_window_be *_sgsdl2_get_window_with_id(int window_id)
+{
+    SDL_Window *window = SDL_GetWindowFromID(window_id);
+    
+    for (int i = 0; i < _sgsdl2_num_open_windows; i++)
+    {
+        if (window == _sgsdl2_open_windows[i]->window)
+        {
+            return _sgsdl2_open_windows[i];
+        }
+    }
+    
+    return NULL;
+}
 
 
 //--------------------------------------------------------------------------------------
@@ -149,8 +146,13 @@ void _sgsdl2_create_initial_window()
     
 //    std::cout << "Initial Renderer is " << _sgsdl2_initial_window->renderer << std::endl;
     
-    // You cannot draw onto this window!
+    // The user cannot draw onto this window!
     _sgsdl2_initial_window->backing = NULL;
+    
+    _sgsdl2_initial_window->close_requested = false;
+    _sgsdl2_initial_window->has_focus = false;
+    _sgsdl2_initial_window->mouse_over = false;
+    _sgsdl2_initial_window->shown = false;
     
     _sgsdl2_initial_window->clipped = false;
     _sgsdl2_initial_window->clip = {0,0,0,0};
@@ -444,6 +446,11 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     window_be->clipped = false;
     window_be->clip = {0,0,0,0};
     
+    window_be->close_requested = false;
+    window_be->has_focus = false;
+    window_be->mouse_over = false;
+    window_be->shown = true;
+    
     result.kind = SGDS_Window;
     
     result.width = width;
@@ -452,29 +459,6 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     _sgsdl2_add_window(window_be);
 
     return result;
-}
-
-void _sgsdl2_close_window(sg_drawing_surface *window)
-{
-    // window assumed to be ok - private
-    sg_window_be * window_be;
-    window_be = (sg_window_be *)window->_data;
-    
-    if ( window_be )
-    {
-        _sgsdl2_destroy_window(window_be);
-    }
-}
-
-void _sgsdl2_close_bitmap(sg_drawing_surface *bitmap)
-{
-    // bitmap assumed to be ok - private
-    sg_bitmap_be *bitmap_be = (sg_bitmap_be *)bitmap->_data;
-    
-    if (bitmap_be)
-    {
-        _sgsdl2_destroy_bitmap(bitmap_be);
-    }
 }
 
 void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
@@ -488,11 +472,11 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
     switch (surface->kind)
     {
         case SGDS_Window:
-            _sgsdl2_close_window(surface);
+            _sgsdl2_destroy_window( (sg_window_be*) surface->_data);
             break;
         
         case SGDS_Bitmap:
-            _sgsdl2_close_bitmap(surface);
+            _sgsdl2_destroy_bitmap( (sg_bitmap_be*) surface->_data);
             break;
             
         default:

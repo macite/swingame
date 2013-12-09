@@ -544,6 +544,23 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 
 }
 
+void test_events(sg_drawing_surface * window_arr, int sz)
+{
+    cout << "Processing Events" << endl;
+    
+    for (int i = 0; i < 300; i++)
+    {
+        _sg_functions->input.process_events();
+        
+        for (int w = 0; w < sz; w++)
+        {
+            _sg_functions->graphics.refresh_window(&window_arr[w]);
+        }
+    }
+    
+    cout << "Ended Events" << endl;
+}
+
 
 sg_drawing_surface img, img2;
 
@@ -553,12 +570,14 @@ bool test_basic_drawing()
     
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
-
+    
     img = _sg_functions->image.load_bitmap("on_med.png", &window);
     
     _sg_functions->image.draw_bitmap( &img, &window, 0, 0);
     _sg_functions->graphics.refresh_window(&window);
     _sg_functions->utils.delay(3000);
+    
+    test_events(&window, 1);
     
     test_colors(&window);
     test_positions(&window, 1);
@@ -646,6 +665,8 @@ bool test_window_operations()
     test_ellipses(w, 2);
     test_lines(w, 2);
     
+    test_events(w, 2);
+    
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
 
@@ -715,19 +736,6 @@ void output_system_details()
 
 #include "test_draw_point.h"
 
-int * leak()
-{
-    int *p = (int*)malloc(sizeof(int) * 1024);
-    int a = 0;
-    for (int i = 0; i < 1024; i++)
-    {
-        *(p+i) = i;
-        a += *(p+i);
-        cout << a << endl;
-    }
-    
-    return p;
-}
 
 int main(int argc, const char * argv[])
 {
@@ -749,7 +757,9 @@ int main(int argc, const char * argv[])
         return -1;
     }
     
-    //test_window_operations();
+    _sg_functions->input.process_events();
+    
+    test_window_operations();
     
     test_bitmap_dest_drawing();
     

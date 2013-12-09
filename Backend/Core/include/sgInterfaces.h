@@ -217,6 +217,22 @@ extern "C" {
     
     
     //
+    // Input callback functions
+    //
+    typedef struct sg_input_callbacks
+    {
+    } sg_input_callbacks;
+    
+    //
+    // Input functions
+    //
+    typedef struct sg_input_interface
+    {
+        sg_empty_procedure * process_events;
+    } sg_input_interface;
+    
+    
+    //
     // All sg functions.
     //
     // - has_error (data) = is there currently an error
@@ -240,6 +256,7 @@ extern "C" {
         sg_audio_interface      audio;
         sg_graphics_interface   graphics;
         sg_image_interface      image;
+        sg_input_interface      input;
         sg_utils_interface      utils;
         
         sg_system_data_fn *read_system_data;
