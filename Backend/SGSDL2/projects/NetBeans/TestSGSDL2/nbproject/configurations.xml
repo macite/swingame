@@ -5,6 +5,8 @@
       <itemPath>../../../../Test/src/main.cpp</itemPath>
       <itemPath>../../../../Test/src/test_audio.cpp</itemPath>
       <itemPath>../../../../Test/src/test_audio.h</itemPath>
+      <itemPath>../../../../Test/src/test_input.cpp</itemPath>
+      <itemPath>../../../../Test/src/test_input.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -66,6 +68,13 @@
       </item>
       <item path="../../../../Test/src/test_audio.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../../../Test/src/test_input.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_input.h" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -94,6 +103,13 @@
             flavor2="0">
       </item>
       <item path="../../../../Test/src/test_audio.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_input.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_input.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
