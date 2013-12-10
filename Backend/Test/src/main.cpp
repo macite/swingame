@@ -18,16 +18,26 @@ using namespace std;
 
 sg_interface * _sg_functions = NULL;
 
+void _callback_do_quit()
+{
+    cout << "Do Quit" << endl;
+    exit(0);
+}
+
 //
 // Test the core functions, can the driver be loaded
 // and initialised?
 //
 bool test_core_functions()
 {
+    sg_input_callbacks callbacks;
+    
+    callbacks.do_quit = &_callback_do_quit;
+    
     cout << "Testing Core Functions!" << endl;
     
     cout << "Calling load_sg..." << endl;
-    _sg_functions = sg_load();
+    _sg_functions = sg_load(callbacks);
     
     if ( !_sg_functions )
     {

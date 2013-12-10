@@ -146,9 +146,11 @@ void sgsdl2_finalise()
 extern "C"
 {
     
-sg_interface * sg_load()
+sg_interface * sg_load(sg_input_callbacks callbacks)
 {
     clear_functions();
+    
+    _functions.input_callbacks = callbacks;
     
     _functions.init = &init_sgsdl2;
     _functions.read_system_data = &sgsdl2_read_system_data;

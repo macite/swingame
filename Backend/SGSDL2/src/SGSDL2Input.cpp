@@ -9,7 +9,9 @@
 #include "SGSDL2Input.h"
 #include "SDL.h"
 #include <iostream>
+
 #include "SGSDL2Graphics.h"
+#include "sgBackendUtils.h"
 
 void _sgsdl2_handle_window_event(SDL_Event * event)
 {
@@ -93,7 +95,13 @@ void sgsdl2_process_events()
                 _sgsdl2_handle_window_event(&event);
                 break;
                 
-            case SDL_QUIT: std::cout << "Quit" << std::endl;
+            case SDL_QUIT:
+                // Use callback to inform front end of quit
+                if (_functions.input_callbacks.do_quit)
+                {
+                    _functions.input_callbacks.do_quit();
+                }
+                break;
         }
     }
 }

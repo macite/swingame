@@ -225,6 +225,7 @@ extern "C" {
     //
     typedef struct sg_input_callbacks
     {
+        sg_empty_procedure * do_quit;
     } sg_input_callbacks;
     
     //
@@ -265,10 +266,15 @@ extern "C" {
         sg_input_interface      input;
         sg_utils_interface      utils;
         
-        sg_system_data_fn *read_system_data;
+        //
+        // callback
+        //
+        sg_input_callbacks      input_callbacks;
         
-        sg_empty_procedure *init;
-        sg_empty_procedure *finalise;
+        sg_system_data_fn   *read_system_data;
+        
+        sg_empty_procedure  *init;
+        sg_empty_procedure  *finalise;
     } sg_interface;
 
     
@@ -276,7 +282,7 @@ extern "C" {
     // All sg backends need to implement a load function that can be
     // called to load the function pointers for the frontend to use.
     //
-    sg_interface * sg_load();
+    sg_interface * sg_load(sg_input_callbacks callbacks);
 
     
 #ifdef __cplusplus
