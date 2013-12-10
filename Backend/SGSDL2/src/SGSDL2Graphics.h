@@ -9,11 +9,10 @@
 #ifndef __sgsdl2__SGSDL2Graphics__
 #define __sgsdl2__SGSDL2Graphics__
 
-#include <iostream>
+#include <SDL.h>
 
 #include "sgBackendTypes.h"
 #include "sgInterfaces.h"
-#include "SDL.h"
 
 
 void sgsdl2_load_graphics_fns(sg_interface *functions);

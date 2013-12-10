@@ -7,8 +7,8 @@
 //
 
 #include "SGSDL2Audio.h"
-#include "SDL.h"
-#include "SDL_mixer.h"
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include "sgBackendUtils.h"
 
 #define SG_MAX_CHANNELS 64

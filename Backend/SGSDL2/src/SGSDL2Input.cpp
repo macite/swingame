@@ -7,8 +7,7 @@
 //
 
 #include "SGSDL2Input.h"
-#include "SDL.h"
-#include <iostream>
+#include <SDL.h>
 
 #include "SGSDL2Graphics.h"
 #include "sgBackendUtils.h"

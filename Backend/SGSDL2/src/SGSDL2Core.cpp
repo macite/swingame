@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
+#include <SDL.h>
+
 #include "SGSDL2Core.h"
 
 #include "sgInterfaces.h"

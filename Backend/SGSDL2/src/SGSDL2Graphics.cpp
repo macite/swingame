@@ -7,11 +7,14 @@
 //
 
 #include <limits.h>
+#include <iostream>
+
+#include <SDL.h>
+#include <SDL2_gfxPrimitives.h>
+#include <SDL_image.h>
+
 
 #include "SGSDL2Graphics.h"
-
-#include "SDL.h"
-#include "SDL2_gfxPrimitives.h"
 #include "sgBackendUtils.h"
 
 
@@ -1344,8 +1347,6 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
 // Images
 //
 //--------------------------------------------------------------------------------------
-
-#include "SDL_image.h"
 
 
 sg_drawing_surface sgsdl2_create_bitmap(int width, int height)

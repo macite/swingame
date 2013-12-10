@@ -8,7 +8,7 @@
 
 #include "SGSDL2Utils.h"
 
-#include "SDL.h"
+#include <SDL.h>
 
 void sgsdl2_delay(unsigned int ms)
 {

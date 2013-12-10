@@ -9,10 +9,6 @@
 #ifndef __sgsdl2__SGSDL2Core__
 #define __sgsdl2__SGSDL2Core__
 
-#include <iostream>
-
-#include "SDL.h"
-
 
 //
 // _fatal_error indicates that the driver has failed
