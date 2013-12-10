@@ -282,7 +282,15 @@ void _sgsdl2_remove_window(sg_window_be * window_be)
 //    std::cout << "windows open " << _sgsdl2_num_open_windows << std::endl;
     if (_sgsdl2_num_open_windows > 0)
     {
-        _sgsdl2_open_windows = (sg_window_be **)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+        sg_window_be ** temp = (sg_window_be **)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+        if (!temp) 
+        {
+          exit(-1);
+        }
+        else
+        {
+          _sgsdl2_open_windows = temp;
+        }
     }
     else
     {
@@ -352,7 +360,16 @@ void _sgsdl2_remove_bitmap(sg_bitmap_be *bitmap_be)
     _sgsdl2_num_open_bitmaps--;
     if (_sgsdl2_num_open_bitmaps > 0)
     {
-        _sgsdl2_open_bitmaps = (sg_bitmap_be**)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
+        sg_bitmap_be ** temp = (sg_bitmap_be**)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
+
+        if (!temp)
+        {
+          exit(-1);
+        }
+        else
+        {
+          _sgsdl2_open_bitmaps = temp;
+        }
     }
     else
     {
