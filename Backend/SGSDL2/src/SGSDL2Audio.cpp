@@ -13,8 +13,8 @@
 
 #define SG_MAX_CHANNELS 64
 
-Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
-Mix_Music * _current_music;
+static Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
+static Mix_Music * _current_music;
 
 extern sg_system_data _sgsdk_system_data;
 

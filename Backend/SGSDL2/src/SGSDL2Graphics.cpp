@@ -119,8 +119,8 @@ void _sgsdl2_make_drawable(sg_bitmap_be *bitmap)
 //
 //--------------------------------------------------------------------------------------
 
-bool _sgsdl2_has_initial_window = false;
-sg_window_be * _sgsdl2_initial_window = NULL;
+static bool _sgsdl2_has_initial_window = false;
+static sg_window_be * _sgsdl2_initial_window = NULL;
 
 // The initial window is a hidden window that is always "open"
 // This allows drawing without the user having to open a window initially.
