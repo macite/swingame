@@ -20,6 +20,7 @@
 		942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF1183C327800876830 /* SGSDL2Graphics.cpp */; };
 		942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF7183C558500876830 /* SGSDL2Utils.cpp */; };
 		943177F91855802100A0D403 /* sgBackendUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 943177F81855802100A0D403 /* sgBackendUtils.h */; };
+		943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
 		9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */; };
 		9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9471BD9D183B717900BE3771 /* SGSDL2Core.h */; };
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
@@ -45,7 +46,6 @@
 		94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821645184DE3BC00C89CBE /* 280.mp3 */; };
 		94821648184DE7F600C89CBE /* energize_my_mind.mod in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821647184DE7F100C89CBE /* energize_my_mind.mod */; };
 		9482164B184DE9DD00C89CBE /* superman_1.mid in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9482164A184DE9D800C89CBE /* superman_1.mid */; };
-		9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
 		9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 9499C69D184C5F2B00B71B41 /* test_audio.h */; };
 		94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94BF146C18530C79004191DF /* SGSDL2Input.cpp */; };
 		94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF146D18530C79004191DF /* SGSDL2Input.h */; };
@@ -371,7 +371,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9499C69E184C5F2B00B71B41 /* test_audio.cpp in Sources */,
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
@@ -385,6 +384,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */,
 				942DBED2183C1DBA00876830 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
