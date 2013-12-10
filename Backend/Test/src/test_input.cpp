@@ -82,9 +82,22 @@ void test_events(sg_drawing_surface * window_arr, int sz)
     cout << "Ended Events" << endl;
 }
 
+void test_key_press()
+{
+    cout << "Testing key press" << endl;
+    cout << " - Press the 'a' key" << endl;
+    
+    while ( ! _sg_functions->input.key_pressed('a') )
+    {
+        _sg_functions->input.process_events();
+    }
+}
+
 
 
 void test_input(sg_drawing_surface * window_arr, int sz)
 {
     test_events(window_arr, sz);
+    test_key_press();
 }
+

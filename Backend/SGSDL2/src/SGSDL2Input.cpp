@@ -165,14 +165,14 @@ int sgsdl2_window_close_requested(sg_drawing_surface* surf)
 int sgsdl2_key_pressed(int key_code)
 {
     const Uint8 *keys;
-    
+    int key_scancode = SDL_GetScancodeFromKey(key_code);
     int sz;
 
     keys = SDL_GetKeyboardState(&sz);
     
-    if ( (! keys) || sz <= key_code ) return 0;
+    if ( (! keys) || sz <= key_scancode ) return 0;
     
-    if ( *(keys + key_code) == 1 ) return -1;
+    if ( keys[key_scancode] == 1 ) return -1;
     else return 0;
 }
 
