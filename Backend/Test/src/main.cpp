@@ -24,6 +24,17 @@ void _callback_do_quit()
     exit(0);
 }
 
+void _callback_handle_key_down(int key_char)
+{
+    cout << "Key Down " << key_char << endl;
+}
+
+void _callback_handle_key_up(int key_char)
+{
+    cout << "Key Up " << key_char << endl;
+}
+
+
 //
 // Test the core functions, can the driver be loaded
 // and initialised?
@@ -33,6 +44,8 @@ bool test_core_functions()
     sg_input_callbacks callbacks;
     
     callbacks.do_quit = &_callback_do_quit;
+    callbacks.handle_key_down = & _callback_handle_key_down;
+    callbacks.handle_key_up = & _callback_handle_key_up;
     
     cout << "Testing Core Functions!" << endl;
     

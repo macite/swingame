@@ -2,9 +2,9 @@ unit sgInputBackend;
 
 interface
   uses sgTypes, sysutils;
-    procedure DoQuit();
+    procedure DoQuit();       // #
     procedure CheckQuit();
-    procedure HandleKeydownEvent(kyCode, kyChar : LongInt);
+    procedure HandleKeydownEvent(kyCode, kyChar : LongInt);     // #
     procedure AddKeyData(kyCode, kyChar: Longint);
     procedure HandleKeyupEvent(kyCode: LongInt);
     procedure ProcessKeyPress(kyCode, kyChar: Longint);

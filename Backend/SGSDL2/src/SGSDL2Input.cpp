@@ -96,12 +96,35 @@ void sgsdl2_process_events()
                 break;
                 
             case SDL_QUIT:
+            {
                 // Use callback to inform front end of quit
                 if (_functions.input_callbacks.do_quit)
                 {
                     _functions.input_callbacks.do_quit();
                 }
                 break;
+            }
+            
+            case SDL_KEYDOWN:
+            {
+                if (_functions.input_callbacks.handle_key_down)
+                {
+                    int key_code = static_cast<int>(event.key.keysym.sym);
+                    _functions.input_callbacks.handle_key_down(key_code);
+                }
+                break;
+            }
+
+            case SDL_KEYUP:
+            {
+                if (_functions.input_callbacks.handle_key_up)
+                {
+                    int key_code = static_cast<int>(event.key.keysym.sym);
+                    _functions.input_callbacks.handle_key_up(key_code);
+                }
+                break;
+            }
+                
         }
     }
 }

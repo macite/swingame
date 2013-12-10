@@ -84,12 +84,17 @@ extern "C" {
     
     typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     
-    
     //
     // Utility related
     //
     typedef unsigned int  (uint_fn)();
     
+    //
+    // Call back functions
+    //
+    
+    // Callback for key related events
+    typedef void sg_key_proc(int key_code);
     
     
     //
@@ -226,6 +231,9 @@ extern "C" {
     typedef struct sg_input_callbacks
     {
         sg_empty_procedure * do_quit;
+        
+        sg_key_proc * handle_key_down;
+        sg_key_proc * handle_key_up;
     } sg_input_callbacks;
     
     //
