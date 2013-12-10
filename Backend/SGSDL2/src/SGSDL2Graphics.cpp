@@ -415,7 +415,7 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
 {
-    sg_drawing_surface  result = { SGDS_Unknown, NULL };
+    sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
 
     sg_window_be *      window_be;
     
@@ -1294,7 +1294,7 @@ sg_drawing_surface sgsdl2_create_bitmap(const char * title, int width, int heigh
 {
     if ( ! _sgsdl2_has_initial_window ) _sgsdl2_create_initial_window();
     
-    sg_drawing_surface result = { SGDS_Unknown, NULL };
+    sg_drawing_surface result = { SGDS_Unknown, 0, 0, NULL };
     
     result.kind = SGDS_Bitmap;
     
