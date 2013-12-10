@@ -9,6 +9,7 @@
 #include "test_audio.h"
 #include "sgInterfaces.h"
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 

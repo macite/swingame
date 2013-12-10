@@ -7,6 +7,7 @@
 //
 
 #include <iostream>
+#include <cstdlib>
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
@@ -265,14 +266,17 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
 
 void test_pixels(sg_drawing_surface *window_arr, int sz)
 {
+	_sg_functions->input.process_events();
     color clr = { 0.0, 0.0, 0.0, 1.0 };
-    
+    cout << "executed" << endl;
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
+    _sg_functions->input.process_events();
     }
-    
+	cout << "executed" << endl;
+    _sg_functions->input.process_events();
     for (int i = 0; i < SHAPE_COUNT; i++)
     {
         for (int w = 0; w < sz; w++)
@@ -287,10 +291,12 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
                 _sg_functions->graphics.draw_pixel(&window_arr[w], clr, data, 2 );
             }
             
-            refresh_or_draw(&window_arr[w]);
+			_sg_functions->input.process_events();            
+			refresh_or_draw(&window_arr[w]);
         }
     }
-    
+	cout << "executed" << endl;
+    _sg_functions->input.process_events();
     for (int w = 0; w < sz; w++)
     {
         int sz = window_arr[w].width * window_arr[w].height;
@@ -305,13 +311,15 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
             {
                 if  ( pixels[x + y * window_arr[w].width] == 0xffffffff ) count++;
             }
+			_sg_functions->input.process_events();
         }
         cout << "Window " << w << " has " << count << " white pixels" << endl;
         
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
-    }
-
+		_sg_functions->input.process_events();
+	}
+cout << "executed" << endl;
 }
 
 
@@ -546,8 +554,8 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 
 void test_events(sg_drawing_surface * window_arr, int sz)
 {
-    cout << "Processing Events" << endl;
-    
+	cout << "Processing Events (REMOVED)" << endl;
+	//return;   
     for (int i = 0; i < 300; i++)
     {
         _sg_functions->input.process_events();
@@ -575,7 +583,7 @@ bool test_basic_drawing()
     
     _sg_functions->image.draw_bitmap( &img, &window, 0, 0);
     _sg_functions->graphics.refresh_window(&window);
-    _sg_functions->utils.delay(3000);
+    //_sg_functions->utils.delay(3000);
     
     test_events(&window, 1);
     
@@ -586,11 +594,11 @@ bool test_basic_drawing()
     test_clip( &window, 1);
     test_pixels( &window, 1);
     
-    _sg_functions->graphics.show_fullscreen(&window, true);
+    //_sg_functions->graphics.show_fullscreen(&window, true);
 
     test_rects( &window, 1);
     
-    _sg_functions->graphics.show_fullscreen(&window, false);
+    //_sg_functions->graphics.show_fullscreen(&window, false);
     
     test_triangles( &window, 1);
     test_circles( &window, 1);
@@ -632,8 +640,10 @@ bool test_basic_drawing()
 
 bool test_window_operations()
 {
-    cout << "Testing Window Operations!" << endl;
-
+    cout << "Testing Window Operations! REMOVED" << endl;
+	//return true;
+	_sg_functions->input.process_events();
+	
     sg_drawing_surface w[2];
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
@@ -654,8 +664,8 @@ bool test_window_operations()
     _sg_functions->image.draw_bitmap( &img2, &w[1], 50, 50);
     _sg_functions->graphics.refresh_window(&w[1]);
 
-    _sg_functions->utils.delay(3000);
-
+    _sg_functions->utils.delay(300);
+_sg_functions->input.process_events();
     
     test_clip(w, 2);
     test_pixels(w, 2);
@@ -733,9 +743,6 @@ void output_system_details()
     
     cout << "Time is " << _sg_functions->utils.get_ticks() << endl;
 }
-
-#include "test_draw_point.h"
-
 
 int main(int argc, const char * argv[])
 {
