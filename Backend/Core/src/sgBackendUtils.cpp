@@ -15,7 +15,7 @@
 #endif
 
 // Storage for the sg functions
-static sg_interface _functions;
+sg_interface _functions;
 
 
 
