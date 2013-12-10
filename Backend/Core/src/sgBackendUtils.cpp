@@ -17,7 +17,8 @@
 // Storage for the sg functions
 sg_interface _functions;
 
-
+// Storage for the system data
+sg_system_data _sgsdk_system_data;
 
 
 // Set all functions to NULL to initialise/clear structure

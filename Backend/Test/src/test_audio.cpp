@@ -14,7 +14,6 @@
 using namespace std;
 
 extern sg_interface * _sg_functions;
-extern sg_system_data _sgsdk_system_data;
 
 void test_audio()
 {
@@ -22,10 +21,12 @@ void test_audio()
 
     _sg_functions->audio.open_audio();
     
-    printf("Opened audio at %d Hz %d bit %s\n", _sgsdk_system_data.audio_specs.audio_rate,
-           (_sgsdk_system_data.audio_specs.audio_format&0xFF),
-           (_sgsdk_system_data.audio_specs.audio_channels > 2) ? "surround" :
-           (_sgsdk_system_data.audio_specs.audio_channels > 1) ? "stereo" : "mono");
+    sg_system_data * system_data = _sg_functions->read_system_data();
+    
+    printf("Opened audio at %d Hz %d bit %s\n", system_data->audio_specs.audio_rate,
+           (system_data->audio_specs.audio_format&0xFF),
+           (system_data->audio_specs.audio_channels > 2) ? "surround" :
+           (system_data->audio_specs.audio_channels > 1) ? "stereo" : "mono");
 
     
     cout << "Audio open ... " << (_sg_functions->has_error ? "FAILED" : "SUCCESS") << endl;

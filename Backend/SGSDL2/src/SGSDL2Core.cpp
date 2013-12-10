@@ -19,8 +19,6 @@
 
 using namespace std;
 
-static sg_system_data _sgsdk_system_data = { 0 };
-
 void sgsdk_setup_displays();
 
 void init_sgsdl2()

@@ -16,8 +16,6 @@
 static Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
 static Mix_Music * _current_music;
 
-extern sg_system_data _sgsdk_system_data;
-
 
 void sgsdl2_init_audio()
 {

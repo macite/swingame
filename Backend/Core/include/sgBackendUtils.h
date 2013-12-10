@@ -18,6 +18,12 @@
 //
 extern sg_interface _functions;
 
+
+//
+// Storage for the system data
+//
+extern sg_system_data _sgsdk_system_data;
+
 //
 // Clear all function pointers by initialising
 // all to NULL. Can be used on startup and on
