@@ -92,8 +92,10 @@ void sgsdl2_process_events()
         switch ( event.type )
         {
             case SDL_WINDOWEVENT:
+            {
                 _sgsdl2_handle_window_event(&event);
                 break;
+            }
                 
             case SDL_QUIT:
             {
@@ -125,6 +127,26 @@ void sgsdl2_process_events()
                 break;
             }
                 
+            case SDL_MOUSEBUTTONUP:
+            {
+                if (_functions.input_callbacks.handle_mouse_up)
+                {
+                    int mouse_button = event.button.button;
+                    _functions.input_callbacks.handle_mouse_up(mouse_button);
+                }
+                break;
+            }
+                
+            case SDL_MOUSEBUTTONDOWN:
+            {
+                if (_functions.input_callbacks.handle_mouse_down)
+                {
+                    int mouse_button = event.button.button;
+                    _functions.input_callbacks.handle_mouse_down(mouse_button);
+                }
+                break;
+            }
+            
         }
     }
 }

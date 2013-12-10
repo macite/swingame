@@ -34,6 +34,16 @@ void _callback_handle_key_up(int key_char)
     cout << "Key Up " << key_char << endl;
 }
 
+void _callback_handle_mouse_up(int mouse_button)
+{
+    cout << "Mouse up " << mouse_button << endl;
+}
+
+void _callback_handle_mouse_down(int mouse_button)
+{
+    cout << "Mouse down " << mouse_button << endl;
+}
+
 
 //
 // Test the core functions, can the driver be loaded
@@ -46,6 +56,8 @@ bool test_core_functions()
     callbacks.do_quit = &_callback_do_quit;
     callbacks.handle_key_down = & _callback_handle_key_down;
     callbacks.handle_key_up = & _callback_handle_key_up;
+    callbacks.handle_mouse_up = &_callback_handle_mouse_up;
+    callbacks.handle_mouse_down = &_callback_handle_mouse_down;
     
     cout << "Testing Core Functions!" << endl;
     

@@ -90,14 +90,6 @@ extern "C" {
     typedef unsigned int  (uint_fn)();
     
     //
-    // Call back functions
-    //
-    
-    // Callback for key related events
-    typedef void sg_key_proc(int key_code);
-    
-    
-    //
     // Image related
     //
     typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title, sg_drawing_surface *window);
@@ -232,8 +224,11 @@ extern "C" {
     {
         sg_empty_procedure * do_quit;
         
-        sg_key_proc * handle_key_down;
-        sg_key_proc * handle_key_up;
+        sg_intp_proc * handle_key_down;
+        sg_intp_proc * handle_key_up;
+        
+        sg_intp_proc * handle_mouse_up;
+        sg_intp_proc * handle_mouse_down;
     } sg_input_callbacks;
     
     //
