@@ -282,7 +282,15 @@ void _sgsdl2_remove_window(sg_window_be * window_be)
 //    std::cout << "windows open " << _sgsdl2_num_open_windows << std::endl;
     if (_sgsdl2_num_open_windows > 0)
     {
-        _sgsdl2_open_windows = (sg_window_be **)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+        sg_window_be ** temp = (sg_window_be **)realloc(_sgsdl2_open_windows, sizeof(sg_window_be*) * _sgsdl2_num_open_windows);
+        if (!temp) 
+        {
+          exit(-1);
+        }
+        else
+        {
+          _sgsdl2_open_windows = temp;
+        }
     }
     else
     {
@@ -352,7 +360,16 @@ void _sgsdl2_remove_bitmap(sg_bitmap_be *bitmap_be)
     _sgsdl2_num_open_bitmaps--;
     if (_sgsdl2_num_open_bitmaps > 0)
     {
-        _sgsdl2_open_bitmaps = (sg_bitmap_be**)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
+        sg_bitmap_be ** temp = (sg_bitmap_be**)realloc(_sgsdl2_open_bitmaps, sizeof(sg_bitmap_be *) * _sgsdl2_num_open_bitmaps);
+
+        if (!temp)
+        {
+          exit(-1);
+        }
+        else
+        {
+          _sgsdl2_open_bitmaps = temp;
+        }
     }
     else
     {
@@ -398,7 +415,7 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
 {
-    sg_drawing_surface  result = { SGDS_Unknown, NULL };
+    sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
 
     sg_window_be *      window_be;
     
@@ -1034,8 +1051,11 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
             window_be = (sg_window_be *)surface->_data;
 
             window_be->clipped = true;
+#ifndef WINDOWS
             //HACK: Current hack to fix SDL clip rect error
             window_be->clip = { x1, surface->height - h + y1, w, h };
+#endif
+
             //Should be: window_be->clip = { x1, y1, w, h };
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);
             break;
@@ -1277,7 +1297,7 @@ sg_drawing_surface sgsdl2_create_bitmap(const char * title, int width, int heigh
 {
     if ( ! _sgsdl2_has_initial_window ) _sgsdl2_create_initial_window();
     
-    sg_drawing_surface result = { SGDS_Unknown, NULL };
+    sg_drawing_surface result = { SGDS_Unknown, 0, 0, NULL };
     
     result.kind = SGDS_Bitmap;
     

@@ -47,13 +47,20 @@ void refresh_or_draw(sg_drawing_surface *surf)
 {
     if (surf->kind == SGDS_Window)
     {
-        _sg_functions->graphics.refresh_window(surf);
+      _sg_functions->input.process_events(); 
+      if (_sg_functions->input.window_close_requested(surf))
+      { 
+        exit(0); 
+      }
+
+      _sg_functions->graphics.refresh_window(surf);
     }
     else
     {
         _sg_functions->image.draw_bitmap(surf, _bmp_wnd, 10, 10);
         _sg_functions->graphics.refresh_window(_bmp_wnd);
     }
+
 }
 
 
