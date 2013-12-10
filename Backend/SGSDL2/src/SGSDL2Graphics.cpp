@@ -1087,9 +1087,6 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
 
         case SGDS_Unknown:
             break;
-            
-        default:
-            break;
     }
 }
 
@@ -1130,9 +1127,6 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
       
         case SGDS_Unknown:
             break;
-
-        default:
-            break;
     }
 }
 
@@ -1168,9 +1162,6 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
 
         case SGDS_Unknown:
             break;
-            
-        default:
-            break;
     }
 }
 
@@ -1199,9 +1190,6 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
 
         case SGDS_Unknown:
           break;
-            
-        default:
-            break;
     }
 }
 
@@ -1225,9 +1213,6 @@ void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
 
         case SGDS_Unknown:
           break;
-            
-        default:
-            break;
     }
 }
 
@@ -1285,9 +1270,6 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
             break;
 
         case SGDS_Unknown:
-            break;
-
-        default:
             break;
     }
 }
