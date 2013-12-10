@@ -495,6 +495,9 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
         case SGDS_Bitmap:
             _sgsdl2_destroy_bitmap( (sg_bitmap_be*) surface->_data);
             break;
+
+        case SGDS_Unknown:
+            break;
             
         default:
             break;
@@ -561,6 +564,9 @@ void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, color clr)
             _sgsdl2_clear_bitmap(surface, clr);
             break;
             
+        case SGDS_Unknown:
+            break;
+
         default:
             break;
     }
@@ -604,6 +610,10 @@ SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface *surface, int idx)
                 return _sgsdl2_open_windows[idx]->renderer;
             else return NULL;
         }
+        
+        case SGDS_Unknown:
+            break;
+        
         default:
             return NULL;
     }
@@ -619,6 +629,8 @@ void _sgsdl2_complete_render(sg_drawing_surface *surface, int idx)
             if (idx >= 0 && idx < _sgsdl2_num_open_windows)
                 _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[idx], (sg_bitmap_be *)surface->_data);
             break;
+        case SGDS_Unknown:
+            break;
         default:
             break;
     }
@@ -632,6 +644,8 @@ int _sgsdl2_renderer_count(sg_drawing_surface *surface)
             return 1;
         case SGDS_Bitmap:
             return _sgsdl2_num_open_windows;
+        case SGDS_Unknown:
+            break;
         default:
             return 0;
     }
@@ -1073,8 +1087,8 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
             bitmap_be->clip = { x1, surface->height - h + y1, w, h };
             break;
         }
-            
-        default:
+
+        case SGDS_Unknown:
             break;
     }
 }
@@ -1113,8 +1127,8 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
 
             break;
         }
-            
-        default:
+      
+        case SGDS_Unknown:
             break;
     }
 }
@@ -1148,8 +1162,8 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
             SDL_RenderReadPixels(_sgsdl2_open_windows[0]->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, surface->width * 4);
             break;
         }
-            
-        default:
+
+        case SGDS_Unknown:
             break;
     }
 }
@@ -1173,9 +1187,12 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
             SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);
             break;
         }
-            
-        default:
-            break;
+
+        case SGDS_Bitmap:
+          break;
+
+        case SGDS_Unknown:
+          break;
     }
 }
 
@@ -1193,9 +1210,12 @@ void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
             SDL_SetWindowFullscreen(window_be->window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
             break;
         }
-            
-        default:
-            break;
+
+        case SGDS_Bitmap:
+          break;
+
+        case SGDS_Unknown:
+          break;
     }
 }
 
@@ -1248,8 +1268,11 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
             
             break;
         }
-            
-        default:
+         
+        case SGDS_Bitmap:
+            break;
+
+        case SGDS_Unknown:
             break;
     }
 }

@@ -81,7 +81,8 @@ sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
             result.data = Mix_LoadMUS(filename);
             break;
         }
-        default:
+        
+        case SGSD_UNKNOWN:
             break;
     }
     
@@ -101,8 +102,8 @@ void sgsdl2_close_sound_data(sg_sound_data * sound )
         case SGSD_SOUND_EFFECT:
             Mix_FreeChunk((Mix_Chunk*)sound->data);
             break;
-            
-        default:
+        
+        case SGSD_UNKNOWN:
             break;
     }
     
@@ -134,7 +135,7 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
             _current_music = (Mix_Music *)sound->data;
             break;
         }
-        default:
+        case SGSD_UNKNOWN:
             break;
     }
 }
@@ -155,9 +156,10 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
         case SGSD_MUSIC:
         {
             if ( _current_music == sound->data && Mix_PlayingMusic() ) return 1.0f;
+            break;
         }
-            
-        default:
+     
+        case SGSD_UNKNOWN:
             break;
     }
     
@@ -185,9 +187,10 @@ void sgsdl2_fade_in(sg_sound_data *sound, int loops, int ms)
         {
             Mix_FadeInMusic((Mix_Music *)sound->data, loops, ms);
             _current_music = (Mix_Music *)sound->data;
+            break;
         }
-            
-        default:
+        
+        case SGSD_UNKNOWN:
             break;
     }
 }
@@ -209,9 +212,10 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
         {
             if ( _current_music == sound->data )
                 Mix_FadeOutMusic(ms);
+            break;
         }
-            
-        default:
+
+        case SGSD_UNKNOWN:
             break;
     }
 }
@@ -247,7 +251,7 @@ float sgsdl2_sound_volume(sg_sound_data *sound)
             break;
         case SGSD_SOUND_EFFECT:
             return Mix_VolumeChunk((Mix_Chunk *)sound->data, -1) / (float)MIX_MAX_VOLUME;
-        default:
+        case SGSD_UNKNOWN:
             break;
     }
     
@@ -267,8 +271,9 @@ void sgsdl2_set_sound_volume(sg_sound_data *sound, float vol)
             
         case SGSD_SOUND_EFFECT:
             Mix_VolumeChunk((Mix_Chunk *)sound->data, (int)(vol * MIX_MAX_VOLUME));
+            break;
         
-        default:
+        case SGSD_UNKNOWN:
             break;
     }
 }
@@ -312,7 +317,8 @@ void sgsdl2_stop_sound(sg_sound_data *sound)
             }
             break;
         }
-        default:
+        
+        case SGSD_UNKNOWN:
             break;
     }
 }
