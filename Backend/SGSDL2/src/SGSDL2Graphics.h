@@ -28,7 +28,7 @@ typedef struct sg_window_be
     SDL_Texture *   backing;
     bool            clipped;
     SDL_Rect        clip;
-    int             idx;
+    unsigned int    idx;
     
     // Event data store
     bool            close_requested;
@@ -49,7 +49,7 @@ typedef struct sg_bitmap_be
 } sg_bitmap_be;
 
 
-sg_window_be *_sgsdl2_get_window_with_id(int window_id);
+sg_window_be *_sgsdl2_get_window_with_id(unsigned int window_id);
 
 
 #endif /* defined(__sgsdl2__SGSDL2Graphics__) */

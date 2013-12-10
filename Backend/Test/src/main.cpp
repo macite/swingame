@@ -490,14 +490,14 @@ void test_clip(sg_drawing_surface *window_arr, int sz)
             data[2] = window_arr[w].width * (0.9 - c * 0.1);
             data[3] = window_arr[w].height * (0.9 - c * 0.1);
             
-            _sg_functions->graphics.set_clip_rect(&window_arr[w], {0.0f}, data, 4);
+            _sg_functions->graphics.set_clip_rect(&window_arr[w], data, 4);
             _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0f - c * 0.1f, 0.0, 0.0, 1.0});
         }
         refresh_or_draw(&window_arr[w]);
         
         data[2] = window_arr[w].width * 0.4;
         data[3] = window_arr[w].height * 0.4;
-        _sg_functions->graphics.set_clip_rect(&window_arr[w], {0.0f}, data, 4);
+        _sg_functions->graphics.set_clip_rect(&window_arr[w], data, 4);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0f, 0.0, 1.0f});
     }
     
@@ -621,7 +621,7 @@ bool test_basic_drawing()
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
     
-    img = _sg_functions->image.load_bitmap("on_med.png", &window);
+    img = _sg_functions->image.load_bitmap("on_med.png");
     
     _sg_functions->image.draw_bitmap( &img, &window, 0, 0);
     _sg_functions->graphics.refresh_window(&window);
@@ -650,7 +650,7 @@ bool test_basic_drawing()
     test_ellipses( &window, 1);
     test_lines( &window, 1);
     
-    img2 = _sg_functions->image.create_bitmap("testbmp1", 100, 50);
+    img2 = _sg_functions->image.create_bitmap(100, 50);
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
     _sg_functions->image.draw_bitmap(&img2, &window, 50, 50);
     _sg_functions->graphics.refresh_window(&window);
@@ -733,7 +733,7 @@ bool test_bitmap_dest_drawing()
     window = _sg_functions->graphics.open_window("Drawing to Bitmap", 800, 600);
     _bmp_wnd = &window;
     
-    sg_drawing_surface bmp = _sg_functions->image.create_bitmap("Dst", 640, 480);
+    sg_drawing_surface bmp = _sg_functions->image.create_bitmap(640, 480);
     
     _sg_functions->image.draw_bitmap( &img, &bmp, 0, 0);
     refresh_or_draw(&bmp);

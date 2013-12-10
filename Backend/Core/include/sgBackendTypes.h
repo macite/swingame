@@ -50,7 +50,7 @@ typedef struct sg_display
     const char *    name;
     int             x, y;
     int             width, height;
-    int             num_modes;
+    unsigned int    num_modes;
     sg_mode *       modes;
     
     // private data used by the backend
@@ -68,7 +68,7 @@ typedef struct sg_audiospec
 
 typedef struct sg_system_data
 {
-    int             num_displays;
+    unsigned int    num_displays;
     sg_display    * displays;
     sg_audiospec    audio_specs;
     

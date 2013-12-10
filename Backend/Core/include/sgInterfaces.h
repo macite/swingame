@@ -42,12 +42,14 @@ extern "C" {
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
     typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
     typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
+    typedef void (sg_clip_proc)( sg_drawing_surface *surface, float *data, int data_sz );
     typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, bool value );
     typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
     
     typedef void (sg_surface_size_proc)( sg_drawing_surface *surface, int width, int height );
 
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
+    typedef sg_drawing_surface  (sg_create_surface_fn)(int width, int height);
 
     typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
@@ -92,7 +94,7 @@ extern "C" {
     //
     // Image related
     //
-    typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title, sg_drawing_surface *window);
+    typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title);
     
     typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dest, int x, int y );
     
@@ -118,7 +120,7 @@ extern "C" {
     //
     typedef struct sg_image_interface
     {
-        sg_new_surface_fn * create_bitmap;
+        sg_create_surface_fn * create_bitmap;
         
         sg_load_surface_fn * load_bitmap;
         
@@ -203,7 +205,7 @@ extern "C" {
 
         sg_surface_color_fn * read_pixel;
         
-        sg_drawing_proc * set_clip_rect;
+        sg_clip_proc * set_clip_rect;
         sg_drawing_surface_proc * clear_clip_rect;
         
         sg_to_pixel_array_proc * to_pixels;

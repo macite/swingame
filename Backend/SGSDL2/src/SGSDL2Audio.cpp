@@ -44,7 +44,7 @@ void sgsdl2_close_audio()
     _sgsdk_system_data.audio_specs.times_opened--;
     if ( 0 == _sgsdk_system_data.audio_specs.times_opened )
     {
-        sg_audiospec empty = { 0 };
+        sg_audiospec empty = { 0, 0, 0, 0 };
         _sgsdk_system_data.audio_specs = empty;
     }
 }
@@ -232,7 +232,7 @@ void sgsdl2_fade_music_out(int ms)
 
 void sgsdl2_set_music_vol(float vol)
 {
-    Mix_VolumeMusic( (int) MIX_MAX_VOLUME * vol );
+    Mix_VolumeMusic( static_cast<int>(MIX_MAX_VOLUME * vol) );
 }
 
 float sgsdl2_music_vol()

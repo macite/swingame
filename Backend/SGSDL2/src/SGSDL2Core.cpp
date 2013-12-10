@@ -83,7 +83,7 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
         SDL_GetDisplayMode(idx, i, &mode);
         add = true;
         
-        for ( int m = 0; m < disp.num_modes; m++)
+        for ( unsigned int m = 0; m < disp.num_modes; m++)
         {
             if ( disp.modes[m].width == mode.w && disp.modes[m].height == mode.h )
             {
@@ -113,12 +113,18 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
 
 void sgsdk_setup_displays()
 {
-    _sgsdk_system_data.num_displays = SDL_GetNumVideoDisplays();
+    int num_displays = SDL_GetNumVideoDisplays();
+    // 0 = zero displays
+    // less than 0 = use SDL_GetError() for failure
+    if (num_displays <= 0) {
+      exit(-1);
+    }
+    _sgsdk_system_data.num_displays = static_cast<unsigned int>(num_displays);
     _sgsdk_system_data.displays = (sg_display *)malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays);
     
-    for (int i = 0; i < _sgsdk_system_data.num_displays; i++)
+    for (unsigned int i = 0; i < _sgsdk_system_data.num_displays; i++)
     {
-        sgsdk2_setup_display(i, _sgsdk_system_data.displays[i]);
+        sgsdk2_setup_display(static_cast<int>(i), _sgsdk_system_data.displays[i]);
     }
 }
 
@@ -131,7 +137,7 @@ void sgsdl2_finalise()
 {
     sgsdl2_finalise_graphics();
 
-    for (int i = 0; i < _sgsdk_system_data.num_displays; i++)
+    for (unsigned int i = 0; i < _sgsdk_system_data.num_displays; i++)
     {
         free(_sgsdk_system_data.displays[i].modes);
     }
