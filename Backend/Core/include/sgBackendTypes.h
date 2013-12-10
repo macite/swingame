@@ -9,6 +9,9 @@
 #ifndef sgsdl2_sgBackendTypes_h
 #define sgsdl2_sgBackendTypes_h
 
+// Align structs to one byte boundaries
+#pragma pack(push, 1)
+
 //
 // A list of the available kinds of drawing surface.
 // Drivers must support drawing onto these.
@@ -89,5 +92,8 @@ typedef struct sg_sound_data
     // private data used by backend
     void * data;
 } sg_sound_data;
+
+// Stop aligning structs to one byte boundaries
+#pragma pack(pop)
 
 #endif

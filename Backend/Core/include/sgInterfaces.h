@@ -9,6 +9,9 @@
 #ifndef sgsdl2_sgInterfaces_h
 #define sgsdl2_sgInterfaces_h
 
+// Align structs to one byte boundaries
+#pragma pack(push, 1)
+
 #ifndef __cplusplus
 #include <stdbool.h>
 #endif
@@ -279,5 +282,8 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+// Stop aligning structs to one byte boundaries
+#pragma pack(pop)
 
 #endif
