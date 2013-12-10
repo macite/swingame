@@ -130,7 +130,7 @@ void _sgsdl2_create_initial_window()
     _sgsdl2_initial_window = (sg_window_be *) malloc(sizeof(sg_window_be));
     _sgsdl2_initial_window->window = SDL_CreateWindow("",
                                          0, 0, 1, 1,
-                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN ); //TODO: Log SDL issue re drawing using hidden windows
+                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_BORDERLESS); //TODO: Log SDL issue re drawing using hidden windows
     
     if ( ! _sgsdl2_initial_window->window )
     {
@@ -518,6 +518,10 @@ void _sgsdl2_clear_window(sg_drawing_surface *window, color clr)
     if ( window_be )
     {
         _sgsdl2_do_clear(window_be->renderer, clr);
+		
+		//ATI cards are lazy, won't draw the clear screen until you actually draw something else on top of it
+		SDL_Rect rect = { 0, 0, 1, 1 }; 
+		SDL_RenderFillRect(window_be->renderer, &rect);
     }
 }
 
@@ -571,7 +575,6 @@ void sgsdl2_refresh_window(sg_drawing_surface *window)
     
     if ( window_be )
     {
-        SDL_RenderPresent(window_be->renderer);
         SDL_SetRenderTarget(window_be->renderer, NULL);
         
         SDL_RenderCopy(window_be->renderer, window_be->backing, NULL, NULL);
