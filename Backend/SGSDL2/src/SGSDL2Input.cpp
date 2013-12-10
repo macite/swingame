@@ -98,7 +98,20 @@ void sgsdl2_process_events()
     }
 }
 
+bool sgsdl2_window_close_requested(sg_drawing_surface* surf) 
+{
+  if (surf->kind == SGDS_Window) 
+  {
+    if (((sg_window_be*)surf->_data)->close_requested)
+    {
+      return true; 
+    }
+  }
+  return false; 
+}
+
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
     functions->input.process_events = & sgsdl2_process_events;
+    functions->input.window_close_requested = & sgsdl2_window_close_requested;
 }
