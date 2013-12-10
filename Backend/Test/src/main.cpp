@@ -11,6 +11,7 @@
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
+#include "test_input.h"
 
 #define SHAPE_COUNT 60
 
@@ -18,31 +19,8 @@ using namespace std;
 
 sg_interface * _sg_functions = NULL;
 
-void _callback_do_quit()
-{
-    cout << "Do Quit" << endl;
-    exit(0);
-}
-
-void _callback_handle_key_down(int key_char)
-{
-    cout << "Key Down " << key_char << endl;
-}
-
-void _callback_handle_key_up(int key_char)
-{
-    cout << "Key Up " << key_char << endl;
-}
-
-void _callback_handle_mouse_up(int mouse_button)
-{
-    cout << "Mouse up " << mouse_button << endl;
-}
-
-void _callback_handle_mouse_down(int mouse_button)
-{
-    cout << "Mouse down " << mouse_button << endl;
-}
+// images drawn in tests
+sg_drawing_surface img, img2;
 
 
 //
@@ -50,19 +28,11 @@ void _callback_handle_mouse_down(int mouse_button)
 // and initialised?
 //
 bool test_core_functions()
-{
-    sg_input_callbacks callbacks;
-    
-    callbacks.do_quit = &_callback_do_quit;
-    callbacks.handle_key_down = & _callback_handle_key_down;
-    callbacks.handle_key_up = & _callback_handle_key_up;
-    callbacks.handle_mouse_up = &_callback_handle_mouse_up;
-    callbacks.handle_mouse_down = &_callback_handle_mouse_down;
-    
+{    
     cout << "Testing Core Functions!" << endl;
     
     cout << "Calling load_sg..." << endl;
-    _sg_functions = sg_load(callbacks);
+    _sg_functions = sg_load(get_input_callbacks());
     
     if ( !_sg_functions )
     {
@@ -76,10 +46,17 @@ bool test_core_functions()
     return false == _sg_functions->has_error;
 }
 
+//
+// The _bmp_wnd is a hack to allow the drawing test functions to be called with a
+// bitmap surface rather than a window. In these cases "refreshing" the bitmap would
+// have no effect. In these cases the _bmp_wnd is set to an open window that the bitmap
+// can be drawn to, and this window is then refreshed.
+//
 sg_drawing_surface *_bmp_wnd = NULL;
 
 void refresh_or_draw(sg_drawing_surface *surf)
 {
+    // if we are refreshing a window... do normal processing
     if (surf->kind == SGDS_Window)
     {
       _sg_functions->input.process_events(); 
@@ -92,65 +69,71 @@ void refresh_or_draw(sg_drawing_surface *surf)
     }
     else
     {
+        // the test has asked to "refresh" a bitmap - use the _bmp_wnd to show the new
+        // state of surf
         _sg_functions->image.draw_bitmap(surf, _bmp_wnd, 10, 10);
         _sg_functions->graphics.refresh_window(_bmp_wnd);
     }
-
 }
 
 
-void test_colors(sg_drawing_surface *window)
+void test_colors(sg_drawing_surface *window_arr, int sz)
 {
-    cout << "Testing Colors - R,G,B,W" << endl;
-    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
+    cout << "Testing Colors" << endl;
     
-    color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+    for (int w = 0; w < sz; w++)
+    {
+        cout << " - Clearning the surface to..." << endl;
+        cout << "   - RED" << endl;
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 0.0, 0.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+        _sg_functions->utils.delay(200);
+        
+        cout << "   - WHITE" << endl;
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+        _sg_functions->utils.delay(500);
+        
+        cout << "   - GREEN" << endl;
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 1.0, 0.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+        _sg_functions->utils.delay(200);
+       
+        cout << "   - BLUE" << endl;
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {0.0, 0.0, 1.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+        _sg_functions->utils.delay(200);
+     
+        cout << "   - WHITE" << endl;
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+        _sg_functions->utils.delay(200);
+    }
+}
 
-    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
-    cout << "Should be 1, 0, 0, 1" << endl;
+void test_read_pixels(sg_drawing_surface *window)
+{
+    cout << "Testing Reading of Pixel data" << endl;
+    
+    
+    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
+    color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+    
+    cout << " - Color at  10,10  is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "   -                  Match 1,0,0,1" << endl;
     
     clr = _sg_functions->graphics.read_pixel(window, -10, -10);
-    cout << " Color at -10,-10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
-    cout << "Should be 0, 0, 0, 0" << endl;
-
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
-
+    cout << " - Color at -10,-10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "                      Match 0,0,0,0" << endl;
+    
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
     refresh_or_draw(window);
-    _sg_functions->utils.delay(500);
-    
     clr = _sg_functions->graphics.read_pixel(window, 10, 10);
     
-    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
-    cout << "Should be 1, 1, 1, 1" << endl;
-    
-    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 1.0, 0.0, 1.0});
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
-    
-    clr = _sg_functions->graphics.read_pixel(window, 10, 10);
-    
-    cout << " Color at 10,10 is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
-    cout << "Should be 0, 1, 0, 1" << endl;
-    
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
-
-
-    _sg_functions->graphics.clear_drawing_surface(window, {0.0, 0.0, 1.0, 1.0});
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
-    
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
-
-    _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
-    refresh_or_draw(window);
-    _sg_functions->utils.delay(200);
+    cout << " - Color at  10,10  is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
+    cout << "   -                  Match 1,1,1,1" << endl;
 }
+
 
 color random_color()
 {
@@ -310,14 +293,13 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
 {
 	_sg_functions->input.process_events();
     color clr = { 0.0, 0.0, 0.0, 1.0 };
-    cout << "executed" << endl;
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
     _sg_functions->input.process_events();
     }
-	cout << "executed" << endl;
+    
     _sg_functions->input.process_events();
     for (int i = 0; i < SHAPE_COUNT; i++)
     {
@@ -337,7 +319,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
 			refresh_or_draw(&window_arr[w]);
         }
     }
-	cout << "executed" << endl;
+    
     _sg_functions->input.process_events();
     for (int w = 0; w < sz; w++)
     {
@@ -361,7 +343,6 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
         refresh_or_draw(&window_arr[w]);
 		_sg_functions->input.process_events();
 	}
-cout << "executed" << endl;
 }
 
 
@@ -567,52 +548,45 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
         _sg_functions->graphics.resize(&window_arr[i], 320, 240);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(500);
+        _sg_functions->utils.delay(2000);
         
         _sg_functions->graphics.resize(&window_arr[i], 640, 480);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(500);
+        _sg_functions->utils.delay(2000);
 
         _sg_functions->graphics.resize(&window_arr[i], 800, 600);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(500);
+        _sg_functions->utils.delay(2000);
         
         _sg_functions->graphics.resize(&window_arr[i], 1024, 768);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(1000);
+        _sg_functions->utils.delay(2000);
         
         _sg_functions->graphics.resize(&window_arr[i], w, h);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1.0f, 1.0f, 1.0f, 1.0f});
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(500);
+        _sg_functions->utils.delay(2000);
     }
 
 }
 
-void test_events(sg_drawing_surface * window_arr, int sz)
+void test_bitmaps(sg_drawing_surface * window_arr, int sz)
 {
-	cout << "Processing Events (REMOVED)" << endl;
-	//return;   
-    for (int i = 0; i < 300; i++)
+    for (int i = 0; i < sz; i++)
     {
-        _sg_functions->input.process_events();
-        
-        for (int w = 0; w < sz; w++)
-        {
-            _sg_functions->graphics.refresh_window(&window_arr[w]);
-        }
+        _sg_functions->image.draw_bitmap( &img, &window_arr[i], 0, 0);
+        _sg_functions->image.draw_bitmap( &img2, &window_arr[i], 50, 50);
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
     }
     
-    cout << "Ended Events" << endl;
+    _sg_functions->utils.delay(300);
+    _sg_functions->input.process_events();
 }
-
-
-sg_drawing_surface img, img2;
 
 bool test_basic_drawing()
 {
@@ -620,27 +594,26 @@ bool test_basic_drawing()
     
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
-    
+
+    // Create the images
     img = _sg_functions->image.load_bitmap("on_med.png");
+    img2 = _sg_functions->image.create_bitmap(100, 50);
+    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
+
     
-    _sg_functions->image.draw_bitmap( &img, &window, 0, 0);
-    _sg_functions->graphics.refresh_window(&window);
-    //_sg_functions->utils.delay(3000);
-    
-    test_events(&window, 1);
-    
-    test_colors(&window);
+    test_colors(&window, 1);
+    test_read_pixels(&window);
     test_positions(&window, 1);
     test_alpha(&window, 1);
 
     test_clip( &window, 1);
     test_pixels( &window, 1);
     
-    //_sg_functions->graphics.show_fullscreen(&window, true);
+    _sg_functions->graphics.show_fullscreen(&window, true);
 
     test_rects( &window, 1);
     
-    //_sg_functions->graphics.show_fullscreen(&window, false);
+    _sg_functions->graphics.show_fullscreen(&window, false);
     
     test_triangles( &window, 1);
     test_circles( &window, 1);
@@ -649,32 +622,15 @@ bool test_basic_drawing()
     
     test_ellipses( &window, 1);
     test_lines( &window, 1);
-    
-    img2 = _sg_functions->image.create_bitmap(100, 50);
-    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
-    _sg_functions->image.draw_bitmap(&img2, &window, 50, 50);
-    _sg_functions->graphics.refresh_window(&window);
-    _sg_functions->utils.delay(3000);
 
+    // Test the bitmaps - changing img2 in between
+    test_bitmaps( &window, 1);
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
+    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
+    test_bitmaps( &window, 1);
     
-    _sg_functions->image.draw_bitmap(&img, &window, 100, 100);
-    _sg_functions->image.draw_bitmap(&img2, &window, 100, 100);
-    _sg_functions->graphics.refresh_window(&window);
-    _sg_functions->utils.delay(3000);
+    test_input(&window, 1);
 
-//    int sz = 100 * 50;
-//    int pixels[ sz ];
-//    _sg_functions->graphics.to_pixels(&img2, pixels, sz);
-//    
-//    for (int i = 0; i < sz; i++)
-//    {
-//        cout << std::hex << pixels[i] << " ";
-//        if ( (i+1) % 100 == 0) {
-//            cout << endl;
-//        }
-//    }
-    
     _sg_functions->graphics.close_drawing_surface(&window);
     
     return false == _sg_functions->has_error;
@@ -682,8 +638,7 @@ bool test_basic_drawing()
 
 bool test_window_operations()
 {
-    cout << "Testing Window Operations! REMOVED" << endl;
-	//return true;
+    cout << "Testing Window Operations!" << endl;
 	_sg_functions->input.process_events();
 	
     sg_drawing_surface w[2];
@@ -698,17 +653,7 @@ bool test_window_operations()
     if ( w[0].height != 600 ) cout << " >> Error with w[0] height! " << w[0].height << endl;
     if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
     
-    _sg_functions->image.draw_bitmap( &img, &w[0], 0, 0);
-    _sg_functions->image.draw_bitmap( &img2, &w[0], 50, 50);
-    _sg_functions->graphics.refresh_window(&w[0]);
-
-    _sg_functions->image.draw_bitmap( &img, &w[1], 0, 0);
-    _sg_functions->image.draw_bitmap( &img2, &w[1], 50, 50);
-    _sg_functions->graphics.refresh_window(&w[1]);
-
-    _sg_functions->utils.delay(300);
-_sg_functions->input.process_events();
-    
+    test_colors(w, 2);
     test_clip(w, 2);
     test_pixels(w, 2);
     test_rects(w, 2);
@@ -716,8 +661,9 @@ _sg_functions->input.process_events();
     test_circles(w, 2);
     test_ellipses(w, 2);
     test_lines(w, 2);
+    test_bitmaps(w, 2);
     
-    test_events(w, 2);
+    test_input(w, 2);
     
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
@@ -739,7 +685,7 @@ bool test_bitmap_dest_drawing()
     refresh_or_draw(&bmp);
     _sg_functions->utils.delay(3000);
     
-    test_colors(&bmp);
+    test_colors(&bmp, 1);
     test_positions(&bmp, 1);
     test_alpha(&bmp, 1);
     

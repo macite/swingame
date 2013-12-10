@@ -150,20 +150,35 @@ void sgsdl2_process_events()
     }
 }
 
-bool sgsdl2_window_close_requested(sg_drawing_surface* surf) 
+int sgsdl2_window_close_requested(sg_drawing_surface* surf)
 {
   if (surf->kind == SGDS_Window) 
   {
     if (((sg_window_be*)surf->_data)->close_requested)
     {
-      return true; 
+      return -1;
     }
   }
-  return false; 
+  return 0;
+}
+
+int sgsdl2_key_pressed(int key_code)
+{
+    const Uint8 *keys;
+    
+    int sz;
+
+    keys = SDL_GetKeyboardState(&sz);
+    
+    if ( (! keys) || sz <= key_code ) return 0;
+    
+    if ( *(keys + key_code) == 1 ) return -1;
+    else return 0;
 }
 
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
     functions->input.process_events = & sgsdl2_process_events;
     functions->input.window_close_requested = & sgsdl2_window_close_requested;
+    functions->input.key_pressed= &sgsdl2_key_pressed;
 }

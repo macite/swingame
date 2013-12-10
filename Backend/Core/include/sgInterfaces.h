@@ -38,7 +38,7 @@ extern "C" {
     typedef void (sg_empty_procedure)( void );
     
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
-    typedef bool (sg_drawing_surface_bool_fn)(sg_drawing_surface *); 
+    typedef int  (sg_drawing_surface_bool_fn)(sg_drawing_surface *);
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
     typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
     typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
@@ -83,6 +83,7 @@ extern "C" {
     typedef void (sg_floatp_proc)( float val );
     
     typedef float (sg_float_fn)( );
+    typedef int sg_int_intp_fn( int val );
     
     typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     
@@ -240,6 +241,8 @@ extern "C" {
     {
         sg_empty_procedure * process_events;
         sg_drawing_surface_bool_fn * window_close_requested;
+        
+        sg_int_intp_fn * key_pressed;
     } sg_input_interface;
 
     
