@@ -1277,17 +1277,17 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
             // Clear new window surface
             SDL_RenderSetClipRect(window_be->renderer, NULL);
             SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
-
             SDL_RenderClear(window_be->renderer);
             
             // Create new backing
             window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
             
+            // Copy across old display data
             SDL_SetRenderTarget(window_be->renderer, window_be->backing);
             SDL_RenderClear(window_be->renderer);
-            
             SDL_RenderCopy(window_be->renderer, old, NULL, &dst);
-            
+            SDL_RenderPresent(window_be->renderer);
+
             // Restore clipping
             if ( window_be->clipped )
             {
