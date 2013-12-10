@@ -13,11 +13,11 @@
 #include "sgBackendUtils.h"
 
 
-sg_window_be ** _sgsdl2_open_windows = NULL;
-int _sgsdl2_num_open_windows = 0;
+static sg_window_be ** _sgsdl2_open_windows = NULL;
+static int _sgsdl2_num_open_windows = 0;
 
-sg_bitmap_be ** _sgsdl2_open_bitmaps = NULL;
-int _sgsdl2_num_open_bitmaps = 0;
+static sg_bitmap_be ** _sgsdl2_open_bitmaps = NULL;
+static int _sgsdl2_num_open_bitmaps = 0;
 
 //
 // Misc
@@ -1068,6 +1068,7 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, color clr, float *data, i
             bitmap_be->clipped = true;
             //HACK: Current hack to fix SDL clip rect error
             bitmap_be->clip = { x1, surface->height - h + y1, w, h };
+            break;
         }
             
         default:
