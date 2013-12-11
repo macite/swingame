@@ -9,6 +9,10 @@
 #ifndef __sgsdl2__sgBackendUtils__
 #define __sgsdl2__sgBackendUtils__
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#define WINDOWS
+#endif
+
 #include "sgInterfaces.h"
 
 //
