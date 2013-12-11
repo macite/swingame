@@ -16,3 +16,4 @@ CoreSDK/trace.gdb
 *.gch
 *.so
 *.swo
+tags
