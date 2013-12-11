@@ -89,7 +89,7 @@ implementation
 
 	  	colorFG := ToSDLColor(clrFg);
 	  	bgTransparent := TransparencyOf(clrBg) < 255;
-	  // If there's nothing to draw, return NULL
+      { If there's nothing to draw, return NULL }
 	  	if (Length(str) = 0) or (font = nil) then exit;
 
 	  // This is the surface that everything is printed to.
@@ -376,7 +376,7 @@ implementation
 	end;
 		
 	procedure StringColorProcedure(dest : Bitmap; x,y : single; theText : String; theColor:Color); 
-	var
+	ar
 	  surf : PSDL_Surface;
 	  texture : PSDL_Texture;
     offset : Rectangle;
@@ -422,9 +422,9 @@ implementation
 		TextDriver.GetFontStyle := @GetFontStyleProcedure;
 		TextDriver.SizeOfText := @SizeOfTextProcedure;
 		TextDriver.SizeOfUnicode := @SizeOfUnicodeProcedure;
-		TextDriver.Quit := @QuitProcedure;
+		TextDriver.Quit := @QuitProcedure;                             // - No longer required
 		TextDriver.GetError := @GetErrorProcedure;
-		TextDriver.Init := @InitProcedure;
+		TextDriver.Init := @InitProcedure;                            // - No longer required
 		TextDriver.StringColor  := @StringColorProcedure;
 	end;
 	

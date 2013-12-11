@@ -261,8 +261,14 @@ extern "C" {
         sg_empty_procedure * stop_unicode_text_input; 
     } sg_input_interface;
 
-    
-    
+    //
+    // Text functions
+    //
+    typedef struct sg_text_interface
+    {
+          
+    } sg_text_interface;
+
     //
     // All sg functions.
     //
@@ -288,6 +294,7 @@ extern "C" {
         sg_graphics_interface   graphics;
         sg_image_interface      image;
         sg_input_interface      input;
+        sg_text_interface       text;
         sg_utils_interface      utils;
         
         //

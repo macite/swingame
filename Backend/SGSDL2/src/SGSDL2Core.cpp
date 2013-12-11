@@ -17,6 +17,7 @@
 #include "SGSDL2Audio.h"
 #include "SGSDL2Utils.h"
 #include "SGSDL2Input.h"
+#include "SGSDL2Text.h"
 
 
 using namespace std;
@@ -55,6 +56,7 @@ void init_sgsdl2()
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
     
     sgsdl2_init_audio();
+    sgsdl2_init_text();
     
     sgsdk_setup_displays();
 }
@@ -146,6 +148,8 @@ void sgsdl2_finalise()
     
     free(_sgsdk_system_data.displays);
     
+    sgsdl2_finalize_text();
+
     SDL_Quit();
 }
 
@@ -166,6 +170,7 @@ sg_interface * sg_load(sg_input_callbacks callbacks)
     sgsdl2_load_graphics_fns(&_functions);
     sgsdl2_load_image_fns(&_functions);
     sgsdl2_load_input_fns(&_functions);
+    sgsdl2_load_text_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     
     return &_functions;
