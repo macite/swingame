@@ -20,6 +20,8 @@
       <itemPath>../../../src/SGSDL2Graphics.h</itemPath>
       <itemPath>../../../src/SGSDL2Input.cpp</itemPath>
       <itemPath>../../../src/SGSDL2Input.h</itemPath>
+      <itemPath>../../../src/SGSDL2Text.cpp</itemPath>
+      <itemPath>../../../src/SGSDL2Text.h</itemPath>
       <itemPath>../../../src/SGSDL2Utils.cpp</itemPath>
       <itemPath>../../../src/SGSDL2Utils.h</itemPath>
     </logicalFolder>
@@ -58,6 +60,7 @@
             <pElem>../../../external/SDL_image</pElem>
             <pElem>../../../external/SDL_mixer</pElem>
             <pElem>../../../external/SDL_net</pElem>
+            <pElem>../../../external/SDL_ttf</pElem>
           </incDir>
         </ccTool>
         <archiverTool>
@@ -100,6 +103,10 @@
       <item path="../../../src/SGSDL2Input.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Input.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/SGSDL2Text.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/SGSDL2Text.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Utils.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -164,6 +171,10 @@
       <item path="../../../src/SGSDL2Input.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Input.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../src/SGSDL2Text.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../src/SGSDL2Text.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Utils.cpp" ex="false" tool="1" flavor2="0">
       </item>

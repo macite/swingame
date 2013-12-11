@@ -7,6 +7,8 @@
       <itemPath>../../../../Test/src/test_audio.h</itemPath>
       <itemPath>../../../../Test/src/test_input.cpp</itemPath>
       <itemPath>../../../../Test/src/test_input.h</itemPath>
+      <itemPath>../../../../Test/src/test_text.cpp</itemPath>
+      <itemPath>../../../../Test/src/test_text.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -56,7 +58,7 @@
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
-          <commandLine>-lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid</commandLine>
+          <commandLine>-lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf</commandLine>
         </linkerTool>
       </compileType>
       <item path="../../../../Test/src/main.cpp" ex="false" tool="1" flavor2="0">
@@ -74,6 +76,10 @@
             flavor2="0">
       </item>
       <item path="../../../../Test/src/test_input.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_text.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_text.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -110,6 +116,10 @@
             flavor2="0">
       </item>
       <item path="../../../../Test/src/test_input.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_text.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../../../Test/src/test_text.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

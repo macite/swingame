@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Core.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Graphics.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o \
+	${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o
 
 
@@ -93,6 +94,11 @@ ${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o: ../../../src/SGSDL2Input.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o ../../../src/SGSDL2Input.cpp
+
+${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o: ../../../src/SGSDL2Text.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o ../../../src/SGSDL2Text.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o: ../../../src/SGSDL2Utils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
