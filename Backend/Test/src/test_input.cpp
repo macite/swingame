@@ -48,6 +48,11 @@ void _callback_handle_mouse_down(int mouse_button)
     cout << "Mouse down " << mouse_button << endl;
 }
 
+void _callback_handle_input_text(char* text)
+{
+  cout << "Text entered: " << text << endl; 
+}
+
 sg_input_callbacks get_input_callbacks()
 {
     sg_input_callbacks callbacks;
@@ -57,6 +62,8 @@ sg_input_callbacks get_input_callbacks()
     callbacks.handle_key_up = & _callback_handle_key_up;
     callbacks.handle_mouse_up = &_callback_handle_mouse_up;
     callbacks.handle_mouse_down = &_callback_handle_mouse_down;
+
+    callbacks.handle_input_text = &_callback_handle_input_text; 
 
     return callbacks;
 }
@@ -103,10 +110,29 @@ void test_key_press()
 }
 
 
+void test_unicode_input() 
+{
+  cout << "Testing unicode input" << endl; 
+  cout << " - enter some unicode " << endl; 
+  _sg_functions->input.start_unicode_text_input(); 
+
+  _sg_functions->input.process_events();
+  while ( ! _sg_functions->input.key_pressed('e') )
+  {
+      _sg_functions->input.process_events();
+  }
+  _sg_functions->input.stop_unicode_text_input(); 
+  _sg_functions->utils.delay(1000);
+}
+
 
 void test_input(sg_drawing_surface * window_arr, int sz)
 {
     test_events(window_arr, sz);
     test_key_press();
+    test_unicode_input(); 
 }
+
+
+
 

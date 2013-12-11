@@ -36,7 +36,10 @@ extern "C" {
     } color;
     
     typedef void (sg_empty_procedure)( void );
+
     
+    typedef char* (sg_charp_fn)(); 
+    typedef void (sg_charp_proc)(char* text); 
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef int  (sg_drawing_surface_bool_fn)(sg_drawing_surface *);
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
@@ -236,6 +239,10 @@ extern "C" {
         
         sg_intp_proc * handle_mouse_up;
         sg_intp_proc * handle_mouse_down;
+
+        sg_charp_proc * handle_input_text; 
+
+
     } sg_input_callbacks;
     
     //
@@ -245,10 +252,12 @@ extern "C" {
     {
         sg_empty_procedure * process_events;
         sg_drawing_surface_bool_fn * window_close_requested;
-        
         sg_int_intp_fn * key_pressed;
         sg_mouse_state_fn * mouse_state;
         sg_mouse_state_fn * mouse_relative_state;
+
+        sg_empty_procedure * start_unicode_text_input; 
+        sg_empty_procedure * stop_unicode_text_input; 
     } sg_input_interface;
 
     

@@ -29,9 +29,10 @@ enum test_options
   BASIC_DRAWING = 1, 
   WINDOW_OPERATIONS = 2,  
   BITMAP_DRAWING = 4, 
-  AUDIO = 8
-
+  AUDIO = 8,
+  INPUT = 16
 }; 
+
 enum test_drawing_options 
 {
   TEST_COLORS = 1, 
@@ -55,6 +56,7 @@ void print_options()
     cout << "2: window operations"  << endl; 
     cout << "4: bitmap drawing"  << endl; 
     cout << "8: audio "  << endl; 
+    cout << "16: input "  << endl; 
 }
 
 void print_drawing_options() 
@@ -719,12 +721,12 @@ bool test_basic_drawing(int drawing_test_run)
       test_lines( &window, 1);
     }
 
+    // Test the bitmaps - changing img2 in between
+    test_bitmaps( &window, 1);
+    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
+    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
     if (drawing_test_run & TEST_BITMAPS) 
     {
-      // Test the bitmaps - changing img2 in between
-      test_bitmaps( &window, 1);
-      _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
-      _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
 
       test_bitmaps( &window, 1);
     }
@@ -748,8 +750,6 @@ bool test_window_operations()
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
     
-
-
 
     _sg_functions->graphics.show_border(&w[0], false);
     
@@ -842,8 +842,6 @@ int main(int argc, const char * argv[])
 {
   char keycode_pressed; 
     cout << "Starting driver backend test" << endl;
-    
-
 
     if ( ! test_core_functions() )
     {
@@ -869,7 +867,6 @@ int main(int argc, const char * argv[])
       print_drawing_options(); 
       scanf("%d", &test_drawing_run); 
     }
-    //test_run = cstdlib::stoi(keycode_pressed); 
 
     output_system_details();
     
@@ -899,6 +896,14 @@ int main(int argc, const char * argv[])
     if (test_run & AUDIO) 
     {
       test_audio();
+    }
+
+    if (test_run & INPUT)
+    {
+
+      sg_drawing_surface w[1];
+      w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
+      test_input(w, 1);
     }
     
     _sg_functions->finalise();

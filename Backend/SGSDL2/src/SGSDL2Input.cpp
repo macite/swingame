@@ -145,6 +145,24 @@ void sgsdl2_process_events()
                 }
                 break;
             }
+            case SDL_TEXTEDITING:
+            {
+                if (_functions.input_callbacks.handle_input_text)
+                {
+                  char* text = event.edit.text; 
+                  _functions.input_callbacks.handle_input_text(text);
+                }
+                break; 
+            }
+            case SDL_TEXTINPUT: 
+            { 
+                if (_functions.input_callbacks.handle_input_text)
+                {
+                  char* text = event.text.text; 
+                  _functions.input_callbacks.handle_input_text(text);
+                }
+                break; 
+            }
             
         }
     }
@@ -176,6 +194,7 @@ int sgsdl2_key_pressed(int key_code)
     else return 0;
 }
 
+
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
     functions->input.process_events = & sgsdl2_process_events;
@@ -183,4 +202,6 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.key_pressed= &sgsdl2_key_pressed;
     functions->input.mouse_state = &SDL_GetMouseState;  // call it directly
     functions->input.mouse_relative_state = &SDL_GetRelativeMouseState;
+    functions->input.start_unicode_text_input = &SDL_StartTextInput; 
+    functions->input.stop_unicode_text_input = &SDL_StopTextInput; 
 }
