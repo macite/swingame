@@ -539,6 +539,7 @@ bool test_alpha(sg_drawing_surface *window_arr, int sz)
 
 void test_resize(sg_drawing_surface * window_arr, int sz)
 {
+    cout << "Testing resize" << endl;
     for (int i = 0; i < sz; i++)
     {
         int w, h;
@@ -548,29 +549,29 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
         _sg_functions->graphics.resize(&window_arr[i], 320, 240);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(2000);
+        _sg_functions->utils.delay(1000);
         
         _sg_functions->graphics.resize(&window_arr[i], 640, 480);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(2000);
+        _sg_functions->utils.delay(1000);
 
         _sg_functions->graphics.resize(&window_arr[i], 800, 600);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(2000);
+        _sg_functions->utils.delay(1000);
         
         _sg_functions->graphics.resize(&window_arr[i], 1024, 768);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], random_color());
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(2000);
+        _sg_functions->utils.delay(1000);
         
         _sg_functions->graphics.resize(&window_arr[i], w, h);
         _sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1.0f, 1.0f, 1.0f, 1.0f});
         _sg_functions->graphics.refresh_window(&window_arr[i]);
-        _sg_functions->utils.delay(2000);
+        _sg_functions->utils.delay(1000);
     }
 
 }
