@@ -182,4 +182,5 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.window_close_requested = & sgsdl2_window_close_requested;
     functions->input.key_pressed= &sgsdl2_key_pressed;
     functions->input.mouse_state = &SDL_GetMouseState;  // call it directly
+    functions->input.mouse_relative_state = &SDL_GetRelativeMouseState;
 }

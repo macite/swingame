@@ -150,8 +150,8 @@ implementation
     InputDriver.CheckQuit             := @CheckQuitProcedure;               // -
     InputDriver.ProcessEvents         := @ProcessEventsProcedure;           // #
     InputDriver.GetKeyState           := @GetKeyStateProcedure;             // - NEVER USED
-    InputDriver.GetMouseState         := @GetMouseStateProcedure;
-    InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;
+    InputDriver.GetMouseState         := @GetMouseStateProcedure;           // #
+    InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;   
     InputDriver.ShowCursor            := @ShowCursorProcedure;
     InputDriver.Button                := @ButtonProcedure;
     InputDriver.WarpMouse             := @WarpMouseProcedure;

@@ -248,6 +248,7 @@ extern "C" {
         
         sg_int_intp_fn * key_pressed;
         sg_mouse_state_fn * mouse_state;
+        sg_mouse_state_fn * mouse_relative_state;
     } sg_input_interface;
 
     

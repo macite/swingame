@@ -77,7 +77,10 @@ void test_events(sg_drawing_surface * window_arr, int sz)
         _sg_functions->input.process_events();
         
         mouse_button = _sg_functions->input.mouse_state(&x, &y);
-        cout << "Mouse at " << x << "," << y << endl;
+        cout << "Mouse       at " << x << "," << y << "( " << mouse_button << " )" << endl;
+
+        mouse_button = _sg_functions->input.mouse_relative_state(&x, &y);
+        cout << "Mouse relative " << x << "," << y << "( " << mouse_button << " )" << endl;
         
         for (int w = 0; w < sz; w++)
         {
