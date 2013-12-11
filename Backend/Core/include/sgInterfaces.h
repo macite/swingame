@@ -99,6 +99,10 @@ extern "C" {
     
     typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dest, int x, int y );
     
+    //
+    // Input related
+    //
+    typedef unsigned int (sg_mouse_state_fn)(int *x, int *y);
     
     //
     // Utility relation functions
@@ -243,6 +247,7 @@ extern "C" {
         sg_drawing_surface_bool_fn * window_close_requested;
         
         sg_int_intp_fn * key_pressed;
+        sg_mouse_state_fn * mouse_state;
     } sg_input_interface;
 
     
