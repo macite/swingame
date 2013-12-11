@@ -174,6 +174,47 @@ void _sgsdl2_create_initial_window()
     _sgsdl2_num_open_windows = 1;
 }
 
+SDL_Texture* _sgsdl2_copy_texture(SDL_Texture *src_tex, SDL_Renderer *src_renderer, SDL_Renderer *dest_renderer) 
+{	
+	// Read from initial window
+	void *pixels;
+	int w, h;
+
+	SDL_QueryTexture(src_tex, NULL, NULL, &w, &h);
+	pixels = malloc(static_cast<size_t>(4 * w * h));
+
+	SDL_SetRenderTarget(src_renderer, src_tex);
+	SDL_RenderReadPixels(src_renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, 4 * w);
+
+	SDL_Texture *tex = SDL_CreateTexture(dest_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+	SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+
+	SDL_UpdateTexture(tex, NULL, pixels, 4 * w);
+	free(pixels);
+
+	// Restore default target
+	SDL_SetRenderTarget(src_renderer, NULL);
+	
+	return tex;
+}
+
+void _sgsdl2_create_texture_for_bitmap_window(sg_bitmap_be *current_bmp, int src_window_idx, int dest_window_idx) 
+{
+	sg_window_be *window = _sgsdl2_open_windows[dest_window_idx];
+	
+	// if the surface exists, use that to create the new bitmap... otherwise extract from texture
+	if (current_bmp->surface)
+	{
+		current_bmp->texture[dest_window_idx] = SDL_CreateTextureFromSurface(window->renderer, current_bmp->surface );
+	}
+	else
+	{
+		SDL_Texture *src_tex = current_bmp->texture[src_window_idx];
+		current_bmp->texture[dest_window_idx] = _sgsdl2_copy_texture(src_tex, 
+				_sgsdl2_open_windows[src_window_idx]->renderer, window->renderer);
+	}	
+}
+
 //
 // Add a window to the array of windows, and update all textures so
 // they can be drawn to this window
@@ -212,38 +253,8 @@ void _sgsdl2_add_window(sg_window_be * window)
         if ( !textures ) exit (-1); // out of memory
 
         current_bmp->texture = textures;
-        
-        // if the surface exists, use that to create the new bitmap... otherwise extract from texture
-        if (current_bmp->surface)
-        {
-            current_bmp->texture[idx] = SDL_CreateTextureFromSurface(window->renderer, current_bmp->surface );
-        }
-        else
-        {
-            // Read from initial window
-            void *pixels;
-            int w, h;
-            
-            SDL_Texture *orig_tex = current_bmp->texture[0];
-            
-            SDL_QueryTexture(orig_tex, NULL, NULL, &w, &h);
-            pixels = malloc(static_cast<size_t>(4 * w * h));
-            
-            SDL_Renderer *orig_renderer = _sgsdl2_open_windows[0]->renderer;
-            SDL_SetRenderTarget(orig_renderer, orig_tex);
-            SDL_RenderReadPixels(orig_renderer, NULL, SDL_PIXELFORMAT_RGBA8888, pixels, 4 * w);
-            
-            SDL_Texture *tex = SDL_CreateTexture(window->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
-            SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
-            
-            SDL_UpdateTexture(tex, NULL, pixels, 4 * w);
-            free(pixels);
-            
-            current_bmp->texture[idx] = tex;
-            
-            // Restore default target
-            SDL_SetRenderTarget(orig_renderer, NULL);
-        }
+		
+		_sgsdl2_create_texture_for_bitmap_window(current_bmp, 0, idx);
     }
 }
 
@@ -418,7 +429,43 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 //--------------------------------------------------------------------------------------
 
 
-sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
+void _sgsdl2_open_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
+{
+    window_be->window = SDL_CreateWindow(title,
+                                         SDL_WINDOWPOS_CENTERED,
+                                         SDL_WINDOWPOS_CENTERED,
+                                         width,
+                                         height,
+                                         options | SDL_WINDOW_OPENGL);
+    
+    if ( ! window_be->window )
+    {
+        set_error_state(SDL_GetError());
+        free ( window_be );
+        return;
+    }
+    
+    window_be->renderer = SDL_CreateRenderer(window_be->window,
+                                             -1,
+                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
+    
+   //std::cout << "Renderer is " << window_be->renderer << std::endl;
+    
+    SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
+    SDL_RenderClear(window_be->renderer);
+    SDL_RenderPresent(window_be->renderer);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+    
+    window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+    
+    SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+    SDL_RenderClear(window_be->renderer);
+	
+	_sgsdl2_add_window(window_be);
+}
+
+sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height) 
 {
     sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
 
@@ -431,39 +478,10 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
         set_error_state("Unable to open window: Out of memory");
         return result;
     }
-
-    window_be->window = SDL_CreateWindow(title,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         SDL_WINDOWPOS_CENTERED,
-                                         width,
-                                         height,
-                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
-    
-    if ( ! window_be->window )
-    {
-        set_error_state(SDL_GetError());
-        free ( window_be );
-        return result;
-    }
-    
-    result._data = window_be;
-    
-    window_be->renderer = SDL_CreateRenderer(window_be->window,
-                                             -1,
-                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
-    
-//    std::cout << "Renderer is " << window_be->renderer << std::endl;
-    
-    SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
-    SDL_RenderClear(window_be->renderer);
-    SDL_RenderPresent(window_be->renderer);
-    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-    
-    window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
-    
-    SDL_SetRenderTarget(window_be->renderer, window_be->backing);
-    SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
-    SDL_RenderClear(window_be->renderer);
+	
+	_sgsdl2_open_window(title, width, height, SDL_WINDOW_SHOWN, window_be);
+	
+	result._data = window_be;
     
     window_be->clipped = false;
     window_be->clip = {0,0,0,0};
@@ -477,10 +495,8 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     result.width = width;
     result.height = height;
-    
-    _sgsdl2_add_window(window_be);
-
-    return result;
+	
+	return result;
 }
 
 void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
@@ -1215,7 +1231,42 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
     {
         case SGDS_Window:
         {
-            SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);
+#ifdef WINDOWS
+			//There's a Windows-specific bug where turning the border off after 
+			//  showing the Window causes a small amount of display corruption.
+			//  The window is not really borderless either, the border just becomes white.
+			//As a workaround, a new window will be opened, the current backing texture
+			//  copied to it, and the current window closed.
+			
+			// get backing texture .. copy before free
+			// window
+			// renderer
+			// ... free before end
+			SDL_Texture *backing = window_be->backing;
+			SDL_Window *window = window_be->window;
+			SDL_Renderer *renderer = window_be->renderer;
+			
+			//Replace window_be with a new window, renderer and backing texture
+			_sgsdl2_open_window(SDL_GetWindowTitle(window_be->window), surface->width, 
+					surface->height, SDL_WINDOW_BORDERLESS | SDL_WINDOW_SHOWN, window_be);
+			
+			//Replace the new window's backing texture with the old one, making everything seamless
+			SDL_DestroyTexture(window_be->backing);
+			window_be->backing = _sgsdl2_copy_texture(backing, renderer, window_be->renderer);
+			
+			//Same location
+			int x, y;
+			SDL_GetWindowPosition(window, &x, &y);
+			SDL_SetWindowPosition(window_be->window, x, y);
+			
+			//Destroy old window
+			SDL_DestroyTexture(backing);
+			SDL_DestroyRenderer(renderer);
+			SDL_DestroyWindow(window);
+			
+#else
+            SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);			
+#endif
             break;
         }
 
