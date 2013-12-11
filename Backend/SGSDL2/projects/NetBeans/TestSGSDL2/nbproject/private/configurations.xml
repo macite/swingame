@@ -29,6 +29,7 @@
         <runcommand>"${OUTPUT_PATH}"</runcommand>
         <rundir>C:\Users\James\Desktop\SwinGame\swingame\swingame\Backend\Test\Resources</rundir>
         <buildfirst>true</buildfirst>
+        <console-type>1</console-type>
         <terminal-type>0</terminal-type>
         <remove-instrumentation>0</remove-instrumentation>
         <environment>

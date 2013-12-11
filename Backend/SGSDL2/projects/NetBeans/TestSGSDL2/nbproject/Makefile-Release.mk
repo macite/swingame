@@ -37,7 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/_ext/1446273465/main.o \
 	${OBJECTDIR}/_ext/1446273465/test_audio.o \
-	${OBJECTDIR}/_ext/1446273465/test_input.o
+	${OBJECTDIR}/_ext/1446273465/test_input.o \
+	${OBJECTDIR}/_ext/1446273465/test_text.o
 
 
 # C Compiler Flags
@@ -78,6 +79,11 @@ ${OBJECTDIR}/_ext/1446273465/test_input.o: ../../../../Test/src/test_input.cpp
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_input.o ../../../../Test/src/test_input.cpp
+
+${OBJECTDIR}/_ext/1446273465/test_text.o: ../../../../Test/src/test_text.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_text.o ../../../../Test/src/test_text.cpp
 
 # Subprojects
 .build-subprojects:
