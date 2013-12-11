@@ -840,7 +840,6 @@ void output_system_details()
 
 int main(int argc, const char * argv[])
 {
-  char keycode_pressed; 
     cout << "Starting driver backend test" << endl;
 
     if ( ! test_core_functions() )
