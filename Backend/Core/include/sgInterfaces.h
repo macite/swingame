@@ -39,6 +39,8 @@ extern "C" {
 
     
     typedef char* (sg_charp_fn)(); 
+    typedef void (sg_rectangle_dimensions_proc)(int x, int y, int w, int h); 
+
     typedef void (sg_charp_proc)(char* text); 
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef int  (sg_drawing_surface_bool_fn)(sg_drawing_surface *);
@@ -257,7 +259,7 @@ extern "C" {
         sg_mouse_state_fn * mouse_relative_state;
         sg_int_intp_fn * mouse_cursor_state;
 
-        sg_empty_procedure * start_unicode_text_input; 
+        sg_rectangle_dimensions_proc * start_unicode_text_input; 
         sg_empty_procedure * stop_unicode_text_input; 
     } sg_input_interface;
 
