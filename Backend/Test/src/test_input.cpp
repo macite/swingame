@@ -89,6 +89,17 @@ void test_events(sg_drawing_surface * window_arr, int sz)
         mouse_button = _sg_functions->input.mouse_relative_state(&x, &y);
         cout << "Mouse relative " << x << "," << y << "( " << mouse_button << " )" << endl;
         
+        if ( i == 100 )
+        {
+            _sg_functions->input.mouse_cursor_state(0);
+            cout << " - Hide mouse" << endl;
+        }
+        if ( i == 200 )
+        {
+            _sg_functions->input.mouse_cursor_state(1);
+            cout << " - Show mouse" << endl;
+        }
+        
         for (int w = 0; w < sz; w++)
         {
             _sg_functions->graphics.refresh_window(&window_arr[w]);
