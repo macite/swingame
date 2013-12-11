@@ -195,6 +195,16 @@ int sgsdl2_key_pressed(int key_code)
 }
 
 
+
+void sgsdl2_start_unicode_text_input(int x, int y, int w, int h)
+{
+  SDL_Rect rect = {x,y,w,h};  
+  SDL_SetTextInputRect(&rect);
+
+  SDL_StartTextInput(); 
+}
+
+
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
     functions->input.process_events = & sgsdl2_process_events;
@@ -203,6 +213,6 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.mouse_state = &SDL_GetMouseState;  // call it directly
     functions->input.mouse_relative_state = &SDL_GetRelativeMouseState;
     functions->input.mouse_cursor_state = &SDL_ShowCursor; // 0 hide, 1 show, -1 query
-    functions->input.start_unicode_text_input = &SDL_StartTextInput; 
+    functions->input.start_unicode_text_input = &sgsdl2_unicode_start_text_input; 
     functions->input.stop_unicode_text_input = &SDL_StopTextInput; 
 }

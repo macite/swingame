@@ -118,6 +118,7 @@ void test_key_press()
     {
         _sg_functions->input.process_events();
     }
+    _sg_functions->utils.delay(1000);
 }
 
 
@@ -125,17 +126,15 @@ void test_unicode_input()
 {
   cout << "Testing unicode input" << endl; 
   cout << " - enter some unicode " << endl; 
-  _sg_functions->input.start_unicode_text_input(); 
+  _sg_functions->input.start_unicode_text_input(0,0,200,200); 
 
   _sg_functions->input.process_events();
-  while ( ! _sg_functions->input.key_pressed('e') )
+  while ( ! _sg_functions->input.key_pressed('a') )
   {
       _sg_functions->input.process_events();
   }
   _sg_functions->input.stop_unicode_text_input(); 
-  _sg_functions->utils.delay(1000);
 }
-
 
 void test_input(sg_drawing_surface * window_arr, int sz)
 {
