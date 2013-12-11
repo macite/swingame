@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <climits>
+#include <cstdio>
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
