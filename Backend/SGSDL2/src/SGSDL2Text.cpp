@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "SGSDL2Text.h"
+#include "sgBackendTypes.h"
 
 void sgsdl2_init_text()
 {
@@ -22,10 +23,18 @@ void sgsdl2_init_text()
 
 void sgsdl2_finalize_text()
 {
-  TTF_Quit();
+ TTF_Quit();
+}
+
+sg_font_data sgsdl2_load_font(const char * filename, int font_size)
+{
+  sg_font_data font;
+  font.kind = SGFT_TTF;
+  font.data = TTF_OpenFont(filename, font_size);
+  return font;
 }
 
 void sgsdl2_load_text_fns(sg_interface *functions)
 {
-
+  functions->text.load_font = &sgsdl2_load_font;
 }

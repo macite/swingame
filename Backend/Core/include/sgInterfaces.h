@@ -60,7 +60,11 @@ extern "C" {
     
     typedef sg_system_data * (sg_system_data_fn)();
 
-    
+    //
+    // Text related function pointers
+    // 
+    typedef sg_font_data (sg_font_load_fn)(const char *filename, int font_size);
+
     //
     // Sound related function pointers
     //
@@ -268,7 +272,7 @@ extern "C" {
     //
     typedef struct sg_text_interface
     {
-          
+      sg_font_load_fn * load_font;
     } sg_text_interface;
 
     //

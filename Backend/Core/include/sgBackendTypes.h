@@ -74,6 +74,19 @@ typedef struct sg_system_data
     
 } sg_system_data;
 
+enum sg_font_kind
+{
+  SGFT_UNKNOWN = 0,
+  SGFT_TTF = 1
+};
+
+typedef struct sg_font_data
+{
+  sg_font_kind kind;
+
+  // private data used by backend
+  void * data;
+} sg_font_data;
 
 enum sg_sound_kind
 {
