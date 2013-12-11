@@ -34,7 +34,13 @@ sg_font_data sgsdl2_load_font(const char * filename, int font_size)
   return font;
 }
 
+void sgsdl2_close_font(sg_font_data font)
+{
+  TTF_CloseFont((TTF_Font*)font.data);
+}
+
 void sgsdl2_load_text_fns(sg_interface *functions)
 {
   functions->text.load_font = &sgsdl2_load_font;
+  functions->text.close_font = &sgsdl2_close_font;
 }

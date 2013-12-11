@@ -414,15 +414,15 @@ implementation
 	
 	procedure LoadSDL13TextDriver();
 	begin
-		TextDriver.LoadFont := @LoadFontProcedure;
-		TextDriver.CloseFont := @CloseFontProcedure;
+		TextDriver.LoadFont := @LoadFontProcedure;                    // +
+		TextDriver.CloseFont := @CloseFontProcedure;                  // +
 		TextDriver.PrintStrings := @PrintStringsProcedure;
 		TextDriver.PrintWideStrings := @PrintWideStringsProcedure;
 		TextDriver.SetFontStyle := @SetFontStyleProcedure;
 		TextDriver.GetFontStyle := @GetFontStyleProcedure;
 		TextDriver.SizeOfText := @SizeOfTextProcedure;
 		TextDriver.SizeOfUnicode := @SizeOfUnicodeProcedure;
-		TextDriver.Quit := @QuitProcedure;                             // - No longer required
+		TextDriver.Quit := @QuitProcedure;                            // - No longer required
 		TextDriver.GetError := @GetErrorProcedure;
 		TextDriver.Init := @InitProcedure;                            // - No longer required
 		TextDriver.StringColor  := @StringColorProcedure;
