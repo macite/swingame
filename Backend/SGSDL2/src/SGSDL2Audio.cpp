@@ -53,7 +53,7 @@ int sgsdl2_get_channel(sg_sound_data *sound)
 {
     for (int i = 0; i < SG_MAX_CHANNELS; i++)
     {
-        if ( _sgsdl2_sound_channels[i] == sound->data && Mix_Playing(i) )
+        if ( _sgsdl2_sound_channels[i] == sound->_data && Mix_Playing(i) )
         {
             return i;
         }
@@ -73,12 +73,12 @@ sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
     {
         case SGSD_SOUND_EFFECT:
         {
-            result.data = Mix_LoadWAV(filename);
+            result._data = Mix_LoadWAV(filename);
             break;
         }
         case SGSD_MUSIC:
         {
-            result.data = Mix_LoadMUS(filename);
+            result._data = Mix_LoadMUS(filename);
             break;
         }
         
@@ -96,11 +96,11 @@ void sgsdl2_close_sound_data(sg_sound_data * sound )
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            Mix_FreeMusic((Mix_Music*)sound->data);
+            Mix_FreeMusic((Mix_Music*)sound->_data);
             break;
         
         case SGSD_SOUND_EFFECT:
-            Mix_FreeChunk((Mix_Chunk*)sound->data);
+            Mix_FreeChunk((Mix_Chunk*)sound->_data);
             break;
         
         case SGSD_UNKNOWN:
@@ -108,18 +108,18 @@ void sgsdl2_close_sound_data(sg_sound_data * sound )
     }
     
     sound->kind = SGSD_UNKNOWN;
-    sound->data = NULL;
+    sound->_data = NULL;
 }
 
 void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
 {
-    if ( (!sound) || (!sound->data) ) return;
+    if ( (!sound) || (!sound->_data) ) return;
     
     switch (sound->kind)
     {
         case SGSD_SOUND_EFFECT:
         {
-            Mix_Chunk *effect = (Mix_Chunk*) sound->data;
+            Mix_Chunk *effect = (Mix_Chunk*) sound->_data;
             int channel = Mix_PlayChannel( -1, effect, loops);
             if (channel >= 0 && channel < SG_MAX_CHANNELS)
             {
@@ -130,9 +130,9 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
         }
         case SGSD_MUSIC:
         {
-            Mix_PlayMusic((Mix_Music *)sound->data, loops);
+            Mix_PlayMusic((Mix_Music *)sound->_data, loops);
             Mix_VolumeMusic((int)volume * MIX_MAX_VOLUME);
-            _current_music = (Mix_Music *)sound->data;
+            _current_music = (Mix_Music *)sound->_data;
             break;
         }
         case SGSD_UNKNOWN:
@@ -155,7 +155,7 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
         }
         case SGSD_MUSIC:
         {
-            if ( _current_music == sound->data && Mix_PlayingMusic() ) return 1.0f;
+            if ( _current_music == sound->_data && Mix_PlayingMusic() ) return 1.0f;
             break;
         }
      
@@ -175,18 +175,18 @@ void sgsdl2_fade_in(sg_sound_data *sound, int loops, int ms)
         case SGSD_SOUND_EFFECT:
         {
             int channel;
-            channel = Mix_FadeInChannel(-1, (Mix_Chunk *)sound->data, loops, ms);
+            channel = Mix_FadeInChannel(-1, (Mix_Chunk *)sound->_data, loops, ms);
             if ( channel >= 0 && channel < SG_MAX_CHANNELS )
             {
-                _sgsdl2_sound_channels[channel] = (Mix_Chunk *)sound->data;
+                _sgsdl2_sound_channels[channel] = (Mix_Chunk *)sound->_data;
             }
             break;
         }
             
         case SGSD_MUSIC:
         {
-            Mix_FadeInMusic((Mix_Music *)sound->data, loops, ms);
-            _current_music = (Mix_Music *)sound->data;
+            Mix_FadeInMusic((Mix_Music *)sound->_data, loops, ms);
+            _current_music = (Mix_Music *)sound->_data;
             break;
         }
         
@@ -210,7 +210,7 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
             
         case SGSD_MUSIC:
         {
-            if ( _current_music == sound->data )
+            if ( _current_music == sound->_data )
                 Mix_FadeOutMusic(ms);
             break;
         }
@@ -247,10 +247,10 @@ float sgsdl2_sound_volume(sg_sound_data *sound)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->data ) return sgsdl2_music_vol();
+            if ( _current_music == sound->_data ) return sgsdl2_music_vol();
             break;
         case SGSD_SOUND_EFFECT:
-            return Mix_VolumeChunk((Mix_Chunk *)sound->data, -1) / (float)MIX_MAX_VOLUME;
+            return Mix_VolumeChunk((Mix_Chunk *)sound->_data, -1) / (float)MIX_MAX_VOLUME;
         case SGSD_UNKNOWN:
             break;
     }
@@ -265,12 +265,12 @@ void sgsdl2_set_sound_volume(sg_sound_data *sound, float vol)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->data )
+            if ( _current_music == sound->_data )
                 sgsdl2_set_music_vol(vol);
             break;
             
         case SGSD_SOUND_EFFECT:
-            Mix_VolumeChunk((Mix_Chunk *)sound->data, (int)(vol * MIX_MAX_VOLUME));
+            Mix_VolumeChunk((Mix_Chunk *)sound->_data, (int)(vol * MIX_MAX_VOLUME));
             break;
         
         case SGSD_UNKNOWN:
@@ -303,14 +303,14 @@ void sgsdl2_stop_sound(sg_sound_data *sound)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->data ) sgsdl2_stop_music();
+            if ( _current_music == sound->_data ) sgsdl2_stop_music();
             break;
         
         case SGSD_SOUND_EFFECT:
         {
             for (int i = 0; i < SG_MAX_CHANNELS; i++)
             {
-                if ( _sgsdl2_sound_channels[i] == sound->data )
+                if ( _sgsdl2_sound_channels[i] == sound->_data )
                 {
                     Mix_HaltChannel(i);
                 }

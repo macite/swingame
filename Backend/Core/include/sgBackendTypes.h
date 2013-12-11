@@ -103,7 +103,7 @@ typedef struct sg_sound_data
     sg_sound_kind kind;
     
     // private data used by backend
-    void * data;
+    void * _data;
 } sg_sound_data;
 
 // Stop aligning structs to one byte boundaries
