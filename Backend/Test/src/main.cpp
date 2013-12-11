@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <climits>
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
@@ -21,6 +22,56 @@ sg_interface * _sg_functions = NULL;
 
 // images drawn in tests
 sg_drawing_surface img, img2;
+
+enum test_options 
+{ 
+  BASIC_DRAWING = 1, 
+  WINDOW_OPERATIONS = 2,  
+  BITMAP_DRAWING = 4, 
+  AUDIO = 8
+
+}; 
+enum test_drawing_options 
+{
+  TEST_COLORS = 1, 
+  TEST_READ_PIXELS = 2, 
+  TEST_POSITIONS = 4, 
+  TEST_ALPHA = 8, 
+  TEST_CLIP = 16, 
+  TEST_PIXELS = 32, 
+  TEST_SHAPES = 64, 
+  TEST_RESIZE = 128, 
+  TEST_LINES = 256,
+  TEST_BITMAPS = 512, 
+  TEST_INPUT = 1024,
+  TEST_FULLSCREEN = 2048
+
+}; 
+void print_options() 
+{
+    cout << "0: all " << endl; 
+    cout << "1: basic drawing functions"  << endl; 
+    cout << "2: window operations"  << endl; 
+    cout << "4: bitmap drawing"  << endl; 
+    cout << "8: audio "  << endl; 
+}
+
+void print_drawing_options() 
+{
+    cout << "0: all " << endl; 
+    cout << "1: colors"  << endl; 
+    cout << "2: read pixels"  << endl; 
+    cout << "4: test positions"  << endl; 
+    cout << "8: test alpha"  << endl; 
+    cout << "16: test clip"  << endl; 
+    cout << "32 test pixels"  << endl; 
+    cout << "64: test shapes"  << endl; 
+    cout << "128: test resize "  << endl; 
+    cout << "256: test lines "  << endl; 
+    cout << "512: test bitmaps "  << endl; 
+    cout << "1024: test input "  << endl; 
+    cout << "2048: test fullscreen "  << endl; 
+}
 
 
 //
@@ -589,9 +640,10 @@ void test_bitmaps(sg_drawing_surface * window_arr, int sz)
     _sg_functions->input.process_events();
 }
 
-bool test_basic_drawing()
+bool test_basic_drawing(int drawing_test_run)
 {
     cout << "Testing Basic Drawing!" << endl;
+    cout << drawing_test_run << endl; 
     
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
@@ -602,35 +654,84 @@ bool test_basic_drawing()
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
 
     
-    test_colors(&window, 1);
-    test_read_pixels(&window);
-    test_positions(&window, 1);
-    test_alpha(&window, 1);
+    if (drawing_test_run & TEST_COLORS) 
+    {
+      test_colors(&window, 1);
+    }
 
-    test_clip( &window, 1);
-    test_pixels( &window, 1);
-    
-    _sg_functions->graphics.show_fullscreen(&window, true);
+    if (drawing_test_run & TEST_PIXELS) 
+    {
+      test_read_pixels(&window);
+    }
 
-    test_rects( &window, 1);
-    
-    _sg_functions->graphics.show_fullscreen(&window, false);
-    
-    test_triangles( &window, 1);
-    test_circles( &window, 1);
-    
-    test_resize(&window, 1);
-    
-    test_ellipses( &window, 1);
-    test_lines( &window, 1);
+    if (drawing_test_run & TEST_POSITIONS) 
+    {
+      test_positions(&window, 1);
+    }
 
-    // Test the bitmaps - changing img2 in between
-    test_bitmaps( &window, 1);
-    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
-    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
-    test_bitmaps( &window, 1);
+    if (drawing_test_run & TEST_ALPHA) 
+    {
+      test_alpha(&window, 1);
+    }
+
+    if (drawing_test_run & TEST_CLIP) 
+    {
+      test_clip( &window, 1);
+    }
     
-    test_input(&window, 1);
+    if (drawing_test_run & TEST_PIXELS) 
+    {
+      test_pixels( &window, 1);
+    }
+    
+    if (drawing_test_run & TEST_FULLSCREEN) 
+    {
+      _sg_functions->graphics.show_fullscreen(&window, true);
+
+      test_rects( &window, 1);
+      
+      _sg_functions->graphics.show_fullscreen(&window, false);
+    }
+    
+    if (drawing_test_run & TEST_SHAPES) 
+    {
+      test_triangles( &window, 1);
+    }
+
+    if (drawing_test_run & TEST_SHAPES) 
+    {
+      test_circles( &window, 1);
+    }
+    
+    if (drawing_test_run & TEST_RESIZE) 
+    {
+      test_resize(&window, 1);
+    }
+    
+    if (drawing_test_run & TEST_SHAPES) 
+    {
+      test_ellipses( &window, 1);
+    }
+
+    if (drawing_test_run & TEST_LINES) 
+    {
+      test_lines( &window, 1);
+    }
+
+    if (drawing_test_run & TEST_BITMAPS) 
+    {
+      // Test the bitmaps - changing img2 in between
+      test_bitmaps( &window, 1);
+      _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
+      _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
+
+      test_bitmaps( &window, 1);
+    }
+    
+    if (drawing_test_run & TEST_INPUT) 
+    {
+      test_input(&window, 1);
+    }
 
     _sg_functions->graphics.close_drawing_surface(&window);
     
@@ -646,6 +747,9 @@ bool test_window_operations()
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
     
+
+
+
     _sg_functions->graphics.show_border(&w[0], false);
     
     if ( w[0].width != 800 ) cout << " >> Error with w[0] width! " << w[0].width << endl;
@@ -665,7 +769,7 @@ bool test_window_operations()
     test_bitmaps(w, 2);
     
     test_input(w, 2);
-    
+
     _sg_functions->graphics.close_drawing_surface(&w[0]);
     _sg_functions->graphics.close_drawing_surface(&w[1]);
 
@@ -735,18 +839,40 @@ void output_system_details()
 
 int main(int argc, const char * argv[])
 {
+  char keycode_pressed; 
     cout << "Starting driver backend test" << endl;
     
+
+
     if ( ! test_core_functions() )
     {
         cout << "Core functions failed with error: " << endl;
         cout << _sg_functions->current_error << endl;
         return -1;
     }
-    
+
+
+    cout << " Which tests do you want to run? " << endl; 
+    print_options(); 
+
+    int test_run = 0; 
+    int test_drawing_run = INT_MAX; 
+    scanf("%d", &test_run); 
+    if (test_run == 0) 
+    {
+      test_run |= 255; 
+    }
+    else if (test_run & BASIC_DRAWING) 
+    {
+      cout << "Which drawing functions would you like to run? " << endl; 
+      print_drawing_options(); 
+      scanf("%d", &test_drawing_run); 
+    }
+    //test_run = cstdlib::stoi(keycode_pressed); 
+
     output_system_details();
     
-    if ( ! test_basic_drawing() )
+    if (test_run & BASIC_DRAWING && ! test_basic_drawing(test_drawing_run) )
     {
         cout << "Basic drawing failed with error: " << endl;
         //cout << _sg_functions->current_error << endl;
@@ -755,14 +881,24 @@ int main(int argc, const char * argv[])
     
     _sg_functions->input.process_events();
     
-    test_window_operations();
+
+    if (test_run & WINDOW_OPERATIONS) 
+    {
+      test_window_operations();
+    }
     
-    test_bitmap_dest_drawing();
+    if (test_run & BITMAP_DRAWING) 
+    {
+      test_bitmap_dest_drawing();
+    }
     
     _sg_functions->graphics.close_drawing_surface(&img);
     _sg_functions->graphics.close_drawing_surface(&img2);
     
-    test_audio();
+    if (test_run & AUDIO) 
+    {
+      test_audio();
+    }
     
     _sg_functions->finalise();
     cout << "Success" << endl;
