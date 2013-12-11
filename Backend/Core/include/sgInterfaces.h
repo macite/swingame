@@ -255,6 +255,7 @@ extern "C" {
         sg_int_intp_fn * key_pressed;
         sg_mouse_state_fn * mouse_state;
         sg_mouse_state_fn * mouse_relative_state;
+        sg_int_intp_fn * mouse_cursor_state;
 
         sg_empty_procedure * start_unicode_text_input; 
         sg_empty_procedure * stop_unicode_text_input; 

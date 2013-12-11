@@ -151,8 +151,8 @@ implementation
     InputDriver.ProcessEvents         := @ProcessEventsProcedure;           // #
     InputDriver.GetKeyState           := @GetKeyStateProcedure;             // - NEVER USED
     InputDriver.GetMouseState         := @GetMouseStateProcedure;           // #
-    InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;   
-    InputDriver.ShowCursor            := @ShowCursorProcedure;
+    InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;   // #  
+    InputDriver.ShowCursor            := @ShowCursorProcedure;              // #
     InputDriver.Button                := @ButtonProcedure;
     InputDriver.WarpMouse             := @WarpMouseProcedure;
   end;
