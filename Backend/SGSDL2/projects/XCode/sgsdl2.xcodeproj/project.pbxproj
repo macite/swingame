@@ -52,6 +52,12 @@
 		94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF146D18530C79004191DF /* SGSDL2Input.h */; };
 		94BF1472185572AE004191DF /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94BF1470185572AE004191DF /* SGSDL2Audio.cpp */; };
 		94BF1473185572AE004191DF /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF1471185572AE004191DF /* SGSDL2Audio.h */; };
+		94FEB50C18582F7900AFF9D7 /* SGSDL2Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */; };
+		94FEB50D18582F7900AFF9D7 /* SGSDL2Text.h in Headers */ = {isa = PBXBuildFile; fileRef = 94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */; };
+		94FEB51118582F8700AFF9D7 /* test_text.h in Headers */ = {isa = PBXBuildFile; fileRef = 94FEB50F18582F8700AFF9D7 /* test_text.h */; };
+		94FEB51218582F8D00AFF9D7 /* test_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FEB50E18582F8700AFF9D7 /* test_text.cpp */; };
+		94FEB5151858301A00AFF9D7 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FEB51318582FEE00AFF9D7 /* libbz2.dylib */; };
+		94FEB5171858302500AFF9D7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 94FEB5161858302500AFF9D7 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -126,6 +132,12 @@
 		94BF146D18530C79004191DF /* SGSDL2Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Input.h; path = ../../src/SGSDL2Input.h; sourceTree = "<group>"; };
 		94BF1470185572AE004191DF /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Audio.cpp; path = ../../src/SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		94BF1471185572AE004191DF /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Audio.h; path = ../../src/SGSDL2Audio.h; sourceTree = "<group>"; };
+		94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Text.cpp; path = ../../src/SGSDL2Text.cpp; sourceTree = "<group>"; };
+		94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Text.h; path = ../../src/SGSDL2Text.h; sourceTree = "<group>"; };
+		94FEB50E18582F8700AFF9D7 /* test_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_text.cpp; path = ../../../Test/src/test_text.cpp; sourceTree = "<group>"; };
+		94FEB50F18582F8700AFF9D7 /* test_text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_text.h; path = ../../../Test/src/test_text.h; sourceTree = "<group>"; };
+		94FEB51318582FEE00AFF9D7 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
+		94FEB5161858302500AFF9D7 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +167,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				94FEB5171858302500AFF9D7 /* libz.dylib in Frameworks */,
+				94FEB5151858301A00AFF9D7 /* libbz2.dylib in Frameworks */,
 				942DBEEA183C218300876830 /* AudioToolbox.framework in Frameworks */,
 				942DBEEB183C218600876830 /* AudioUnit.framework in Frameworks */,
 				942DBEEC183C218A00876830 /* CoreAudio.framework in Frameworks */,
@@ -173,6 +187,8 @@
 		9471BD83183B6E5700BE3771 = {
 			isa = PBXGroup;
 			children = (
+				94FEB5161858302500AFF9D7 /* libz.dylib */,
+				94FEB51318582FEE00AFF9D7 /* libbz2.dylib */,
 				9471BDA1183B72A900BE3771 /* Libraries */,
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
@@ -220,6 +236,8 @@
 		9471BD97183B70ED00BE3771 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */,
+				94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */,
 				94BF1470185572AE004191DF /* SGSDL2Audio.cpp */,
 				94BF1471185572AE004191DF /* SGSDL2Audio.h */,
 				9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */,
@@ -237,6 +255,8 @@
 		9471BDA0183B727700BE3771 /* Test */ = {
 			isa = PBXGroup;
 			children = (
+				94FEB50E18582F8700AFF9D7 /* test_text.cpp */,
+				94FEB50F18582F8700AFF9D7 /* test_text.h */,
 				94821584184C6FF000C89CBE /* Resources */,
 				942DBED1183C1DBA00876830 /* main.cpp */,
 				9499C69C184C5F2B00B71B41 /* test_audio.cpp */,
@@ -303,6 +323,8 @@
 				94BF1473185572AE004191DF /* SGSDL2Audio.h in Headers */,
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
 				943177F91855802100A0D403 /* sgBackendUtils.h in Headers */,
+				94FEB51118582F8700AFF9D7 /* test_text.h in Headers */,
+				94FEB50D18582F7900AFF9D7 /* SGSDL2Text.h in Headers */,
 				9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +401,7 @@
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
+				94FEB50C18582F7900AFF9D7 /* SGSDL2Text.cpp in Sources */,
 				94BF1472185572AE004191DF /* SGSDL2Audio.cpp in Sources */,
 				94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */,
 				9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */,
@@ -391,6 +414,7 @@
 			files = (
 				943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */,
 				945BB7A01857C5B000148796 /* test_input.cpp in Sources */,
+				94FEB51218582F8D00AFF9D7 /* test_text.cpp in Sources */,
 				942DBED2183C1DBA00876830 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -495,6 +519,7 @@
 					../../external/SDL/include,
 					../../external/SDL_gfx,
 					../../external/SDL_image,
+					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 				);
 				LIBRARY_SEARCH_PATHS = (
@@ -535,6 +560,7 @@
 					../../external/SDL/include,
 					../../external/SDL_gfx,
 					../../external/SDL_image,
+					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 				);
 				LIBRARY_SEARCH_PATHS = (
