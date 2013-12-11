@@ -429,7 +429,7 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 //--------------------------------------------------------------------------------------
 
 
-void _sgsdl2_open_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
+bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
 {
     window_be->window = SDL_CreateWindow(title,
                                          SDL_WINDOWPOS_CENTERED,
@@ -441,8 +441,7 @@ void _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
     if ( ! window_be->window )
     {
         set_error_state(SDL_GetError());
-        free ( window_be );
-        return;
+        return false;
     }
     
     window_be->renderer = SDL_CreateRenderer(window_be->window,
@@ -463,6 +462,8 @@ void _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
     SDL_RenderClear(window_be->renderer);
 	
 	_sgsdl2_add_window(window_be);
+    
+    return true;
 }
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height) 
@@ -479,7 +480,11 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
         return result;
     }
 	
-	_sgsdl2_open_window(title, width, height, SDL_WINDOW_SHOWN, window_be);
+	if ( ! _sgsdl2_open_window(title, width, height, SDL_WINDOW_SHOWN, window_be) )
+    {
+        free ( window_be );
+        return result;
+    }
 	
 	result._data = window_be;
     
@@ -1247,8 +1252,12 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
 			SDL_Renderer *renderer = window_be->renderer;
 			
 			//Replace window_be with a new window, renderer and backing texture
-			_sgsdl2_open_window(SDL_GetWindowTitle(window_be->window), surface->width, 
-					surface->height, SDL_WINDOW_BORDERLESS | SDL_WINDOW_SHOWN, window_be);
+			if ( ! _sgsdl2_open_window(SDL_GetWindowTitle(window_be->window), surface->width,
+					surface->height, SDL_WINDOW_BORDERLESS | SDL_WINDOW_SHOWN, window_be) )
+            {
+                std::cout << "Error switching to borderless window - switching windows failed" << std::endl;
+                exit(-1);
+            }
 			
 			//Replace the new window's backing texture with the old one, making everything seamless
 			SDL_DestroyTexture(window_be->backing);
