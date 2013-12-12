@@ -6,7 +6,7 @@ interface
 
       
 implementation
-  uses sgDriverInput, sgInputBackend, sgInput, sgShared, sgTypes ;
+  uses sgDriverInput, sgInputBackend, sgInput, sgShared, sgTypes, sgDriverSDL2Types ;
   
 
   
@@ -42,11 +42,6 @@ implementation
     begin
       result := false;
     end;
-  end;
-  
-  function GetKeyStateProcedure(): Byte;
-  begin
-    result := SDL_GetKeyState(nil)^;
   end;
   
   function CheckQuitProcedure() : Boolean;
@@ -121,7 +116,6 @@ implementation
     InputDriver.IsKeyPressed := @IsKeyPressedProcedure;
     InputDriver.CheckQuit := @CheckQuitProcedure;
     InputDriver.ProcessEvents := @ProcessEventsProcedure;
-    InputDriver.GetKeyState := @GetKeyStateProcedure;
     InputDriver.GetMouseState := @GetMouseStateProcedure;
     InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;
     InputDriver.ShowCursor := @ShowCursorProcedure;

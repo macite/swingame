@@ -25,10 +25,6 @@ interface
 implementation
   uses sgDriverSDL2Types, sgDriverGraphics;
 
-  // Currently only a single window... TODO: allow multiple windows
-  var
-    wind: sg_drawing_surface;
-
     
 	function GetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
 	begin
@@ -97,7 +93,8 @@ implementation
 	
   procedure InitializeGraphicsWindowProcedure(caption : String; screenWidth, screenHeight : LongInt);
   begin
-    wind := _sg_functions^.graphics.open_window('Hello', 800, 600);
+    wind := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
+    wind_open := true;
   end;
 
   procedure InitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);

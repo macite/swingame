@@ -271,6 +271,9 @@ interface
 
   var
   	_sg_functions: ^sg_interface;
+    // Currently only a single window... TODO: allow multiple windows
+    wind: sg_drawing_surface;
+    wind_open: Boolean = false;
 
 implementation
 

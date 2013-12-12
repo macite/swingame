@@ -33,6 +33,8 @@ implementation
     {$ELSE}
     result := (IsKeyPressed(SDLK_LALT) and IsKeyPressed(SDLK_F4));
     {$ENDIF}
+
+    result := result or (wind_open and (_sg_functions^.input.window_close_requested(@wind) <> 0));
   end;
   
   procedure ProcessEventsProcedure();

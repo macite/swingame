@@ -133,7 +133,7 @@ elif [ "$OS" = "$WIN" ]; then
 fi
 
 if [ ${SDL_2} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lgcc\" -k\"-lc\" -k\"-lc++\""
+  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 elif [ ${SDL_13} = true ]; then
   PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL13"
 elif [ ${OPENGL} = true ]; then
