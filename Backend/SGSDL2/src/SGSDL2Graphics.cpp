@@ -203,7 +203,7 @@ SDL_Texture* _sgsdl2_copy_texture(SDL_Texture *src_tex, SDL_Renderer *src_render
 	return tex;
 }
 
-void _sgsdl2_create_texture_for_bitmap_window(sg_bitmap_be *current_bmp, int src_window_idx, int dest_window_idx) 
+void _sgsdl2_create_texture_for_bitmap_window(sg_bitmap_be *current_bmp, unsigned int src_window_idx, unsigned int dest_window_idx) 
 {
 	sg_window_be *window = _sgsdl2_open_windows[dest_window_idx];
 	
