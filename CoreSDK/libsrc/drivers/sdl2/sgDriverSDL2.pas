@@ -19,7 +19,7 @@ interface
   procedure LoadSDL2Driver();
 
 implementation
-	uses sgDriver, sgShared, SysUtils, sgTrace;
+	uses sgDriver, sgShared, SysUtils, sgTrace, SDL2, sgTypes, sgDriverSDL2Types;
 
 	var
 	  _Initialised : Boolean = False;
@@ -286,7 +286,7 @@ implementation
 	
 	function GetErrorProcedure() : PChar;
 	begin
-		result := "ERROR TEXT"; //TODO: add this
+		result := 'ERROR TEXT'; //TODO: add this
 	end;
   
   procedure QuitProcedure(); 
@@ -299,7 +299,7 @@ implementation
     if _Initialised then exit;
     _Initialised := true;
     
-    //TODO: add this    
+    _sg_functions^.init();
   end;
   
   
@@ -319,6 +319,6 @@ implementation
         callbacks.handle_mouse_down := nil;
         callbacks.handle_input_text := nil;
 
-        _sg_functions = sg_load(callbacks);
+        _sg_functions := sg_load(callbacks);
 	end;
 end.

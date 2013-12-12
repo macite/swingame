@@ -73,6 +73,7 @@ implementation
   // MusicPlaying returns true if music is currently being played
   function MusicPlayingProcedure() : Boolean;
   begin
+    result := false;
   end;
   
   procedure PauseMusicProcedure();
@@ -102,6 +103,7 @@ implementation
   
   function GetMusicVolumeProcedure() : Single;
   begin
+    result := 0;
   end;  
     
   function PlayMusicProcedure(music : Music; loops : Integer) : Boolean;
@@ -122,7 +124,7 @@ implementation
   //============================================================================= 
   // Loads the procedures and functions into the audio driver
   //=============================================================================
-  procedure LoadSDL2AudioDriver();
+  procedure LoadSDL2MixerAudioDriver();
   begin
     //WriteLn('Loading SDL_Mixer Audio Driver...');
     AudioDriver.LoadSoundEffect := @LoadSoundEffectProcedure;   // # 

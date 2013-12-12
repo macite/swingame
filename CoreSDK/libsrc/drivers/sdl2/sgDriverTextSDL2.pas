@@ -4,6 +4,8 @@ interface
 	procedure LoadSDL2TextDriver();
 		
 implementation
+	uses sgTypes, sgDriverSDL2Types, sgDriverText;
+
 	function LoadFontProcedure(fontName, fileName : String; size : Longint) : font;
 	begin
 		result := nil;
@@ -51,6 +53,7 @@ implementation
 	
 	function InitProcedure(): integer;
 	begin
+		result := 0;
 	end;
 	
 	procedure StringColorProcedure(dest : Bitmap; x,y : Single; theText : String; theColor : Color); 

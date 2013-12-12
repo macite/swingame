@@ -99,10 +99,14 @@ implementation
 //=============================================================================
 	procedure LoadDefaultAudioDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL13}
-	    LoadSDL13MixerAudioDriver();
+	  {$IFDEF SWINGAME_SDL2}
+	  	LoadSDL2MixerAudioDriver();
 	  {$ELSE}
-	    LoadSDLMixerAudioDriver();
+		  {$IFDEF SWINGAME_SDL13}
+		    LoadSDL13MixerAudioDriver();
+		  {$ELSE}
+		    LoadSDLMixerAudioDriver();
+		  {$ENDIF}
 	  {$ENDIF};
 	end;
 

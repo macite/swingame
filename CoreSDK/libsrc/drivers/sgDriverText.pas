@@ -91,7 +91,7 @@ implementation
 	procedure LoadDefaultTextDriver();
 	begin
 	{$IFDEF SWINGAME_SDL2}
-		LoadOpenGLTextDriver()
+		LoadSDL2TextDriver()
 	{$ELSE}
 		{$IFDEF SWINGAME_OPENGL}
 			LoadOpenGLTextDriver()

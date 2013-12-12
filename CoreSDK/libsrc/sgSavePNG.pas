@@ -1,7 +1,7 @@
 unit sgSavePNG;
 
 interface
-uses {$IFDEF SWINGAME_SDL13}SDL2{$ELSE}SDL{$ENDIF};
+uses {$IFDEF SWINGAME_SDL2}SDL2{$ELSE}{$IFDEF SWINGAME_SDL13}SDL2{$ELSE}SDL{$ENDIF}{$ENDIF};
 
 function png_save_surface(filename: String; surf: PSDL_Surface): Boolean;
 

@@ -82,31 +82,6 @@ done
 
 shift $((${OPTIND}-1))
 
-if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_2} = true ]; then
-      TMP_DIR="${APP_PATH}/tmp/sdl2"
-      LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
-    elif [ ${SDL_13} = true ]; then
-      TMP_DIR="${APP_PATH}/tmp/sdl13"
-      LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-      TMP_DIR="${APP_PATH}/tmp/godly"
-      LIB_DIR="${APP_PATH}/staticlib/godly/mac"
-    else
-      TMP_DIR="${APP_PATH}/tmp/sdl12"
-      LIB_DIR="${APP_PATH}/staticlib/sdl12/mac"
-    fi
-elif [ "$OS" = "$WIN" ]; then
-    if [ ${SDL_13} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    elif [ ${OPENGL} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    else
-      LIB_DIR="${APP_PATH}/lib/win"
-    fi
-fi
-
-
 #
 # Set compiler path and options
 #
@@ -130,11 +105,35 @@ if [ "$OS" = "$WIN" ]; then
     PAS_FLAGS="-g -Ci -gc -Ct -dTrace"
 else
     PAS_FLAGS="-g -Ci -gw -Ct -dTrace"
-fi    
+fi
 
+if [ "$OS" = "$MAC" ]; then
+    if [ ${SDL_2} = true ]; then
+      FPC_BIN=`which ppcx64`
+      TMP_DIR="${APP_PATH}/tmp/sdl2"
+      LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
+    elif [ ${SDL_13} = true ]; then
+      TMP_DIR="${APP_PATH}/tmp/sdl13"
+      LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
+    elif [ ${OPENGL} = true ]; then
+      TMP_DIR="${APP_PATH}/tmp/godly"
+      LIB_DIR="${APP_PATH}/staticlib/godly/mac"
+    else
+      TMP_DIR="${APP_PATH}/tmp/sdl12"
+      LIB_DIR="${APP_PATH}/staticlib/sdl12/mac"
+    fi
+elif [ "$OS" = "$WIN" ]; then
+    if [ ${SDL_13} = true ]; then
+      LIB_DIR="${APP_PATH}/lib/sdl13/win"
+    elif [ ${OPENGL} = true ]; then
+      LIB_DIR="${APP_PATH}/lib/sdl13/win"
+    else
+      LIB_DIR="${APP_PATH}/lib/win"
+    fi
+fi
 
 if [ ${SDL_2} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2"
+  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lgcc\" -k\"-lc\" -k\"-lc++\""
 elif [ ${SDL_13} = true ]; then
   PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL13"
 elif [ ${OPENGL} = true ]; then

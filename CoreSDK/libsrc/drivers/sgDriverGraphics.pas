@@ -314,6 +314,12 @@ uses
     result := GraphicsDriver.GetScreenHeight();
   end;
 
+  function DefaultAvailableResolutionsProcedure(): ResolutionArray;
+  begin
+    LoadDefaultGraphicsDriver();
+    result := GraphicsDriver.AvailableResolutions();
+  end;
+
 	initialization
 	begin
 		GraphicsDriver.GetPixel32               := @DefaultGetPixel32Procedure;
@@ -347,6 +353,7 @@ uses
     GraphicsDriver.SurfaceFormatAssigned    := @DefaultSurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @DefaultGetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @DefaultGetScreenHeightProcedure;
+    GraphicsDriver.AvailableResolutions     := @DefaultAvailableResolutionsProcedure;
 	end;
 end.
 	

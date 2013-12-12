@@ -4,7 +4,7 @@ interface
   procedure LoadSDL2InputDriver();
 
 implementation
-  uses sgDriverInput, sgDriverSDL2Types;
+  uses sgDriverInput, sgDriverSDL2Types, sgInputBackend;
 
   function IsKeyPressedProcedure(virtKeyCode : LongInt) : Boolean;
   begin

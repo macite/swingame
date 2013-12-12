@@ -5,7 +5,7 @@ interface
 	procedure LoadSDL2ImagesDriver();
 		
 implementation
-  uses sgDriverSDL2Types;
+  uses sgDriverSDL2Types, sgTypes, sgDriverImages, sgShared;
 
 	procedure SetNonAlphaPixelsProcedure(bmp : Bitmap);
 	begin
@@ -70,7 +70,7 @@ implementation
   begin	  
   end;
 
-	procedure LoadSDL2ImagesDriver()
+	procedure LoadSDL2ImagesDriver();
 	begin
 	  ImagesDriver.InitBitmapColors           := @InitBitmapColorsProcedure;
 	  ImagesDriver.SurfaceExists              := @SurfaceExistsProcedure;

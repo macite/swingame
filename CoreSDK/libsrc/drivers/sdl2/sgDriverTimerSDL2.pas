@@ -4,16 +4,18 @@ interface
 	procedure LoadSDLTimerDriver();
 
 implementation
+	uses sgDriverTimer;
+
 	procedure DelayProcedure(time : LongWord);
 	begin
 	end;
 	
-	function DefaultGetTicksProcedure() : LongWord;
+	function GetTicksProcedure() : LongWord;
 	begin
 		result := 0;
 	end;
 
-	initialization
+	procedure LoadSDLTimerDriver();
 	begin
 		TimerDriver.Delay := @DelayProcedure;
 		TimerDriver.GetTicks := @GetTicksProcedure;
