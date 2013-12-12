@@ -418,9 +418,9 @@ implementation
 		TextDriver.CloseFont := @CloseFontProcedure;                  // +
 		TextDriver.PrintStrings := @PrintStringsProcedure;
 		TextDriver.PrintWideStrings := @PrintWideStringsProcedure;
-		TextDriver.SetFontStyle := @SetFontStyleProcedure;
-		TextDriver.GetFontStyle := @GetFontStyleProcedure;
-		TextDriver.SizeOfText := @SizeOfTextProcedure;
+		TextDriver.SetFontStyle := @SetFontStyleProcedure;            // +
+		TextDriver.GetFontStyle := @GetFontStyleProcedure;            // +
+		TextDriver.SizeOfText := @SizeOfTextProcedure;                // +
 		TextDriver.SizeOfUnicode := @SizeOfUnicodeProcedure;
 		TextDriver.Quit := @QuitProcedure;                            // - No longer required
 		TextDriver.GetError := @GetErrorProcedure;
