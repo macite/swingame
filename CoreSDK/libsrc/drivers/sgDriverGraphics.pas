@@ -94,31 +94,38 @@ interface
 		
 implementation
 uses 
-   
-  {$IFDEF SWINGAME_OPENGL}
-    sgDriverGraphicsOpenGL;
+  {$IFDEF SWINGAME_SDL2}
+    sgDriverGraphicsSDL2;
   {$ELSE}
-      {$IFDEF SWINGAME_SDL13}
-        sgDriverGraphicsSDL13;
-      {$ELSE}
-        sgDriverGraphicsSDL;
-      {$ENDIF}
+    {$IFDEF SWINGAME_OPENGL}
+      sgDriverGraphicsOpenGL;
+    {$ELSE}
+        {$IFDEF SWINGAME_SDL13}
+          sgDriverGraphicsSDL13;
+        {$ELSE}
+          sgDriverGraphicsSDL;
+        {$ENDIF}
+    {$ENDIF}
   {$ENDIF}
     
 	procedure LoadDefaultGraphicsDriver();
 	begin
-    {$IFDEF SWINGAME_OPENGL}
-      {$INFO Using OpenGL Driver}
-      LoadOpenGLGraphicsDriver();
-		{$ELSE}
-      {$IFDEF SWINGAME_SDL13}
-        {$INFO Using SDL 2 Driver}
-        LoadSDL13GraphicsDriver();  
+    {$IFDEF SWINGAME_SDL2}
+      LoadSDL2GraphicsDriver();
+    {$ELSE}
+      {$IFDEF SWINGAME_OPENGL}
+        {$INFO Using OpenGL Driver}
+        LoadOpenGLGraphicsDriver();
       {$ELSE}
-        {$INFO Using SDL 1.2 Driver}
-		    LoadSDLGraphicsDriver();
+        {$IFDEF SWINGAME_SDL13}
+          {$INFO Using SDL 2 Driver}
+          LoadSDL13GraphicsDriver();  
+        {$ELSE}
+          {$INFO Using SDL 1.2 Driver}
+          LoadSDLGraphicsDriver();
+        {$ENDIF}
       {$ENDIF}
-		{$ENDIF}
+    {$ENDIF}
 	end;
 	
 	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
