@@ -30,17 +30,36 @@ sg_font_data sgsdl2_load_font(const char * filename, int font_size)
 {
   sg_font_data font;
   font.kind = SGFT_TTF;
-  font.data = TTF_OpenFont(filename, font_size);
+  font._data = TTF_OpenFont(filename, font_size);
   return font;
 }
 
-void sgsdl2_close_font(sg_font_data font)
+
+
+void sgsdl2_close_font(sg_font_data* font)
 {
-  TTF_CloseFont((TTF_Font*)font.data);
+  if (font->_data) 
+  {
+    TTF_CloseFont((TTF_Font*)font->_data);
+    font->kind = SGFT_UNKNOWN; 
+    font->_data = NULL; 
+  }
+}
+
+int sgsdl2_text_line_skip(sg_font_data* font) 
+{ 
+  return TTF_FontLineSkip((TTF_Font*)font->_data);
+}
+
+int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h) 
+{
+  return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
 }
 
 void sgsdl2_load_text_fns(sg_interface *functions)
 {
   functions->text.load_font = &sgsdl2_load_font;
   functions->text.close_font = &sgsdl2_close_font;
+  functions->text.text_line_skip = &sgsdl2_text_line_skip; 
+  functions->text.text_size = &sgsdl2_text_size; 
 }

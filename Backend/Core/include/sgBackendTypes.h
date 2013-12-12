@@ -85,7 +85,7 @@ typedef struct sg_font_data
   sg_font_kind kind;
 
   // private data used by backend
-  void * data;
+  void * _data;
 } sg_font_data;
 
 enum sg_sound_kind

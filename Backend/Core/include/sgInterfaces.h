@@ -64,7 +64,9 @@ extern "C" {
     // Text related function pointers
     // 
     typedef sg_font_data (sg_font_load_fn)(const char *filename, int font_size);
-    typedef void (sg_font_data_proc)(sg_font_data font);
+    typedef void (sg_font_data_proc)(sg_font_data* font);
+    typedef int  (sg_font_int_fn)(sg_font_data* font);
+    typedef int  (sg_font_size_fn)(sg_font_data* font, char* text, int* w, int* h); 
 
     //
     // Sound related function pointers
@@ -275,6 +277,8 @@ extern "C" {
     {
       sg_font_load_fn * load_font;
       sg_font_data_proc * close_font;
+      sg_font_int_fn * text_line_skip;
+      sg_font_size_fn * text_size; 
     } sg_text_interface;
 
     //

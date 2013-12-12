@@ -14,6 +14,7 @@
 #include "sgInterfaces.h"
 #include "test_audio.h"
 #include "test_input.h"
+#include "test_text.h"
 
 #define SHAPE_COUNT 60
 
@@ -30,7 +31,8 @@ enum test_options
   WINDOW_OPERATIONS = 2,  
   BITMAP_DRAWING = 4, 
   AUDIO = 8,
-  INPUT = 16
+  INPUT = 16,
+  TEXT = 32
 }; 
 
 enum test_drawing_options 
@@ -57,6 +59,7 @@ void print_options()
     cout << "4: bitmap drawing"  << endl; 
     cout << "8: audio "  << endl; 
     cout << "16: input "  << endl; 
+    cout << "32: text "  << endl; 
 }
 
 void print_drawing_options() 
@@ -903,6 +906,11 @@ int main(int argc, const char * argv[])
       sg_drawing_surface w[1];
       w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
       test_input(w, 1);
+    }
+
+    if  (test_run & TEXT) 
+    {
+      test_text();
     }
     
     _sg_functions->finalise();

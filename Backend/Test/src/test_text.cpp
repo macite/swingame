@@ -17,5 +17,18 @@ extern sg_interface * _sg_functions;
 
 void test_text()
 {
+  cout <<  "Testing text " << endl; 
+  sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF",14); 
+
+  int line_skip = _sg_functions->text.text_line_skip(&font); 
+  cout << " The line skip is: " << line_skip << endl; 
+
+  int w; 
+  int h; 
+  int text_size = _sg_functions->text.text_size(&font,(char*)"Hello World", &w, &h); 
+  cout << "Result for text size is : " << text_size << " with a width of: " << w << " and a height of: " << h << endl; 
+
+  _sg_functions->text.close_font(&font); 
+  _sg_functions->text.close_font(&font); 
 
 }
