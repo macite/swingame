@@ -1509,8 +1509,8 @@ void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, flo
 						 (int)(w * scale), (int)(h * scale) }; //scale bitmap
     
 	// Adjust centre to be relative to the bitmap centre rather than top-left
-	centre_x = (centre_x * scale) + dstrect.w / 2.0;
-	centre_y = (centre_y * scale) + dstrect.h / 2.0;
+	centre_x = (centre_x * scale) + dstrect.w / 2.0f;
+	centre_y = (centre_y * scale) + dstrect.h / 2.0f;
 	
     unsigned int count = _sgsdl2_renderer_count(dst);
     
