@@ -530,7 +530,7 @@ void sgsdl2_close_drawing_surface(sg_drawing_surface *surface)
     surface->_data = NULL;
 }
 
-void _sgsdl2_do_clear(SDL_Renderer *renderer, color clr)
+void _sgsdl2_do_clear(SDL_Renderer *renderer, sg_color clr)
 {
     SDL_SetRenderDrawColor(renderer, 
         static_cast<Uint8>(clr.r * 255), 
@@ -540,7 +540,7 @@ void _sgsdl2_do_clear(SDL_Renderer *renderer, color clr)
     SDL_RenderClear(renderer);
 }
 
-void _sgsdl2_clear_window(sg_drawing_surface *window, color clr)
+void _sgsdl2_clear_window(sg_drawing_surface *window, sg_color clr)
 {
     sg_window_be * window_be;
     window_be = (sg_window_be *)window->_data;
@@ -555,7 +555,7 @@ void _sgsdl2_clear_window(sg_drawing_surface *window, color clr)
     }
 }
 
-void _sgsdl2_clear_bitmap(sg_drawing_surface *bitmap, color clr)
+void _sgsdl2_clear_bitmap(sg_drawing_surface *bitmap, sg_color clr)
 {
     sg_bitmap_be * bitmap_be = (sg_bitmap_be *)bitmap->_data;
     
@@ -577,7 +577,7 @@ void _sgsdl2_clear_bitmap(sg_drawing_surface *bitmap, color clr)
     }
 }
 
-void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, color clr)
+void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, sg_color clr)
 {
     if ( ! surface ) return;
     
@@ -673,7 +673,7 @@ unsigned int _sgsdl2_renderer_count(sg_drawing_surface *surface)
 //  Rectangles
 //
 
-void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( (! surface) || (! surface->_data) ) return;
     if ( data_sz != 4 ) return;
@@ -697,7 +697,7 @@ void sgsdl2_draw_aabb_rect(sg_drawing_surface *surface, color clr, float *data, 
     }
 }
 
-void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( (! surface) || (! surface->_data)  ) return;
     if ( data_sz != 4 ) return;
@@ -729,7 +729,7 @@ void sgsdl2_fill_aabb_rect(sg_drawing_surface *surface, color clr, float *data, 
 //   .       .
 //   2 ..... 3
 //
-void sgsdl2_draw_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_rect(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( (! surface) || ! surface->_data ) return;
     if ( data_sz != 8 ) return;
@@ -768,7 +768,7 @@ void sgsdl2_draw_rect(sg_drawing_surface *surface, color clr, float *data, int d
 //   .       .
 //   2 ..... 3
 //
-void sgsdl2_fill_rect(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_fill_rect(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface ) return;
     if ( data_sz != 8 ) return;
@@ -809,7 +809,7 @@ void sgsdl2_fill_rect(sg_drawing_surface *surface, color clr, float *data, int d
 //  Triangles
 //
 
-void sgsdl2_draw_triangle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_triangle(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 6) return;
 
@@ -837,7 +837,7 @@ void sgsdl2_draw_triangle(sg_drawing_surface *surface, color clr, float *data, i
     }
 }
 
-void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_fill_triangle(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 6) return;
     
@@ -876,7 +876,7 @@ void sgsdl2_fill_triangle(sg_drawing_surface *surface, color clr, float *data, i
 //  Ellipse
 //
 
-void sgsdl2_draw_ellipse(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_ellipse(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 4) return;
     
@@ -908,7 +908,7 @@ void sgsdl2_draw_ellipse(sg_drawing_surface *surface, color clr, float *data, in
     }
 }
 
-void sgsdl2_fill_ellipse(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_fill_ellipse(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 4) return;
     
@@ -945,7 +945,7 @@ void sgsdl2_fill_ellipse(sg_drawing_surface *surface, color clr, float *data, in
 // Pixel
 //
 
-void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_pixel(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 2) return;
     
@@ -981,9 +981,9 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, color clr, float *data, int 
 }
 
 
-color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
+sg_color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
 {
-    color result = {0,0,0,0};
+    sg_color result = {0,0,0,0};
     unsigned int clr = 0;
     SDL_Rect rect = {x,y, 1, 1};
     
@@ -1010,7 +1010,7 @@ color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
 // Circles
 //
 
-void sgsdl2_draw_circle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_circle(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 3) return;
     
@@ -1040,7 +1040,7 @@ void sgsdl2_draw_circle(sg_drawing_surface *surface, color clr, float *data, int
     }
 }
 
-void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_fill_circle(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 3) return;
     
@@ -1075,7 +1075,7 @@ void sgsdl2_fill_circle(sg_drawing_surface *surface, color clr, float *data, int
 // Lines
 //
 
-void sgsdl2_draw_line(sg_drawing_surface *surface, color clr, float *data, int data_sz)
+void sgsdl2_draw_line(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
     if ( ! surface || ! surface->_data || data_sz != 4) return;
     
@@ -1225,7 +1225,7 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
 // Window change functions...
 //
 
-void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
+void sgsdl2_show_border(sg_drawing_surface *surface, int border)
 {
     if ( ! surface || ! surface->_data ) return;
     
@@ -1287,7 +1287,7 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
     }
 }
 
-void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
+void sgsdl2_show_fullscreen(sg_drawing_surface *surface, int fullscreen)
 {
     if ( ! surface || ! surface->_data ) return;
     

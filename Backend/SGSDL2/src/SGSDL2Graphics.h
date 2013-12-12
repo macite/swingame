@@ -19,6 +19,9 @@ void sgsdl2_load_graphics_fns(sg_interface *functions);
 void sgsdl2_load_image_fns(sg_interface *functions);
 void sgsdl2_finalise_graphics();
 
+unsigned int _sgsdl2_renderer_count(sg_drawing_surface *surface);
+SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface* surface, unsigned int idx);
+void _sgsdl2_complete_render(sg_drawing_surface* surface, unsigned int idx);
 
 typedef struct sg_window_be
 {

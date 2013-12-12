@@ -154,7 +154,7 @@ implementation
          (not (IsSet(flags, AlignCenter) or
                IsSet(flags, AlignRight))) then
       begin
-        // If it's specifically LEFT or none of the others:
+        { If it's specifically LEFT or none of the others: }
         rect := NewSDLRect(0,i*lineSkip,0,0);
       end
       else if IsSet(flags, AlignCenter) then
@@ -293,7 +293,7 @@ implementation
            (not (IsSet(flags, AlignCenter) or
                  IsSet(flags, AlignRight))) then
         begin
-          // If it's specifically LEFT or none of the others:
+          { // If it's specifically LEFT or none of the others: }
           rect := NewSDLRect(0,i*lineSkip,0,0);
         end
         else if IsSet(flags, AlignCenter) then

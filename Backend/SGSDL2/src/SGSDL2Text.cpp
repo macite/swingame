@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "SGSDL2Text.h"
+#include "SGSDL2Graphics.h"
 #include "sgBackendTypes.h"
 
 void sgsdl2_init_text()
@@ -56,7 +57,6 @@ int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h)
   return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
 }
 
-
 void sgsdl2_set_font_style(sg_font_data* font,int style) 
 {
   TTF_SetFontStyle((TTF_Font*)font->_data, style); 
@@ -65,6 +65,58 @@ void sgsdl2_set_font_style(sg_font_data* font,int style)
 int sgsdl2_get_font_style(sg_font_data* font) 
 {
   return TTF_GetFontStyle((TTF_Font*)font->_data); 
+}
+  
+void sgsdl2_draw_text(
+    sg_drawing_surface * surface, 
+    sg_font_data* font, 
+    float x, float y, 
+    const char * text, 
+    sg_color clr)
+{
+  SDL_Surface * text_surface = NULL;
+  SDL_Texture * text_texture = NULL;
+
+  SDL_Color sdl_color;
+  sdl_color.r = static_cast<Uint8>(clr.r * 255);
+  sdl_color.g = static_cast<Uint8>(clr.g * 255);
+  sdl_color.b = static_cast<Uint8>(clr.b * 255);
+  sdl_color.a = static_cast<Uint8>(clr.a * 255);
+  
+  text_surface = TTF_RenderText_Blended((TTF_Font*)font->_data, text, sdl_color);
+
+  if (text_surface == NULL)
+  {
+    // fail
+  }
+  else
+  {
+    unsigned int count = _sgsdl2_renderer_count(surface);
+
+    for (unsigned int i = 0; i < count; i++)
+    {
+      SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+      text_texture = SDL_CreateTextureFromSurface(renderer, text_surface);
+      if (text_texture == NULL)
+      {
+        // fail
+      }
+      else
+      {
+        SDL_Rect rect;
+        rect.x = x;
+        rect.y = y;
+        rect.w = text_surface->w;
+        rect.h = text_surface->h;
+
+        SDL_RenderCopy(renderer, text_texture, NULL, &rect);
+
+        _sgsdl2_complete_render(surface, i); 
+      }
+    }
+  }
+
+  SDL_FreeSurface(text_surface);
 }
 
 void sgsdl2_load_text_fns(sg_interface *functions)
@@ -75,4 +127,5 @@ void sgsdl2_load_text_fns(sg_interface *functions)
   functions->text.text_size = &sgsdl2_text_size; 
   functions->text.get_font_style = &sgsdl2_get_font_style; 
   functions->text.set_font_style = &sgsdl2_set_font_style; 
+  functions->text.draw_text = &sgsdl2_draw_text;
 }
