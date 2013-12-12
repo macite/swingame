@@ -175,7 +175,7 @@ void test_read_pixels(sg_drawing_surface *window)
     
     
     _sg_functions->graphics.clear_drawing_surface(window, {1.0, 0.0, 0.0, 1.0});
-    color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
+    sg_color clr = _sg_functions->graphics.read_pixel(window, 10, 10);
     
     cout << " - Color at  10,10  is RGBA " << clr.r << "," << clr.g << "," << clr.b << "," << clr.a << endl;
     cout << "   -                  Match 1,0,0,1" << endl;
@@ -193,7 +193,7 @@ void test_read_pixels(sg_drawing_surface *window)
 }
 
 
-color random_color()
+sg_color random_color()
 {
     return {    rand() / (float)RAND_MAX,
                 rand() / (float)RAND_MAX,
@@ -350,7 +350,7 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
 void test_pixels(sg_drawing_surface *window_arr, int sz)
 {
 	_sg_functions->input.process_events();
-    color clr = { 0.0, 0.0, 0.0, 1.0 };
+    sg_color clr = { 0.0, 0.0, 0.0, 1.0 };
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
