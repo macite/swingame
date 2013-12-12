@@ -42,6 +42,7 @@ fi
 #
 OPENGL=false
 SDL_13=false
+SDL_2=false
 
 Usage()
 {
@@ -53,10 +54,13 @@ Usage()
     echo "Options:"
     echo " -c   Perform a clean rather than a build"
     echo " -h   Show this help message "
+    echo " -badass Use SDL 1.3 driver"
+    echo " -godly  Use OpenGL driver"
+    echo " -sdl2   Use the SDL 2 driver"
     exit 0
 }
 
-while getopts chb:g: o
+while getopts chb:g:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
@@ -69,13 +73,20 @@ do
             OPENGL=true
         fi 
         ;;
+    s)  if [ "${OPTARG}" = "dl2" ]; then
+            SDL_2=true
+        fi
+        ;;
     esac
 done
 
 shift $((${OPTIND}-1))
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
+    if [ ${SDL_2} = true ]; then
+      TMP_DIR="${APP_PATH}/tmp/sdl2"
+      LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
+    elif [ ${SDL_13} = true ]; then
       TMP_DIR="${APP_PATH}/tmp/sdl13"
       LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
     elif [ ${OPENGL} = true ]; then
@@ -122,7 +133,9 @@ else
 fi    
 
 
-if [ ${SDL_13} = true ]; then
+if [ ${SDL_2} = true ]; then
+  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2"
+elif [ ${SDL_13} = true ]; then
   PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL13"
 elif [ ${OPENGL} = true ]; then
   PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_OPENGL -dSWINGAME_SDL13"
@@ -130,7 +143,7 @@ else
   PAS_FLAGS="${PAS_FLAGS} -k\"-lstdc++\""
 fi
 
-echo ${PAS_FLAGS}
+# echo ${PAS_FLAGS}
 
 DRV_LIB=`find ./libsrc -type d ! -path \*.svn\* | awk -F . '{print "-Fu"$0}'`
 SG_INC="-Fi${APP_PATH}/libsrc -Fu${APP_PATH}/libsrc -Fu${APP_PATH}/src ${DRV_LIB}"
@@ -219,7 +232,9 @@ CleanTmp()
 
 DoDriverMessage()
 {
-  if [ ${SDL_13} = true ]; then
+  if [ ${SDL_2} = true ]; then
+    echo "  ... Using SDL 2 Driver"
+  elif [ ${SDL_13} = true ]; then
     echo "  ... Using SDL 1.3 Driver"
   elif [ ${OPENGL} = true ]; then
     echo "  ... Using OpenGL Driver"

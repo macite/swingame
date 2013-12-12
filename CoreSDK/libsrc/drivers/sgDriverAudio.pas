@@ -18,7 +18,14 @@ unit sgDriverAudio;
 //=============================================================================
 
 interface
-	uses sgTypes, {$IFDEF SWINGAME_SDL13}sgDriverAudioSDL13Mixer{$ELSE}sgDriverAudioSDLMixer{$ENDIF};
+	uses sgTypes, 
+	{$IFDEF SWINGAME_SDL2}
+		sgDriverAudioSDL2
+	{$ELSE}
+		{$IFDEF SWINGAME_SDL13}sgDriverAudioSDL13Mixer
+		{$ELSE}sgDriverAudioSDLMixer
+		{$ENDIF}
+	{$ENDIF};
 	
 	type
 		// These function and procedure pointers are required by the AudioDriverRecord

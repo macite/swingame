@@ -13,7 +13,16 @@ unit sgDriverTimer;
 //=============================================================================
 
 interface
-	uses sgTypes, {$IFDEF SWINGAME_SDL13}sgDriverTimerSDL13{$ELSE}sgDriverTimerSDL{$ENDIF};
+	uses sgTypes, 
+	{$IFDEF SWINGAME_SDL2}
+		sgDriverTimerSDL2
+	{$ELSE}
+		{$IFDEF SWINGAME_SDL13}
+			sgDriverTimerSDL13
+		{$ELSE}
+			sgDriverTimerSDL
+		{$ENDIF}
+	{$ENDIF};
 	
 	type
 		DelayProcedure = procedure (time : LongWord);

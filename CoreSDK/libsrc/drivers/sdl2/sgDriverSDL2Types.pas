@@ -260,6 +260,8 @@ interface
 
   function sg_load(callbacks:sg_input_callbacks): ^sg_interface; cdecl; external;
 
+  var
+  	_sg_functions: ^sg_interface;
 
 implementation
 

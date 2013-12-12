@@ -20,11 +20,10 @@ unit sgDriverGraphics;
 interface
 	uses sgTypes;
 
-interface
-		
   procedure LoadSDL2GraphicsDriver();
 
 implementation
+  uses sgDriverSDL2Types;
     
 	function GetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
 	begin
@@ -196,37 +195,37 @@ implementation
 
 	procedure LoadSDL2GraphicsDriver();
 	begin
-		GraphicsDriver.GetPixel32               := @GetPixel32Procedure;
-  	GraphicsDriver.PutPixel                 := @PutPixelProcedure;		
-		GraphicsDriver.FillTriangle             := @FillTriangleProcedure;
-		GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;		
-		GraphicsDriver.FillCircle               := @FillCircleProcedure;
-		GraphicsDriver.DrawCircle               := @DrawCircleProcedure;				
-		GraphicsDriver.FillEllipse              := @FillEllipseProcedure;
-		GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;
-		GraphicsDriver.FillRectangle            := @FillRectangleProcedure;
-		GraphicsDriver.DrawLine                 := @DrawLineProcedure;
-		GraphicsDriver.SetPixelColor            := @SetPixelColorProcedure;
-    GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure;
-    GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;
-    GraphicsDriver.ResetClip                := @ResetClipProcedure;
-    GraphicsDriver.SetVideoModeFullScreen   := @SetVideoModeFullScreenProcedure;
-    GraphicsDriver.SetVideoModeNoFrame      := @SetVideoModeNoFrameProcedure;
-    GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;
-    GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;
-    GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;
-    GraphicsDriver.SaveImage                := @SaveImageProcedure;
-    GraphicsDriver.RefreshScreen            := @RefreshScreenProcedure;
-    GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;
-    GraphicsDriver.ColorFrom                := @ColorFromProcedure;
-    GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
-    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
-    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
-    // GraphicsDriver.ToGfxColor               := @ToGfxColorProcedure;
-    GraphicsDriver.GetRGB                   := @GetRGBProcedure;
-    GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
-    GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
-    GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;
+    GraphicsDriver.GetPixel32               := @GetPixel32Procedure;    // # (done)
+    GraphicsDriver.PutPixel                 := @PutPixelProcedure;      // #
+    GraphicsDriver.FillTriangle             := @FillTriangleProcedure;  // #
+    GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;  // #    
+    GraphicsDriver.FillCircle               := @FillCircleProcedure;    // #
+    GraphicsDriver.DrawCircle               := @DrawCircleProcedure;    // #
+    GraphicsDriver.FillEllipse              := @FillEllipseProcedure;   // #
+    GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;   // #
+    GraphicsDriver.FillRectangle            := @FillRectangleProcedure; // #
+    GraphicsDriver.DrawLine                 := @DrawLineProcedure;      // #  
+    GraphicsDriver.SetPixelColor            := @SetPixelColorProcedure; // - (not needed)
+    GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure; // #
+    GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;  // #
+    GraphicsDriver.ResetClip                := @ResetClipProcedure;         // #
+    GraphicsDriver.SetVideoModeFullScreen   := @SetVideoModeFullScreenProcedure;    // # show_fullscreen  
+    GraphicsDriver.SetVideoModeNoFrame      := @SetVideoModeNoFrameProcedure;       // # show_border 
+    GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;  // #
+    GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;          // #
+    GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;      // #
+    GraphicsDriver.SaveImage                := @SaveImageProcedure;             // - use to_pixels
+    GraphicsDriver.RefreshScreen            := @RefreshScreenProcedure;         // #
+    GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
+    GraphicsDriver.ColorFrom                := @ColorFromProcedure;             // -
+    GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
+    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
+    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
+    GraphicsDriver.GetRGB                   := @GetRGBProcedure;                // -
+    GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
+    GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
+    GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -
+    GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;  // # 
 	end;
 end.
 	

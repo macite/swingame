@@ -304,10 +304,21 @@ implementation
   
   
 	procedure LoadSDL2Driver();
+    var
+        callbacks: sg_input_callbacks;
 	begin
 		Driver.GetError           := @GetErrorProcedure;
 		Driver.GetKeyCode         := @GetKeyCodeProcedure;
 		Driver.Quit               := @QuitProcedure;
 		Driver.Init               := @InitProcedure;
+
+        callbacks.do_quit           := nil;
+        callbacks.handle_key_down   := nil;
+        callbacks.handle_key_up     := nil;
+        callbacks.handle_mouse_up   := nil;
+        callbacks.handle_mouse_down := nil;
+        callbacks.handle_input_text := nil;
+
+        _sg_functions = sg_load(callbacks);
 	end;
 end.
