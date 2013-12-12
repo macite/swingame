@@ -146,7 +146,7 @@ interface
     // Image related
     //
     sg_load_surface_fn = procedure(title: pchar); cdecl;
-    sg_drawing_surface_surface_proc = procedure(src: ^sg_drawing_surface; dst: ^sg_drawing_surface; x, y: float; angle: double; centre_x, centre_y: float; scale: double; flip: sg_renderer_flip); cdecl;
+    sg_drawing_surface_surface_proc = procedure(src: ^sg_drawing_surface; dst: ^sg_drawing_surface; x, y: float; angle: float; centre_x, centre_y: float; scale: float; flip: sg_renderer_flip); cdecl;
 
     //
     // Input related
