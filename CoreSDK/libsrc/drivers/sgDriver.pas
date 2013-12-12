@@ -40,16 +40,26 @@ uses
 	procedure LoadDefaultDriver();
 		
 implementation
-  	uses sgDriverTimer, {$IFDEF SWINGAME_SDL13}sgDriverSDL13{$ELSE}sgDriverSDL{$ENDIF};
+  	uses 
+  	{$IFDEF SWINGAME_SDL2}sgDriverSDL2
+  	{$ELSE}
+  		{$IFDEF SWINGAME_SDL13}sgDriverSDL13
+  		{$ELSE}sgDriverSDL
+  		{$ENDIF}
+  	{$ENDIF};
 
 	procedure LoadDefaultDriver();
 	begin
+		{$IFDEF SWINGAME_SDL2}
+			LoadSDL2Driver();
+		{$ELSE}	
 	  {$IFDEF SWINGAME_SDL13}
       // WriteLn('Loading 1.3');
 		  LoadSDL13Driver();
 		{$ELSE}
       // WriteLn('Loading 1.2');
 		  LoadSDLDriver();
+		{$ENDIF}
 		{$ENDIF}
 	end;
 

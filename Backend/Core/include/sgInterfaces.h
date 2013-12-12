@@ -311,8 +311,11 @@ extern "C" {
     //
     typedef struct sg_interface
     {
-        bool has_error;
-        const char *    current_error;
+        int                 has_error;
+        const char *        current_error;
+        
+        sg_empty_procedure  *init;
+        sg_empty_procedure  *finalise;
 
         //
         // function pointers by functionality
@@ -331,8 +334,6 @@ extern "C" {
         
         sg_system_data_fn   *read_system_data;
         
-        sg_empty_procedure  *init;
-        sg_empty_procedure  *finalise;
     } sg_interface;
 
     
