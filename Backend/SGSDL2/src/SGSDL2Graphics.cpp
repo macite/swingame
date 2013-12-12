@@ -1489,7 +1489,7 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
 //x, y is the position to draw the bitmap to. As bitmaps scale around their centre, (x, y) is the top-left of the bitmap IF and ONLY IF scale = 1.
 //Angle is in degrees, 0 being right way up
 //Centre is the point to rotate around, relative to the bitmap centre (therefore (0,0) would rotate around the centre point)
-void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, double angle, float centre_x, float centre_y, double scale, sg_renderer_flip flip )
+void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, float angle, float centre_x, float centre_y, float scale, sg_renderer_flip flip )
 {
     if ( ! src || ! dst || src->kind != SGDS_Bitmap )
 		return;
