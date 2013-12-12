@@ -68,6 +68,7 @@ extern "C" {
     typedef int  (sg_font_int_fn)(sg_font_data* font);
     typedef void  (sg_font_int_proc)(sg_font_data* font,int style);
     typedef int  (sg_font_size_fn)(sg_font_data* font, char* text, int* w, int* h); 
+    typedef void (sg_draw_text_proc)(sg_drawing_surface *surface, sg_font_data* font, float x, float y, const char *text, color clr);
 
     //
     // Sound related function pointers
@@ -292,6 +293,7 @@ extern "C" {
       sg_font_size_fn * text_size; 
       sg_font_int_fn * get_font_style; 
       sg_font_int_proc * set_font_style; 
+      sg_draw_text_proc * draw_text;
     } sg_text_interface;
 
     //
