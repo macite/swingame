@@ -1225,7 +1225,7 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
 // Window change functions...
 //
 
-void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
+void sgsdl2_show_border(sg_drawing_surface *surface, int border)
 {
     if ( ! surface || ! surface->_data ) return;
     
@@ -1287,7 +1287,7 @@ void sgsdl2_show_border(sg_drawing_surface *surface, bool border)
     }
 }
 
-void sgsdl2_show_fullscreen(sg_drawing_surface *surface, bool fullscreen)
+void sgsdl2_show_fullscreen(sg_drawing_surface *surface, int fullscreen)
 {
     if ( ! surface || ! surface->_data ) return;
     

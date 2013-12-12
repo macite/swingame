@@ -12,14 +12,9 @@
 // Align structs to one byte boundaries
 #pragma pack(push, 1)
 
-#ifndef __cplusplus
-#include <stdbool.h>
-#endif
-
-#ifdef __cplusplus
-
 #include "sgBackendTypes.h"
 
+#ifdef __cplusplus
 extern "C" {
 #endif
     
@@ -48,7 +43,7 @@ extern "C" {
     typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
     typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
     typedef void (sg_clip_proc)( sg_drawing_surface *surface, float *data, int data_sz );
-    typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, bool value );
+    typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, int value );
     typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
     
     typedef void (sg_surface_size_proc)( sg_drawing_surface *surface, int width, int height );
