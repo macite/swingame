@@ -1486,20 +1486,27 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
     return result;
 }
 
-void sgsdl2_draw_bitmap(sg_drawing_surface * src, sg_drawing_surface * dst, int x, int y )
+//x, y is the position to draw the bitmap to. As bitmaps scale around their centre, (x, y) is the top-left of the bitmap IF and ONLY IF scale = 1.
+//Angle is in degrees, 0 being right way up
+//Centre is the point to rotate around, relative to the bitmap centre (therefore (0,0) would rotate around the centre point)
+void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, double angle, float centre_x, float centre_y, double scale, sg_renderer_flip flip )
 {
     if ( ! src || ! dst || src->kind != SGDS_Bitmap )
-    {
-        return;
-    }
+		return;
 
     // Get size
     int w, h;
     SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[0];
     SDL_QueryTexture(srcT, NULL, NULL, &w, &h);
     
-    SDL_Rect dstrect = { x, y, w, h};
+	// Scale
+    SDL_Rect dstrect = { (int)(x - (w * scale / 2.0) + w/2.0), (int)(y - (h * scale / 2.0) + h/2.0), //fix the drawing position as scaling broke it
+						 (int)(w * scale), (int)(h * scale) }; //scale bitmap
     
+	// Adjust centre to be relative to the bitmap centre rather than top-left
+	centre_x = (centre_x * scale) + dstrect.w / 2.0;
+	centre_y = (centre_y * scale) + dstrect.h / 2.0;
+	
     unsigned int count = _sgsdl2_renderer_count(dst);
     
     for (unsigned int i = 0; i < count; i++)
@@ -1516,7 +1523,12 @@ void sgsdl2_draw_bitmap(sg_drawing_surface * src, sg_drawing_surface * dst, int 
         else
             srcT = ((sg_bitmap_be *)src->_data)->texture[ i ];
         
-        SDL_RenderCopy(renderer, srcT, NULL, &dstrect);
+		//Convert parameters to format SDL_RenderCopyEx expects
+		SDL_Point centre = {(int)centre_x, (int)centre_y};
+		SDL_RendererFlip sdl_flip = (SDL_RendererFlip) ((flip == SG_FLIP_BOTH) ? (SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL) : flip); //SDL does not have a FLIP_BOTH
+		
+		//Render
+        SDL_RenderCopyEx(renderer, srcT, NULL, &dstrect, angle, &centre, sdl_flip);
         
         _sgsdl2_complete_render(dst, i);
     }

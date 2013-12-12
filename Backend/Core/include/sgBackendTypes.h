@@ -39,6 +39,13 @@ typedef struct sg_drawing_surface
     void * _data;
 } sg_drawing_surface;
 
+enum sg_renderer_flip
+{
+	SG_FLIP_NONE,
+	SG_FLIP_HORIZONTAL,
+	SG_FLIP_VERTICAL,
+	SG_FLIP_BOTH
+};
 
 typedef struct sg_mode
 {

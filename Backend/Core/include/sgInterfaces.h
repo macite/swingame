@@ -110,7 +110,7 @@ extern "C" {
     //
     typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title);
     
-    typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dest, int x, int y );
+    typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, double angle, float centre_x, float centre_y, double scale, sg_renderer_flip flip );
     
     //
     // Input related

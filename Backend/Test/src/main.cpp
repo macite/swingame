@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <climits>
 #include <cstdio>
+#include <cmath>
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
@@ -128,7 +129,7 @@ void refresh_or_draw(sg_drawing_surface *surf)
     {
         // the test has asked to "refresh" a bitmap - use the _bmp_wnd to show the new
         // state of surf
-        _sg_functions->image.draw_bitmap(surf, _bmp_wnd, 10, 10);
+        _sg_functions->image.draw_bitmap(surf, _bmp_wnd, 10, 10, 0, 0, 0, 1, SG_FLIP_NONE);
         _sg_functions->graphics.refresh_window(_bmp_wnd);
     }
 }
@@ -635,11 +636,85 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 
 void test_bitmaps(sg_drawing_surface * window_arr, int sz)
 {
-    for (int i = 0; i < sz; i++)
-    {
-        _sg_functions->image.draw_bitmap( &img, &window_arr[i], 0, 0);
-        _sg_functions->image.draw_bitmap( &img2, &window_arr[i], 50, 50);
-        _sg_functions->graphics.refresh_window(&window_arr[i]);
+	float centre_x = 75;
+	float centre_y = 120.5; 
+	
+	//Draw at TOP LEFT (shows that the scaling of the draw coordinates works)
+	for (int i = 0; i < sz; i++)
+	{
+		_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		_sg_functions->image.draw_bitmap( &img, &window_arr[0], 0, 0, 0, 0, 0, 1, SG_FLIP_NONE);
+		_sg_functions->graphics.refresh_window(&window_arr[0]);	
+		_sg_functions->utils.delay(1000);
+	}
+	
+	//Test rotation (should rotate around centre)
+	for (int u = 0; u <= 360; u += 4) 
+	{
+		for (int i = 0; i < sz; i++)
+		{
+			//use sin
+			_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		    _sg_functions->image.draw_bitmap( &img, &window_arr[i], 300, 300, u, 0, 0, 1, SG_FLIP_NONE);
+			_sg_functions->image.draw_bitmap( &img2, &window_arr[i], 300, 300, u, 0, 0, 1, SG_FLIP_NONE);
+			_sg_functions->graphics.refresh_window(&window_arr[i]);	
+		}
+    }
+    _sg_functions->utils.delay(200);
+	
+	//Test scale
+	for (int u = 0; u <= 90; u++) 
+	{
+		for (int i = 0; i < sz; i++)
+		{
+			//use sin
+			_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		    _sg_functions->image.draw_bitmap( &img, &window_arr[i], 150, 150, 0, 0, 0, u/40.0, SG_FLIP_NONE);
+			_sg_functions->image.draw_bitmap( &img2, &window_arr[i], 150, 150, 0, 0, 0, u/40.0, SG_FLIP_NONE);
+			_sg_functions->graphics.refresh_window(&window_arr[i]);	
+		}
+    }
+	
+	//Test rotate and scale (should rotate around centre)
+	for (int u = 0; u <= 360; u += 2) 
+	{
+		for (int i = 0; i < sz; i++)
+		{
+			//use sin
+			_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		    _sg_functions->image.draw_bitmap( &img, &window_arr[i], 150, 150, u*2, 0, 0, u/360.0, SG_FLIP_NONE);
+			_sg_functions->image.draw_bitmap( &img2, &window_arr[i], 150, 150, u*2, 0, 0, u/360.0, SG_FLIP_NONE);
+			_sg_functions->graphics.refresh_window(&window_arr[i]);	
+		}
+    }
+		
+	//Test flip
+	for (int u = 0; u < 240; u++) 
+	{
+		for (int i = 0; i < sz; i++)
+		{
+			//use sin
+			_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		    _sg_functions->image.draw_bitmap( &img, &window_arr[i], 150, 150, 0, 0, 0, 1, (sg_renderer_flip)((u/30) % 4));
+			_sg_functions->image.draw_bitmap( &img2, &window_arr[i], 150, 150, 0, 0, 0, 1, SG_FLIP_NONE);
+			_sg_functions->graphics.refresh_window(&window_arr[i]);	
+		}
+    }
+	
+	//Test pretty
+	double scale;
+	for (int u = 0; u <= 720; u += 4) 
+	{
+		for (int i = 0; i < sz; i++)
+		{
+			scale = sin(u/90.0) + 0.5;
+			scale = scale > 0.2 ? scale : 0.2;
+			
+			//use sin
+			_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
+		    _sg_functions->image.draw_bitmap( &img, &window_arr[i], u, 100 + sin(u/60.0)*100, -u, 0, 0, scale, SG_FLIP_NONE);
+			_sg_functions->graphics.refresh_window(&window_arr[i]);	
+		}
     }
     
     _sg_functions->utils.delay(300);
@@ -790,7 +865,7 @@ bool test_bitmap_dest_drawing()
     
     sg_drawing_surface bmp = _sg_functions->image.create_bitmap(640, 480);
     
-    _sg_functions->image.draw_bitmap( &img, &bmp, 0, 0);
+    _sg_functions->image.draw_bitmap( &img, &bmp, 0, 0, 0, 0, 0, 1, SG_FLIP_NONE);
     refresh_or_draw(&bmp);
     _sg_functions->utils.delay(3000);
     
@@ -809,7 +884,7 @@ bool test_bitmap_dest_drawing()
     test_ellipses( &bmp, 1);
     test_lines( &bmp, 1);
     
-    _sg_functions->image.draw_bitmap(&img2, &bmp, 50, 50);
+    _sg_functions->image.draw_bitmap(&img2, &bmp, 50, 50, 0, 0, 0, 1, SG_FLIP_NONE);
     refresh_or_draw(&bmp);
     _sg_functions->utils.delay(3000);
     
