@@ -66,6 +66,7 @@ extern "C" {
     typedef sg_font_data (sg_font_load_fn)(const char *filename, int font_size);
     typedef void (sg_font_data_proc)(sg_font_data* font);
     typedef int  (sg_font_int_fn)(sg_font_data* font);
+    typedef void  (sg_font_int_proc)(sg_font_data* font,int style);
     typedef int  (sg_font_size_fn)(sg_font_data* font, char* text, int* w, int* h); 
 
     //
@@ -273,12 +274,24 @@ extern "C" {
     //
     // Text functions
     //
+
+    enum sg_font_style 
+    { 
+      SG_FONT_STYLE_NORMAL = 0,
+      SG_FONT_STYLE_BOLD = 1,
+      SG_FONT_STYLE_ITALIC = 2,
+      SG_FONT_STYLE_UNDERLINE = 4,
+      SG_FONT_STYLE_STRIKETHROUGH = 8
+    };
+
     typedef struct sg_text_interface
     {
       sg_font_load_fn * load_font;
       sg_font_data_proc * close_font;
       sg_font_int_fn * text_line_skip;
       sg_font_size_fn * text_size; 
+      sg_font_int_fn * get_font_style; 
+      sg_font_int_proc * set_font_style; 
     } sg_text_interface;
 
     //

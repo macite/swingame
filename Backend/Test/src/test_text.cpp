@@ -28,6 +28,12 @@ void test_text()
   int text_size = _sg_functions->text.text_size(&font,(char*)"Hello World", &w, &h); 
   cout << "Result for text size is : " << text_size << " with a width of: " << w << " and a height of: " << h << endl; 
 
+
+
+  _sg_functions->text.set_font_style(&font, SG_FONT_STYLE_ITALIC); 
+  int font_style = _sg_functions->text.get_font_style(&font); 
+  cout << " The font style is: " << font_style <<  endl; 
+
   _sg_functions->text.close_font(&font); 
   _sg_functions->text.close_font(&font); 
 

@@ -56,10 +56,23 @@ int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h)
   return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
 }
 
+
+void sgsdl2_set_font_style(sg_font_data* font,int style) 
+{
+  TTF_SetFontStyle((TTF_Font*)font->_data, style); 
+}
+
+int sgsdl2_get_font_style(sg_font_data* font) 
+{
+  return TTF_GetFontStyle((TTF_Font*)font->_data); 
+}
+
 void sgsdl2_load_text_fns(sg_interface *functions)
 {
   functions->text.load_font = &sgsdl2_load_font;
   functions->text.close_font = &sgsdl2_close_font;
   functions->text.text_line_skip = &sgsdl2_text_line_skip; 
   functions->text.text_size = &sgsdl2_text_size; 
+  functions->text.get_font_style = &sgsdl2_get_font_style; 
+  functions->text.set_font_style = &sgsdl2_set_font_style; 
 }
