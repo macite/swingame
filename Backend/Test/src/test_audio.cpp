@@ -34,7 +34,7 @@ void test_audio()
     
     sg_sound_data sound = _sg_functions->audio.load_sound_data("error.wav", SGSD_SOUND_EFFECT);
     
-    cout << "Loaded sound effect WAV ... " << ( sound.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded sound effect WAV ... " << ( sound._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound, 0, 1.0f);
     
@@ -42,7 +42,7 @@ void test_audio()
 
     sg_sound_data sound_ogg = _sg_functions->audio.load_sound_data("test.ogg", SGSD_SOUND_EFFECT);
     
-    cout << "Loaded sound effect OGG ... " << ( sound_ogg.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded sound effect OGG ... " << ( sound_ogg._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound_ogg, 0, 1.0f);
 
@@ -51,7 +51,7 @@ void test_audio()
     
     sg_sound_data sound_flac = _sg_functions->audio.load_sound_data("30248__streety__sword7.flac", SGSD_SOUND_EFFECT);
     
-    cout << "Loaded sound effect FLAC ... " << ( sound_ogg.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded sound effect FLAC ... " << ( sound_ogg._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound_flac, 0, 1.0f);
     
@@ -59,7 +59,7 @@ void test_audio()
     
     sg_sound_data sound_mp3 = _sg_functions->audio.load_sound_data("280.mp3", SGSD_MUSIC);
     
-    cout << "Loaded music MP3 ... " << ( sound_mp3.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded music MP3 ... " << ( sound_mp3._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound_mp3, 0, 1.0f);
     
@@ -67,7 +67,7 @@ void test_audio()
     
     sg_sound_data sound_mod = _sg_functions->audio.load_sound_data("energize_my_mind.mod", SGSD_MUSIC);
     
-    cout << "Loaded music MOD ... " << ( sound_mod.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded music MOD ... " << ( sound_mod._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound_mod, 0, 1.0f);
     
@@ -90,7 +90,7 @@ void test_audio()
     
     sg_sound_data sound_midi = _sg_functions->audio.load_sound_data("superman_1.mid", SGSD_MUSIC);
     
-    cout << "Loaded music MIDI ... " << ( sound_midi.data ? "SUCCESS" : "FAILED") << endl;
+    cout << "Loaded music MIDI ... " << ( sound_midi._data ? "SUCCESS" : "FAILED") << endl;
     
     _sg_functions->audio.play_sound(&sound_midi, 0, 1.0f);
     
