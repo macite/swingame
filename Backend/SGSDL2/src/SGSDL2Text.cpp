@@ -5,9 +5,15 @@
 //  Created by James Armstrong on 11/12/2013.
 //
 
+#include <iostream>
+
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#else
 #include <SDL.h>
 #include <SDL_ttf.h>
-#include <iostream>
+#endif
 
 #include "SGSDL2Text.h"
 #include "SGSDL2Graphics.h"

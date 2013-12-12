@@ -9,7 +9,11 @@
 #ifndef __sgsdl2__SGSDL2Graphics__
 #define __sgsdl2__SGSDL2Graphics__
 
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "sgBackendTypes.h"
 #include "sgInterfaces.h"
