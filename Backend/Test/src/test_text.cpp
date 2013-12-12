@@ -28,7 +28,8 @@ void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style)
   sg_drawing_surface bitmap = _sg_functions->image.create_bitmap(400, 400);
   _sg_functions->graphics.clear_drawing_surface(&bitmap, {0.0, 0.0, 0.0, 0.0});
   _sg_functions->text.draw_text(&bitmap, font, 0, 0, "AWESOME!", {0.0, 1.0, 0.0, 1.0});
-  _sg_functions->image.draw_bitmap(&bitmap, &window, x, y);
+  _sg_functions->image.draw_bitmap(&bitmap, &window, x, y, 0, 0, 0, 1, SG_FLIP_NONE);
+
   _sg_functions->graphics.refresh_window(&window);
   _sg_functions->utils.delay(1000);
   
