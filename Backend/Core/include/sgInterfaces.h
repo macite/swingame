@@ -18,13 +18,6 @@
 extern "C" {
 #endif
     
-    typedef unsigned char byte;
-    typedef enum sg_interface_features
-    {
-        SGV_NONE = 0x00,
-        SGV_INIT = 0x01
-    } sg_interface_version;
-    
     typedef struct sg_color
     {
         float r, g, b, a;
@@ -32,8 +25,9 @@ extern "C" {
     
     typedef void (sg_empty_procedure)( void );
 
+    typedef char * pchar;
     
-    typedef char* (sg_charp_fn)(); 
+    typedef pchar (sg_charp_fn)();
     typedef void (sg_rectangle_dimensions_proc)(int x, int y, int w, int h); 
 
     typedef void (sg_charp_proc)(char* text); 
@@ -53,7 +47,8 @@ extern "C" {
 
     typedef sg_color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
-    typedef sg_system_data * (sg_system_data_fn)();
+    typedef sg_system_data * psg_system_data;
+    typedef psg_system_data (sg_system_data_fn)();
 
     //
     // Text related function pointers
@@ -92,7 +87,7 @@ extern "C" {
     typedef void (sg_floatp_proc)( float val );
     
     typedef float (sg_float_fn)( );
-    typedef int sg_int_intp_fn( int val );
+    typedef int   (sg_int_intp_fn)( int val );
     
     typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     

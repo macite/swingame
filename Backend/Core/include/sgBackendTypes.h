@@ -18,9 +18,9 @@
 //
 enum sg_drawing_surface_kind
 {
-    SGDS_Unknown,   // Unknown, so do not draw onto this!
-    SGDS_Window,    // A window
-    SGDS_Bitmap     // A surface, bitmap, or texture
+    SGDS_Unknown = 0,   // Unknown, so do not draw onto this!
+    SGDS_Window = 1,    // A window
+    SGDS_Bitmap = 2     // A surface, bitmap, or texture
 };
 
 //
@@ -41,10 +41,10 @@ typedef struct sg_drawing_surface
 
 enum sg_renderer_flip
 {
-	SG_FLIP_NONE,
-	SG_FLIP_HORIZONTAL,
-	SG_FLIP_VERTICAL,
-	SG_FLIP_BOTH
+	SG_FLIP_NONE = 0,
+	SG_FLIP_HORIZONTAL = 1,
+	SG_FLIP_VERTICAL = 2,
+	SG_FLIP_BOTH = 3
 };
 
 typedef struct sg_mode
