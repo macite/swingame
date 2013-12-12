@@ -4,15 +4,16 @@ interface
 	procedure LoadSDLTimerDriver();
 
 implementation
-	uses sgDriverTimer;
+	uses sgDriverTimer, sgDriverSDL2Types;
 
 	procedure DelayProcedure(time : LongWord);
 	begin
+		_sg_functions^.utils.delay(time);
 	end;
 	
 	function GetTicksProcedure() : LongWord;
 	begin
-		result := 0;
+		result := _sg_functions^.utils.get_ticks();
 	end;
 
 	procedure LoadSDLTimerDriver();
