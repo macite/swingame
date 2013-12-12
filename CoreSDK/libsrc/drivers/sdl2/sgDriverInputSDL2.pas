@@ -1,70 +1,110 @@
 unit sgDriverInputSDL2;
 
 interface
+  uses sgDriverSDL2Types;
+
   procedure LoadSDL2InputDriver();
+  function GetInputCallbackFunction() : sg_input_callbacks;
 
 implementation
-  uses sgDriverInput, sgDriverSDL2Types, sgInputBackend;
+  uses sgDriverInput, sgInputBackend, SDL2;
 
   function IsKeyPressedProcedure(virtKeyCode : LongInt) : Boolean;
   begin
-    result := true;
+    result := _sg_functions^.input.key_pressed(virtKeyCode) <> 0;
   end;
   
-  function CheckQuitProcedure() : Boolean;
+  function CheckQuitProcedure() : Boolean; //TODO: check why this doesn't work correctly from SDL - Cmd + Q should end it
+  {$IFDEF FPC}
+  var
+    keys: PUInt8;
+    modS:  SDL_Keymod;
+  {$ENDIF} 
   begin
-    result := false;
+    {$IFDEF FPC}
+    keys := SDL_GetKeyboardState(nil);
+    modS := SDL_GetModState();
+    
+    result := ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_LGUI) = LongInt(KMOD_LGUI)) or 
+              ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_RGUI) = LongInt(KMOD_RGUI)) or 
+              ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_LALT) = LongInt(KMOD_LALT)) or 
+              ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_RALT) = LongInt(KMOD_RALT));
+                
+    {$ELSE}
+    result := (IsKeyPressed(SDLK_LALT) and IsKeyPressed(SDLK_F4));
+    {$ENDIF}
   end;
   
   procedure ProcessEventsProcedure();
   begin
-  end;
-  
-  procedure DestroyProcedure();
-  begin
-  end;
-  
-  function GetKeyStateProcedure() : Byte; 
-  begin
-    result := 0
+    _sg_functions^.input.process_events();
   end;
   
   function GetRelativeMouseStateProcedure(var x : LongInt; var y : LongInt) : Byte;
   begin
-    result := 0;
+    result := _sg_functions^.input.mouse_relative_state(@x, @y);
   end;
 
   function GetMouseStateProcedure(var x : LongInt; var y : LongInt): Byte; 
   begin
-    result := 0;
+    result := _sg_functions^.input.mouse_state(@x, @y);
   end;
   
   function ShowCursorProcedure(toggle : LongInt):LongInt;
   begin
-    result := 0;
+    result := _sg_functions^.input.mouse_cursor_state(toggle);
   end;
   
   function ButtonProcedure(button : LongInt) : LongInt;
   begin
-    result := 0;
+    result := button; //TODO: check
   end;
   
   procedure WarpMouseProcedure(x,y : Word); 
   begin
+    //TODO: ...
+  end;
+
+  procedure HandleKeydownEventCallback(code: Longint); cdecl;
+  begin
+    HandleKeydownEvent(code, code);
+  end;
+
+  procedure HandleKeyupEventCallback(code: Longint); cdecl;
+  begin
+    HandleKeyupEvent(code);
+  end;
+
+  procedure ProcessMouseEventCallback(code: Longint); cdecl;
+  begin
+    ProcessMouseEvent(code);
+  end;
+
+  procedure DoQuitCallback(); cdecl;
+  begin
+    DoQuit();
+  end;
+
+  function GetInputCallbackFunction() : sg_input_callbacks;
+  begin
+    result.do_quit           := @DoQuitCallback;
+    result.handle_key_down   := @HandleKeydownEventCallback;
+    result.handle_key_up     := @HandleKeyupEventCallback;
+    result.handle_mouse_up   := @ProcessMouseEventCallback;
+    result.handle_mouse_down := nil;
+    result.handle_input_text := nil;
   end;
   
   procedure LoadSDL2InputDriver();
   begin
-    InputDriver.IsKeyPressed := @IsKeyPressedProcedure;
-    InputDriver.CheckQuit := @CheckQuitProcedure;
+    InputDriver.IsKeyPressed  := @IsKeyPressedProcedure;
+    InputDriver.CheckQuit     := @CheckQuitProcedure;
     InputDriver.ProcessEvents := @ProcessEventsProcedure;
-    InputDriver.Destroy := @DestroyProcedure;
-    InputDriver.GetKeyState := @GetKeyStateProcedure;
     InputDriver.GetRelativeMouseState := @GetRelativeMouseStateProcedure;
     InputDriver.GetMouseState := @GetMouseStateProcedure;
-    InputDriver.ShowCursor := @ShowCursorProcedure;
-    InputDriver.Button := @ButtonProcedure;
-    InputDriver.WarpMouse := @WarpMouseProcedure;
+    InputDriver.ShowCursor    := @ShowCursorProcedure;
+    InputDriver.Button        := @ButtonProcedure;
+    InputDriver.WarpMouse     := @WarpMouseProcedure;
   end;
 
 end.

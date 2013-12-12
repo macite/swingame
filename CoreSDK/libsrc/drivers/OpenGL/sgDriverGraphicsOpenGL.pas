@@ -540,11 +540,6 @@ implementation
     result := false;
   end;
   
-  procedure GetRGBProcedure(pixel : Byte; r,g,b : Byte); 
-    begin
-    exit;
-  end;
-
   function GetScreenWidthProcedure(): LongInt; 
   begin
     result := _screenWidth;
@@ -584,7 +579,6 @@ implementation
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
     GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
     GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
-    GraphicsDriver.GetRGB                   := @GetRGBProcedure;
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;

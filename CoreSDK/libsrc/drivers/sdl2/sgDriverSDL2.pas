@@ -19,7 +19,7 @@ interface
   procedure LoadSDL2Driver();
 
 implementation
-	uses sgDriver, sgShared, SysUtils, sgTrace, SDL2, sgTypes, sgDriverSDL2Types;
+	uses sgDriver, sgShared, SysUtils, sgTrace, SDL2, sgTypes, sgDriverSDL2Types, sgDriverInputSDL2;
 
 	var
 	  _Initialised : Boolean = False;
@@ -312,13 +312,7 @@ implementation
 		Driver.Quit               := @QuitProcedure;
 		Driver.Init               := @InitProcedure;
 
-        callbacks.do_quit           := nil;
-        callbacks.handle_key_down   := nil;
-        callbacks.handle_key_up     := nil;
-        callbacks.handle_mouse_up   := nil;
-        callbacks.handle_mouse_down := nil;
-        callbacks.handle_input_text := nil;
-
-        _sg_functions := sg_load(callbacks);
+        callbacks       := GetInputCallbackFunction();
+        _sg_functions   := sg_load(callbacks);
 	end;
 end.

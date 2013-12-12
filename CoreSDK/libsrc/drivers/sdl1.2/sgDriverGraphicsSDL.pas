@@ -390,18 +390,6 @@ implementation
     result := Assigned( PSDL_Surface(src^.surface)^.format);
   end; 
   
-
-  
-
-  
-  procedure GetRGBProcedure(pixel : Byte; r,g,b : Byte); 
-  var
-    fmt : PSDL_Surface;
-  begin
-    fmt := screen^.surface;
-    SDL_GetRGB(pixel,fmt^.format, @r,@g,@b);    
-  end;
-
   function GetScreenWidthProcedure(): LongInt; 
   begin
     result := PSDL_Surface(_screen)^.w;
@@ -440,8 +428,6 @@ implementation
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
     GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
     GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
-    // GraphicsDriver.ToGfxColor               := @ToGfxColorProcedure;
-    GraphicsDriver.GetRGB                   := @GetRGBProcedure;
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;

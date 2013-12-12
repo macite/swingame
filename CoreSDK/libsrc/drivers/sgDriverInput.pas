@@ -16,8 +16,6 @@ type
   IsKeyPressedProcedure = function(virtKeyCode: Longint) : Boolean;
   CheckQuitProcedure = function() : Boolean;
   ProcessEventsProcedure = procedure();
-  DestroyProcedure = procedure();  
-  GetKeyStateProcedure = function() : Byte;
   GetRelativeMouseStateProcedure = function(var x : LongInt; var y : LongInt): Byte;
   GetMouseStateProcedure = function(var x : LongInt; var y : LongInt): Byte;
   ShowCursorProcedure = function (toggle : LongInt) : LongInt;
@@ -28,8 +26,6 @@ type
     IsKeyPressed : IsKeyPressedProcedure;
     CheckQuit : CheckQuitProcedure;
     ProcessEvents : ProcessEventsProcedure;
-    Destroy : DestroyProcedure;
-    GetKeyState : GetKeyStateProcedure;
     GetRelativeMouseState : GetRelativeMouseStateProcedure;
     GetMouseState : GetMouseStateProcedure;
     ShowCursor : ShowCursorProcedure;
@@ -71,21 +67,7 @@ implementation
     LoadDefaultInputDriver();
     InputDriver.ProcessEvents();
   end;
-  
-  procedure DefaultDestroyProcedure();
-  begin
-    LoadDefaultInputDriver();
-    InputDriver.Destroy();
-  end;
-  
-
-  
-  function DefaultGetKeyStateProcedure() : Byte; 
-  begin
-    LoadDefaultInputDriver();
-    result := InputDriver.GetKeyState();
-  end;
-  
+    
   function DefaultGetRelativeMouseStateProcedure(var x : LongInt; var y : LongInt) : Byte;
   begin
     LoadDefaultInputDriver();
@@ -121,8 +103,6 @@ initialization
     InputDriver.IsKeyPressed := @DefaultIsKeyPressedProcedure;
     InputDriver.CheckQuit := @DefaultCheckQuitProcedure;
     InputDriver.ProcessEvents := @DefaultProcessEventsProcedure;
-    InputDriver.Destroy := @DefaultDestroyProcedure;
-    InputDriver.GetKeyState := @DefaultGetKeyStateProcedure;
     InputDriver.GetRelativeMouseState := @DefaultGetRelativeMouseStateProcedure;
     InputDriver.GetMouseState := @DefaultGetMouseStateProcedure;
     InputDriver.ShowCursor := @DefaultShowCursorProcedure;

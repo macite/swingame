@@ -24,6 +24,11 @@ interface
 
 implementation
   uses sgDriverSDL2Types, sgDriverGraphics;
+
+  // Currently only a single window... TODO: allow multiple windows
+  var
+    wind: sg_drawing_surface;
+
     
 	function GetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
 	begin
@@ -91,8 +96,6 @@ implementation
   end;
 	
   procedure InitializeGraphicsWindowProcedure(caption : String; screenWidth, screenHeight : LongInt);
-  var
-    wind: sg_drawing_surface;
   begin
     wind := _sg_functions^.graphics.open_window('Hello', 800, 600);
   end;
@@ -136,16 +139,6 @@ implementation
   function GetSurfaceHeightProcedure(src : Bitmap)  : LongInt;
   begin
     result := 0;
-  end;
-  
-  // function ToGfxColorProcedure(val : Color): Color; 
-  // begin
-  //   LoadGraphicsDriver();
-  //   result := GraphicsDriver.ToGfxColor(val);
-  // end;
-  // 
-  procedure GetRGBProcedure(pixel : Byte ; r,g,b : Byte);
-  begin
   end;
   
   function SurfaceFormatAssignedProcedure(bmp : Bitmap) : Boolean; 
@@ -197,7 +190,6 @@ implementation
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
     GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
     GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
-    GraphicsDriver.GetRGB                   := @GetRGBProcedure;                // -
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -
