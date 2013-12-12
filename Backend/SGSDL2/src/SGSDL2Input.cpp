@@ -6,10 +6,15 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#include "SGSDL2Input.h"
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
+#include "SGSDL2Input.h"
 #include "SGSDL2Graphics.h"
+
 #include "sgBackendUtils.h"
 
 void _sgsdl2_handle_window_event(SDL_Event * event)

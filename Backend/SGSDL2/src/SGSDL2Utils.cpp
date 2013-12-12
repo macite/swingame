@@ -8,7 +8,11 @@
 
 #include "SGSDL2Utils.h"
 
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 void sgsdl2_delay(unsigned int ms)
 {

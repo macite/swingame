@@ -6,9 +6,15 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#include "SGSDL2Audio.h"
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#else
 #include <SDL.h>
 #include <SDL_mixer.h>
+#endif
+
+#include "SGSDL2Audio.h"
 #include "sgBackendUtils.h"
 
 #define SG_MAX_CHANNELS 64

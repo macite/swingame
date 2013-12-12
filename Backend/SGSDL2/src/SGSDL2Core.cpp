@@ -6,7 +6,11 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
+#endif
 
 #include "SGSDL2Core.h"
 
