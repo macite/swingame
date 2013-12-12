@@ -110,8 +110,8 @@ void sgsdl2_draw_text(
       else
       {
         SDL_Rect rect;
-        rect.x = x;
-        rect.y = y;
+        rect.x = (int)x;
+        rect.y = (int)y;
         rect.w = text_surface->w;
         rect.h = text_surface->h;
 
