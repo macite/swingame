@@ -76,6 +76,10 @@ interface
   // sgInterface types
   //
   type
+    int = longint;
+    float = single;
+    uint = longword;
+
     sg_color = packed record
         r : single;
         g : single;
@@ -85,6 +89,71 @@ interface
 
     psg_system_data = ^sg_system_data;
 
+    //
+    // Function pointers
+    //
+    sg_empty_procedure = procedure(); cdecl;
+    sg_charp_fn = function(): pchar; cdecl;
+    sg_drawing_surface = procedure(surface: ^sg_drawing_surface); cdecl;
+    sg_drawing_surface_bool_fn = function(surface: ^sg_drawing_surface): int; cdecl;
+    sg_single_uint32param_proc = procedure(ms: uint); cdecl;
+    sg_drawing_surface_clr_proc = procedure(surface: ^sg_drawing_surface); cdecl;
+    sg_drawing_proc = procedure(surface: ^sg_drawing_surface; data: ^float; data_sz: int); cdecl;
+    sg_clip_proc = procedure(surface: ^sg_drawing_surface; val: int); data_sz;
+    sg_to_pixel_array_proc = procedure(surface: ^sg_drawing_surface; pixels: ^int; sz: int); cdecl;
+
+    sg_surface_size_proc = procedure(surface: ^sg_drawing_surface; width, height: int); cdecl;
+
+    sg_new_surface_fn = function(title: pchar; width, height: int): sg_drawing_surface; cdecl;
+    sg_create_surface_fn = function(width, height: int): sg_drawing_surface; cdecl;
+
+    sg_surface_color_fn = function(surface: ^sg_drawing_surface; x, y: int): sg_color; cdecl;
+
+    sg_system_data_fn = function(): ^sg_system_data; cdecl;
+
+    //
+    // Text-related function pointers
+    //
+    sg_font_load_fn = function(filename: pchar; font_size: int): sg_font_data; cdecl;
+    sg_font_data_proc = procedure(font: ^sg_font_data); cdecl;
+    sg_font_int_fn = function(font: ^sg_font_data): int; cdecl;
+    sg_font_int_proc = procedure(font: ^sg_font_data, style: int); cdecl;
+    sg_font_size_fn = function(font: ^sg_font_data; text: pchar; w, h: ^int); cdecl;
+    sg_draw_text_proc = procedure(surface: ^sg_drawing_surface; font: ^sg_font_data; x, y: float; text: pchar; clr: sg_color); cdecl;
+
+    //
+    // Sound-related function pointers
+    //
+    sg_sound_load_fn = function(filename: pchar; kind: sg_sound_kind): sg_sound_data; cdecl;
+    sg_play_sound_fn = procedure(sound: ^sg_sound_data; loops: int; volume: float); cdecl;
+    sg_sound_data_proc = procedure(sound: ^sg_sound_data); cdecl;
+    sg_sound_float_fn = function(sound: ^sg_sound_data): float; cdecl;
+    sg_sound_fade_proc = procedure(sound: ^sg_sound_data; loops, ms: int); cdecl;
+    sg_sound_fade_out_proc = procedure(sound: ^sg_sound_data; ms: int); cdecl;
+    sg_sound_float_proc = procedure(sound: ^sg_sound_data; val: float); cdecl;
+    sg_intp_proc = procedure(ms: int); cdecl;
+    sg_floatp_proc = procedure(val: float); cdecl;
+    sg_float_fn = function(): float; cdecl;
+    sg_int_intp_fn = function(int val): int; cdecl;
+    sg_float_soundp_fn = function(sound ^sg_sound_data): float; cdecl;
+
+    //
+    // Utility related
+    //
+    uint_fn = function(): uint; cdecl;
+
+    // 
+    // Image related
+    //
+    sg_load_surface_fn = procedure(title: pchar); cdecl;
+    sg_drawing_surface_surface_proc = procedure(src: ^sg_drawing_surface; dst: ^sg_drawing_surface; x, y: float; angle: double; centre_x, centre_y: float; scale: double; flip: sg_renderer_flip); cdecl;
+
+    //
+    // Input related
+    //
+    sg_mouse_state_fn = function(x, y: ^int): uint; cdecl;
+
+    
     sg_utils_interface = packed record
         delay : ^sg_single_uint32param_proc;
         get_ticks : ^uint_fn;
