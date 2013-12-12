@@ -25,10 +25,10 @@ extern "C" {
         SGV_INIT = 0x01
     } sg_interface_version;
     
-    typedef struct color
+    typedef struct sg_color
     {
         float r, g, b, a;
-    } color;
+    } sg_color;
     
     typedef void (sg_empty_procedure)( void );
 
@@ -40,8 +40,8 @@ extern "C" {
     typedef void (sg_drawing_surface_proc)( sg_drawing_surface * );
     typedef int  (sg_drawing_surface_bool_fn)(sg_drawing_surface *);
     typedef void (sg_single_uint32param_proc)( unsigned int ms );
-    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, color clr );
-    typedef void (sg_drawing_proc)( sg_drawing_surface *surface, color clr, float *data, int data_sz );
+    typedef void (sg_drawing_surface_clr_proc)( sg_drawing_surface *surface, sg_color clr );
+    typedef void (sg_drawing_proc)( sg_drawing_surface *surface, sg_color clr, float *data, int data_sz );
     typedef void (sg_clip_proc)( sg_drawing_surface *surface, float *data, int data_sz );
     typedef void (sg_surface_bool_proc)( sg_drawing_surface *surface, int value );
     typedef void (sg_to_pixel_array_proc)( sg_drawing_surface *surface, int *pixels, int sz );
@@ -51,7 +51,7 @@ extern "C" {
     typedef sg_drawing_surface  (sg_new_surface_fn)(const char *title, int width, int height);
     typedef sg_drawing_surface  (sg_create_surface_fn)(int width, int height);
 
-    typedef color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
+    typedef sg_color (sg_surface_color_fn)( sg_drawing_surface *surface, int x, int y );
     
     typedef sg_system_data * (sg_system_data_fn)();
 
@@ -63,7 +63,7 @@ extern "C" {
     typedef int  (sg_font_int_fn)(sg_font_data* font);
     typedef void  (sg_font_int_proc)(sg_font_data* font,int style);
     typedef int  (sg_font_size_fn)(sg_font_data* font, char* text, int* w, int* h); 
-    typedef void (sg_draw_text_proc)(sg_drawing_surface *surface, sg_font_data* font, float x, float y, const char *text, color clr);
+    typedef void (sg_draw_text_proc)(sg_drawing_surface *surface, sg_font_data* font, float x, float y, const char *text, sg_color clr);
 
     //
     // Sound related function pointers

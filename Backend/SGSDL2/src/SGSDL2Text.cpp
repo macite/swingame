@@ -72,7 +72,7 @@ void sgsdl2_draw_text(
     sg_font_data* font, 
     float x, float y, 
     const char * text, 
-    color clr)
+    sg_color clr)
 {
   SDL_Surface * text_surface = NULL;
   SDL_Texture * text_texture = NULL;
