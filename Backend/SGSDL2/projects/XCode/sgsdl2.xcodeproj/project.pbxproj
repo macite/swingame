@@ -187,8 +187,6 @@
 		9471BD83183B6E5700BE3771 = {
 			isa = PBXGroup;
 			children = (
-				94FEB5161858302500AFF9D7 /* libz.dylib */,
-				94FEB51318582FEE00AFF9D7 /* libbz2.dylib */,
 				9471BDA1183B72A900BE3771 /* Libraries */,
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
@@ -270,6 +268,8 @@
 		9471BDA1183B72A900BE3771 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				94FEB5161858302500AFF9D7 /* libz.dylib */,
+				94FEB51318582FEE00AFF9D7 /* libbz2.dylib */,
 				942DBEE5183C213300876830 /* Carbon.framework */,
 				942DBEE1183C211C00876830 /* OpenGL.framework */,
 				942DBEDF183C211100876830 /* IOKit.framework */,

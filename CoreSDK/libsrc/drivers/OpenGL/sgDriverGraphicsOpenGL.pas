@@ -525,16 +525,6 @@ implementation
     result := 0;
   end;
 
-  function GetSurfaceWidthProcedure(src : Bitmap) : LongInt;
-  begin
-    result := 0;
-  end;
-  
-  function GetSurfaceHeightProcedure(src : Bitmap) : LongInt;
-  begin
-    result := 0;
-  end;
-  
   function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
   begin
     result := false;
@@ -577,8 +567,6 @@ implementation
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
-    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
-    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;

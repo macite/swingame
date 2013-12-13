@@ -576,17 +576,17 @@ implementation
     result := SDL_MapRGBA(GetSurface(screen)^.format, r, g, b, a);
   end;
 
-  function GetSurfaceWidthProcedure(src : Bitmap) : LongInt;
-  begin
-		if not Assigned(GetSurface(src)) then begin RaiseWarning('SDL1.3 Graphics Driver - GetSurfaceWidthProcedure recieved empty Bitmap'); exit; end;
-    result := GetSurface(src)^.w;
-  end;
+  // function GetSurfaceWidthProcedure(src : Bitmap) : LongInt;
+  // begin
+		// if not Assigned(GetSurface(src)) then begin RaiseWarning('SDL1.3 Graphics Driver - GetSurfaceWidthProcedure recieved empty Bitmap'); exit; end;
+  //   result := GetSurface(src)^.w;
+  // end;
   
-  function GetSurfaceHeightProcedure(src : Bitmap) : LongInt;
-  begin
-		if not Assigned(GetSurface(src)) then begin RaiseWarning('SDL1.3 Graphics Driver - GetSurfaceHeightProcedure recieved empty Bitmap'); exit; end;
-    result := GetSurface(src)^.h;
-  end;
+  // function GetSurfaceHeightProcedure(src : Bitmap) : LongInt;
+  // begin
+		// if not Assigned(GetSurface(src)) then begin RaiseWarning('SDL1.3 Graphics Driver - GetSurfaceHeightProcedure recieved empty Bitmap'); exit; end;
+  //   result := GetSurface(src)^.h;
+  // end;
   
   function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
   begin
@@ -637,8 +637,8 @@ implementation
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;             // -
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
-    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
-    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
+    // GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
+    // GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -

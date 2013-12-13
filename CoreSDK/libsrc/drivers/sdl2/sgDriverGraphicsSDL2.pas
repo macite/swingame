@@ -1,3 +1,4 @@
+
 unit sgDriverGraphicsSDL2;
 //=============================================================================
 // sgDriverGraphics.pas
@@ -23,7 +24,7 @@ interface
   procedure LoadSDL2GraphicsDriver();
 
 implementation
-  uses sgDriverSDL2Types, sgDriverGraphics;
+  uses sgDriverSDL2Types, sgDriverGraphics, sgShared, sgGeometry;
 
     
 	function GetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
@@ -95,10 +96,34 @@ implementation
   begin
     wind := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
     wind_open := true;
+
+    // Allocate space for the screen variable - TODO: move this out of here!
+    New(screen);
+    screen^.surface := @wind;
+    screenRect    := RectangleFrom(0,0, screenWidth, screenHeight);
+    screen^.width := screenWidth;
+    screen^.height := screenHeight;
+
+    _screen := @wind;
   end;
 
-  procedure InitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);
+  procedure InitializeScreenProcedure( screen: Bitmap; x, y : LongInt; bgColor, stringColor : Color; msg : String);
+  var
+    clr: sg_color;
   begin
+    clr.a := ((bgColor and $ff000000) shr 24) / 255.0;
+    clr.r := ((bgColor and $00ff0000) shr 16) / 255.0;
+    clr.g := ((bgColor and $0000ff00) shr  8) / 255.0;
+    clr.b := ((bgColor and $000000ff)       ) / 255.0;
+
+    _sg_functions^.graphics.clear_drawing_surface(psg_drawing_surface(screen^.surface), clr);
+
+    clr.a := ((stringColor and $ff000000) shr 24) / 255.0;
+    clr.r := ((stringColor and $00ff0000) shr 16) / 255.0;
+    clr.g := ((stringColor and $0000ff00) shr  8) / 255.0;
+    clr.b := ((stringColor and $000000ff)       ) / 255.0;
+
+    _sg_functions^.text.draw_text( psg_drawing_surface(screen^.surface), nil, x - 30, y, PChar(msg), clr);
   end;
   
   procedure ResizeGraphicsWindowProcedure(newWidth, newHeight : LongInt);
@@ -112,6 +137,7 @@ implementation
   
   procedure RefreshScreenProcedure(screen : Bitmap);
   begin
+    _sg_functions^.graphics.refresh_window(psg_drawing_surface(screen^.surface));
   end;
   
   procedure ColorComponentsProcedure(c : Color; var r, g, b, a : Byte);
@@ -120,37 +146,27 @@ implementation
   
   function ColorFromProcedure(bmp : Bitmap; r, g, b, a: Byte)  : Color;
   begin
-    result := 0;
+    result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
   
   function RGBAColorProcedure(r, g, b, a: Byte)  : Color;
   begin
-    result := 0;
+    result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
 
-  function GetSurfaceWidthProcedure(src : Bitmap)  : LongInt;
-  begin
-    result := 0;
-  end;
-
-  function GetSurfaceHeightProcedure(src : Bitmap)  : LongInt;
-  begin
-    result := 0;
-  end;
-  
   function SurfaceFormatAssignedProcedure(bmp : Bitmap) : Boolean; 
   begin
-    result := false;
+    result := true;
   end;
   
   function GetScreenWidthProcedure(): LongInt; 
   begin
-    result := 0;
+    result := screenRect.width;
   end;
   
   function GetScreenHeightProcedure(): LongInt; 
   begin
-    result := 0;
+    result := screenRect.height;
   end;
 
   function AvailableResolutionsProcedure(): ResolutionArray;
@@ -185,8 +201,6 @@ implementation
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;             // -
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
-    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
-    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -

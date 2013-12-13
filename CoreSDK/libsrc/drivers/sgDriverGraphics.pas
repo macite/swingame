@@ -45,8 +45,8 @@ interface
     ColorComponentsProcedure              = procedure (c : Color; var r, g, b, a : Byte); 
     ColorFromProcedure                    = function  (bmp : Bitmap; r, g, b, a: Byte)  : Color;
     RGBAColorProcedure                    = function  (r, g, b, a: Byte)  : Color;
-    GetSurfaceWidthProcedure              = function  (src : Bitmap) : LongInt;
-    GetSurfaceHeightProcedure             = function  (src : Bitmap) : LongInt;
+    // GetSurfaceWidthProcedure              = function  (src : Bitmap) : LongInt;
+    // GetSurfaceHeightProcedure             = function  (src : Bitmap) : LongInt;
     SurfaceFormatAssignedProcedure        = function ( bmp : Bitmap) : Boolean;
     GetScreenWidthProcedure               = function():LongInt;
     GetScreenHeightProcedure              = function():LongInt;
@@ -77,8 +77,8 @@ interface
     ColorComponents           : ColorComponentsProcedure;
     ColorFrom                 : ColorFromProcedure;
     RGBAColor                 : RGBAColorProcedure;
-    GetSurfaceWidth           : GetSurfaceWidthProcedure;
-    GetSurfaceHeight          : GetSurfaceHeightProcedure;
+    // GetSurfaceWidth           : GetSurfaceWidthProcedure;
+    // GetSurfaceHeight          : GetSurfaceHeightProcedure;
     // ToGfxColor                : ToGfxColorProcedure;
     SurfaceFormatAssigned     : SurfaceFormatAssignedProcedure;
     GetScreenWidth            : GetScreenWidthProcedure;
@@ -269,17 +269,17 @@ uses
     result := GraphicsDriver.RGBAColor(r, g, b, a);
   end;
 
-  function DefaultGetSurfaceWidthProcedure(src : Bitmap)  : LongInt;
-  begin
-    LoadDefaultGraphicsDriver();
-    result := GraphicsDriver.GetSurfaceWidth(src);
-  end;
+  // function DefaultGetSurfaceWidthProcedure(src : Bitmap)  : LongInt;
+  // begin
+  //   LoadDefaultGraphicsDriver();
+  //   result := GraphicsDriver.GetSurfaceWidth(src);
+  // end;
 
-  function DefaultGetSurfaceHeightProcedure(src : Bitmap)  : LongInt;
-  begin
-    LoadDefaultGraphicsDriver();
-    result := GraphicsDriver.GetSurfaceHeight(src);
-  end;
+  // function DefaultGetSurfaceHeightProcedure(src : Bitmap)  : LongInt;
+  // begin
+  //   LoadDefaultGraphicsDriver();
+  //   result := GraphicsDriver.GetSurfaceHeight(src);
+  // end;
   
   function DefaultSurfaceFormatAssignedProcedure(bmp : Bitmap) : Boolean; 
   begin
@@ -331,8 +331,8 @@ uses
     GraphicsDriver.ColorComponents          := @DefaultColorComponentsProcedure;
     GraphicsDriver.ColorFrom                := @DefaultColorFromProcedure;
     GraphicsDriver.RGBAColor                := @DefaultRGBAColorProcedure;
-    GraphicsDriver.GetSurfaceWidth          := @DefaultGetSurfaceWidthProcedure;
-    GraphicsDriver.GetSurfaceHeight         := @DefaultGetSurfaceHeightProcedure;
+    // GraphicsDriver.GetSurfaceWidth          := @DefaultGetSurfaceWidthProcedure;
+    // GraphicsDriver.GetSurfaceHeight         := @DefaultGetSurfaceHeightProcedure;
     // GraphicsDriver.ToGfxColor               := @DefaultToGfxColorProcedure;
     GraphicsDriver.SurfaceFormatAssigned    := @DefaultSurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @DefaultGetScreenWidthProcedure;

@@ -375,15 +375,15 @@ implementation
     result := SDL_MapRGBA(PSDL_Surface(screen^.surface)^.format, red, green, blue, alpha);
   end;
 
-  function GetSurfaceWidthProcedure(src : Bitmap) : LongInt;
-  begin
-    result := PSDL_Surface(src^.surface)^.w;
-  end;
+  // function GetSurfaceWidthProcedure(src : Bitmap) : LongInt;
+  // begin
+  //   result := PSDL_Surface(src^.surface)^.w;
+  // end;
   
-  function GetSurfaceHeightProcedure(src : Bitmap) : LongInt;
-  begin
-    result := PSDL_Surface(src^.surface)^.h;
-  end;
+  // function GetSurfaceHeightProcedure(src : Bitmap) : LongInt;
+  // begin
+  //   result := PSDL_Surface(src^.surface)^.h;
+  // end;
   
   function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
   begin
@@ -426,8 +426,8 @@ implementation
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
-    GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
-    GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
+    // GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
+    // GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;

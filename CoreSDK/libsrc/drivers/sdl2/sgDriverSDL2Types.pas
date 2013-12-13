@@ -105,7 +105,7 @@ interface
     sg_drawing_surface_proc = procedure(surface: psg_drawing_surface); cdecl;
     sg_drawing_surface_bool_fn = function(surface: psg_drawing_surface): int; cdecl;
     sg_single_uint32param_proc = procedure(ms: uint); cdecl;
-    sg_drawing_surface_clr_proc = procedure(surface: psg_drawing_surface); cdecl;
+    sg_drawing_surface_clr_proc = procedure(surface: psg_drawing_surface; clr: sg_color); cdecl;
     sg_drawing_proc = procedure(surface: psg_drawing_surface; data: pfloat; data_sz: int); cdecl;
     sg_clip_proc = procedure(surface: psg_drawing_surface; data: pfloat; data_sz: int); cdecl;
     sg_surface_bool_proc = procedure(surface: psg_drawing_surface; val: int); cdecl;
