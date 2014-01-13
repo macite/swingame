@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2013-11-13 21:53:05.078497
+// SwinGame.pas was generated on 2014-01-13 14:49:15.037981
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1372,6 +1372,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Returns the two widest points on the circle that lie along the indicated vector.
   procedure WidestPoints(const c: Circle; const along: Vector; out pt1: Point2D; out pt2: Point2D); overload;
 
+  // Returns a list of the available resolutions.
+  function AvailableResolutions(): ResolutionArray; overload;
+
   // Get the blue value of ``color``.
   function BlueOf(c: Color): Byte; overload;
 
@@ -2230,7 +2233,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure MoveMouse(const point: Point2D); overload;
 
   // Moves the mouse cursor to the specified screen location.
-  procedure MoveMouse(x: Byte; y: Byte); overload;
+  procedure MoveMouse(x: Longint; y: Longint); overload;
 
   // Returns the number of fingers that are currently
   // on the screen.
@@ -5996,6 +5999,11 @@ implementation
     sgGeometry.WidestPoints(c,along,pt1,pt2);
   end;
 
+  function AvailableResolutions(): ResolutionArray; overload;
+  begin
+    result := sgGraphics.AvailableResolutions();
+  end;
+
   function BlueOf(c: Color): Byte; overload;
   begin
     result := sgGraphics.BlueOf(c);
@@ -7261,7 +7269,7 @@ implementation
     sgInput.MoveMouse(point);
   end;
 
-  procedure MoveMouse(x: Byte; y: Byte); overload;
+  procedure MoveMouse(x: Longint; y: Longint); overload;
   begin
     sgInput.MoveMouse(x,y);
   end;

@@ -107,6 +107,7 @@ extern "C" {
     // Input related
     //
     typedef unsigned int (sg_mouse_state_fn)(int *x, int *y);
+    typedef void (sg_surface_xy_proc)(sg_drawing_surface *surface, int x, int y);
     
     //
     // Utility relation functions
@@ -241,9 +242,7 @@ extern "C" {
         sg_intp_proc * handle_mouse_up;
         sg_intp_proc * handle_mouse_down;
 
-        sg_charp_proc * handle_input_text; 
-
-
+        sg_charp_proc * handle_input_text;
     } sg_input_callbacks;
     
     //
@@ -257,9 +256,11 @@ extern "C" {
         sg_mouse_state_fn * mouse_state;
         sg_mouse_state_fn * mouse_relative_state;
         sg_int_intp_fn * mouse_cursor_state;
+        sg_surface_xy_proc * warp_mouse;
 
         sg_rectangle_dimensions_proc * start_unicode_text_input; 
-        sg_empty_procedure * stop_unicode_text_input; 
+        sg_empty_procedure * stop_unicode_text_input;
+        
     } sg_input_interface;
 
     //

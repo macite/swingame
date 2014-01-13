@@ -127,25 +127,7 @@ implementation
  //    end;
  //    {$IFEND}
 	// end;
-		
-	procedure PutPixelProcedure(bmp: Bitmap; clr: Color; x, y: Longint);
-  begin
-    PutSurfacePixel(GetSurface(bmp), clr, x, y);
-  end;
- //  var
- //      p:    ^Color;
- //      bpp:  Longint;
- //  begin
- //      if not Assigned(GetSurface(bmp)) then begin RaiseWarning('SDL1.3 Graphics Driver - PutPixelProcedure recieved empty Bitmap'); exit; end;
-        
- //      bpp := GetSurface(bmp)^.format^.BytesPerPixel;
- //      // Here p is the address to the pixel we want to set
- //      p := GetSurface(bmp)^.pixels + y * GetSurface(bmp)^.pitch + x * bpp;
-
- //      if bpp <> 4 then RaiseException('PutPixel only supported on 32bit images.');
- //      p^ := clr;
- //  end;
-  
+	  
   procedure ColorComponentsProcedure(c: Color; var r, g, b, a: byte);
   begin  
     if not Assigned(GetSurface(screen)) then begin RaiseWarning('SDL1.3 Graphics Driver - ColorComponentsProcedure Screen is not Initialised'); exit; end;
@@ -588,12 +570,6 @@ implementation
   //   result := GetSurface(src)^.h;
   // end;
   
-  function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
-  begin
-		if not Assigned(GetSurface(src)) then begin RaiseWarning('SDL1.3 Graphics Driver - SurfaceFormatAssignedProcedure recieved empty Bitmap'); exit; end;
-    result := Assigned(GetSurface(src)^.format );
-  end; 
-  
   function GetScreenWidthProcedure(): LongInt; 
   var
     w, h : LongInt;
@@ -614,7 +590,6 @@ implementation
 	procedure LoadSDL13GraphicsDriver();
 	begin
     GraphicsDriver.GetPixel32               := @GetPixel32Procedure;    // # (done)
-    GraphicsDriver.PutPixel                 := @PutPixelProcedure;		  // #
     GraphicsDriver.FillTriangle             := @FillTriangleProcedure;  // #
     GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;  // #		
     GraphicsDriver.FillCircle               := @FillCircleProcedure;    // #
@@ -639,7 +614,6 @@ implementation
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
     // GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;       // -
     // GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;      // -
-    GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure; // -
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -
     GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;  // # 

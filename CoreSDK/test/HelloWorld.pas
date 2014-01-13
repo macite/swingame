@@ -1,7 +1,33 @@
 program HelloWorld;
 //{IFNDEF UNIX} {r GameLauncher.res} {ENDIF}
 uses
-  SwinGame, sgShared;
+  SwinGame, sgShared, Classes, SysUtils;
+
+procedure CatchUnhandledException(Obj: TObject; Addr: Pointer; FrameCount: Longint; Frames: PPointer);
+var
+  Message: string;
+  i: LongInt;
+  hstdout: ^Text;
+begin
+  hstdout := @stdout;
+  Writeln(hstdout^, 'An unhandled exception occurred at $', HexStr(PtrUInt(Addr), SizeOf(PtrUInt) * 2), ' :');
+  if Obj is exception then
+   begin
+     Message := Exception(Obj).ClassName + ' : ' + Exception(Obj).Message;
+     Writeln(hstdout^, Message);
+   end
+  else
+    Writeln(hstdout^, 'Exception object ', Obj.ClassName, ' is not of class Exception.');
+  Writeln(hstdout^, BackTraceStrFunc(Addr));
+  if (FrameCount > 0) then
+    begin
+      for i := 0 to FrameCount - 1 do
+        Writeln(hstdout^, BackTraceStrFunc(Frames[i]));
+    end;
+  Writeln(hstdout^,'');
+end;
+
+
 
 procedure TestLineDraw();
 var
@@ -17,12 +43,31 @@ begin
   
 end;
 
+
+procedure PrintAvailableResolutions();
+var
+  res: ResolutionArray;
+  r: Resolution;
+begin
+  res := AvailableResolutions();
+
+  WriteLn('Available Resolutions:');
+
+  for r in res do
+  begin
+    WriteLn('    ', r.width, 'x', r.height, ' @', r.refreshRate, ' (', r.format, ')');
+  end;
+end;
+
 procedure Main();
 var
   img: Bitmap;
   i: Integer;
 begin
-  OpenAudio();  
+
+  PrintAvailableResolutions();
+
+  OpenAudio();
   
   // LoadResourceBundle('splash.txt');
   LoadResourceBundle('bundle.txt');
@@ -37,8 +82,11 @@ begin
   // LoadBitmap('cape.jpg');
   
   OpenGraphicsWindow('Hello World', 640, 480);
+
   LoadDefaultColors();
   ShowSwinGameSplashScreen();
+
+
   
   TestLineDraw();
   
@@ -86,5 +134,6 @@ begin
 end;
 
 begin
+  ExceptProc := @CatchUnhandledException;
   Main();
 end.

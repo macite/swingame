@@ -209,6 +209,29 @@ void sgsdl2_start_unicode_text_input(int x, int y, int w, int h)
   SDL_StartTextInput(); 
 }
 
+void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
+{
+    if ( ! surface || ! surface->_data ) return;
+
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+
+            SDL_WarpMouseInWindow(window_be->window, x, y);
+            break;
+        }
+            
+        case SGDS_Bitmap:
+            break;
+            
+        case SGDS_Unknown:
+            break;
+    }
+}
+
 
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
@@ -219,5 +242,6 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.mouse_relative_state = &SDL_GetRelativeMouseState;
     functions->input.mouse_cursor_state = &SDL_ShowCursor; // 0 hide, 1 show, -1 query
     functions->input.start_unicode_text_input = &sgsdl2_start_unicode_text_input; 
-    functions->input.stop_unicode_text_input = &SDL_StopTextInput; 
+    functions->input.stop_unicode_text_input = &SDL_StopTextInput;
+    functions->input.warp_mouse = &sgsdl2_warp_mouse;
 }

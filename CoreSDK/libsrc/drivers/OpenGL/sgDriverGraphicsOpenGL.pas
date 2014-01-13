@@ -48,11 +48,6 @@ implementation
     result := 0;
   end;
     
-  procedure PutPixelProcedure(bmp: Bitmap; clr: Color; x, y: Longint);
-  begin
-    exit;
-  end;
-  
   procedure ColorComponentsProcedure(c: Color; var r, g, b, a: byte);
   begin
     // writeln(c, ' = ', IntToHex(c, 8));
@@ -525,11 +520,6 @@ implementation
     result := 0;
   end;
 
-  function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
-  begin
-    result := false;
-  end;
-  
   function GetScreenWidthProcedure(): LongInt; 
   begin
     result := _screenWidth;
@@ -544,7 +534,6 @@ implementation
   procedure LoadOpenGLGraphicsDriver();
   begin
     GraphicsDriver.GetPixel32               := @GetPixel32Procedure;
-    GraphicsDriver.PutPixel                 := @PutPixelProcedure;    
     GraphicsDriver.FillTriangle             := @FillTriangleProcedure;
     GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;    
     GraphicsDriver.FillCircle               := @FillCircleProcedure;
@@ -567,7 +556,6 @@ implementation
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
-    GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;
     GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;

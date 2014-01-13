@@ -1768,7 +1768,7 @@ begin
   begin
     for y := 0 to src^.Height - 1 do
     begin
-      if (GetPixel(src, x, y) = clr) then PutPixel(src,RGBAColor(0,0,0,0),x,y);
+      if (GetPixel(src, x, y) = clr) then DrawPixel(src,RGBAColor(0,0,0,0),x,y);
     end;
   end;
 end;

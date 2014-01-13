@@ -82,6 +82,12 @@ interface
   ///
   /// @lib
   procedure SetIcon(filename: String);
+
+
+  /// Returns a list of the available resolutions.
+  ///
+  /// @lib
+  function AvailableResolutions(): ResolutionArray;
   
   /// Opens the graphical window so that it can be drawn onto. You can set the
   /// icon for this window using `SetIcon`. The window itself is only drawn when
@@ -1409,13 +1415,8 @@ implementation
   end;
 
   procedure PutPixel(bmp: Bitmap; value: Color; x, y: Longint);
-  var
-    clr:  Color;
   begin
-    if not assigned(bmp) then begin RaiseWarning('PutPixel recieved empty Bitmap'); exit; end;
-    
-    clr := ColorFrom(bmp, value);
-    GraphicsDriver.PutPixel(bmp, clr, x, y);
+    DrawPixel(bmp, value, x, y);
   end;
   
   /// Draws a pixel onto the screen.
@@ -2420,12 +2421,8 @@ implementation
       i := i + 1;
     end;
     
-    //if SDL_SaveBMP(screen^.surface, PChar(path + filename)) = -1 then
-    if not GraphicsDriver.SaveImage(screen, path + filename) then
-    begin
-      RaiseWarning('Failed to save ' + basename + ': ' + Driver.GetError());
-      exit;
-    end;
+    ImagesDriver.SaveBitmap(screen, path + filename);
+    
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'TakeScreenShot');
     {$ENDIF}
@@ -2682,9 +2679,9 @@ implementation
     {$ENDIF}
 
     {$IFNDEF SWINGAME_OPENGL}
-    if not ImagesDriver.SurfaceExists(screen) or (not GraphicsDriver.SurfaceFormatAssigned(screen)) then
+    if not ImagesDriver.SurfaceExists(screen) then
     begin
-      RaiseWarning('Estimating RGBAColor as the window is not open');
+    //   RaiseWarning('Estimating RGBAColor as the window is not open');
     {$ENDIF}
       result := (alpha shl 24) or (red shl 16) or (green shl 8) or (blue);
       exit;
@@ -2825,6 +2822,12 @@ implementation
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'RandomRGBColor');
     {$ENDIF}
+  end;
+
+
+  function AvailableResolutions(): ResolutionArray;
+  begin
+    result := GraphicsDriver.AvailableResolutions();
   end;
 
 //-----------------------------------------------------------------------------

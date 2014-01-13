@@ -57,6 +57,7 @@ implementation
     result := _sg_functions^.input.mouse_cursor_state(toggle);
   end;
   
+  //TODO: move this to SwinGame
   function ButtonProcedure(button : LongInt) : LongInt;
   begin
     result := button; //TODO: check
@@ -64,7 +65,7 @@ implementation
   
   procedure WarpMouseProcedure(x,y : Word); 
   begin
-    //TODO: ...
+    _sg_functions^.input.warp_mouse(@wind, x, y);
   end;
 
   procedure HandleKeydownEventCallback(code: Longint); cdecl;
@@ -85,6 +86,11 @@ implementation
   procedure DoQuitCallback(); cdecl;
   begin
     DoQuit();
+  end;
+
+  procedure HandleInputText(ttext: PChar);
+  begin
+    //TODO: add SDL supported text entry
   end;
 
   function GetInputCallbackFunction() : sg_input_callbacks;

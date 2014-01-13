@@ -23,6 +23,8 @@ implementation
 
 	var
 	  _Initialised : Boolean = False;
+    
+    //TODO: Move the array to SwinGame - init it from driver
     //321 is Highest Value 321
     _KeyCode     : array[0..321] of LongInt;
 	
@@ -279,6 +281,7 @@ implementation
     _KeyCode[LongInt(vk_EURO)]   := LongInt(SDLK_UNKNOWN) // Some european keyboards
   end;
  
+  //TODO: move this to SwinGame
   function GetKeyCodeProcedure(val : LongInt) : LongInt;
   begin
     result := _KeyCode[val];
@@ -299,6 +302,7 @@ implementation
     if _Initialised then exit;
     _Initialised := true;
     
+    InitKeyCodes();
     _sg_functions^.init();
   end;
   

@@ -129,7 +129,7 @@ interface
   /// 
   /// @lib
   /// @sn moveMouseToX:%s y:%s
-  procedure MoveMouse(x, y : Byte); overload;
+  procedure MoveMouse(x, y : Longint); overload;
     
   /// Moves the mouse cursor to the specified screen location.
   /// 
@@ -614,7 +614,7 @@ end;
     end;
   end;
   
-  procedure MoveMouse(x, y : Byte);overload;
+  procedure MoveMouse(x, y : Longint);overload;
   begin
     InputDriver.WarpMouse(x,y);
     MouseMovement();
@@ -622,7 +622,7 @@ end;
   
   procedure MoveMouse(const point : Point2d);overload;
   begin
-    InputDriver.WarpMouse(RoundUShort(point.x), RoundUShort(point.y));
+    InputDriver.WarpMouse(Round(point.x), Round(point.y));
     MouseMovement();
   end;
   

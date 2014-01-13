@@ -4,6 +4,7 @@ interface
 uses {$IFDEF SWINGAME_SDL2}SDL2{$ELSE}{$IFDEF SWINGAME_SDL13}SDL2{$ELSE}SDL{$ENDIF}{$ENDIF};
 
 function png_save_surface(filename: String; surf: PSDL_Surface): Boolean;
+function png_save_pixels(filename: String; pixels: PLongint; width, height: Longint): Boolean;
 
 implementation
 uses png, sgShared;
@@ -38,6 +39,7 @@ const
   PNG_COLOR_MASK_ALPHA      = 4;
   
   PNG_COLOR_TYPE_RGB        = PNG_COLOR_MASK_COLOR;
+  PNG_COLOR_TYPE_RGB_ALPHA  = 2 or 4;
   
   PNG_INTERLACE_NONE        = 0; // Non-interlaced image
   
@@ -110,6 +112,8 @@ end;
 //   }
 
 
+
+
 function png_save_surface(filename: String; surf: PSDL_Surface): Boolean;
 var
   fp:           Pointer;
@@ -169,6 +173,105 @@ begin
       
       png_write_image(png_ptr, row_pointers);
       png_write_end(png_ptr, info_ptr);
+      
+      // Cleaning out...
+      Dispose(row_pointers);
+      png_destroy_write_struct(@png_ptr, @info_ptr);
+    finally
+      // Close the file...
+      fclose(fp);
+    end;
+    
+    result := true;
+  except
+    //Errors...
+  end;
+end;
+
+
+function png_save_pixels(filename: String; pixels: PLongint; width, height: Longint): Boolean;
+var
+  fp:           Pointer;
+  png_ptr:      png_structp;
+  info_ptr:     png_infop;
+  i, colortype: Longint;
+  row_pointers: pppng_byte;
+begin
+  result := false;
+  
+  try
+    // Opening output file
+    fp := fopen(PChar(filename), 'wb');
+    
+    try
+      // Initializing png structures and callbacks
+      png_ptr := png_create_write_struct(PNG_LIBPNG_VER_STRING, nil, @png_user_error, @png_user_warn);
+      if not assigned(png_ptr) then
+      begin
+        //printf("png_create_write_struct error!\n");
+        result := false;
+        exit;
+      end;
+      
+      info_ptr := png_create_info_struct(png_ptr);
+      if not assigned(info_ptr) then
+      begin
+        png_destroy_write_struct(@png_ptr, nil);
+        //printf("png_create_info_struct error!\n");
+        result := false;
+        exit;
+      end;
+      
+      if setjmp(png_ptr^.jmpbuf) <> 0 then
+      begin
+        png_destroy_write_struct(@png_ptr, @info_ptr);
+        result := false;
+        exit;
+      end;
+      
+      png_init_io(png_ptr, fp);
+      
+      if setjmp(png_ptr^.jmpbuf) <> 0 then
+      begin
+        png_destroy_write_struct(@png_ptr, @info_ptr);
+        result := false;
+        exit;
+      end;
+
+      colortype := PNG_COLOR_TYPE_RGB_ALPHA;
+      png_set_IHDR( png_ptr, info_ptr, 
+                    width, height, 8, colortype, 
+                    PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+      
+      // Writing the image
+      png_write_info(png_ptr, info_ptr);
+
+      if setjmp(png_ptr^.jmpbuf) <> 0 then
+      begin
+        png_destroy_write_struct(@png_ptr, @info_ptr);
+        result := false;
+        exit;
+      end;
+
+      png_set_packing(png_ptr);
+      png_set_swap_alpha(png_ptr);
+      png_set_bgr(png_ptr);
+      
+      GetMem(row_pointers, sizeof(png_bytep) * height);
+      
+      for i := 0 to height - 1 do
+        row_pointers[i] := png_bytep(PUInt8(pixels) + i * width * 4);
+      
+      png_write_image(png_ptr, row_pointers);
+
+      if setjmp(png_ptr^.jmpbuf) <> 0 then
+      begin
+        png_destroy_write_struct(@png_ptr, @info_ptr);
+        result := false;
+        exit;
+      end;
+
+      png_write_end(png_ptr, nil); //info_ptr);
       
       // Cleaning out...
       Dispose(row_pointers);

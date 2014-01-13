@@ -121,7 +121,7 @@ interface
     
     /// @struct Resolution
     Resolution = packed record
-      format : Word;
+      format : Longword;
       refreshRate, width, height: Longint;
     end;
     

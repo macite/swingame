@@ -6,6 +6,12 @@ interface
 	// Types from sgBackendTypes.pas
 	//
   type
+    int = longint;
+    pint = ^int;
+    float = single;
+    pfloat = ^single;
+    uint = longword;
+
     sg_drawing_surface_kind = (
     	SGDS_Unknown := 0,
     	SGDS_Window  := 1,
@@ -24,8 +30,10 @@ interface
 
 
     sg_mode = packed record
+        format : uint;
         width : longint;
         height : longint;
+        refresh_rate : longint;
       end;
 
     sg_display = packed record
@@ -34,6 +42,8 @@ interface
         y : longint;
         width : longint;
         height : longint;
+        refresh_rate : longint;
+        format: dword;
         num_modes : dword;
         modes : ^sg_mode;
         _data : pointer;
@@ -76,12 +86,6 @@ interface
   // sgInterface types
   //
   type
-    int = longint;
-    pint = ^int;
-    float = single;
-    pfloat = ^single;
-    uint = longword;
-
     sg_color = packed record
         r : single;
         g : single;
@@ -106,7 +110,7 @@ interface
     sg_drawing_surface_bool_fn = function(surface: psg_drawing_surface): int; cdecl;
     sg_single_uint32param_proc = procedure(ms: uint); cdecl;
     sg_drawing_surface_clr_proc = procedure(surface: psg_drawing_surface; clr: sg_color); cdecl;
-    sg_drawing_proc = procedure(surface: psg_drawing_surface; data: pfloat; data_sz: int); cdecl;
+    sg_drawing_proc = procedure(surface: psg_drawing_surface; clr: sg_color;data: pfloat; data_sz: int); cdecl;
     sg_clip_proc = procedure(surface: psg_drawing_surface; data: pfloat; data_sz: int); cdecl;
     sg_surface_bool_proc = procedure(surface: psg_drawing_surface; val: int); cdecl;
     sg_to_pixel_array_proc = procedure(surface: psg_drawing_surface; pixels: pint; sz: int); cdecl;
@@ -154,13 +158,14 @@ interface
     // 
     // Image related
     //
-    sg_load_surface_fn = procedure(title: pchar); cdecl;
+    sg_load_surface_fn = function(title: pchar): sg_drawing_surface; cdecl;
     sg_drawing_surface_surface_proc = procedure(src: psg_drawing_surface; dst: psg_drawing_surface; x, y: float; angle: double; centre_x, centre_y: float; scale: double; flip: sg_renderer_flip); cdecl;
 
     //
     // Input related
     //
     sg_mouse_state_fn = function(x, y: pint): uint; cdecl;
+    sg_surface_xy_proc = procedure(surface: psg_drawing_surface; x, y: int); cdecl;
 
     
     sg_utils_interface = packed record
@@ -237,6 +242,8 @@ interface
         mouse_state : sg_mouse_state_fn;
         mouse_relative_state : sg_mouse_state_fn;
         mouse_cursor_state : sg_int_intp_fn;
+        warp_mouse : sg_surface_xy_proc;
+
         start_unicode_text_input : sg_rectangle_dimensions_proc;
         stop_unicode_text_input : sg_empty_procedure;
       end;
@@ -274,8 +281,22 @@ interface
     // Currently only a single window... TODO: allow multiple windows
     wind: sg_drawing_surface;
     wind_open: Boolean = false;
+    _wind_fullscreen: Boolean = false;
+    _wind_border: Boolean = true;
+    
+  function _ToSGColor(clr: Longint) : sg_color;
 
 implementation
+
+
+  function _ToSGColor(clr: Longint) : sg_color;
+  begin
+    result.a := ((clr and $ff000000) shr 24) / 255.0;
+    result.r := ((clr and $00ff0000) shr 16) / 255.0;
+    result.g := ((clr and $0000ff00) shr  8) / 255.0;
+    result.b := ((clr and $000000ff)       ) / 255.0;
+  end;
+    
 
 
 

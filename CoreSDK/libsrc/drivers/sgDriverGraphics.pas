@@ -22,7 +22,6 @@ interface
 	
 	type
 	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Longint) : Color;
-    PutPixelProcedure                     = procedure (bmp: Bitmap; clr: Color; x, y: Longint);      
     FillTriangleProcedure                 = procedure (dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);  
     DrawTriangleProcedure                 = procedure (dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);      
     FillCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
@@ -40,21 +39,18 @@ interface
     InitializeGraphicsWindowProcedure     = procedure (caption : String; screenWidth, screenHeight : LongInt);
     InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);      
     ResizeGraphicsWindowProcedure         = procedure (newWidth, newHeight : LongInt);
-    SaveImageProcedure                    = function  (bmpToSave : Bitmap; path : String) : Boolean;
     RefreshScreenProcedure                = procedure (screen : Bitmap);
     ColorComponentsProcedure              = procedure (c : Color; var r, g, b, a : Byte); 
     ColorFromProcedure                    = function  (bmp : Bitmap; r, g, b, a: Byte)  : Color;
     RGBAColorProcedure                    = function  (r, g, b, a: Byte)  : Color;
     // GetSurfaceWidthProcedure              = function  (src : Bitmap) : LongInt;
     // GetSurfaceHeightProcedure             = function  (src : Bitmap) : LongInt;
-    SurfaceFormatAssignedProcedure        = function ( bmp : Bitmap) : Boolean;
     GetScreenWidthProcedure               = function():LongInt;
     GetScreenHeightProcedure              = function():LongInt;
   	AvaialbleResolutionsProcedure         = function (): ResolutionArray;
 
 	GraphicsDriverRecord = record
 	  GetPixel32                : GetPixel32Procedure;
-	  PutPixel                  : PutPixelProcedure;	  
 	  FillTriangle              : FillTriangleProcedure;
 	  DrawTriangle              : DrawTriangleProcedure;	  
 	  FillCircle                : FillCircleProcedure;
@@ -72,7 +68,6 @@ interface
     InitializeGraphicsWindow  : InitializeGraphicsWindowProcedure;
     InitializeScreen          : InitializeScreenProcedure;
     ResizeGraphicsWindow      : ResizeGraphicsWindowProcedure;
-    SaveImage                 : SaveImageProcedure;
     RefreshScreen             : RefreshScreenProcedure;
     ColorComponents           : ColorComponentsProcedure;
     ColorFrom                 : ColorFromProcedure;
@@ -80,7 +75,6 @@ interface
     // GetSurfaceWidth           : GetSurfaceWidthProcedure;
     // GetSurfaceHeight          : GetSurfaceHeightProcedure;
     // ToGfxColor                : ToGfxColorProcedure;
-    SurfaceFormatAssigned     : SurfaceFormatAssignedProcedure;
     GetScreenWidth            : GetScreenWidthProcedure;
     GetScreenHeight           : GetScreenHeightProcedure;
     AvailableResolutions      : AvaialbleResolutionsProcedure;
@@ -131,12 +125,6 @@ uses
 		result := GraphicsDriver.GetPixel32(bmp, x, y);
 	end;
 	
-	procedure DefaultPutPixelProcedure (bmp: Bitmap; clr: Color; x, y: Longint);
-	begin
-		LoadDefaultGraphicsDriver();
-		GraphicsDriver.PutPixel(bmp, clr, x, y);
-	end;
-
   procedure DefaultFillTriangleProcedure(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);
   begin
   	LoadDefaultGraphicsDriver();
@@ -238,13 +226,7 @@ uses
     LoadDefaultGraphicsDriver();
     GraphicsDriver.ResizeGraphicsWindow(newWidth, newHeight);
   end;
-  
-  function DefaultSaveImageProcedure(bmpToSave : Bitmap; path : String) : Boolean;
-  begin
-    LoadDefaultGraphicsDriver();
-    result := GraphicsDriver.SaveImage(bmptoSave, path);
-  end;
-  
+    
   procedure DefaultRefreshScreenProcedure(screen : Bitmap);
   begin
     LoadDefaultGraphicsDriver();
@@ -281,12 +263,6 @@ uses
   //   result := GraphicsDriver.GetSurfaceHeight(src);
   // end;
   
-  function DefaultSurfaceFormatAssignedProcedure(bmp : Bitmap) : Boolean; 
-  begin
-    LoadDefaultGraphicsDriver();
-    result := GraphicsDriver.SurfaceFormatAssigned(bmp);
-  end;
-  
   function DefaultGetScreenWidthProcedure(): LongInt; 
   begin
     LoadDefaultGraphicsDriver();
@@ -308,7 +284,6 @@ uses
 	initialization
 	begin
 		GraphicsDriver.GetPixel32               := @DefaultGetPixel32Procedure;
-  	GraphicsDriver.PutPixel                 := @DefaultPutPixelProcedure;		
 		GraphicsDriver.FillTriangle             := @DefaultFillTriangleProcedure;
 		GraphicsDriver.DrawTriangle             := @DefaultDrawTriangleProcedure;		
 		GraphicsDriver.FillCircle               := @DefaultFillCircleProcedure;
@@ -326,7 +301,6 @@ uses
     GraphicsDriver.InitializeGraphicsWindow := @DefaultInitializeGraphicsWindowProcedure;
     GraphicsDriver.InitializeScreen         := @DefaultInitializeScreenProcedure;
     GraphicsDriver.ResizeGraphicsWindow     := @DefaultResizeGraphicsWindowProcedure;
-    GraphicsDriver.SaveImage                := @DefaultSaveImageProcedure;
     GraphicsDriver.RefreshScreen            := @DefaultRefreshScreenProcedure;
     GraphicsDriver.ColorComponents          := @DefaultColorComponentsProcedure;
     GraphicsDriver.ColorFrom                := @DefaultColorFromProcedure;
@@ -334,7 +308,6 @@ uses
     // GraphicsDriver.GetSurfaceWidth          := @DefaultGetSurfaceWidthProcedure;
     // GraphicsDriver.GetSurfaceHeight         := @DefaultGetSurfaceHeightProcedure;
     // GraphicsDriver.ToGfxColor               := @DefaultToGfxColorProcedure;
-    GraphicsDriver.SurfaceFormatAssigned    := @DefaultSurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @DefaultGetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @DefaultGetScreenHeightProcedure;
     GraphicsDriver.AvailableResolutions     := @DefaultAvailableResolutionsProcedure;

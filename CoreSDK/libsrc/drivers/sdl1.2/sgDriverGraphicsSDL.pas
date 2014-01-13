@@ -91,25 +91,7 @@ implementation
  //    end;
  //    {$IFEND}
 	// end;
-		
-  procedure PutPixelProcedure(bmp: Bitmap; clr: Color; x, y: Longint);
-  begin
-    PutSurfacePixel(bmp^.surface, clr, x, y);
-  end;
- //  var
- //      p:    ^Color;
- //      bpp:  Longint;
- //  begin
- //      if not assigned(bmp) then begin RaiseWarning('SDL1.2 Driver - PutPixelProcedure recieved empty Bitmap'); exit; end;
-        
- //      bpp := PSDL_Surface(bmp^.surface)^.format^.BytesPerPixel;
- //      // Here p is the address to the pixel we want to set
- //      p := PSDL_Surface(bmp^.surface)^.pixels + y * PSDL_Surface(bmp^.surface)^.pitch + x * bpp;
-
- //      if bpp <> 4 then RaiseException('PutPixel only supported on 32bit images.');
- //      p^ := clr;
- //  end;
-  
+	  
   procedure ColorComponentsProcedure(c: Color; var r, g, b, a: byte);
   begin
     SDL_GetRGBA(c, PSDL_surface(screen^.surface)^.Format, @r, @g, @b, @a);
@@ -385,11 +367,6 @@ implementation
   //   result := PSDL_Surface(src^.surface)^.h;
   // end;
   
-  function SurfaceFormatAssignedProcedure(src: Bitmap) : Boolean;
-  begin
-    result := Assigned( PSDL_Surface(src^.surface)^.format);
-  end; 
-  
   function GetScreenWidthProcedure(): LongInt; 
   begin
     result := PSDL_Surface(_screen)^.w;
@@ -403,7 +380,6 @@ implementation
 	procedure LoadSDLGraphicsDriver();
 	begin
 		GraphicsDriver.GetPixel32               := @GetPixel32Procedure;
-		GraphicsDriver.PutPixel                 := @PutPixelProcedure;		
 		GraphicsDriver.FillTriangle             := @FillTriangleProcedure;
 		GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;		
 		GraphicsDriver.FillCircle               := @FillCircleProcedure;
@@ -428,7 +404,6 @@ implementation
     GraphicsDriver.RGBAColor                := @RGBAColorProcedure;
     // GraphicsDriver.GetSurfaceWidth          := @GetSurfaceWidthProcedure;
     // GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
-    GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;
 	end;

@@ -49,14 +49,16 @@ enum sg_renderer_flip
 
 typedef struct sg_mode
 {
-    int width, height;
+    unsigned int format;
+    int width, height, refresh_rate;
 } sg_mode;
 
 typedef struct sg_display
 {
     const char *    name;
     int             x, y;
-    int             width, height;
+    int             width, height, refresh_rate;
+    unsigned int    format;
     unsigned int    num_modes;
     sg_mode *       modes;
     

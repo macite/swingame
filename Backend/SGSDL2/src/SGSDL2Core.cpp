@@ -75,6 +75,8 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
     SDL_GetCurrentDisplayMode(idx, &mode);
     disp.width = mode.w;
     disp.height = mode.h;
+    disp.format = mode.format;
+    disp.refresh_rate = mode.refresh_rate;
     
     SDL_GetDisplayBounds(idx, &rect);
     disp.x = rect.x;
@@ -115,6 +117,8 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
             disp.modes = new_modes;
             disp.modes[disp.num_modes - 1].width = mode.w;
             disp.modes[disp.num_modes - 1].height = mode.h;
+            disp.modes[disp.num_modes - 1].format = mode.format;
+            disp.modes[disp.num_modes - 1].refresh_rate = mode.refresh_rate;
         }
     }
 }
