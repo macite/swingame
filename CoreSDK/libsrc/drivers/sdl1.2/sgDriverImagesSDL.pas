@@ -20,7 +20,7 @@ interface
 		
 implementation
 	uses sgDriverImages, sgShared, sgTypes, SysUtils, sgGraphics, sgDriver, sgSharedUtils,
-	     SDL_gfx, SDL, SDL_Image, sgDriverGraphics, sgDriverGraphicsSDL, sgSDLUtils; // sdl;
+	     SDL_gfx, SDL, SDL_Image, sgDriverGraphics, sgDriverGraphicsSDL, sgSDLUtils, sgSavePNG; // sdl;
 		
 	procedure InitBitmapColorsProcedure(bmp : Bitmap);
  	begin	  
@@ -252,7 +252,8 @@ implementation
   begin
  	  if not CheckAssigned('SDL1.2 ImagesDriver - SaveBitmapProcedure recieved empty Bitmap', src) then exit;
    	if not CheckAssigned('SDL1.2 ImagesDriver - SaveBitmapProcedure recieved empty Bitmap Surface', src^.surface) then exit;
-    SDL_SaveBMP(src^.surface, PChar(filepath));
+    //SDL_SaveBMP(src^.surface, PChar(filepath));
+    png_save_surface(filepath, src^.surface);
   end;
   
 
@@ -273,5 +274,6 @@ implementation
 		ImagesDriver.ClearSurface                             := @ClearSurfaceProcedure;
 		ImagesDriver.OptimiseBitmap                           := @OptimiseBitmapProcedure;
 		ImagesDriver.SetNonAlphaPixels                        := @SetNonAlphaPixelsProcedure;
+    ImagesDriver.SaveBitmap                               := @SaveBitmapProcedure;
 	end;
 end.

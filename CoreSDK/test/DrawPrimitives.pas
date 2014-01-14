@@ -30,7 +30,8 @@ begin
       WriteLn('Toggle Fullscreen');
     end;
 
-    if KeyTyped(vk_S) then TakeScreenshot('test');
+    if KeyTyped(vk_S) then 
+      TakeScreenshot('test');
     if KeyTyped(vk_B) then ToggleWindowBorder();
     if KeyTyped(vk_C) then
     begin
