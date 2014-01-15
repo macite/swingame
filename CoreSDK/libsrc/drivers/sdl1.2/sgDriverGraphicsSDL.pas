@@ -377,6 +377,12 @@ implementation
     result := PSDL_Surface(_screen)^.h;
   end;
 
+  function AvailableResolutionsProcedure(): ResolutionArray;
+  begin
+    SetLength(result, 0);
+  end;
+
+
 	procedure LoadSDLGraphicsDriver();
 	begin
 		GraphicsDriver.GetPixel32               := @GetPixel32Procedure;
@@ -405,6 +411,7 @@ implementation
     // GraphicsDriver.GetSurfaceHeight         := @GetSurfaceHeightProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;
+    GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;
 	end;
 	
 end.
