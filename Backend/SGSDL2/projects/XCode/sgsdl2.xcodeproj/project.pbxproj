@@ -21,6 +21,7 @@
 		942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBEF7183C558500876830 /* SGSDL2Utils.cpp */; };
 		943177F91855802100A0D403 /* sgBackendUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 943177F81855802100A0D403 /* sgBackendUtils.h */; };
 		943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
+		94390FE6188792FF0061DC61 /* BATTLEST.TTF in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94390FE5188792EC0061DC61 /* BATTLEST.TTF */; };
 		945BB7A01857C5B000148796 /* test_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 945BB79E1857C5B000148796 /* test_input.cpp */; };
 		9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */; };
 		9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9471BD9D183B717900BE3771 /* SGSDL2Core.h */; };
@@ -72,6 +73,7 @@
 				9482164B184DE9DD00C89CBE /* superman_1.mid in CopyFiles */,
 				94821586184C701700C89CBE /* test.ogg in CopyFiles */,
 				94821648184DE7F600C89CBE /* energize_my_mind.mod in CopyFiles */,
+				94390FE6188792FF0061DC61 /* BATTLEST.TTF in CopyFiles */,
 				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
 				94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */,
 			);
@@ -97,6 +99,7 @@
 		942DBEF7183C558500876830 /* SGSDL2Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Utils.cpp; path = ../../src/SGSDL2Utils.cpp; sourceTree = "<group>"; };
 		942DBEF8183C558500876830 /* SGSDL2Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Utils.h; path = ../../src/SGSDL2Utils.h; sourceTree = "<group>"; };
 		943177F81855802100A0D403 /* sgBackendUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sgBackendUtils.h; path = ../../../Core/include/sgBackendUtils.h; sourceTree = "<group>"; };
+		94390FE5188792EC0061DC61 /* BATTLEST.TTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = BATTLEST.TTF; path = ../../../Test/Resources/BATTLEST.TTF; sourceTree = "<group>"; };
 		945BB79E1857C5B000148796 /* test_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_input.cpp; path = ../../../Test/src/test_input.cpp; sourceTree = "<group>"; };
 		945BB79F1857C5B000148796 /* test_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_input.h; path = ../../../Test/src/test_input.h; sourceTree = "<group>"; };
 		9471BD8C183B6E5700BE3771 /* libsgsdl2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libsgsdl2.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,17 +148,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
+				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
+				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
+				94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */,
+				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */,
 				9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */,
 				9471BDB8183B732800BE3771 /* libpng.a in Frameworks */,
 				9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */,
 				9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */,
-				94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */,
-				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
 				9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */,
-				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				9471BDBC183B732800BE3771 /* libSDL2_net.a in Frameworks */,
 				9471BDBD183B732800BE3771 /* libSDL2_ttf.a in Frameworks */,
 				9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */,
@@ -301,6 +304,7 @@
 		94821584184C6FF000C89CBE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				94390FE5188792EC0061DC61 /* BATTLEST.TTF */,
 				947D3E67184F1DA700F9F685 /* on_med.png */,
 				94821645184DE3BC00C89CBE /* 280.mp3 */,
 				9482164A184DE9D800C89CBE /* superman_1.mid */,
@@ -527,8 +531,8 @@
 					"$(inherited)",
 					../../lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
+					/Users/acain/Source/GitHub/SwinGame/Backend/SGSDL2/lib/mac,
 				);
-				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -570,6 +574,7 @@
 					"$(inherited)",
 					../../lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
+					/Users/acain/Source/GitHub/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -578,7 +583,7 @@
 		9471BDCB183B737000BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
@@ -604,7 +609,7 @@
 		9471BDCC183B737000BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				ARCHS = "$(ARCHS_STANDARD)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,

@@ -76,15 +76,23 @@ var
 
 implementation
 uses
-  {$IFDEF SWINGAME_SDL13}sgDriverNetworkingSDL{$ELSE}sgDriverNetworkingSDL{$ENDIF};
+  {$IFDEF SWINGAME_SDL2}
+    sgDriverNetworkingSDL
+  {$ELSE}
+    sgDriverNetworkingSDL
+  {$ENDIF};
 
   procedure LoadDefaultNetworkingDriver(); 
   begin
-    {$IFDEF SWINGAME_SDL13}
-      LoadSDLNetworkingDriver();
+    {$IFDEF SWINGAME_SDL2}
+        LoadSDLNetworkingDriver();
     {$ELSE}
-      LoadSDLNetworkingDriver();
-    {$ENDIF}
+      {$IFDEF SWINGAME_SDL13}
+        LoadSDLNetworkingDriver();
+      {$ELSE}
+        LoadSDLNetworkingDriver();
+      {$ENDIF}
+    {$ENDIF};
   end;
 
   function DefaultMyIPProcedure() : String;

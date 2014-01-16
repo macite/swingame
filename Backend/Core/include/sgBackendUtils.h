@@ -15,6 +15,10 @@
 
 #include "sgInterfaces.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //
 // Default storage for a backend's function pointers.
 // This will be loaded in load_sg and a pointer returned
@@ -44,6 +48,11 @@ void set_error_state(const char *error);
 // Clear the current error.
 //
 void clear_error();
+
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* defined(__sgsdl2__sgBackendUtils__) */

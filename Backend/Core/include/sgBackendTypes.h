@@ -10,18 +10,22 @@
 #define sgsdl2_sgBackendTypes_h
 
 // Align structs to one byte boundaries
-#pragma pack(push, 1)
+//#pragma pack(push, 8)
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //
 // A list of the available kinds of drawing surface.
 // Drivers must support drawing onto these.
 //
-enum sg_drawing_surface_kind
+typedef enum sg_drawing_surface_kind
 {
     SGDS_Unknown = 0,   // Unknown, so do not draw onto this!
     SGDS_Window = 1,    // A window
     SGDS_Bitmap = 2     // A surface, bitmap, or texture
-};
+} sg_drawing_surface_kind;
 
 //
 // A drawing surface is something the user can draw onto.
@@ -39,13 +43,13 @@ typedef struct sg_drawing_surface
     void * _data;
 } sg_drawing_surface;
 
-enum sg_renderer_flip
+typedef enum sg_renderer_flip
 {
 	SG_FLIP_NONE = 0,
 	SG_FLIP_HORIZONTAL = 1,
 	SG_FLIP_VERTICAL = 2,
 	SG_FLIP_BOTH = 3
-};
+} sg_renderer_flip;
 
 typedef struct sg_mode
 {
@@ -83,11 +87,11 @@ typedef struct sg_system_data
     
 } sg_system_data;
 
-enum sg_font_kind
+typedef enum sg_font_kind
 {
   SGFT_UNKNOWN = 0,
   SGFT_TTF = 1
-};
+} sg_font_kind;
 
 typedef struct sg_font_data
 {
@@ -97,12 +101,12 @@ typedef struct sg_font_data
   void * _data;
 } sg_font_data;
 
-enum sg_sound_kind
+typedef enum sg_sound_kind
 {
     SGSD_UNKNOWN = 0,
     SGSD_SOUND_EFFECT = 1,
     SGSD_MUSIC = 2
-};
+} sg_sound_kind;
 
 //
 // Sound data is an audio chunk the user can play.
@@ -115,7 +119,12 @@ typedef struct sg_sound_data
     void * _data;
 } sg_sound_data;
 
+#ifdef __cplusplus
+}
+#endif
+
+    
 // Stop aligning structs to one byte boundaries
-#pragma pack(pop)
+//#pragma pack(pop)
 
 #endif

@@ -1496,23 +1496,51 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
 //x, y is the position to draw the bitmap to. As bitmaps scale around their centre, (x, y) is the top-left of the bitmap IF and ONLY IF scale = 1.
 //Angle is in degrees, 0 being right way up
 //Centre is the point to rotate around, relative to the bitmap centre (therefore (0,0) would rotate around the centre point)
-void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, float angle, float centre_x, float centre_y, float scale, sg_renderer_flip flip )
+void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, float * src_data, int src_data_sz, float * dst_data, int dst_data_sz, sg_renderer_flip flip )
 {
     if ( ! src || ! dst || src->kind != SGDS_Bitmap )
 		return;
-
-    // Get size
-    int w, h;
-    SDL_Texture *srcT = ((sg_bitmap_be *)src->_data)->texture[0];
-    SDL_QueryTexture(srcT, NULL, NULL, &w, &h);
     
-	// Scale
-    SDL_Rect dstrect = { (int)(x - (w * scale / 2.0) + w/2.0), (int)(y - (h * scale / 2.0) + h/2.0), //fix the drawing position as scaling broke it
-						 (int)(w * scale), (int)(h * scale) }; //scale bitmap
+    if ( dst_data_sz != 7 )
+        return;
+    
+    // dst_data must be 7 values
+    float x         = dst_data[0];
+    float y         = dst_data[1];
+    float angle     = dst_data[2];
+    float centre_x  = dst_data[3];
+    float centre_y  = dst_data[4];
+    float scale_x   = dst_data[5];
+    float scale_y   = dst_data[6];
+    
+    if ( src_data_sz != 4)
+        return;
+    
+    // src_data must be
+    float src_x     = src_data[0];
+    float src_y     = src_data[1];
+    float src_w     = src_data[2];
+    float src_h     = src_data[3];
+    
+    // Other locals
+    SDL_Texture *srcT;
+    
+	// Create destination rect from scale values
+    SDL_Rect dst_rect = {
+            (int)(x - (src_w * scale_x / 2.0) + src_w/2.0),
+            (int)(y - (src_h * scale_y / 2.0) + src_h/2.0), //fix the drawing position as scaling broke it
+            (int)(src_w * scale_x),
+            (int)(src_h * scale_y)
+        }; //scale bitmap
+
+    SDL_Rect src_rect = {(int)src_x, (int)src_y, (int)src_w, (int)src_h};
+
+    // check if any size is 0... and return if nothing is to be drawn
+    if ( dst_rect.w * dst_rect.h * src_rect.w * src_rect.h == 0) return;
     
 	// Adjust centre to be relative to the bitmap centre rather than top-left
-	centre_x = (centre_x * scale) + dstrect.w / 2.0f;
-	centre_y = (centre_y * scale) + dstrect.h / 2.0f;
+	centre_x = (centre_x * scale_x) + dst_rect.w / 2.0f;
+	centre_y = (centre_y * scale_y) + dst_rect.h / 2.0f;
 	
     unsigned int count = _sgsdl2_renderer_count(dst);
     
@@ -1535,7 +1563,7 @@ void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, flo
 		SDL_RendererFlip sdl_flip = (SDL_RendererFlip) ((flip == SG_FLIP_BOTH) ? (SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL) : flip); //SDL does not have a FLIP_BOTH
 		
 		//Render
-        SDL_RenderCopyEx(renderer, srcT, NULL, &dstrect, angle, &centre, sdl_flip);
+        SDL_RenderCopyEx(renderer, srcT, &src_rect, &dst_rect, angle, &centre, sdl_flip);
         
         _sgsdl2_complete_render(dst, i);
     }

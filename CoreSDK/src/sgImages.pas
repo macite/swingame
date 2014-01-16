@@ -951,6 +951,7 @@ begin
   end;
   
   New(result);
+  result^.surface := nil;
   
   ImagesDriver.CreateBitmap(result, width, height);
   
@@ -1777,7 +1778,7 @@ procedure SaveToPNG(bmp: Bitmap; filename: String);
 begin
   if not assigned(bmp) then exit;
   
-  png_save_surface(filename, bmp^.surface);
+  ImagesDriver.SaveBitmap(bmp, filename);
 end;
 
 

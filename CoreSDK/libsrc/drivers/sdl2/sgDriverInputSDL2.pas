@@ -7,7 +7,7 @@ interface
   function GetInputCallbackFunction() : sg_input_callbacks;
 
 implementation
-  uses sgDriverInput, sgInputBackend, SDL2;
+  uses sgDriverInput, sgInputBackend;
 
   function IsKeyPressedProcedure(virtKeyCode : LongInt) : Boolean;
   begin
@@ -16,19 +16,20 @@ implementation
   
   function CheckQuitProcedure() : Boolean; //TODO: check why this doesn't work correctly from SDL - Cmd + Q should end it
   {$IFDEF FPC}
-  var
-    keys: PUInt8;
-    modS:  SDL_Keymod;
+  // var
+  //   keys: PUInt8;
+  //   modS:  SDL_Keymod;
   {$ENDIF} 
   begin
     {$IFDEF FPC}
-    keys := SDL_GetKeyboardState(nil);
-    modS := SDL_GetModState();
+    result := false;
+    // keys := SDL_GetKeyboardState(nil);
+    // modS := SDL_GetModState();
     
-    result := ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_LGUI) = LongInt(KMOD_LGUI)) or 
-              ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_RGUI) = LongInt(KMOD_RGUI)) or 
-              ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_LALT) = LongInt(KMOD_LALT)) or 
-              ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_RALT) = LongInt(KMOD_RALT));
+    // result := ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_LGUI) = LongInt(KMOD_LGUI)) or 
+    //           ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_RGUI) = LongInt(KMOD_RGUI)) or 
+    //           ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_LALT) = LongInt(KMOD_LALT)) or 
+    //           ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_RALT) = LongInt(KMOD_RALT));
                 
     {$ELSE}
     result := (IsKeyPressed(SDLK_LALT) and IsKeyPressed(SDLK_F4));

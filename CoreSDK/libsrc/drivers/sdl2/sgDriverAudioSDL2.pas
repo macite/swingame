@@ -5,20 +5,32 @@ interface
   procedure LoadSDL2MixerAudioDriver();
   
 implementation
-  uses sgDriverAudio, sgTypes, sgShared, sysUtils;
+  uses sgDriverAudio, sgTypes, sgShared, sysUtils, sgDriverSDL2Types;
   
   function GetChannel(effect : SoundEffect) : Integer;
   begin
     result := 0;
   end;
 
+  // var fptr: sg_sound_load_fn;
+
+  // function my_load_sound_data(filename: PChar): sg_sound_data; cdecl;
+  // begin
+  //   result := fptr(filename);
+  // end;
+
   function OpenAudioProcedure() : Boolean;
   begin
+    //fptr := _sg_functions^.audio.load_sound_data;
+    //_sg_functions^.audio.load_sound_data := @my_load_sound_data;
+
+    _sg_functions^.audio.open_audio();
     result := true;
   end;
   
   procedure CloseAudioProcedure();
   begin
+    _sg_functions^.audio.close_audio();
   end;
   
   // GetErrorProcedure gets an audio error and returns the error as
@@ -33,8 +45,34 @@ implementation
 //=============================================================================
 
   function LoadSoundEffectProcedure(filename, name: String) : SoundEffect;
+  var
+    sndData: ^sg_sound_data;
   begin
-    result := NIL;
+    //TODO: Move some of this to Audio unit
+
+    // try
+      New(sndData);
+
+      sndData^ := _sg_functions^.audio.load_sound_data(PChar(filename), SGSD_SOUND_EFFECT); //, kind);
+
+
+      New(result); 
+      result^.effect := sndData;
+
+      if result^.effect = nil then RaiseException('Error loading sound effect');
+
+    // except on e1: Exception do
+    //   begin
+    //     Dispose(result);
+    //     Dispose(sndData);
+    //     result := nil;
+    //     RaiseWarning('Error loading sound effect: ' + AudioDriver.GetError());
+    //     exit;
+    //   end;
+    // end;
+  
+    result^.filename := filename;
+    result^.name := name;
   end;
   
   procedure StopSoundEffectProcedure(effect : SoundEffect);
@@ -47,6 +85,7 @@ implementation
   
   function PlaySoundEffectProcedure(effect : SoundEffect; loops : Integer; volume : Single) : Boolean;
   begin
+    _sg_functions^.audio.play_sound(effect^.effect, loops, volume);
     result := true;
   end;
   

@@ -9,8 +9,8 @@
 #ifndef sgsdl2_sgInterfaces_h
 #define sgsdl2_sgInterfaces_h
 
-// Align structs to one byte boundaries
-#pragma pack(push, 1)
+//// Align structs to four byte boundaries
+//#pragma pack(push, 8)
 
 #include "sgBackendTypes.h"
 
@@ -67,6 +67,7 @@ extern "C" {
     // Load functions
     typedef sg_sound_data (sg_sound_load_fn)(const char *filename, sg_sound_kind kind);
     
+
     // Play functions
     typedef void (sg_play_sound_fn)(sg_sound_data *sound, int loops, float volume);
     
@@ -101,7 +102,7 @@ extern "C" {
     //
     typedef sg_drawing_surface  (sg_load_surface_fn)(const char *title);
     
-    typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dst, float x, float y, float angle, float centre_x, float centre_y, float scale, sg_renderer_flip flip );
+    typedef void (sg_drawing_surface_surface_proc)( sg_drawing_surface * src, sg_drawing_surface * dst, float * src_data, int src_data_sz, float * dst_data, int dst_data_sz, sg_renderer_flip flip );
     
     //
     // Input related
@@ -147,7 +148,6 @@ extern "C" {
     {
         sg_empty_procedure      *    open_audio;
         sg_empty_procedure      *    close_audio;
-        
         sg_sound_load_fn        *    load_sound_data;
         sg_sound_data_proc      *    close_sound_data;
         
@@ -173,9 +173,9 @@ extern "C" {
         sg_empty_procedure  *   stop_music;
         
         sg_sound_data_proc  *   stop_sound;
-        
+
     } sg_audio_interface;
-    
+
     //
     // Graphics related functions.
     //
@@ -323,8 +323,7 @@ extern "C" {
         //
         sg_input_callbacks      input_callbacks;
         
-        sg_system_data_fn   *read_system_data;
-        
+        sg_system_data_fn   *read_system_data;        
     } sg_interface;
 
     
@@ -340,6 +339,6 @@ extern "C" {
 #endif
 
 // Stop aligning structs to one byte boundaries
-#pragma pack(pop)
+//#pragma pack(pop)
 
 #endif
