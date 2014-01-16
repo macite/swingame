@@ -57,6 +57,8 @@ void sgsdl2_close_audio()
 
 int sgsdl2_get_channel(sg_sound_data *sound)
 {
+    if ( (!sound) || (!sound->_data) ) return -1;
+    
     for (int i = 0; i < SG_MAX_CHANNELS; i++)
     {
         if ( _sgsdl2_sound_channels[i] == sound->_data && Mix_Playing(i) )
@@ -97,7 +99,7 @@ sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
 
 void sgsdl2_close_sound_data(sg_sound_data * sound )
 {
-    if ( ! sound ) return;
+    if ( (!sound) || (!sound->_data) ) return;
     
     switch (sound->kind)
     {
