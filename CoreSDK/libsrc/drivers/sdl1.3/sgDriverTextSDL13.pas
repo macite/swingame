@@ -376,7 +376,7 @@ implementation
 	end;
 		
 	procedure StringColorProcedure(dest : Bitmap; x,y : single; theText : String; theColor:Color); 
-	ar
+	var
 	  surf : PSDL_Surface;
 	  texture : PSDL_Texture;
     offset : Rectangle;
@@ -411,6 +411,12 @@ implementation
 			end;
 		end;
 	end;
+
+	function LineSkipFunction(fnt: Font): Integer;
+	begin
+		result := TTF_FontLineSkip( fnt^.fptr );
+	end;
+
 	
 	procedure LoadSDL13TextDriver();
 	begin
@@ -426,6 +432,8 @@ implementation
 		TextDriver.GetError := @GetErrorProcedure;
 		TextDriver.Init := @InitProcedure;                            // - No longer required
 		TextDriver.StringColor  := @StringColorProcedure;
+
+		TextDriver.LineSkip := @LineSkipFunction;
 	end;
 	
 

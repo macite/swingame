@@ -87,6 +87,7 @@ implementation
 	
 	procedure StringColorProcedure(dest : Bitmap; x,y : Single; theText : String; theColor : Color); 
 	begin
+		_sg_functions^.text.draw_text(dest^.surface, nil, x, y, PChar(theText), _ToSGColor(theColor));
 	end;
 
 	function LineSkipFunction(fnt: Font): Integer;

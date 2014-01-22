@@ -607,7 +607,6 @@ implementation
     GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;  // #
     GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;          // #
     GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;      // #
-    GraphicsDriver.SaveImage                := @SaveImageProcedure;             // - use to_pixels
     GraphicsDriver.RefreshScreen            := @RefreshScreenProcedure;         // #
     GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
     GraphicsDriver.ColorFrom                := @ColorFromProcedure;             // -

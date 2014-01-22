@@ -350,6 +350,11 @@ implementation
 	begin
 	  StringColor(dest^.surface, RoundShort(x), RoundShort(y), PChar(theText), ToGfxColorProcedure(theColor) );
 	end;
+
+	function LineSkipFunction(fnt: Font): Integer;
+	begin
+		result := TTF_FontLineSkip( fnt^.fptr );
+	end;
 	
 	procedure LoadSDLTextDriver();
 	begin
@@ -365,6 +370,8 @@ implementation
 		TextDriver.GetError := @GetErrorProcedure;
 		TextDriver.Init := @InitProcedure;
 		TextDriver.StringColor  := @StringColorProcedure;
+
+		TextDriver.LineSkip := @LineSkipFunction;
 	end;
 	
 

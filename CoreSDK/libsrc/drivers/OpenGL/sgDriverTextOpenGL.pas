@@ -622,6 +622,15 @@ end;
     glPopMatrix();
   end;
   
+  function LineSkipFunction(fnt: Font): Integer;
+  var
+    glf: GLFont;
+  begin
+    glf := fnt^.fptr;
+
+    result := Round(glf^.lineSize);
+  end;
+
   procedure LoadOpenGLTextDriver();
   begin
     TextDriver.LoadFont := @LoadFontProcedure;
@@ -636,6 +645,7 @@ end;
     TextDriver.GetError := @GetErrorProcedure;
     TextDriver.Init := @InitProcedure;
     TextDriver.StringColor  := @StringColorProcedure;
+    TextDriver.LineSkip := @LineSkipFunction;
   end;
   
 
