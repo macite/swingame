@@ -62,6 +62,8 @@ interface
     //checks if font library is initialiszed.
 		InitProcedure = function() : integer;
 		StringColorProcedure = procedure (dest : Bitmap; x,y : Single; theText : String; theColor : Color);
+
+		FontToIntFn = function (fnt: Font) : Integer;
 		
 		
 		TextDriverRecord = record
@@ -77,6 +79,7 @@ interface
 			GetError : GetErrorProcedure;
 			Init : InitProcedure;
 			StringColor : StringColorProcedure;
+			LineSkip : FontToIntFn;
 		end;
 		
 		
@@ -141,7 +144,7 @@ implementation
 		result := TextDriver.GetFontStyle(font);
 	end;
 	
-	function DefaultSizeOfTextProcedure(font : Font; theText : String; var w : Longint ; var h : Longint) : Integer;
+	function DefaultSizeOfTextProcedure(font : Font; theText : String; var w, h : Longint) : Integer;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.SizeOfText(font, theText, w, h);
@@ -176,6 +179,12 @@ implementation
 	  LoadDefaultTextDriver();
 	  TextDriver.StringColor(dest,x,y,theText,theColor);
 	end;
+
+	function DefaultLineSkipFunction(fnt: Font) : Integer;
+	begin
+		LoadDefaultTextDriver();
+		result := TextDriver.LineSkip(fnt);		
+	end;
 	
 //=============================================================================
 	
@@ -196,6 +205,7 @@ implementation
 		TextDriver.GetError := @DefaultGetErrorProcedure;
 		TextDriver.Init := @DefaultInitProcedure;
 		TextDriver.StringColor := @DefaultStringColorProcedure;
+		TextDriver.LineSkip := @DefaultLineSkipFunction;
 	end;
 
 end.
