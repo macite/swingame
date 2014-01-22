@@ -36,26 +36,26 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
 //            SDL_Log("Window %d hidden", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_EXPOSED:
-            SDL_Log("Window %d exposed", event->window.windowID);
+//            SDL_Log("Window %d exposed", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_MOVED:
-            SDL_Log("Window %d moved to %d,%d",
-                    event->window.windowID, event->window.data1,
-                    event->window.data2);
+//            SDL_Log("Window %d moved to %d,%d",
+//                    event->window.windowID, event->window.data1,
+//                    event->window.data2);
             break;
         case SDL_WINDOWEVENT_RESIZED:
-            SDL_Log("Window %d resized to %dx%d",
-                    event->window.windowID, event->window.data1,
-                    event->window.data2);
+//            SDL_Log("Window %d resized to %dx%d",
+//                    event->window.windowID, event->window.data1,
+//                    event->window.data2);
             break;
         case SDL_WINDOWEVENT_MINIMIZED:
-            SDL_Log("Window %d minimized", event->window.windowID);
+//            SDL_Log("Window %d minimized", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_MAXIMIZED:
-            SDL_Log("Window %d maximized", event->window.windowID);
+//            SDL_Log("Window %d maximized", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_RESTORED:
-            SDL_Log("Window %d restored", event->window.windowID);
+//            SDL_Log("Window %d restored", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_ENTER:
             window->mouse_over = true;
@@ -81,8 +81,8 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
             window->close_requested = true;
             break;
         default:
-            SDL_Log("Window %d got unknown event %d",
-                    event->window.windowID, event->window.event);
+//            SDL_Log("Window %d got unknown event %d",
+//                    event->window.windowID, event->window.event);
             break;
     }
 }

@@ -31,14 +31,9 @@ begin
       if KeyTyped(vk_5) then FadeMusicIn('saber.ogg', -1, 10000);
       if KeyTyped(vk_6) then FadeMusicIn('diving-turtle.mp3', -1, 10000);      
     end
-    else if KeyDown(vk_RALT) OR KeyDown(vk_LALT) then
+    else if KeyTyped(vk_RALT) OR KeyTyped(vk_LALT) then
     begin
-      if KeyTyped(vk_1) then PlayMusic('game.ogg'); FadeMusicOut(10000);
-      if KeyTyped(vk_2) then PlayMusic('fast.mp3'); FadeMusicOut(10000);
-      if KeyTyped(vk_3) then PlayMusic('gentle-thoughts-1.mp3'); FadeMusicOut(10000);
-      if KeyTyped(vk_4) then PlayMusic('morning-workout.mp3'); FadeMusicOut(10000);
-      if KeyTyped(vk_5) then PlayMusic('saber.ogg'); FadeMusicOut(10000);
-      if KeyTyped(vk_6) then PlayMusic('diving-turtle.mp3'); FadeMusicOut(10000);
+      FadeMusicOut(10000);
     end
     else
     begin

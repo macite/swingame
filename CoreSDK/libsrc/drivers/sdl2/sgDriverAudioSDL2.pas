@@ -29,24 +29,35 @@ implementation
 //              Sound Effects
 //=============================================================================
 
-	function LoadSoundEffectProcedure(filename, name: String) : SoundEffect;
+	function _LoadSoundData(filename, name: String; kind: sg_sound_kind) : Pointer;
 	var
 		sndData: ^sg_sound_data;
 	begin
-		//TODO: Move some of this to Audio unit
-
 		New(sndData);
-		New(result); 
+		result := sndData;
 
-		sndData^ := _sg_functions^.audio.load_sound_data(PChar(filename), SGSD_SOUND_EFFECT);
-		result^.effect := sndData;
+		sndData^ := _sg_functions^.audio.load_sound_data(PChar(filename), kind);
 
 		if sndData^._data = nil then 
 		begin
-			Dispose(result);
 			Dispose(sndData);
 			result := nil;
-			RaiseWarning('Error loading sound effect: ' + name + ' (' + filename + ')');
+			RaiseWarning('Error loading sound data for ' + name + ' (' + filename + ')');
+		end;
+	end;
+
+	//TODO: most of this can be moved to sgAudio
+	function LoadSoundEffectProcedure(filename, name: String) : SoundEffect;
+	begin
+		//TODO: Move some of this to Audio unit
+		New(result); 
+
+		result^.effect := _LoadSoundData(filename, name, SGSD_SOUND_EFFECT);
+
+		if result^.effect = nil then 
+		begin
+			Dispose(result);
+			result := nil;
 		end
 		else
 		begin
@@ -100,52 +111,83 @@ implementation
 	// MusicPlaying returns true if music is currently being played
 	function MusicPlayingProcedure() : Boolean;
 	begin
-		result := false;
+		result := _sg_functions^.audio.music_playing() <> 0;
 	end;
 	
 	procedure PauseMusicProcedure();
 	begin
+		_sg_functions^.audio.pause_music();
 	end;
 	
 	procedure ResumeMusicProcedure();
 	begin
+		_sg_functions^.audio.resume_music();
 	end;
 	
 	procedure StopMusicProcedure();
 	begin
+		_sg_functions^.audio.stop_music();
 	end;
 	
+	//TODO: Move this to Audio unit
 	function LoadMusicProcedure(filename, name: String) : Music;
 	begin
-		result := nil;
+		New(result); 
+
+		result^.music := _LoadSoundData(filename, name, SGSD_MUSIC);
+
+		if result^.music = nil then 
+		begin
+			Dispose(result);
+			result := nil;
+		end
+		else
+		begin
+			result^.filename := filename;
+			result^.name := name;
+		end;
 	end;
 	
 	procedure FreeMusicProcedure(music : Music);
+	var
+		sndData: ^sg_sound_data;
 	begin
+		sndData := music^.music;
+		_sg_functions^.audio.close_sound_data(sndData);
+		Dispose(sndData);
+		music^.music := nil;
 	end;
 	
 	procedure SetMusicVolumeProcedure(newVolume : Single);
 	begin
+		_sg_functions^.audio.set_music_vol(newVolume);
 	end;
 	
 	function GetMusicVolumeProcedure() : Single;
 	begin
-		result := 0;
+		result := _sg_functions^.audio.music_vol();
 	end;  
 		
 	function PlayMusicProcedure(music : Music; loops : Integer) : Boolean;
+	var
+		pct: Single;
 	begin
-		result := false;
+		pct := GetMusicVolumeProcedure();
+		_sg_functions^.audio.play_sound(music^.music, loops, pct);
+		result := true;
 	end;
 	
 	function FadeMusicInProcedure(music : Music; loops, ms : Integer) : Boolean;
 	begin
-		result := false;
+		_sg_functions^.audio.fade_in(music^.music, loops, ms);
+		result := true;
 	end;
 	
 	function FadeMusicOutProcedure(ms : Integer) : Boolean;
 	begin
-		result := false;
+		WriteLn('fade out');
+		_sg_functions^.audio.fade_out(_sg_functions^.audio.current_music(), ms);
+		result := true;
 	end;
 	
 	//============================================================================= 

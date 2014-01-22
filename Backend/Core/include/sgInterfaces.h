@@ -92,6 +92,8 @@ extern "C" {
     
     typedef float (sg_float_soundp_fn)( sg_sound_data *sound );
     
+    typedef sg_sound_data * (sg_sound_fn)();
+    
     //
     // Utility related
     //
@@ -173,6 +175,9 @@ extern "C" {
         sg_empty_procedure  *   stop_music;
         
         sg_sound_data_proc  *   stop_sound;
+        
+        sg_float_fn         * music_playing;
+        sg_sound_fn         * current_music;
 
     } sg_audio_interface;
 

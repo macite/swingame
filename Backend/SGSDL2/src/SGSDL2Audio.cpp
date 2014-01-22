@@ -20,7 +20,7 @@
 #define SG_MAX_CHANNELS 64
 
 static Mix_Chunk * _sgsdl2_sound_channels[SG_MAX_CHANNELS];
-static Mix_Music * _current_music;
+static sg_sound_data * _current_music;
 
 
 void sgsdl2_init_audio()
@@ -108,6 +108,10 @@ void sgsdl2_close_sound_data(sg_sound_data * sound )
             break;
         
         case SGSD_SOUND_EFFECT:
+            if (_current_music == sound)
+            {
+                _current_music = NULL;
+            }
             Mix_FreeChunk((Mix_Chunk*)sound->_data);
             break;
         
@@ -139,8 +143,8 @@ void sgsdl2_play_sound(sg_sound_data * sound, int loops, float volume)
         case SGSD_MUSIC:
         {
             Mix_PlayMusic((Mix_Music *)sound->_data, loops);
-            Mix_VolumeMusic((int)volume * MIX_MAX_VOLUME);
-            _current_music = (Mix_Music *)sound->_data;
+            Mix_VolumeMusic(static_cast<int>(MIX_MAX_VOLUME * volume));
+            _current_music = sound;
             break;
         }
         case SGSD_UNKNOWN:
@@ -163,7 +167,7 @@ float sgsdl2_sound_playing(sg_sound_data * sound)
         }
         case SGSD_MUSIC:
         {
-            if ( _current_music == sound->_data && Mix_PlayingMusic() ) return 1.0f;
+            if ( _current_music == sound && Mix_PlayingMusic() ) return 1.0f;
             break;
         }
      
@@ -194,7 +198,7 @@ void sgsdl2_fade_in(sg_sound_data *sound, int loops, int ms)
         case SGSD_MUSIC:
         {
             Mix_FadeInMusic((Mix_Music *)sound->_data, loops, ms);
-            _current_music = (Mix_Music *)sound->_data;
+            _current_music = sound;
             break;
         }
         
@@ -218,8 +222,11 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
             
         case SGSD_MUSIC:
         {
-            if ( _current_music == sound->_data )
+            if ( _current_music == sound )
+            {
                 Mix_FadeOutMusic(ms);
+                _current_music = NULL;
+            }
             break;
         }
 
@@ -236,7 +243,10 @@ void sgsdl2_fade_all_sound_effects_out(int ms)
 void sgsdl2_fade_music_out(int ms)
 {
     Mix_FadeOutMusic(ms);
+    _current_music = NULL;
 }
+
+#include <iostream>
 
 void sgsdl2_set_music_vol(float vol)
 {
@@ -255,7 +265,7 @@ float sgsdl2_sound_volume(sg_sound_data *sound)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->_data ) return sgsdl2_music_vol();
+            if ( _current_music == sound ) return sgsdl2_music_vol();
             break;
         case SGSD_SOUND_EFFECT:
             return Mix_VolumeChunk((Mix_Chunk *)sound->_data, -1) / (float)MIX_MAX_VOLUME;
@@ -273,7 +283,7 @@ void sgsdl2_set_sound_volume(sg_sound_data *sound, float vol)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->_data )
+            if ( _current_music == sound )
                 sgsdl2_set_music_vol(vol);
             break;
             
@@ -311,7 +321,7 @@ void sgsdl2_stop_sound(sg_sound_data *sound)
     switch (sound->kind)
     {
         case SGSD_MUSIC:
-            if ( _current_music == sound->_data ) sgsdl2_stop_music();
+            if ( _current_music == sound ) sgsdl2_stop_music();
             break;
         
         case SGSD_SOUND_EFFECT:
@@ -330,6 +340,24 @@ void sgsdl2_stop_sound(sg_sound_data *sound)
             break;
     }
 }
+
+float sgsdl2_music_playing()
+{
+    if ( Mix_PlayingMusic() ) {
+        return -1.0f;
+    }
+    else
+    {
+        return 0.0f;
+    }
+}
+
+sg_sound_data * sgsdl2_current_music()
+{
+    return _current_music;
+}
+
+
 
 void sgsdl2_load_audio_fns(sg_interface *functions)
 {
@@ -351,5 +379,7 @@ void sgsdl2_load_audio_fns(sg_interface *functions)
     functions->audio.resume_music = & sgsdl2_resume_music;
     functions->audio.stop_music =   & sgsdl2_stop_music;
     functions->audio.stop_sound =   & sgsdl2_stop_sound;
+    functions->audio.music_playing = & sgsdl2_music_playing;
+    functions->audio.current_music = & sgsdl2_current_music;
 }
 

@@ -162,6 +162,7 @@ interface
 
 		sg_sound_load_fn = function(name: PChar; kind: sg_sound_kind): sg_sound_data; cdecl;
 
+		sg_sound_fn = function() : psg_sound_data;
 
 		//
 		// Utility related
@@ -211,6 +212,8 @@ interface
 				resume_music : sg_empty_procedure;
 				stop_music : sg_empty_procedure;
 				stop_sound : sg_sound_data_proc;
+				music_playing : sg_float_fn;
+				current_music : sg_sound_fn;
 			end;
 
 		sg_graphics_interface = record
