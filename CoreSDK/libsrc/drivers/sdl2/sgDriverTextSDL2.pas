@@ -54,11 +54,12 @@ implementation
 	
 	procedure SetFontStyleProcedure(fontToSet : font; value : FontStyle);
 	begin
+		_sg_functions^.text.set_font_style(fontToSet^.fptr, Longint(value));
 	end;
 	
 	function GetFontStyleProcedure(font : Font) : FontStyle;
 	begin
-		result := NormalFont;
+		result := FontStyle(_sg_functions^.text.set_font_style);
 	end;
 	
 	function SizeOfTextProcedure(font : Font; theText : String; var w : Longint ; var h : Longint) : Integer;
@@ -73,6 +74,7 @@ implementation
 	
 	procedure QuitProcedure();
 	begin
+		//do nothing - now in general quit code
 	end;
 	
 	function GetErrorProcedure() : String;
@@ -82,6 +84,7 @@ implementation
 	
 	function InitProcedure(): integer;
 	begin
+		// do nothing - now in standard startup
 		result := 0;
 	end;
 	
