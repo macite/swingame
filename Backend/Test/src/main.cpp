@@ -376,7 +376,7 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
                 _sg_functions->graphics.draw_pixel(&window_arr[w], clr, data, 2 );
             }
             
-			_sg_functions->input.process_events();            
+			_sg_functions->input.process_events();
 			refresh_or_draw(&window_arr[w]);
         }
     }
@@ -970,6 +970,27 @@ bool test_bitmap_dest_drawing()
     return false == _sg_functions->has_error;
 }
 
+void test_bitmap_loading_saving()
+{
+    sg_drawing_surface lines = _sg_functions->image.load_bitmap("Lines.png");
+    int sz = lines.width * lines.height;
+    int pixels[sz];
+    
+    for (int i = 0; i < sz; i++) pixels[i] = 0;
+        
+    _sg_functions->graphics.to_pixels(&lines, pixels, sz);
+    
+    for (int i = 0; i < sz; i++)
+    {
+        cout << std::hex << pixels[i] << std::dec << " ";
+        if ((i+1) % lines.width == 0)
+        {
+            cout << endl;
+        }
+    }
+    _sg_functions->graphics.close_drawing_surface(&lines);
+}
+
 
 void output_system_details()
 {
@@ -1002,6 +1023,7 @@ int main(int argc, const char * argv[])
         return -1;
     }
 
+    test_bitmap_loading_saving();
 
     cout << " Which tests do you want to run? " << endl; 
     print_options(); 
@@ -1034,12 +1056,13 @@ int main(int argc, const char * argv[])
 
     if (test_run & WINDOW_OPERATIONS) 
     {
-      test_window_operations();
+        test_window_operations();
     }
     
     if (test_run & BITMAP_DRAWING) 
     {
-      test_bitmap_dest_drawing();
+        test_bitmap_dest_drawing();
+        test_bitmap_loading_saving();
     }
     
     _sg_functions->graphics.close_drawing_surface(&img);
@@ -1052,15 +1075,14 @@ int main(int argc, const char * argv[])
 
     if (test_run & INPUT)
     {
-
-      sg_drawing_surface w[1];
-      w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
-      test_input(w, 1);
+        sg_drawing_surface w[1];
+        w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
+        test_input(w, 1);
     }
 
     if  (test_run & TEXT) 
     {
-      test_text();
+        test_text();
     }
     
     _sg_functions->finalise();

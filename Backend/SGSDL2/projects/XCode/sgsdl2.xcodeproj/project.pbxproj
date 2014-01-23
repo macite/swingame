@@ -53,6 +53,8 @@
 		94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF146D18530C79004191DF /* SGSDL2Input.h */; };
 		94BF1472185572AE004191DF /* SGSDL2Audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94BF1470185572AE004191DF /* SGSDL2Audio.cpp */; };
 		94BF1473185572AE004191DF /* SGSDL2Audio.h in Headers */ = {isa = PBXBuildFile; fileRef = 94BF1471185572AE004191DF /* SGSDL2Audio.h */; };
+		94E752931890D2FD00A3176C /* ball_small.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E752921890D08800A3176C /* ball_small.png */; };
+		94E752951890DA2100A3176C /* Lines.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94E752941890DA1C00A3176C /* Lines.png */; };
 		94FEB50C18582F7900AFF9D7 /* SGSDL2Text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */; };
 		94FEB50D18582F7900AFF9D7 /* SGSDL2Text.h in Headers */ = {isa = PBXBuildFile; fileRef = 94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */; };
 		94FEB51118582F8700AFF9D7 /* test_text.h in Headers */ = {isa = PBXBuildFile; fileRef = 94FEB50F18582F8700AFF9D7 /* test_text.h */; };
@@ -69,6 +71,8 @@
 			dstSubfolderSpec = 6;
 			files = (
 				94821585184C701400C89CBE /* error.wav in CopyFiles */,
+				94E752951890DA2100A3176C /* Lines.png in CopyFiles */,
+				94E752931890D2FD00A3176C /* ball_small.png in CopyFiles */,
 				947D3E68184F1DB300F9F685 /* on_med.png in CopyFiles */,
 				9482164B184DE9DD00C89CBE /* superman_1.mid in CopyFiles */,
 				94821586184C701700C89CBE /* test.ogg in CopyFiles */,
@@ -135,6 +139,8 @@
 		94BF146D18530C79004191DF /* SGSDL2Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Input.h; path = ../../src/SGSDL2Input.h; sourceTree = "<group>"; };
 		94BF1470185572AE004191DF /* SGSDL2Audio.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Audio.cpp; path = ../../src/SGSDL2Audio.cpp; sourceTree = "<group>"; };
 		94BF1471185572AE004191DF /* SGSDL2Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Audio.h; path = ../../src/SGSDL2Audio.h; sourceTree = "<group>"; };
+		94E752921890D08800A3176C /* ball_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ball_small.png; sourceTree = "<group>"; };
+		94E752941890DA1C00A3176C /* Lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Lines.png; sourceTree = "<group>"; };
 		94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Text.cpp; path = ../../src/SGSDL2Text.cpp; sourceTree = "<group>"; };
 		94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Text.h; path = ../../src/SGSDL2Text.h; sourceTree = "<group>"; };
 		94FEB50E18582F8700AFF9D7 /* test_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_text.cpp; path = ../../../Test/src/test_text.cpp; sourceTree = "<group>"; };
@@ -304,6 +310,8 @@
 		94821584184C6FF000C89CBE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				94E752921890D08800A3176C /* ball_small.png */,
+				94E752941890DA1C00A3176C /* Lines.png */,
 				94390FE5188792EC0061DC61 /* BATTLEST.TTF */,
 				947D3E67184F1DA700F9F685 /* on_med.png */,
 				94821645184DE3BC00C89CBE /* 280.mp3 */,

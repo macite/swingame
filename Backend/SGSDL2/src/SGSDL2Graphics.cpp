@@ -412,6 +412,7 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
     for (unsigned int bmp_idx = 0; bmp_idx < _sgsdl2_num_open_windows; bmp_idx++)
     {
         SDL_DestroyTexture(bitmap_be->texture[bmp_idx]);
+        bitmap_be->texture[bmp_idx] = NULL;
     }
     free(bitmap_be->texture);
     
@@ -1192,6 +1193,34 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
     }
 }
 
+Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
+{
+    Uint8 *p;
+    
+    if(!surface->pixels) return 0;
+    
+    p = (Uint8 *)surface->pixels
+    + y * surface->pitch
+    + x * surface->format->BytesPerPixel;
+    
+    if(x < 0 || y < 0 || x >= surface->w || y >= surface->h) return 0;
+    
+    switch(surface->format->BytesPerPixel) {
+        case 1:
+            return *p;
+        case 2:
+            return *(Uint16 *)p;
+        case 3:
+            if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                return static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
+            }
+            else return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
+        case 4:
+            return *(Uint32 *)p;
+        default:
+            return 0;
+    }
+}
 
 //
 // To Pixels
@@ -1217,8 +1246,22 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
         {
             sg_bitmap_be * bitmap_be = (sg_bitmap_be *)surface->_data;
             
-            _sgsdl2_set_renderer_target(0, bitmap_be);
-            SDL_RenderReadPixels(_sgsdl2_open_windows[0]->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, surface->width * 4);
+            if (bitmap_be->drawable)
+            {
+                _sgsdl2_set_renderer_target(0, bitmap_be);
+                SDL_RenderReadPixels(_sgsdl2_open_windows[0]->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, surface->width * 4);
+            }
+            else
+            {
+                // cannot set as target - use surface
+                for (int y = 0; y < surface->height; y++)
+                {
+                    for(int x = 0; x < surface->width; x++)
+                    {
+                        pixels[y * surface->width + x] = (int)_get_pixel(bitmap_be->surface, x, y);
+                    }
+                }
+            }
             break;
         }
 
