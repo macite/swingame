@@ -59,7 +59,7 @@ implementation
 	
 	function GetFontStyleProcedure(font : Font) : FontStyle;
 	begin
-		result := FontStyle(_sg_functions^.text.set_font_style);
+		result := FontStyle(_sg_functions^.text.get_font_style(font^.fptr));
 	end;
 	
 	function SizeOfTextProcedure(font : Font; theText : String; var w : Longint ; var h : Longint) : Integer;
