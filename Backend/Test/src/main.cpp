@@ -794,88 +794,87 @@ bool test_basic_drawing(int drawing_test_run)
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
 
     // Create the images
-    img = _sg_functions->image.load_bitmap("on_med.png");
+    img = _sg_functions->image.load_bitmap("whac-a-mole-background.png");
     img2 = _sg_functions->image.create_bitmap(100, 50);
     _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 0.0f, 1.0f});
 
     
     if (drawing_test_run & TEST_COLORS) 
     {
-      test_colors(&window, 1);
+        test_colors(&window, 1);
     }
 
     if (drawing_test_run & TEST_PIXELS) 
     {
-      test_read_pixels(&window);
+        test_read_pixels(&window);
     }
 
     if (drawing_test_run & TEST_POSITIONS) 
     {
-      test_positions(&window, 1);
+        test_positions(&window, 1);
     }
 
     if (drawing_test_run & TEST_ALPHA) 
     {
-      test_alpha(&window, 1);
+        test_alpha(&window, 1);
     }
 
     if (drawing_test_run & TEST_CLIP) 
     {
-      test_clip( &window, 1);
+        test_clip( &window, 1);
     }
     
     if (drawing_test_run & TEST_PIXELS) 
     {
-      test_pixels( &window, 1);
+        test_pixels( &window, 1);
     }
     
     if (drawing_test_run & TEST_FULLSCREEN) 
     {
-      _sg_functions->graphics.show_fullscreen(&window, true);
+        _sg_functions->graphics.show_fullscreen(&window, true);
 
-      test_rects( &window, 1);
-      
-      _sg_functions->graphics.show_fullscreen(&window, false);
+        test_rects( &window, 1);
+
+        _sg_functions->graphics.show_fullscreen(&window, false);
     }
     
     if (drawing_test_run & TEST_SHAPES) 
     {
-      test_triangles( &window, 1);
+        test_triangles( &window, 1);
     }
 
     if (drawing_test_run & TEST_SHAPES) 
     {
-      test_circles( &window, 1);
+        test_circles( &window, 1);
     }
     
     if (drawing_test_run & TEST_RESIZE) 
     {
-      test_resize(&window, 1);
+        test_resize(&window, 1);
     }
     
     if (drawing_test_run & TEST_SHAPES) 
     {
-      test_ellipses( &window, 1);
+        test_ellipses( &window, 1);
     }
 
     if (drawing_test_run & TEST_LINES) 
     {
-      test_lines( &window, 1);
+        test_lines( &window, 1);
     }
 
-    // Test the bitmaps - changing img2 in between
-    test_bitmaps( &window, 1);
-    _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
-    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
-    if (drawing_test_run & TEST_BITMAPS) 
+    if (drawing_test_run & TEST_BITMAPS)
     {
-
-      test_bitmaps( &window, 1);
+        // Test the bitmaps - changing img2 in between
+        test_bitmaps( &window, 1);
+        _sg_functions->graphics.clear_drawing_surface(&img2, {1.0f, 0.0f, 1.0f, 0.2f});
+        _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
+        test_bitmaps( &window, 1);
     }
     
     if (drawing_test_run & TEST_INPUT) 
     {
-      test_input(&window, 1);
+        test_input(&window, 1);
     }
 
     _sg_functions->graphics.close_drawing_surface(&window);

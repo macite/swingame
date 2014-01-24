@@ -1579,7 +1579,7 @@ void sgsdl2_draw_bitmap( sg_drawing_surface * src, sg_drawing_surface * dst, flo
     SDL_Rect src_rect = {(int)src_x, (int)src_y, (int)src_w, (int)src_h};
 
     // check if any size is 0... and return if nothing is to be drawn
-    if ( dst_rect.w * dst_rect.h * src_rect.w * src_rect.h == 0) return;
+    if ( 0 == dst_rect.w || 0 == dst_rect.h || 0 == src_rect.w || 0 == src_rect.h ) return;
     
 	// Adjust centre to be relative to the bitmap centre rather than top-left
 	centre_x = (centre_x * scale_x) + dst_rect.w / 2.0f;
