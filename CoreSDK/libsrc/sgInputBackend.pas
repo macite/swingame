@@ -197,7 +197,7 @@ implementation
   var
     i: Integer;
   begin
-    if (kyCode = LongInt(vk_LSHIFT)) or (kyCode = LongInt(vk_RSHIFT)) then exit;
+    // if (kyCode = LongInt(vk_LSHIFT)) or (kyCode = LongInt(vk_RSHIFT)) then exit;
     
     for i := 0 to High(_KeyDown) do
     begin
