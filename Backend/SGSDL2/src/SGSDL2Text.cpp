@@ -10,6 +10,7 @@
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #else
 #include <SDL.h>
 #include <SDL_ttf.h>
