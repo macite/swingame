@@ -14,6 +14,19 @@ color ColorMagenta  = 0xffff00ff;
 color ColorTransparent = 0x0;
 color ColorLightGrey   = 0xffc8c8c8;
 
+color COLOR_BLUE         = 0xff0000ff;
+color COLOR_GREEN        = 0xff00ff00;
+color COLOR_RED          = 0xffff0000;
+color COLOR_WHITE        = 0xffffffff;
+color COLOR_BLACK        = 0xff000000;
+color COLOR_YELLOW       = 0xffffff00;
+color COLOR_PINK         = 0xffff1493;
+color COLOR_TURQUOISE    = 0xffced1ff;
+color COLOR_GREY         = 0xff808080;
+color COLOR_MAGENTA      = 0xffff00ff;
+color COLOR_TRANSPARENT  = 0x0;
+color COLOR_LIGHTGREY    = 0xffc8c8c8;
+
 color color_blue     = 0xff0000ff;
 color color_green    = 0xff00ff00;
 color color_red      = 0xffff0000;
@@ -30,29 +43,16 @@ color color_light_grey   = 0xffc8c8c8;
 
 void load_default_colors()
 {
-    ColorBlue =         rgbacolor(0, 0, 255, 255);
-    ColorGreen =        rgbacolor(0, 255, 0, 255);
-    ColorRed =          rgbacolor(255, 0, 0, 255);
-    ColorWhite =        rgbacolor(255, 255, 255, 255);
-    ColorBlack =        rgbacolor(0, 0, 0, 255);
-    ColorYellow =       rgbacolor(255, 255, 0, 255);
-    ColorPink =         rgbacolor(255, 20, 147, 255);
-    ColorTurquoise =    rgbacolor(0, 206, 209, 255);
-    ColorGrey =         rgbacolor(128, 128, 128, 255);
-    ColorMagenta =      rgbacolor(255, 0, 255, 255);
-    ColorTransparent =  rgbacolor(0, 0, 0, 0);
-    ColorLightGrey =    rgbacolor(200, 200, 200, 255);
-    
-    color_blue         = rgbacolor(0, 0, 255, 255);
-    color_green        = rgbacolor(0, 255, 0, 255);
-    color_red          = rgbacolor(255, 0, 0, 255);
-    color_white        = rgbacolor(255, 255, 255, 255);
-    color_black        = rgbacolor(0, 0, 0, 255);
-    color_yellow       = rgbacolor(255, 255, 0, 255);
-    color_pink         = rgbacolor(255, 20, 147, 255);
-    color_turquoise    = rgbacolor(0, 206, 209, 255);
-    color_grey         = rgbacolor(128, 128, 128, 255);
-    color_magenta      = rgbacolor(255, 0, 255, 255);
-    color_transparent  = rgbacolor(0, 0, 0, 0);
-    color_light_grey   = rgbacolor(200, 200, 200, 255);
+    color_blue         = COLOR_BLUE         =  ColorBlue =         rgbacolor(0, 0, 255, 255);
+    color_green        = COLOR_GREEN        =  ColorGreen =        rgbacolor(0, 255, 0, 255);
+    color_red          = COLOR_RED          =  ColorRed =          rgbacolor(255, 0, 0, 255);
+    color_white        = COLOR_WHITE        =  ColorWhite =        rgbacolor(255, 255, 255, 255);
+    color_black        = COLOR_BLACK        =  ColorBlack =        rgbacolor(0, 0, 0, 255);
+    color_yellow       = COLOR_YELLOW       =  ColorYellow =       rgbacolor(255, 255, 0, 255);
+    color_pink         = COLOR_PINK         =  ColorPink =         rgbacolor(255, 20, 147, 255);
+    color_turquoise    = COLOR_TURQUOISE    =  ColorTurquoise =    rgbacolor(0, 206, 209, 255);
+    color_grey         = COLOR_GREY         =  ColorGrey =         rgbacolor(128, 128, 128, 255);
+    color_magenta      = COLOR_MAGENTA      =  ColorMagenta =      rgbacolor(255, 0, 255, 255);
+    color_transparent  = COLOR_TRANSPARENT  =  ColorTransparent =  rgbacolor(0, 0, 0, 0);
+    color_light_grey   = COLOR_LIGHTGREY    =  ColorLightGrey =    rgbacolor(200, 200, 200, 255);
 }
