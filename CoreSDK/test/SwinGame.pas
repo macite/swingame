@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-01-13 14:49:15.037981
+// SwinGame.pas was generated on 2014-07-12 16:10:38.103538
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -193,6 +193,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // The index of the animation within the animation template that has the supplied name.
   function AnimationIndex(temp: AnimationScript; name: String): Longint; overload;
+
+  // The name of the animation currently being played.
+  function AnimationName(temp: Animation): String; overload;
 
   // The name of the animation within the animation template at the specified index.
   function AnimationName(temp: AnimationScript; idx: Longint): String; overload;
@@ -2687,6 +2690,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // resources.
   procedure SetAppPath(path: String; withExe: Boolean); overload;
 
+  // Call the supplied function for all sprites.
+  procedure CallForAllSprites(fn: SpriteFunction); overload;
+
   // Register a procedure to be called when an events occur on any sprite.
   procedure CallOnSpriteEvent(handler: SpriteEventHandler); overload;
 
@@ -2923,6 +2929,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Indicates if the sprites animation has ended.
   function SpriteAnimationHasEnded(s: Sprite): Boolean; overload;
+
+  // Returns the name of the Sprite's current animation.
+  function SpriteAnimationName(s: Sprite): String; overload;
 
   // Sends the layer specified forward in the visible layer order.
   procedure SpriteBringLayerForward(s: Sprite; visibleLayer: Longint); overload;
@@ -3640,6 +3649,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // will continue to return the same time.
   procedure PauseTimer(toPause: Timer); overload;
 
+  // Pause the timer, getting ticks from a paused timer
+  // will continue to return the same time.
+  procedure PauseTimer(name: String); overload;
+
   // Releases all of the timers that have been loaded.
   procedure ReleaseAllTimers(); overload;
 
@@ -3648,10 +3661,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure ReleaseTimer(name: String); overload;
 
   // Resets the time of a given timer
+  procedure ResetTimer(name: String); overload;
+
+  // Resets the time of a given timer
   procedure ResetTimer(tmr: Timer); overload;
 
   // Resumes a paused timer.
+  procedure ResumeTimer(name: String); overload;
+
+  // Resumes a paused timer.
   procedure ResumeTimer(toUnpause: Timer); overload;
+
+  // Start a timer recording the time that has passed.
+  procedure StartTimer(name: String); overload;
 
   // Start a timer recording the time that has passed.
   procedure StartTimer(toStart: Timer); overload;
@@ -3660,8 +3682,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // recall start to begin the timer ticking again.
   procedure StopTimer(toStop: Timer); overload;
 
+  // Stop the timer. The time is reset to 0 and you must
+  // recall start to begin the timer ticking again.
+  procedure StopTimer(name: String); overload;
+
   // Get the timer created with the indicated named.
   function TimerNamed(name: String): Timer; overload;
+
+  // Gets the number of ticks (milliseconds) that have passed since the timer
+  // was started/reset. When paused the timer's ticks will not advance until
+  // the timer is once again resumed.
+  function TimerTicks(name: String): Longword; overload;
 
   // Gets the number of ticks (milliseconds) that have passed since the timer
   // was started/reset. When paused the timer's ticks will not advance until
@@ -4472,6 +4503,11 @@ implementation
   function AnimationIndex(temp: AnimationScript; name: String): Longint; overload;
   begin
     result := sgAnimations.AnimationIndex(temp,name);
+  end;
+
+  function AnimationName(temp: Animation): String; overload;
+  begin
+    result := sgAnimations.AnimationName(temp);
   end;
 
   function AnimationName(temp: AnimationScript; idx: Longint): String; overload;
@@ -7824,6 +7860,11 @@ implementation
     sgResources.SetAppPath(path,withExe);
   end;
 
+  procedure CallForAllSprites(fn: SpriteFunction); overload;
+  begin
+    sgSprites.CallForAllSprites(fn);
+  end;
+
   procedure CallOnSpriteEvent(handler: SpriteEventHandler); overload;
   begin
     sgSprites.CallOnSpriteEvent(handler);
@@ -8047,6 +8088,11 @@ implementation
   function SpriteAnimationHasEnded(s: Sprite): Boolean; overload;
   begin
     result := sgSprites.SpriteAnimationHasEnded(s);
+  end;
+
+  function SpriteAnimationName(s: Sprite): String; overload;
+  begin
+    result := sgSprites.SpriteAnimationName(s);
   end;
 
   procedure SpriteBringLayerForward(s: Sprite; visibleLayer: Longint); overload;
@@ -8874,6 +8920,11 @@ implementation
     sgTimers.PauseTimer(toPause);
   end;
 
+  procedure PauseTimer(name: String); overload;
+  begin
+    sgTimers.PauseTimer(name);
+  end;
+
   procedure ReleaseAllTimers(); overload;
   begin
     sgTimers.ReleaseAllTimers();
@@ -8884,14 +8935,29 @@ implementation
     sgTimers.ReleaseTimer(name);
   end;
 
+  procedure ResetTimer(name: String); overload;
+  begin
+    sgTimers.ResetTimer(name);
+  end;
+
   procedure ResetTimer(tmr: Timer); overload;
   begin
     sgTimers.ResetTimer(tmr);
   end;
 
+  procedure ResumeTimer(name: String); overload;
+  begin
+    sgTimers.ResumeTimer(name);
+  end;
+
   procedure ResumeTimer(toUnpause: Timer); overload;
   begin
     sgTimers.ResumeTimer(toUnpause);
+  end;
+
+  procedure StartTimer(name: String); overload;
+  begin
+    sgTimers.StartTimer(name);
   end;
 
   procedure StartTimer(toStart: Timer); overload;
@@ -8904,9 +8970,19 @@ implementation
     sgTimers.StopTimer(toStop);
   end;
 
+  procedure StopTimer(name: String); overload;
+  begin
+    sgTimers.StopTimer(name);
+  end;
+
   function TimerNamed(name: String): Timer; overload;
   begin
     result := sgTimers.TimerNamed(name);
+  end;
+
+  function TimerTicks(name: String): Longword; overload;
+  begin
+    result := sgTimers.TimerTicks(name);
   end;
 
   function TimerTicks(toGet: Timer): Longword; overload;

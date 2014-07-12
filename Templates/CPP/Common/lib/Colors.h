@@ -3,18 +3,18 @@
 #ifndef COLORS_H
 #define COLORS_H
 
-extern color ColorBlue, color_blue;
-extern color ColorGreen, color_green;
-extern color ColorRed, color_red;
-extern color ColorWhite, color_white;
-extern color ColorBlack, color_black;
-extern color ColorYellow, color_yellow;
-extern color ColorPink, color_pink;
-extern color ColorTurquoise, color_turquoise;
-extern color ColorGrey, color_grey;
-extern color ColorMagenta, color_magenta;
-extern color ColorTransparent, color_transparent;
-extern color ColorLightGrey, color_light_grey;
+extern color COLOR_BLUE, 		ColorBlue, 		color_blue;
+extern color COLOR_GREEN, 		ColorGreen, 		color_green;
+extern color COLOR_RED, 			ColorRed, 			color_red;
+extern color COLOR_WHITE, 		ColorWhite, 		color_white;
+extern color COLOR_BLACK, 		ColorBlack, 		color_black;
+extern color COLOR_YELLOW, 		ColorYellow, 		color_yellow;
+extern color COLOR_PINK, 		ColorPink, 		color_pink;
+extern color COLOR_TURQUOISE, 	ColorTurquoise, 	color_turquoise;
+extern color COLOR_GREY, 		ColorGrey, 		color_grey;
+extern color COLOR_MAGENTA, 		ColorMagenta, 		color_magenta;
+extern color COLOR_TRANSPARENT, 	ColorTransparent, 	color_transparent;
+extern color COLOR_LIGHTGREY, 	ColorLightGrey, 	color_light_grey;
 
 void load_default_colors();
 

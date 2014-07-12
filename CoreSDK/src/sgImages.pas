@@ -429,7 +429,7 @@ uses sgTypes;
   /// @sn bitmap:%s saveToPNG:%s
   ///
   /// @class Bitmap
-  /// @method saveToPNG
+  /// @method SaveToPNG
   procedure SaveToPNG(bmp: Bitmap; filename: String);
   
   

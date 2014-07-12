@@ -82,7 +82,7 @@ namespace SwinGame
         {
             ~ReleaserClass()
             {
-                Console.WriteLine("Deregistering");
+                //Console.WriteLine("Deregistering");
                 sgLibrary.sg_Resources_RegisterFreeNotifier(null);                
             }
         }

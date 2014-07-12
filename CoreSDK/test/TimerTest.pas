@@ -18,9 +18,35 @@ begin
 	
 	
 	StartTimer(tmr);
-	Delay(2000);
+	Delay(1000);
+	WriteLn('part way at: ', TimerTicks(tmr));
+	Delay(1000);
 	PauseTimer(tmr);
 	WriteLn('complete... Should have taken ~2000, took: ', TimerTicks(tmr));
+
+	Delay(1000);
+	WriteLn('test resume');
+	ResumeTimer(tmr);
+	Delay(1000);
+	PauseTimer(tmr);
+	WriteLn('complete... Should have taken ~3000, took: ', TimerTicks(tmr));	
+	
+	WriteLn('reset...');
+	ResetTimer(tmr);
+	WriteLn('time is now: ', TimerTicks('MyTimer'));
+
+	ResumeTimer(tmr);
+
+	Delay(1000);
+	WriteLn('part way at: ', TimerTicks('MyTimer'));
+	Delay(1000);
+	PauseTimer('MyTimer');
+	WriteLn('complete... Should have taken ~2000, took: ', TimerTicks(tmr));
+
+	WriteLn('restarting...');
+	ResetTimer('MyTimer');
+	WriteLn('done');
+
 end;
 
 begin

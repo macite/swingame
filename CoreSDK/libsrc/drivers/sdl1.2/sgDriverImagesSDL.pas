@@ -45,19 +45,9 @@ implementation
  	  if not CheckAssigned('SDL1.2 ImagesDriver - CreateBitmapProcedure recieved unassigned Bitmap', bmp) then exit;
     // if not CheckAssigned('SDL1.2 ImagesDriver - Screen must be loaded to create bitmap', screen) then exit;
     // if not CheckAssigned('SDL1.2 ImagesDriver - Screen must be loaded to create bitmap', screen^.surface) then exit;
-    
-		if (screen = nil) or (screen^.surface = nil) or (PSDL_Surface(screen^.surface)^.format = nil) then
-    begin
-      RaiseWarning('Creating ARGB surface as screen format unknown.');
+
+      // Always create RGBA surfaces...
       bmp^.surface := SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, $00FF0000, $0000FF00, $000000FF, $FF000000);
-    end
-    else
-    begin
-      with PSDL_Surface(screen^.surface)^.format^ do
-      begin
-        bmp^.surface := SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, RMask, GMask, BMask, AMask);
-      end;
-    end;
 	end;
 
   // Sets the non-transparent pixels in a Bitmap. This is then used for

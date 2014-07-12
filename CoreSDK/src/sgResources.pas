@@ -209,6 +209,8 @@ implementation
         // The full path location of the current executable (or script). This is
         // particuarly useful when determining the path to resources (images, maps,
         // sounds, music etc).
+
+        _AppPathSet: Boolean;
         
     
     procedure RegisterFreeNotifier(fn: FreeNotifier);
@@ -622,11 +624,15 @@ implementation
         result := PathToResource(filename, kind, paths);
     end;
     
+    procedure _GuessAppPath(); forward;
+
     function PathToResource(filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
     var
         temp: String;
         i: Longint;
     begin
+        if not _AppPathSet then _GuessAppPath();
+
         if Length(subPaths) > 0 then
         begin
             temp := '';
@@ -662,6 +668,10 @@ implementation
         
         {$IFDEF DARWIN}
         _SetMacRelativePath();
+        {$ENDIF}
+
+        {$IFDEF IOS}
+            applicationPath := applicationPath + '/MyResources/Resources';
         {$ENDIF}
         
         {$IFDEF TRACE}
@@ -701,6 +711,8 @@ implementation
             SetAppPath(cwd + '/Resources', False)
         else if DirectoryExists(cwd + '../Resources') then
             SetAppPath(cwd + '../Resources', False)
+        else if DirectoryExists(cwd + '../../Resources') then 
+            SetAppPath(cwd + '../../Resources', False)
         else
         begin
             mainBundle := CFBundleGetMainBundle();
@@ -728,8 +740,12 @@ implementation
             
             CFStringGetCString(cfStringRef, path, 4096, 1536); // 1536 = 0x0600
             
-            cwd := String(path) + '/Contents/MacOS';
-            
+            // Check for C# mono mac path location
+            if Pos('Resources/bin', path) = Length(path) - Length('Resources/bin') + 1 then
+                cwd := String(path) + '/..'
+            else
+                cwd := String(path) + '/Contents/MacOS';
+
             CFRelease(mainBundleURL);
             CFRelease(cfStringRef);
             StrDispose(path);
@@ -796,10 +812,7 @@ implementation
             if ParamCount() >= 0 then SetAppPath(ParamStr(0), True)
             else _GuessAppPath();
             
-            {$IFDEF IOS}
-                applicationPath := applicationPath + '/MyResources/Resources';
-            {$ENDIF}
-            
+            _AppPathSet := true;
             
         except
         end;

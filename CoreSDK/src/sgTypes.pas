@@ -291,12 +291,13 @@ interface
     /// @struct AnimationData
     /// @via_pointer
     AnimationData = packed record
-      firstFrame:   AnimationFrame;   // Where did it start?
-      currentFrame: AnimationFrame;   // Where is the animation up to
-      lastFrame:    AnimationFrame;   // The last frame used, so last image can be drawn
-      frameTime:    Single;           // How long have we spent in this frame?
-      enteredFrame: Boolean;          // Did we just enter this frame? (can be used for sound playing)
-      script:       AnimationScript;  // Which script was it created from?
+      firstFrame:     AnimationFrame;   // Where did it start?
+      currentFrame:   AnimationFrame;   // Where is the animation up to
+      lastFrame:      AnimationFrame;   // The last frame used, so last image can be drawn
+      frameTime:      Single;           // How long have we spent in this frame?
+      enteredFrame:   Boolean;          // Did we just enter this frame? (can be used for sound playing)
+      script:         AnimationScript;  // Which script was it created from?
+      animationName:  String;           // The name of the animation - when it was started
       //hasEnded:     Boolean;          // Has the animation stopped?
     end;
     
@@ -481,6 +482,8 @@ interface
       movingVec:    Vector;                   // The sprite's movement vector
       arriveInSec:  Single;                   // Amount of time in seconds to arrive at point
       lastUpdate:   Longint;                  // Time of last update
+
+      announcedAnimationEnd: Boolean;         // Used to avoid multiple announcements of an end of an animation
 
       evts: SpriteEventHandlerArray;          // The call backs listening for sprite events
 

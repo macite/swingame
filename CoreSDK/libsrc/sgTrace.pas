@@ -44,10 +44,11 @@ implementation
 uses 
   Math,
   SysUtils,
+  Classes,
   {$IFDEF UNIX}
   BaseUnix,
   {$ENDIF}
-  StrUtils, StringHash;
+  StrUtils, StringHash, sgResources;
 //=============================================================================
 
 
@@ -95,12 +96,16 @@ uses
     MAX_LINES := MAX_LINES_DEFAULT;
     MAX_LOGS := MAX_LOGS_DEFAULT;
     
-    if FileExists('Trace.cfg') then
+    if FileExists('Trace.cfg') or FileExists(PathToResource('Trace.cfg')) then
     begin
       inUnits := false;
       
       try
-        Assign(input, 'Trace.cfg');
+        if FileExists('Trace.cfg') then
+          Assign(input, 'Trace.cfg')
+        else
+          Assign(input, PathToResource('Trace.cfg'));
+
         Reset(input);
         
         while not EOF(input) do
@@ -161,7 +166,7 @@ uses
     begin
       traceLog += 1;
       lineCount := 0;
-      newTrace := 'Trace ' + IntToStr(traceLog) + '.log';
+      newTrace := PathToResource('Trace ' + IntToStr(traceLog) + '.log');
       WriteLn(output, 'Trace continues in ', newTrace);
       
       if traceLog > MAX_LOGS then
@@ -191,9 +196,12 @@ uses
   procedure Trace(unitname, action, routine, message: String);
   begin
     try
-      if (Length(unitname) > 0) and not TRACE_UNITS.containsKey(unitname) then exit;
+      if (not Assigned(TRACE_UNITS)) or ((Length(unitname) > 0) and not TRACE_UNITS.containsKey(unitname)) then exit;
       
       lineCount += 1;
+      {$IFDEF UNIX}
+      WriteLn(unitname, ': ':(15 - Length(unitname)), action, ': ':(8 - Length(action)), StringOfChar(' ', indentLevel * 2), routine, ': ', message);
+      {$ENDIF}
       WriteLn(output, unitname, ': ':(15 - Length(unitname)), action, ': ':(8 - Length(action)), StringOfChar(' ', indentLevel * 2), routine, ': ', message);
       Flush(output);
       AdvanceTrace();
@@ -239,16 +247,20 @@ uses
     SetExceptionMask([exInvalidOp, exDenormalized, exZeroDivide, exOverflow, exUnderflow, exPrecision]);
     TRACE_UNITS := TStringHash.Create(False, 32);
     ConfigureTrace();
-    
+
+    {$IFDEF UNIX}
     try
-      {$IFDEF UNIX}
-      fpChmod ('Trace.log',S_IWUSR or S_IRUSR or S_IWGRP or S_IRGRP or S_IWOTH or S_IROTH);
-      {$ENDIF}
-      Assign(output, 'Trace.log');
+      fpChmod (PathToResource('Trace.log'),S_IWUSR or S_IRUSR or S_IWGRP or S_IRGRP or S_IWOTH or S_IROTH);
+    except
+    end;
+    {$ENDIF}
+
+    try
+      Assign(output, PathToResource('Trace.log'));
       Rewrite(output);
       Trace('sgTrace', 'INFO', 'initialization', 'Tracing started in SwinGame.');
-    except
-      WriteLn('ERROR: Unable to write to trace file. Please make Trace.log writable by this program.')
+    except on e: Exception do
+      WriteLn('ERROR: Unable to write to trace file. Please make Trace.log writable by this program. ' + e.Message)
     end;
   end;
 
