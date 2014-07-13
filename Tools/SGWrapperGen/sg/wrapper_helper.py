@@ -251,6 +251,7 @@ def add_local_var_processing(the_method, details, local_variable_switcher):
                 # TODO: fix this so that variable declaration is not hard coded (and C style)
                 
                 # print the_method.name, '->', the_method.method_called.name
+                print var_details
                 temp = 'int %(var)s = %(size)s;\n    ' % var_details + temp
                 continue #no further processing of these variables
             elif local_var.data_type.name.lower() == 'string':

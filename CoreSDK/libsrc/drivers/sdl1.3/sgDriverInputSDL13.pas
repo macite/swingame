@@ -83,7 +83,7 @@ implementation
       // lKeyCode: LongInt = -1;
       // lTmpUniCode : LongInt;
       // lSendKeyCode : Boolean = False;
-      i : Integer;
+      // i : Integer;
     begin
       SetLength(lKeys, 0);
       while SDL_WaitEventTimeout(@event,0) > 0 do

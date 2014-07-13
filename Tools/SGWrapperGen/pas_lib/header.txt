@@ -18,6 +18,7 @@ library %(name)s;
     BitmapPtr       = ^Bitmap;
     TrianglePtr     = ^Triangle;
     FingerPtr       = ^Finger;
+    ResolutionPtr   = ^Resolution;
   
   
   // The exception trap is used to ensure that exceptions do not propagate beyond the
@@ -249,3 +250,28 @@ library %(name)s;
     end;
   end;
   
+  procedure ResolutionCopyFromPtr(data: ResolutionPtr; len: Longint; out arr: ResolutionArray);
+  var
+    i: Longint;
+  begin
+    if len < 0 then raise Exception.Create('Length of array cannot be negative');
+
+    SetLength(arr, len);
+
+    for i := 0 to len - 1 do
+    begin
+      arr[i] := (data + i)^;
+    end;
+  end;
+  
+  procedure ResolutionCopyToPtr(const arr: ResolutionArray; len: Longint; data: ResolutionPtr);
+  var
+    i: Longint;
+  begin
+    if len < Length(arr) then raise Exception.Create('Error in array size to call expected length to be ' + IntToStr(len));
+    
+    for i := Low(arr) to High(arr) do
+    begin
+      (data + i)^ := arr[i];
+    end;
+  end;

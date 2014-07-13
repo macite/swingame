@@ -526,10 +526,11 @@ _type_dictionary_creation_data = [
     {
         'identifiers': [
             # type key, c-type, objc type, post-fix for switching, initialisation code
-            ('bitmaparray',     'bitmap',   'SGBitmap',     'Bitmaps',      ''),
-            ('stringarray',     'char *',   'NSString',     'Strings',      '\n    [SGStringBufferManager stringBufferManagerFor:%(var)s size:%(size)s];\n    '),
-            ('trianglearray',   'triangle', 'SGTriangle',   'Triangles',    ''),
-            ('fingerarray',     'finger',   'SGFinger',     'Fingers',      ''),
+            ('bitmaparray',     'bitmap',     'SGBitmap',     'Bitmaps',      ''),
+            ('stringarray',     'char *',     'NSString',     'Strings',      '\n    [SGStringBufferManager stringBufferManagerFor:%(var)s size:%(size)s];\n    '),
+            ('trianglearray',   'triangle',   'SGTriangle',   'Triangles',    ''),
+            ('fingerarray',     'finger',     'SGFinger',     'Fingers',      ''),
+            ('resolutionarray', 'resolution', 'SGResolution', 'Resolution',   ''),
             
         ],
         '_type_switcher': {

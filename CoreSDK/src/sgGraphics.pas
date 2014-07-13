@@ -83,10 +83,15 @@ interface
   /// @lib
   procedure SetIcon(filename: String);
 
+  /// Returns the number of resolutions in the list of available resolutions.
+  ///
+  /// @lib
+  function NumberOfResolutions(): Longint;
 
   /// Returns a list of the available resolutions.
   ///
   /// @lib
+  /// @length NumberOfResolutions
   function AvailableResolutions(): ResolutionArray;
   
   /// Opens the graphical window so that it can be drawn onto. You can set the
@@ -2834,6 +2839,11 @@ implementation
   function AvailableResolutions(): ResolutionArray;
   begin
     result := GraphicsDriver.AvailableResolutions();
+  end;
+
+  function NumberOfResolutions(): Longint;
+  begin
+    result := Length(GraphicsDriver.AvailableResolutions());
   end;
 
 //-----------------------------------------------------------------------------
