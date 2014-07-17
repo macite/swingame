@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace SwinGame
+namespace SwinGameSDK
 {
     //internal delegate void FreeDelegate(IntPtr toFree);
     [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]

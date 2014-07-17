@@ -15,5 +15,5 @@ using System.Text;
 using System.Runtime.InteropServices;
 using Color = System.Drawing.Color;
 
-namespace SwinGame
+namespace SwinGameSDK
 {

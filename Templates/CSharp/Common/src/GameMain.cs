@@ -1,6 +1,6 @@
 using System;
 using System.Reflection;
-using SwinGame;
+using SwinGameSDK;
 using Color = System.Drawing.Color;
 
 namespace MyGame
