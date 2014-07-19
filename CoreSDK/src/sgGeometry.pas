@@ -822,6 +822,17 @@ interface
   /// @class Point2D
   /// @method InCircle
   function PointInCircle(const pt: Point2D; const c: Circle): Boolean;
+
+  /// Returns True if the point ``pt`` is in the circle defined by x, y, radius.
+  ///
+  /// @lib PointInCirclePt
+  /// @sn point:%s inCircleAtX:%s y:%s withRadius:%s
+  ///
+  /// @class Point2D
+  /// @method InCircle
+  /// @csn inCircleAtX:%s y:%s withRadius:%s
+  function PointInCircle(const pt: Point2D; x, y, radius: Single): Boolean;
+
   
   /// Returns True if the point ``ptX``, ``ptY`` is in the circle.
   ///
@@ -838,6 +849,16 @@ interface
   /// @method OnLine
   function PointOnLine(const pt: Point2D; const line: LineSegment): Boolean;
   
+  /// Returns True if point ``pt`` is on the line segment ``line``.
+  ///
+  /// @lib PointOnLineXYXY
+  /// @sn point:%s onLineAtX:%s Y:%s endX:%s endY:%s
+  ///
+  /// @class Point2D
+  /// @method OnLine
+  /// @csn onLineAtX:%s Y:%s endX:%s endY:%s
+  function PointOnLine(const pt: Point2D; x, y, endX, endY: Single): Boolean;
+
   /// Returns True of `pt1` is at the same point as `pt2`.
   ///
   /// @lib
@@ -3133,6 +3154,11 @@ implementation
     {$ENDIF}
   end;
 
+  function PointOnLine(const pt: Point2D; x, y, endX, endY: Single): Boolean;
+  begin
+    result := PointOnLine(pt, LineFrom(x, y, endX, endY));
+  end;
+
   function PointOnPoint(const pt1,pt2:Point2d):Boolean;
   begin
     if ((pt1.X = pt2.X) AND (pt1.Y = pt2.Y)) then
@@ -3599,6 +3625,11 @@ implementation
   function PointInCircle(ptX, ptY, cX, cY, radius: Single): Boolean;
   begin
     result := PointInCircle(PointAt(ptX, ptY), CircleAt(cX, cY, Round(radius)));
+  end;
+
+  function PointInCircle(const pt: Point2D; x, y, radius: Single): Boolean;
+  begin
+    result := PointInCircle(pt.x, pt.y, x, y, radius);
   end;
 
   function TriangleBarycenter(const tri: Triangle): Point2D;
