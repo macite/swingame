@@ -9,9 +9,17 @@ function OptionDrawTo(dest: Bitmap): BitmapDrawOpts;
 
 function OptionDrawTo(dest: Bitmap; const opts: BitmapDrawOpts): BitmapDrawOpts;
 
-function OptionScaleBmp(scaleX, scaleY: single): BitmapDrawOpts;
+function OptionScaleBmp(scaleX, scaleY: Single): BitmapDrawOpts;
 
-function OptionScaleBmp(scaleX, scaleY: single; const opts: BitmapDrawOpts): BitmapDrawOpts;
+function OptionScaleBmp(scaleX, scaleY: Single; const opts: BitmapDrawOpts): BitmapDrawOpts;
+
+function OptionRotateBmp(angle, anchorX, anchorY : Single) : BitmapDrawOpts;
+
+function OptionRotateBmp(angle, anchorX, anchorY : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
+function OptionRotateBmp(angle : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
+function OptionRotateBmp(angle : Single) : BitmapDrawOpts;
 
 implementation
 uses sgShared;
@@ -23,6 +31,9 @@ begin
 		dest := screen;
 		scaleX := 1;
 		scaleY := 1;
+		angle := 0;
+		anchoroffsetX := 0;
+		anchoroffsetY := 0;
 	end;
 end;
 
@@ -47,6 +58,29 @@ begin
 	result := opts;
 	result.scaleX := opts.scaleX * scaleX;
 	result.scaleY := opts.scaleY * scaleY;
+end;
+
+function OptionRotateBmp(angle, anchorX, anchorY : Single) : BitmapDrawOpts;
+begin
+	result := OptionRotateBmp(angle, anchorX, anchorY, OptionDefaults());
+end;
+
+function OptionRotateBmp(angle, anchorX, anchorY : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.angle += angle;
+	result.anchoroffsetX := anchorX;
+	result.anchoroffsetY := anchorY;
+end;
+
+function OptionRotateBmp(angle : Single) : BitmapDrawOpts;
+begin
+	result := OptionRotateBmp(angle, 0, 0, OptionDefaults());
+end;
+
+function OptionRotateBmp(angle : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := OptionRotateBmp(angle, 0, 0, opts);
 end;
 
 end.

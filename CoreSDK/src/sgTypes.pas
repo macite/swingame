@@ -353,6 +353,9 @@ interface
       dest : Bitmap; //the bitmap used to draw on
       scaleX : Single;
       scaleY : Single;
+      angle : Single;
+      anchoroffsetX : Single;
+      anchoroffsetY : Single;
     end;
 
     /// @type BitmapArray

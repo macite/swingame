@@ -128,9 +128,9 @@ implementation
 			// make up dst data
 			dstData[0] := x; // X
 			dstData[1] := y; // Y
-			dstData[2] := 0; // Angle
-			dstData[3] := 0; // Centre X
-			dstData[4] := 0; // Centre Y
+			dstData[2] := opts.angle; // Angle
+			dstData[3] := opts.anchoroffsetX; // Centre X
+			dstData[4] := opts.anchoroffsetY; // Centre Y
 			dstData[5] := opts.scaleX; // Scale X
 			dstData[6] := opts.scaleY; // Scale Y
 		end;
