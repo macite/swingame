@@ -8,12 +8,19 @@ begin
 	OpenGraphicsWindow('test',1000,1000);
 	// ShowSwinGameSplashScreen();
 	LoadBitmapNamed('test','Swinburne.jpg');
+	ClearScreen(ColorWhite);
 	opts:=OptionDefaults();
-	for i:=1 to 1000 do
-		begin
-			opts:=OptionRotateBmp(10,10,90,opts);
-			ClearScreen(ColorWhite);
-			DrawBitmap('test',100,100,opts);
-			RefreshScreen();
-		end;
+	DrawBitmap('test',100,100,opts);
+	RefreshScreen();
+	Delay(1000);
+	ClearScreen(ColorWhite);
+	opts:=OptionFlipX();
+	DrawBitmap('test',100,100,opts);
+	RefreshScreen();
+	Delay(1000);
+	ClearScreen(ColorWhite);
+	opts:=OptionFlipXY();
+	DrawBitmap('test',100,100,opts);
+	RefreshScreen();
+	Delay(1000);
 end.

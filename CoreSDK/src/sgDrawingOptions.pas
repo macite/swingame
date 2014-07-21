@@ -21,6 +21,18 @@ function OptionRotateBmp(angle : Single; const opts : BitmapDrawOpts) : BitmapDr
 
 function OptionRotateBmp(angle : Single) : BitmapDrawOpts;
 
+function OptionFlipX() : BitmapDrawOpts;
+
+function OptionFlipX(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
+function OptionFlipY() : BitmapDrawOpts;
+
+function OptionFlipY(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
+function OptionFlipXY() : BitmapDrawOpts;
+
+function OptionFlipXY(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
 implementation
 uses sgShared;
 
@@ -34,6 +46,8 @@ begin
 		angle := 0;
 		anchoroffsetX := 0;
 		anchoroffsetY := 0;
+		flipX := false;
+		flipY := false;
 	end;
 end;
 
@@ -81,6 +95,40 @@ end;
 function OptionRotateBmp(angle : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
 begin
 	result := OptionRotateBmp(angle, 0, 0, opts);
+end;
+
+function OptionFlipX() : BitmapDrawOpts;
+begin
+	result := OptionFlipX(OptionDefaults());
+end;
+
+function OptionFlipX(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.flipX := not result.flipX;
+end;
+
+function OptionFlipY() : BitmapDrawOpts;
+begin
+	result := OptionFlipY(OptionDefaults());
+end;
+
+function OptionFlipY(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.flipY := not result.flipY;
+end;
+
+function OptionFlipXY() : BitmapDrawOpts;
+begin
+	result := OptionFlipXY(OptionDefaults());
+end;
+
+function OptionFlipXY(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.flipY := not result.flipY;
+	result.flipX := not result.flipX;
 end;
 
 end.

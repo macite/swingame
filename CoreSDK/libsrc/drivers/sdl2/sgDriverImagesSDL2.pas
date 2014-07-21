@@ -91,51 +91,38 @@ implementation
 	var
 		srcData: array [0..3] of Single;
 		dstData: array [0..6] of Single;
+		flip : sg_renderer_flip;
 	begin
-		// if Assigned(srcRect) then
-		// begin
-		// 	// get src data from srcRect
-
 			// Fill with part details...
 			// if not has part details
 			srcData[0] := 0;
 			srcData[1] := 0;
 			srcData[2] := src^.width;
 			srcData[3] := src^.height;
-		// end
-		// else
-		// begin
-		// 	// get src data from srcBmp
-		// 	srcData[0] := 0;
-		// 	srcData[1] := 0;
-		// 	srcData[2] := srcBmp^.width;
-		// 	srcData[3] := srcBmp^.height;			
-		// end;
 
-		// if Assigned(destRect) then
-		// begin
-		// 	// get dst data from dstRect
-		// 	dstData[0] := destRect^.x;
-		// 	dstData[1] := destRect^.y;
-		// 	dstData[2] := 0; // Angle
-		// 	dstData[3] := 0; // Centre X
-		// 	dstData[4] := 0; // Centre Y
-		// 	dstData[5] := Opts.ScaleX; // Scale X
-		// 	dstData[6] := Opts.ScaleY; // Scale Y
-		// end
-		// else
-		begin
+		//
+		if (opts.flipX) and (opts.flipY)then
+			flip := SG_FLIP_BOTH
+		else
+			if (opts.flipX) then
+				flip := SG_FLIP_VERTICAL
+			else
+				if (opts.flipY) then
+					flip := SG_FLIP_HORIZONTAL
+				else
+					flip := SG_FLIP_NONE;
+
 			// make up dst data
-			dstData[0] := x; // X
-			dstData[1] := y; // Y
-			dstData[2] := opts.angle; // Angle
-			dstData[3] := opts.anchoroffsetX; // Centre X
-			dstData[4] := opts.anchoroffsetY; // Centre Y
-			dstData[5] := opts.scaleX; // Scale X
-			dstData[6] := opts.scaleY; // Scale Y
-		end;
+		dstData[0] := x; // X
+		dstData[1] := y; // Y
+		dstData[2] := opts.angle; // Angle
+		dstData[3] := opts.anchoroffsetX; // Centre X
+		dstData[4] := opts.anchoroffsetY; // Centre Y
+		dstData[5] := opts.scaleX; // Scale X
+		dstData[6] := opts.scaleY; // Scale Y
+		
 
-		_sg_functions^.image.draw_bitmap(src^.surface, opts.dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), SG_FLIP_NONE);
+		_sg_functions^.image.draw_bitmap(src^.surface, opts.dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), flip);
 	end;
 	
 	procedure FreeSurfaceProcedure(bmp : Bitmap);

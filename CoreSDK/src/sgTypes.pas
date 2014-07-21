@@ -356,6 +356,8 @@ interface
       angle : Single;
       anchoroffsetX : Single;
       anchoroffsetY : Single;
+      flipX : Boolean;
+      flipY : Boolean;
     end;
 
     /// @type BitmapArray
