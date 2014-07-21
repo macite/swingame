@@ -6,7 +6,6 @@ var
 	i : integer;
 begin
 	OpenGraphicsWindow('test',1000,1000);
-	// ShowSwinGameSplashScreen();
 	LoadBitmapNamed('test','Swinburne.jpg');
 	ClearScreen(ColorWhite);
 	opts:=OptionDefaults();
@@ -14,12 +13,12 @@ begin
 	RefreshScreen();
 	Delay(1000);
 	ClearScreen(ColorWhite);
-	opts:=OptionFlipX();
+	opts:=OptionPartBmp(140,140,100,100);
 	DrawBitmap('test',100,100,opts);
 	RefreshScreen();
 	Delay(1000);
 	ClearScreen(ColorWhite);
-	opts:=OptionFlipXY();
+	opts:=OptionFlipXY(opts);
 	DrawBitmap('test',100,100,opts);
 	RefreshScreen();
 	Delay(1000);

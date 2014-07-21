@@ -93,12 +93,20 @@ implementation
 		dstData: array [0..6] of Single;
 		flip : sg_renderer_flip;
 	begin
-			// Fill with part details...
-			// if not has part details
-			srcData[0] := 0;
-			srcData[1] := 0;
-			srcData[2] := src^.width;
-			srcData[3] := src^.height;
+		if not (opts.isPart) then
+			begin
+				srcData[0] := 0;
+				srcData[1] := 0;
+				srcData[2] := src^.width;
+				srcData[3] := src^.height;
+			end
+		else
+			begin
+				srcData[0] := opts.x;
+				srcData[1] := opts.y;
+				srcData[2] := opts.w;
+				srcData[3] := opts.h;
+			end;
 
 		//
 		if (opts.flipX) and (opts.flipY)then

@@ -358,6 +358,8 @@ interface
       anchoroffsetY : Single;
       flipX : Boolean;
       flipY : Boolean;
+      isPart : Boolean;
+      x, y, w, h : Single;
     end;
 
     /// @type BitmapArray

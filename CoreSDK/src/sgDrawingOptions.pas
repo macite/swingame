@@ -33,6 +33,10 @@ function OptionFlipXY() : BitmapDrawOpts;
 
 function OptionFlipXY(const opts : BitmapDrawOpts) : BitmapDrawOpts;
 
+function OptionPartBmp(x, y, w, h : Single) : BitmapDrawOpts;
+
+function OptionPartBmp(x, y, w, h : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
 implementation
 uses sgShared;
 
@@ -48,6 +52,7 @@ begin
 		anchoroffsetY := 0;
 		flipX := false;
 		flipY := false;
+		isPart := false;
 	end;
 end;
 
@@ -129,6 +134,21 @@ begin
 	result := opts;
 	result.flipY := not result.flipY;
 	result.flipX := not result.flipX;
+end;
+
+function OptionPartBmp(x, y, w, h : Single) : BitmapDrawOpts;
+begin
+	result := OptionPartBmp(x, y, w, h, OptionDefaults());
+end;
+
+function OptionPartBmp(x, y, w, h : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.isPart := true;
+	result.x := x;
+	result.y := y;
+	result.w := w;
+	result.h := h;
 end;
 
 end.
