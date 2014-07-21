@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-12 16:10:38.103538
+// SwinGame.pas was generated on 2014-07-21 14:03:33.713186
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -72,6 +72,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   type BitmapData = sgTypes.BitmapData;
 
   type Bitmap = sgTypes.Bitmap;
+
+  type BitmapDrawOpts = sgTypes.BitmapDrawOpts;
 
   type BitmapArray = sgTypes.BitmapArray;
 
@@ -1731,6 +1733,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Get the hue of the ``color``.
   function HueOf(c: Color): Single; overload;
 
+  // Returns the number of resolutions in the list of available resolutions.
+  function NumberOfResolutions(): Longint; overload;
+
   // Opens the graphical window as an 800 x 600 window. See OpenGramhicsWinddow
   // for more options.
   procedure OpenGraphicsWindow(caption: String); overload;
@@ -1976,8 +1981,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draws the source bitmap onto the destination
   procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
 
+  // Draw the bitmap using the passed in options
+  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+
   // Draws the source bitmap onto the destination.
   procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
+
+  // Draw the bitmap using the passed in options
+  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
 
   // Draw the cell of the passed in bitmap onto the game.
   procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
@@ -6620,6 +6631,11 @@ implementation
     result := sgGraphics.HueOf(c);
   end;
 
+  function NumberOfResolutions(): Longint; overload;
+  begin
+    result := sgGraphics.NumberOfResolutions();
+  end;
+
   procedure OpenGraphicsWindow(caption: String); overload;
   begin
     sgGraphics.OpenGraphicsWindow(caption);
@@ -6955,9 +6971,19 @@ implementation
     sgImages.DrawBitmap(dest,src,position);
   end;
 
+  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  begin
+    sgImages.DrawBitmap(name,x,y,opts);
+  end;
+
   procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
   begin
     sgImages.DrawBitmap(dest,src,x,y);
+  end;
+
+  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  begin
+    sgImages.DrawBitmap(src,x,y,opts);
   end;
 
   procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;

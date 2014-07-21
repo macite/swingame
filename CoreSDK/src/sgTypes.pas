@@ -7,7 +7,7 @@
 //
 // Change History:
 //
-// Version 3.0:
+// Version 3.0:g
 // - 2013-11-08: Andrew : Add Sprite Event Details
 //
 // ... long missing history --sadface--
@@ -346,12 +346,21 @@ interface
     /// @field pointer: ^BitmapData
     Bitmap = ^BitmapData;
     
+    /// 
+    ///
+    /// @struct BitmapDrawOpts
+    BitmapDrawOpts = packed record
+      dest : Bitmap; //the bitmap used to draw on
+      scaleX : Single;
+      scaleY : Single;
+    end;
+
     /// @type BitmapArray
     /// @array_wrapper
     /// @field data: array of Bitmap
     BitmapArray = array of Bitmap;
     
-      /// A bitmap cell is used to store the cell to draw from a particular bitmap.
+    /// A bitmap cell is used to store the cell to draw from a particular bitmap.
     /// 
     /// @struct BitmapCell
     BitmapCell = record

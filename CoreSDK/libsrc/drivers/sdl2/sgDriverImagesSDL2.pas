@@ -87,52 +87,55 @@ implementation
 	end;
 	
 	//TODO: rename to DrawImage
-	procedure BlitSurfaceProcedure(srcBmp, destBmp : Bitmap; srcRect, destRect : RectPtr);
+	procedure BlitSurfaceProcedure(src: Bitmap; x, y: Single; const opts : BitmapDrawOpts);
 	var
 		srcData: array [0..3] of Single;
 		dstData: array [0..6] of Single;
 	begin
-		if Assigned(srcRect) then
-		begin
-			// get src data from srcRect
-			srcData[0] := srcRect^.x;
-			srcData[1] := srcRect^.y;
-			srcData[2] := srcRect^.width;
-			srcData[3] := srcRect^.height;
-		end
-		else
-		begin
-			// get src data from srcBmp
+		// if Assigned(srcRect) then
+		// begin
+		// 	// get src data from srcRect
+
+			// Fill with part details...
+			// if not has part details
 			srcData[0] := 0;
 			srcData[1] := 0;
-			srcData[2] := srcBmp^.width;
-			srcData[3] := srcBmp^.height;			
-		end;
+			srcData[2] := src^.width;
+			srcData[3] := src^.height;
+		// end
+		// else
+		// begin
+		// 	// get src data from srcBmp
+		// 	srcData[0] := 0;
+		// 	srcData[1] := 0;
+		// 	srcData[2] := srcBmp^.width;
+		// 	srcData[3] := srcBmp^.height;			
+		// end;
 
-		if Assigned(destRect) then
-		begin
-			// get dst data from dstRect
-			dstData[0] := destRect^.x;
-			dstData[1] := destRect^.y;
-			dstData[2] := 0; // Angle
-			dstData[3] := 0; // Centre X
-			dstData[4] := 0; // Centre Y
-			dstData[5] := destRect^.width / srcData[2]; // Scale X
-			dstData[6] := destRect^.height / srcData[3]; // Scale Y
-		end
-		else
+		// if Assigned(destRect) then
+		// begin
+		// 	// get dst data from dstRect
+		// 	dstData[0] := destRect^.x;
+		// 	dstData[1] := destRect^.y;
+		// 	dstData[2] := 0; // Angle
+		// 	dstData[3] := 0; // Centre X
+		// 	dstData[4] := 0; // Centre Y
+		// 	dstData[5] := Opts.ScaleX; // Scale X
+		// 	dstData[6] := Opts.ScaleY; // Scale Y
+		// end
+		// else
 		begin
 			// make up dst data
-			dstData[0] := 0; // X
-			dstData[1] := 0; // Y
+			dstData[0] := x; // X
+			dstData[1] := y; // Y
 			dstData[2] := 0; // Angle
 			dstData[3] := 0; // Centre X
 			dstData[4] := 0; // Centre Y
-			dstData[5] := 1; // Scale X
-			dstData[6] := 1; // Scale Y
+			dstData[5] := opts.scaleX; // Scale X
+			dstData[6] := opts.scaleY; // Scale Y
 		end;
 
-		_sg_functions^.image.draw_bitmap(srcBmp^.surface, destBmp^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), SG_FLIP_NONE);
+		_sg_functions^.image.draw_bitmap(src^.surface, opts.dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), SG_FLIP_NONE);
 	end;
 	
 	procedure FreeSurfaceProcedure(bmp : Bitmap);

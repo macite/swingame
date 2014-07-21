@@ -570,6 +570,22 @@ uses sgTypes;
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - onto bitmap
 //---------------------------------------------------------------------------
+
+  /// Draw the bitmap using the passed in options
+  ///
+  /// @lib DrawBitmapWithOpts
+  /// @sn drawBitmap:%s atX:%s y:%s withOptions:%s
+  ///
+  /// @class Bitmap
+  /// @method DrawWithOpts
+  /// @csn drawAtX:%s y:%s withOptions:%s
+  procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: BitmapDrawOpts); overload;
+
+  /// Draw the bitmap using the passed in options
+  ///
+  /// @lib DrawBitmapNamedWithOpts
+  /// @sn drawBitmapNamed:%s atX:%s y:%s withOptions:%s
+  procedure DrawBitmap(name: String; x, y : Longint; const opts: BitmapDrawOpts); overload;
   
   /// Draws the source bitmap onto the destination.
   ///
@@ -915,7 +931,7 @@ uses sgTypes;
 //=============================================================================
 implementation
 uses sgResources, sgCamera, sgGeometry, sgGraphics,
-     sgDriverImages, sgDriver,
+     sgDriverImages, sgDriver, sgDrawingOptions,
      stringhash,         // libsrc
      SysUtils, 
      sgSavePNG, sgShared, sgTrace;
@@ -1364,11 +1380,22 @@ end;
 ///
 /// Side Effects:
 /// - Draws the src at the x,y location in the destination.
+
 procedure DrawBitmap(dest: Bitmap; src: Bitmap; x, y : Longint); overload;
-var
-  offset: Rectangle;
 begin
-  if (not assigned(dest)) or (not assigned(src)) then exit;
+  DrawBitmap(src, x, y, OptionDrawTo(dest));
+end;
+
+procedure DrawBitmap(name: String; x, y : Longint; const opts: BitmapDrawOpts); overload;
+begin
+    DrawBitmap(BitmapNamed(name), x, y, opts);
+end;
+
+procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: BitmapDrawOpts); overload;
+// var
+//   offset: Rectangle;
+begin
+  if (not assigned(opts.dest)) or (not assigned(src)) then exit;
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'DrawBitmap', 'src = ' + HexStr(src));
   {$ENDIF}
@@ -1376,24 +1403,32 @@ begin
   //TODO: Check if this is right
   // Offset was previously 0 width 0 height which caused a bitmap from a simple draw 
   // bitmap method to not draw (because of the dimensions)
-  offset := RectangleFrom(x, y, src^.width, src^.height);
-  ImagesDriver.BlitSurface(src, dest, nil, @offset);
+  // offset := RectangleFrom(x, y, src^.width, src^.height);
+
+
+  ImagesDriver.BlitSurface(src, x, y, opts);
+
+
   {$IFDEF TRACE}
     TraceExit('sgImages', 'DrawBitmap');
   {$ENDIF}
 end;
 
 procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX, srcY, srcW, srcH, x, y : Longint); overload;
-var
-  offset, source: Rectangle;
+// var
+//   offset, source: Rectangle;
 begin
-  if (not assigned(dest)) or (not assigned(src)) then begin {RaiseException('No bitmap supplied');} exit; end;
-  if (srcW <= 0) or (srcH <= 0) then begin {RaiseException('Width and Height must be >= 0');} exit; end;
+  // if (not assigned(dest)) or (not assigned(src)) then begin {RaiseException('No bitmap supplied');} exit; end;
+  // if (srcW <= 0) or (srcH <= 0) then begin RaiseException('Width and Height must be >= 0'); exit; end;
   
-  offset := RectangleFrom(x, y, srcW, srcH);
-  source := RectangleFrom(srcX, srcY, srcW, srcH);
+  // offset := RectangleFrom(x, y, srcW, srcH);
+  // source := RectangleFrom(srcX, srcY, srcW, srcH);
   
-  ImagesDriver.BlitSurface(src, dest, @source, @offset);
+  // ImagesDriver.BlitSurface(src, dest, @source, @offset);
+
+
+  //TODO: Add Part
+  DrawBitmap(src, x, y, OptionDrawTo(dest));
 end;
 
 procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x, y : Longint); overload;

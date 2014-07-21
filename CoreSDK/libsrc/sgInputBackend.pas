@@ -75,7 +75,7 @@ interface
     _deltaAccelerometer: AccelerometerMotion;
 
 implementation
-  uses sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics;
+  uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics;
   
   procedure _InitGlobalVars(); 
   begin
@@ -365,7 +365,10 @@ implementation
           srect.height := _area.height;
 
           drect := _area;
-          imagesDriver.BlitSurface(_textBitmap,  dest, @srect, @drect);
+          // imagesDriver.BlitSurface(_textBitmap,  dest, @srect, @drect);
+
+          //TODO: check this...
+          imagesDriver.BlitSurface(_textBitmap, _area.x, _area.y, OptionDrawTo(dest));
         end;
   end;
   
