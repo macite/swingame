@@ -1392,8 +1392,6 @@ begin
 end;
 
 procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: BitmapDrawOpts); overload;
-// var
-//   offset: Rectangle;
 begin
   if (not assigned(opts.dest)) or (not assigned(src)) then exit;
   {$IFDEF TRACE}
@@ -1415,20 +1413,8 @@ begin
 end;
 
 procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX, srcY, srcW, srcH, x, y : Longint); overload;
-// var
-//   offset, source: Rectangle;
 begin
-  // if (not assigned(dest)) or (not assigned(src)) then begin {RaiseException('No bitmap supplied');} exit; end;
-  // if (srcW <= 0) or (srcH <= 0) then begin RaiseException('Width and Height must be >= 0'); exit; end;
-  
-  // offset := RectangleFrom(x, y, srcW, srcH);
-  // source := RectangleFrom(srcX, srcY, srcW, srcH);
-  
-  // ImagesDriver.BlitSurface(src, dest, @source, @offset);
-
-
-  //TODO: Add Part
-  DrawBitmap(src, x, y, OptionDrawTo(dest));
+  DrawBitmap(src, x, y, OptionDrawTo(dest,OptionPartBmp(srcX,srcY,srcW,srcH)));
 end;
 
 procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x, y : Longint); overload;
