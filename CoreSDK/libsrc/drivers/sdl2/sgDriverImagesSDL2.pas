@@ -87,7 +87,7 @@ implementation
 	end;
 	
 	//TODO: rename to DrawImage
-	procedure BlitSurfaceProcedure(src: Bitmap; x, y: Single; const opts : BitmapDrawOpts);
+	procedure BlitSurfaceProcedure(src: Bitmap; x, y: Single; const opts : DrawingOptions);
 	var
 		srcData: array [0..3] of Single;
 		dstData: array [0..6] of Single;

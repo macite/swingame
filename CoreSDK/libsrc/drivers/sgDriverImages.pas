@@ -31,7 +31,7 @@ interface
     MakeTransparentProcedure             = procedure (bmp : Bitmap);
     RotateScaleSurfaceProcedure          = procedure (resultBmp, src : Bitmap; deg, scale : Single; smooth : LongInt);
     SameBitmapProcedure                  = function  (const bitmap1, bitmap2 : Bitmap) : Boolean;
-    BlitSurfaceProcedure                 = procedure (srcBmp: Bitmap; x, y: Single; const opts : BitmapDrawOpts);
+    BlitSurfaceProcedure                 = procedure (srcBmp: Bitmap; x, y: Single; const opts : DrawingOptions);
     ClearSurfaceProcedure                = procedure (dest : Bitmap; toColor : Color);
     OptimiseBitmapProcedure              = procedure (surface : Bitmap);
     SaveBitmapProcedure                  = procedure (src : Bitmap; filepath : String);
@@ -128,7 +128,7 @@ implementation
     result := ImagesDriver.SameBitmap(Bitmap1, Bitmap2);
   end;
   
-  procedure DefaultBlitSurfaceProcedure(srcBmp : Bitmap; x, y: Single; const opts : BitmapDrawOpts);
+  procedure DefaultBlitSurfaceProcedure(srcBmp : Bitmap; x, y: Single; const opts : DrawingOptions);
   begin
     LoadDefaultImagesDriver();
     ImagesDriver.BlitSurface(srcBmp, x, y, Opts);

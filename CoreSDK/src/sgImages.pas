@@ -579,13 +579,13 @@ uses sgTypes;
   /// @class Bitmap
   /// @method DrawWithOpts
   /// @csn drawAtX:%s y:%s withOptions:%s
-  procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: DrawingOptions); overload;
 
   /// Draw the bitmap using the passed in options
   ///
   /// @lib DrawBitmapNamedWithOpts
   /// @sn drawBitmapNamed:%s atX:%s y:%s withOptions:%s
-  procedure DrawBitmap(name: String; x, y : Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(name: String; x, y : Longint; const opts: DrawingOptions); overload;
   
   /// Draws the source bitmap onto the destination.
   ///
@@ -1386,12 +1386,12 @@ begin
   DrawBitmap(src, x, y, OptionDrawTo(dest));
 end;
 
-procedure DrawBitmap(name: String; x, y : Longint; const opts: BitmapDrawOpts); overload;
+procedure DrawBitmap(name: String; x, y : Longint; const opts: DrawingOptions); overload;
 begin
     DrawBitmap(BitmapNamed(name), x, y, opts);
 end;
 
-procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: BitmapDrawOpts); overload;
+procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: DrawingOptions); overload;
 begin
   if (not assigned(opts.dest)) or (not assigned(src)) then exit;
   {$IFDEF TRACE}

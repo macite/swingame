@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-21 14:03:33.713186
+// SwinGame.pas was generated on 2014-07-23 15:06:46.888512
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -73,7 +73,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   type Bitmap = sgTypes.Bitmap;
 
-  type BitmapDrawOpts = sgTypes.BitmapDrawOpts;
+  type DrawingOptions = sgTypes.DrawingOptions;
 
   type BitmapArray = sgTypes.BitmapArray;
 
@@ -1982,13 +1982,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
 
   // Draw the bitmap using the passed in options
-  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: DrawingOptions); overload;
 
   // Draws the source bitmap onto the destination.
   procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
 
   // Draw the bitmap using the passed in options
-  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: DrawingOptions); overload;
 
   // Draw the cell of the passed in bitmap onto the game.
   procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
@@ -6971,7 +6971,7 @@ implementation
     sgImages.DrawBitmap(dest,src,position);
   end;
 
-  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: DrawingOptions); overload;
   begin
     sgImages.DrawBitmap(name,x,y,opts);
   end;
@@ -6981,7 +6981,7 @@ implementation
     sgImages.DrawBitmap(dest,src,x,y);
   end;
 
-  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: BitmapDrawOpts); overload;
+  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: DrawingOptions); overload;
   begin
     sgImages.DrawBitmap(src,x,y,opts);
   end;

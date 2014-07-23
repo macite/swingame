@@ -2,7 +2,7 @@ program DrawBitmapTest;
 uses sgTypes, SwinGame, sgDrawingOptions, sgCamera;
 
 var 
-	opts : BitmapDrawOpts;
+	opts : DrawingOptions;
 	i : integer;
 begin
 	OpenGraphicsWindow('test',1000,1000);

@@ -348,8 +348,8 @@ interface
     
     /// 
     ///
-    /// @struct BitmapDrawOpts
-    BitmapDrawOpts = packed record
+    /// @struct DrawingOptions
+    DrawingOptions = packed record
       dest : Bitmap; //the bitmap used to draw on
       scaleX : Single;
       scaleY : Single;
