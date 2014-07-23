@@ -37,6 +37,14 @@ function OptionPartBmp(x, y, w, h : Single) : BitmapDrawOpts;
 
 function OptionPartBmp(x, y, w, h : Single; const opts : BitmapDrawOpts) : BitmapDrawOpts;
 
+function OptionToWorld() : BitmapDrawOpts;
+
+function OptionToWorld(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
+function OptionToScreen() : BitmapDrawOpts;
+
+function OptionToScreen(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+
 implementation
 uses sgShared;
 
@@ -53,6 +61,7 @@ begin
 		flipX := false;
 		flipY := false;
 		isPart := false;
+		ToWorld := false;
 	end;
 end;
 
@@ -149,6 +158,28 @@ begin
 	result.y := y;
 	result.w := w;
 	result.h := h;
+end;
+
+function OptionToWorld() : BitmapDrawOpts;
+begin
+	result := OptionToWorld(OptionDefaults());
+end;
+
+function OptionToWorld(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.ToWorld := true;
+end;
+
+function OptionToScreen() : BitmapDrawOpts;
+begin
+	result := OptionToScreen(OptionDefaults());
+end;
+
+function OptionToScreen(const opts : BitmapDrawOpts) : BitmapDrawOpts;
+begin
+	result := opts;
+	result.ToWorld := false;
 end;
 
 end.

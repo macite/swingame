@@ -360,6 +360,7 @@ interface
       flipY : Boolean;
       isPart : Boolean;
       x, y, w, h : Single;
+      ToWorld : Boolean;
     end;
 
     /// @type BitmapArray

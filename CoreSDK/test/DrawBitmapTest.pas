@@ -1,5 +1,5 @@
 program DrawBitmapTest;
-uses sgTypes, SwinGame, sgDrawingOptions;
+uses sgTypes, SwinGame, sgDrawingOptions, sgCamera;
 
 var 
 	opts : BitmapDrawOpts;
@@ -7,20 +7,14 @@ var
 begin
 	OpenGraphicsWindow('test',1000,1000);
 	LoadBitmapNamed('test','Swinburne.jpg');
-	ClearScreen(ColorWhite);
-	ShowSwinGameSplashScreen();
-	// opts:=OptionDefaults();
-	// DrawBitmap('test',100,100,opts);
-	// RefreshScreen();
-	// Delay(1000);
-	// ClearScreen(ColorWhite);
-	// // opts:=OptionPartBmp(140,140,100,100);
-	// DrawBitmapPart(BitmapNamed('test'),140,140,100,100,100,100);
-	// RefreshScreen();
-	// Delay(1000);
-	// ClearScreen(ColorWhite);
-	// opts:=OptionFlipXY(opts);
-	// DrawBitmap('test',100,100,opts);
-	// RefreshScreen();
-	// Delay(1000);
+	
+	for i:=1 to 400 do
+		begin
+			ClearScreen(ColorWhite);
+			DrawBitmap('test',100,100,OptionToWorld());
+			DrawBitmap('test',400,400,OptionToScreen());
+			DrawBitmap('test',700,700);
+			MoveCameraBy(0,-1);
+			RefreshScreen();
+		end;
 end.

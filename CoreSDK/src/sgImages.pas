@@ -1404,7 +1404,11 @@ begin
   // offset := RectangleFrom(x, y, src^.width, src^.height);
 
 
-  ImagesDriver.BlitSurface(src, x, y, opts);
+  // if world map to screen... default to world
+  if not (opts.ToWorld) then
+    ImagesDriver.BlitSurface(src, x, y, opts)
+  else
+    ImagesDriver.BlitSurface(src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y), opts);
 
 
   {$IFDEF TRACE}
