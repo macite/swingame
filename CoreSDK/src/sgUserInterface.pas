@@ -1634,7 +1634,7 @@ implementation
     SysUtils, StrUtils, Classes, Math,
     stringhash, sgSharedUtils, sgNamedIndexCollection,   // libsrc
     sgShared, sgResources, sgTrace, sgImages, sgGraphics,
-    sgGeometry, sgText, sgInput, sgAudio;
+    sgGeometry, sgText, sgInput, sgAudio, sgDrawingOptions;
 //=============================================================================
 
 procedure DoFreePanel(var pnl: Panel); forward;
@@ -1886,11 +1886,11 @@ end;
 
 procedure DrawVectorCheckbox(forRegion: Region; const area: Rectangle);
 begin
-  DrawRectangleOnScreen(VectorForecolorToDraw(forRegion), area);
+  DrawRectangle(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
   if CheckboxState(forRegion) then 
   begin
-    FillRectangleOnScreen(VectorForecolorToDraw(forRegion), InsetRectangle(area, 2));
+    FillRectangle(VectorForecolorToDraw(forRegion), InsetRectangle(area, 2), OptionToScreen());
   end;
 end;
 
@@ -1908,7 +1908,7 @@ procedure DrawTextbox(forRegion: Region; const area: Rectangle);
 begin
   if not Assigned(forRegion) then exit;
 
-  if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then DrawRectangleOnScreen(VectorForecolorToDraw(forRegion), area);
+  if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then DrawRectangle(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
   if GUIC.activeTextBox <> forRegion then
     DrawTextLinesOnScreen(TextboxText(forRegion), 
@@ -1934,7 +1934,7 @@ var
     innerRect, arrowArea: Rectangle;
   begin
     arrowArea := RectangleOffset(rect, areaPt);
-    FillRectangleOnScreen(VectorForecolorToDraw(forRegion), arrowArea);
+    FillRectangle(VectorForecolorToDraw(forRegion), arrowArea, OptionToScreen());
     innerRect := InsetRectangle(arrowArea, 2);
     
     if up then
@@ -1958,7 +1958,7 @@ var
     innerRect, arrowArea: Rectangle;
   begin
     arrowArea := RectangleOffset(rect, areaPt);
-    FillRectangleOnScreen(VectorForecolorToDraw(forRegion), arrowArea);
+    FillRectangle(VectorForecolorToDraw(forRegion), arrowArea, OptionToScreen());
     innerRect := InsetRectangle(arrowArea, 2);
     
     if left then
@@ -2017,11 +2017,12 @@ var
     if tempList^.verticalScroll then
     begin
       if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
-        FillRectangleOnScreen(VectorForecolorToDraw(forRegion), 
+        FillRectangle(VectorForecolorToDraw(forRegion), 
                               RoundInt(scrollArea.x),
                               RoundInt(scrollArea.y + pct * (scrollArea.Height - tempList^.scrollSize)),
                               tempList^.scrollSize,
-                              tempList^.scrollSize
+                              tempList^.scrollSize,
+                              OptionToScreen()
                               )
       else
         DrawBitmapOnScreen(tempList^.ScrollButton,
@@ -2031,11 +2032,12 @@ var
     else
     begin
       if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
-        FillRectangleOnScreen(VectorForecolorToDraw(forRegion), 
+        FillRectangle(VectorForecolorToDraw(forRegion), 
                               RoundInt(scrollArea.x + pct * (scrollArea.Width - tempList^.scrollSize)),
                               RoundInt(scrollArea.y),
                               tempList^.scrollSize,
-                              tempList^.scrollSize
+                              tempList^.scrollSize,
+                              OptionToScreen()
                               )
       else
         DrawBitmapOnScreen(tempList^.ScrollButton,
@@ -2047,7 +2049,7 @@ begin
   tempList := ListFromRegion(forRegion);
   if not assigned(tempList) then exit;
   
-  if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then DrawRectangleOnScreen(VectorForecolorToDraw(forRegion), area);
+  if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then DrawRectangle(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
   PushClip(area);
   areaPt := RectangleTopLeft(area);
@@ -2072,8 +2074,8 @@ begin
   
   if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
   begin
-    DrawRectangleOnScreen(VectorBackcolorToDraw(forRegion), scrollArea);
-    DrawRectangleOnScreen(VectorForecolorToDraw(forRegion), scrollArea);
+    DrawRectangle(VectorBackcolorToDraw(forRegion), scrollArea, OptionToScreen());
+    DrawRectangle(VectorForecolorToDraw(forRegion), scrollArea, OptionToScreen());
   end;
   
   // Draw the scroll position indicator
@@ -2090,7 +2092,7 @@ begin
     
     // Outline the item's area
     if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
-      DrawRectangleOnScreen(VectorForecolorToDraw(forRegion), itemArea);
+      DrawRectangle(VectorForecolorToDraw(forRegion), itemArea, OptionToScreen());
     
     // Find the index of the first item to be shown in the list
     // NOTE: place holders in col then row order 0, 1 -> 2, 3 -> 4, 5 (for 2 cols x 3 rows)
@@ -2127,7 +2129,7 @@ begin
       if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
       begin
         // Fill and draw text in alternate color if vector based
-        FillRectangleOnScreen(VectorForecolorToDraw(forRegion), itemArea);
+        FillRectangle(VectorForecolorToDraw(forRegion), itemArea, OptionToScreen());
       end
       else
       begin
@@ -2198,13 +2200,13 @@ begin
 
   if current^.active then
   begin
-    FillRectangleOnScreen(GUIC.backgroundClr, current^.area);
-    DrawRectangleOnScreen(GUIC.foregroundClr, current^.area);
+    FillRectangle(GUIC.backgroundClr, current^.area, OptionToScreen());
+    DrawRectangle(GUIC.foregroundClr, current^.area, OptionToScreen());
   end
   else
   begin
-    FillRectangleOnScreen(GUIC.backgroundClrInactive, current^.area);
-    DrawRectangleOnScreen(GUIC.foregroundClrInactive, current^.area);
+    FillRectangle(GUIC.backgroundClrInactive, current^.area, OptionToScreen());
+    DrawRectangle(GUIC.foregroundClrInactive, current^.area, OptionToScreen());
   end;
   
   PushClip(current^.area);
@@ -2213,7 +2215,7 @@ begin
   begin
     currentReg := @p^.Regions[j];
     case currentReg^.kind of
-      gkButton:     DrawRectangleOnScreen(VectorForecolorToDraw(currentReg), RegionRectangleOnscreen(currentReg));
+      gkButton:     DrawRectangle(VectorForecolorToDraw(currentReg), RegionRectangleOnscreen(currentReg), OptionToScreen());
       gkLabel:      DrawLabelText(currentReg, RegionRectangleOnscreen(currentReg));
       gkCheckbox:   DrawVectorCheckbox(currentReg, RegionRectangleOnScreen(currentReg));
       gkRadioGroup: DrawVectorRadioButton(currentReg, RegionRectangleOnScreen(currentReg));

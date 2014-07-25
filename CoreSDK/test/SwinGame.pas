@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-23 15:06:46.888512
+// SwinGame.pas was generated on 2014-07-25 12:12:35.931854
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1561,40 +1561,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure DrawPixelOnScreen(clr: Color; x: Longint; y: Longint); overload;
 
   // Draw a rectangle in the game.
-  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
 
-  // Draw rectangle in the game.
-  procedure DrawRectangle(clr: Color; const source: Rectangle); overload;
-
-  // Draw a rectangle in the game (filled or outline).
-  procedure DrawRectangle(clr: Color; filled: Boolean; const source: Rectangle); overload;
-
-  // Draw a rectangle onto a destination.
-  procedure DrawRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
-
-  // Draw a rectangle onto a destination (filled or outline).
-  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
-
-  // Draw a rectangle in the game (filled or outline).
-  procedure DrawRectangle(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-
-  // Draw a rectangle onto a destination.
-  procedure DrawRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Draw a rectangle in the game.
+  procedure DrawRectangle(clr: Color; const rect: Rectangle); overload;
 
   // Draw a rectangle onto a destination bitmap.
-  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure DrawRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
 
-  // Draw a rectangle on the screen.
-  procedure DrawRectangleOnScreen(clr: Color; const source: Rectangle); overload;
-
-  // Draw a rectangle on the screen (fill or outline).
-  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
-
-  // Draw a rectangle on the screen.
-  procedure DrawRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
-  // Draw a rectangle on the screen (filled or outline).
-  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Draw a rectangle onto a destination bitmap.
+  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
 
   // Draw a triangle in the game.
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -1677,23 +1653,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Fills an ellipse on the screen.
   procedure FillEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
-  // Fill rectangle.
-  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  // Fill a rectangle in the game.
+  procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
 
   // Fill a rectangle in the game.
-  procedure FillRectangle(clr: Color; const source: Rectangle); overload;
+  procedure FillRectangle(clr: Color; const rect: Rectangle); overload;
 
-  // Fill a rectangle onto a destination.
-  procedure FillRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  // Fill a rectangle onto a destination bitmap.
+  procedure FillRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
 
-  // Fill a rectangle onto a destination.
-  procedure FillRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
-  // Fill a rectangle on the screen.
-  procedure FillRectangleOnScreen(clr: Color; const source: Rectangle); overload;
-
-  // Fill a rectangle on the screen.
-  procedure FillRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Fill a rectangle onto a destination bitmap.
+  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
 
   // Fill a triangle in the game.
   procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -6346,64 +6316,24 @@ implementation
     sgGraphics.DrawPixelOnScreen(clr,x,y);
   end;
 
-  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
   begin
-    sgGraphics.DrawRectangle(clr,xPos,yPos,width,height);
+    sgGraphics.DrawRectangle(clr,x,y,width,height);
   end;
 
-  procedure DrawRectangle(clr: Color; const source: Rectangle); overload;
+  procedure DrawRectangle(clr: Color; const rect: Rectangle); overload;
   begin
-    sgGraphics.DrawRectangle(clr,source);
+    sgGraphics.DrawRectangle(clr,rect);
   end;
 
-  procedure DrawRectangle(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  procedure DrawRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawRectangle(clr,filled,source);
+    sgGraphics.DrawRectangle(clr,rect,opts);
   end;
 
-  procedure DrawRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawRectangle(dest,clr,source);
-  end;
-
-  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawRectangle(dest,clr,filled,source);
-  end;
-
-  procedure DrawRectangle(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawRectangle(clr,filled,xPos,yPos,width,height);
-  end;
-
-  procedure DrawRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawRectangle(dest,clr,xPos,yPos,width,height);
-  end;
-
-  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawRectangle(dest,clr,filled,xPos,yPos,width,height);
-  end;
-
-  procedure DrawRectangleOnScreen(clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawRectangleOnScreen(clr,source);
-  end;
-
-  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawRectangleOnScreen(clr,filled,source);
-  end;
-
-  procedure DrawRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawRectangleOnScreen(clr,xPos,yPos,width,height);
-  end;
-
-  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawRectangleOnScreen(clr,filled,xPos,yPos,width,height);
+    sgGraphics.DrawRectangle(clr,xPos,yPos,width,height,opts);
   end;
 
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -6541,34 +6471,24 @@ implementation
     sgGraphics.FillEllipseOnScreen(clr,xPos,yPos,width,height);
   end;
 
-  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
   begin
-    sgGraphics.FillRectangle(clr,xPos,yPos,width,height);
+    sgGraphics.FillRectangle(clr,x,y,width,height);
   end;
 
-  procedure FillRectangle(clr: Color; const source: Rectangle); overload;
+  procedure FillRectangle(clr: Color; const rect: Rectangle); overload;
   begin
-    sgGraphics.FillRectangle(clr,source);
+    sgGraphics.FillRectangle(clr,rect);
   end;
 
-  procedure FillRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  procedure FillRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillRectangle(dest,clr,source);
+    sgGraphics.FillRectangle(clr,rect,opts);
   end;
 
-  procedure FillRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillRectangle(dest,clr,xPos,yPos,width,height);
-  end;
-
-  procedure FillRectangleOnScreen(clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.FillRectangleOnScreen(clr,source);
-  end;
-
-  procedure FillRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.FillRectangleOnScreen(clr,xPos,yPos,width,height);
+    sgGraphics.FillRectangle(clr,xPos,yPos,width,height,opts);
   end;
 
   procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;

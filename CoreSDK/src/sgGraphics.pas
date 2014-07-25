@@ -861,165 +861,56 @@ interface
   
   /// Draw a rectangle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillRectangleOnto
-  /// @sn drawOnto:%s color:%s filled:%s rectangleX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(dest: Bitmap; clr : Color; filled : Boolean; xPos, yPos, width, height : Longint); overload;
-  
-  /// Draw a rectangle onto a destination (filled or outline).
-  /// 
-  /// @lib DrawOrFillRectangleStructOnto
-  /// @sn drawOnto:%s color:%s filled:%s rectangle:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(dest: Bitmap; clr : Color; filled : Boolean; const source: Rectangle); overload;
-  
-  /// Draw a rectangle onto a destination.
-  /// 
-  /// @lib DrawOrFillRectangleOnto(dest, clr, False, xPos, yPos, width, height)
-  /// @uname DrawRectangleOnto
-  /// @sn drawOnto:%s color:%s rectangleX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(dest: Bitmap; clr : Color; xPos, yPos, width, height: Longint); overload;
-  
-  /// Draw a rectangle onto a destination.
-  /// 
-  /// @lib DrawOrFillRectangleStructOnto(dest, clr, False, source)
-  /// @uname DrawRectangleStructOnto
-  /// @sn drawOnto:%s color:%s rectangle:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(dest: Bitmap; clr : Color; const source: Rectangle); overload;
-  
-  /// Fill a rectangle onto a destination.
-  /// 
-  /// @lib DrawOrFillRectangleOnto(dest, clr, True, xPos, yPos, width, height)
-  /// @uname FillRectangleOnto
-  /// @sn fillOnto:%s color:%s rectangleX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_details
-  procedure FillRectangle(dest: Bitmap; clr : Color; xPos, yPos, width, height : Longint); overload;
-  
-  /// Fill a rectangle onto a destination.
-  /// 
-  /// @lib DrawOrFillRectangleStructOnto(dest, clr, True, source)
-  /// @uname FillRectangleStructOnto
-  /// @sn fillOnto:%s color:%s rectangle:%s
-  ///
-  /// @doc_details
-  procedure FillRectangle(dest: Bitmap; clr : Color; const source: Rectangle); overload;
-  
-  /// Draw a rectangle in the game (filled or outline).
-  ///
-  /// @lib DrawOrFillRectangle
-  /// @sn draw:%s filled:%s rectangleX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(clr: Color; filled: Boolean; xPos, yPos: Single; width, height: Longint); overload;
-  
-  /// Draw a rectangle in the game (filled or outline).
-  /// 
-  /// @lib DrawOrFillRectangleStruct
-  /// @sn draw:%s filled:%s rectangle:%s
-  ///
-  /// @doc_details
-  procedure DrawRectangle(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  /// @lib DrawRectangleOpts
+  /// @sn drawRectangleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  procedure DrawRectangle(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Draw a rectangle in the game.
   ///
-  /// @lib DrawOrFillRectangle(clr, False, xPos, yPos, width, height)
-  /// @uname DrawRectangle
-  /// @sn draw:%s rectangleX:%s y:%s width:%s height:%s
+  /// @lib 
+  /// @sn drawRectangleColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
-  procedure DrawRectangle(clr: Color; xPos, yPos: Single; width, height: Longint); overload;
+  procedure DrawRectangle(clr : Color; x, y, width, height : Single);
+
+  /// Draw a rectangle onto a destination bitmap.
+  /// 
+  /// @lib DrawRectangleStructOpts
+  /// @sn drawRectangleColor:%s data:%s opts:%s
+  procedure DrawRectangle(clr : Color; const rect: Rectangle; const opts : DrawingOptions); overload;
   
-  /// Draw rectangle in the game.
+  /// Draw a rectangle in the game.
   ///
-  /// @lib DrawOrFillRectangleStruct(clr, False, source)
-  /// @uname DrawRectangleStruct
-  /// @sn draw:%s rectangle:%s
-  ///
-  /// @doc_idx 1
-  procedure DrawRectangle(clr: Color; const source: Rectangle); overload;
-  
-  /// Fill rectangle.
-  ///
-  /// @lib DrawOrFillRectangle(clr, True, xPos, yPos, width, height)
-  /// @uname FillRectangle
-  /// @sn fill:%s rectangleX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_idx 0
-  procedure FillRectangle(clr: Color; xPos, yPos: Single; width, height: Longint); overload;
+  /// @lib DrawRectangleStruct
+  /// @sn drawRectangleColor:%s data:%s
+  procedure DrawRectangle(clr : Color; const rect: Rectangle);
+
+
+  /// Fill a rectangle onto a destination bitmap.
+  /// 
+  /// @lib FillRectangleOpts
+  /// @sn fillRectangleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  procedure FillRectangle(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Fill a rectangle in the game.
   ///
-  /// @lib DrawOrFillRectangleStruct(clr, True, source)
-  /// @uname FillRectangleStruct
-  /// @sn fill:%s rectangle:%s
+  /// @lib 
+  /// @sn FillRectangleColor:%s atX:%s y:%s width:%s height:%s
   ///
-  /// @doc_idx 1
-  procedure FillRectangle(clr: Color; const source: Rectangle); overload;
-  
-  /// Draw a rectangle on the screen (filled or outline).
-  ///
-  /// @lib DrawOrFillRectangleOnScreen
-  /// @sn draw:%s filled:%s rectangleOnScreenX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawRectangleOnScreen(clr : Color; filled : Boolean; xPos, yPos, width, height : Longint); overload;
-  
-  /// Draw a rectangle on the screen.
-  ///
-  /// @lib DrawOrFillRectangleOnScreen(clr, False, xPos, yPos, width, height)
-  /// @uname DrawRectangleOnScreen
-  /// @sn draw:%s rectangleOnScreenX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawRectangleOnScreen(clr : Color; xPos, yPos, width, height : Longint); overload;
-  
-  /// Fill a rectangle on the screen.
-  ///
-  /// @lib DrawOrFillRectangleOnScreen(clr, True, xPos, yPos, width, height)
-  /// @uname FillRectangleOnScreen
-  /// @sn fill:%s rectangleOnScreenX:%s y:%s width:%s height:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure FillRectangleOnScreen(clr : Color; xPos, yPos, width, height : Longint); overload;
-  
-  /// Draw a rectangle on the screen (fill or outline).
-  ///
-  /// @lib DrawOrFillRectangleStructOnScreen
-  /// @sn draw:%s filled:%s rectangleOnScreen:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawRectangleOnScreen(clr : Color; filled : Boolean; const source : Rectangle); overload;
-  
-  /// Draw a rectangle on the screen.
-  ///
-  /// @lib DrawOrFillRectangleStructOnScreen(clr, False, source)
-  /// @uname DrawRectangleStructOnScreen
-  /// @sn draw:%s rectangleOnScreen:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawRectangleOnScreen(clr : Color; const source : Rectangle); overload;
-  
-  /// Fill a rectangle on the screen.
+  /// @doc_idx 0
+  procedure FillRectangle(clr : Color; x, y, width, height : Single);
+
+  /// Fill a rectangle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillRectangleStructOnScreen(clr, True, source)
-  /// @uname FillRectangleStructOnScreen
-  /// @sn fill:%s rectangleOnScreen:%s
+  /// @lib FillRectangleStructOpts
+  /// @sn fillRectangleColor:%s data:%s opts:%s
+  procedure FillRectangle(clr : Color; const rect: Rectangle; const opts : DrawingOptions); overload;
+  
+  /// Fill a rectangle in the game.
   ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure FillRectangleOnScreen(clr : Color; const source : Rectangle); overload;
+  /// @lib FillRectangleStruct
+  /// @sn fillRectangleColor:%s data:%s
+  procedure FillRectangle(clr : Color; const rect: Rectangle);
   
   
   
@@ -1387,7 +1278,7 @@ implementation
   uses Math, Classes, SysUtils, // system
        sgSavePNG, 
        sgTrace, 
-       sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations;
+       sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions;
 
   /// Clears the surface of the screen to the passed in color.
   ///
@@ -1441,59 +1332,34 @@ implementation
     DrawPixelOnScreen(clr, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
   end;
 
-  /// Draws a rectangle on the screen.
-  ///
-  /// @param clr:     The color to draw the rectangle
-  /// @param filled:       True to draw a filled rectangle, false for outline
-  /// @param xPos,yPos:   The x,y location to draw the rectangle at
-  /// @param width,height: The width and height of the rectangle
-  ///
-  /// Side Effects:
-  /// - Draws a rectangle in the dest bitmap
-  procedure DrawRectangleOnScreen(clr : Color; filled : Boolean; xPos, yPos, width, height : Longint); overload;
+  procedure DrawRectangle(clr : Color; x, y, width, height : Single);
   begin
-    DrawRectangle(screen, clr, filled, xPos, yPos, width, height);
+    DrawRectangle(clr, x, y, width, height, OptionDefaults());
   end;
 
-  procedure DrawRectangle(clr : Color; filled : Boolean; xPos, yPos: Single; width, height : Longint); overload;
+  procedure DrawRectangle(clr : Color; const rect : Rectangle);
   begin
-    DrawRectangle(screen, clr, filled, sgCamera.ToScreenX(xPos), sgCamera.ToScreenY(yPos), width, height);
+    DrawRectangle(clr, rect.x, rect.y, rect.width, rect.height, OptionDefaults());
   end;
 
-  /// Draws the outline of a rectangle on the screen.
-  ///
-  /// @param clr:     The color to draw the rectangle
-  /// @param xPos,yPos:   The x,y location to draw the rectangle at
-  /// @param width,height: The width and height of the rectangle
-  ///
-  /// Side Effects:
-  /// - Draws a rectangle on the screen
-  procedure DrawRectangleOnScreen(clr : Color; xPos, yPos, width, height : Longint); overload;
+  procedure DrawRectangle(clr : Color; const rect : Rectangle; const opts : DrawingOptions);
   begin
-    DrawRectangle(screen, clr, xPos, yPos, width, height);
-  end;
-  
-  procedure DrawRectangle(clr: Color; xPos, yPos: Single; width, height : Longint); overload;
-  begin
-    DrawRectangle(screen, clr, sgCamera.ToScreenX(xPos), sgCamera.ToScreenY(yPos), width, height);
+    DrawRectangle(clr, rect, opts);
   end;
 
-  /// Draws a filled rectangle on the screen.
-  ///
-  /// @param clr:     The color to draw the rectangle
-  /// @param xPos,yPos:   The x,y location to draw the rectangle at
-  /// @param width,height: The width and height of the rectangle
-  ///
-  /// Side Effects:
-  /// - Draws a rectangle on the screen
-  procedure FillRectangleOnScreen(clr : Color; xPos, yPos, width, height : Longint); overload;
+  procedure FillRectangle(clr : Color; x, y, width, height : Single);
   begin
-    FillRectangle(screen, clr, xPos, yPos, width, height);
+    FillRectangle(clr, x, y, width, height, OptionDefaults());
   end;
 
-  procedure FillRectangle(clr : Color; xPos, yPos: Single; width, height : Longint); overload;
+  procedure FillRectangle(clr : Color; const rect : Rectangle);
   begin
-    FillRectangle(screen, clr, sgCamera.ToScreenX(xPos), sgCamera.ToScreenY(yPos), width, height);
+    FillRectangle(clr, rect, OptionDefaults());
+  end;
+
+  procedure FillRectangle(clr : Color; const rect : Rectangle; const opts : DrawingOptions);
+  begin
+    FillRectangle(clr, rect, opts);
   end;
 
   /// Draws a line on the screen.
@@ -1850,23 +1716,12 @@ implementation
 
   //=============================================================================
   
-  procedure DrawRectangle(dest: Bitmap; clr: Color; filled : Boolean; xPos, yPos, width, height : Longint); overload;
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'DrawRectangle', 'onto: ' + HexStr(dest) + ' clr: ' + IntToStr(clr) + ' at ' + IntToStr(xPos) + ',' + IntToStr(yPos) + ' ' + IntToStr(width) + 'x' + IntToStr(height));
-    {$ENDIF}
-    if filled then FillRectangle(dest, clr, xPos, yPos, width, height)
-    else DrawRectangle(dest, clr, xPos, yPos, width, height);
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'DrawRectangle');
-    {$ENDIF}
-  end;
-
-  procedure DrawRectangle(dest: Bitmap; clr : Color; xPos, yPos, width, height : Longint); overload;
+  procedure DrawRectangle(clr : Color; xPos, yPos, width, height : Single; const opts : DrawingOptions); overload;
   var
     rect: Rectangle;
   begin
-    if dest = nil then begin RaiseWarning('DrawRectangle - No destination bitmap supplied'); exit; end;
+
+    if opts.dest = nil then begin RaiseWarning('DrawRectangle - No destination bitmap supplied'); exit; end;
     
     if width < 0 then
     begin
@@ -1880,17 +1735,18 @@ implementation
       height := -height;
     end else rect.y := yPos;
     
-    rect.width := width;
-    rect.height := height;
+    rect.width := Round(width);
+    rect.height := Round(height);
     
-    GraphicsDriver.DrawRectangle(dest, rect, clr);
+    GraphicsDriver.DrawRectangle(rect, clr, opts);
   end;
 
-  procedure FillRectangle(dest: Bitmap; clr : Color;  xPos, yPos, width, height : Longint);
+  procedure FillRectangle(clr : Color;  xPos, yPos, width, height : Single; const opts : DrawingOptions);
   var
     rect: Rectangle;
   begin
-    if dest = nil then begin RaiseWarning('FillRectangle - No destination bitmap supplied'); exit; end;
+
+    if opts.dest = nil then begin RaiseWarning('FillRectangle - No destination bitmap supplied'); exit; end;
     
     if width < 0 then
     begin
@@ -1904,11 +1760,12 @@ implementation
       height := -height;
     end else rect.y := yPos;
     
-    rect.width := width;
-    rect.height := height;
+    rect.width := Round(width);
+    rect.height := Round(height);
     
     //SDL_FillRect(dest^.surface, @rect, clr);
-    GraphicsDriver.FillRectangle(dest, rect, clr);
+    GraphicsDriver.FillRectangle(rect, clr, opts);
+
   end;
   
   /// Draws a vertical line on the destination bitmap.
@@ -1982,21 +1839,6 @@ implementation
     DrawPixel(dest, clr, Round(position.x), Round(position.y));
   end;
 
-  procedure DrawRectangle(dest: Bitmap; clr : Color; filled : Boolean; const source: Rectangle); overload;
-  begin
-    DrawRectangle(dest, clr, filled, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure DrawRectangle(dest: Bitmap; clr : Color; const source: Rectangle); overload;
-  begin
-    DrawRectangle(dest, clr, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure FillRectangle(dest: Bitmap; clr : Color; const source: Rectangle); overload;
-  begin
-    FillRectangle(dest, clr, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
   procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
   begin
     DrawCircle(dest, clr, filled, Round(point.x), Round(point.y), radius);
@@ -2032,21 +1874,6 @@ implementation
     DrawPixel(clr, Round(position.x), Round(position.y));
   end;
 
-  procedure DrawRectangle(clr : Color; filled : Boolean; const source : Rectangle); overload;
-  begin
-    DrawRectangle(clr, filled, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure DrawRectangle(clr : Color; const source : Rectangle); overload;
-  begin
-    DrawRectangle(clr, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure FillRectangle(clr : Color; const source : Rectangle); overload;
-  begin
-    FillRectangle(clr, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
   procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
   begin
     DrawCircle(clr, filled, Round(position.x), Round(position.y), radius);
@@ -2080,21 +1907,6 @@ implementation
   procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
   begin
     DrawPixelOnScreen(clr, Round(position.x), Round(position.y));
-  end;
-
-  procedure DrawRectangleOnScreen(clr : Color; filled : Boolean; const source : Rectangle); overload;
-  begin
-    DrawRectangleOnScreen(clr, filled, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure DrawRectangleOnScreen(clr : Color; const source : Rectangle); overload;
-  begin
-    DrawRectangleOnScreen(clr, Round(source.x), Round(source.y), source.width, source.height);
-  end;
-
-  procedure FillRectangleOnScreen(clr : Color; const source : Rectangle); overload;
-  begin
-    FillRectangleOnScreen(clr, Round(source.x), Round(source.y), source.width, source.height);
   end;
 
   procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;

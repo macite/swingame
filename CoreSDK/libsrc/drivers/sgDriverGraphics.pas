@@ -28,8 +28,8 @@ interface
     DrawCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint);      
 	  FillEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
 	  DrawEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
-		FillRectangleProcedure                = procedure (dest : Bitmap; rect : Rectangle; clr : Color);
-    DrawRectangleProcedure                = procedure (dest : Bitmap; rect : Rectangle; clr : Color);
+		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+    DrawRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
 		DrawLineProcedure                     = procedure (dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
 		SetPixelColorProcedure                = procedure (dest : Bitmap; x, y : Integer; clr : Color);
     SetClipRectangleProcedure             = procedure (dest : Bitmap; rect : Rectangle);      
@@ -161,10 +161,10 @@ uses
 		GraphicsDriver.DrawEllipse(dest, clr,  xPos, yPos, halfWidth, halfHeight);
 	end;
 	
-	procedure DefaultFillRectangleProcedure (dest : Bitmap; rect : Rectangle; clr : Color);
+	procedure DefaultFillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.FillRectangle(dest, rect, clr);
+		GraphicsDriver.FillRectangle(rect, clr, opts);
 	end;
 	
 	procedure DefaultDrawLineProcedure(dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
@@ -179,10 +179,10 @@ uses
 		GraphicsDriver.SetPixelColor(dest, x, y, clr);
 	end;
   
-  procedure DefaultDrawRectangleProcedure (dest : Bitmap; rect : Rectangle; clr : Color);
+  procedure DefaultDrawRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.DrawRectangle(dest, rect, clr);
+		GraphicsDriver.DrawRectangle(rect, clr, opts);
 	end;
   
   procedure DefaultSetClipRectangleProcedure(dest : Bitmap; rect : Rectangle);

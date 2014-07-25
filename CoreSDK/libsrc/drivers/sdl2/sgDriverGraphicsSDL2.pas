@@ -116,7 +116,7 @@ implementation
     _sg_functions^.graphics.draw_ellipse(dest^.surface, _ToSGColor(clr), @pts[0], 4);
     end;
 	
-	procedure FillRectangleProcedure (dest : Bitmap; rect : Rectangle; clr : Color);
+	procedure FillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -125,10 +125,10 @@ implementation
     pts[2] := rect.width;
     pts[3] := rect.height;
 
-    _sg_functions^.graphics.fill_aabb_rect(dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 
-  procedure DrawRectangleProcedure (dest : Bitmap; rect : Rectangle; clr : Color);
+  procedure DrawRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -137,7 +137,7 @@ implementation
     pts[2] := rect.width;
     pts[3] := rect.height;
 
-    _sg_functions^.graphics.draw_aabb_rect(dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
 	procedure DrawLineProcedure(dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
