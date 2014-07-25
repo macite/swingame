@@ -860,7 +860,7 @@ uses
 
 
 implementation
-    uses  SysUtils, sgGeometry, sgShared, sgPhysics, sgGraphics, sgCamera, sgSprites, sgTrace;
+    uses  SysUtils, sgGeometry, sgShared, sgPhysics, sgGraphics, sgCamera, sgSprites, sgTrace, sgDrawingOptions;
 
 function PointOnLineList(const pt:point2d; const s:Shape):Boolean;
 var
@@ -1965,7 +1965,7 @@ begin
   DrawPixel(dest, s^.color, PointAdd(pts[0], offset));
 end;
 
-procedure DrawShapeAsCircle(dest: Bitmap; s:Shape; filled: Boolean; const offset: point2D); overload;
+procedure DrawShapeAsCircle(dest: Bitmap; s:Shape; filled : Boolean; const offset: point2D); overload;
 var
   // r: Single;
   // pts: Point2DArray;
@@ -1977,7 +1977,10 @@ begin
   //if length(pts) < 2 then exit;
   //r := PointPointDistance(pts[0], pts[1]);
   
-  DrawCircle(dest, s^.color, filled, c); //PointAdd(pts[0], offset), Round(r));
+  if filled then
+    FillCircle(s^.color, c, OptionDrawTo(dest)) //PointAdd(pts[0], offset), Round(r));
+  else
+    DrawCircle(s^.color, c, OptionDrawTo(dest))
 end;
 
 // procedure DrawShapeAsEllipse(dest: Bitmap; s:Shape; filled: Boolean; const offset: Point2D); overload;

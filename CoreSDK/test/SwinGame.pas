@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-25 12:49:30.874222
+// SwinGame.pas was generated on 2014-07-25 13:24:23.530994
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1412,60 +1412,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
 
   // Draw a circle in the game.
-  procedure DrawCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Draw circle in the game.
-  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-
-  // Draw a circle in the game (filled or outline).
-  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
+  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
 
   // Draw a circle in the game.
   procedure DrawCircle(clr: Color; const c: Circle); overload;
 
-  // Draw a circle onto a bitmap.
-  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
+  // Draw a circle onto a destination bitmap.
+  procedure DrawCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
 
-  // Draw a circle in the game (filled or outline).
-  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
-
-  // Draw a circle onto a bitmap (filled or outline).
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
-
-  // Draw a circle onto a bitmap.
-  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-
-  // Draw a circle onto a destination.
-  procedure DrawCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Draw a circle onto a destination (filled or outline).
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
-
-  // Draw a circle in the game (filled or outline).
-  procedure DrawCircle(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Draw a circle onto a destination (filled or outline).
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Draw the circel onto the screen.
-  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
-
-  // Draw a circle on the screen (filled or outline)
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
-
-  // Draw a circle onto the screen.
-  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-
-  // Draw a circle on the screen.
-  procedure DrawCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Draw a circle onto the screen (filled or outline).
-  // 
-  // Draw a circle onto the screen
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-
-  // Draw a circle on the screen (filled or outline).
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+  // Draw a circle onto a destination bitmap.
+  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
 
   // Draw an ellipse in the game.
   procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
@@ -1482,11 +1438,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw an ellipse on the screen.
   procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
-  // Drawthe ellipse onto the destination.
-  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
   // Draw an ellipse in the game (filled or outline).
   procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+
+  // Drawthe ellipse onto the destination.
+  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
   // Draw the ellipse onto the destination.
   procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
@@ -1594,31 +1550,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure DrawVerticalLineOnScreen(clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
 
   // Fill a circle in the game.
-  procedure FillCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Fill a circle in the game.
-  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
+  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
 
   // Fill a circle in the game.
   procedure FillCircle(clr: Color; const c: Circle); overload;
 
-  // Fill a circle onto a destination.
-  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
+  // Fill a circle onto a destination bitmap.
+  procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
 
   // Fill a circle onto a destination bitmap.
-  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-
-  // Fill a circle onto a destination.
-  procedure FillCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-
-  // Fill the circle onto the screen.
-  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
-
-  // Fills a circle onto the screen.
-  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-
-  // Fill a circle on the screen.
-  procedure FillCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
 
   // Fill a ellipse in the game.
   procedure FillEllipse(clr: Color; const source: Rectangle); overload;
@@ -6050,19 +5991,9 @@ implementation
     result := sgGraphics.CurrentClip(bmp);
   end;
 
-  procedure DrawCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
   begin
-    sgGraphics.DrawCircle(clr,xc,yc,radius);
-  end;
-
-  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(clr,position,radius);
-  end;
-
-  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(clr,filled,position,radius);
+    sgGraphics.DrawCircle(clr,x,y,radius);
   end;
 
   procedure DrawCircle(clr: Color; const c: Circle); overload;
@@ -6070,74 +6001,14 @@ implementation
     sgGraphics.DrawCircle(clr,c);
   end;
 
-  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
+  procedure DrawCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawCircle(dest,clr,c);
+    sgGraphics.DrawCircle(clr,c,opts);
   end;
 
-  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
+  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawCircle(clr,filled,c);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
-  begin
-    sgGraphics.DrawCircle(dest,clr,filled,c);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(dest,clr,point,radius);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(dest,clr,xc,yc,radius);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(dest,clr,filled,point,radius);
-  end;
-
-  procedure DrawCircle(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(clr,filled,xc,yc,radius);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircle(dest,clr,filled,xc,yc,radius);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,c);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,filled,c);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,position,radius);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,xc,yc,radius);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,filled,position,radius);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.DrawCircleOnScreen(clr,filled,xc,yc,radius);
+    sgGraphics.DrawCircle(clr,x,y,radius,opts);
   end;
 
   procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
@@ -6165,14 +6036,14 @@ implementation
     sgGraphics.DrawEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawEllipse(dest,clr,xPos,yPos,width,height);
-  end;
-
   procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
     sgGraphics.DrawEllipse(clr,filled,xPos,yPos,width,height);
+  end;
+
+  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawEllipse(dest,clr,xPos,yPos,width,height);
   end;
 
   procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
@@ -6350,14 +6221,9 @@ implementation
     sgGraphics.DrawVerticalLineOnScreen(clr,x,y1,y2);
   end;
 
-  procedure FillCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
   begin
-    sgGraphics.FillCircle(clr,xc,yc,radius);
-  end;
-
-  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.FillCircle(clr,position,radius);
+    sgGraphics.FillCircle(clr,x,y,radius);
   end;
 
   procedure FillCircle(clr: Color; const c: Circle); overload;
@@ -6365,34 +6231,14 @@ implementation
     sgGraphics.FillCircle(clr,c);
   end;
 
-  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
+  procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillCircle(dest,clr,c);
+    sgGraphics.FillCircle(clr,c,opts);
   end;
 
-  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
+  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillCircle(dest,clr,point,radius);
-  end;
-
-  procedure FillCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.FillCircle(dest,clr,xc,yc,radius);
-  end;
-
-  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
-  begin
-    sgGraphics.FillCircleOnScreen(clr,c);
-  end;
-
-  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    sgGraphics.FillCircleOnScreen(clr,position,radius);
-  end;
-
-  procedure FillCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
-  begin
-    sgGraphics.FillCircleOnScreen(clr,xc,yc,radius);
+    sgGraphics.FillCircle(clr,x,y,radius,opts);
   end;
 
   procedure FillEllipse(clr: Color; const source: Rectangle); overload;

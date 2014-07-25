@@ -382,265 +382,58 @@ interface
 // Circle drawing code
 //---------------------------------------------------------------------------
   
-  /// Draw a circle onto a destination (filled or outline).
+  /// Draw a circle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillCircleOnto
-  /// @sn drawOnto:%s color:%s filled:%s circleX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
+  /// @lib DrawCircleOpts
+  /// @sn drawCircleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  procedure DrawCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
-  /// Draw a circle onto a destination.
+  /// Draw a circle in the game.
+  ///
+  /// @lib 
+  /// @sn drawCircleColor:%s atX:%s y:%s width:%s height:%s
+  ///
+  /// @doc_idx 0
+  procedure DrawCircle(clr : Color; x, y, radius : Single);
+
+  /// Draw a circle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillCircleOnto(dest, clr, False, xc, yc, radius)
-  /// @uname DrawCircleOnto
-  /// @sn drawOnto:%s color:%s circleX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); overload;
+  /// @lib DrawCircleStructOpts
+  /// @sn drawCircleColor:%s data:%s opts:%s
+  procedure DrawCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
   
-  /// Fill a circle onto a destination.
-  /// 
-  /// @lib DrawOrFillCircleOnto(dest, clr, True, xc, yc, radius)
-  /// @uname FillCircleOnto
-  /// @sn fillOnto:%s color:%s circleX:%s y:%s radius:%s
+  /// Draw a circle in the game.
   ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircle(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); overload;
-  
-  /// Draw a circle onto a destination (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircleAtPointOnto
-  /// @sn drawOnto:%s color:%s filled:%s circle:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
-  
-  /// Draw a circle onto a bitmap.
-  /// 
-  /// @lib DrawOrFillCircleAtPointOnto(dest, clr, False, point, radius)
-  /// @uname DrawCircleAtPointOnto
-  /// @sn drawOnto:%s color:%s circle:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-  
+  /// @lib DrawCircleStruct
+  /// @sn drawCircleColor:%s data:%s
+  procedure DrawCircle(clr : Color; const c: Circle);
+
+
   /// Fill a circle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillCircleAtPointOnto(dest, clr, True, point, radius)
-  /// @uname FillCircleAtPointOnto
-  /// @sn fillOnto:%s color:%s circle:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-  
-  /// Draw a circle onto a bitmap (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircleStructOnto
-  /// @sn drawOnto:%s color:%s filled:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
-  
-  /// Draw a circle onto a bitmap.
-  /// 
-  /// @lib DrawOrFillCircleStructOnto(dest, clr, False, c)
-  /// @uname DrawCircleStructOnto
-  /// @sn drawOnto:%s color:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
-  
-  /// Fill a circle onto a destination.
-  /// 
-  /// @lib DrawOrFillCircleStructOnto(dest, clr, True, c)
-  /// @uname FillCircleStructOnto
-  /// @sn fillOnto:%s color:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
-  
-  /// Draw a circle in the game (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircle
-  /// @sn draw:%s filled:%s circleX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
-  
-  /// Draw a circle in the game.
-  /// 
-  /// @lib DrawOrFillCircle(clr, False, xc, yc, radius)
-  /// @uname DrawCircle
-  /// @sn draw:%s circleX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 1
-  procedure DrawCircle(clr: Color; xc, yc: Single; radius: Longint); overload;
+  /// @lib FillCircleOpts
+  /// @sn fillCircleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  procedure FillCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
   /// Fill a circle in the game.
-  /// 
-  /// @lib DrawOrFillCircle(clr, True, xc, yc, radius)
-  /// @uname FillCircle
-  /// @sn fill:%s circleX:%s y:%s radius:%s
   ///
-  /// @doc_idx 1
-  procedure FillCircle(clr: Color; xc, yc: Single; radius: Longint); overload;
-  
-  /// Draw a circle in the game (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircleAtPoint
-  /// @sn draw:%s filled:%s circleAt:%s radius:%s
+  /// @lib 
+  /// @sn FillCircleColor:%s atX:%s y:%s width:%s height:%s
   ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  
-  /// Draw circle in the game.
+  /// @doc_idx 0
+  procedure FillCircle(clr : Color; x, y, radius : Single);
+
+  /// Fill a circle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillCircleAtPoint(clr, False, position, radius)
-  /// @uname DrawCircleAtPoint
-  /// @sn draw:%s circleAt:%s radius:%s
-  ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
+  /// @lib FillCircleStructOpts
+  /// @sn fillCircleColor:%s data:%s opts:%s
+  procedure FillCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
   
   /// Fill a circle in the game.
-  /// 
-  /// @lib DrawOrFillCircleAtPoint(clr, True, position, radius)
-  /// @uname FillCircleAtPoint
-  /// @sn fill:%s circle:%s radius:%s
   ///
-  /// @doc_idx 2
-  /// @doc_details
-  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-  
-  /// Draw a circle in the game (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircleStruct
-  /// @sn draw:%s filled:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
-  
-  /// Draw a circle in the game.
-  /// 
-  /// @lib DrawOrFillCircleStruct(clr, False, c)
-  /// @uname DrawCircleStruct
-  /// @sn draw:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircle(clr: Color; const c: Circle); overload;
-  
-  /// Fill a circle in the game.
-  /// 
-  /// @lib DrawOrFillCircleStruct(clr, True, c)
-  /// @uname FillCircleStruct
-  /// @sn fill:%s circle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircle(clr: Color; const c: Circle); overload;
-  
-  /// Draw a circle on the screen (filled or outline).
-  /// 
-  /// @lib DrawOrFillCircleOnScreen
-  /// @sn draw:%s filled:%s circleOnScreenX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
-  
-  /// Draw a circle on the screen.
-  /// 
-  /// @lib DrawOrFillCircleOnScreen(clr, False, xc, yc, radius)
-  /// @uname DrawCircleOnScreen
-  /// @sn draw:%s circleOnScreenX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; xc, yc: Single; radius: Longint); overload;
-  
-  /// Fill a circle on the screen.
-  /// 
-  /// @lib DrawOrFillCircleOnScreen(clr, True, xc, yc, radius)
-  /// @uname FillCircleOnScreen
-  /// @sn fill:%s circleOnScreenX:%s y:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircleOnScreen(clr: Color; xc, yc: Single; radius: Longint); overload;
-  
-  /// Draw a circle onto the screen (filled or outline).
-  /// 
-  /// Draw a circle onto the screen
-  /// @lib DrawOrFillCircleAtPointOnScreen
-  /// @sn draw:%s filled:%s circleOnScreenAt:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  
-  /// Draw a circle onto the screen.
-  /// 
-  /// @lib DrawOrFillCircleAtPointOnScreen(clr, False, position, radius)
-  /// @uname DrawCircleAtPointOnScreen
-  /// @sn draw:%s circleOnScreenAt:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  
-  /// Fills a circle onto the screen.
-  /// 
-  /// @lib DrawOrFillCircleAtPointOnScreen(clr, True, position, radius)
-  /// @uname FillCircleAtPointOnScreen
-  /// @sn fill:%s circleOnScreenAt:%s radius:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  
-  /// Draw a circle on the screen (filled or outline)
-  /// 
-  /// @lib DrawOrFillCircleStructOnScreen
-  /// @sn draw:%s filled:%s circleOnScreen:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
-  
-  /// Draw the circel onto the screen.
-  /// 
-  /// @lib DrawOrFillCircleStructOnScreen(clr, False, c)
-  /// @uname DrawCircleStructOnScreen
-  /// @sn draw:%s circleOnScreen:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
-  
-  /// Fill the circle onto the screen.
-  /// 
-  /// @lib DrawOrFillCircleStructOnScreen(clr, True, c)
-  /// @uname FillCircleStructOnScreen
-  /// @sn fill:%s circleOnScreen:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
+  /// @lib FillCircleStruct
+  /// @sn fillCircleColor:%s data:%s
+  procedure FillCircle(clr : Color; const c: Circle);
   
   
   
@@ -1393,98 +1186,37 @@ implementation
   end;
   
   //=============================================================================
-  
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
+
+  procedure DrawCircle(clr : Color; x, y, radius : Single);
   begin
-    DrawCircle(screen, clr, filled, xc, yc, radius);
-  end;
-  
-  procedure DrawCircle(clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
-  begin
-    DrawCircle(screen, clr, filled, sgCamera.ToScreenX(xc), sgCamera.ToScreenY(yc), radius);
-  end;
-  
-  procedure DrawCircleOnScreen(clr: Color; xc, yc: Single; radius: Longint); overload;
-  begin
-    DrawCircle(screen, clr, xc, yc, radius);
-  end;
-  
-  procedure DrawCircle(clr: Color; xc, yc: Single; radius: Longint); overload;
-  begin
-    DrawCircle(screen, clr, sgCamera.ToScreenX(xc), sgCamera.ToScreenY(yc), radius);
+    DrawCircle(clr, x, y, radius, OptionDefaults());
   end;
 
-  procedure FillCircleOnScreen(clr: Color; xc, yc: Single; radius: Longint); overload;
+  procedure DrawCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
   begin
-    FillCircle(screen, clr, xc, yc, radius);
+    DrawCircle(clr, c.center.x, c.center.y, c.radius, opts);
   end;
 
-  procedure FillCircle(clr: Color; xc, yc: Single; radius: Longint); overload;
+  procedure DrawCircle(clr : Color; const c: Circle);
   begin
-    FillCircle(screen, clr, sgCamera.ToScreenX(xc), sgCamera.ToScreenY(yc), radius);
-  end;
-  
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc, yc: Single; radius: Longint); overload;
-  begin
-    if filled then FillCircle(dest, clr, xc, yc, radius)
-    else DrawCircle(dest, clr, xc, yc, radius);
+    DrawCircle(clr, c.center.x, c.center.y, c.radius, OptionDefaults());
   end;
 
-  procedure DrawCircle(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); overload;
+  procedure FillCircle(clr : Color; x, y, radius : Single);
   begin
-    GraphicsDriver.DrawCircle(dest, clr, xc, yc, radius);
+    FillCircle(clr, x, y, radius, OptionDefaults());
   end;
 
-  procedure FillCircle(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint);
+  procedure FillCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
   begin
-    GraphicsDriver.FillCircle(dest, clr, xc, yc, radius);
-  end;
-  
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
-  begin
-    DrawCircle(dest, clr, filled, c.center.x, c.center.y, c.radius);
-  end;
-  
-  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
-  begin
-    DrawCircle(dest, clr, False, c.center.x, c.center.y, c.radius)
-  end;
-  
-  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
-  begin
-    DrawCircle(dest, clr, True, c.center.x, c.center.y, c.radius)
-  end;
-  
-  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
-  begin
-    DrawCircle(screen, clr, filled, sgCamera.ToScreenX(c.center.x), sgCamera.ToScreenY(c.center.y), c.radius);
+    FillCircle(clr, c.center.x, c.center.y, c.radius, opts);
   end;
 
-  procedure DrawCircle(clr: Color; const c: Circle); overload;
+  procedure FillCircle(clr : Color; const c: Circle);
   begin
-    DrawCircle(screen, clr, False, sgCamera.ToScreenX(c.center.x), sgCamera.ToScreenY(c.center.y), c.radius);
-  end;
-  
-  procedure FillCircle(clr: Color; const c: Circle); overload;
-  begin
-    DrawCircle(screen, clr, True, sgCamera.ToScreenX(c.center.x), sgCamera.ToScreenY(c.center.y), c.radius);
-  end;
-  
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
-  begin
-    DrawCircle(screen, clr, filled, c.center.x, c.center.y, c.radius);
-  end;
-  
-  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
-  begin
-    DrawCircle(screen, clr, False, c.center.x, c.center.y, c.radius);
+    FillCircle(clr, c.center.x, c.center.y, c.radius, OptionDefaults());
   end;
 
-  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
-  begin
-    DrawCircle(screen, clr, True, c.center.x, c.center.y, c.radius);
-  end;
-  
   //=============================================================================
   
   procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos, yPos, width, height: Longint); overload;
@@ -1629,6 +1361,17 @@ implementation
     GraphicsDriver.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
+  procedure DrawCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions); overload;
+  begin
+    GraphicsDriver.DrawCircle(clr, x, y, radius, opts);
+  end;
+
+  procedure FillCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions);
+  begin
+    GraphicsDriver.FillCircle(clr, x, y, radius, opts);
+  end;
+
+
   /// Draws a vertical line on the destination bitmap.
   ///
   /// @param dest:         The destination bitmap - not optimised!
@@ -1700,21 +1443,6 @@ implementation
     DrawPixel(dest, clr, Round(position.x), Round(position.y));
   end;
 
-  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
-  begin
-    DrawCircle(dest, clr, filled, Round(point.x), Round(point.y), radius);
-  end;
-
-  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-  begin
-    DrawCircle(dest, clr, Round(point.x), Round(point.y), radius);
-  end;
-
-  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
-  begin
-    FillCircle(dest, clr, Round(point.x), Round(point.y), radius);
-  end;
-
   procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
   begin
     DrawEllipse(dest, clr, filled, Round(source.x), Round(source.y), source.width, source.height);
@@ -1733,21 +1461,6 @@ implementation
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
   begin
     DrawPixel(clr, Round(position.x), Round(position.y));
-  end;
-
-  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  begin
-    DrawCircle(clr, filled, Round(position.x), Round(position.y), radius);
-  end;
-
-  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    DrawCircle(clr, Round(position.x), Round(position.y), radius);
-  end;
-
-  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    FillCircle(clr, position.x, position.y, radius);
   end;
 
   procedure DrawEllipse(clr: Color; filled: Boolean; const source: Rectangle); overload;
@@ -1780,21 +1493,6 @@ implementation
     DrawLineOnScreen(clr, Round(startPt.x), Round(startPt.y), Round(endPt.x), Round(endPt.y));
   end;
   
-  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
-  begin
-    DrawCircleOnScreen(clr, filled, Round(position.x), Round(position.y), radius);
-  end;
-
-  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    DrawCircleOnScreen(clr, Round(position.x), Round(position.y), radius);
-  end;
-
-  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
-  begin
-    FillCircleOnScreen(clr, Round(position.x), Round(position.y), radius);
-  end;
-
   procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
   begin
     DrawEllipseOnScreen(clr, filled, Round(source.x), Round(source.y), source.width, source.height);

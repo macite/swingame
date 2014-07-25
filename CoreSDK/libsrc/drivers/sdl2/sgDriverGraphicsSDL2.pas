@@ -68,7 +68,7 @@ implementation
     _sg_functions^.graphics.draw_triangle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
   
-  procedure FillCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
+  procedure FillCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   var
     pts: array [0..3] of Single;
   begin
@@ -76,10 +76,10 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.fill_circle(dest^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.fill_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 
-  procedure DrawCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
+  procedure DrawCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   var
     pts: array [0..3] of Single;
   begin
@@ -87,7 +87,7 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.draw_circle(dest^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.draw_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 	
 	procedure FillEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);

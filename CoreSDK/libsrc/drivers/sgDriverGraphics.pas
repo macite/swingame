@@ -24,8 +24,8 @@ interface
 	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Longint) : Color;
     FillTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);  
     DrawTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);      
-    FillCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
-    DrawCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint);      
+    FillCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
+    DrawCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions);      
 	  FillEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
 	  DrawEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
 		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
@@ -137,16 +137,16 @@ uses
   	GraphicsDriver.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
-  procedure DefaultFillCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
+  procedure DefaultFillCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   begin
   	LoadDefaultGraphicsDriver();
-  	GraphicsDriver.FillCircle(dest, clr, xc, yc, radius);
+  	GraphicsDriver.FillCircle(clr, xc, yc, radius, opts);
   end;
 
-  procedure DefaultDrawCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
+  procedure DefaultDrawCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   begin
   	LoadDefaultGraphicsDriver();
-  	GraphicsDriver.DrawCircle(dest, clr, xc, yc, radius);
+  	GraphicsDriver.DrawCircle(clr, xc, yc, radius, opts);
   end;
 	
 	procedure DefaultFillEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
