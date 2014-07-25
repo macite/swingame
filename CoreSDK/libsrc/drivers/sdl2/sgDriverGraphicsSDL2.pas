@@ -40,7 +40,7 @@ implementation
     result := RGBAColorProcedure(Round(clr.r * 255), Round(clr.g * 255), Round(clr.b * 255), Round(clr.a * 255));
 	end;
 	
-  procedure FillTriangleProcedure(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);
+  procedure FillTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   var
     pts: array [0..6] of Single;
   begin
@@ -51,10 +51,10 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.fill_triangle(dest^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.fill_triangle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
 
-  procedure DrawTriangleProcedure(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);
+  procedure DrawTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   var
     pts: array [0..6] of Single;
   begin
@@ -65,7 +65,7 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.draw_triangle(dest^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.draw_triangle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
   
   procedure FillCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 

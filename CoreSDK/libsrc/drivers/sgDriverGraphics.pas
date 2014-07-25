@@ -22,8 +22,8 @@ interface
 	
 	type
 	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Longint) : Color;
-    FillTriangleProcedure                 = procedure (dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);  
-    DrawTriangleProcedure                 = procedure (dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);      
+    FillTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);  
+    DrawTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);      
     FillCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 
     DrawCircleProcedure                   = procedure (dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint);      
 	  FillEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
@@ -125,16 +125,16 @@ uses
 		result := GraphicsDriver.GetPixel32(bmp, x, y);
 	end;
 	
-  procedure DefaultFillTriangleProcedure(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);
+  procedure DefaultFillTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   begin
   	LoadDefaultGraphicsDriver();
-  	GraphicsDriver.FillTriangle(dest, clr, x1, y1, x2, y2, x3, y3);
+  	GraphicsDriver.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
 
-  procedure DefaultDrawTriangleProcedure(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single);
+  procedure DefaultDrawTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   begin
   	LoadDefaultGraphicsDriver();
-  	GraphicsDriver.DrawTriangle(dest, clr, x1, y1, x2, y2, x3, y3);
+  	GraphicsDriver.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
   procedure DefaultFillCircleProcedure(dest: Bitmap; clr: Color; xc, yc: Single; radius: Longint); 

@@ -648,147 +648,59 @@ interface
 // Triangle drawing code
 //---------------------------------------------------------------------------
   
-  /// Draw the triangle onto the destination (filled or outline).
+  /// Draw a triangle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillTriangleStructOnto
-  /// @sn drawOnto:%s color:%s filled:%s triangle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
-  
-  /// Draw the triangle onto the destination.
-  /// 
-  /// @lib DrawOrFillTriangleStructOnto(dest, clr, False, tri)
-  /// @uname DrawTriangleStructOnto
-  /// @sn drawOnto:%s color:%s triangle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
-  
-  /// Fill the triangle onto the destination.
-  ///
-  /// @lib DrawOrFillTriangleStructOnto(dest, clr, True, tri)
-  /// @uname FillTriangleStructOnto
-  /// @sn fillOnto:%s color:%s triangle:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
-  
-  /// Draw the triangle onto the destination.
-  /// 
-  /// @lib DrawTriangleOnto
-  /// @sn drawOnto:%s color:%s triangleX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure DrawTriangle(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  
-  /// Fill the triangle onto the destination.
-  ///
-  /// @lib FillTriangleOnto
-  /// @sn fillOnto:%s color:%s triangleX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
-  ///
-  /// @doc_idx 9
-  /// @doc_details
-  procedure FillTriangle(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
+  /// @lib DrawTriangleOpts
+  /// @sn drawTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   
   /// Draw a triangle in the game.
   ///
-  /// @lib DrawOrFillTriangleStruct
-  /// @sn draw:%s filled:%s triangle:%s
+  /// @lib 
+  /// @sn drawTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
   ///
-  /// @doc_idx 3
-  /// @doc_details
-  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
-  
-  /// Draw a triangle in the game.
-  ///
-  /// @lib DrawOrFillTriangleStruct(clr, False, tri)
-  /// @uname DrawTriangleStruct
-  /// @sn draw:%s triangle:%s
-  ///
-  /// @doc_idx 3
-  /// @doc_details
-  procedure DrawTriangle(clr: Color; const tri: Triangle); overload;
-  
-  /// Fill a triangle in the game.
+  /// @doc_idx 0
+  procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
+
+  /// Draw a triangle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillTriangleStruct(clr, True, tri)
-  /// @uname FillTriangleStruct
-  /// @sn fill:%s triangle:%s
-  ///
-  /// @doc_idx 3
-  /// @doc_details
-  procedure FillTriangle(clr: Color; const tri: Triangle); overload;
+  /// @lib DrawTriangleStructOpts
+  /// @sn drawTriangleColor:%s data:%s opts:%s
+  procedure DrawTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   
   /// Draw a triangle in the game.
   ///
-  /// @lib DrawTriangle
-  /// @sn draw:%s triangleX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
-  ///
-  /// @doc_idx 1
-  procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
+  /// @lib DrawTriangleStruct
+  /// @sn drawTriangleColor:%s data:%s
+  procedure DrawTriangle(clr : Color; const tri: Triangle);
+
+
+  /// Fill a triangle onto a destination bitmap.
+  /// 
+  /// @lib FillTriangleOpts
+  /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  procedure FillTriangle(clr : Color;  x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   
   /// Fill a triangle in the game.
   ///
-  /// @lib FillTriangle
-  /// @sn fill:%s triangleX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
+  /// @lib 
+  /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
   ///
-  /// @doc_idx 1
-  procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  
-  /// Draw a triangle (filled or outline) onto the screen.
+  /// @doc_idx 0
+  procedure FillTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
+
+  /// Fill a triangle onto a destination bitmap.
   /// 
-  /// @lib DrawOrFillTriangleStructOnScreen
-  /// @sn draw:%s filled:%s triangleOnScreen:%s
+  /// @lib FillTriangleStructOpts
+  /// @sn fillTriangleColor:%s data:%s opts:%s
+  procedure FillTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
+  
+  /// Fill a triangle in the game.
   ///
-  /// @doc_idx 7
-  /// @doc_details
-  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
-  
-  /// Draw a triangle onto the screen.
-  ///
-  /// @lib DrawOrFillTriangleStructOnScreen(clr, False, tri)
-  /// @uname DrawTriangleStructOnScreen
-  /// @sn draw:%s triangleOnScreen:%s
-  ///
-  /// @doc_idx 7
-  /// @doc_details
-  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  
-  /// Fills a triangle on the screen.
-  /// 
-  /// @lib DrawOrFillTriangleStructOnScreen(clr, True, tri)
-  /// @uname FillTriangleStructOnScreen
-  /// @sn fill:%s triangleOnScreen:%s
-  ///
-  /// @doc_idx 7
-  /// @doc_details
-  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  
-  /// Draws the outline of a triangle on the screen.
-  /// 
-  /// @lib DrawTriangleOnScreen
-  /// @sn draw:%s triangleOnScreenX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
-  ///
-  /// @doc_idx 7
-  /// @doc_details
-  procedure DrawTriangleOnScreen(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  
-  /// Fills a triangle on the screen.
-  /// 
-  /// @lib FillTriangleOnScreen
-  /// @sn fill:%s triangleOnScreenX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
-  ///
-  /// @doc_idx 7
-  /// @doc_details
-  procedure FillTriangleOnScreen(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  
-  
-  
+  /// @lib FillTriangleStruct
+  /// @sn fillTriangleColor:%s data:%s
+  procedure FillTriangle(clr : Color; const tri: Triangle);
+
 //---------------------------------------------------------------------------
 // Screen clearing routines
 //---------------------------------------------------------------------------
@@ -1400,123 +1312,62 @@ implementation
     DrawLine(dest, clr, Round(startPt.x), Round(startPt.y), Round(endPt.x), Round(endPt.y));
   end;
   
-  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
+  procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
   begin
-    if filled then FillTriangle(clr, tri)
-    else DrawTriangle(clr, tri);
+    DrawTriangle(clr, x1, y1, x2, y2, x3, y3, OptionDefaults());
   end;
 
-  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
+  procedure DrawTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
-    if filled then FillTriangle(dest, clr, tri)
-    else DrawTriangle(dest, clr, tri);
-  end;
-  
-  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
-  begin
-    DrawTriangle(dest, 
-                clr,
-                tri.points[0].x,
-                tri.points[0].y, 
-                tri.points[1].x, 
-                tri.points[1].y, 
-                tri.points[2].x, 
-                tri.points[2].y);
-  end;
-
-  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
-  begin
-    if filled then FillTriangleOnScreen(clr, tri) 
-    else DrawTriangleOnScreen(clr, tri);
-  end;
-
-  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  begin
-    DrawTriangle(screen,
-                 clr, 
-                 tri.points[0].x, 
+    DrawTriangle(clr,
+                 tri.points[0].x,
                  tri.points[0].y, 
                  tri.points[1].x, 
                  tri.points[1].y, 
                  tri.points[2].x, 
-                 tri.points[2].y);
+                 tri.points[2].y,
+                 opts);
   end;
 
-  procedure DrawTriangle(clr: Color; const tri: Triangle); overload;
+  procedure DrawTriangle(clr : Color; const tri: Triangle);
   begin
-    DrawTriangle(screen,
-                 clr, 
-                 tri.points[0].x, 
+    DrawTriangle(clr,
+                 tri.points[0].x,
                  tri.points[0].y, 
                  tri.points[1].x, 
                  tri.points[1].y, 
                  tri.points[2].x, 
-                 tri.points[2].y);
-  end;
-  
-  procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  begin
-    DrawTriangle(screen, clr, sgCamera.ToScreenX(x1), sgCamera.ToScreenY(y1), sgCamera.ToScreenX(x2), sgCamera.ToScreenY(y2), sgCamera.ToScreenX(x3), sgCamera.ToScreenY(y3));
-  end;
-  
-  procedure DrawTriangleOnScreen(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  begin
-    DrawTriangle(screen, clr, x1, y1, x2, y2, x3, y3);
+                 tri.points[2].y,
+                 OptionDefaults());
   end;
 
-  procedure DrawTriangle(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
+  procedure FillTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
   begin
-      GraphicsDriver.DrawTriangle(dest, clr, x1, y1, x2, y2, x3, y3);
+    DrawTriangle(clr, x1, y1, x2, y2, x3, y3, OptionDefaults());
   end;
 
-  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
+  procedure FillTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
-    FillTriangle(dest,
-                 clr, 
-                 tri.points[0].x, 
+    DrawTriangle(clr,
+                 tri.points[0].x,
                  tri.points[0].y, 
                  tri.points[1].x, 
                  tri.points[1].y, 
                  tri.points[2].x, 
-                 tri.points[2].y);
+                 tri.points[2].y,
+                 opts);
   end;
-  
-  procedure FillTriangle(clr: Color; const tri: Triangle); overload;
+
+  procedure FillTriangle(clr : Color; const tri: Triangle);
   begin
-    FillTriangle(clr,
-                 tri.points[0].x, 
+    DrawTriangle(clr,
+                 tri.points[0].x,
                  tri.points[0].y, 
                  tri.points[1].x, 
                  tri.points[1].y, 
                  tri.points[2].x, 
-                 tri.points[2].y);
-  end;
-
-  procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  begin
-    FillTriangle(screen, clr, sgCamera.ToScreenX(x1), sgCamera.ToScreenY(y1), sgCamera.ToScreenX(x2), sgCamera.ToScreenY(y2), sgCamera.ToScreenX(x3), sgCamera.ToScreenY(y3));
-  end;
-
-  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  begin
-    FillTriangle(screen, 
-                 clr, 
-                 tri.points[0].x, 
-                 tri.points[0].y, 
-                 tri.points[1].x, 
-                 tri.points[1].y, 
-                 tri.points[2].x, 
-                 tri.points[2].y);
-  end;
-  
-  procedure FillTriangleOnScreen(clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  begin
-    FillTriangle(screen, clr, x1, y1, x2, y2, x3, y3);
-  end;
-
-  procedure FillTriangle(dest: Bitmap; clr: Color; x1, y1, x2, y2, x3, y3: Single); overload;
-  begin
-    GraphicsDriver.FillTriangle(dest, clr, x1, y1, x2, y2, x3, y3);
+                 tri.points[2].y,
+                 OptionDefaults());
   end;
 
   //=============================================================================
@@ -1766,6 +1617,16 @@ implementation
     //SDL_FillRect(dest^.surface, @rect, clr);
     GraphicsDriver.FillRectangle(rect, clr, opts);
 
+  end;
+
+  procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
+  begin
+    GraphicsDriver.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
+  end;
+
+  procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
+  begin
+    GraphicsDriver.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
   /// Draws a vertical line on the destination bitmap.

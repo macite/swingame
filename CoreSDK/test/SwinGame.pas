@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-25 12:12:35.931854
+// SwinGame.pas was generated on 2014-07-25 12:49:30.874222
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1578,26 +1578,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw a triangle in the game.
   procedure DrawTriangle(clr: Color; const tri: Triangle); overload;
 
-  // Draw a triangle in the game.
-  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
+  // Draw a triangle onto a destination bitmap.
+  procedure DrawTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
 
-  // Draw the triangle onto the destination.
-  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
-
-  // Draw the triangle onto the destination (filled or outline).
-  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
-
-  // Draw the triangle onto the destination.
-  procedure DrawTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
-
-  // Draw a triangle onto the screen.
-  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-
-  // Draw a triangle (filled or outline) onto the screen.
-  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
-
-  // Draws the outline of a triangle on the screen.
-  procedure DrawTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  // Draw a triangle onto a destination bitmap.
+  procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
 
   // Draw a vertical line in the game.
   procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
@@ -1671,17 +1656,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Fill a triangle in the game.
   procedure FillTriangle(clr: Color; const tri: Triangle); overload;
 
-  // Fill the triangle onto the destination.
-  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
+  // Fill a triangle onto a destination bitmap.
+  procedure FillTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
 
-  // Fill the triangle onto the destination.
-  procedure FillTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
-
-  // Fills a triangle on the screen.
-  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-
-  // Fills a triangle on the screen.
-  procedure FillTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  // Fill a triangle onto a destination bitmap.
+  procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
 
   // Returns the color of the pixel at the x,y location on
   // the supplied bitmap.
@@ -6346,39 +6325,14 @@ implementation
     sgGraphics.DrawTriangle(clr,tri);
   end;
 
-  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
+  procedure DrawTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawTriangle(clr,filled,tri);
+    sgGraphics.DrawTriangle(clr,tri,opts);
   end;
 
-  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
+  procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawTriangle(dest,clr,tri);
-  end;
-
-  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
-  begin
-    sgGraphics.DrawTriangle(dest,clr,filled,tri);
-  end;
-
-  procedure DrawTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
-  begin
-    sgGraphics.DrawTriangle(dest,clr,x1,y1,x2,y2,x3,y3);
-  end;
-
-  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  begin
-    sgGraphics.DrawTriangleOnScreen(clr,tri);
-  end;
-
-  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
-  begin
-    sgGraphics.DrawTriangleOnScreen(clr,filled,tri);
-  end;
-
-  procedure DrawTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
-  begin
-    sgGraphics.DrawTriangleOnScreen(clr,x1,y1,x2,y2,x3,y3);
+    sgGraphics.DrawTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
   end;
 
   procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
@@ -6501,24 +6455,14 @@ implementation
     sgGraphics.FillTriangle(clr,tri);
   end;
 
-  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
+  procedure FillTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillTriangle(dest,clr,tri);
+    sgGraphics.FillTriangle(clr,tri,opts);
   end;
 
-  procedure FillTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillTriangle(dest,clr,x1,y1,x2,y2,x3,y3);
-  end;
-
-  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
-  begin
-    sgGraphics.FillTriangleOnScreen(clr,tri);
-  end;
-
-  procedure FillTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
-  begin
-    sgGraphics.FillTriangleOnScreen(clr,x1,y1,x2,y2,x3,y3);
+    sgGraphics.FillTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
   end;
 
   function GetPixel(bmp: Bitmap; x: Longint; y: Longint): Color; overload;

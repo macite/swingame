@@ -1950,7 +1950,7 @@ var
       tri.points[2] := RectangleCenterBottom(innerRect);
     end;
     
-    FillTriangleOnScreen(VectorBackcolorToDraw(forRegion), tri);
+    FillTriangle(VectorBackcolorToDraw(forRegion), tri, OptionToScreen());
   end;
   procedure _DrawLeftRightArrow(const rect: Rectangle; left: Boolean);
   var
@@ -1974,7 +1974,7 @@ var
       tri.points[2] := RectangleBottomLeft(innerRect);
     end;
     
-    FillTriangleOnScreen(VectorBackcolorToDraw(forRegion), tri);
+    FillTriangle(VectorBackcolorToDraw(forRegion), tri, OptionToScreen());
   end;
   
   procedure _ResizeItemArea(var area: Rectangle; var imgPt: Point2D; aligned: FontAlignment; const bmp: BitmapCell);
