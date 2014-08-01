@@ -30,7 +30,7 @@ interface
 	  DrawEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
 		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
     DrawRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
-		DrawLineProcedure                     = procedure (dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
+		DrawLineProcedure                     = procedure (clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
 		SetPixelColorProcedure                = procedure (dest : Bitmap; x, y : Integer; clr : Color);
     SetClipRectangleProcedure             = procedure (dest : Bitmap; rect : Rectangle);      
     ResetClipProcedure                    = procedure (bmp: Bitmap);  
@@ -167,10 +167,10 @@ uses
 		GraphicsDriver.FillRectangle(rect, clr, opts);
 	end;
 	
-	procedure DefaultDrawLineProcedure(dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
+	procedure DefaultDrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.DrawLine(dest, x1, y1, x2, y2, clr);
+		GraphicsDriver.DrawLine(clr, x1, y1, x2, y2, opts);
 	end;
 	
 	procedure DefaultSetPixelColorProcedure(dest : Bitmap; x, y : Integer; clr : Color);

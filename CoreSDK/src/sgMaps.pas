@@ -1360,7 +1360,7 @@ interface
           begin
             if not assigned(map^.Tiles[row,col].SurroundingTiles[dir]) then continue
             else
-            DrawLine(map^.mapHighlightcolor, map^.Tiles[row,col].center,map^.Tiles[row,col].SurroundingTiles[dir]^.center);
+            DrawLine(map^.mapHighlightcolor, map^.Tiles[row,col].center.x,map^.Tiles[row,col].center.y,map^.Tiles[row,col].SurroundingTiles[dir]^.center.x,map^.Tiles[row,col].SurroundingTiles[dir]^.center.y);
           end;
         end;
       end;

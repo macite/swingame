@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-07-25 13:24:23.530994
+// SwinGame.pas was generated on 2014-08-01 22:34:13.723603
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1438,11 +1438,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw an ellipse on the screen.
   procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
-  // Draw an ellipse in the game (filled or outline).
-  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-
   // Drawthe ellipse onto the destination.
   procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw an ellipse in the game (filled or outline).
+  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
   // Draw the ellipse onto the destination.
   procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
@@ -1459,44 +1459,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw an ellipse on the screen (filled or outline).
   procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
-  // Draw a horizontal line.
-  procedure DrawHorizontalLine(clr: Color; y: Single; x1: Single; x2: Single); overload;
-
-  // Draw a horizontal line onto a destination.
-  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
-
-  // Draw a horizontal line on the screen between x1, x2
-  procedure DrawHorizontalLineOnScreen(clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
+  // Draw a line in the game.
+  procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
 
   // Draw a line in the game.
-  procedure DrawLine(clr: Color; const line: LineSegment); overload;
-
-  // Draw a line in the game.
-  procedure DrawLine(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
+  procedure DrawLine(clr: Color; const l: LineSegment); overload;
 
   // Draw a line onto a destination bitmap.
-  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
-
-  // Draw a line onto a destination.
-  procedure DrawLine(dest: Bitmap; clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
-
-  // Draw a line in the game.
-  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single); overload;
+  procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
 
   // Draw a line onto a destination bitmap.
-  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
-
-  // Draw a line on the screen.
-  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
-
-  // Draw a line on the screen.
-  procedure DrawLineOnScreen(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
-
-  // Draw a line on the screen.
-  procedure DrawLineOnScreen(clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
-
-  // Draw a collection of lines.
-  procedure DrawLines(clr: Color; const lines: LinesArray); overload;
+  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
 
   // Draw a pixel in the game.
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
@@ -1539,15 +1512,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Draw a triangle onto a destination bitmap.
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
-
-  // Draw a vertical line in the game.
-  procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
-
-  // Draw a vertical line onto a destination.
-  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
-
-  // Draw a vertical line on the screen between y1 and y2.
-  procedure DrawVerticalLineOnScreen(clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
 
   // Fill a circle in the game.
   procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
@@ -6036,14 +6000,14 @@ implementation
     sgGraphics.DrawEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawEllipse(clr,filled,xPos,yPos,width,height);
-  end;
-
   procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
     sgGraphics.DrawEllipse(dest,clr,xPos,yPos,width,height);
+  end;
+
+  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawEllipse(clr,filled,xPos,yPos,width,height);
   end;
 
   procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
@@ -6071,69 +6035,24 @@ implementation
     sgGraphics.DrawEllipseOnScreen(clr,filled,xPos,yPos,width,height);
   end;
 
-  procedure DrawHorizontalLine(clr: Color; y: Single; x1: Single; x2: Single); overload;
+  procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
   begin
-    sgGraphics.DrawHorizontalLine(clr,y,x1,x2);
+    sgGraphics.DrawLine(clr,x1,y1,x2,y2);
   end;
 
-  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
+  procedure DrawLine(clr: Color; const l: LineSegment); overload;
   begin
-    sgGraphics.DrawHorizontalLine(dest,clr,y,x1,x2);
+    sgGraphics.DrawLine(clr,l);
   end;
 
-  procedure DrawHorizontalLineOnScreen(clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
+  procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawHorizontalLineOnScreen(clr,y,x1,x2);
+    sgGraphics.DrawLine(clr,l,opts);
   end;
 
-  procedure DrawLine(clr: Color; const line: LineSegment); overload;
+  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawLine(clr,line);
-  end;
-
-  procedure DrawLine(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
-  begin
-    sgGraphics.DrawLine(clr,startPt,endPt);
-  end;
-
-  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
-  begin
-    sgGraphics.DrawLine(dest,clr,line);
-  end;
-
-  procedure DrawLine(dest: Bitmap; clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
-  begin
-    sgGraphics.DrawLine(dest,clr,startPt,endPt);
-  end;
-
-  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single); overload;
-  begin
-    sgGraphics.DrawLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
-  end;
-
-  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
-  begin
-    sgGraphics.DrawLine(dest,clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
-  end;
-
-  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
-  begin
-    sgGraphics.DrawLineOnScreen(clr,line);
-  end;
-
-  procedure DrawLineOnScreen(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
-  begin
-    sgGraphics.DrawLineOnScreen(clr,startPt,endPt);
-  end;
-
-  procedure DrawLineOnScreen(clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
-  begin
-    sgGraphics.DrawLineOnScreen(clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
-  end;
-
-  procedure DrawLines(clr: Color; const lines: LinesArray); overload;
-  begin
-    sgGraphics.DrawLines(clr,lines);
+    sgGraphics.DrawLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd,opts);
   end;
 
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
@@ -6204,21 +6123,6 @@ implementation
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
   begin
     sgGraphics.DrawTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
-  end;
-
-  procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
-  begin
-    sgGraphics.DrawVerticalLine(clr,x,y1,y2);
-  end;
-
-  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
-  begin
-    sgGraphics.DrawVerticalLine(dest,clr,x,y1,y2);
-  end;
-
-  procedure DrawVerticalLineOnScreen(clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
-  begin
-    sgGraphics.DrawVerticalLineOnScreen(clr,x,y1,y2);
   end;
 
   procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;

@@ -140,7 +140,7 @@ implementation
     _sg_functions^.graphics.draw_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
-	procedure DrawLineProcedure(dest : Bitmap; x1, y1, x2, y2 : Longint; clr : Color);
+	procedure DrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -149,7 +149,7 @@ implementation
     pts[2] := x2;
     pts[3] := y2;
 
-    _sg_functions^.graphics.draw_line(dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
 	procedure SetPixelColorProcedure(dest : Bitmap; x, y : Integer; clr : Color);

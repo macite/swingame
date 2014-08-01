@@ -625,99 +625,29 @@ interface
   
   /// Draw a line onto a destination bitmap.
   /// 
-  /// @lib DrawLineOnto
-  /// @sn drawOnto:%s color:%s lineX1:%s y1:%s x2:%s y2:%s
-  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Longint); overload;
+  /// @lib DrawLineOpts
+  /// @sn drawLineColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
   
+  /// Draw a line in the game.
+  ///
+  /// @lib 
+  /// @sn drawLineColor:%s atX:%s y:%s width:%s height:%s
+  ///
+  /// @doc_idx 0
+  procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
+
   /// Draw a line onto a destination bitmap.
   /// 
-  /// @lib DrawLineSegmentOnto
-  /// @sn drawOnto:%s color:%s line:%s
-  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
-  
-  /// Draw a line onto a destination.
-  /// 
-  /// @lib DrawLinePtsOnto
-  /// @sn drawOnto:%s color:%s lineFromPt:%s toPt:%s
-  procedure DrawLine(dest: Bitmap; clr: Color; const startPt, endPt: Point2D); overload;
-  
-  /// Draw a horizontal line onto a destination.
-  /// 
-  /// @lib DrawHorizontalLineOnto
-  /// @sn drawOnto:%s color:%s horizontalLineY:%s x1:%s x2:%s
-  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y, x1, x2: Longint); overload;
-  
-  /// Draw a vertical line onto a destination.
-  ///
-  /// @lib DrawVerticalLineOnto
-  /// @sn drawOnto:%s color:%s verticalLineX:%s y1:%s y2:%s
-  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x, y1, y2: Longint); overload;
-  
-  /// Draw a collection of lines.
-  /// 
-  /// @lib DrawLineSegments
-  /// @sn draw:%s lines:%s
-  procedure DrawLines(clr: Color; const lines: LinesArray); //overload;
-  
-  /// Draw a line in the game.
-  /// 
-  /// @lib
-  /// @sn draw:%s lineX1:%s y1:%s x2:%s y2:%s
-  procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single); overload;
+  /// @lib DrawLineStructOpts
+  /// @sn drawLineColor:%s data:%s opts:%s
+  procedure DrawLine(clr : Color; const l : LineSegment; const opts : DrawingOptions); overload;
   
   /// Draw a line in the game.
   ///
-  /// @lib DrawLineSegment
-  /// @sn draw:%s line:%s
-  procedure DrawLine(clr: Color; const line: LineSegment); overload;
-  
-  /// Draw a line in the game.
-  ///
-  /// @lib DrawLinePts
-  /// @sn draw:%s lineFromPt:%s toPt:%s
-  procedure DrawLine(clr: Color; const startPt, endPt: Point2D); overload;
-  
-  /// Draw a horizontal line.
-  /// 
-  /// @lib
-  /// @sn draw:%s horizontalLineY:%s x1:%s x2:%s
-  procedure DrawHorizontalLine(clr: Color; y, x1, x2: Single); overload;
-  
-  /// Draw a vertical line in the game.
-  /// 
-  /// @lib
-  /// @sn draw:%s verticalLineX:%s y1:%s y2:%s
-  procedure DrawVerticalLine(clr: Color; x, y1, y2: Single); overload;
-  
-  /// Draw a line on the screen.
-  /// 
-  /// @lib
-  /// @sn draw:%s onScreenX1:%s y1:%s x2:%s y2:%s
-  procedure DrawLineOnScreen(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Longint); overload;
-  
-  /// Draw a line on the screen.
-  ///
-  /// @lib DrawLineSegmentOnScreen
-  /// @sn draw:%s lineOnScreen:%s
-  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
-  
-  /// Draw a line on the screen.
-  ///
-  /// @lib DrawLinePtsOnScreen
-  /// @sn draw:%s lineOnScreenFromPt:%s toPt:%s
-  procedure DrawLineOnScreen(clr: Color; const startPt, endPt: Point2D); overload;
-  
-  /// Draw a horizontal line on the screen between x1, x2
-  ///
-  /// @lib
-  /// @sn draw:%s horizontalLineOnScreenY:%s x1:%s x2:%s
-  procedure DrawHorizontalLineOnScreen(clr: Color; y, x1, x2: Longint); overload;
-  
-  /// Draw a vertical line on the screen between y1 and y2.
-  ///
-  /// @lib
-  /// @sn draw:%s verticalLineOnScreenX:%s y1:%s y2:%s
-  procedure DrawVerticalLineOnScreen(clr: Color; x, y1, y2: Longint);
+  /// @lib DrawLineStruct
+  /// @sn drawLineColor:%s data:%s
+  procedure DrawLine(clr : Color; const l : LineSegment);
   
   
   
@@ -1037,6 +967,8 @@ implementation
     DrawPixelOnScreen(clr, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
   end;
 
+//=============================================================================
+
   procedure DrawRectangle(clr : Color; x, y, width, height : Single);
   begin
     DrawRectangle(clr, x, y, width, height, OptionDefaults());
@@ -1067,44 +999,8 @@ implementation
     FillRectangle(clr, rect, opts);
   end;
 
-  /// Draws a line on the screen.
-  ///
-  /// @param clr:     The color to draw the line
-  /// @param xPosStart,yPosStart: The x,y location to start the line at
-  /// @param xPosEnd, yPosEnd:    The x,y location to end the line at
-  ///
-  /// Side Effects:
-  /// - Draws a line in the screen
-  procedure DrawLineOnScreen(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Longint); overload;
-  begin
-    DrawLine(screen, clr, xPosStart, yPosStart, xPosEnd, yPosEnd);
-  end;
-  
-  procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single); overload;
-  begin
-    DrawLine(screen, clr, sgCamera.ToScreenX(xPosStart), sgCamera.ToScreenY(yPosStart), sgCamera.ToScreenX(xPosEnd), sgCamera.ToScreenY(yPosEnd));
-  end;
-  
-  procedure DrawLine(clr: Color; const line: LineSegment); overload;
-  begin
-    DrawLine(clr, line.startPoint.x, line.startPoint.y, line.endPoint.x, line.endPoint.y);
-  end;
-  
-  procedure DrawLine(clr: Color; const startPt, endPt: Point2D); overload;
-  begin
-    DrawLine(clr, startPt.x, startPt.y, endPt.x, endPt.y);
-  end;
-  
-  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
-  begin
-    DrawLine(dest, clr, Round(line.startPoint.x), Round(line.startPoint.y), Round(line.endPoint.x), Round(line.endPoint.y));
-  end;
-  
-  procedure DrawLine(dest: Bitmap; clr: Color; const startPt, endPt: Point2D); overload;
-  begin
-    DrawLine(dest, clr, Round(startPt.x), Round(startPt.y), Round(endPt.x), Round(endPt.y));
-  end;
-  
+//=============================================================================
+
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
   begin
     DrawTriangle(clr, x1, y1, x2, y2, x3, y3, OptionDefaults());
@@ -1165,26 +1061,21 @@ implementation
 
   //=============================================================================
   
-  procedure DrawHorizontalLineOnScreen(clr: Color; y, x1, x2: Longint); overload;
+  procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
   begin
-    DrawHorizontalLine(screen, clr, y, x1, x2);
+    DrawLine(clr,x1,y1,x2,y2,OptionDefaults());
   end;
 
-  procedure DrawHorizontalLine(clr: Color; y, x1, x2: Single); overload;
+  procedure DrawLine(clr : Color; const l : LineSegment; const opts : DrawingOptions); overload;
   begin
-    DrawHorizontalLine(screen, clr, sgCamera.ToScreenY(y), sgCamera.ToScreenX(x1), sgCamera.ToScreenX(x2));
+    DrawLine(clr,l.startPoint.x,l.startPoint.y,l.endPoint.x,l.endPoint.y,opts);
   end;
 
-  procedure DrawVerticalLineOnScreen(clr: Color; x, y1, y2: Longint);
+  procedure DrawLine(clr : Color; const l : LineSegment);
   begin
-    DrawVerticalLine(screen, clr, x, y1, y2);
+    DrawLine(clr,l.startPoint.x,l.startPoint.y,l.endPoint.x,l.endPoint.y,OptionDefaults());
   end;
 
-  procedure DrawVerticalLine(clr: Color; x, y1, y2: Single); overload;
-  begin
-    DrawVerticalLine(screen, clr, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y1), sgCamera.ToScreenY(y2));
-  end;
-  
   //=============================================================================
 
   procedure DrawCircle(clr : Color; x, y, radius : Single);
@@ -1371,50 +1262,14 @@ implementation
     GraphicsDriver.FillCircle(clr, x, y, radius, opts);
   end;
 
-
-  /// Draws a vertical line on the destination bitmap.
-  ///
-  /// @param dest:         The destination bitmap - not optimised!
-  /// @param clr:     The color to draw the line
-  /// @param x:           The x location of the line
-  /// @param y1, y2:       The starting and ending y value of the line
-  ///
-  /// Side Effects:
-  /// - Draws a line in the dest bitmap
-  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x, y1, y2: Longint);
+  procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
   begin
-    if dest = nil then begin RaiseWarning('DrawVerticalLine - No destination bitmap supplied'); exit; end;
-    DrawLine(dest, clr, x, y1, x, y2);
-  end;
-
-  /// Draws a horizontal line on the destination bitmap.
-  ///
-  /// @param dest:         The destination bitmap - not optimised!
-  /// @param clr:     The color to draw the line
-  /// @param y:           The y location of the line
-  /// @param x1, x2:       The starting and ending x value of the line
-  ///
-  /// Side Effects:
-  /// - Draws a line in the dest bitmap
-  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y, x1, x2: Longint);
-  begin
-    if dest = nil then begin RaiseWarning('DrawHorizontalLine - No destination bitmap supplied'); exit; end;
-    DrawLine(dest, clr, x1, y, x2, y);
-  end;
-
-  /// Draws a line on the destination bitmap.
-  ///
-  /// @param dest:         The destination bitmap - not optimised!
-  /// @param clr:     The color to draw the line
-  /// @param xPosStart,yPosStart: The x,y location to start the line at
-  /// @param xPosEnd, yPosEnd:    The x,y location to end the line at
-  ///
-  /// Side Effects:
-  /// - Draws a line in the dest bitmap
-  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Longint);
-  begin
-		if dest = nil then begin RaiseWarning('DrawLine - No destination bitmap supplied'); exit; end;
-		GraphicsDriver.DrawLine(dest, xPosStart, yPosStart, xPosEnd, yPosEnd, clr);
+    if opts.dest = nil then 
+      begin 
+        RaiseWarning('DrawLine - No destination bitmap supplied');
+        exit; 
+      end;
+    GraphicsDriver.DrawLine(clr, xPosStart, yPosStart, xPosEnd, yPosEnd, opts);
   end;
 
   /// Draws a pixel onto the destination bitmap.
@@ -1483,16 +1338,6 @@ implementation
     DrawPixelOnScreen(clr, Round(position.x), Round(position.y));
   end;
 
-  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
-  begin
-    DrawLineOnScreen(clr, Round(line.startPoint.x), Round(line.startPoint.y), Round(line.endPoint.x), Round(line.endPoint.y));
-  end;
-  
-  procedure DrawLineOnScreen(clr: Color; const startPt, endPt: Point2D); overload;
-  begin
-    DrawLineOnScreen(clr, Round(startPt.x), Round(startPt.y), Round(endPt.x), Round(endPt.y));
-  end;
-  
   procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
   begin
     DrawEllipseOnScreen(clr, filled, Round(source.x), Round(source.y), source.width, source.height);
@@ -1601,20 +1446,6 @@ implementation
   function CurrentClip(): Rectangle; overload;
   begin
     result := CurrentClip(screen);
-  end;
-
-  
-  
-  //=============================================================================
-  
-  procedure DrawLines(clr: Color; const lines: LinesArray); //TODO: overload;
-  var
-    i: Longint;
-  begin
-    for i := 0 to High(lines) do
-    begin
-      DrawLine(clr, lines[i]);
-    end;
   end;
 
 //----------------------------------------------------------------------------

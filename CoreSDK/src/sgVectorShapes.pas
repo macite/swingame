@@ -2006,7 +2006,7 @@ begin
   // pts := ShapePoints(s);
   // if length(pts) < 2 then exit;
   
-  DrawLine(dest, s^.color, ln); //PointAdd(pts[0], offset), PointAdd(pts[1], offset));
+  DrawLine(s^.color, ln, OptionDrawTo(dest)); //PointAdd(pts[0], offset), PointAdd(pts[1], offset));
 end;
 
 procedure _DrawTriangles(dest: Bitmap; s: Shape; filled: Boolean; const offset: Point2D; kind: ShapeKind);
@@ -2050,7 +2050,7 @@ begin
   lines := ShapeLines(s, kind, offset);
   for i := 0 to High(lines) do
   begin
-    DrawLine(dest, s^.color, lines[i]);
+    DrawLine(s^.color, lines[i], OptionDrawTo(dest));
   end;
 end;
 
