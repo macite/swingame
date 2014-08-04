@@ -19,7 +19,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\MsBuild.exe MyGame.csproj /target:CopyFiles /p:ToolsVersion=3.5;Configuration=Debug-Windows;Platform=x86;OutDir=$(OutDir)" externalConsole="True" />
+        <Command type="AfterBuild" command="%SystemRoot%\Microsoft.NET\Framework\v4.0.30319\MsBuild.exe &quot;${ProjectDir}/MyGame.csproj&quot; /target:CopyFiles /p:Configuration=Debug-Windows;Platform=x86;OutDir=&quot;${TargetDir}&quot;" workingdir="${ProjectDir}" externalConsole="True" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
