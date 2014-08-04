@@ -1896,11 +1896,11 @@ end;
 
 procedure DrawVectorRadioButton(forRegion: Region; const area: Rectangle);
 begin
-  DrawEllipseOnScreen(VectorForecolorToDraw(forRegion), area);
+  DrawEllipse(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
   if forRegion = ActiveRadioButton(RadioGroupFromRegion(forRegion)) then
   begin
-    FillEllipseOnScreen(VectorForecolorToDraw(forRegion), InsetRectangle(area, 2));
+    FillEllipse(VectorForecolorToDraw(forRegion), InsetRectangle(area, 2), OptionToScreen());
   end;
 end;
 

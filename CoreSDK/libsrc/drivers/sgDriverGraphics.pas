@@ -26,8 +26,8 @@ interface
     DrawTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);      
     FillCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
     DrawCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions);      
-	  FillEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
-	  DrawEllipseProcedure                  = procedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
+	  FillEllipseProcedure                  = procedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
+	  DrawEllipseProcedure                  = procedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
 		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
     DrawRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
 		DrawLineProcedure                     = procedure (clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
@@ -149,16 +149,16 @@ uses
   	GraphicsDriver.DrawCircle(clr, xc, yc, radius, opts);
   end;
 	
-	procedure DefaultFillEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
+	procedure DefaultFillEllipseProcedure (clr: Color; xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.FillEllipse(dest, clr,  xPos, yPos, halfWidth, halfHeight);
+		GraphicsDriver.FillEllipse(clr,  xPos, yPos, halfWidth, halfHeight, opts);
 	end;
 	
-	procedure DefaultDrawEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
+	procedure DefaultDrawEllipseProcedure (clr: Color; xPos, yPos, halfWidth, halfHeight: Single; const opts: DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.DrawEllipse(dest, clr,  xPos, yPos, halfWidth, halfHeight);
+		GraphicsDriver.DrawEllipse(clr,  xPos, yPos, halfWidth, halfHeight, opts);
 	end;
 	
 	procedure DefaultFillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);

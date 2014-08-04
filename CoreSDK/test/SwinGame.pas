@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-08-01 22:34:13.723603
+// SwinGame.pas was generated on 2014-08-04 11:37:35.751193
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1423,41 +1423,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw a circle onto a destination bitmap.
   procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
 
-  // Draw an ellipse in the game.
-  procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
+  // Draw a ellipse in the game.
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
 
-  // Draw an ellipse in the game (filled or outline).
-  procedure DrawEllipse(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  // Draw a ellipse in the game.
+  procedure DrawEllipse(clr: Color; const rec: Rectangle); overload;
 
-  // Draw the ellipse onto the destination.
-  procedure DrawEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  // Draw a ellipse onto a destination bitmap.
+  procedure DrawEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
 
-  // Draw the ellipse onto the destination (filled or outline).
-  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
-
-  // Draw an ellipse on the screen.
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-
-  // Drawthe ellipse onto the destination.
-  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
-  // Draw an ellipse in the game (filled or outline).
-  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
-
-  // Draw the ellipse onto the destination.
-  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
-  // Draw an ellipse on the screen.
-  procedure DrawEllipseOnScreen(clr: Color; const source: Rectangle); overload;
-
-  // Draw an ellpse on the screen (filled or outline).
-  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
-
-  // Draw an ellipse on screen.
-  procedure DrawEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-
-  // Draw an ellipse on the screen (filled or outline).
-  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Draw a ellipse onto a destination bitmap.
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
 
   // Draw a line in the game.
   procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
@@ -1526,22 +1502,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
 
   // Fill a ellipse in the game.
-  procedure FillEllipse(clr: Color; const source: Rectangle); overload;
-
-  // Fill the ellipse onto the destination.
-  procedure FillEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
 
   // Fill a ellipse in the game.
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure FillEllipse(clr: Color; const rec: Rectangle); overload;
 
-  // Fill the ellipse onto the destination.
-  procedure FillEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Fill a ellipse onto a destination bitmap.
+  procedure FillEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
 
-  // Fills the ellipse on screen.
-  procedure FillEllipseOnScreen(clr: Color; const source: Rectangle); overload;
-
-  // Fills an ellipse on the screen.
-  procedure FillEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  // Fill a ellipse onto a destination bitmap.
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
 
   // Fill a rectangle in the game.
   procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -5975,64 +5945,24 @@ implementation
     sgGraphics.DrawCircle(clr,x,y,radius,opts);
   end;
 
-  procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipse(clr,source);
-  end;
-
-  procedure DrawEllipse(clr: Color; filled: Boolean; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipse(clr,filled,source);
-  end;
-
-  procedure DrawEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipse(dest,clr,source);
-  end;
-
-  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipse(dest,clr,filled,source);
-  end;
-
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
   begin
     sgGraphics.DrawEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure DrawEllipse(clr: Color; const rec: Rectangle); overload;
   begin
-    sgGraphics.DrawEllipse(dest,clr,xPos,yPos,width,height);
+    sgGraphics.DrawEllipse(clr,rec);
   end;
 
-  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure DrawEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawEllipse(clr,filled,xPos,yPos,width,height);
+    sgGraphics.DrawEllipse(clr,rec,opts);
   end;
 
-  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawEllipse(dest,clr,filled,xPos,yPos,width,height);
-  end;
-
-  procedure DrawEllipseOnScreen(clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipseOnScreen(clr,source);
-  end;
-
-  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
-  begin
-    sgGraphics.DrawEllipseOnScreen(clr,filled,source);
-  end;
-
-  procedure DrawEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawEllipseOnScreen(clr,xPos,yPos,width,height);
-  end;
-
-  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.DrawEllipseOnScreen(clr,filled,xPos,yPos,width,height);
+    sgGraphics.DrawEllipse(clr,xPos,yPos,width,height,opts);
   end;
 
   procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
@@ -6145,34 +6075,24 @@ implementation
     sgGraphics.FillCircle(clr,x,y,radius,opts);
   end;
 
-  procedure FillEllipse(clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.FillEllipse(clr,source);
-  end;
-
-  procedure FillEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
-  begin
-    sgGraphics.FillEllipse(dest,clr,source);
-  end;
-
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
   begin
     sgGraphics.FillEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure FillEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure FillEllipse(clr: Color; const rec: Rectangle); overload;
   begin
-    sgGraphics.FillEllipse(dest,clr,xPos,yPos,width,height);
+    sgGraphics.FillEllipse(clr,rec);
   end;
 
-  procedure FillEllipseOnScreen(clr: Color; const source: Rectangle); overload;
+  procedure FillEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillEllipseOnScreen(clr,source);
+    sgGraphics.FillEllipse(clr,rec,opts);
   end;
 
-  procedure FillEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.FillEllipseOnScreen(clr,xPos,yPos,width,height);
+    sgGraphics.FillEllipse(clr,xPos,yPos,width,height,opts);
   end;
 
   procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;

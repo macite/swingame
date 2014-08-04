@@ -90,7 +90,7 @@ implementation
     _sg_functions^.graphics.draw_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 	
-	procedure FillEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
+	procedure FillEllipseProcedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
 	begin
@@ -100,10 +100,10 @@ implementation
     pts[2] := 2 * halfWidth;
     pts[3] := 2 * halfHeight;
 
-    _sg_functions^.graphics.fill_ellipse(dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 	
-	procedure DrawEllipseProcedure (dest: Bitmap; clr: Color;  xPos, yPos, halfWidth, halfHeight: Longint);
+	procedure DrawEllipseProcedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -113,7 +113,7 @@ implementation
     pts[2] := 2 * halfWidth;
     pts[3] := 2 * halfHeight;
 
-    _sg_functions^.graphics.draw_ellipse(dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
     end;
 	
 	procedure FillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
