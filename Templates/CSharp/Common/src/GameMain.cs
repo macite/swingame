@@ -10,31 +10,31 @@ namespace MyGame
         public static void Main()
         {
             //Start the audio system so sound can be played
-            Audio.OpenAudio();
+            SwinGame.OpenAudio();
             
             //Open the game window
-            Graphics.OpenGraphicsWindow("GameMain", 800, 600);
-            Graphics.ShowSwinGameSplashScreen();
+            SwinGame.OpenGraphicsWindow("GameMain", 800, 600);
+            SwinGame.ShowSwinGameSplashScreen();
             
             //Run the game loop
-            while(false == Input.WindowCloseRequested())
+            while(false == SwinGame.WindowCloseRequested())
             {
                 //Fetch the next batch of UI interaction
-                Input.ProcessEvents();
+                SwinGame.ProcessEvents();
                 
                 //Clear the screen and draw the framerate
-                Graphics.ClearScreen(Color.White);
-                Text.DrawFramerate(0,0);
+                SwinGame.ClearScreen(Color.White);
+                SwinGame.DrawFramerate(0,0);
                 
                 //Draw onto the screen
-                Graphics.RefreshScreen();
+                SwinGame.RefreshScreen();
             }
             
             //End the audio
-            Audio.CloseAudio();
+            SwinGame.CloseAudio();
             
             //Close any resources we were using
-            Resources.ReleaseAllResources();
+            SwinGame.ReleaseAllResources();
         }
     }
 }

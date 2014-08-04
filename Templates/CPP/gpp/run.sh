@@ -51,4 +51,23 @@ if [ ! -f "${EXE_PATH}" ]; then
 fi
 
 echo "Running ${VERSION}"
-"$EXE_PATH"
+
+if [ "$OS" = "$MAC" ]; then
+    "$EXE_PATH" & 
+    WAIT_PID=$!
+    
+    osascript <<EOF
+    try
+    tell application "System Events"
+      tell process "${GAME_NAME}"
+          set frontmost to true
+      end tell
+    end tell
+    on error
+    end try
+    return
+EOF
+    wait ${WAIT_PID}
+else
+    "$EXE_PATH"
+fi
