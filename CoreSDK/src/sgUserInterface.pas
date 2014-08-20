@@ -2025,24 +2025,25 @@ var
                               OptionToScreen()
                               )
       else
-        DrawBitmapOnScreen(tempList^.ScrollButton,
-                            RoundInt(scrollArea.x),
-                            RoundInt(scrollArea.y + pct * (scrollArea.Height - tempList^.scrollSize)));
+        DrawBitmap(tempList^.ScrollButton,
+                  RoundInt(scrollArea.x),
+                  RoundInt(scrollArea.y + pct * (scrollArea.Height - tempList^.scrollSize)),
+                  OptionToScreen());
     end
     else
     begin
       if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
         FillRectangle(VectorForecolorToDraw(forRegion), 
-                              RoundInt(scrollArea.x + pct * (scrollArea.Width - tempList^.scrollSize)),
-                              RoundInt(scrollArea.y),
-                              tempList^.scrollSize,
-                              tempList^.scrollSize,
-                              OptionToScreen()
-                              )
+                      RoundInt(scrollArea.x + pct * (scrollArea.Width - tempList^.scrollSize)),
+                      RoundInt(scrollArea.y),
+                      tempList^.scrollSize,
+                      tempList^.scrollSize,
+                      OptionToScreen())
       else
-        DrawBitmapOnScreen(tempList^.ScrollButton,
+        DrawBitmap(tempList^.ScrollButton,
                             RoundInt(scrollArea.x + pct * (scrollArea.Width - tempList^.scrollSize)),
-                            RoundInt(scrollArea.y));
+                            RoundInt(scrollArea.y),
+                            OptionToScreen());
     end;
   end;
 begin
@@ -2242,7 +2243,7 @@ var
   j: LongInt;
   currentReg: Region;
 begin
-  DrawBitmapOnScreen(PanelBitmapToDraw(p), RectangleTopLeft(p^.area));   
+  DrawBitmap(PanelBitmapToDraw(p), RoundInt(RectangleTopLeft(p^.area).x), RoundInt(RectangleTopLeft(p^.area).y), OptionToScreen());
   
   for j := Low(p^.Regions) to High(p^.Regions) do
   begin

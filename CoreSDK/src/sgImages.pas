@@ -806,26 +806,6 @@ uses sgTypes;
 // Bitmap drawing routines - onto screen
 //---------------------------------------------------------------------------
   
-  /// Draw the bitmap onto the screen.
-  ///
-  /// @lib
-  /// @sn draw:%s onScreenAtX:%s y:%s
-  ///
-  /// @class Bitmap
-  /// @method DrawOnScreen
-  /// @csn drawOnScreenAtX:%s y:%s
-  procedure DrawBitmapOnScreen(src : Bitmap; x, y : Longint); overload;
-  
-  /// Draw the bitmap onto the screen.
-  ///
-  /// @lib DrawBitmapAtPointOnScreen
-  /// @sn draw:%s onScreenAt:%s
-  ///
-  /// @class Bitmap
-  /// @overload DrawOnScreen DrawAtPointOnSreen
-  /// @csn drawOnScreenAt:%s
-  procedure DrawBitmapOnScreen(src : Bitmap; const position : Point2D); overload;
-
   /// Draw the cell of the bitmap onto the screen.
   ///
   /// @lib DrawBitmapCellOnScreen
@@ -1436,11 +1416,6 @@ begin
   DrawBitmapPart(screen, src, srcX, srcY, srcW, srcH, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
 end;
 
-procedure DrawBitmapOnScreen(src : Bitmap; x, y : Longint); overload;
-begin
-  DrawBitmap(screen, src, x, y);
-end;
-
 procedure DrawBitmap(src : Bitmap; x, y : Single); overload;
 begin
   DrawBitmap(screen, src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
@@ -1479,11 +1454,6 @@ end;
 procedure DrawBitmapPartOnScreen(src : Bitmap; const source: Rectangle; const position: Point2D); overload;
 begin
   DrawBitmapPartOnScreen(src, source, RoundInt(position.x), RoundInt(position.y));
-end;
-
-procedure DrawBitmapOnScreen(src : Bitmap; const position : Point2D); overload;
-begin
-  DrawBitmapOnScreen(src, RoundInt(position.x), RoundInt(position.y))
 end;
 
 procedure DrawBitmap(name: String; x, y : Single); overload;
@@ -1586,7 +1556,7 @@ end;
 procedure DrawBitmapCellOnScreen(const src : BitmapCell; x, y : Longint); overload;
 begin
   if src.cell = -1 then
-    DrawBitmapOnScreen(src.bmp, x, y)
+    DrawBitmap(src.bmp, x, y, OptionToScreen())
   else
     DrawCellOnScreen(src.bmp, src.cell, x, y);
 end;
@@ -1594,7 +1564,7 @@ end;
 procedure DrawBitmapCellOnScreen(const src : BitmapCell; const position : Point2D); overload;
 begin
   if src.cell = -1 then
-    DrawBitmapOnScreen(src.bmp, position)
+    DrawBitmap(src.bmp, RoundInt(position.x), RoundInt(position.y), OptionToScreen())
   else
     DrawCellOnScreen(src.bmp, src.cell, position);
 end;

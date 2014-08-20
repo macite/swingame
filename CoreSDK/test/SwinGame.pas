@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-08-04 11:37:35.751193
+// SwinGame.pas was generated on 2014-08-20 20:00:25.559975
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1831,12 +1831,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Draw the cell of the bitmap onto the screen.
   procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
-
-  // Draw the bitmap onto the screen.
-  procedure DrawBitmapOnScreen(src: Bitmap; const position: Point2D); overload;
-
-  // Draw the bitmap onto the screen.
-  procedure DrawBitmapOnScreen(src: Bitmap; x: Longint; y: Longint); overload;
 
   // Draw part of a bitmap onto the game.
   procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
@@ -6548,16 +6542,6 @@ implementation
   procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
   begin
     sgImages.DrawBitmapCellOnScreen(src,x,y);
-  end;
-
-  procedure DrawBitmapOnScreen(src: Bitmap; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmapOnScreen(src,position);
-  end;
-
-  procedure DrawBitmapOnScreen(src: Bitmap; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapOnScreen(src,x,y);
   end;
 
   procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
