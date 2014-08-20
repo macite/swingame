@@ -729,7 +729,7 @@ interface
   implementation
   uses
     sgText, sgGraphics, sgTrace, sgResources,
-    sgCamera, sgGeometry, sgImages, sgInput, sgPhysics,
+    sgCamera, sgGeometry, sgImages, sgInput, sgPhysics, sgDrawingOptions,
     sgSprites, sgTimers, SysUtils, StrUtils, Classes,
       stringhash, sgSharedUtils, sgNamedIndexCollection, sgShared;
 
@@ -1301,7 +1301,7 @@ interface
             if map^.Tiles[row,col].TileBitmapCellKind[layer]^.Bmap <> nil then
             begin
              // writeln(HexStr(map^.Tiles[row,col].TileBitmapCellKind[layer]^.Bmap));
-                DrawCell(map^.Tiles[row,col].TileBitmapCellKind[layer]^.Bmap, map^.Tiles[row,col].TileBitmapCellKind[layer]^.Cell, PointAdd(map^.Tiles[row,col].Position,offset));
+                DrawCell(map^.Tiles[row,col].TileBitmapCellKind[layer]^.Bmap, map^.Tiles[row,col].TileBitmapCellKind[layer]^.Cell, PointAdd(map^.Tiles[row,col].Position,offset), OptionDefaults());
             end;
         end; // end of col in row
       end; // end of row

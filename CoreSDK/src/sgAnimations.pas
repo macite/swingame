@@ -485,7 +485,7 @@ implementation
     uses
         SysUtils, StrUtils, Classes, 
         stringhash, sgSharedUtils, sgNamedIndexCollection,
-        sgShared, sgResources, sgTrace, sgAudio, sgImages, sgGeometry;
+        sgShared, sgResources, sgTrace, sgAudio, sgImages, sgGeometry, sgDrawingOptions;
 //=============================================================================
 
 var
@@ -1360,7 +1360,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimation', ''); try
     {$ENDIF}
     
-    DrawCell(bmp, AnimationCurrentCell(ani), x, y);
+    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionDefaults());
     
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
@@ -1373,7 +1373,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimation', ''); try
     {$ENDIF}
 
-    DrawCell(bmp, AnimationCurrentCell(ani), pt);
+    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionDefaults());
 
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
@@ -1386,7 +1386,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimation', ''); try
     {$ENDIF}
 
-    DrawCell(dest, bmp, AnimationCurrentCell(ani), x, y);
+    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionDrawTo(dest));
 
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
@@ -1399,7 +1399,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimation', ''); try
     {$ENDIF}
 
-    DrawCell(dest, bmp, AnimationCurrentCell(ani), pt);
+    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionDrawTo(dest));
 
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
@@ -1412,7 +1412,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimationOnScreen', ''); try
     {$ENDIF}
     
-    DrawCellOnScreen(bmp, AnimationCurrentCell(ani), x, y);
+    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionToScreen());
     
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
@@ -1425,7 +1425,7 @@ begin
         TraceEnter('sgAnimations', 'DrawAnimationOnScreen', ''); try
     {$ENDIF}
     
-    DrawCellOnScreen(bmp, AnimationCurrentCell(ani), pt);
+    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionToScreen());
     
     {$IFDEF TRACE}
         finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;

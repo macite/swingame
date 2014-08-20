@@ -1682,7 +1682,7 @@ implementation
     Classes, SysUtils, Math, // System
     stringhash,
     sgNamedIndexCollection, SpritePack, //libsrc
-    sgAnimations, sgGraphics, sgGeometry, sgPhysics, sgInput, sgCamera, sgShared, sgResources, sgImages, sgTrace, sgTimers; //SwinGame
+    sgAnimations, sgGraphics, sgGeometry, sgPhysics, sgInput, sgCamera, sgShared, sgResources, sgImages, sgTrace, sgTimers, sgDrawingOptions; //SwinGame
 //=============================================================================
 
   var
@@ -2068,7 +2068,7 @@ implementation
         idx := s^.visibleLayers[i];
         bmp := s^.layers[idx]; // the bitmap to draw + rotate
         MakeOpaque(bmp);
-        DrawCell(dest, bmp, currentCell, Round(s^.layerOffsets[idx].x), Round(s^.layerOffsets[idx].y));
+        DrawCell(bmp, currentCell, Round(s^.layerOffsets[idx].x), Round(s^.layerOffsets[idx].y), OptionDrawTo(dest));
         MakeTransparent(bmp);
       end;
       cells[currentCell] := RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
@@ -2093,7 +2093,7 @@ implementation
     begin
       dest := CreateBitmap('collision-cache-cell' + IntToStr(currentCell) + '-' + BitmapName(bmp), BitmapCellWidth(bmp), BitmapCellHeight(bmp));
       MakeOpaque(bmp);
-      DrawCell(dest, bmp, currentCell, 0, 0);
+      DrawCell(bmp, currentCell, 0, 0, OptionDrawTo(dest));
       MakeTransparent(bmp);
       cells[currentCell] := RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
       FreeBitmap(dest);
@@ -2317,7 +2317,8 @@ implementation
     begin
       DrawCell(s^.cacheImage, SpriteCurrentCell(s), 
         Round(s^.position.x + xOffset), 
-        Round(s^.position.y + yOffset));
+        Round(s^.position.y + yOffset),
+        OptionDefaults());
       exit;
     end;
     
@@ -2326,7 +2327,8 @@ implementation
       idx := s^.visibleLayers[i];
       DrawCell(SpriteLayer(s, idx), SpriteCurrentCell(s), 
         Round(s^.position.x + xOffset + s^.layerOffsets[idx].x), 
-        Round(s^.position.y + yOffset + s^.layerOffsets[idx].y));
+        Round(s^.position.y + yOffset + s^.layerOffsets[idx].y),
+        OptionDefaults());
     end;
   end;
 

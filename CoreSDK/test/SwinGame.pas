@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-08-20 20:00:25.559975
+// SwinGame.pas was generated on 2014-08-20 20:50:03.191409
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1832,50 +1832,20 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Draw the cell of the bitmap onto the screen.
   procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
 
-  // Draw part of a bitmap onto the game.
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
-
-  // Draw part of a bitmap onto the game
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single); overload;
-
   // Draw part of the source bitmap onto the destination
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; const position: Point2D); overload;
-
-  // Draw part of the source bitmap onto the destination.
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts: DrawingOptions); overload;
 
   // Draw part of a bitmap onto the game
-  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single); overload;
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single; const opts: DrawingOptions); overload;
 
-  // Draw part of the source onto the desitination.
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
-
-  // Draw part of the bitmap on the screen.
-  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
-
-  // Draw part of the bitmap on the screen.
-  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
-
-  // Draw part of the bitmap on the screen.
-  procedure DrawBitmapPartOnScreen(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
+  // Draw part of a bitmap onto the game
+  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw a cell from a bitmap onto the game.
-  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D); overload;
-
-  // Draw a cell from a bitmap onto the destination.
-  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; const position: Point2D); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;
 
   // Draw a cell from a bitmap onto the game.
-  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
-
-  // Draw a cell from a bitmap onto the destination.
-  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; x: Single; y: Single); overload;
-
-  // Draw a cell from a bitmap onto the game.
-  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; const position: Point2D); overload;
-
-  // Draw a cell from a bitmap onto the screen.
-  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Frees a loaded bitmap. Use this when you will no longer be drawing the
   // bitmap (including within Sprites), and when the program exits.
@@ -6544,79 +6514,29 @@ implementation
     sgImages.DrawBitmapCellOnScreen(src,x,y);
   end;
 
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts: DrawingOptions); overload;
   begin
-    sgImages.DrawBitmapPart(src,source,position);
+    sgImages.DrawBitmapPart(src,source,position,opts);
   end;
 
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single); overload;
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgImages.DrawBitmapPart(src,source,x,y);
+    sgImages.DrawBitmapPart(src,source,x,y,opts);
   end;
 
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgImages.DrawBitmapPart(dest,src,source,position);
+    sgImages.DrawBitmapPart(src,srcX,srcY,srcW,srcH,x,y,opts);
   end;
 
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;
   begin
-    sgImages.DrawBitmapPart(dest,src,source,x,y);
+    sgImages.DrawCell(src,cell,position,opts);
   end;
 
-  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgImages.DrawBitmapPart(src,srcX,srcY,srcW,srcH,x,y);
-  end;
-
-  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapPart(dest,src,srcX,srcY,srcW,srcH,x,y);
-  end;
-
-  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmapPartOnScreen(src,source,position);
-  end;
-
-  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapPartOnScreen(src,source,x,y);
-  end;
-
-  procedure DrawBitmapPartOnScreen(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapPartOnScreen(src,srcX,srcY,srcW,srcH,x,y);
-  end;
-
-  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D); overload;
-  begin
-    sgImages.DrawCell(src,cell,position);
-  end;
-
-  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; const position: Point2D); overload;
-  begin
-    sgImages.DrawCell(dest,src,cell,position);
-  end;
-
-  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
-  begin
-    sgImages.DrawCell(src,cell,x,y);
-  end;
-
-  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; x: Single; y: Single); overload;
-  begin
-    sgImages.DrawCell(dest,src,cell,x,y);
-  end;
-
-  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; const position: Point2D); overload;
-  begin
-    sgImages.DrawCellOnScreen(src,cell,position);
-  end;
-
-  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
-  begin
-    sgImages.DrawCellOnScreen(src,cell,x,y);
+    sgImages.DrawCell(src,cell,x,y,opts);
   end;
 
   procedure FreeBitmap(var bitmapToFree: Bitmap); overload;
