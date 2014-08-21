@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-08-20 20:50:03.191409
+// SwinGame.pas was generated on 2014-08-21 10:34:36.392887
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1831,15 +1831,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Draw the cell of the bitmap onto the screen.
   procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
-
-  // Draw part of the source bitmap onto the destination
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts: DrawingOptions); overload;
-
-  // Draw part of a bitmap onto the game
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single; const opts: DrawingOptions); overload;
-
-  // Draw part of a bitmap onto the game
-  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw a cell from a bitmap onto the game.
   procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;
@@ -6512,21 +6503,6 @@ implementation
   procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
   begin
     sgImages.DrawBitmapCellOnScreen(src,x,y);
-  end;
-
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts: DrawingOptions); overload;
-  begin
-    sgImages.DrawBitmapPart(src,source,position,opts);
-  end;
-
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single; const opts: DrawingOptions); overload;
-  begin
-    sgImages.DrawBitmapPart(src,source,x,y,opts);
-  end;
-
-  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
-  begin
-    sgImages.DrawBitmapPart(src,srcX,srcY,srcW,srcH,x,y,opts);
   end;
 
   procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;

@@ -631,16 +631,6 @@ uses sgTypes;
   /// @csn drawOnto:%s at:%s
   procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position : Point2D); overload;
 
-  /// Draw part of the source bitmap onto the destination
-  ///
-  /// @lib DrawBitmapPartFromRectAtPointOnto
-  /// @sn drawOnto:%s bitmap:%s srcRect:%s at:%s
-  ///
-  /// @class Bitmap
-  /// @overload DrawPartOnto DrawPartFromRectAtPointOnto
-  /// @csn drawOnto:%s srcRect:%s at:%s
-  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts : DrawingOptions); overload;
-
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - standard
 //---------------------------------------------------------------------------
@@ -704,26 +694,6 @@ uses sgTypes;
   /// @overload DrawAt DrawAtPoint
   /// @csn drawAt:%s
   procedure DrawBitmapCell(const src : BitmapCell; const position : Point2D); overload;
-  
-  /// Draw part of a bitmap onto the game
-  ///
-  /// @lib
-  /// @sn draw:%s srcX:%s srcY:%s srcW:%s srcH:%s x:%s y:%s
-  ///
-  /// @class Bitmap
-  /// @method DrawPart
-  /// @csn drawSrcX:%s srcY:%s srcW:%s srcH:%s x:%s y:%s
-  procedure DrawBitmapPart(src : Bitmap; srcX, srcY, srcW, srcH: Longint; x, y : Single; const opts : DrawingOptions); overload;
-  
-  /// Draw part of a bitmap onto the game
-  ///
-  /// @lib DrawBitmapPartFromRect
-  /// @sn draw:%s srcRect:%s x:%s y:%s
-  ///
-  /// @class Bitmap
-  /// @overload DrawPart DrawPartFromRect
-  /// @csn drawSrcRect:%s x:%s y:%s
-  procedure DrawBitmapPart(src : Bitmap; const source : Rectangle; x, y : Single; const opts : DrawingOptions); overload;
     
   /// Draw a cell from a bitmap onto the game.
   ///
@@ -1290,21 +1260,6 @@ begin
   {$ENDIF}
 end;
 
-procedure DrawBitmapPart(src: Bitmap; srcX, srcY, srcW, srcH, x, y : Longint; const opts : DrawingOptions); overload;
-begin
-  DrawBitmap(src, x, y, OptionPartBmp(srcX,srcY,srcW,srcH));
-end;
-
-procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x, y : Longint; const opts : DrawingOptions); overload;
-begin
-  DrawBitmapPart(src, RoundInt(source.x), RoundInt(source.y), source.width, source.height, x, y, opts);
-end;
-
-procedure DrawBitmapPart(src : Bitmap; srcX, srcY, srcW, srcH: Longint; x, y : Single; const opts : DrawingOptions); overload;
-begin
-  DrawBitmapPart(src, srcX, srcY, srcW, srcH, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y), opts);
-end;
-
 procedure DrawBitmap(src : Bitmap; x, y : Single); overload;
 begin
   DrawBitmap(screen, src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
@@ -1315,19 +1270,9 @@ begin
   DrawBitmap(dest, src, RoundInt(position.x), RoundInt(position.y));
 end;
 
-procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D; const opts : DrawingOptions); overload;
-begin
-  DrawBitmapPart(src, source, RoundInt(position.x), RoundInt(position.y), opts);
-end;
-
 procedure DrawBitmap(src : Bitmap; const position : Point2D); overload;
 begin
   DrawBitmap(src, RoundInt(position.x), RoundInt(position.y));
-end;
-
-procedure DrawBitmapPart(src : Bitmap; const source : Rectangle; x, y : Single; const opts : DrawingOptions); overload;
-begin
-  DrawBitmapPart(src, RoundInt(source.x), RoundInt(source.y), source.width, source.height, x, y, opts);
 end;
 
 procedure DrawBitmap(name: String; x, y : Single); overload;
@@ -1364,7 +1309,7 @@ end;
 
 procedure DrawCell(src: Bitmap; const source : Rectangle; x, y: Single; const opts : DrawingOptions); overload;
   begin
-    DrawBitmapPart(src, source, RoundInt(x), RoundInt(y), opts);
+    DrawBitmap(src, RoundInt(x), RoundInt(y), OptionPartBmp(source.x, source.y, source.width, source.height, opts));
   end;
 
 procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single; const opts : DrawingOptions); overload;

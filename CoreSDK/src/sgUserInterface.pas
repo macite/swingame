@@ -2135,10 +2135,10 @@ begin
       else
       begin
         // Draw bitmap and text if bitmap based
-        DrawBitmapPart(forRegion^.parent^.panelBitmapActive,
-                       placeHolderScreenRect,
-                       RectangleTopLeft(itemArea),
-                       OptionToScreen());
+        DrawBitmap(forRegion^.parent^.panelBitmapActive,
+                       RoundInt(RectangleTopLeft(itemArea).x),
+                       RoundInt(RectangleTopLeft(itemArea).y),
+                       OptionToScreen(OptionPartBmp(placeHolderScreenRect.x, placeHolderScreenRect.y, placeHolderScreenRect.width, placeHolderScreenRect.height)));
       end;
     end;
     
@@ -2253,7 +2253,7 @@ begin
       gkLabel:      DrawLabelText(currentReg, RegionRectangleOnscreen(currentReg));
       gkTextbox:    DrawTextbox(currentReg, RegionRectangleOnScreen(currentReg));
       gkList:       DrawList(currentReg, RegionRectangleOnScreen(currentReg));
-      else          DrawBitmapPart(BitmapToDraw(currentReg), currentReg^.area, RectangleTopLeft(RegionRectangleOnScreen(currentReg)), OptionToScreen());
+      else          DrawBitmap(BitmapToDraw(currentReg), RoundInt(RectangleTopLeft(RegionRectangleOnScreen(currentReg)).x), RoundInt(RectangleTopLeft(RegionRectangleOnScreen(currentReg)).y), OptionToScreen(OptionPartBmp(currentReg^.area.x, currentReg^.area.y, currentReg^.area.width, currentReg^.area.height)));
     end;
   end;
 end;
