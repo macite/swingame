@@ -88,7 +88,11 @@ implementation
 		begin
 		  for r := 0 to bmp^.height - 1 do
 		  begin
-		    bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and SDL_Swap32($000000FF)) > 0);
+		  	{$IFDEF SWINGAME_SDL13}
+		  		bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and SDL_Swap32($000000FF)) > 0);
+			{$ELSE}
+				bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and ($FF shr surface^.format^.ashift)) > 0);
+			{$ENDIF}
 		  end;
 		end;
 	end;
