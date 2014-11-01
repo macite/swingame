@@ -25,15 +25,15 @@ begin
   OpenAudio();  
   
   // LoadResourceBundle('splash.txt');
-  LoadResourceBundle('bundle.txt');
-  LoadSoundEffectNamed('blah', 'blah');
-  LoadMusicNamed('blah', 'blah');
-  LoadBitmapNamed('blah', 'blah');
-  LoadAnimationScriptNamed('blah', 'blah');
-  LoadPanel('blah');
-  LoadAnimationScript('test.txt');
-  FillRectangle(ColorRed, 0, 0, 10, 10);
-  LoadDefaultColors();
+  // LoadResourceBundle('bundle.txt');
+  // LoadSoundEffectNamed('blah', 'blah');
+  // LoadMusicNamed('blah', 'blah');
+  // LoadBitmapNamed('blah', 'blah');
+  // LoadAnimationScriptNamed('blah', 'blah');
+  // LoadPanel('blah');
+  // LoadAnimationScript('test.txt');
+  // FillRectangle(ColorRed, 0, 0, 10, 10);
+  // LoadDefaultColors();
   // LoadBitmap('cape.jpg');
   
   OpenGraphicsWindow('Hello World', 640, 480);
@@ -45,19 +45,19 @@ begin
   img := CreateBitmap(800, 600);
   
   //Test releasing of resources - not assigned
-  WriteLn('BMP: ', HexStr(BitmapNamed('fred')));
-  ReleaseBitmap('fred');
-  WriteLn('FNT: ', HexStr(FontNamed('fred')));
-  ReleaseFont('fred');
-  WriteLn('SND: ', HexStr(SoundEffectNamed('fred')));
-  ReleaseSoundEffect('fred');
-  WriteLn('MUS: ', HexStr(MusicNamed('fred')));
-  ReleaseMusic('fred');
+  // WriteLn('BMP: ', HexStr(BitmapNamed('fred')));
+  // ReleaseBitmap('fred');
+  // WriteLn('FNT: ', HexStr(FontNamed('fred')));
+  // ReleaseFont('fred');
+  // WriteLn('SND: ', HexStr(SoundEffectNamed('fred')));
+  // ReleaseSoundEffect('fred');
+  // WriteLn('MUS: ', HexStr(MusicNamed('fred')));
+  // ReleaseMusic('fred');
   // WriteLn('MAP: ', HexStr(TileMapNamed('fred')));
   // ReleaseTileMap('fred');
-  ReleaseResourceBundle('fred');
+  // ReleaseResourceBundle('fred');
   
-  StartTimer(TimerNamed('TestTimer'));
+  // StartTimer(TimerNamed('TestTimer'));
   
   for i := 0 to 2 do img := CreateBitmap(800,600);
   
