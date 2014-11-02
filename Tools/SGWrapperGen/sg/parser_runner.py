@@ -21,7 +21,6 @@ all_units = [
     ('sgAnimations', 'Animations', '../../CoreSDK/src/sgAnimations.pas'),
     ('sgAudio', 'Audio', '../../CoreSDK/src/sgAudio.pas'),
     ('sgCamera', 'Camera', '../../CoreSDK/src/sgCamera.pas'),
-    ('sgCharacters', 'Characters', '../../CoreSDK/src/sgCharacters.pas'),
     ('sgGeometry', 'Geometry', '../../CoreSDK/src/sgGeometry.pas'),
     ('sgGraphics', 'Graphics', '../../CoreSDK/src/sgGraphics.pas'),
     ('sgImages', 'Images', '../../CoreSDK/src/sgImages.pas'),

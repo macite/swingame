@@ -407,7 +407,6 @@ interface
       SoundResource,
       AnimationResource,    //in load order,  Animation must be > sound
       PanelResource,        //                Panel must be > sound + bitmap
-      CharacterResource,
       OtherResource
     );
     
@@ -847,63 +846,6 @@ interface
     ///
     /// @type FreeNotifier
     FreeNotifier = procedure (p: Pointer); cdecl;
-
-
-  ///---------------------------------------------------------------------------
-  /// Character Type Details
-  ///--------------------------------------------------------------------------- 
-  
-    /// Character directions are represented as existing between a given
-    /// minimum and maximum angle as coded in the DirectionAngles type.
-    /// This is then used with the velocity from the `Character`'s `Sprite`
-    /// to determine the image that is shown.
-    ///
-    /// @struct DirectionAngles
-    DirectionAngles = record
-      min : Longint;
-      max : Longint;
-    end;
-    
-    /// The DirStateData contains the data for a Character's direction and
-    /// state combination. This allows, for example, for a character to have
-    /// an animation and layer orderring for Swimming North, Walking North,
-    /// Swimming East, etc.
-    ///
-    /// @struct DirStateData
-    /// @via_pointer
-    DirStateData = record
-      Anim      : Longint;
-      LayerOrder: LongintArray;
-    end;
-    
-    /// @struct CharacterData
-    /// @via_pointer
-    CharacterData = record
-      Name                  : String;
-      FileName              : String;
-      CharSprite            : Sprite;                               // The Character's Sprite
-      CharName              : String;                               // The Character's Name
-      CharType              : String;                               // The Character's Type
-      States                : NamedIndexCollection;                 // The names and indexs of the Character's States
-      Directions            : NamedIndexCollection;                 // The names and indexs of the Character's Direction
-      CurrentState          : Longint;                              // The Character's Current State
-      CurrentDirection      : Longint;                              // The Character's Current Direction
-      DirectionParameters   : array of DirectionAngles;             // The different angle parameters the character checks to change the animation based on the direction
-      ShownLayers           : array of Boolean;                     // Boolean stating whether a layer is to be drawn
-      ShownLayersByDirState : array of array of DirStateData;       // 
-      ShownLayerCache       : array of array of array of Longint;   // 
-    end;
-    
-    /// SwinGame Characters allow you to code `Sprite` like entities that
-    /// include multiple layers, and handle directions and different states.
-    /// The Character code provides logic that manages displaying different
-    /// images and animations for characters based on their state and current
-    /// direction. 
-    ///
-    /// @class Character
-    /// @pointer_wrapper
-    /// @field pointer: ^CharacterData
-    Character  = ^CharacterData;
     
     /// GUIElementKind is an enum of all the GUI types
     /// 

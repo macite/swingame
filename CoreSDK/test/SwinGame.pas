@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-02 14:49:10.474180
+// SwinGame.pas was generated on 2014-11-02 15:15:05.698885
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -7,7 +7,7 @@
 unit SwinGame;
 
 interface
-uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino;
+uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino;
 
   type LongintArray = sgTypes.LongintArray;
 
@@ -116,14 +116,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   type KeyCode = sgTypes.KeyCode;
 
   type FreeNotifier = sgTypes.FreeNotifier;
-
-  type DirectionAngles = sgTypes.DirectionAngles;
-
-  type DirStateData = sgTypes.DirStateData;
-
-  type CharacterData = sgTypes.CharacterData;
-
-  type Character = sgTypes.Character;
 
   type GUIElementKind = sgTypes.GUIElementKind;
 
@@ -607,10 +599,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // at `CameraY` + `ScreenHeight`.
   function CameraY(): Single; overload;
 
-  // Set the camera view to be centered over the specific Character. The offset
-  // vector allows you to move the sprite from the direct center of the screen.
-  procedure CenterCameraOn(c: Character; const offset: Vector); overload;
-
   // Set the camera view to be centered over the specific sprite. The offset
   // vector allows you to move the sprite from the direct center of the screen.
   procedure CenterCameraOn(s: Sprite; const offset: Vector); overload;
@@ -679,140 +667,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Translate a screen y value (based on the camera) to a world y value
   function ToWorldY(screenY: Longint): Single; overload;
-
-  // Returns the DirectionAngles data at the selected index. The min and max
-  // of this record can be accessed by .min and .max
-  function CharacterAngleAt(c: Character; index: Longint): DirectionAngles; overload;
-
-  // Returns the maximum angle in the DirectionAngles record at the index
-  // specified
-  function CharacterAngleMaxAt(c: Character; index: Longint): Longint; overload;
-
-  // Returns the minimum angle in the DirectionAngles record at the index
-  // specified
-  function CharacterAngleMinAt(c: Character; index: Longint): Longint; overload;
-
-  // Returns the count of the Angles of the character
-  function CharacterAnglesLength(c: Character): Longint; overload;
-
-  // Returns the Character's name
-  function CharacterCharacterName(c: Character): String; overload;
-
-  // Returns the index of the current direction of the character
-  function CharacterCurrentDirection(c: Character): Longint; overload;
-
-  // Returns the index of the current state of the character
-  function CharacterCurrentState(c: Character): Longint; overload;
-
-  // Returns the count of the amount of directions that the character has
-  function CharacterDirectionCount(c: Character): Longint; overload;
-
-  // Returns all of the possible directions of the character
-  function CharacterDirections(c: Character): StringArray; overload;
-
-  // Returns the name of the file that was used to load the character's
-  // details.
-  function CharacterFilename(c: Character): String; overload;
-
-  // Returns the name of the character. This name can be used to
-  // retrieve this character using the `CharacterNamed` function.
-  function CharacterName(c: Character): String; overload;
-
-  // Returns the `Character` with the given name. You can specify
-  // the name to use in the resource bundle, or by calling the
-  // `LoadCharacterNamed` function.
-  function CharacterNamed(name: String): Character; overload;
-
-  // Sets the current direction of the character
-  procedure CharacterSetCurrentDirection(c: Character; direction: Longint); overload;
-
-  // Sets the current state of the character
-  procedure CharacterSetCurrentState(c: Character; state: Longint); overload;
-
-  // Sets the Character's name
-  procedure CharacterSetName(c: Character; name: String); overload;
-
-  // Sets the the name of the Type of Character(eg boss, grunt etc)
-  procedure CharacterSetType(c: Character; name: String); overload;
-
-  // Set the value of the character.
-  procedure CharacterSetValue(c: Character; idx: Longint; val: Single); overload;
-
-  // Set the value of the character.
-  procedure CharacterSetValue(c: Character; name: String; val: Single); overload;
-
-  // Returns whether or not the layer at the selected index is drawn
-  function CharacterShownLayersAt(c: Character; index: Longint): Boolean; overload;
-
-  // Returns the character's sprite
-  function CharacterSprite(c: Character): Sprite; overload;
-
-  // Returns all of the possible states of the character
-  function CharacterStateCount(c: Character): Longint; overload;
-
-  // Returns all of the possible directions of the character
-  function CharacterStates(c: Character): StringArray; overload;
-
-  // Returns the string value of the character's type
-  function CharacterType(c: Character): String; overload;
-
-  // Returns the character's value at the index specified
-  function CharacterValueAt(c: Character; index: Longint): Single; overload;
-
-  // Returns the count of character values
-  function CharacterValueCount(c: Character): Longint; overload;
-
-  // Returns the names of all of the values of the character
-  function CharacterValueNames(c: Character): StringArray; overload;
-
-  // Draw Character without a stationary state with default facing down when not moving
-  procedure DrawCharacter(c: Character); overload;
-
-  // Draws the character's sprite with no additional functionality
-  procedure DrawCharacterSprite(c: Character); overload;
-
-  // Draw Character that changes state when it's velocity is 0 to be the stationary
-  // state which is specified.
-  procedure DrawCharacterWithStationary(c: Character; stationaryState: Longint; state: Longint); overload;
-
-  // Free the resources associated with a Character. Please note
-  // that this also frees the `Sprite` that exists within the
-  // Character.
-  procedure FreeCharacter(var c: Character); overload;
-
-  // Returns ``true`` if SwinGame has loaded a character with the
-  // indicated name.
-  function HasCharacter(name: String): Boolean; overload;
-
-  // Loads the character from a text file
-  function LoadCharacter(filename: String): Character; overload;
-
-  // Loads the character from a text file, and assigns the character
-  // the indicated name. This name can then be used to refer to this
-  // character in the `CharacterNamed` function.
-  function LoadCharacterNamed(name: String; filename: String): Character; overload;
-
-  // Release all of the characters currently loaded into SwinGame.
-  procedure ReleaseAllCharacters(); overload;
-
-  // Free the resources associated with a Character with the
-  // given name.
-  procedure ReleaseCharacter(name: String); overload;
-
-  // Sets the active layers from the shown layers cache, using the current
-  // states and directions for the indexes of the array
-  procedure SetActiveLayer(c: Character); overload;
-
-  // Toggles whether or not the layer at the specified index is drawn or not
-  procedure ToggleLayerVisibility(c: Character; index: Longint); overload;
-
-  // Update the animation of the character depending on it's direction. Returns true
-  // if the direction was changed and false if it was no changed
-  function UpdateDirectionAnimation(c: Character): Boolean; overload;
-
-  // Update the animation of the character depending on it's direction, including updating
-  //When the character's state goes stationary
-  function UpdateDirectionAnimationWithStationary(c: Character; state: Longint; newState: Longint): Boolean; overload;
 
   // Adds the two parameter vectors (``v1`` and ``v2``) together and returns 
   // the result as a new `Vector`.
@@ -4692,11 +4546,6 @@ implementation
     result := sgCamera.CameraY();
   end;
 
-  procedure CenterCameraOn(c: Character; const offset: Vector); overload;
-  begin
-    sgCamera.CenterCameraOn(c,offset);
-  end;
-
   procedure CenterCameraOn(s: Sprite; const offset: Vector); overload;
   begin
     sgCamera.CenterCameraOn(s,offset);
@@ -4785,201 +4634,6 @@ implementation
   function ToWorldY(screenY: Longint): Single; overload;
   begin
     result := sgCamera.ToWorldY(screenY);
-  end;
-
-  function CharacterAngleAt(c: Character; index: Longint): DirectionAngles; overload;
-  begin
-    result := sgCharacters.CharacterAngleAt(c,index);
-  end;
-
-  function CharacterAngleMaxAt(c: Character; index: Longint): Longint; overload;
-  begin
-    result := sgCharacters.CharacterAngleMaxAt(c,index);
-  end;
-
-  function CharacterAngleMinAt(c: Character; index: Longint): Longint; overload;
-  begin
-    result := sgCharacters.CharacterAngleMinAt(c,index);
-  end;
-
-  function CharacterAnglesLength(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterAnglesLength(c);
-  end;
-
-  function CharacterCharacterName(c: Character): String; overload;
-  begin
-    result := sgCharacters.CharacterCharacterName(c);
-  end;
-
-  function CharacterCurrentDirection(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterCurrentDirection(c);
-  end;
-
-  function CharacterCurrentState(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterCurrentState(c);
-  end;
-
-  function CharacterDirectionCount(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterDirectionCount(c);
-  end;
-
-  function CharacterDirections(c: Character): StringArray; overload;
-  begin
-    result := sgCharacters.CharacterDirections(c);
-  end;
-
-  function CharacterFilename(c: Character): String; overload;
-  begin
-    result := sgCharacters.CharacterFilename(c);
-  end;
-
-  function CharacterName(c: Character): String; overload;
-  begin
-    result := sgCharacters.CharacterName(c);
-  end;
-
-  function CharacterNamed(name: String): Character; overload;
-  begin
-    result := sgCharacters.CharacterNamed(name);
-  end;
-
-  procedure CharacterSetCurrentDirection(c: Character; direction: Longint); overload;
-  begin
-    sgCharacters.CharacterSetCurrentDirection(c,direction);
-  end;
-
-  procedure CharacterSetCurrentState(c: Character; state: Longint); overload;
-  begin
-    sgCharacters.CharacterSetCurrentState(c,state);
-  end;
-
-  procedure CharacterSetName(c: Character; name: String); overload;
-  begin
-    sgCharacters.CharacterSetName(c,name);
-  end;
-
-  procedure CharacterSetType(c: Character; name: String); overload;
-  begin
-    sgCharacters.CharacterSetType(c,name);
-  end;
-
-  procedure CharacterSetValue(c: Character; idx: Longint; val: Single); overload;
-  begin
-    sgCharacters.CharacterSetValue(c,idx,val);
-  end;
-
-  procedure CharacterSetValue(c: Character; name: String; val: Single); overload;
-  begin
-    sgCharacters.CharacterSetValue(c,name,val);
-  end;
-
-  function CharacterShownLayersAt(c: Character; index: Longint): Boolean; overload;
-  begin
-    result := sgCharacters.CharacterShownLayersAt(c,index);
-  end;
-
-  function CharacterSprite(c: Character): Sprite; overload;
-  begin
-    result := sgCharacters.CharacterSprite(c);
-  end;
-
-  function CharacterStateCount(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterStateCount(c);
-  end;
-
-  function CharacterStates(c: Character): StringArray; overload;
-  begin
-    result := sgCharacters.CharacterStates(c);
-  end;
-
-  function CharacterType(c: Character): String; overload;
-  begin
-    result := sgCharacters.CharacterType(c);
-  end;
-
-  function CharacterValueAt(c: Character; index: Longint): Single; overload;
-  begin
-    result := sgCharacters.CharacterValueAt(c,index);
-  end;
-
-  function CharacterValueCount(c: Character): Longint; overload;
-  begin
-    result := sgCharacters.CharacterValueCount(c);
-  end;
-
-  function CharacterValueNames(c: Character): StringArray; overload;
-  begin
-    result := sgCharacters.CharacterValueNames(c);
-  end;
-
-  procedure DrawCharacter(c: Character); overload;
-  begin
-    sgCharacters.DrawCharacter(c);
-  end;
-
-  procedure DrawCharacterSprite(c: Character); overload;
-  begin
-    sgCharacters.DrawCharacterSprite(c);
-  end;
-
-  procedure DrawCharacterWithStationary(c: Character; stationaryState: Longint; state: Longint); overload;
-  begin
-    sgCharacters.DrawCharacterWithStationary(c,stationaryState,state);
-  end;
-
-  procedure FreeCharacter(var c: Character); overload;
-  begin
-    sgCharacters.FreeCharacter(c);
-  end;
-
-  function HasCharacter(name: String): Boolean; overload;
-  begin
-    result := sgCharacters.HasCharacter(name);
-  end;
-
-  function LoadCharacter(filename: String): Character; overload;
-  begin
-    result := sgCharacters.LoadCharacter(filename);
-  end;
-
-  function LoadCharacterNamed(name: String; filename: String): Character; overload;
-  begin
-    result := sgCharacters.LoadCharacterNamed(name,filename);
-  end;
-
-  procedure ReleaseAllCharacters(); overload;
-  begin
-    sgCharacters.ReleaseAllCharacters();
-  end;
-
-  procedure ReleaseCharacter(name: String); overload;
-  begin
-    sgCharacters.ReleaseCharacter(name);
-  end;
-
-  procedure SetActiveLayer(c: Character); overload;
-  begin
-    sgCharacters.SetActiveLayer(c);
-  end;
-
-  procedure ToggleLayerVisibility(c: Character; index: Longint); overload;
-  begin
-    sgCharacters.ToggleLayerVisibility(c,index);
-  end;
-
-  function UpdateDirectionAnimation(c: Character): Boolean; overload;
-  begin
-    result := sgCharacters.UpdateDirectionAnimation(c);
-  end;
-
-  function UpdateDirectionAnimationWithStationary(c: Character; state: Longint; newState: Longint): Boolean; overload;
-  begin
-    result := sgCharacters.UpdateDirectionAnimationWithStationary(c,state,newState);
   end;
 
   function AddVectors(const v1: Vector; const v2: Vector): Vector; overload;

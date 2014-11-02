@@ -196,7 +196,7 @@ implementation
 				unix, BaseUnix,
 				{$endif}
 			 {$endif}
-             sgText, sgAudio, sgGraphics, sgInput, sgCharacters, sgShared, sgTimers, sgUtils,
+             sgText, sgAudio, sgGraphics, sgInput, sgShared, sgTimers, sgUtils,
              sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface, sgMaps, sgNetworking,
              sgArduino; // Swingame
 
@@ -318,7 +318,6 @@ implementation
                     MapResource:            LoadMapNamed(current.name, current.path);
                     AnimationResource:      LoadAnimationScriptNamed(current.name, current.path);
                     PanelResource:          LoadPanelNamed(current.name, current.path);
-                    CharacterResource:      LoadCharacterNamed(current.name, current.path);
                     else
                         RaiseException('Unknown resource kind in LoadResources' + IntToStr(Longint(kind)));
                 end;
@@ -366,7 +365,6 @@ implementation
                 PanelResource:          ReleasePanel(current.name);
                 MapResource:                ReleaseMap(current.name);
                 AnimationResource:  ReleaseAnimationScript(current.name);
-                CharacterResource:  ReleaseCharacter(current.name);
             end;
         end;
         SetLength(identifiers, 0);
@@ -382,7 +380,6 @@ implementation
         ReleaseAllPanels();
         ReleaseAllMaps();
         ReleaseAllSprites();
-        ReleaseAllCharacters();
         ReleaseAllConnections();
         ReleaseAllAnimationScripts();
         ReleaseAllSoundEffects();
@@ -405,7 +402,6 @@ implementation
         else if kind = 'MAP'                then result := MapResource
         else if kind = 'ANIM'               then result := AnimationResource
         else if kind = 'PANEL'          then result := PanelResource
-        else if kind = 'CHARACTER'  then result := CharacterResource
         else result := OtherResource;
     end;
     
@@ -551,7 +547,6 @@ implementation
             MapResource:                result := PathToResourceWithBase(path, 'maps/' + filename);
             AnimationResource:  result := PathToResourceWithBase(path, 'animations/' + filename);
             PanelResource:          result := PathToResourceWithBase(path, 'panels/' + filename);
-            CharacterResource:  result := PathToResourceWithBase(path, 'characters/' + filename);
         {$else}
             BundleResource:         result := PathToResourceWithBase(path, 'bundles\' + filename);
             FontResource:               result := PathToResourceWithBase(path, 'fonts\' + filename);
@@ -560,7 +555,6 @@ implementation
             MapResource:                result := PathToResourceWithBase(path, 'maps\' + filename);
             AnimationResource:  result := PathToResourceWithBase(path, 'animations\' + filename);
             PanelResource:          result := PathToResourceWithBase(path, 'panels\' + filename);
-            CharacterResource:  result := PathToResourceWithBase(path, 'characters\' + filename);
         {$endif}
             
             else result := PathToResourceWithBase(path, filename);
