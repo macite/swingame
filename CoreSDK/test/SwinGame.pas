@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-08-21 10:34:36.392887
+// SwinGame.pas was generated on 2014-11-02 14:49:10.474180
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -246,25 +246,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // point.
   procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
 
+  // Uses the animation information to draw a bitmap at the specified
+  // point given the passed in options.
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts: DrawingOptions); overload;
+
   // Uses the `Animation` information to draw a `Bitmap` at the specified
   // ``x``,``y`` location.
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single); overload;
 
   // Uses the animation information to draw a bitmap at the specified
-  // point on a destination bitmap.
-  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-
-  // Uses the animation information to draw a bitmap at the specified
-  // x,y location on a destination bitmap.
-  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
-
-  // Uses the animation information to draw a bitmap to the screen at the specified
-  // point.
-  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-
-  // Uses the animation information to draw a bitmap to the screen at the specified
-  // x,y location.
-  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+  // x,y location given the passed in options.
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Disposes of the resources used in the animation.
   procedure FreeAnimation(var ani: Animation); overload;
@@ -1621,7 +1613,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Refresh with a target FPS. This will delay a period of time that will 
   // approximately meet the targetted frames per second.
-  procedure RefreshScreen(TargetFPS: Longword); overload;
+  procedure RefreshScreen(TargetFPS: Longint); overload;
 
   // Reset the clipping rectangle of the screen.
   procedure ResetClip(); overload;
@@ -4360,29 +4352,19 @@ implementation
     sgAnimations.DrawAnimation(ani,bmp,pt);
   end;
 
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts: DrawingOptions); overload;
+  begin
+    sgAnimations.DrawAnimation(ani,bmp,pt,opts);
+  end;
+
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single); overload;
   begin
     sgAnimations.DrawAnimation(ani,bmp,x,y);
   end;
 
-  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgAnimations.DrawAnimation(dest,ani,bmp,pt);
-  end;
-
-  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
-  begin
-    sgAnimations.DrawAnimation(dest,ani,bmp,x,y);
-  end;
-
-  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-  begin
-    sgAnimations.DrawAnimationOnScreen(ani,bmp,pt);
-  end;
-
-  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
-  begin
-    sgAnimations.DrawAnimationOnScreen(ani,bmp,x,y);
+    sgAnimations.DrawAnimation(ani,bmp,x,y,opts);
   end;
 
   procedure FreeAnimation(var ani: Animation); overload;
@@ -6205,7 +6187,7 @@ implementation
     sgGraphics.RefreshScreen();
   end;
 
-  procedure RefreshScreen(TargetFPS: Longword); overload;
+  procedure RefreshScreen(TargetFPS: Longint); overload;
   begin
     sgGraphics.RefreshScreen(TargetFPS);
   end;

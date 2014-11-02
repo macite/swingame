@@ -1,26 +1,6 @@
 //=============================================================================
 // sgAnimations.pas
 //=============================================================================
-//
-// The Animation unit is responsible for defining and managing animation
-// information for SwinGame.
-//
-// Change History:
-//
-// Version 3:
-// - 2010-01-28: David  : Changed LoadAnimationScriptNamed to use an already loaded 
-//                        bitmap if found
-// - 2009-12-21: Andrew : Changed to include sound filename in animation loading.
-// - 2009-12-18: Andrew : Added in code to verify animations have no loops
-//                        with a 0 duration.
-// - 2009-12-15: Andrew : Updated animation handling to use new NamedIndexCollection.
-//                      : Fixed loading of animations with ranges like [,]
-//                      : Added code to query animations, and more create code.
-// - 2009-12-10: Andrew : Got basic Animation features working
-// - 2009-12-08: Andrew : Changed name to AnimationScript
-// - 2009-12-08: Andrew : Created
-//=============================================================================
-
 
 
 /// Animations in SwinGame can be used to move between cells in bitmaps and
@@ -167,7 +147,7 @@ interface
     /// @class Animation
     /// @constructor
     /// @csn initAsName:%s from:%s
-    function CreateAnimation(identifier: String;    script: AnimationScript): Animation; overload;
+    function CreateAnimation(identifier: String; script: AnimationScript): Animation; overload;
     
     /// Creates an animation from a `AnimationScript`. If ``withSound`` is ``true``, this may
     /// play a sound effect if the animation is set to play a sound effect on its first frame.
@@ -180,7 +160,7 @@ interface
     /// @csn initAsName:%s from:%s withSound:%s
     ///
     /// @doc_details
-    function CreateAnimation(identifier: String;    script: AnimationScript; withSound: Boolean): Animation; overload;
+    function CreateAnimation(identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
     
     /// Creates an animation from an `AnimationScript`. If ``withSound`` is ``true``, this may
     /// play a sound effect if the animation is set to play a sound effect on its first frame.
@@ -193,7 +173,7 @@ interface
     /// @csn initAtIndex:%s from:%s withSound:%s
     ///
     /// @doc_details
-    function CreateAnimation(identifier: Longint;    script: AnimationScript; withSound: Boolean): Animation; overload;
+    function CreateAnimation(identifier: Longint; script: AnimationScript; withSound: Boolean): Animation; overload;
     
     /// Creates an animation from an `AnimationScript`. This may play a sound effect
     /// if the animation is set to play a sound effect on its first frame.
@@ -206,7 +186,7 @@ interface
     /// @csn initAtIndex:%s from:%s
     ///
     /// @doc_details
-    function CreateAnimation(identifier: Longint;    script: AnimationScript): Animation; overload;
+    function CreateAnimation(identifier: Longint; script: AnimationScript): Animation; overload;
     
     /// Disposes of the resources used in the animation.
     ///
@@ -288,7 +268,20 @@ interface
     /// @class Animation
     /// @method DrawBitmap
     /// @csn drawBitmap:%s x:%s y:%s
-    procedure DrawAnimation(ani: Animation; bmp: Bitmap; x,y: Longint); overload;
+    procedure DrawAnimation(ani: Animation; bmp: Bitmap; x, y: Single); overload;
+        
+    /// Uses the animation information to draw a bitmap at the specified
+    /// x,y location given the passed in options.
+    ///
+    /// @lib DrawAnimationWithOptions
+    /// @sn drawAnimation:%s bitmap:%s atX:%s y:%s opts:%s
+    ///
+    /// @class Animation
+    /// @overload DrawBitmap DrawBitmapWithOptions
+    /// @csn drawBitmap:%s atX:%s y:%s opts:%s
+    ///
+    /// @doc_details
+    procedure DrawAnimation(ani: Animation; bmp: Bitmap; x, y: Single; const opts : DrawingOptions); overload;
     
     /// Uses the animation information to draw a bitmap at the specified
     /// point.
@@ -299,62 +292,22 @@ interface
     /// @class Animation
     /// @overload DrawBitmap DrawBitmapAtPt
     /// @csn drawBitmap:%s pt:%s
+    ///
+    /// @doc_details
     procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-    
+
     /// Uses the animation information to draw a bitmap at the specified
-    /// x,y location on a destination bitmap.
+    /// point given the passed in options.
     ///
-    /// @lib DrawAnimationOntoDest
-    /// @sn drawOnto:%s animation:%s bitmap:%s x:%s y:%s
-    ///
-    /// @class Animation
-    /// @overload DrawBitmap DrawBitmapOnto
-    /// @self 2
-    /// @csn drawOnto:%s bitmap:%s x:%s y:%s
-    ///
-    /// @doc_details
-    procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x,y: Longint); overload;
-    
-    /// Uses the animation information to draw a bitmap at the specified
-    /// point on a destination bitmap.
-    ///
-    /// @lib DrawAnimationOntoDestAtPt
-    /// @sn drawOnto:%s animation:%s bitmap:%s pt:%s
+    /// @lib DrawAnimationAtPointWithOptions
+    /// @sn drawAnimation:%s bitmap:%s pt:%s opts:%s
     ///
     /// @class Animation
-    /// @overload DrawBitmap DrawBitmapAtPtOnto
-    /// @self 2
-    /// @csn drawOnto:%s using:%s pt:%s
+    /// @overload DrawBitmap DrawBitmapPtWithOptions
+    /// @csn drawBitmap:%s at:%s opts:%s
     ///
     /// @doc_details
-    procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-    
-    /// Uses the animation information to draw a bitmap to the screen at the specified
-    /// x,y location.
-    ///
-    /// @lib DrawAnimationOnScreen
-    /// @sn drawAnimation:%s bitmap:%s onScreenAtX:%s y:%s
-    ///
-    /// @class Animation
-    /// @method DrawBitmapOnScreen
-    /// @csn drawBitmap:%s onScreenAtX:%s y:%s
-    ///
-    /// @doc_details
-    procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x,y: Longint); overload;
-    
-    /// Uses the animation information to draw a bitmap to the screen at the specified
-    /// point.
-    ///
-    /// @lib DrawAnimationOnScreenAtPt
-    /// @sn drawAnimation:%s bitmap:%s onScreenAtPt:%s
-    ///
-    /// @class Animation
-    /// @overload DrawBitmapOnScreen DrawBitmapAtPtOnScreen
-    /// @csn drawBitmap:%s onScreenAtPt:%s
-    ///
-    /// @doc_details
-    procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-    
+    procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts : DrawingOptions); overload;    
     
     
 //----------------------------------------------------------------------------
@@ -1354,82 +1307,36 @@ begin
 end;
 
 
-procedure DrawAnimation(ani: Animation; bmp: Bitmap; x, y: Longint); overload;
+procedure DrawAnimation(ani: Animation; bmp: Bitmap; x, y: Single; const opts: DrawingOptions); overload;
 begin
     {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimation', ''); try
+        TraceEnter('sgAnimations', 'DrawAnimation', AnimationName(ani)); 
+        try
     {$ENDIF}
     
-    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionDefaults());
+    DrawCell(bmp, AnimationCurrentCell(ani), x, y, opts);
     
     {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
+        finally 
+            TraceExit('sgAnimations', 'DrawAnimation', AnimationName(ani)); 
+        end;
     {$ENDIF}
 end;
+
+procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts: DrawingOptions); overload;
+begin
+    DrawAnimation(ani, bmp, pt.x, pt.y, OptionDefaults());
+end;
+
+procedure DrawAnimation(ani: Animation; bmp: Bitmap; x, y: Single); overload;
+begin
+    DrawAnimation(ani, bmp, x, y, OptionDefaults());
+end;
+
 
 procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
 begin
-    {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimation', ''); try
-    {$ENDIF}
-
-    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionDefaults());
-
-    {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
-    {$ENDIF}
-end;
-
-procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x,y: Longint); overload;
-begin
-    {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimation', ''); try
-    {$ENDIF}
-
-    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionDrawTo(dest));
-
-    {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
-    {$ENDIF}
-end;
-
-procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-begin
-    {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimation', ''); try
-    {$ENDIF}
-
-    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionDrawTo(dest));
-
-    {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
-    {$ENDIF}
-end;
-
-procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x,y: Longint); overload;
-begin
-    {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimationOnScreen', ''); try
-    {$ENDIF}
-    
-    DrawCell(bmp, AnimationCurrentCell(ani), x, y, OptionToScreen());
-    
-    {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
-    {$ENDIF}
-end;
-
-procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
-begin
-    {$IFDEF TRACE}
-        TraceEnter('sgAnimations', 'DrawAnimationOnScreen', ''); try
-    {$ENDIF}
-    
-    DrawCell(bmp, AnimationCurrentCell(ani), pt, OptionToScreen());
-    
-    {$IFDEF TRACE}
-        finally TraceExit('sgAnimations', 'DrawAnimation', ''); end;
-    {$ENDIF}
+    DrawAnimation(ani, bmp, pt.x, pt.y, OptionDefaults());
 end;
 
 
