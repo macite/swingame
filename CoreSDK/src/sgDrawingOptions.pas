@@ -15,52 +15,149 @@
 // - Drawing part of a bitmap
 // - Drawing to the World or Screen
 //
+
+/// DrawingOptions allows you to provide various options (such as scaling, 
+/// rotation, and drawing on to a bitmap) for SwinGame's drawing operations.
+///
+/// The one DrawingOption value can contain a number of different options.
+///
+/// @module DrawingOptionsConfiguration
+/// @static
+///
+/// @doc_types DrawingOptions
 unit sgDrawingOptions;
 
 interface
 uses sgTypes;
 
+/// Returns a DrawingOptions with default values. 
+///
+/// @lib
 function OptionDefaults(): DrawingOptions;
 
+/// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+///
+/// @lib
 function OptionDrawTo(dest: Bitmap): DrawingOptions;
 
+/// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionDrawToOpts
+/// @sn optionDrawTo:%s withOptions:%s
 function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions;
 
+/// Use this option to scale the drawing of bitmaps. You can scale x and y separately.
+///
+/// @lib
 function OptionScaleBmp(scaleX, scaleY: Single): DrawingOptions;
 
+/// Use this option to scale the drawing of bitmaps. You can scale x and y separately.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionScaleBmpOpts
 function OptionScaleBmp(scaleX, scaleY: Single; const opts: DrawingOptions): DrawingOptions;
 
-function OptionRotateBmp(angle, anchorX, anchorY : Single) : DrawingOptions;
+/// Use this option to rotate the drawing of a bitmap. This allows you to set the
+/// anchor point and rotate around that by a number of degrees.
+///
+/// @lib
+function OptionRotateBmp(angle, anchorX, anchorY: Single): DrawingOptions;
 
-function OptionRotateBmp(angle, anchorX, anchorY : Single; const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to rotate the drawing of a bitmap. This allows you to set the
+/// anchor point and rotate around that by a number of degrees.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionRotateBmpOpts
+function OptionRotateBmp(angle, anchorX, anchorY: Single; const opts: DrawingOptions): DrawingOptions;
 
-function OptionRotateBmp(angle : Single; const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to rotate a bitmap around its centre point.
+///
+/// @lib OptionRotateBmpAngleOpts
+function OptionRotateBmp(angle: Single; const opts: DrawingOptions): DrawingOptions;
 
-function OptionRotateBmp(angle : Single) : DrawingOptions;
+/// Use this option to rotate a bitmap around its centre point.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionRotateBmpAngle
+function OptionRotateBmp(angle: Single): DrawingOptions;
 
-function OptionFlipX() : DrawingOptions;
+/// Use this option to flip an image along its X axis.
+///
+/// @lib
+function OptionFlipX(): DrawingOptions;
 
-function OptionFlipX(const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to flip an image along its X axis.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionFlipXOpts
+function OptionFlipX(const opts: DrawingOptions): DrawingOptions;
 
-function OptionFlipY() : DrawingOptions;
+/// Use this option to flip the drawing of an image along its Y axis.
+///
+/// @lib
+function OptionFlipY(): DrawingOptions;
 
-function OptionFlipY(const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to flip the drawing of an image along its Y axis.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionFlipYOpts
+function OptionFlipY(const opts: DrawingOptions): DrawingOptions;
 
-function OptionFlipXY() : DrawingOptions;
+/// Use this option to flow the drawing of an image along both X and Y axis.
+///
+/// @lib
+function OptionFlipXY(): DrawingOptions;
 
-function OptionFlipXY(const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to flow the drawing of an image along both X and Y axis.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionFlipXYOpts
+function OptionFlipXY(const opts: DrawingOptions): DrawingOptions;
 
-function OptionPartBmp(x, y, w, h : Single) : DrawingOptions;
+/// Use this option to draw only a part of a bitmap.
+///
+/// @lib
+function OptionPartBmp(x, y, w, h: Single): DrawingOptions;
 
-function OptionPartBmp(x, y, w, h : Single; const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to draw only a part of a bitmap.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionPartBmpOpts
+function OptionPartBmp(x, y, w, h: Single; const opts: DrawingOptions): DrawingOptions;
 
-function OptionToWorld() : DrawingOptions;
+/// Use this option to draw only part of a bitmap.
+///
+/// @lib OptionPartBmpRect
+function OptionPartBmp(const part: Rectangle): DrawingOptions;
 
-function OptionToWorld(const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to draw only part of a bitmap.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionPartBmpRectOpts
+function OptionPartBmp(const part: Rectangle; const opts: DrawingOptions): DrawingOptions;
 
-function OptionToScreen() : DrawingOptions;
+/// Use this option to draw in World coordinates -- these are affected by the movement of the camera.
+///
+/// @lib
+function OptionToWorld(): DrawingOptions;
 
-function OptionToScreen(const opts : DrawingOptions) : DrawingOptions;
+/// Use this option to draw in World coordinates -- these are affected by the movement of the camera.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionToWorldOpts
+function OptionToWorld(const opts: DrawingOptions): DrawingOptions;
+
+/// Use this option to draw to the screen, ignoring the positon of the camera.
+///
+/// @lib
+function OptionToScreen(): DrawingOptions;
+
+/// Use this option to draw to the screen, ignoring the positon of the camera.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionToScreenOpts
+function OptionToScreen(const opts: DrawingOptions): DrawingOptions;
 
 implementation
 uses sgShared;
@@ -69,16 +166,16 @@ function OptionDefaults(): DrawingOptions;
 begin
 	with result do
 	begin
-		dest := screen;
-		scaleX := 1;
-		scaleY := 1;
-		angle := 0;
-		anchoroffsetX := 0;
-		anchoroffsetY := 0;
-		flipX := false;
-		flipY := false;
-		isPart := false;
-		ToWorld := false;
+		dest 			:= screen;
+		scaleX 			:= 1;
+		scaleY 			:= 1;
+		angle  			:= 0;
+		anchorOffsetX 	:= 0;
+		anchorOffsetY 	:= 0;
+		flipX 			:= false;
+		flipY 			:= false;
+		isPart 			:= false;
+		ToWorld 		:= false;
 	end;
 end;
 
@@ -171,11 +268,24 @@ function OptionPartBmp(x, y, w, h : Single; const opts : DrawingOptions) : Drawi
 begin
 	result := opts;
 	result.isPart := true;
-	result.x := x;
-	result.y := y;
-	result.w := w;
-	result.h := h;
+	result.part.x := x;
+	result.part.y := y;
+	result.part.width := w;
+	result.part.height := h;
 end;
+
+function OptionPartBmp(const part: Rectangle): DrawingOptions;
+begin
+	result := OptionPartBmp(part, OptionDefaults());
+end;
+
+function OptionPartBmp(const part: Rectangle; const opts : DrawingOptions) : DrawingOptions;
+begin
+	result := opts;
+	result.isPart := true;
+	result.part := part;
+end;
+
 
 function OptionToWorld() : DrawingOptions;
 begin

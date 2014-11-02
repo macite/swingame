@@ -63,8 +63,6 @@ implementation
 	function DoLoadBitmapProcedure (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	var
 		surface: ^sg_drawing_surface;
-		pixels: array of Longword;
-		sz: Longint;
 	begin
 		result := nil;
 
@@ -102,10 +100,10 @@ implementation
 			end
 		else
 			begin
-				srcData[0] := opts.x;
-				srcData[1] := opts.y;
-				srcData[2] := opts.w;
-				srcData[3] := opts.h;
+				srcData[0] := opts.part.x;
+				srcData[1] := opts.part.y;
+				srcData[2] := opts.part.width;
+				srcData[3] := opts.part.height;
 			end;
 
 		//

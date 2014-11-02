@@ -21,7 +21,7 @@ interface
 	uses sgTypes;
 	
 	type
-	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Longint) : Color;
+	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Single) : Color;
     FillTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);  
     DrawTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);      
     FillCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -31,7 +31,7 @@ interface
 		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
     DrawRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
 		DrawLineProcedure                     = procedure (clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
-		SetPixelColorProcedure                = procedure (dest : Bitmap; x, y : Integer; clr : Color);
+		SetPixelColorProcedure                = procedure (dest : Bitmap; x, y : Single; clr : Color);
     SetClipRectangleProcedure             = procedure (dest : Bitmap; rect : Rectangle);      
     ResetClipProcedure                    = procedure (bmp: Bitmap);  
     SetVideoModeFullScreenProcedure       = procedure ();
@@ -119,7 +119,7 @@ uses
     {$ENDIF}
 	end;
 	
-	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
+	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
 	begin
 		LoadDefaultGraphicsDriver();
 		result := GraphicsDriver.GetPixel32(bmp, x, y);
@@ -173,7 +173,7 @@ uses
 		GraphicsDriver.DrawLine(clr, x1, y1, x2, y2, opts);
 	end;
 	
-	procedure DefaultSetPixelColorProcedure(dest : Bitmap; x, y : Integer; clr : Color);
+	procedure DefaultSetPixelColorProcedure(dest : Bitmap; x, y : Single; clr : Color);
 	begin
 		LoadDefaultGraphicsDriver();
 		GraphicsDriver.SetPixelColor(dest, x, y, clr);

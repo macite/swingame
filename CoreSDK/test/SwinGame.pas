@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-02 15:15:05.698885
+// SwinGame.pas was generated on 2014-11-02 19:11:39.679645
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -7,7 +7,7 @@
 unit SwinGame;
 
 interface
-uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino;
+uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
 
   type LongintArray = sgTypes.LongintArray;
 
@@ -76,8 +76,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type DrawingOptions = sgTypes.DrawingOptions;
 
   type BitmapArray = sgTypes.BitmapArray;
-
-  type BitmapCell = sgTypes.BitmapCell;
 
   type CollisionSide = sgTypes.CollisionSide;
 
@@ -607,7 +605,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // offset from the center of the sprite if needed. The sprites size (width
   // and height) are taken into account. Use x and y offset of 0.0 if you want 
   // the camera to be exaclty over the center of the sprite.
-  procedure CenterCameraOn(s: Sprite; offsetX: Longint; offsetY: Longint); overload;
+  procedure CenterCameraOn(s: Sprite; offsetX: Single; offsetY: Single); overload;
 
   // Move the camera (offset its world x and y values) using the specified 
   // vector. For example, if you move the camera by the same speed vector of 
@@ -654,19 +652,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Translate a world x value to the current screen x value which is based on
   // the camera position.
-  function ToScreenX(worldX: Single): Longint; overload;
+  function ToScreenX(worldX: Single): Single; overload;
 
   // Translate a world y value to the current screen y value set by the camera.
-  function ToScreenY(worldY: Single): Longint; overload;
+  function ToScreenY(worldY: Single): Single; overload;
 
   // Translate a Point2D from screen coordinates to world coordinates.
   function ToWorld(const screenPoint: Point2D): Point2D; overload;
 
   // Translate a screen x value (based on the camera) to a world x value
-  function ToWorldX(screenX: Longint): Single; overload;
+  function ToWorldX(screenX: Single): Single; overload;
 
   // Translate a screen y value (based on the camera) to a world y value
-  function ToWorldY(screenY: Longint): Single; overload;
+  function ToWorldY(screenY: Single): Single; overload;
 
   // Adds the two parameter vectors (``v1`` and ``v2``) together and returns 
   // the result as a new `Vector`.
@@ -695,13 +693,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CenterPoint(const c: Circle): Point2D; overload;
 
   // Creates a circle at the given x,y location with the indicated radius.
-  function CircleAt(x: Single; y: Single; radius: Longint): Circle; overload;
+  function CircleAt(x: Single; y: Single; radius: Single): Circle; overload;
 
   // Creates a Circle at the point pt with the given radius.
-  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
 
   // Returns the radius of the passed in circle.
-  function CircleRadius(const c: Circle): Longint; overload;
+  function CircleRadius(const c: Circle): Single; overload;
 
   // Returns true if the circle is completely within the rectangle.
   function CircleWithinRect(const c: Circle; const rect: Rectangle): Boolean; overload;
@@ -734,10 +732,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function Cosine(angle: Single): Single; overload;
 
   // Creates a circle at the given x,y location with the indicated radius.
-  function CreateCircle(x: Single; y: Single; radius: Longint): Circle; overload;
+  function CreateCircle(x: Single; y: Single; radius: Single): Circle; overload;
 
   // Creates a Circle at the point pt with the given radius.
-  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
 
   // Returns a line segment from x1,y1 to x2,y2.
   function CreateLine(x1: Single; y1: Single; x2: Single; y2: Single): LineSegment; overload;
@@ -763,7 +761,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns a rectangle from a given x,y location with a given width
   // and height.
-  function CreateRectangle(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
+  function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
 
   // Returns a rectangle that encloses the lines in the lines array.
   function CreateRectangle(const lines: LinesArray): Rectangle; overload;
@@ -781,7 +779,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CreateRectangle(const pt1: Point2D; const pt2: Point2D): Rectangle; overload;
 
   // Returns a rectangle at a given point with a specified width and height.
-  function CreateRectangle(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
 
   // Returns a triangle from the points passed in.
   function CreateTriangle(ax: Single; ay: Single; bx: Single; by: Single; cx: Single; cy: Single): Triangle; overload;
@@ -800,7 +798,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CreateVectorFromPointToRect(x: Single; y: Single; const rect: Rectangle): Vector; overload;
 
   // Returns a vector from the specified point to the specified rectangle.
-  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
+  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
 
   // Returns a `Vector` created from the difference from the ``p1`` to 
   // the second ``p2`` points (`Point2D`).
@@ -830,14 +828,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure FixRectangle(var rect: Rectangle); overload;
 
   // Ensures that the passed in rectangle has a positive width and height.
-  procedure FixRectangle(var x: Single; var y: Single; var width: Longint; var height: Longint); overload;
+  procedure FixRectangle(var x: Single; var y: Single; var width: Single; var height: Single); overload;
 
   // Returns the identity matrix. When a Matrix2D or Vector is multiplied by
   // the identity matrix the result is the original matrix or vector.
   function IdentityMatrix(): Matrix2D; overload;
 
   // Returns a rectangle that is inset from rect the amount specified.
-  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle; overload;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle; overload;
 
   // Returns the intersection of two rectangles.
   function Intersection(const rect1: Rectangle; const rect2: Rectangle): Rectangle; overload;
@@ -1031,7 +1029,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns a rectangle from a given x,y location with a given width
   // and height.
-  function RectangleFrom(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
+  function RectangleFrom(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
 
   // Returns a rectangle that encloses th epoints in a triangle.
   function RectangleFrom(const tri: Triangle): Rectangle; overload;
@@ -1049,7 +1047,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function RectangleFrom(const pt1: Point2D; const pt2: Point2D): Rectangle; overload;
 
   // Returns a rectangle at a given point with a specified width and height.
-  function RectangleFrom(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
 
   // Returns the left (x) value of a rectangle.
   function RectangleLeft(const rect: Rectangle): Single; overload;
@@ -1146,7 +1144,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function VectorFromPointToRect(x: Single; y: Single; const rect: Rectangle): Vector; overload;
 
   // Returns a vector from the specified point to the specified rectangle.
-  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
+  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
 
   // Returns a `Vector` created from the difference from the ``p1`` to 
   // the second ``p2`` points (`Point2D`).
@@ -1282,6 +1280,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
 
   // Draw a line in the game.
+  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D); overload;
+
+  // Draw a line in the game.
   procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
 
   // Draw a line in the game.
@@ -1289,6 +1290,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Draw a line onto a destination bitmap.
   procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
+
+  // Draw a line onto a destination bitmap.
+  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D; const opts: DrawingOptions); overload;
 
   // Draw a line onto a destination bitmap.
   procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
@@ -1303,13 +1307,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
 
   // Draw a pixel onto a destination.
-  procedure DrawPixel(dest: Bitmap; clr: Color; x: Longint; y: Longint); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; x: Single; y: Single); overload;
 
   // Draw a pixel on the screen.
   procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
 
   // Draw a pixel on the screen.
-  procedure DrawPixelOnScreen(clr: Color; x: Longint; y: Longint); overload;
+  procedure DrawPixelOnScreen(clr: Color; x: Single; y: Single); overload;
 
   // Draw a rectangle in the game.
   procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -1385,10 +1389,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the color of the pixel at the x,y location on
   // the supplied bitmap.
-  function GetPixel(bmp: Bitmap; x: Longint; y: Longint): Color; overload;
+  function GetPixel(bmp: Bitmap; x: Single; y: Single): Color; overload;
 
   // Returns the color of the pixel at the given x,y location.
-  function GetPixelFromScreen(x: Longint; y: Longint): Color; overload;
+  function GetPixelFromScreen(x: Single; y: Single): Color; overload;
 
   // Get the green value of ``color``.
   function GreenOf(c: Color): Byte; overload;
@@ -1433,7 +1437,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
 
   // Sets the color of the pixel to the specified value.
-  procedure PutPixel(bmp: Bitmap; value: Color; x: Longint; y: Longint); overload;
+  procedure PutPixel(bmp: Bitmap; value: Color; x: Single; y: Single); overload;
 
   // Gets a color given its RGBA components.
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -1530,7 +1534,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a circle from within a cell in a bitmap, uses the larger of the width and
   // height.
-  function BitmapCellCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
+  function BitmapCellCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
 
   // Returns the number of columns of cells in the specified bitmap.
   function BitmapCellColumns(bmp: Bitmap): Longint; overload;
@@ -1541,14 +1545,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the height of a cell within the bitmap.
   function BitmapCellHeight(bmp: Bitmap): Longint; overload;
 
-  // Returns a bitmap cell for the cell of the indicated bitmap.
-  function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell; overload;
-
   // Returns a bounding rectangle for a cell of the bitmap at the origin.
   function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
-
-  // Returns a rectangle for a cell of the bitmap at the indicated point.
-  function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
 
   // Returns a rectangle for a cell of the bitmap at the indicated point.
   function BitmapCellRectangle(x: Single; y: Single; bmp: Bitmap): Rectangle; overload;
@@ -1565,13 +1563,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a circle from within a bitmap, uses the larger of the width and
   // height.
-  function BitmapCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
+  function BitmapCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
 
   // Returns the Filename of the bitmap
   function BitmapFilename(bmp: Bitmap): String; overload;
-
-  // Returns the height of the bitmap cell.
-  function BitmapHeight(const bmp: BitmapCell): Longint; overload;
 
   // Returns the height of the entire bitmap.
   function BitmapHeight(bmp: Bitmap): Longint; overload;
@@ -1602,9 +1597,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the width of the entire bitmap.
   function BitmapWidth(bmp: Bitmap): Longint; overload;
-
-  // Returns the width of the bitmap cell.
-  function BitmapWidth(const bmp: BitmapCell): Longint; overload;
 
   // Are the two bitmaps of a similar format that they could be used in
   // place of each other. This returns true if they have the same cell
@@ -1642,44 +1634,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draw the named bitmap onto the game.
   procedure DrawBitmap(name: String; x: Single; y: Single); overload;
 
-  // Draw the passed in bitmap onto the game.
-  procedure DrawBitmap(name: String; const position: Point2D); overload;
-
-  // Draw the passed in bitmap onto the game.
-  procedure DrawBitmap(src: Bitmap; const position: Point2D); overload;
-
-  // Draws the source bitmap onto the destination
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
+  // Draw the bitmap using the passed in options
+  procedure DrawBitmap(name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw the bitmap using the passed in options
-  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: DrawingOptions); overload;
-
-  // Draws the source bitmap onto the destination.
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
-
-  // Draw the bitmap using the passed in options
-  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: DrawingOptions); overload;
-
-  // Draw the cell of the passed in bitmap onto the game.
-  procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
-
-  // Draw the cell of the passed in bitmap onto the game.
-  procedure DrawBitmapCell(const src: BitmapCell; x: Single; y: Single); overload;
-
-  // Draws the cell of the source bitmap onto the destination
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position: Point2D); overload;
-
-  // Draws the cell of the source bitmap onto the destination.
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x: Longint; y: Longint); overload;
-
-  // Draw the cell of the bitmap onto the screen.
-  procedure DrawBitmapCellOnScreen(const src: BitmapCell; const position: Point2D); overload;
-
-  // Draw the cell of the bitmap onto the screen.
-  procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
+  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw a cell from a bitmap onto the game.
-  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
 
   // Draw a cell from a bitmap onto the game.
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
@@ -1736,7 +1698,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure OptimiseBitmap(surface: Bitmap); overload;
 
   // Checks if a pixel is drawn at the specified x,y location.
-  function PixelDrawnAtPoint(bmp: Bitmap; x: Longint; y: Longint): Boolean; overload;
+  function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
 
   // Releases all of the bitmaps that have been loaded.
   procedure ReleaseAllBitmaps(); overload;
@@ -1744,13 +1706,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Releases the SwinGame resources associated with the bitmap of the
   // specified ``name``.
   procedure ReleaseBitmap(name: String); overload;
-
-  // Rotate and Scale the passed in bitmap.
-  function RotateScaleBitmap(src: Bitmap; degRot: Single; scale: Single): Bitmap; overload;
-
-  // Returns true of the two bitmap cells refer to the same cell
-  // in the one bitmap.
-  function SameBitmapCell(const bmp1: BitmapCell; const bmp2: BitmapCell): Boolean; overload;
 
   // Save Bitmap to specific directory.
   procedure SaveBitmap(src: Bitmap; filepath: String); overload;
@@ -2103,7 +2058,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns True if two bitmaps have collided using per pixel testing if required.
   // The ``x`` and ``y`` parameters specify the world location of the bitmaps (``bmp1`` and ``bmp2``).
-  function BitmapCollision(bmp1: Bitmap; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
+  function BitmapCollision(bmp1: Bitmap; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
 
   // Returns True if the specified parts (``part1`` and ``part2`` rectangles) of the two 
   // bitmaps (``bmp1`` and ``bmpt2``) have collided, using pixel level collision if required. 
@@ -2115,47 +2070,47 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // use the rectangle collision functions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The point ``pt`` needs to be provided in world coordinates.
-  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const pt: Point2D): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const pt: Point2D): Boolean; overload;
 
   // Returns True if a point (``ptX``,``ptY``) is located within the ``part`` (rectangle) of the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions. For bounding box collisions
   // use the rectangle collision functions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The ``ptX`` and ``ptY`` needs to be provided in world coordinates.
-  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
 
   // Returns True if a point (``pt``) is located within the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The point ``pt`` needs to be provided in world coordinates.
-  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; const pt: Point2D): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; const pt: Point2D): Boolean; overload;
 
   // Returns True if a point (``ptX``,``ptY``) is located within the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The ``ptX`` and ``ptY`` needs to be provided in world coordinates.
-  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; ptX: Single; ptY: Single): Boolean; overload;
-
-  // Returns True if the indicated part of the bitmap has collided with the specified
-  // rectangle.
-  function BitmapRectCollision(bmp: Bitmap; const pt: Point2D; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; ptX: Single; ptY: Single): Boolean; overload;
 
   // Returns True if the bitmap ``bmp`` has collided with the rectangle
   // specified using pixel level testing if required.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The rectangle ``rect`` needs to be provided in world coordinates.
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
 
   // Returns True if the indicated part of the bitmap has collided with the specified
   // rectangle.
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; const pt: Point2D; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+
+  // Returns True if the indicated part of the bitmap has collided with the specified
+  // rectangle.
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const rect: Rectangle): Boolean; overload;
 
   // Returns True if the bitmap ``bmp`` has collided with the rectangle
   // specified using pixel level testing if required.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The rectangles world position (``rectX`` and ``rectY``) and size
   // (``rectWidth`` and ``rectHeight``) need to be provided.
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; rectX: Longint; rectY: Longint; rectWidth: Longint; rectHeight: Longint): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a bitmap.
   function CellBitmapCollision(bmp1: Bitmap; cell: Longint; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D): Boolean; overload;
@@ -2164,22 +2119,22 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CellBitmapCollision(bmp1: Bitmap; cell: Longint; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D; const part: Rectangle): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a bitmap.
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a part of a bitmap.
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint; const part: Rectangle): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single; const part: Rectangle): Boolean; overload;
 
   // Returns true if the cells within the two bitmaps have collided at the given points.
   function CellCollision(bmp1: Bitmap; cell1: Longint; const pt1: Point2D; bmp2: Bitmap; cell2: Longint; const pt2: Point2D): Boolean; overload;
 
   // Returns true if the cells within the two bitmaps have collided at their specified x,y locations.
-  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; cell2: Longint; x2: Longint; y2: Longint): Boolean; overload;
+  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Single; y1: Single; bmp2: Bitmap; cell2: Longint; x2: Single; y2: Single): Boolean; overload;
 
   // Returns true if the cell of the bitmap has collided with a given rectangle.
   function CellRectCollision(bmp: Bitmap; cell: Longint; const pt: Point2D; const rect: Rectangle): Boolean; overload;
 
   // Returns true if the cell of the bitmap has collided with a given rectangle.
-  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
+  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
 
   // Returns True if the circles have collided.
   function CircleCircleCollision(const c1: Circle; const c2: Circle): Boolean; overload;
@@ -2248,7 +2203,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Determined if a sprite has collided with a given rectangle. The rectangles
   // coordinates are expressed in "world" coordinates.
-  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Longint; height: Longint): Boolean; overload;
+  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Single; height: Single): Boolean; overload;
 
   // Returns true if the triangle and the line have collided.
   function TriangleLineCollision(const tri: Triangle; const ln: LineSegment): Boolean; overload;
@@ -2932,16 +2887,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function VectorFromTo(s1: Sprite; s2: Sprite): Vector; overload;
 
   // Draws the framerate to the screen using a simple font built into SwinGame.
-  procedure DrawFramerate(x: Longint; y: Longint); overload;
+  procedure DrawFramerate(x: Single; y: Single); overload;
 
   // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Longint; y: Longint; font: Font); overload;
+  procedure DrawFramerate(x: Single; y: Single; font: Font); overload;
 
   // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Longint; y: Longint; name: String); overload;
+  procedure DrawFramerate(x: Single; y: Single; name: String); overload;
 
   // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Longint; y: Longint; name: String; size: Longint); overload;
+  procedure DrawFramerate(x: Single; y: Single; name: String; size: Longint); overload;
 
   // Draws text using a simple bitmap font that is built into SwinGame.
   procedure DrawText(theText: String; textColor: Color; const pt: Point2D); overload;
@@ -3016,7 +2971,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
 
   // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
@@ -3024,7 +2979,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
 
   // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
@@ -3032,31 +2987,31 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
-
-  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
-
-  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws theText onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
   //
@@ -3098,13 +3053,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3112,7 +3067,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3144,7 +3099,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3152,7 +3107,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws text using a simple bitmap font that is built into SwinGame.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3181,7 +3136,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
 
   // Draws the text onto the screen at the specified x,y location using the color and font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3189,7 +3144,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
 
   // Draws theText onto the screen at the specified point using the color and font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3205,7 +3160,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version only draws a single line of text, to draw text that contains line breaks use the
   // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
 
   // Draws the text onto the bitmap at the specified point using the color and font indicated.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
@@ -3588,10 +3543,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Adds an item to the list by bitmap
   procedure ListAddItem(id: String; img: Bitmap); overload;
 
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
-
   // Adds an item to the list by text
   procedure ListAddItem(lst: GUIList; text: String); overload;
 
@@ -3601,30 +3552,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Adds an item to the list by bitmap
   procedure ListAddItem(r: Region; img: Bitmap); overload;
 
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(r: Region; const img: BitmapCell); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(id: String; const img: BitmapCell); overload;
-
   // Adds an item to the list by text
   procedure ListAddItem(r: Region; text: String); overload;
 
   // Adds an item to the list by bitmap
   procedure ListAddItem(pnl: Panel; id: String; img: Bitmap); overload;
 
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap and some text.
-  procedure ListAddItem(r: Region; const img: BitmapCell; text: String); overload;
-
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(lst: GUIList; img: Bitmap; text: String); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell); overload;
 
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(id: String; img: Bitmap; text: String); overload;
@@ -3633,28 +3568,48 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ListAddItem(r: Region; img: Bitmap; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
-  // bitmap and some text.
-  procedure ListAddItem(lst: GUIList; const img: BitmapCell; text: String); overload;
+  // bitmap.
+  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(id: String; const img: Bitmap; cell: Longint); overload;
 
   // Adds an item to the list by text
   procedure ListAddItem(pnl: Panel; id: String; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(id: String; const img: BitmapCell; text: String); overload;
+  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; text: String); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(pnl: Panel; id: String; const img: Bitmap; cell: Longint); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell; text: String); overload;
+  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; text: String); overload;
 
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(pnl: Panel; id: String; img: Bitmap; text: String); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap and some text.
+  procedure ListAddItem(id: String; const img: Bitmap; cell: Longint; text: String); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap and some text.
+  procedure ListAddItem(pnl: Panel; id: String; const img: Bitmap; cell: Longint; text: String); overload;
 
   // Returns the index of the item with the bitmap, img
   function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 
   // Returns the index of the item with the bitmap and cell.
-  function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
 
   // Removes all items from the list.
   procedure ListClearItems(id: String); overload;
@@ -4076,6 +4031,88 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Release the ArduinoDevice with the indicated name.
   procedure ReleaseArduinoDevice(name: String); overload;
+
+  // Returns a DrawingOptions with default values.
+  function OptionDefaults(): DrawingOptions; overload;
+
+  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+  function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
+
+  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+  // Pass opts the other options you want use.
+  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to flip an image along its X axis.
+  function OptionFlipX(): DrawingOptions; overload;
+
+  // Use this option to flip an image along its X axis.
+  // Pass opts the other options you want use.
+  function OptionFlipX(const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to flow the drawing of an image along both X and Y axis.
+  function OptionFlipXY(): DrawingOptions; overload;
+
+  // Use this option to flow the drawing of an image along both X and Y axis.
+  // Pass opts the other options you want use.
+  function OptionFlipXY(const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to flip the drawing of an image along its Y axis.
+  function OptionFlipY(): DrawingOptions; overload;
+
+  // Use this option to flip the drawing of an image along its Y axis.
+  // Pass opts the other options you want use.
+  function OptionFlipY(const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to draw only part of a bitmap.
+  function OptionPartBmp(const part: Rectangle): DrawingOptions; overload;
+
+  // Use this option to draw only part of a bitmap.
+  // Pass opts the other options you want use.
+  function OptionPartBmp(const part: Rectangle; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to draw only a part of a bitmap.
+  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single): DrawingOptions; overload;
+
+  // Use this option to draw only a part of a bitmap.
+  // Pass opts the other options you want use.
+  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to rotate a bitmap around its centre point.
+  // Pass opts the other options you want use.
+  function OptionRotateBmp(angle: Single): DrawingOptions; overload;
+
+  // Use this option to rotate a bitmap around its centre point.
+  function OptionRotateBmp(angle: Single; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to rotate the drawing of a bitmap. This allows you to set the
+  // anchor point and rotate around that by a number of degrees.
+  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single): DrawingOptions; overload;
+
+  // Use this option to rotate the drawing of a bitmap. This allows you to set the
+  // anchor point and rotate around that by a number of degrees.
+  // Pass opts the other options you want use.
+  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to scale the drawing of bitmaps. You can scale x and y separately.
+  function OptionScaleBmp(scaleX: Single; scaleY: Single): DrawingOptions; overload;
+
+  // Use this option to scale the drawing of bitmaps. You can scale x and y separately.
+  // Pass opts the other options you want use.
+  function OptionScaleBmp(scaleX: Single; scaleY: Single; const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to draw to the screen, ignoring the positon of the camera.
+  function OptionToScreen(): DrawingOptions; overload;
+
+  // Use this option to draw to the screen, ignoring the positon of the camera.
+  // Pass opts the other options you want use.
+  function OptionToScreen(const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Use this option to draw in World coordinates -- these are affected by the movement of the camera.
+  function OptionToWorld(): DrawingOptions; overload;
+
+  // Use this option to draw in World coordinates -- these are affected by the movement of the camera.
+  // Pass opts the other options you want use.
+  function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
 
 Procedure LoadDefaultColors();
 
@@ -4551,7 +4588,7 @@ implementation
     sgCamera.CenterCameraOn(s,offset);
   end;
 
-  procedure CenterCameraOn(s: Sprite; offsetX: Longint; offsetY: Longint); overload;
+  procedure CenterCameraOn(s: Sprite; offsetX: Single; offsetY: Single); overload;
   begin
     sgCamera.CenterCameraOn(s,offsetX,offsetY);
   end;
@@ -4611,12 +4648,12 @@ implementation
     result := sgCamera.ToScreen(rect);
   end;
 
-  function ToScreenX(worldX: Single): Longint; overload;
+  function ToScreenX(worldX: Single): Single; overload;
   begin
     result := sgCamera.ToScreenX(worldX);
   end;
 
-  function ToScreenY(worldY: Single): Longint; overload;
+  function ToScreenY(worldY: Single): Single; overload;
   begin
     result := sgCamera.ToScreenY(worldY);
   end;
@@ -4626,12 +4663,12 @@ implementation
     result := sgCamera.ToWorld(screenPoint);
   end;
 
-  function ToWorldX(screenX: Longint): Single; overload;
+  function ToWorldX(screenX: Single): Single; overload;
   begin
     result := sgCamera.ToWorldX(screenX);
   end;
 
-  function ToWorldY(screenY: Longint): Single; overload;
+  function ToWorldY(screenY: Single): Single; overload;
   begin
     result := sgCamera.ToWorldY(screenY);
   end;
@@ -4676,17 +4713,17 @@ implementation
     result := sgGeometry.CenterPoint(c);
   end;
 
-  function CircleAt(x: Single; y: Single; radius: Longint): Circle; overload;
+  function CircleAt(x: Single; y: Single; radius: Single): Circle; overload;
   begin
     result := sgGeometry.CircleAt(x,y,radius);
   end;
 
-  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
   begin
     result := sgGeometry.CircleAt(pt,radius);
   end;
 
-  function CircleRadius(const c: Circle): Longint; overload;
+  function CircleRadius(const c: Circle): Single; overload;
   begin
     result := sgGeometry.CircleRadius(c);
   end;
@@ -4741,12 +4778,12 @@ implementation
     result := sgGeometry.Cosine(angle);
   end;
 
-  function CreateCircle(x: Single; y: Single; radius: Longint): Circle; overload;
+  function CreateCircle(x: Single; y: Single; radius: Single): Circle; overload;
   begin
     result := sgGeometry.CreateCircle(x,y,radius);
   end;
 
-  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
   begin
     result := sgGeometry.CreateCircle(pt,radius);
   end;
@@ -4781,7 +4818,7 @@ implementation
     result := sgGeometry.CreateLineFromVector(x,y,mv);
   end;
 
-  function CreateRectangle(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
+  function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
   begin
     result := sgGeometry.CreateRectangle(x,y,w,h);
   end;
@@ -4811,7 +4848,7 @@ implementation
     result := sgGeometry.CreateRectangle(pt1,pt2);
   end;
 
-  function CreateRectangle(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
   begin
     result := sgGeometry.CreateRectangle(pt,width,height);
   end;
@@ -4841,7 +4878,7 @@ implementation
     result := sgGeometry.CreateVectorFromPointToRect(x,y,rect);
   end;
 
-  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
+  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
   begin
     result := sgGeometry.CreateVectorFromPointToRect(x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -4876,7 +4913,7 @@ implementation
     sgGeometry.FixRectangle(rect);
   end;
 
-  procedure FixRectangle(var x: Single; var y: Single; var width: Longint; var height: Longint); overload;
+  procedure FixRectangle(var x: Single; var y: Single; var width: Single; var height: Single); overload;
   begin
     sgGeometry.FixRectangle(x,y,width,height);
   end;
@@ -4886,7 +4923,7 @@ implementation
     result := sgGeometry.IdentityMatrix();
   end;
 
-  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle; overload;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle; overload;
   begin
     result := sgGeometry.InsetRectangle(rect,insetAmount);
   end;
@@ -5171,7 +5208,7 @@ implementation
     result := sgGeometry.RectangleCenterTop(rect);
   end;
 
-  function RectangleFrom(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
+  function RectangleFrom(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
   begin
     result := sgGeometry.RectangleFrom(x,y,w,h);
   end;
@@ -5201,7 +5238,7 @@ implementation
     result := sgGeometry.RectangleFrom(pt1,pt2);
   end;
 
-  function RectangleFrom(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
   begin
     result := sgGeometry.RectangleFrom(pt,width,height);
   end;
@@ -5351,7 +5388,7 @@ implementation
     result := sgGeometry.VectorFromPointToRect(x,y,rect);
   end;
 
-  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
+  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
   begin
     result := sgGeometry.VectorFromPointToRect(x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -5556,6 +5593,11 @@ implementation
     sgGraphics.DrawEllipse(clr,xPos,yPos,width,height,opts);
   end;
 
+  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D); overload;
+  begin
+    sgGraphics.DrawLine(clr,fromPt,toPt);
+  end;
+
   procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
   begin
     sgGraphics.DrawLine(clr,x1,y1,x2,y2);
@@ -5569,6 +5611,11 @@ implementation
   procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
   begin
     sgGraphics.DrawLine(clr,l,opts);
+  end;
+
+  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D; const opts: DrawingOptions); overload;
+  begin
+    sgGraphics.DrawLine(clr,fromPt,toPt,opts);
   end;
 
   procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
@@ -5591,7 +5638,7 @@ implementation
     sgGraphics.DrawPixel(dest,clr,position);
   end;
 
-  procedure DrawPixel(dest: Bitmap; clr: Color; x: Longint; y: Longint); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; x: Single; y: Single); overload;
   begin
     sgGraphics.DrawPixel(dest,clr,x,y);
   end;
@@ -5601,7 +5648,7 @@ implementation
     sgGraphics.DrawPixelOnScreen(clr,position);
   end;
 
-  procedure DrawPixelOnScreen(clr: Color; x: Longint; y: Longint); overload;
+  procedure DrawPixelOnScreen(clr: Color; x: Single; y: Single); overload;
   begin
     sgGraphics.DrawPixelOnScreen(clr,x,y);
   end;
@@ -5726,12 +5773,12 @@ implementation
     sgGraphics.FillTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
   end;
 
-  function GetPixel(bmp: Bitmap; x: Longint; y: Longint): Color; overload;
+  function GetPixel(bmp: Bitmap; x: Single; y: Single): Color; overload;
   begin
     result := sgGraphics.GetPixel(bmp,x,y);
   end;
 
-  function GetPixelFromScreen(x: Longint; y: Longint): Color; overload;
+  function GetPixelFromScreen(x: Single; y: Single): Color; overload;
   begin
     result := sgGraphics.GetPixelFromScreen(x,y);
   end;
@@ -5796,7 +5843,7 @@ implementation
     sgGraphics.PushClip(x,y,w,h);
   end;
 
-  procedure PutPixel(bmp: Bitmap; value: Color; x: Longint; y: Longint); overload;
+  procedure PutPixel(bmp: Bitmap; value: Color; x: Single; y: Single); overload;
   begin
     sgGraphics.PutPixel(bmp,value,x,y);
   end;
@@ -5926,7 +5973,7 @@ implementation
     result := sgImages.BitmapCellCircle(bmp,pt);
   end;
 
-  function BitmapCellCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
+  function BitmapCellCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
   begin
     result := sgImages.BitmapCellCircle(bmp,x,y);
   end;
@@ -5946,19 +5993,9 @@ implementation
     result := sgImages.BitmapCellHeight(bmp);
   end;
 
-  function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell; overload;
-  begin
-    result := sgImages.BitmapCellOf(bmp,cell);
-  end;
-
   function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
   begin
     result := sgImages.BitmapCellRectangle(bmp);
-  end;
-
-  function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
-  begin
-    result := sgImages.BitmapCellRectangle(pt,bmp);
   end;
 
   function BitmapCellRectangle(x: Single; y: Single; bmp: Bitmap): Rectangle; overload;
@@ -5981,7 +6018,7 @@ implementation
     result := sgImages.BitmapCircle(bmp,pt);
   end;
 
-  function BitmapCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
+  function BitmapCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
   begin
     result := sgImages.BitmapCircle(bmp,x,y);
   end;
@@ -5989,11 +6026,6 @@ implementation
   function BitmapFilename(bmp: Bitmap): String; overload;
   begin
     result := sgImages.BitmapFilename(bmp);
-  end;
-
-  function BitmapHeight(const bmp: BitmapCell): Longint; overload;
-  begin
-    result := sgImages.BitmapHeight(bmp);
   end;
 
   function BitmapHeight(bmp: Bitmap): Longint; overload;
@@ -6032,11 +6064,6 @@ implementation
   end;
 
   function BitmapWidth(bmp: Bitmap): Longint; overload;
-  begin
-    result := sgImages.BitmapWidth(bmp);
-  end;
-
-  function BitmapWidth(const bmp: BitmapCell): Longint; overload;
   begin
     result := sgImages.BitmapWidth(bmp);
   end;
@@ -6081,69 +6108,19 @@ implementation
     sgImages.DrawBitmap(name,x,y);
   end;
 
-  procedure DrawBitmap(name: String; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmap(name,position);
-  end;
-
-  procedure DrawBitmap(src: Bitmap; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmap(src,position);
-  end;
-
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmap(dest,src,position);
-  end;
-
-  procedure DrawBitmap(name: String; x: Longint; y: Longint; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
     sgImages.DrawBitmap(name,x,y,opts);
   end;
 
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmap(dest,src,x,y);
-  end;
-
-  procedure DrawBitmap(src: Bitmap; x: Longint; y: Longint; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
     sgImages.DrawBitmap(src,x,y,opts);
   end;
 
-  procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
+  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
   begin
-    sgImages.DrawBitmapCell(src,position);
-  end;
-
-  procedure DrawBitmapCell(const src: BitmapCell; x: Single; y: Single); overload;
-  begin
-    sgImages.DrawBitmapCell(src,x,y);
-  end;
-
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmapCell(dest,src,position);
-  end;
-
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapCell(dest,src,x,y);
-  end;
-
-  procedure DrawBitmapCellOnScreen(const src: BitmapCell; const position: Point2D); overload;
-  begin
-    sgImages.DrawBitmapCellOnScreen(src,position);
-  end;
-
-  procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
-  begin
-    sgImages.DrawBitmapCellOnScreen(src,x,y);
-  end;
-
-  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts: DrawingOptions); overload;
-  begin
-    sgImages.DrawCell(src,cell,position,opts);
+    sgImages.DrawCell(src,cell,x,y);
   end;
 
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
@@ -6201,7 +6178,7 @@ implementation
     sgImages.OptimiseBitmap(surface);
   end;
 
-  function PixelDrawnAtPoint(bmp: Bitmap; x: Longint; y: Longint): Boolean; overload;
+  function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
   begin
     result := sgImages.PixelDrawnAtPoint(bmp,x,y);
   end;
@@ -6214,16 +6191,6 @@ implementation
   procedure ReleaseBitmap(name: String); overload;
   begin
     sgImages.ReleaseBitmap(name);
-  end;
-
-  function RotateScaleBitmap(src: Bitmap; degRot: Single; scale: Single): Bitmap; overload;
-  begin
-    result := sgImages.RotateScaleBitmap(src,degRot,scale);
-  end;
-
-  function SameBitmapCell(const bmp1: BitmapCell; const bmp2: BitmapCell): Boolean; overload;
-  begin
-    result := sgImages.SameBitmapCell(bmp1,bmp2);
   end;
 
   procedure SaveBitmap(src: Bitmap; filepath: String); overload;
@@ -6661,7 +6628,7 @@ implementation
     result := sgPhysics.BitmapCollision(bmp1,pt1,bmp2,pt2);
   end;
 
-  function BitmapCollision(bmp1: Bitmap; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
+  function BitmapCollision(bmp1: Bitmap; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapCollision(bmp1,x1,y1,bmp2,x2,y2);
   end;
@@ -6671,24 +6638,29 @@ implementation
     result := sgPhysics.BitmapCollision(bmp1,pt1,part1,bmp2,pt2,part2);
   end;
 
-  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const pt: Point2D): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const pt: Point2D): Boolean; overload;
   begin
     result := sgPhysics.BitmapPartPointCollision(bmp,x,y,part,pt);
   end;
 
-  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapPartPointCollision(bmp,x,y,part,ptX,ptY);
   end;
 
-  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; const pt: Point2D): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; const pt: Point2D): Boolean; overload;
   begin
     result := sgPhysics.BitmapPointCollision(bmp,x,y,pt);
   end;
 
-  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; ptX: Single; ptY: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapPointCollision(bmp,x,y,ptX,ptY);
+  end;
+
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
+  begin
+    result := sgPhysics.BitmapRectCollision(bmp,x,y,rect);
   end;
 
   function BitmapRectCollision(bmp: Bitmap; const pt: Point2D; const part: Rectangle; const rect: Rectangle): Boolean; overload;
@@ -6696,17 +6668,12 @@ implementation
     result := sgPhysics.BitmapRectCollision(bmp,pt,part,rect);
   end;
 
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
-  begin
-    result := sgPhysics.BitmapRectCollision(bmp,x,y,rect);
-  end;
-
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const rect: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.BitmapRectCollision(bmp,x,y,part,rect);
   end;
 
-  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; rectX: Longint; rectY: Longint; rectWidth: Longint; rectHeight: Longint): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapRectCollision(bmp,x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -6721,12 +6688,12 @@ implementation
     result := sgPhysics.CellBitmapCollision(bmp1,cell,pt1,bmp2,pt2,part);
   end;
 
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
   begin
     result := sgPhysics.CellBitmapCollision(bmp1,cell,x1,y1,bmp2,x2,y2);
   end;
 
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint; const part: Rectangle): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single; const part: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.CellBitmapCollision(bmp1,cell,x1,y1,bmp2,x2,y2,part);
   end;
@@ -6736,7 +6703,7 @@ implementation
     result := sgPhysics.CellCollision(bmp1,cell1,pt1,bmp2,cell2,pt2);
   end;
 
-  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; cell2: Longint; x2: Longint; y2: Longint): Boolean; overload;
+  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Single; y1: Single; bmp2: Bitmap; cell2: Longint; x2: Single; y2: Single): Boolean; overload;
   begin
     result := sgPhysics.CellCollision(bmp1,cell1,x1,y1,bmp2,cell2,x2,y2);
   end;
@@ -6746,7 +6713,7 @@ implementation
     result := sgPhysics.CellRectCollision(bmp,cell,pt,rect);
   end;
 
-  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
+  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.CellRectCollision(bmp,cell,x,y,rect);
   end;
@@ -6836,7 +6803,7 @@ implementation
     result := sgPhysics.SpriteRectCollision(s,r);
   end;
 
-  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Longint; height: Longint): Boolean; overload;
+  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Single; height: Single): Boolean; overload;
   begin
     result := sgPhysics.SpriteRectCollision(s,x,y,width,height);
   end;
@@ -7681,22 +7648,22 @@ implementation
     result := sgSprites.VectorFromTo(s1,s2);
   end;
 
-  procedure DrawFramerate(x: Longint; y: Longint); overload;
+  procedure DrawFramerate(x: Single; y: Single); overload;
   begin
     sgText.DrawFramerate(x,y);
   end;
 
-  procedure DrawFramerate(x: Longint; y: Longint; font: Font); overload;
+  procedure DrawFramerate(x: Single; y: Single; font: Font); overload;
   begin
     sgText.DrawFramerate(x,y,font);
   end;
 
-  procedure DrawFramerate(x: Longint; y: Longint; name: String); overload;
+  procedure DrawFramerate(x: Single; y: Single; name: String); overload;
   begin
     sgText.DrawFramerate(x,y,name);
   end;
 
-  procedure DrawFramerate(x: Longint; y: Longint; name: String; size: Longint); overload;
+  procedure DrawFramerate(x: Single; y: Single; name: String; size: Longint); overload;
   begin
     sgText.DrawFramerate(x,y,name,size);
   end;
@@ -7761,37 +7728,37 @@ implementation
     sgText.DrawText(theText,textColor,name,size,x,y);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
   begin
     sgText.DrawText(dest,theText,textColor,theFont,x,y);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
   begin
     sgText.DrawText(dest,theText,textColor,name,x,y);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
   begin
     sgText.DrawText(dest,theText,textColor,name,size,x,y);
   end;
 
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,x,y,w,h);
   end;
 
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,x,y,w,h);
   end;
 
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,x,y,w,h);
   end;
@@ -7826,17 +7793,17 @@ implementation
     sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,withinRect);
   end;
 
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(theText,textColor,backColor,theFont,align,x,y,w,h);
   end;
 
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(theText,textColor,backColor,name,align,x,y,w,h);
   end;
 
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,x,y,w,h);
   end;
@@ -7856,12 +7823,12 @@ implementation
     sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,withinRect);
   end;
 
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLinesOnScreen(theText,textColor,backColor,theFont,align,x,y,w,h);
   end;
 
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,x,y,w,h);
   end;
@@ -7881,12 +7848,12 @@ implementation
     sgText.DrawTextOnScreen(theText,textColor,theFont,pt);
   end;
 
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
   begin
     sgText.DrawTextOnScreen(theText,textColor,theFont,x,y);
   end;
 
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
   begin
     sgText.DrawTextOnScreen(theText,textColor,name,x,y);
   end;
@@ -7896,7 +7863,7 @@ implementation
     sgText.DrawTextOnScreen(theText,textColor,name,size,pt);
   end;
 
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
   begin
     sgText.DrawTextOnScreen(theText,textColor,name,size,x,y);
   end;
@@ -8471,11 +8438,6 @@ implementation
     sgUserInterface.ListAddItem(id,img);
   end;
 
-  procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img);
-  end;
-
   procedure ListAddItem(lst: GUIList; text: String); overload;
   begin
     sgUserInterface.ListAddItem(lst,text);
@@ -8491,16 +8453,6 @@ implementation
     sgUserInterface.ListAddItem(r,img);
   end;
 
-  procedure ListAddItem(r: Region; const img: BitmapCell); overload;
-  begin
-    sgUserInterface.ListAddItem(r,img);
-  end;
-
-  procedure ListAddItem(id: String; const img: BitmapCell); overload;
-  begin
-    sgUserInterface.ListAddItem(id,img);
-  end;
-
   procedure ListAddItem(r: Region; text: String); overload;
   begin
     sgUserInterface.ListAddItem(r,text);
@@ -8511,19 +8463,9 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,img);
   end;
 
-  procedure ListAddItem(r: Region; const img: BitmapCell; text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(r,img,text);
-  end;
-
   procedure ListAddItem(lst: GUIList; img: Bitmap; text: String); overload;
   begin
     sgUserInterface.ListAddItem(lst,img,text);
-  end;
-
-  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell); overload;
-  begin
-    sgUserInterface.ListAddItem(pnl,id,img);
   end;
 
   procedure ListAddItem(id: String; img: Bitmap; text: String); overload;
@@ -8536,9 +8478,19 @@ implementation
     sgUserInterface.ListAddItem(r,img,text);
   end;
 
-  procedure ListAddItem(lst: GUIList; const img: BitmapCell; text: String); overload;
+  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
   begin
-    sgUserInterface.ListAddItem(lst,img,text);
+    sgUserInterface.ListAddItem(lst,img,cell);
+  end;
+
+  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
+  begin
+    sgUserInterface.ListAddItem(r,img,cell);
+  end;
+
+  procedure ListAddItem(id: String; const img: Bitmap; cell: Longint); overload;
+  begin
+    sgUserInterface.ListAddItem(id,img,cell);
   end;
 
   procedure ListAddItem(pnl: Panel; id: String; text: String); overload;
@@ -8546,14 +8498,19 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,text);
   end;
 
-  procedure ListAddItem(id: String; const img: BitmapCell; text: String); overload;
+  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; text: String); overload;
   begin
-    sgUserInterface.ListAddItem(id,img,text);
+    sgUserInterface.ListAddItem(lst,img,cell,text);
   end;
 
-  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell; text: String); overload;
+  procedure ListAddItem(pnl: Panel; id: String; const img: Bitmap; cell: Longint); overload;
   begin
-    sgUserInterface.ListAddItem(pnl,id,img,text);
+    sgUserInterface.ListAddItem(pnl,id,img,cell);
+  end;
+
+  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(r,img,cell,text);
   end;
 
   procedure ListAddItem(pnl: Panel; id: String; img: Bitmap; text: String); overload;
@@ -8561,14 +8518,24 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,img,text);
   end;
 
+  procedure ListAddItem(id: String; const img: Bitmap; cell: Longint; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(id,img,cell,text);
+  end;
+
+  procedure ListAddItem(pnl: Panel; id: String; const img: Bitmap; cell: Longint; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(pnl,id,img,cell,text);
+  end;
+
   function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
   begin
     result := sgUserInterface.ListBitmapIndex(lst,img);
   end;
 
-  function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
   begin
-    result := sgUserInterface.ListBitmapIndex(lst,img);
+    result := sgUserInterface.ListBitmapIndex(lst,img,cell);
   end;
 
   procedure ListClearItems(id: String); overload;
@@ -9254,6 +9221,121 @@ implementation
   procedure ReleaseArduinoDevice(name: String); overload;
   begin
     sgArduino.ReleaseArduinoDevice(name);
+  end;
+
+  function OptionDefaults(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionDefaults();
+  end;
+
+  function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionDrawTo(dest);
+  end;
+
+  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionDrawTo(dest,opts);
+  end;
+
+  function OptionFlipX(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipX();
+  end;
+
+  function OptionFlipX(const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipX(opts);
+  end;
+
+  function OptionFlipXY(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipXY();
+  end;
+
+  function OptionFlipXY(const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipXY(opts);
+  end;
+
+  function OptionFlipY(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipY();
+  end;
+
+  function OptionFlipY(const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionFlipY(opts);
+  end;
+
+  function OptionPartBmp(const part: Rectangle): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionPartBmp(part);
+  end;
+
+  function OptionPartBmp(const part: Rectangle; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionPartBmp(part,opts);
+  end;
+
+  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionPartBmp(x,y,w,h);
+  end;
+
+  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionPartBmp(x,y,w,h,opts);
+  end;
+
+  function OptionRotateBmp(angle: Single): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionRotateBmp(angle);
+  end;
+
+  function OptionRotateBmp(angle: Single; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionRotateBmp(angle,opts);
+  end;
+
+  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionRotateBmp(angle,anchorX,anchorY);
+  end;
+
+  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionRotateBmp(angle,anchorX,anchorY,opts);
+  end;
+
+  function OptionScaleBmp(scaleX: Single; scaleY: Single): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionScaleBmp(scaleX,scaleY);
+  end;
+
+  function OptionScaleBmp(scaleX: Single; scaleY: Single; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionScaleBmp(scaleX,scaleY,opts);
+  end;
+
+  function OptionToScreen(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionToScreen();
+  end;
+
+  function OptionToScreen(const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionToScreen(opts);
+  end;
+
+  function OptionToWorld(): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionToWorld();
+  end;
+
+  function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionToWorld(opts);
   end;
 
 end.

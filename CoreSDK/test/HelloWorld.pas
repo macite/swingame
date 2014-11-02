@@ -39,7 +39,7 @@ begin
   p2.x := 1000;
   p2.y := 20000;
   
-  DrawLineOnScreen(ColorRed, p1, p2);
+  DrawLine(ColorRed, p1, p2);
   
 end;
 

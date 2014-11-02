@@ -95,7 +95,7 @@ interface
     /// @struct Rectangle
     Rectangle = packed record
       x, y: Single;
-      width, height: Longint;
+      width, height: Single;
     end;
     
 
@@ -133,7 +133,7 @@ interface
     /// @struct Circle
     Circle = packed record
       center: Point2D;
-      radius: Longint;
+      radius: Single;
     end;
 
     /// @struct AccelerometerMotion
@@ -359,7 +359,7 @@ interface
       flipX : Boolean;          // Flip data
       flipY : Boolean;          //
       isPart : Boolean;         // Draw just a part?
-      x, y, w, h : Single;      // Part to draw
+      part : Rectangle;         // Part to draw
       ToWorld : Boolean;        // Draw to world or screen coordinates (camera has effect?)
     end;
 
@@ -367,15 +367,7 @@ interface
     /// @array_wrapper
     /// @field data: array of Bitmap
     BitmapArray = array of Bitmap;
-    
-    /// A bitmap cell is used to store the cell to draw from a particular bitmap.
-    /// 
-    /// @struct BitmapCell
-    BitmapCell = record
-      bmp: Bitmap;
-      cell: Longint;
-    end;
-    
+        
     /// The CollisionSide enumeration is used to indicate the side a collision
     /// has occurred on.
     ///
@@ -884,7 +876,8 @@ interface
       /// @via_pointer
       GUIListItem = packed record
         text:     String;
-        image:    BitmapCell;
+        image:    Bitmap;
+        cell:     Longint;
         parent:   GUIList;
       end;
       
@@ -898,8 +891,8 @@ interface
         scrollArea:   Rectangle;
         columns:      Longint;
         rows:         Longint;
-        rowHeight:    Longint;
-        colWidth:     Longint;
+        rowHeight:    Single;
+        colWidth:     Single;
         scrollSize:   Longint;
         placeholder:  Array of Rectangle;
         activeItem:   Longint;
@@ -996,7 +989,7 @@ interface
     RegionData = packed record
       stringID:       String;
       kind:           GUIElementKind;
-      regionIdx:       Longint;
+      regionIdx:      Longint;
       elementIndex:   Longint;
       area:           Rectangle;
       active:         Boolean;

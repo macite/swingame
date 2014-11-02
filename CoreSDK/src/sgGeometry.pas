@@ -9,44 +9,6 @@
 // Most of the code in this unit was in sgPhysics prior to version 3. See
 // there for possible relevant change notes.
 //
-// Change History:
-//
-// Version 3.0:
-// - 2011-05-23: Andrew : Removed "Shape" code, placed in sgVectorShapes.
-// - 2010-01-13: Aaron  : Added PointAdd which adds 2 pointers together.
-//                        Added PointInShape which checks if a Point is in a shape.
-// - 2009-12-21: Andrew : Moved Sprite and Bitmap rectangle function to sgSprites and sgImages
-// - 2009-12-18: Andrew : Added code to fix rectangles (+ve width and height)
-// - 2009-11-10: Andrew : Added tracing and sn and csn tags to code
-// - 2009-10-16: Andrew : Added shapes and prototypes. Ensure they are freed
-// - 2009-07-29: Andrew : Renamed cos, sin, tan to avoid conflict in c
-// - 2009-07-10: Andrew : Fixed missing const modifier on struct types
-// - 2009-07-05: Clinton:
-// - 2009-07-03: Andrew : Started adding class indicators
-//                      : Started adding operator overloads
-//                      : Added IdentityMatrix and MatrixToString
-//                      : Added overloaded operators to Vector and Matrix2D
-// - 2009-07-02: Andrew : Added comments for returning fixed size var length arrays
-//                      : Increased precision of deg to rad
-// - 2009-06-29: Andrew : Removed all need for Collision Side
-//                      : Changed to use Circle Type
-//                      : Added new circle working code
-// - 2009-06-26: Andrew : Completed ClosestPointOnRectFromCircle
-//                      : Completed
-//                      : Fixed overloads of PointAt
-//                      : Added RectangleCenter
-//                      : RayCircleIntersectDistance heading can now be non-unit vector
-//                      : Add DistantPointOnCircle
-//                      : Added DistantPointOnCircleHeading
-//                      : Added VectorOutOfRectFromCircle
-//                      : Added PointInCircle
-//                      : Added RectangleFrom Triangle
-// - 2009-06-24: Andrew : Renamed to sgGeometry and combined with Shapes
-//                      : Moved CenterPoint to sgSprite.
-//                      : VectorFromCenterSpriteToPoint
-//                      : VectorFromTo
-// - 2009-06-23: Clinton: Created unit. Moved math routines from physics and
-//                      : shapes units.
 //=============================================================================
 
 
@@ -72,7 +34,7 @@ interface
   ///
   /// @lib
   /// @sn circleAt:%s radius:%s
-  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
   
   /// Creates a circle at the given x,y location with the indicated radius.
   ///
@@ -80,13 +42,13 @@ interface
   /// @sn circleAtX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
-  function CircleAt(x, y: Single; radius: Longint): Circle; overload;
+  function CircleAt(x, y: Single; radius: Single): Circle; overload;
   
   /// Creates a Circle at the point pt with the given radius.
   ///
   /// @lib
   /// @sn createCircle:%s radius:%s
-  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
 
   /// Creates a circle at the given x,y location with the indicated radius.
   ///
@@ -94,7 +56,7 @@ interface
   /// @sn createCircleX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
-  function CreateCircle(x, y: Single; radius: Longint): Circle; overload;
+  function CreateCircle(x, y: Single; radius: Single): Circle; overload;
   
 //---------------------------------------------------------------------------
 // Circle code
@@ -118,7 +80,7 @@ interface
   /// Returns the radius of the passed in circle.
   /// 
   /// @lib
-  function CircleRadius(const c: Circle): Longint;
+  function CircleRadius(const c: Circle): Single;
   
   /// Returns the point that lies on the circle's radius that is closest to the fromPt.
   ///
@@ -458,7 +420,7 @@ interface
   /// @sn rectangleFromX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
-  function RectangleFrom(x, y: Single; w, h: Longint): Rectangle; overload;
+  function RectangleFrom(x, y, w, h: Single): Rectangle; overload;
   
   /// Returns a rectangle with pt1 and pt2 defining the two distant edge points.
   ///
@@ -470,7 +432,7 @@ interface
   ///
   /// @lib RectangleAtPoint
   /// @sn rectangleFrom:%s width:%s height:%s
-  function RectangleFrom(const pt: Point2D; width, height: Longint): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width, height: Single): Rectangle; overload;
   
   /// Returns a rectangle that encloses the two points on the line segment.
   ///
@@ -499,7 +461,7 @@ interface
   /// @sn createRectangleX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
-  function CreateRectangle(x, y: Single; w, h: Longint): Rectangle; overload;
+  function CreateRectangle(x, y, w, h: Single): Rectangle; overload;
 
   /// Returns a rectangle with pt1 and pt2 defining the two distant edge points.
   ///
@@ -511,7 +473,7 @@ interface
   ///
   /// @lib CreateRectangleAtPoint
   /// @sn createRectangle:%s width:%s height:%s
-  function CreateRectangle(const pt: Point2D; width, height: Longint): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width, height: Single): Rectangle; overload;
 
   /// Returns a rectangle that encloses the two points on the line segment.
   ///
@@ -537,7 +499,7 @@ interface
   ///
   /// @lib
   /// @sn insetRectangle:%s pixels:%s
-  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle;
   
   /// Ensures that the passed in rectangle has a positive width and height.
   ///
@@ -548,7 +510,7 @@ interface
   ///
   /// @lib FixRect
   /// @sn fixRectangleX:%s y:%s width:%s height:%s
-  procedure FixRectangle(var x, y: Single; var width, height: Longint);
+  procedure FixRectangle(var x, y, width, height: Single);
   
   //---------------------------------------------------------------------------
   // Triangle creation code
@@ -1110,7 +1072,7 @@ interface
   /// 
   /// @lib VectorFromPointToRect
   /// @sn vectorFromX:%s y:%s toRectX:%s y:%s width:%s height:%s
-  function VectorFromPointToRect(x, y, rectX, rectY: Single; rectWidth, rectHeight: Longint): Vector; overload;
+  function VectorFromPointToRect(x, y, rectX, rectY, rectWidth, rectHeight: Single): Vector; overload;
   
   /// Returns a vector from the specified point to the specified rectangle.
   /// 
@@ -1161,7 +1123,7 @@ interface
   /// 
   /// @lib CreateVectorFromPointToRect
   /// @sn createvectorFromX:%s y:%s toRectX:%s y:%s width:%s height:%s
-  function CreateVectorFromPointToRect(x, y, rectX, rectY: Single; rectWidth, rectHeight: Longint): Vector; overload;
+  function CreateVectorFromPointToRect(x, y, rectX, rectY, rectWidth, rectHeight: Single): Vector; overload;
 
   /// Returns a vector from the specified point to the specified rectangle.
   /// 
@@ -1609,7 +1571,7 @@ implementation
             vOut := VectorFromPoints(startPt, ptOnLine)
           else // if we are searching forward (using velocity)
             vOut := VectorFromPoints(ptOnLine, startPt);
-          vOut := VectorMultiply(UnitVector(vOut), VectorMagnitude(vOut) + 1.42)
+          vOut := VectorMultiply(UnitVector(vOut), VectorMagnitude(vOut) + 1) //TODO: check this further
         end;      
       end;
     end;
@@ -2199,7 +2161,7 @@ implementation
     result := LineAsVector(line);
   end;
 
-  function CreateVectorFromPointToRect(x, y, rectX, rectY: Single; rectWidth, rectHeight: Longint): Vector; overload;
+  function CreateVectorFromPointToRect(x, y, rectX, rectY, rectWidth, rectHeight: Single): Vector; overload;
   begin
     result := VectorFromPointToRect(x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -2901,9 +2863,9 @@ implementation
     {$ENDIF}
   end;
   
-  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle;
   var
-    dblAmt: Longint;
+    dblAmt: Single;
   begin
     dblAmt := 2 * insetAmount;
     if (rect.width <= dblAmt) or (rect.height <= dblAmt) then begin result := rect; exit; end;
@@ -3028,7 +2990,7 @@ implementation
   end;
     
 
-  function CreateRectangle(x, y: Single; w, h: Longint): Rectangle; overload;
+  function CreateRectangle(x, y, w, h: Single): Rectangle; overload;
   begin
     result := RectangleFrom(x,y,w,h);    
   end;
@@ -3039,7 +3001,7 @@ implementation
     result := RectangleFrom(pt1,pt2);
   end;
 
-  function CreateRectangle(const pt: Point2D; width, height: Longint): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width, height: Single): Rectangle; overload;
   begin
     result := RectangleFrom(pt,width,height); 
   end;
@@ -3273,7 +3235,7 @@ implementation
   
   function RectangleToString(const rect:Rectangle): String;
   begin
-    result := 'Rect @' + FloatToStr(rect.x) + ':' + FloatToStr(rect.y) + ' ' + IntToStr(rect.width) + 'x' + IntToStr(rect.height);
+    result := 'Rect @' + FloatToStr(rect.x) + ':' + FloatToStr(rect.y) + ' ' + FloatToStr(rect.width) + 'x' + FloatToStr(rect.height);
   end;
 
   function LineToString(const ln: LineSegment): String;
@@ -3469,7 +3431,7 @@ implementation
     result := RectangleFrom(PointAdd(vec, RectangleTopLeft(rect)), rect.width, rect.height);
   end;
   
-  function RectangleFrom(x, y: Single; w, h: Longint): Rectangle; overload;
+  function RectangleFrom(x, y, w, h: Single): Rectangle; overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'RectangleFrom(x, y: Single', '');
@@ -3485,7 +3447,7 @@ implementation
     {$ENDIF}
   end;
   
-  function RectangleFrom(const pt: Point2D; width, height: Longint): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width, height: Single): Rectangle; overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'RectangleFrom(const pt: Point2D', '');
@@ -3598,7 +3560,7 @@ implementation
   
   function PointInCircle(ptX, ptY, cX, cY, radius: Single): Boolean;
   begin
-    result := PointInCircle(PointAt(ptX, ptY), CircleAt(cX, cY, Round(radius)));
+    result := PointInCircle(PointAt(ptX, ptY), CircleAt(cX, cY, radius));
   end;
 
   function TriangleBarycenter(const tri: Triangle): Point2D;
@@ -4092,7 +4054,7 @@ implementation
     {$ENDIF}
   end;
 
-  function VectorFromPointToRect(x, y, rectX, rectY: Single; rectWidth, rectHeight: Longint): Vector; overload;
+  function VectorFromPointToRect(x, y, rectX, rectY, rectWidth, rectHeight: Single): Vector; overload;
   var
     px, py: Single;
   begin
@@ -4448,7 +4410,7 @@ implementation
     {$ENDIF}
   end;
   
-  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'CircleAt(const pt: Point2D', '');
@@ -4462,7 +4424,7 @@ implementation
     {$ENDIF}
   end;
   
-  function CircleAt(x, y: Single; radius: Longint): Circle; overload;
+  function CircleAt(x, y: Single; radius: Single): Circle; overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'CircleAt(x, y: Single', '');
@@ -4476,12 +4438,12 @@ implementation
     {$ENDIF}
   end;
   
-  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
   begin
     result := CircleAt(pt,radius);
   end;
   
-  function CreateCircle(x, y: Single; radius: Longint): Circle; overload;
+  function CreateCircle(x, y: Single; radius: Single): Circle; overload;
   begin
     result := CircleAt(x,y,radius);
   end;
@@ -4511,16 +4473,16 @@ implementation
     {$ENDIF}
   end;
   
-  function CircleRadius(const c: Circle): Longint;
+  function CircleRadius(const c: Circle): Single;
   begin
     {$IFDEF TRACE}
-      TraceEnter('sgGeometry', 'CircleRadius(const c: Circle): Longint', '');
+      TraceEnter('sgGeometry', 'CircleRadius(const c: Circle): Single', '');
     {$ENDIF}
     
     result := c.radius;
     
     {$IFDEF TRACE}
-      TraceExit('sgGeometry', 'CircleRadius(const c: Circle): Longint', '');
+      TraceExit('sgGeometry', 'CircleRadius(const c: Circle): Single', '');
     {$ENDIF}
   end;
   
@@ -4559,7 +4521,7 @@ implementation
     FixRectangle(rect.x, rect.y, rect.width, rect.height);
   end;
   
-  procedure FixRectangle(var x, y: Single; var width, height: Longint);
+  procedure FixRectangle(var x, y, width, height: Single);
   begin
     if width < 0 then
     begin

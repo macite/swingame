@@ -63,7 +63,7 @@ begin
       ResetTimer(tmr);
     end;
       
-    mvmtLn := LineFromVector(rect.x + rect.width div 2, rect.y + rect.height div 2, mvmt);
+    mvmtLn := LineFromVector(rect.x + rect.width / 2, rect.y + rect.height / 2, mvmt);
     DrawLine(ColorRed, mvmtLn);
     
     outMvmt := VectorOutOfRectFromRect(rect, rect2, mvmt);

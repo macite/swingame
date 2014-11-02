@@ -10,11 +10,11 @@ begin
 	OpenGraphicsWindow('Walking Frog', 800, 600);
 
 	fish := LoadBitmapNamed('walking', 'frog.png');
-    BitmapSetCellDetails(fish, 32, 48, 4, 4, 16);
+    BitmapSetCellDetails(fish, 73, 105, 4, 4, 16);
     LoadAnimationScriptNamed('WalkingScrpt', 'kermit.txt');
 	
 	walking := CreateSprite(fish, AnimationScriptNamed('WalkingScrpt'));
-	SpriteStartAnimation(walking, 'WalkFront');
+	SpriteStartAnimation(walking, 'Dance');
 	
 	SpriteSetX(walking, 400);
     SpriteSetY(walking, 300);

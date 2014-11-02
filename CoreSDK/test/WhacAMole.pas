@@ -203,7 +203,7 @@ begin
   rect := RectangleFrom(0, 0, BAR_WIDTH, round(TimerTicks(gData.gTimer) / gData.roundTime * BAR_HEIGHT));
 
   DrawBitmap(gData.fullBar, BAR_X, BAR_Y);
-  DrawBitmapPart(gData.emptyBar, rect, BAR_X, BAR_Y);
+  DrawBitmap(gData.emptyBar, BAR_X, BAR_Y, OptionPartBmp(rect));
 end;
 
 procedure InitMolesSprite(var gData : GameData);

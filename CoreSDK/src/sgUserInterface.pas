@@ -2,17 +2,8 @@
 // sgUserInterface.pas
 //=============================================================================
 //
-// Version 0.1 - Resposible for constructing User Interfaces in 
-// SwinGame projects.. eventually.
+// Resposible for constructing User Interfaces in SwinGame projects.. eventually.
 //
-// Change History:
-//
-// Version 3:
-// - 2010-01-19: Cooldave : Textboxes, Buttons, Checkboxes, Radiobuttons, Labels all fully functional.
-//              			Lists are almost completed. Can be created and used, and items can be added at runtime.
-//              			Need to add the ability to remove items from lists.
-// - 2009-12-18: Cooldave : Ability to create panels...  no regions, just panels. 
-//              			They can  be drawn as rectangles and read from file.
 //=============================================================================
 
 
@@ -1250,79 +1241,79 @@ procedure ListAddItem(pnl : Panel; id : String;img:Bitmap; text: String); overlo
 /// bitmap.
 ///
 /// @lib ListAddItemWithCell
-/// @sn list:%s addBitmapCell:%s
+/// @sn list:%s addBitmap:%s cell:%s
 ///
 /// @class GUIList
 /// @overload AddItem AddItemWithCell
-/// @csn addBitmapCell:%s
-procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
+/// @csn addBitmap:%s cell:%s
+procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
 ///
 /// @lib ListWithIdAddItemWithCell
-/// @sn listWithId:%s addBitmapCell:%s
+/// @sn listWithId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(id : String; const img: BitmapCell); overload;
+procedure ListAddItem(id : String; const img: Bitmap; cell: Longint); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
 ///
 /// @lib ListOnPanelWithIdAddItemWithCell
-/// @sn listOnPanel:%s withId:%s addBitmapCell:%s
+/// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(pnl : Panel;id : String; const img: BitmapCell); overload;
+procedure ListAddItem(pnl : Panel;id : String; const img: Bitmap; cell: Longint); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
 ///
 /// @lib ListAddItemWithCellAndText
-/// @sn list:%s addBitmapCell:%s andText:%s
+/// @sn list:%s addBitmap:%s cell:%s andText:%s
 ///
 /// @class GUIList
 /// @overload AddItem AddItemWithCellAndText
-/// @csn addBitmapCell:%s andText:%s
-procedure ListAddItem(lst: GUIList; const img: BitmapCell; text: String); overload;
+/// @csn addBitmap:%s cell:%s andText:%s
+procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; text: String); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
 ///
 /// @lib ListWithIdAddItemWithCellAndText
-/// @sn listWithId:%s addBitmapCell:%s andText:%s
+/// @sn listWithId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(id : String; const img: BitmapCell; text: String); overload;
+procedure ListAddItem(id : String; const img: Bitmap; cell: Longint; text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
 ///
 /// @lib ListOnPanelWithIdAddItemWithCellAndText
-/// @sn listOnPanel:%s withId:%s addBitmapCell:%s andText:%s
+/// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(pnl : Panel; id : String; const img: BitmapCell; text: String); overload;
+procedure ListAddItem(pnl : Panel; id : String; const img: Bitmap; cell: Longint; text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
 ///
 /// @lib ListAddItemWithCellAndTextFromRegion
-/// @sn region:%s addBitmapCell:%s andText:%s
+/// @sn region:%s addBitmap:%s cell:%s andText:%s
 ///
 /// @class Region
 /// @overload AddItem AddItemWithCellAndTextFromRegion
-/// @csn addBitmapCell:%s andText:%s
-procedure ListAddItem(r: Region; const img:BitmapCell; text: String); overload;
+/// @csn addBitmap:%s cell:%s andText:%s
+procedure ListAddItem(r: Region; const img:Bitmap; cell: Longint; text: String); overload;
 
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
 ///
 /// @lib ListAddItemWithCellFromRegion
-/// @sn region:%s addBitmapCell:%s
+/// @sn region:%s addBitmap:%s cell:%s
 ///
 /// @class Region
 /// @overload AddItem AddItemWithCellFromRegion
-/// @csn addBitmapCell:%s
+/// @csn addBitmap:%s cell:%s
 
-procedure ListAddItem(r : Region; const img: BitmapCell); overload;
+procedure ListAddItem(r : Region; const img: Bitmap; cell: Longint); overload;
 
 /// Adds an item to the list by text
 ///
@@ -1369,7 +1360,7 @@ function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 ///
 /// @class GUIList
 /// @method CellItemIndex
-function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
+function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
 
 /// returns the id of a value in the list.
 ///
@@ -1977,24 +1968,24 @@ var
     FillTriangle(VectorBackcolorToDraw(forRegion), tri, OptionToScreen());
   end;
   
-  procedure _ResizeItemArea(var area: Rectangle; var imgPt: Point2D; aligned: FontAlignment; const bmp: BitmapCell);
+  procedure _ResizeItemArea(var area: Rectangle; var imgPt: Point2D; aligned: FontAlignment; const bmp: Bitmap);
   begin
     
     case aligned of
       AlignCenter:
       begin
-        imgPt.x := imgPt.x + (area.Width - BitmapWidth(bmp)) / 2.0;
+        imgPt.x := imgPt.x + (area.Width - BitmapCellWidth(bmp)) / 2.0;
       end;
       AlignLeft:
       begin
-        area.Width := area.Width - BitmapWidth(bmp) - 1; // 1 pixel boundry for bitmap
-        area.x     := area.x + BitmapWidth(bmp);
-        imgPt.x := imgPt.x + 1;
+        area.Width := area.Width - BitmapCellWidth(bmp) - 1; // 1 pixel boundry for bitmap
+        area.x     := area.x + BitmapCellWidth(bmp);
+        imgPt.x    := imgPt.x + 1;
       end;
       AlignRight:
       begin
-        area.Width := area.Width - BitmapWidth(bmp) - 1;
-        imgPt.x := imgPt.x + area.width + 1;
+        area.Width := area.Width - BitmapCellWidth(bmp) - 1;
+        imgPt.x    := imgPt.x + area.width + 1;
       end;
     end;
   end;
@@ -2115,11 +2106,11 @@ begin
     
     
     //Draw the text (adjusting position for width of list item bitmap)
-    if assigned(tempList^.items[itemIdx].image.bmp) then
+    if assigned(tempList^.items[itemIdx].image) then
     begin
       // Determine the location of the list item's bitmap
       imagePt   := RectangleTopLeft(itemArea);    
-      imagePt.y := imagePt.y + (itemArea.height - BitmapHeight(tempList^.items[itemidx].image)) / 2.0;
+      imagePt.y := imagePt.y + (itemArea.height - BitmapCellHeight(tempList^.items[itemidx].image)) / 2.0;
       
       _ResizeItemArea(itemTextArea, imagePt, ListFontAlignment(tempList), tempList^.items[itemIdx].image);
     end;
@@ -2143,9 +2134,9 @@ begin
     end;
     
     // Draw the item's bitmap
-    if  assigned(tempList^.items[itemIdx].image.bmp) then
+    if  assigned(tempList^.items[itemIdx].image) then
     begin
-      DrawBitmapCellOnScreen(tempList^.items[itemIdx].image, imagePt);
+      DrawCell(tempList^.items[itemIdx].image, tempList^.items[itemIdx].cell, imagePt.x, imagePt.y, OptionToScreen());
     end;
     
     // Draw the text on top
@@ -2285,7 +2276,7 @@ begin
   result := -1;
   if not(assigned(r)) then exit;
   
-  result := r^.area.width;
+  result := Round(r^.area.width);
 end;
 
 function RegionHeight(r: Region): Longint;
@@ -2293,7 +2284,7 @@ begin
   result := -1;
   if not(assigned(r)) then exit;
   
-  result := r^.area.height;
+  result := Round(r^.area.height);
 end;
 
 function RegionX(r: Region): Single;
@@ -3185,41 +3176,42 @@ end;
 
 procedure ListAddItem(lst: GUIList; text: String); overload;
 begin
-  ListAddItem(lst, nil, text);
+  ListAddItem(lst, nil, -1, text);
 end;
 
 procedure ListAddItem(lst: GUIList; img:Bitmap); overload;
 begin
-  ListAddItem(lst, img, '');
+  ListAddItem(lst, img, -1, '');
 end;
 
 procedure ListAddItem(lst: GUIList; img:Bitmap; text: String); overload;
 begin
-  ListAddItem(lst, BitmapCellOf(img, -1), text);
+  ListAddItem(lst, img, -1, text);
 end;
 
-procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
+procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
 begin
-  ListAddItem(lst, img, '');
+  ListAddItem(lst, img, cell, '');
 end;
 
-procedure ListAddItem(lst: GUIList; const img:BitmapCell; text: String); overload;
+procedure ListAddItem(lst: GUIList; const img:Bitmap; cell: Longint; text: String); overload;
 begin
     if not assigned(lst) then exit;
     
     SetLength(lst^.items, Length(lst^.items) + 1);
     lst^.items[High(lst^.items)].text     := text;  //Assign the text to the item
     lst^.items[High(lst^.items)].image    := img;   //Assign the image to the item
+    lst^.items[High(lst^.items)].cell     := cell;  //Assign the image to the item
 end;
 
-procedure ListAddItem(r : Region; const img:BitmapCell); overload;
+procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint); overload;
 begin
-  ListAddItem(r,img,'');
+  ListAddItem(r,img, cell, '');
 end;
 
-procedure ListAddItem(r : Region; const img:BitmapCell; text: String); overload;
+procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint; text: String); overload;
 begin
-  ListAddItem(ListFromRegion(r), img, text);
+  ListAddItem(ListFromRegion(r), img, cell, text);
 end;
 
 procedure ListAddItem(r : Region; text: String); overload;
@@ -3238,14 +3230,14 @@ begin
 end;
 
 
-procedure ListAddItem(id : String; const img:BitmapCell); overload;
+procedure ListAddItem(id : String; const img:Bitmap; cell: Longint); overload;
 begin
-  ListAddItem(RegionWithID(id),img,'');
+  ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(id: String; const img:BitmapCell; text: String); overload;
+procedure ListAddItem(id: String; const img:Bitmap; cell: Longint; text: String); overload;
 begin
-  ListAddItem(RegionWithID(id), img, text);
+  ListAddItem(RegionWithID(id), img, cell, text);
 end;
 
 procedure ListAddItem(id: String; text: String); overload;
@@ -3253,7 +3245,7 @@ begin
   ListAddItem(RegionWithID(id), text);
 end;
 
-procedure ListAddItem(id: String;img:Bitmap); overload;
+procedure ListAddItem(id: String; img:Bitmap); overload;
 begin
   ListAddItem(RegionWithID(id), img);
 end;
@@ -3263,14 +3255,14 @@ begin
   ListAddItem(RegionWithID(id),img, text);
 end;
 
-procedure ListAddItem(pnl : Panel; id : String; const img:BitmapCell); overload;
+procedure ListAddItem(pnl : Panel; id : String; const img:Bitmap; cell: Longint); overload;
 begin
-  ListAddItem(RegionWithID(id),img,'');
+  ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(pnl : Panel; id: String; const img:BitmapCell; text: String); overload;
+procedure ListAddItem(pnl : Panel; id: String; const img:Bitmap; cell: Longint; text: String); overload;
 begin
-  ListAddItem(RegionWithID(id), img, text);
+  ListAddItem(RegionWithID(id), img, cell, text);
 end;
 
 procedure ListAddItem(pnl : Panel; id: String; text: String); overload;
@@ -3378,10 +3370,10 @@ end;
 
 function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 begin
-  result := ListBitmapIndex(lst, BitmapCellOf(img, -1));
+  result := ListBitmapIndex(lst, img, -1);
 end;
 
-function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
+function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
 var
   i: Longint;
 begin
@@ -3391,7 +3383,7 @@ begin
   for i := Low(lst^.items) to High(lst^.items) do
   begin
     //find the text... then exit
-    if SameBitmapCell(lst^.items[i].image, img) then
+    if (lst^.items[i].image = img) and (lst^.items[i].cell = cell) then
     begin
       result := i;
       exit;
@@ -3617,7 +3609,7 @@ begin
   result := -1;
   if not(assigned(p)) then exit;
   
-  result := p^.area.width;
+  result := Round(p^.area.width);
 end;
 
 function PanelHeight(name: String): Longint;
@@ -3630,7 +3622,7 @@ begin
   result := -1;
   if not(assigned(p)) then exit;
   
-  result := p^.area.height;
+  result := Round(p^.area.height);
 end;
 
 function PanelX(p: Panel): Single;
@@ -3950,7 +3942,7 @@ function StringToKind(s: String): GUIElementKind;
   procedure CreateList(r: Region; data: string; result: Panel);
   var
     newList: GUIListData;
-    scrollSz, rhs, btm, height, width: Longint;
+    scrollSz, rhs, btm, height, width: Single;
   begin
     //Format is
     // 1, 2, 3, 4, 5, 6,      7,       8,    9,          10,     11,        12,         13          14                  
@@ -3988,8 +3980,8 @@ function StringToKind(s: String): GUIElementKind;
     // Calculate col and row sizes
     if newList.verticalScroll then
     begin
-      newList.colWidth    := rhs    div newList.columns;
-      newList.rowHeight   := height div newList.rows;
+      newList.colWidth    := rhs    / newList.columns;
+      newList.rowHeight   := height / newList.rows;
       
       // Set scroll buttons
       newList.scrollUp    := RectangleFrom( rhs, 0, scrollSz, scrollSz);
@@ -3999,8 +3991,8 @@ function StringToKind(s: String): GUIElementKind;
     end
     else
     begin
-      newList.colWidth    := r^.area.width div newList.columns;
-      newList.rowHeight   := btm div newList.rows;
+      newList.colWidth    := r^.area.width / newList.columns;
+      newList.rowHeight   := btm / newList.rows;
       
       // Set scroll buttons
       newList.scrollUp    := RectangleFrom( 0, btm, scrollSz, scrollSz);

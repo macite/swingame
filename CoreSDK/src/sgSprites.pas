@@ -2071,8 +2071,8 @@ implementation
         DrawCell(bmp, currentCell, Round(s^.layerOffsets[idx].x), Round(s^.layerOffsets[idx].y), OptionDrawTo(dest));
         MakeTransparent(bmp);
       end;
-      cells[currentCell] := RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
-      FreeBitmap(dest);
+      cells[currentCell] := dest; //RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
+      // FreeBitmap(dest);
     end;
     
     // Make into a new image...
@@ -2095,8 +2095,8 @@ implementation
       MakeOpaque(bmp);
       DrawCell(bmp, currentCell, 0, 0, OptionDrawTo(dest));
       MakeTransparent(bmp);
-      cells[currentCell] := RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
-      FreeBitmap(dest);
+      cells[currentCell] := dest; //RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
+      // FreeBitmap(dest);
     end;
     
     s^.collisionBitmap := CombineIntoGrid(cells, 6);

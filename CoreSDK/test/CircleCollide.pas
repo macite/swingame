@@ -32,7 +32,7 @@ procedure DoLineTest(testLines: LinesArray; const center: Point2D; radius: Longi
 type
   DoublePt = record ptOnCircle, ptOnLine: Point2D; end;
 var
-  pt1, pt2, ptOnLine, ptOnCircle, hitPt, maxHitPtOnLine, maxHitPtOnCircle: Point2D;
+  pt1, pt2, ptOnLine, ptOnCircle, hitPt, maxHitPtOnLine, maxHitPtOnCircle, outPt: Point2D;
   tmp: Array [0..3] of Point2D;
   chkPts: Array [0..3] of DoublePt;
   lineVec, normalMvmt, normalLine, toEdge, edge, ray, vOut: Vector;
@@ -127,7 +127,8 @@ begin
   begin
     WriteLn('---');
     DrawLine(ColorGreen, LineFromVector(center, vOut));
-    DrawCircle(ColorGreen, AddVectors(center, vOut), Round(radius));
+    outPt := AddVectors(center, vOut);
+    DrawCircle(ColorGreen, outPt.x, outPt.y, radius);
   end;
 end;
 
@@ -227,7 +228,7 @@ begin
     
     DrawRectangle(ColorRed, rect);
     DrawRectangle(ColorRed, rect1);
-    DrawCircle(ColorRed, c1, r1);
+    DrawCircle(ColorRed, c1.x, c1.y, r1);
     DrawTriangle(ColorRed, t1);
     
     for i := 0 to High(testLines) do
@@ -247,38 +248,38 @@ begin
 
     if CircleRectCollision(CircleAt(temp, r2), rect) then
     begin
-      DrawCircle(ColorBlue, temp, r2);
+      DrawCircle(ColorBlue, temp.x, temp.y, r2);
       if LineCircleHit(CircleAt(temp, r2), mouseMvmt, LinesFrom(rect), found) then
       begin
         DrawLine(ColorWhite, found);
         mouseOut := VectorOutOfRectFromCircle(CircleAt(temp, r2), rect, mouseMvmt);
         mouseOut := AddVectors(temp, mouseOut);
-        DrawCircle(ColorGreen, mouseOut, r2);
+        DrawCircle(ColorGreen, mouseOut.x, mouseOut.y, r2);
       end;
     end
     else if CircleCircleCollision(CircleAt(temp, r2), CircleAt(c1, r1)) then
     begin
-      DrawCircle(ColorWhite, c1, r1);
-      DrawCircle(ColorBlue, temp, r2);
+      DrawCircle(ColorWhite, c1.x, c1.y, r1);
+      DrawCircle(ColorBlue, temp.x, temp.y, r2);
       mouseOut := VectorOutOfCircleFromCircle(CircleAt(temp, r2), CircleAt(c1, r1), mouseMvmt);
       mouseOut := AddVectors(temp, mouseOut);
-      DrawCircle(ColorGreen, mouseOut, r2);
+      DrawCircle(ColorGreen, mouseOut.x, mouseOut.y, r2);
     end
     else if CircleTriangleCollision(CircleAt(temp, r2), t1) then
     begin
       //DrawTriangle(ColorWhite, t1);
-      DrawCircle(ColorBlue, temp, r2);
+      DrawCircle(ColorBlue, temp.x, temp.y, r2);
       
       mouseOut := VectorOverLinesFromCircle(CircleAt(temp, r2), LinesFrom(t1), mouseMvmt, maxIdx);
       
       mouseOut := AddVectors(temp, mouseOut);
-      DrawCircle(ColorGreen, mouseOut, r2);
+      DrawCircle(ColorGreen, mouseOut.x, mouseOut.y, r2);
       
       DrawLine(ColorWhite, LinesFrom(t1)[maxIdx]);
       
       //LineOfLinesCircleHit(temp, r2, mouseMvmt, LinesFrom(t1), found);
     end else begin
-       DrawCircle(ColorGreen, temp, r2);
+       DrawCircle(ColorGreen, temp.x, temp.y, r2);
     end;
     
     // rectPt := ClosestPointOnRectFromCircle(temp, r2, rect);

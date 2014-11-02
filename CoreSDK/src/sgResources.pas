@@ -197,7 +197,7 @@ implementation
 				{$endif}
 			 {$endif}
              sgText, sgAudio, sgGraphics, sgInput, sgShared, sgTimers, sgUtils,
-             sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface, sgMaps, sgNetworking,
+             sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface, sgNetworking,
              sgArduino; // Swingame
 
 //----------------------------------------------------------------------------
@@ -315,7 +315,6 @@ implementation
                     FontResource:           rbLoadFont();
                     SoundResource:          LoadSoundEffectNamed(current.name, current.path);
                     MusicResource:          LoadMusicNamed(current.name, current.path);
-                    MapResource:            LoadMapNamed(current.name, current.path);
                     AnimationResource:      LoadAnimationScriptNamed(current.name, current.path);
                     PanelResource:          LoadPanelNamed(current.name, current.path);
                     else
@@ -363,7 +362,6 @@ implementation
                 SoundResource:          ReleaseSoundEffect(current.name);
                 MusicResource:          ReleaseMusic(current.name);
                 PanelResource:          ReleasePanel(current.name);
-                MapResource:                ReleaseMap(current.name);
                 AnimationResource:  ReleaseAnimationScript(current.name);
             end;
         end;
@@ -378,7 +376,6 @@ implementation
         ReleaseAllFonts();
         ReleaseAllMusic();
         ReleaseAllPanels();
-        ReleaseAllMaps();
         ReleaseAllSprites();
         ReleaseAllConnections();
         ReleaseAllAnimationScripts();
@@ -399,7 +396,6 @@ implementation
         else if kind = 'SOUND'          then result := SoundResource
         else if kind = 'MUSIC'          then result := MusicResource
         else if kind = 'FONT'               then result := FontResource
-        else if kind = 'MAP'                then result := MapResource
         else if kind = 'ANIM'               then result := AnimationResource
         else if kind = 'PANEL'          then result := PanelResource
         else result := OtherResource;
@@ -544,7 +540,6 @@ implementation
             FontResource:               result := PathToResourceWithBase(path, 'fonts/' + filename);
             SoundResource:          result := PathToResourceWithBase(path, 'sounds/' + filename);
             BitmapResource:         result := PathToResourceWithBase(path, 'images/' + filename);
-            MapResource:                result := PathToResourceWithBase(path, 'maps/' + filename);
             AnimationResource:  result := PathToResourceWithBase(path, 'animations/' + filename);
             PanelResource:          result := PathToResourceWithBase(path, 'panels/' + filename);
         {$else}
@@ -552,7 +547,6 @@ implementation
             FontResource:               result := PathToResourceWithBase(path, 'fonts\' + filename);
             SoundResource:          result := PathToResourceWithBase(path, 'sounds\' + filename);
             BitmapResource:         result := PathToResourceWithBase(path, 'images\' + filename);
-            MapResource:                result := PathToResourceWithBase(path, 'maps\' + filename);
             AnimationResource:  result := PathToResourceWithBase(path, 'animations\' + filename);
             PanelResource:          result := PathToResourceWithBase(path, 'panels\' + filename);
         {$endif}

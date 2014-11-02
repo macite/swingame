@@ -8,47 +8,6 @@
 // screen using the camera settings. Finally the overloaded drawing methods
 // with a destination Bitmap will draw onto the supplied bitmap.
 //
-// Change History:
-//
-// Version 3.0:
-// - 2010-02-02: Aaron  : Added PushClip,PopClip,SetClip,ResetClip
-// - 2010-01-13: Aaron  : Made all Draw Shapes  draw with an offset and made those that does not have a destination Bitmap have  an offset of cameraX and cameraY
-// - 2010-01-04: Andrew : Added PutPixel
-// - 2009-12-10: Andrew : Moved out remaining bitmap function
-// - 2009-11-06: Andrew : Moved out bitmap function
-// - 2009-10-16: Andrew : Added shapes and shape prototypes
-// - 2009-07-14: Andrew : Removed loading and freeing code.
-// - 2009-07-10: Andrew : Fixed missing const modifier on struct parameters
-// - 2009-06-29: Andrew : Using circle
-// - 2009-06-24: Andrew : Moved Sprite routines to Sprites.
-// - 2009-06-23: Clinton: Comment format/cleanup
-// - 2009-06-05: Andrew : Using sgShared
-//
-// Version 2.0:
-// - 2008-12-17: Andrew : Moved all integers to Longint
-// - 2008-12-10: Andrew : Moved primitive drawing to SDL_gfx
-//                      : Added rotation and zoom to Sprite + Sprite Drawing
-//                      : Added RotateZoomBitmap
-//                      : Added MakeOpaque and MakeTransparent to allow multiple blending
-//                      : Added extra triangle drawing code
-// - 2008-12-09: Andrew : Started transition to SDL_gfx
-//
-// Version 1.1:
-// - 2008-04-08: Stephen: Added DrawTriangle()
-// - 2008-04-02: Andrew : Fixed issues related to freeing images
-//                      : Fixed transparent pixels for non 32bit images
-// - 2008-03-09: Andrew : Fixed DrawSprite with Offset
-// - 2008-02-16: Andrew : Added GetPixel and GetPixelFromScreen
-// - 2008-01-31: Andrew : Fixed Line Drawing Issue
-// - 2008-01-30: Andrew : Fixed DrawRectangle
-// - 2008-01-25: Andrew : Fixed compiler hints for pointer use
-// - 2008-01-24: Andrew : Added Clipping
-// - 2008-01-24: James  : Version 1.1 overloads
-// - 2008-01-21: Aki    : 40 overloads added for Point2D and
-// - 2008-01-17: Aki + Andrew: Refactor Rectangle support
-//
-// Version 1.0:
-// - Various
 //=============================================================================
 
 
@@ -520,13 +479,13 @@ interface
   ///
   /// @lib
   /// @sn bitmap:%s putPixelX:%s y:%s color:%s
-  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Longint);
+  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Single);
   
   /// Draw a pixel onto a destination.
   /// 
   /// @lib DrawPixelOnto
   /// @sn drawOnto:%s color:%s pixelX:%s y:%s
-  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Longint); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Single); overload;
   
   /// Draw a pixel onto a destination.
   /// 
@@ -550,7 +509,7 @@ interface
   /// 
   /// @lib
   /// @sn draw:%s pixelOnScreenX:%s y:%s
-  procedure DrawPixelOnScreen(clr: Color; x, y: Longint); overload;
+  procedure DrawPixelOnScreen(clr: Color; x, y: Single); overload;
   
   /// Draw a pixel on the screen.
   ///
@@ -626,16 +585,30 @@ interface
   /// Draw a line onto a destination bitmap.
   /// 
   /// @lib DrawLineOpts
-  /// @sn drawLineColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  /// @sn drawLineColor:%s fromX:%s y:%s toX:%s y:%s opts:%s
   procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
   
   /// Draw a line in the game.
   ///
   /// @lib 
-  /// @sn drawLineColor:%s atX:%s y:%s width:%s height:%s
+  /// @sn drawLineColor:%s fromX:%s y:%s toX:%s y:%s
   ///
   /// @doc_idx 0
   procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
+
+  /// Draw a line onto a destination bitmap.
+  /// 
+  /// @lib DrawLinePt2PtOpts
+  /// @sn drawLineColor:%s fromPt:%s toPt:%s opts:%s
+  procedure DrawLine(clr: Color; const fromPt, toPt: Point2D; const opts : DrawingOptions);
+  
+  /// Draw a line in the game.
+  ///
+  /// @lib DrawLinePt2Pt
+  /// @sn drawLineColor:%s fromPt:%s toPt:%s
+  ///
+  /// @doc_idx 0
+  procedure DrawLine(clr : Color; const fromPt, toPt: Point2D);
 
   /// Draw a line onto a destination bitmap.
   /// 
@@ -824,13 +797,13 @@ interface
   /// @class Bitmap
   /// @method GetPixel
   /// @csn colorAtX:%s y:%s
-  function GetPixel(bmp: Bitmap; x, y: Longint): Color;
+  function GetPixel(bmp: Bitmap; x, y: Single): Color;
   
   /// Returns the color of the pixel at the given x,y location.
   ///
   /// @lib
   /// @sn colorOnScreenAtX:%s y:%s
-  function GetPixelFromScreen(x, y: Longint): Color;
+  function GetPixelFromScreen(x, y: Single): Color;
   
   
   var
@@ -869,17 +842,17 @@ implementation
     ClearScreen(ColorBlack);
   end;
 
-  function GetPixel(bmp: Bitmap; x, y: Longint): Color;
+  function GetPixel(bmp: Bitmap; x, y: Single): Color;
   begin
     result := GraphicsDriver.GetPixel32(bmp, x, y);
   end;
 
-  function GetPixelFromScreen(x, y: Longint): Color;
+  function GetPixelFromScreen(x, y: Single): Color;
   begin
     result := GetPixel(screen, x, y);
   end;
 
-  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Longint);
+  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Single);
   begin
     DrawPixel(bmp, value, x, y);
   end;
@@ -891,7 +864,7 @@ implementation
   ///
   /// Side Effects:
   /// - Sets one pixel on the screen
-  procedure DrawPixelOnScreen(clr: Color; x, y: Longint);
+  procedure DrawPixelOnScreen(clr: Color; x, y: Single);
   begin
     DrawPixel(screen, clr, x, y);
   end;
@@ -915,7 +888,7 @@ implementation
 
   procedure DrawRectangle(clr : Color; const rect : Rectangle; const opts : DrawingOptions);
   begin
-    DrawRectangle(clr, rect, opts);
+    DrawRectangle(clr, rect.x, rect.y, rect.width, rect.height, opts);
   end;
 
   procedure FillRectangle(clr : Color; x, y, width, height : Single);
@@ -925,12 +898,12 @@ implementation
 
   procedure FillRectangle(clr : Color; const rect : Rectangle);
   begin
-    FillRectangle(clr, rect, OptionDefaults());
+    FillRectangle(clr, rect.x, rect.y, rect.width, rect.height, OptionDefaults());
   end;
 
   procedure FillRectangle(clr : Color; const rect : Rectangle; const opts : DrawingOptions);
   begin
-    FillRectangle(clr, rect, opts);
+    FillRectangle(clr, rect.x, rect.y, rect.width, rect.height, opts);
   end;
 
 //=============================================================================
@@ -998,6 +971,16 @@ implementation
   procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
   begin
     DrawLine(clr,x1,y1,x2,y2,OptionDefaults());
+  end;
+
+  procedure DrawLine(clr: Color; const fromPt, toPt: Point2D; const opts : DrawingOptions);
+  begin
+    DrawLine(clr, fromPt.x, fromPt.y, toPt.x, toPt.y, opts);
+  end;
+
+  procedure DrawLine(clr : Color; const fromPt, toPt: Point2D);
+  begin
+    DrawLine(clr, fromPt.x, fromPt.y, toPt.x, toPt.y, OptionDefaults());
   end;
 
   procedure DrawLine(clr : Color; const l : LineSegment; const opts : DrawingOptions); overload;
@@ -1209,7 +1192,7 @@ implementation
   ///
   /// Side Effects:
   /// - Sets one pixel on the destination bitmap
-  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Longint); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Single); overload;
   begin
     if dest = nil then begin RaiseWarning('DrawPixel - No destination bitmap supplied'); exit; end;
     

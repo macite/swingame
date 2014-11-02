@@ -5,22 +5,6 @@
 // The Images unit contains the code related to manipulating and querying
 // bitmap structures.
 //
-// Change History:
-//
-// Version 3.0:
-// - 2010-04-29: Andrew : Fixed create bitmap error that caused memory violation on freeing
-// - 2010-03-19: Andrew : Fixed images to work prior to loading the graphics window.
-// - 2010-02-05: Andrew : Added png saving.
-// - 2010-02-01: Aaron  : Added BitmapName and BitmapFileName
-// - 2010-01-28: David  : Changed DoLoadBitmap to use an already loaded bitmap if found
-// - 2010-01-05: David  : Added SetTransparentColor Procedure (Line 701 and 1442)
-// - 2010-01-04: David  : Added Save Bitmap Procedure (Line 694 and 1428)
-// - 2009-12-21: Andrew : Added Bitmap rectangle calculation code
-// - 2009-12-18: Andrew : Added code to check if two images can be used interchangably
-// - 2009-12-10: Andrew : Added bitmap drawing functions
-// - 2009-12-07: Andrew : Added loading of image resources
-// - 2009-11-06: Andrew : Started Images unit.
-//
 //=============================================================================
 
 /// The Images module contains the code that relates to the manipulating and
@@ -227,7 +211,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @method PixelDrawnAtPoint  
   /// @csn pixelDrawnAtX:%s y:%s
-  function PixelDrawnAtPoint(bmp: Bitmap; x, y: Longint): Boolean;
+  function PixelDrawnAtPoint(bmp: Bitmap; x, y: Single): Boolean;
   
   /// This is used to define the number of cells in a bitmap, and 
   /// their width and height. The cells are
@@ -293,49 +277,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter Filename
   function BitmapFilename(bmp:Bitmap): string;
-  
-  
-  
-//----------------------------------------------------------------------------
-// BitmapCell code
-//----------------------------------------------------------------------------
-  
-  /// Returns a bitmap cell for the cell of the indicated bitmap.
-  ///
-  /// @lib
-  /// @sn bitmap:%s bitmapCellForCell:%s
-  ///
-  /// @class Bitmap
-  /// @method BitmapCell
-  function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell;
-  
-  /// Returns true of the two bitmap cells refer to the same cell
-  /// in the one bitmap.
-  /// 
-  /// @lib
-  /// @sn bitmapCell:%s isSameAs:%s
-  ///
-  /// @class BitmapCell
-  /// @method SameAs
-  function SameBitmapCell(const bmp1, bmp2: BitmapCell): Boolean;
-  
-  /// Returns the width of the bitmap cell.
-  ///
-  /// @lib BitmapWidthForCell
-  ///
-  /// @class BitmapCell
-  /// @getter Width
-  function BitmapWidth(const bmp: BitmapCell): Longint; overload;
-  
-  /// Returns the height of the bitmap cell.
-  /// 
-  /// @lib BitmapHeightForCell
-  /// 
-  /// @class BitmapCell
-  /// @getter Height
-  function BitmapHeight(const bmp: BitmapCell): Longint; overload;
-  
-  
+
   
 //----------------------------------------------------------------------------
 // Bitmap -> Circle
@@ -361,7 +303,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @overload ToCircle ToCircleXY
   /// @csn circleAtX:%s y:%s
-  function BitmapCircle(bmp: Bitmap; x, y: Longint): Circle; overload;
+  function BitmapCircle(bmp: Bitmap; x, y: Single): Circle; overload;
   
   /// Creates a circle from within a cell in a bitmap, uses the larger of the width and
   /// height.
@@ -383,7 +325,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @overload ToCellCircle ToCellCircleXY
   /// @csn circleCellAtX:%s y:%s
-  function BitmapCellCircle(bmp: Bitmap; x,y: Longint): Circle; overload;
+  function BitmapCellCircle(bmp: Bitmap; x, y: Single): Circle; overload;
   
   
   
@@ -431,30 +373,13 @@ uses sgTypes;
   /// @class Bitmap
   /// @method SaveToPNG
   procedure SaveToPNG(bmp: Bitmap; filename: String);
-  
-  
-  
-//---------------------------------------------------------------------------
-// Rotate and Zoom
-//---------------------------------------------------------------------------
-  
-  /// Rotate and Scale the passed in bitmap.
-  ///
-  /// @lib
-  /// @sn transformBitmap:%s rotate:%s scale:%s
-  ///
-  /// @class Bitmap
-  /// @method RotateScaleBitmap
-  /// @csn rotate:%s scale:%s
-  function RotateScaleBitmap(src: Bitmap; degRot, scale: Single): Bitmap;
-  
+    
   /// Setup the passed in bitmap for pixel level collisions.
   ///
   /// @lib
   /// @class Bitmap
   /// @method SetupForCollisions
   procedure SetupBitmapForCollisions(src: Bitmap);
-  
   
   
 //---------------------------------------------------------------------------
@@ -534,17 +459,6 @@ uses sgTypes;
   
   /// Returns a rectangle for a cell of the bitmap at the indicated point.
   /// 
-  /// @lib BitmapCellRectangle
-  /// @sn rectangleAt:%s forBitmapCell:%s
-  ///
-  /// @class Bitmap
-  /// @overload ToCellRectangle ToCellRectangleAtPt
-  /// @self 2
-  /// @csn toRectangleForCellAt:%s
-  function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
-  
-  /// Returns a rectangle for a cell of the bitmap at the indicated point.
-  /// 
   /// @lib BitmapCellRectangleXY
   /// @sn rectangleForCellAtX:%s y:%s forBitmapCell:%s
   ///
@@ -579,57 +493,14 @@ uses sgTypes;
   /// @class Bitmap
   /// @method DrawWithOpts
   /// @csn drawAtX:%s y:%s withOptions:%s
-  procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(src: Bitmap; x, y: Single; const opts: DrawingOptions); overload;
 
   /// Draw the bitmap using the passed in options
   ///
   /// @lib DrawBitmapNamedWithOpts
   /// @sn drawBitmapNamed:%s atX:%s y:%s withOptions:%s
-  procedure DrawBitmap(name: String; x, y : Longint; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(name: String; x, y: Single; const opts: DrawingOptions); overload;
   
-  /// Draws the source bitmap onto the destination.
-  ///
-  /// @lib DrawBitmapOnto
-  /// @sn drawOnto:%s bitmap:%s atX:%s y:%s
-  ///
-  /// @class Bitmap
-  /// @method DrawOnto
-  /// @self 2
-  /// @csn drawOnto:%s atX:%s y:%s
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; x, y : Longint); overload;
-  
-  /// Draws the source bitmap onto the destination
-  ///
-  /// @lib DrawBitmapAtPointOnto
-  /// @sn drawOnto:%s bitmap:%s at:%s
-  ///
-  /// @class Bitmap
-  /// @overload DrawOnto DrawAtPointOnto
-  /// @self 2
-  /// @csn drawOnto:%s at:%s
-  procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position : Point2D); overload;
-  
-  /// Draws the cell of the source bitmap onto the destination.
-  ///
-  /// @lib DrawBitmapCellOnto
-  /// @sn drawOnto:%s bitmapCell:%s atX:%s y:%s
-  ///
-  /// @class BitmapCell
-  /// @method DrawOnto
-  /// @self 2
-  /// @csn drawOnto:%s atX:%s y:%s
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x, y : Longint); overload;
-
-  /// Draws the cell of the source bitmap onto the destination
-  ///
-  /// @lib DrawBitmapCellAtPointOnto
-  /// @sn drawOnto:%s bitmapCell:%s at:%s
-  ///
-  /// @class BitmapCell
-  /// @overload DrawOnto DrawAtPointOnto
-  /// @self 2
-  /// @csn drawOnto:%s at:%s
-  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position : Point2D); overload;
 
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - standard
@@ -647,18 +518,6 @@ uses sgTypes;
   /// @doc_idx 0
   procedure DrawBitmap(src : Bitmap; x, y : Single); overload;
   
-  /// Draw the passed in bitmap onto the game.
-  ///
-  /// @lib DrawBitmapAtPoint
-  /// @sn draw:%s position:%s
-  ///
-  /// @class Bitmap
-  /// @overload Draw DrawAtPoint
-  /// @csn drawAt:%s
-  ///
-  /// @doc_idx 2
-  procedure DrawBitmap(src : Bitmap; const position : Point2D); overload;
-  
   /// Draw the named bitmap onto the game.
   ///
   /// @lib DrawBitmapNamed
@@ -667,81 +526,27 @@ uses sgTypes;
   /// @doc_idx 1
   procedure DrawBitmap(name: String; x, y : Single); overload;
   
-  /// Draw the passed in bitmap onto the game.
-  ///
-  /// @lib DrawBitmapNamedAtPoint
-  /// @sn drawBitmapNamed:%s position:%s
-  ///
-  /// @doc_idx 2
-  procedure DrawBitmap(name: String; const position : Point2D); overload;
-  
-  /// Draw the cell of the passed in bitmap onto the game.
-  ///
-  /// @lib DrawBitmapCell
-  /// @sn bitmapCell:%s drawAtX:%s y:%s
-  ///
-  /// @class BitmapCell
-  /// @method DrawAt
-  /// @csn drawAtX:%s y:%s
-  procedure DrawBitmapCell(const src : BitmapCell; x, y : Single); overload;
-  
-  /// Draw the cell of the passed in bitmap onto the game.
-  ///
-  /// @lib DrawBitmapCellAtPoint
-  /// @sn bitmapCell:%s drawAtPosition:%s
-  ///
-  /// @class BitmapCell
-  /// @overload DrawAt DrawAtPoint
-  /// @csn drawAt:%s
-  procedure DrawBitmapCell(const src : BitmapCell; const position : Point2D); overload;
-    
   /// Draw a cell from a bitmap onto the game.
   ///
-  /// @lib DrawCellXY
-  /// @sn bitmap:%s drawCell:%s atX:%s y:%s
+  /// @lib DrawCellOpts
+  /// @sn bitmap:%s drawCell:%s atX:%s y:%s opts:%s
   ///
   /// @class Bitmap
   /// @method DrawCell
-  /// @csn drawCell:%s atX:%s y:%s
+  /// @csn drawCell:%s atX:%s y:%s opts:%s
   procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single; const opts : DrawingOptions); overload;
   
   /// Draw a cell from a bitmap onto the game.
   ///
   /// @lib DrawCell
-  /// @sn bitmap:%s drawCell:%s at:%s
+  /// @sn bitmap:%s drawCell:%s atX:%s y:%s
   ///
   /// @class Bitmap
-  /// @overload DrawCell DrawCellAtPoint
-  /// @csn drawCell:%s at:%s
-  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts : DrawingOptions); overload;
-  
-  
-  
-//---------------------------------------------------------------------------
-// Bitmap drawing routines - onto screen
-//---------------------------------------------------------------------------
-  
-  /// Draw the cell of the bitmap onto the screen.
-  ///
-  /// @lib DrawBitmapCellOnScreen
-  /// @sn bitmapCell:%s drawOnScreenAtX:%s y:%s
-  ///
-  /// @class BitmapCell
-  /// @method DrawOnScreen
-  /// @csn drawOnScreenAtX:%s y:%s
-  procedure DrawBitmapCellOnScreen(const src : BitmapCell; x, y : Longint); overload;
+  /// @method DrawCell
+  /// @csn drawCell:%s atX:%s y:%s
+  procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single); overload;
 
-  /// Draw the cell of the bitmap onto the screen.
-  ///
-  /// @lib DrawBitmapCellAtPointOnScreen
-  /// @sn bitmapCell:%s drawOnScreenAt:%s
-  ///
-  /// @class BitmapCell
-  /// @overload DrawOnScreen DrawAtPointOnSreen
-  /// @csn drawOnScreenAt:%s
-  procedure DrawBitmapCellOnScreen(const src : BitmapCell; const position : Point2D); overload;
-  
-  
+    
 //---------------------------------------------------------------------------
 // Bitmap Saving
 //---------------------------------------------------------------------------
@@ -867,6 +672,7 @@ end;
 function CombineIntoGrid(const bitmaps: BitmapArray; cols: LongInt): Bitmap;
 var
   i, w, h, rows: Integer;
+  opts: DrawingOptions;
 begin
   result := nil;
   w := 0;
@@ -887,11 +693,12 @@ begin
     rows += 1;
   
   result := CreateBitmap(w * cols, h * rows);
-  
+  opts := OptionDrawTo(result);
+
   for i := Low(bitmaps) to High(bitmaps) do
   begin
     MakeOpaque(bitmaps[i]);
-    DrawBitmap(result, bitmaps[i], (i mod cols) * w, (i div cols) * h);
+    DrawBitmap(bitmaps[i], (i mod cols) * w, (i div cols) * h, opts);
     MakeTransparent(bitmaps[i]);
   end;
   
@@ -1083,13 +890,13 @@ end;
 
 //----------------------------------------------------------------------------
 
-function PixelDrawnAtPoint(bmp: Bitmap; x, y: Longint): Boolean;
+function PixelDrawnAtPoint(bmp: Bitmap; x, y: Single): Boolean;
 begin
   if not assigned(bmp) then result := false
   else result := (Length(bmp^.nonTransparentPixels) = bmp^.width)
-                  and ((x >= 0) and (x < bmp^.width))
-                  and ((y >= 0) and (y < bmp^.height))
-                  and bmp^.nonTransparentPixels[x, y];
+      and ((x >= 0) and (x < bmp^.width))
+      and ((y >= 0) and (y < bmp^.height))
+      and bmp^.nonTransparentPixels[Round(x), Round(y)];
 end;
 
 procedure BitmapSetCellDetails(bmp: Bitmap; width, height, columns, rows, count: Longint);
@@ -1149,55 +956,6 @@ begin
   ImagesDriver.MakeTransparent(bmp);
 end;
 
-//---------------------------------------------------------------------------
-
-function RotateScaleBitmap(src: Bitmap; degRot, scale: Single): Bitmap;
-var
-  name: String;
-  obj: TResourceContainer;
-  deg: Longint;
-begin
-  result := nil;
-  if not assigned(src) then exit;
-  
-  deg := RoundInt(degRot) mod 360;
-  
-  name := Format('%s|%d|%.2f', [BitmapName(src), deg, scale]);
-  
-  //WriteLn(name);
-  
-  if HasBitmap(name) then
-  begin
-    result := BitmapNamed(name);
-    exit; 
-  end;
-  
-  New(result);
-  result^.name := name;
-  obj := tResourceContainer.Create(result);
-  if not _Images.setValue(name, obj) then
-  begin
-    Dispose(result);
-    result := nil;
-    exit;
-  end;
-  
-  ImagesDriver.RotateScaleSurface(result, src, deg, scale, 0);
-  
-  with result^ do
-  begin
-    
-    if degRot = 0 then
-      BitmapSetCellDetails(result, RoundInt(src^.cellW * scale), RoundInt(src^.cellH * scale), src^.cellCount, src^.cellRows, src^.cellCount)
-    else
-      // Cell details are gone
-      BitmapSetCellDetails(result, width, height, 1, 1, 1);
-    
-    SetLength(nonTransparentPixels, 0);
-    SetLength(clipStack, 0);
-  end;
-end;
-
 procedure SetupBitmapForCollisions(src: Bitmap);
 begin
   if not assigned(src) then exit;
@@ -1225,72 +983,41 @@ end;
 /// Side Effects:
 /// - Draws the src at the x,y location in the destination.
 
-procedure DrawBitmap(dest: Bitmap; src: Bitmap; x, y : Longint); overload;
+procedure DrawBitmap(src: Bitmap; x, y: Single; const opts: DrawingOptions); overload;
 begin
-  DrawBitmap(src, x, y, OptionDrawTo(dest));
-end;
-
-procedure DrawBitmap(name: String; x, y : Longint; const opts: DrawingOptions); overload;
-begin
-    DrawBitmap(BitmapNamed(name), x, y, opts);
-end;
-
-procedure DrawBitmap(src: Bitmap; x, y : Longint; const opts: DrawingOptions); overload;
-begin
-  if (not assigned(opts.dest)) or (not assigned(src)) then exit;
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'DrawBitmap', 'src = ' + HexStr(src));
+    try
   {$ENDIF}
+
+  if (not Assigned(opts.dest)) or (not Assigned(src)) then exit;
   
-  //TODO: Check if this is right
-  // Offset was previously 0 width 0 height which caused a bitmap from a simple draw 
-  // bitmap method to not draw (because of the dimensions)
-  // offset := RectangleFrom(x, y, src^.width, src^.height);
-
-
-  // if world map to screen... default to world
+  // if world coordinates then map to screen... default to world
   if not (opts.ToWorld) then
     ImagesDriver.BlitSurface(src, x, y, opts)
   else
     ImagesDriver.BlitSurface(src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y), opts);
 
-
   {$IFDEF TRACE}
-    TraceExit('sgImages', 'DrawBitmap');
+    finally
+      TraceExit('sgImages', 'DrawBitmap');
+    end;
   {$ENDIF}
 end;
 
-procedure DrawBitmap(src : Bitmap; x, y : Single); overload;
+procedure DrawBitmap(src: Bitmap; x, y : Single); overload;
 begin
-  DrawBitmap(screen, src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
+  DrawBitmap(src, x, y, OptionDefaults());
 end;
 
-procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
+procedure DrawBitmap(name: String; x, y : Single; const opts: DrawingOptions); overload;
 begin
-  DrawBitmap(dest, src, RoundInt(position.x), RoundInt(position.y));
-end;
-
-procedure DrawBitmap(src : Bitmap; const position : Point2D); overload;
-begin
-  DrawBitmap(src, RoundInt(position.x), RoundInt(position.y));
+    DrawBitmap(BitmapNamed(name), x, y, opts);
 end;
 
 procedure DrawBitmap(name: String; x, y : Single); overload;
 begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'DrawBitmap', 'name = ' + name);
-  {$ENDIF}
-  
-  DrawBitmap(BitmapNamed(name), x, y);
-  
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'DrawBitmap');
-  {$ENDIF}
-end;
-
-procedure DrawBitmap(name: String; const position : Point2D); overload;
-begin
-  DrawBitmap(BitmapNamed(name), position);
+  DrawBitmap(BitmapNamed(name), x, y, OptionDefaults());
 end;
 
 //---------------------------------------------------------------------------
@@ -1307,69 +1034,14 @@ end;
 
 //---------------------------------------------------------------------------
 
-procedure DrawCell(src: Bitmap; const source : Rectangle; x, y: Single; const opts : DrawingOptions); overload;
-  begin
-    DrawBitmap(src, RoundInt(x), RoundInt(y), OptionPartBmp(source.x, source.y, source.width, source.height, opts));
-  end;
-
 procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single; const opts : DrawingOptions); overload;
 begin
-  DrawCell(src, BitmapRectangleOfCell(src, cell), RoundInt(x), RoundInt(y), opts);
+  DrawBitmap(src, x, y, OptionPartBmp(BitmapRectangleOfCell(src, cell), opts));
 end;
 
-procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D; const opts : DrawingOptions); overload;
+procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single); overload;
 begin
-  DrawCell(src, cell, RoundInt(position.x), RoundInt(position.y), opts);
-end;
-
-//---------------------------------------------------------------------------
-
-procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x, y : Longint); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(dest, src.bmp, x, y)
-  else
-    DrawCell(src.bmp, src.cell, x, y, OptionDrawTo(dest));
-end;
-
-procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position : Point2D); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(dest, src.bmp, position)
-  else
-    DrawCell(src.bmp, src.cell, position, OptionDrawTo(dest));
-end;
-
-procedure DrawBitmapCell(const src : BitmapCell; x, y : Single); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(src.bmp, x, y)
-  else
-    DrawCell(src.bmp, src.cell, x, y, OptionDefaults());
-end;
-
-procedure DrawBitmapCell(const src : BitmapCell; const position : Point2D); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(src.bmp, position)
-  else
-    DrawCell(src.bmp, src.cell, position, OptionDefaults());
-end;
-
-procedure DrawBitmapCellOnScreen(const src : BitmapCell; x, y : Longint); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(src.bmp, x, y, OptionToScreen())
-  else
-    DrawCell(src.bmp, src.cell, x, y, OptionToScreen());
-end;
-
-procedure DrawBitmapCellOnScreen(const src : BitmapCell; const position : Point2D); overload;
-begin
-  if src.cell = -1 then
-    DrawBitmap(src.bmp, RoundInt(position.x), RoundInt(position.y), OptionToScreen())
-  else
-    DrawCell(src.bmp, src.cell, position, OptionToScreen());
+  DrawCell(src, cell, x, y, OptionDefaults());
 end;
 
 //---------------------------------------------------------------------------
@@ -1387,49 +1059,23 @@ end;
 
 function BitmapCellRectangle(x, y: Single; bmp: Bitmap): Rectangle; overload;
 begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'BitmapCellRectangle(x, y: Single', '');
-  {$ENDIF}
-  
   if not Assigned(bmp) then result := RectangleFrom(0,0,0,0)
   else result := RectangleFrom(x, y, bmp^.cellW, bmp^.cellH);
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'BitmapCellRectangle(x, y: Single', '');
-  {$ENDIF}
-end;
-
-function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
-begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'BitmapCellRectangle(const pt: Point2D', '');
-  {$ENDIF}
-  
-  result := BitmapCellRectangle(pt.x, pt.y, bmp);
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'BitmapCellRectangle(const pt: Point2D', '');
-  {$ENDIF}
 end;
 
 function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
 begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'BitmapCellRectangle(bmp: Bitmap): Rectangle', '');
-  {$ENDIF}
-  
   result := BitmapCellRectangle(0, 0, bmp);
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'BitmapCellRectangle(bmp: Bitmap): Rectangle', '');
-  {$ENDIF}
 end;
 
 function BitmapRectangleOfCell(src: Bitmap; cell: Longint): Rectangle;
 begin
-  
-  if (not assigned(src)) or (cell < 0) or (cell >= src^.cellCount) then
+  if (not assigned(src)) or (cell >= src^.cellCount) then
     result := RectangleFrom(0,0,0,0)
+  else if (cell < 0) then
+  begin
+    result := RectangleFrom(0,0,BitmapWidth(src),BitmapHeight(src));
+  end
   else
   begin
     result.x := (cell mod src^.cellCols) * src^.cellW;
@@ -1449,30 +1095,6 @@ function BitmapHeight(bmp: Bitmap): Longint; overload;
 begin
   if not assigned(bmp) then result := 0
   else result := bmp^.height;
-end;
-
-function SameBitmapCell(const bmp1, bmp2: BitmapCell): Boolean;
-begin
-  result := (bmp1.bmp = bmp2.bmp) and (bmp1.cell = bmp2.cell);
-end;
-
-function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell;
-begin
-  result.bmp := bmp;
-  if cell >= -1 then result.cell := cell
-  else result.cell := -1;
-end;
-
-function BitmapWidth(const bmp: BitmapCell): Longint; overload;
-begin
-  if bmp.cell = -1 then result := BitmapWidth(bmp.bmp)
-  else result := BitmapCellWidth(bmp.bmp);
-end;
-
-function BitmapHeight(const bmp: BitmapCell): Longint; overload;
-begin
-  if bmp.cell = -1 then result := BitmapHeight(bmp.bmp)
-  else result := BitmapCellHeight(bmp.bmp);
 end;
 
 function BitmapCellWidth(bmp: Bitmap): Longint;
@@ -1501,7 +1123,7 @@ begin
   result:=bmp^.filename;
 end;
 
-function BitmapCircle(bmp: Bitmap; x, y: Longint): Circle; overload;
+function BitmapCircle(bmp: Bitmap; x, y: Single): Circle; overload;
 begin
   result := BitmapCircle(bmp, PointAt(x, y));
 end;
@@ -1525,7 +1147,7 @@ begin
 end;
 
 
-function BitmapCellCircle(bmp: Bitmap; x, y: Longint): Circle; overload;
+function BitmapCellCircle(bmp: Bitmap; x, y: Single): Circle; overload;
 begin
   result := BitmapCellCircle(bmp, PointAt(x, y));
 end;
@@ -1602,8 +1224,7 @@ end;
     ReleaseAllBitmaps();
     FreeAndNil(_Images);
   end;
-  
-
 //=============================================================================
+
 end.
 //=============================================================================

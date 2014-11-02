@@ -32,11 +32,11 @@ implementation
     result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
 
-	function GetPixel32Procedure (bmp: Bitmap; x, y: Longint) : Color;
+	function GetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
   var
     clr: sg_color;
 	begin
-    clr := _sg_functions^.graphics.read_pixel(bmp^.surface, x, y);
+    clr := _sg_functions^.graphics.read_pixel(bmp^.surface, Round(x), Round(y));
     result := RGBAColorProcedure(Round(clr.r * 255), Round(clr.g * 255), Round(clr.b * 255), Round(clr.a * 255));
 	end;
 	
@@ -152,7 +152,7 @@ implementation
     _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
-	procedure SetPixelColorProcedure(dest : Bitmap; x, y : Integer; clr : Color);
+	procedure SetPixelColorProcedure(dest : Bitmap; x, y : Single; clr : Color);
   var
     pts: array [0..2] of Single;
   begin
@@ -257,12 +257,12 @@ implementation
   
   function GetScreenWidthProcedure(): LongInt; 
   begin
-    result := screenRect.width;
+    result := Round(screenRect.width);
   end;
   
   function GetScreenHeightProcedure(): LongInt; 
   begin
-    result := screenRect.height;
+    result := Round(screenRect.height);
   end;
 
   function AvailableResolutionsProcedure(): ResolutionArray;
