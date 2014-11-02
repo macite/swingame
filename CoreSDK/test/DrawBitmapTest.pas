@@ -9,12 +9,12 @@ begin
 	LoadBitmapNamed('test','Swinburne.jpg');
 	
 	for i:=1 to 400 do
-		begin
-			ClearScreen(ColorWhite);
-			DrawBitmap('test',100,100,OptionToWorld());
-			DrawBitmap('test',400,400,OptionToScreen());
-			DrawBitmap('test',700,700);
-			MoveCameraBy(0,-1);
-			RefreshScreen();
-		end;
+	begin
+		ClearScreen(ColorWhite);
+		DrawBitmap('test',100,100, OptionToWorld());
+		DrawBitmap('test',400,400, OptionToScreen());
+		DrawBitmap('test',700,150);
+		MoveCameraBy(0,-1);
+		RefreshScreen();
+	end;
 end.

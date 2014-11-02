@@ -1,3 +1,20 @@
+//=============================================================================
+// sgDrawingOptions.pas
+//=============================================================================
+//
+// The drawing options provides a flexible means of providing different drawing
+// features, without needing many different overloads of each function or 
+// procedure.
+//
+// Drawing Options can be composed to provide a range of different features
+// including:
+// - Drawing onto another Bitmap, rather than the screen
+// - Scaling the drawing
+// - Rotation
+// - Flipping X and/or Y
+// - Drawing part of a bitmap
+// - Drawing to the World or Screen
+//
 unit sgDrawingOptions;
 
 interface

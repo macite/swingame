@@ -339,7 +339,6 @@ implementation
   procedure RefreshScreenProcedure(screen : Bitmap);
   begin  
   	if not Assigned(screen^.surface) then begin RaiseWarning('SDL1.2 Driver - RefreshScreenProcedure recieved empty Bitmap'); exit; end;
-    DrawCollectedText(screen);
     SDL_BlitSurface(screen^.surface, nil, _screen, nil);
     SDL_Flip(_screen);
   end;

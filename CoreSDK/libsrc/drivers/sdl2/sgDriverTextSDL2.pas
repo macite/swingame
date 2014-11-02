@@ -6,7 +6,7 @@ interface
 implementation
 	uses sgTypes, sgDriverSDL2Types, sgDriverText, sgShared;
 
-	function LoadFontProcedure(fontName, fileName : String; size : Longint) : font;
+	function LoadFontProcedure(fontName, fileName : String; size : Longint) : Font;
 	var
 		fdata: psg_font_data;
 	begin
@@ -32,7 +32,7 @@ implementation
 		result^.name := fontName;
 	end;
 	
-	procedure CloseFontProcedure(fontToClose : font);
+	procedure CloseFontProcedure(fontToClose : Font);
 	var
 		fdata: psg_font_data;   
 	begin
@@ -44,12 +44,25 @@ implementation
 	
 	//TODO: move most of this to sgText
 	procedure PrintStringsProcedure(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
-	begin
+	var
+		clr: sg_color;
+    	pts: array [0..4] of Single;
+  	begin
+		clr := _ToSGColor(clrBg);
+		if clr.a > 0 then
+		begin
+			pts[0] := rc.x;
+	    	pts[1] := rc.y;
+    		pts[2] := rc.width;
+    		pts[3] := rc.height;
+			_sg_functions^.graphics.fill_aabb_rect(dest^.surface, clr, @pts[0], 4);
+		end;
 		_sg_functions^.text.draw_text(dest^.surface, font^.fptr, rc.x, rc.y, PChar(str), _ToSGColor(clrFg));
 	end;
 	
 	procedure PrintWideStringsProcedure(dest: Bitmap; font: Font; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	begin
+		WriteLn('PrintWideStringsProcedure!!!');
 	end;
 	
 	procedure SetFontStyleProcedure(fontToSet : font; value : FontStyle);

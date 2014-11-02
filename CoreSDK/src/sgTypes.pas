@@ -350,17 +350,17 @@ interface
     ///
     /// @struct DrawingOptions
     DrawingOptions = packed record
-      dest : Bitmap; //the bitmap used to draw on
-      scaleX : Single;
-      scaleY : Single;
-      angle : Single;
-      anchoroffsetX : Single;
-      anchoroffsetY : Single;
-      flipX : Boolean;
-      flipY : Boolean;
-      isPart : Boolean;
-      x, y, w, h : Single;
-      ToWorld : Boolean;
+      dest : Bitmap;            // The bitmap used to draw on to
+      scaleX : Single;          // Scale data
+      scaleY : Single;          //
+      angle : Single;           // Angle for rotations
+      anchoroffsetX : Single;   // Centre point for rotations
+      anchoroffsetY : Single;   //
+      flipX : Boolean;          // Flip data
+      flipY : Boolean;          //
+      isPart : Boolean;         // Draw just a part?
+      x, y, w, h : Single;      // Part to draw
+      ToWorld : Boolean;        // Draw to world or screen coordinates (camera has effect?)
     end;
 
     /// @type BitmapArray

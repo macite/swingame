@@ -8,7 +8,7 @@ interface
     procedure AddKeyData(kyCode, kyChar: Longint);
     procedure HandleKeyupEvent(kyCode: LongInt);
     procedure ProcessKeyPress(kyCode, kyChar: Longint);
-    procedure CheckKeyRepeat();
+    procedure ProcessTextEntry(input: String);
     // text reading/draw collection
     procedure DrawCollectedText(dest: Bitmap);
     procedure SetText(text: String);
@@ -99,8 +99,6 @@ implementation
     result := _tempString;
   end;
   
-  
-  
   function TextEntryWasCancelled: Boolean; 
   begin
     result := _textCancelled;
@@ -110,26 +108,6 @@ implementation
   begin
     if (InputDriver.CheckQuit()) then
       DoQuit()
-  end;
-  
-  procedure CheckKeyRepeat();
-  var
-    nowTime, timeDown: Longint;
-  begin
-    if Length(_KeyDown) <> 1 then exit;
-    
-    nowTime := TimerDriver.GetTicks();
-    
-    timeDown := nowTime - _KeyDown[0].downAt;
-    
-    // 300 is the key repeat delay - hard coded for the moment...
-    if timeDown > 300 then
-    begin
-      ProcessKeyPress(_KeyDown[0].code, _KeyDown[0].keyChar);
-      
-      // 40 is the key repeat delap - hard coded for the moment...
-      _KeyDown[0].downAt := _KeyDown[0].downAt + 30;
-    end;
   end;
   
   procedure ResetMouseState();
@@ -151,7 +129,6 @@ implementation
   
     InputDriver.ProcessEvents();
 
-    CheckKeyRepeat();
     CheckQuit();
   end;
   
@@ -259,16 +236,6 @@ implementation
         _tempString := '';
         _readingString := false;
         _textCancelled := true;
-      end
-      else if Length(_tempString) < _maxStringLen then
-      begin
-        case kyChar of
-          //Skip non printable characters
-          0..31: ;
-          127..High(Byte): ;
-          else //Append the character
-            _tempString := _tempString + Char(kyChar);
-        end;
       end;
       
       //If the string was change
@@ -278,7 +245,25 @@ implementation
       end;
     end;
   end;
-  
+
+  procedure ProcessTextEntry(input: String);
+  var
+    i: Integer;
+  begin
+    if _readingString then
+    begin
+      if Length(_tempString) + Length(input) < _maxStringLen then
+      begin
+        _tempString += input;
+        SetText(_tempString);
+      end
+      else if Length(_tempString) < _maxStringLen then
+      begin
+        _tempString := _tempString + Copy(input, 1, _maxStringLen - Length(_tempString));
+        SetText(_tempString);
+      end;
+    end;
+  end;
   
   procedure ProcessMouseEvent(button: Byte);
   begin
@@ -344,32 +329,16 @@ implementation
   end;
 
   procedure DrawCollectedText(dest : Bitmap);
-  var
-    srect, drect: Rectangle;
-    textWidth: Longint;
   begin
     if (not imagesDriver.SurfaceExists(dest)) then exit;
 
     if _readingString then
-      if (imagesDriver.SurfaceExists(_textBitmap)) then
-        begin
-          textWidth := _textBitmap^.width;
-
-          if textWidth > _area.width then
-            srect.x := SmallInt(textWidth - _area.width)
-          else
-            srect.x := 0;
-          srect.y := 0;
-
-          srect.width := _area.width;
-          srect.height := _area.height;
-
-          drect := _area;
-          // imagesDriver.BlitSurface(_textBitmap,  dest, @srect, @drect);
-
-          //TODO: check this...
-          imagesDriver.BlitSurface(_textBitmap, _area.x, _area.y, OptionDrawTo(dest));
-        end;
+    begin
+      if imagesDriver.SurfaceExists(_textBitmap) then
+      begin
+        imagesDriver.BlitSurface(_textBitmap, _area.x, _area.y, OptionDrawTo(dest));
+      end;
+    end;
   end;
   
 

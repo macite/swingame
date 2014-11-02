@@ -548,7 +548,6 @@ implementation
   
   procedure RefreshScreenProcedure(screen : Bitmap);
   begin  
-    DrawCollectedText(screen);
     SDL_RenderPresent(PSDL13Screen(_screen)^.renderer);
   end;
   

@@ -210,7 +210,7 @@ interface
   /// approximately meet the targetted frames per second.
   ///
   /// @lib RefreshScreenRestrictFPS
-  procedure RefreshScreen(TargetFPS: Longword); overload;
+  procedure RefreshScreen(TargetFPS: LongInt); overload;
   
   
   
@@ -277,7 +277,7 @@ interface
   /// @sn colorComponentsOf:%s red:%s green:%s blue:%s alpha:%s
   ///
   /// @doc_group colors
-  procedure ColorComponents(c: Color; out r, g, b, a: byte);
+  procedure ColorComponents(c: Color; out r, g, b, a: Byte);
 
 
   /// returns color to string.
@@ -285,7 +285,7 @@ interface
   /// @lib
   ///
   /// @doc_group colors
-  function  ColorToString(c: Color): string;
+  function  ColorToString(c: Color): String;
 
   /// Returns a color from a floating point RBG value set.
   ///
@@ -846,7 +846,8 @@ implementation
   uses Math, Classes, SysUtils, // system
        sgSavePNG, 
        sgTrace, 
-       sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions;
+       sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
+       sgInputBackend;
 
   /// Clears the surface of the screen to the passed in color.
   ///
@@ -1525,24 +1526,11 @@ implementation
   end;
 
   procedure RefreshScreen(); overload;
-  var
-    nowTime: Longword;
   begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'RefreshScreen');
-    {$ENDIF}
-    //Draw then delay
-    GraphicsDriver.RefreshScreen(screen);
-
-    nowTime := GetTicks();
-    _UpdateFPSData(nowTime - _lastUpdateTime); // delta
-    _lastUpdateTime := nowTime;
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'RefreshScreen');
-    {$ENDIF}
+    RefreshScreen(-1);
   end;
 
-  procedure RefreshScreen(TargetFPS: Longword); overload;
+  procedure RefreshScreen(targetFPS: Longint); overload;
   var
     nowTime: Longword;
     delta, delayTime: Longword;
@@ -1550,15 +1538,16 @@ implementation
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'RefreshScreen');
     {$ENDIF}
+    DrawCollectedText(screen);
     GraphicsDriver.RefreshScreen(screen);
     
     nowTime := GetTicks();
     delta := nowTime - _lastUpdateTime;
     
-    //dont sleep if 1ms remaining...
-    while (delta + 1) * TargetFPS < 1000 do
+    //dont sleep if 5ms remaining...
+    while (targetFPS > 0) and ((delta + 5) * targetFPS < 1000) do
     begin
-      delayTime := (1000 div TargetFPS) - delta;
+      delayTime := (1000 div targetFPS) - delta;
       Delay(delayTime);
       nowTime := GetTicks();
       delta := nowTime - _lastUpdateTime;

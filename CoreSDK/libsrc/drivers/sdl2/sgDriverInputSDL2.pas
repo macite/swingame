@@ -7,7 +7,7 @@ interface
   function GetInputCallbackFunction() : sg_input_callbacks;
 
 implementation
-  uses sgDriverInput, sgInputBackend;
+  uses sgDriverInput, sgInputBackend, sgTypes;
 
   function IsKeyPressedProcedure(virtKeyCode : LongInt) : Boolean;
   begin
@@ -15,25 +15,11 @@ implementation
   end;
   
   function CheckQuitProcedure() : Boolean; //TODO: check why this doesn't work correctly from SDL - Cmd + Q should end it
-  {$IFDEF FPC}
-  // var
-  //   keys: PUInt8;
-  //   modS:  SDL_Keymod;
-  {$ENDIF} 
   begin
-    {$IFDEF FPC}
-    result := false;
-    // keys := SDL_GetKeyboardState(nil);
-    // modS := SDL_GetModState();
-    
-    // result := ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_LGUI) = LongInt(KMOD_LGUI)) or 
-    //           ((keys + LongInt(SDL_SCANCODE_Q))^ = 1) and (LongInt(modS) and LongInt(KMOD_RGUI) = LongInt(KMOD_RGUI)) or 
-    //           ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_LALT) = LongInt(KMOD_LALT)) or 
-    //           ((keys + LongInt(SDL_SCANCODE_F4))^ = 1) and (LongInt(modS) and LongInt(KMOD_RALT) = LongInt(KMOD_RALT));
-                
-    {$ELSE}
-    result := (IsKeyPressed(SDLK_LALT) and IsKeyPressed(SDLK_F4));
-    {$ENDIF}
+    result := 
+      (IsKeyPressedProcedure(SDLK_Q) and (IsKeyPressedProcedure(SDLK_LGUI) or IsKeyPressedProcedure(SDLK_RGUI))) 
+      or
+      (IsKeyPressedProcedure(SDLK_F4) and(IsKeyPressedProcedure(SDLK_RALT) or IsKeyPressedProcedure(SDLK_LALT)));
 
     result := result or (wind_open and (_sg_functions^.input.window_close_requested(@wind) <> 0));
   end;
@@ -89,9 +75,9 @@ implementation
     DoQuit();
   end;
 
-  procedure HandleInputText(ttext: PChar);
+  procedure HandleInputTextCallback(ttext: PChar); cdecl;
   begin
-    //TODO: add SDL supported text entry
+  ProcessTextEntry(ttext);
   end;
 
   function GetInputCallbackFunction() : sg_input_callbacks;
@@ -99,9 +85,9 @@ implementation
     result.do_quit           := @DoQuitCallback;
     result.handle_key_down   := @HandleKeydownEventCallback;
     result.handle_key_up     := @HandleKeyupEventCallback;
-    result.handle_mouse_up   := @ProcessMouseEventCallback;
+    result.handle_mouse_up   := @ProcessMouseEventCallback; // click occurs on up
     result.handle_mouse_down := nil;
-    result.handle_input_text := nil;
+    result.handle_input_text := @HandleInputTextCallback;
   end;
   
   procedure LoadSDL2InputDriver();

@@ -943,8 +943,12 @@ implementation
 		bitmapSize.y := 0;
 		bitmapSize.width := TextWidth(font, str) + 2;
 		bitmapSize.height := TextHeight(font,str) + 2;
+
+		//WriteLn(bitmapSize.width, 'x', bitmapSize.height);
+
 		resultBitmap := CreateBitmap(bitmapSize.width, bitmapSize.height);
-		PrintStrings(resultBitmap,font,str,bitmapSize,clrFg, ColorTransparent, AlignLeft);
+		ClearSurface(resultBitmap, backgroundColor);
+		PrintStrings(resultBitmap, font, str, bitmapSize, clrFg, ColorTransparent, AlignLeft);
 	
 		result := resultBitmap;
 	end;
