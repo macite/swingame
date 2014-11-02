@@ -1,3 +1,7 @@
+//=============================================================================
+// sgArduino.pas
+//=============================================================================
+
 /// SwinGame's Arduino unit is capable of connecting and communicating
 /// with an Arduino device using a Serial port.
 ///

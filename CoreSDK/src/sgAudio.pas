@@ -6,36 +6,6 @@
 // effects. This includes initialisation, loading, freeing, playing, and
 // checking if music or sound is playing.
 //
-// Change History:
-//
-// Version 3:
-// - 2011-05-12: Josh   : Added PauseMusic and Resume Music
-// - 2010-12-08: Andrew : Changed to RaiseWarning, and checked audio open
-//                      : Added interacting with sounds and music by name
-// - 2010-01-28: David  : Changed LoadSoundEffectNamed to use an already
-//                                              loaded sound if found
-// - 2009-11-10: Andrew : Added sn and csn tags to code
-// - 2009-11-06: Andrew : Returned loading code
-//                      : Added extra comments and tracing
-// - 2009-07-29: Andrew : Open Audio now indicates if audio has been opened.
-// - 2009-07-14: Andrew : Removed loading and freeing code.
-// - 2009-06-16: Clinton: Commenting/format tweaks
-// - 2009-06-04: Andrew : Finished processing comments.
-//                        Added fading capabilities.
-//                        Fixed comments in implementation.
-// Version 2.1:
-// - 2009-05-19: Andrew:  Added PlaySoundEffect with volume
-//                        Added meta comments
-// Version 2.0:
-// - 2008-12-17: Andrew: Moved all integers to Longint
-// - 2008-12-16: Andrew: Added volume controls
-//
-// Version 1.1:
-// - 2008-03-09: Andrew: Added extra exception handling
-// - 2008-01-17: Aki + Andrew: Refactor
-//
-// Version 1.0:
-// - Various
 //=============================================================================
 
 
