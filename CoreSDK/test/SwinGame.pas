@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-03 12:26:21.088772
+// SwinGame.pas was generated on 2014-11-03 12:54:57.527776
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2897,6 +2897,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draws theText at the specified point using the color and font indicated.
   procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
 
+  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
+
+  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
+
   // Draws the text at the specified x,y location using the color, font, and options indicated.
   procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
 
@@ -2906,125 +2912,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draws the text at the specified x,y location using the color, font, and options indicated.
   procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
 
-  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws theText onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 
   // Draws theText in the specified rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
 
-  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 
-  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawTextOnScreen` procedure.
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 
   // Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
@@ -7524,6 +7422,16 @@ implementation
     sgText.DrawText(theText,textColor,name,size,x,y);
   end;
 
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
+  begin
+    sgText.DrawText(theText,textColor,backColor,name,align,area);
+  end;
+
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
+  begin
+    sgText.DrawText(theText,textColor,backColor,theFont,align,area);
+  end;
+
   procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
     sgText.DrawText(theText,textColor,theFont,x,y,opts);
@@ -7539,94 +7447,24 @@ implementation
     sgText.DrawText(theText,textColor,name,size,x,y,opts);
   end;
 
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,x,y,w,h);
+    sgText.DrawText(theText,textColor,backColor,name,align,area,opts);
   end;
 
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
   begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,x,y,w,h);
+    sgText.DrawText(theText,textColor,backColor,name,size,align,area);
   end;
 
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,x,y,w,h);
+    sgText.DrawText(theText,textColor,backColor,theFont,align,area,opts);
   end;
 
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,name,align,withinRect);
-  end;
-
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,withinRect);
-  end;
-
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,withinRect);
-  end;
-
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,withinRect);
-  end;
-
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,withinRect);
-  end;
-
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,withinRect);
-  end;
-
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,name,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,theFont,align,withinRect);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,withinRect);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,withinRect);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,theFont,align,x,y,w,h);
-  end;
-
-  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,x,y,w,h);
+    sgText.DrawText(theText,textColor,backColor,name,size,align,area,opts);
   end;
 
   function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;

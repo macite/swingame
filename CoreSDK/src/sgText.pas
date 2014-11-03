@@ -156,12 +156,14 @@ interface
 	///
 	/// @lib
 	/// @sn drawText:%s color:%s font:%s x:%s y:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
 	
 	/// Draws the text at the specified point using the color and font indicated.
 	///
 	/// @lib DrawTextWithFontNamed
 	/// @sn drawText:%s color:%s fontNamed:%s x:%s y:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single); overload;
 	
 	/// Draws theText at the specified point using the color and font indicated.
@@ -174,18 +176,21 @@ interface
 	///
 	/// @lib DrawTextOpts
 	/// @sn drawText:%s color:%s font:%s atX:%s y:%s opts:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text at the specified x,y location using the color, font, and options indicated.
 	///
 	/// @lib DrawTextWithFontNamedOpts
 	/// @sn drawText:%s color:%s fontNamed:%s atX:%s y:%s opts:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text at the specified x,y location using the color, font, and options indicated.
 	///
 	/// @lib DrawTextWithFontNamedAndSizeOpts
 	/// @sn drawText:%s color:%s fontNamed:%s size:%s atX:%s y:%s opts:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
@@ -194,192 +199,55 @@ interface
 	///
 	/// @lib DrawTextToBitmapAtPointWithFontNamedAndSize
 	/// @sn drawTextFont:%s string:%s textColor:%s backgroundColor:%s   
+	/// @doc_details
 	function DrawTextTo(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
 	
 	
 //---------------------------------------------------------------------------
-// Draw Text Lines
+// Draw Text in an area
 //---------------------------------------------------------------------------
 	
-	/// Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
+	/// Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
 	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib
-	/// @sn drawTextLines:%s textColor:%s backColor:%s font:%s align:%s atX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y: Single; w, h: Single); overload;
-	
-	/// Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesWithFontNamed
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s atX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y:Single; w, h: Single); overload;
-	
-	/// Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesWithFontNamedAndSize
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s atX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y:Single; w, h: Single); overload;
-	
+	/// @lib DrawTextInRect
+	/// @sn drawText:%s textColor:%s backColor:%s font:%s align:%s inRect:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
 	
 	/// Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
 	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRect
-	/// @sn drawTextLines:%s textColor:%s backColor:%s font:%s align:%s inRect:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	/// Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRectWithFontNamed
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s inRect:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+	/// @lib DrawTextInRectWithFontNamed
+	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s align:%s inRect:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
 	
 	/// Draws theText in the specified rectangle using the fore and back colors, and the font indicated.
 	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRectWithFontNamedAndSize
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s inRect:%s
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+	/// @lib DrawTextInRectWithFontNamedAndSize
+	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s inRect:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
 	
+	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
+	///
+	/// @lib DrawTextInRectOpts
+	/// @sn bitmap:%s drawText:%s textColor:%s backColor:%s font:%s align:%s in:%s opts:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
-	/// Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesOnBitmap
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s font:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y, w, h: Single); overload;
+	/// @lib DrawTextInRectOnBitmapWithFontNamed
+	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s align:%s in:%s opts:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
-	/// Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesOnBitmapWithFontNamed
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y, w, h: Single); overload;
-	
-	/// Draws theText onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesOnBitmapWithFontNamedAndSize
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y, w, h: Single); overload;
-	
-	
-	/// Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnBitmap
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s font:%s align:%s in:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	/// Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnBitmapWithFontNamed
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s in:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	/// Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawText` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnBitmapWithFontNamedAndSize
-	/// @sn bitmap:%s drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s in:%s
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	
-	/// Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib
-	/// @sn drawTextLines:%s textColor:%s backColor:%s font:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y, w, h: Single); overload;
-	
-	/// Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesOnScreenWithFontNamed
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y, w, h: Single); overload;
-	
-	/// Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesOnScreenWithFontNamedWithSize
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s onScreenAtX:%s y:%s w:%s h:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y, w, h: Single); overload;
-	
-	
-	/// Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnScreen
-	/// @sn drawTextLines:%s textColor:%s backColor:%s font:%s align:%s onScreenInRect:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	/// Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnScreenWithFontNamed
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s align:%s onScreenInRect:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-	
-	/// Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
-	/// As the text is draw directly onto the screen the camera location does not effect its position.
-	/// This is useful for drawing text on a HUD or similar actions.
-	///
-	/// This version should be used to draw text that contains multiple lines, to draw a single line of text
-	/// use the `DrawTextOnScreen` procedure.
-	///
-	/// @lib DrawTextLinesInRectOnScreenWithFontNamedAndSize
-	/// @sn drawTextLines:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s onScreenInRect:%s
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-	
+	/// @lib DrawTextInRectOnBitmapWithFontNamedAndSize
+	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s in:%s opts:%s
+	/// @doc_details
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
 	
 //---------------------------------------------------------------------------
@@ -395,7 +263,8 @@ interface
 	/// Draws text using a simple bitmap font that is built into SwinGame.
 	///
 	/// @lib DrawSimpleTextOpts
-	/// @sn drawText:%s color:%s onScreenAtX:%s y:%s opts:%s
+	/// @sn drawText:%s color:%s atX:%s y:%s opts:%s
+	/// @doc_details
 	procedure DrawText(theText: String; textColor: Color; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// 
@@ -783,119 +652,49 @@ implementation
 	end;
 
 //----------------------------------------------------------------------------
-// Draw Text Area
+// Draw Text in Area
 //----------------------------------------------------------------------------
 
-
-
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y, w, h: Single); overload;
-	begin
-		DrawTextLines(dest, theText, textColor, backColor, FontNamed(name), align, x, y, w, h);
-	end;
-	
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y, w, h: Single); overload;
-	begin
-		DrawTextLines(dest, theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, x, y, w, h);
-	end;
-	
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y, w, h: Single); overload;
-	var
-		rect: Rectangle;
+	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
 		if not Assigned(theFont) then exit;
+		if not Assigned(opts.dest) then begin RaiseWarning('Cannot draw text, as no destination was supplied'); exit; end;
 		if Length(theText) <= 0 then exit;
-		if (w <= 0) or (h <= 0) then exit;
+		if (area.width <= 0) or (area.height <= 0) then exit;
 
-		rect.x := x; // + 1;
-		rect.y := y; // + 1;
-		rect.width := w; // - 2;
-		rect.height := h; // - 2;
-		PrintStrings(dest, theFont, theText, rect, textColor, backColor, align);
+		PrintStrings(opts.dest, theFont, theText, area, textColor, backColor, align);
 	end;
 	
-	
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
-		DrawTextLines(dest, theText, textColor, backColor, FontNamed(name), align, withinRect);
+		DrawText(theText, textColor, backColor, FontNamed(name), align, area, opts);
 	end;
 	
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
-		DrawTextLines(dest, theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, withinRect);
+		DrawText(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, area, opts);
 	end;
-	
-	procedure DrawTextLines(dest: Bitmap; theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+		
+	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
 	begin
-		DrawTextLines(dest, theText, textColor, backColor, theFont, align, RoundInt(withinRect.x), RoundInt(withinRect.y), withinRect.width, withinRect.height);
+		DrawText(theText, textColor, backColor, theFont, align, area, OptionDefaults());
 	end;
 	
-	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y, w, h: Single); overload;
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
 	begin
-		DrawTextLines(screen, theText, textColor, backColor, FontNamed(name), align, x, y, w, h);
+		DrawText(theText, textColor, backColor, FontNamed(name), align, area, OptionDefaults());
 	end;
 	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y, w, h: Single); overload;
+	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
 	begin
-		DrawTextLines(screen, theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, x, y, w, h);
+		DrawText(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, area, OptionDefaults());
 	end;
 	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y, w, h: Single); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, theFont, align, x, y, w, h);
-	end;
-	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, FontNamed(name), align, RoundInt(withinRect.x), RoundInt(withinRect.y), withinRect.width, withinRect.height);
-	end;
-	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, RoundInt(withinRect.x), RoundInt(withinRect.y), withinRect.width, withinRect.height);
-	end;
-	
-	procedure DrawTextLinesOnScreen(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, theFont, align, RoundInt(withinRect.x), RoundInt(withinRect.y), withinRect.width, withinRect.height);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; x, y :Single; w, h: Single); overload;
-	begin
-		DrawTextLines(theText, textColor, backColor, FontNamed(name), align, x, y, w, h);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; x, y:Single; w, h: Single); overload;
-	begin
-		DrawTextLines(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, x, y, w, h);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; x, y :Single; w, h: Single); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, theFont, align, ToScreenX(x), ToScreenY(y), w, h);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(theText, textColor, backColor, FontNamed(name), align, withinRect);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, withinRect);
-	end;
-	
-	procedure DrawTextLines(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
-	begin
-		DrawTextLines(screen, theText, textColor, backColor, theFont, align, ToScreenX(withinRect.x), ToScreenY(withinRect.y), withinRect.width, withinRect.height);
-	end;
-	
+//----------------------------------------------------------------------------
+// Text metrics
+//----------------------------------------------------------------------------
 	
 	/// Calculates the width of a string when drawn with a given font.
-	///
-	/// @param theText:   The text to measure
-	/// @param theFont:   The font used to draw the text
-	/// @returns           The width of the drawing in pixels
 	function TextWidth(theFont: Font; theText: String): Longint; overload;
 	var
 		y: Longint; //SizeText returns both... store and ignore y
@@ -911,27 +710,7 @@ implementation
 		end;
 	end;
 
-	function TextWidth(theText: WideString; theFont: Font): Longint; overload;
-	var
-		y: Longint; //SizeText returns both... store and ignore y
-	begin
-		result := 0;
-		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextWidth'); exit; end;
-		try
-			y := 0; 
-			if length(theText) = 0 then result := 0
-			else TextDriver.SizeOfUnicode(theFont, theText, result, y);
-		except
-			begin RaiseException('Unable to get the text width'); exit; end;
-		end;
-	end;
-
-
 	/// Calculates the height of a string when drawn with a given font.
-	///
-	/// @param theText:   The text to measure
-	/// @param theFont:   The font used to draw the text
-	/// @returns           The height of the drawing in pixels
 	function TextHeight(theFont: Font; theText: String): Longint; overload;
 	var
 		w: Longint; //SizeText returns both... store and ignore w
@@ -940,23 +719,8 @@ implementation
 		
 		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextHeight'); exit; end;
 		try
-				w := 0;
-		TextDriver.SizeOfText(theFont, theText, w, result);
-		except
-			begin RaiseException('Unable to get the text height'); exit; end;
-		end;
-	end;
-
-	function TextHeight(theText: WideString; theFont: Font): Longint; overload;
-	var
-		w: Longint; //SizeText returns both... store and ignore w
-	begin
-		result :=  0;
-		
-		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextHeight'); exit; end;
-		try
 			w := 0;
-		TextDriver.SizeOfUnicode(theFont,theText,w,result);
+			TextDriver.SizeOfText(theFont, theText, w, result);
 		except
 			begin RaiseException('Unable to get the text height'); exit; end;
 		end;

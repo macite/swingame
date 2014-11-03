@@ -1902,12 +1902,13 @@ begin
   if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then DrawRectangle(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
   if GUIC.activeTextBox <> forRegion then
-    DrawTextLinesOnScreen(TextboxText(forRegion), 
-                          VectorForecolorToDraw(forRegion),
-                          VectorBackcolorToDraw(forRegion), 
-                          TextboxFont(forRegion), 
-                          TextboxAlignment(forRegion),
-                          TextboxTextArea(area));
+    DrawText(TextboxText(forRegion), 
+            VectorForecolorToDraw(forRegion),
+            VectorBackcolorToDraw(forRegion), 
+            TextboxFont(forRegion), 
+            TextboxAlignment(forRegion),
+            TextboxTextArea(area),
+            OptionToScreen());
 end;
   
 procedure DrawList(forRegion: Region; const area: Rectangle);
@@ -2143,26 +2144,29 @@ begin
     if (itemIdx <> tempList^.activeItem) then
     begin
       // Draw the text onto the screen as normal...
-      DrawTextLinesOnScreen(ListItemText(tempList, itemIdx), 
-                            VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
-                            ListFont(tempList), ListFontAlignment(tempList), 
-                            itemTextArea);
+      DrawText(ListItemText(tempList, itemIdx), 
+               VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
+               ListFont(tempList), ListFontAlignment(tempList), 
+               itemTextArea,
+               OptionToScreen());
     end
     else // the item is the selected item...
     begin
       if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
       begin
-        DrawTextLinesOnScreen(ListItemText(tempList, itemIdx), 
-                              VectorBackcolorToDraw(forRegion), VectorForecolorToDraw(forRegion),
-                              ListFont(tempList), ListFontAlignment(tempList),
-                              itemTextArea);
+        DrawText(ListItemText(tempList, itemIdx), 
+                 VectorBackcolorToDraw(forRegion), VectorForecolorToDraw(forRegion),
+                 ListFont(tempList), ListFontAlignment(tempList),
+                 itemTextArea,
+                 OptionToScreen());
       end
       else
       begin
-        DrawTextLinesOnScreen(ListItemText(tempList, itemIdx), 
-                     VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
-                     ListFont(tempList), ListFontAlignment(tempList),
-                     itemTextArea);
+        DrawText( ListItemText(tempList, itemIdx), 
+                  VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
+                  ListFont(tempList), ListFontAlignment(tempList),
+                  itemTextArea,
+                  OptionToScreen());
       end;
     end;
     
@@ -2174,12 +2178,13 @@ end;
 
 procedure DrawLabelText(forRegion: Region; const area: Rectangle);
 begin
-  DrawTextLinesOnScreen(LabelText(forRegion), 
-                        VectorForecolorToDraw(forRegion),
-                        ColorTransparent, //VectorBackcolorToDraw(forRegion), 
-                        LabelFont(forRegion),
-                        LabelAlignment(forRegion), 
-                        TextboxTextArea(area));
+  DrawText(LabelText(forRegion), 
+           VectorForecolorToDraw(forRegion),
+           ColorTransparent, //VectorBackcolorToDraw(forRegion), 
+           LabelFont(forRegion),
+           LabelAlignment(forRegion), 
+           TextboxTextArea(area),
+           OptionToScreen());
 end;
 
 procedure DrawAsVectors(p: Panel);
