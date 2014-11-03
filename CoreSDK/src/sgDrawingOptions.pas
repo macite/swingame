@@ -175,7 +175,7 @@ begin
 		flipX 			:= false;
 		flipY 			:= false;
 		isPart 			:= false;
-		ToWorld 		:= false;
+		camera	 		:= DrawDefault;
 	end;
 end;
 
@@ -295,7 +295,7 @@ end;
 function OptionToWorld(const opts : DrawingOptions) : DrawingOptions;
 begin
 	result := opts;
-	result.ToWorld := true;
+	result.camera := DrawToWorld;
 end;
 
 function OptionToScreen() : DrawingOptions;
@@ -306,7 +306,7 @@ end;
 function OptionToScreen(const opts : DrawingOptions) : DrawingOptions;
 begin
 	result := opts;
-	result.ToWorld := false;
+	result.camera := DrawToScreen;
 end;
 
 end.

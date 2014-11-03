@@ -346,6 +346,17 @@ interface
     /// @field pointer: ^BitmapData
     Bitmap = ^BitmapData;
     
+    /// Determines the effect of the camera on a drawing operation.
+    /// `DrawToScreen` means camera has no affect.
+    /// `DrawToWorld` means camera has an affect.
+    /// `DrawDefault` means camera has an affect only if drawn to the screen. 
+    /// @enum DrawingDest
+    DrawingDest = (
+        DrawToScreen, // no camera effect
+        DrawToWorld,  // camera effect
+        DrawDefault   // camera effect on screen, but not on bitmaps
+      );
+
     /// 
     ///
     /// @struct DrawingOptions
@@ -360,7 +371,7 @@ interface
       flipY : Boolean;          //
       isPart : Boolean;         // Draw just a part?
       part : Rectangle;         // Part to draw
-      ToWorld : Boolean;        // Draw to world or screen coordinates (camera has effect?)
+      camera: DrawingDest;      // Draw to world or screen coordinates (camera has effect?)
     end;
 
     /// @type BitmapArray

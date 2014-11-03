@@ -44,6 +44,10 @@ implementation
   var
     pts: array [0..6] of Single;
   begin
+    XYFromOpts(opts, x1, y1);
+    XYFromOpts(opts, x2, y2);
+    XYFromOpts(opts, x3, y3);
+
     pts[0] := x1;
     pts[1] := y1;
     pts[2] := x2;
@@ -58,6 +62,10 @@ implementation
   var
     pts: array [0..6] of Single;
   begin
+    XYFromOpts(opts, x1, y1);
+    XYFromOpts(opts, x2, y2);
+    XYFromOpts(opts, x3, y3);
+
     pts[0] := x1;
     pts[1] := y1;
     pts[2] := x2;
@@ -72,6 +80,8 @@ implementation
   var
     pts: array [0..3] of Single;
   begin
+    XYFromOpts(opts, xc, yc);
+
     pts[0] := xc;
     pts[1] := yc;
     pts[2] := radius;
@@ -83,6 +93,8 @@ implementation
   var
     pts: array [0..3] of Single;
   begin
+    XYFromOpts(opts, xc, yc);
+
     pts[0] := xc;
     pts[1] := yc;
     pts[2] := radius;
@@ -90,33 +102,35 @@ implementation
     _sg_functions^.graphics.draw_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 	
-	procedure FillEllipseProcedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
+	procedure FillEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
 	begin
-    //TODO: -think about- Change both sides to use x, y, w, h - old and new BE use cx, cy, radH, radW
-    pts[0] := xPos - halfWidth;
-    pts[1] := yPos - halfHeight;
-    pts[2] := 2 * halfWidth;
-    pts[3] := 2 * halfHeight;
+    pts[0] := x;
+    pts[1] := y;
+    pts[2] := width;
+    pts[3] := height;
+
+    XYFromOpts(opts, pts[0], pts[1]);
 
     _sg_functions^.graphics.fill_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 	
-	procedure DrawEllipseProcedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
+	procedure DrawEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
-    //TODO: -think about- Change both sides to use x, y, w, h - old and new BE use cx, cy, radH, radW
-    pts[0] := xPos - halfWidth;
-    pts[1] := yPos - halfHeight;
-    pts[2] := 2 * halfWidth;
-    pts[3] := 2 * halfHeight;
+    pts[0] := x;
+    pts[1] := y;
+    pts[2] := width;
+    pts[3] := height;
+
+    XYFromOpts(opts, pts[0], pts[1]);
 
     _sg_functions^.graphics.draw_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
-    end;
+  end;
 	
-	procedure FillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+	procedure FillRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -124,11 +138,13 @@ implementation
     pts[1] := rect.y;
     pts[2] := rect.width;
     pts[3] := rect.height;
+
+    XYFromOpts(opts, pts[0], pts[1]);
 
     _sg_functions^.graphics.fill_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 
-  procedure DrawRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+  procedure DrawRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -136,6 +152,8 @@ implementation
     pts[1] := rect.y;
     pts[2] := rect.width;
     pts[3] := rect.height;
+
+    XYFromOpts(opts, pts[0], pts[1]);
 
     _sg_functions^.graphics.draw_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
@@ -149,17 +167,22 @@ implementation
     pts[2] := x2;
     pts[3] := y2;
 
+    XYFromOpts(opts, pts[0], pts[1]);
+    XYFromOpts(opts, pts[2], pts[3]);
+
     _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
-	procedure SetPixelColorProcedure(dest : Bitmap; x, y : Single; clr : Color);
+	procedure DrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);
   var
     pts: array [0..2] of Single;
   begin
     pts[0] := x;
     pts[1] := y;
 
-    _sg_functions^.graphics.draw_pixel(dest^.surface, _ToSGColor(clr), @pts[0], 2);
+    XYFromOpts(opts, pts[0], pts[1]);
+
+    _sg_functions^.graphics.draw_pixel(opts.dest^.surface, _ToSGColor(clr), @pts[0], 2);
 	end;
   
   procedure SetClipRectangleProcedure(dest : Bitmap; rect : Rectangle);
@@ -300,7 +323,7 @@ implementation
     GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;   // #
     GraphicsDriver.FillRectangle            := @FillRectangleProcedure; // #
     GraphicsDriver.DrawLine                 := @DrawLineProcedure;      // #  
-    GraphicsDriver.SetPixelColor            := @SetPixelColorProcedure; // #
+    GraphicsDriver.DrawPixel                := @DrawPixelProcedure; // #
     GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure; // #
     GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;  // #
     GraphicsDriver.ResetClip                := @ResetClipProcedure;         // #

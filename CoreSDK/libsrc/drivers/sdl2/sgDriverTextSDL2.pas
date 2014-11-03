@@ -49,6 +49,7 @@ implementation
     	pts: array [0..4] of Single;
   	begin
 		clr := _ToSGColor(clrBg);
+
 		if clr.a > 0 then
 		begin
 			pts[0] := rc.x;

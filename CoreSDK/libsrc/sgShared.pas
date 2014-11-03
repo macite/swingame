@@ -69,7 +69,7 @@ interface
   procedure ReleaseAll(tbl: TStringHash; releaser: ReleaseFunction);
 
 
-
+  procedure XYFromOpts(const opts: DrawingOptions; var x, y: Single);
 
 
   // Rounds `x` up... 1.1 -> 2
@@ -148,6 +148,13 @@ interface
     _UpdateFPSData: IntProc = nil;
     
     UseExceptions: Boolean = True;
+
+    ///
+    /// The screen offset variables
+    ///
+    _cameraX : Single = 0.0;
+    _cameraY : Single = 0.0;
+
   const
     DLL_VERSION = 'TEST BUILD';
     {$ifndef FPC}
@@ -160,7 +167,8 @@ implementation
   uses 
     SysUtils, Math, Classes, StrUtils,
     sgTrace, sgGraphics, 
-    sgImages, sgDriver,sgDriverImages;
+    sgImages, sgDriver, sgDriverImages,
+    sgDrawingOptions, sgCamera;
 //=============================================================================
   
   var
@@ -405,6 +413,20 @@ function StrToUByte(val: String): Byte;
 begin
   result := Byte(StrToInt(val));
 end;
+
+procedure XYFromOpts(const opts: DrawingOptions; var x, y: Single);
+begin
+  // check cases where drawn without camera...
+  case opts.camera of
+    DrawToScreen: exit;
+    DrawDefault: if opts.dest <> screen then exit;
+  end;
+
+  // update location using camera
+  x := ToScreenX(x);
+  y := ToScreenY(y);
+end;
+
 
 //=============================================================================
 

@@ -258,13 +258,7 @@ implementation
     sgGraphics, sgGeometry, sgSprites, sgShared, sgImages;
 //=============================================================================
 
-  ///
-  /// The screen offset variables
-  ///
-  var 
-    _cameraX : Single = 0.0;
-    _cameraY : Single = 0.0;
-  
+ 
 //---------------------------------------------------------------------------
 // Camera - position
 //---------------------------------------------------------------------------

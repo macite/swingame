@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-02 19:11:39.679645
+// SwinGame.pas was generated on 2014-11-03 12:26:21.088772
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -72,6 +72,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type BitmapData = sgTypes.BitmapData;
 
   type Bitmap = sgTypes.Bitmap;
+
+  type DrawingDest = sgTypes.DrawingDest;
 
   type DrawingOptions = sgTypes.DrawingOptions;
 
@@ -1300,20 +1302,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draw a pixel in the game.
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
 
+  // Draw a pixel with options.
+  procedure DrawPixel(clr: Color; const position: Point2D; const opts: DrawingOptions); overload;
+
   // Draw a pixel in the game.
   procedure DrawPixel(clr: Color; x: Single; y: Single); overload;
 
-  // Draw a pixel onto a destination.
-  procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
-
-  // Draw a pixel onto a destination.
-  procedure DrawPixel(dest: Bitmap; clr: Color; x: Single; y: Single); overload;
-
-  // Draw a pixel on the screen.
-  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
-
-  // Draw a pixel on the screen.
-  procedure DrawPixelOnScreen(clr: Color; x: Single; y: Single); overload;
+  // Draw a pixel with options.
+  procedure DrawPixel(clr: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw a rectangle in the game.
   procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -1435,9 +1431,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Push a clip rectangle to the screen. This can be undone using PopClip.
   procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
-
-  // Sets the color of the pixel to the specified value.
-  procedure PutPixel(bmp: Bitmap; value: Color; x: Single; y: Single); overload;
 
   // Gets a color given its RGBA components.
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -2886,120 +2879,44 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // (``s1`` and ``s2``).
   function VectorFromTo(s1: Sprite; s2: Sprite): Vector; overload;
 
-  // Draws the framerate to the screen using a simple font built into SwinGame.
+  // 
   procedure DrawFramerate(x: Single; y: Single); overload;
-
-  // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Single; y: Single; font: Font); overload;
-
-  // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Single; y: Single; name: String); overload;
-
-  // Draws the framerate to the screen using the supplied font.
-  procedure DrawFramerate(x: Single; y: Single; name: String; size: Longint); overload;
-
-  // Draws text using a simple bitmap font that is built into SwinGame.
-  procedure DrawText(theText: String; textColor: Color; const pt: Point2D); overload;
-
-  // Draws the text at the specified point using the color and font indicated.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
 
   // Draws text using a simple bitmap font that is built into SwinGame.
   procedure DrawText(theText: String; textColor: Color; x: Single; y: Single); overload;
 
-  // Draws the text at the specified point using the color and font indicated.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
-
-  // Draws the text onto the bitmap at the specified point using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; const pt: Point2D); overload;
+  // Draws text using a simple bitmap font that is built into SwinGame.
+  procedure DrawText(theText: String; textColor: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draws the text at the specified point using the color and font indicated.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
   procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
 
   // Draws the text at the specified point using the color and font indicated.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
   procedure DrawText(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
 
-  // Draws text using a simple bitmap font that is built into SwinGame.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; x: Single; y: Single); overload;
-
-  // Draws the text onto the bitmap at the specified point using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
-
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-
-  // Draws the text onto the bitmap at the specified point using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-
   // Draws theText at the specified point using the color and font indicated.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
   procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
 
-  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
+  // Draws the text at the specified x,y location using the color, font, and options indicated.
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
 
-  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
+  // Draws the text at the specified x,y location using the color, font, and options indicated.
+  procedure DrawText(theText: String; textColor: Color; name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
 
-  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
-  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
-  // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
-
-  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
-  //
-  // This version should be used to draw text that contains multiple lines, to draw a single line of text
-  // use the `DrawText` procedure.
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  // Draws the text at the specified x,y location using the color, font, and options indicated.
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
   procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
   //
@@ -3053,13 +2970,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
   //
   // This version should be used to draw text that contains multiple lines, to draw a single line of text
   // use the `DrawText` procedure.
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
   // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
   // As the text is draw directly onto the screen the camera location does not effect its position.
@@ -3109,65 +3026,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // use the `DrawTextOnScreen` procedure.
   procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
 
-  // Draws text using a simple bitmap font that is built into SwinGame.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; x: Single; y: Single); overload;
-
-  // Draws theText onto the screen at the specified point using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
-
-  // Draws theText onto the screen at the specified point using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
-
-  // Draws theText onto the screen at the specified point using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-
-  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
-  // As the text is draw directly onto the screen the camera location does not effect its position.
-  // This is useful for drawing text on a HUD or similar actions.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLinesOnScreen` procedure.
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
-
-  // Draws the text onto the bitmap at the specified point using the color and font indicated.
+  // Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
   // good idea if the text does not change frequently.
-  //
-  // This version only draws a single line of text, to draw text that contains line breaks use the
-  // `DrawTextLines` procedure.
   function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
 
   // Returns the style settings for the font.
@@ -5628,29 +5489,19 @@ implementation
     sgGraphics.DrawPixel(clr,position);
   end;
 
+  procedure DrawPixel(clr: Color; const position: Point2D; const opts: DrawingOptions); overload;
+  begin
+    sgGraphics.DrawPixel(clr,position,opts);
+  end;
+
   procedure DrawPixel(clr: Color; x: Single; y: Single); overload;
   begin
     sgGraphics.DrawPixel(clr,x,y);
   end;
 
-  procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
+  procedure DrawPixel(clr: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgGraphics.DrawPixel(dest,clr,position);
-  end;
-
-  procedure DrawPixel(dest: Bitmap; clr: Color; x: Single; y: Single); overload;
-  begin
-    sgGraphics.DrawPixel(dest,clr,x,y);
-  end;
-
-  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
-  begin
-    sgGraphics.DrawPixelOnScreen(clr,position);
-  end;
-
-  procedure DrawPixelOnScreen(clr: Color; x: Single; y: Single); overload;
-  begin
-    sgGraphics.DrawPixelOnScreen(clr,x,y);
+    sgGraphics.DrawPixel(clr,x,y,opts);
   end;
 
   procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -5841,11 +5692,6 @@ implementation
   procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
   begin
     sgGraphics.PushClip(x,y,w,h);
-  end;
-
-  procedure PutPixel(bmp: Bitmap; value: Color; x: Single; y: Single); overload;
-  begin
-    sgGraphics.PutPixel(bmp,value,x,y);
   end;
 
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -7653,44 +7499,14 @@ implementation
     sgText.DrawFramerate(x,y);
   end;
 
-  procedure DrawFramerate(x: Single; y: Single; font: Font); overload;
-  begin
-    sgText.DrawFramerate(x,y,font);
-  end;
-
-  procedure DrawFramerate(x: Single; y: Single; name: String); overload;
-  begin
-    sgText.DrawFramerate(x,y,name);
-  end;
-
-  procedure DrawFramerate(x: Single; y: Single; name: String; size: Longint); overload;
-  begin
-    sgText.DrawFramerate(x,y,name,size);
-  end;
-
-  procedure DrawText(theText: String; textColor: Color; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(theText,textColor,pt);
-  end;
-
-  procedure DrawText(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(theText,textColor,theFont,pt);
-  end;
-
   procedure DrawText(theText: String; textColor: Color; x: Single; y: Single); overload;
   begin
     sgText.DrawText(theText,textColor,x,y);
   end;
 
-  procedure DrawText(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
+  procedure DrawText(theText: String; textColor: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawText(theText,textColor,name,pt);
-  end;
-
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(dest,theText,textColor,name,pt);
+    sgText.DrawText(theText,textColor,x,y,opts);
   end;
 
   procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
@@ -7703,54 +7519,34 @@ implementation
     sgText.DrawText(theText,textColor,name,x,y);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; x: Single; y: Single); overload;
-  begin
-    sgText.DrawText(dest,theText,textColor,x,y);
-  end;
-
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(dest,theText,textColor,theFont,pt);
-  end;
-
-  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(theText,textColor,name,size,pt);
-  end;
-
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-  begin
-    sgText.DrawText(dest,theText,textColor,name,size,pt);
-  end;
-
   procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
   begin
     sgText.DrawText(theText,textColor,name,size,x,y);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawText(dest,theText,textColor,theFont,x,y);
+    sgText.DrawText(theText,textColor,theFont,x,y,opts);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawText(dest,theText,textColor,name,x,y);
+    sgText.DrawText(theText,textColor,name,x,y,opts);
   end;
 
-  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
-    sgText.DrawText(dest,theText,textColor,name,size,x,y);
-  end;
-
-  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,x,y,w,h);
+    sgText.DrawText(theText,textColor,name,size,x,y,opts);
   end;
 
   procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  begin
+    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,x,y,w,h);
   end;
 
   procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
@@ -7793,14 +7589,14 @@ implementation
     sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,withinRect);
   end;
 
-  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
-  begin
-    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,x,y,w,h);
-  end;
-
   procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLines(theText,textColor,backColor,name,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,x,y,w,h);
   end;
 
   procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
@@ -7831,41 +7627,6 @@ implementation
   procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Single; h: Single); overload;
   begin
     sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,x,y,w,h);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; x: Single; y: Single); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,x,y);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,name,pt);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,theFont,pt);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,theFont,x,y);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,name,x,y);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,name,size,pt);
-  end;
-
-  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
-  begin
-    sgText.DrawTextOnScreen(theText,textColor,name,size,x,y);
   end;
 
   function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;

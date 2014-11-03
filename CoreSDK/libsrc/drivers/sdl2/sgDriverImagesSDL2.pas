@@ -127,6 +127,7 @@ implementation
 		dstData[5] := opts.scaleX; // Scale X
 		dstData[6] := opts.scaleY; // Scale Y
 		
+		XYFromOpts(opts, dstData[0], dstData[1]); // Camera?
 
 		_sg_functions^.image.draw_bitmap(src^.surface, opts.dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), flip);
 	end;

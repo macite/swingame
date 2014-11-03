@@ -475,50 +475,34 @@ interface
 // Pixel drawing
 //---------------------------------------------------------------------------
   
-  /// Sets the color of the pixel to the specified value.
-  ///
-  /// @lib
-  /// @sn bitmap:%s putPixelX:%s y:%s color:%s
-  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Single);
-  
-  /// Draw a pixel onto a destination.
-  /// 
-  /// @lib DrawPixelOnto
-  /// @sn drawOnto:%s color:%s pixelX:%s y:%s
-  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Single); overload;
-  
-  /// Draw a pixel onto a destination.
-  /// 
-  /// @lib DrawPixelAtPointOnto
-  /// @sn drawOnto:%s color:%s pixel:%s
-  procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
-  
   /// Draw a pixel in the game.
   ///
   /// @lib
-  /// @sn draw:%s pixelX:%s y:%s
+  /// @sn drawPixel:%s atX:%s y:%s
   procedure DrawPixel(clr: Color; x, y: Single); overload;
   
   /// Draw a pixel in the game.
   ///
   /// @lib DrawPixelAtPoint
-  /// @sn draw:%s pixelAt:%s
+  /// @sn drawPixel:%s At:%s
+  /// @doc_details
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
-  
-  /// Draw a pixel on the screen.
+
+  /// Draw a pixel with options.
   /// 
-  /// @lib
-  /// @sn draw:%s pixelOnScreenX:%s y:%s
-  procedure DrawPixelOnScreen(clr: Color; x, y: Single); overload;
+  /// @lib DrawPixelOpts
+  /// @sn drawPixel:%s atX:%s y:%s opts:%s
+  /// @doc_details
+  procedure DrawPixel(clr: Color; x, y: Single; const opts: DrawingOptions); overload;
   
-  /// Draw a pixel on the screen.
-  ///
-  /// @lib DrawPixelAtPointOnScreen
-  /// @sn draw:%s pixelOnScreenAt:%s
-  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
-  
-  
-  
+  /// Draw a pixel with options.
+  /// 
+  /// @lib DrawPixelAtPointOpts
+  /// @sn drawPixel:%s at:%s opts:%s
+  /// @doc_details
+  procedure DrawPixel(clr: Color; const position: Point2D; const opts: DrawingOptions); overload;
+
+
 //---------------------------------------------------------------------------
 // Rectangle drawing
 //---------------------------------------------------------------------------
@@ -852,28 +836,6 @@ implementation
     result := GetPixel(screen, x, y);
   end;
 
-  procedure PutPixel(bmp: Bitmap; value: Color; x, y: Single);
-  begin
-    DrawPixel(bmp, value, x, y);
-  end;
-  
-  /// Draws a pixel onto the screen.
-  ///
-  /// @param clr:     The color to draw the pixel
-  /// @param x,y:         The x,y location to draw the pixel at
-  ///
-  /// Side Effects:
-  /// - Sets one pixel on the screen
-  procedure DrawPixelOnScreen(clr: Color; x, y: Single);
-  begin
-    DrawPixel(screen, clr, x, y);
-  end;
-
-  procedure DrawPixel(clr: Color; x, y: Single); overload;
-  begin
-    DrawPixelOnScreen(clr, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y));
-  end;
-
 //=============================================================================
 
   procedure DrawRectangle(clr : Color; x, y, width, height : Single);
@@ -1027,35 +989,47 @@ implementation
 
    //=============================================================================
 
+  procedure DrawEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
+  begin
+    GraphicsDriver.DrawEllipse(clr, xPos, yPos, width, height, opts);
+  end;
+
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single);
-    begin
-      DrawEllipse(clr, xPos, yPos, width, height, OptionDefaults());
-    end;
+  begin
+    GraphicsDriver.DrawEllipse(clr, xPos, yPos, width, height, OptionDefaults());
+  end;
 
   procedure DrawEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
-    begin
-      DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
-    end;
+  begin
+    GraphicsDriver.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
+  end;
     
   procedure DrawEllipse(clr : Color; const rec: Rectangle);
-    begin
-      DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
-    end;
+  begin
+    GraphicsDriver.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
+  end;
+
+  //=============================================================================
        
+  procedure FillEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions);
+  begin
+    GraphicsDriver.FillEllipse(clr, xPos, yPos, width, height, opts);
+  end;
+
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single);
-    begin
-      FillEllipse(clr, xPos, yPos, width, height, OptionDefaults());
-    end;
+  begin
+    GraphicsDriver.FillEllipse(clr, xPos, yPos, width, height, OptionDefaults());
+  end;
     
   procedure FillEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
-    begin
-      FillEllipse(clr,rec.x, rec.y, rec.width, rec.height, opts);
-    end;
+  begin
+    GraphicsDriver.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
+  end;
     
   procedure FillEllipse(clr : Color; const rec: Rectangle);
-    begin
-      FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
-    end;
+  begin
+    GraphicsDriver.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
+  end;
     
   //=============================================================================
   
@@ -1081,7 +1055,7 @@ implementation
     rect.width := Round(width);
     rect.height := Round(height);
     
-    GraphicsDriver.DrawRectangle(rect, clr, opts);
+    GraphicsDriver.DrawRectangle(clr, rect, opts);
   end;
 
   procedure FillRectangle(clr : Color;  xPos, yPos, width, height : Single; const opts : DrawingOptions);
@@ -1106,9 +1080,7 @@ implementation
     rect.width := Round(width);
     rect.height := Round(height);
     
-    //SDL_FillRect(dest^.surface, @rect, clr);
-    GraphicsDriver.FillRectangle(rect, clr, opts);
-
+    GraphicsDriver.FillRectangle(clr, rect, opts);
   end;
 
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
@@ -1141,84 +1113,33 @@ implementation
     GraphicsDriver.DrawLine(clr, xPosStart, yPosStart, xPosEnd, yPosEnd, opts);
   end;
 
-  procedure DrawEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
-  var
-    halfWidth, halfHeight: Single;
-  begin
-    if width < 0 then
-    begin
-      xPos += width;
-      width := -width;
-    end;
-    if height < 0 then
-    begin
-      yPos += height;
-      height := -height;
-    end;
 
-    halfWidth := width / 2;
-    halfHeight := height / 2;
+  //=============================================================================
+
+  procedure DrawPixel(clr: Color; x, y: Single; const opts: DrawingOptions); overload;
+  begin
+    if opts.dest = nil then begin RaiseWarning('DrawPixel - No destination supplied'); exit; end;
     
-    GraphicsDriver.DrawEllipse(clr, xPos + halfWidth, yPos + halfHeight, halfWidth, halfHeight, opts);
+    GraphicsDriver.DrawPixel(clr, x, y, opts);
   end;
 
-  procedure FillEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions);
-  var
-    halfWidth, halfHeight: Single;
+  procedure DrawPixel(clr: Color; x, y: Single); overload;
   begin
-    if width < 0 then
-    begin
-      xPos += width;
-      width := -width;
-    end;
-    if height < 0 then
-    begin
-      yPos += height;
-      height := -height;
-    end;
-
-    halfWidth := width / 2;
-    halfHeight := height / 2;
-    
-    GraphicsDriver.FillEllipse(clr, xPos + halfWidth, yPos + halfHeight, halfWidth, halfHeight, opts);
+    DrawPixel(clr, x, y, OptionDefaults());
   end;
 
-
-  /// Draws a pixel onto the destination bitmap.
-  ///
-  /// @param dest:         The destination bitmap - not optimised!
-  /// @param clr:     The color to draw the pixel
-  /// @param x,y:         The x,y location to draw the pixel at
-  ///
-  /// Side Effects:
-  /// - Sets one pixel on the destination bitmap
-  procedure DrawPixel(dest: Bitmap; clr: Color; x, y: Single); overload;
+  procedure DrawPixel(clr: Color; const position : Point2D; const opts: DrawingOptions); overload;
   begin
-    if dest = nil then begin RaiseWarning('DrawPixel - No destination bitmap supplied'); exit; end;
-    
-    if (x < 0) or (x >= BitmapWidth(dest)) or (y < 0) or (y >= BitmapHeight(dest)) then 
-    begin 
-      // RaiseWarning('DrawPixel - Coordinate out of range of Bitmap supplied'); 
-      exit; 
-    end;
-    GraphicsDriver.SetPixelColor(dest, x, y, clr);
-  end;
-  
-  
-  procedure DrawPixel(dest: Bitmap; clr: Color; const position : Point2D); overload;
-  begin
-    DrawPixel(dest, clr, Round(position.x), Round(position.y));
+    DrawPixel(clr, position.x, position.y, opts);
   end;
 
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
   begin
-    DrawPixel(clr, Round(position.x), Round(position.y));
+    DrawPixel(clr, position.x, position.y, OptionDefaults());
   end;
 
-  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
-  begin
-    DrawPixelOnScreen(clr, Round(position.x), Round(position.y));
-  end;
+  //=============================================================================
+
   
   procedure ResetClip(bmp: Bitmap); overload;
   begin

@@ -28,10 +28,10 @@ interface
     DrawCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions);      
 	  FillEllipseProcedure                  = procedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
 	  DrawEllipseProcedure                  = procedure (clr: Color;  xPos, yPos, halfWidth, halfHeight: Single; const opts : DrawingOptions);
-		FillRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
-    DrawRectangleProcedure                = procedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+		FillRectangleProcedure                = procedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
+    DrawRectangleProcedure                = procedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
 		DrawLineProcedure                     = procedure (clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
-		SetPixelColorProcedure                = procedure (dest : Bitmap; x, y : Single; clr : Color);
+		DrawPixelProcedure                    = procedure (clr : Color; x, y : Single; const opts: DrawingOptions);
     SetClipRectangleProcedure             = procedure (dest : Bitmap; rect : Rectangle);      
     ResetClipProcedure                    = procedure (bmp: Bitmap);  
     SetVideoModeFullScreenProcedure       = procedure ();
@@ -59,7 +59,7 @@ interface
 	  DrawEllipse               : DrawEllipseProcedure;
 	  FillRectangle             : FillRectangleProcedure;
 		DrawLine                  : DrawLineProcedure;
-		SetPixelColor             : SetPixelColorProcedure;
+		DrawPixel                 : DrawPixelProcedure;
     DrawRectangle             : DrawRectangleProcedure;
     SetClipRectangle          : SetClipRectangleProcedure;
     ResetClip                 : ResetClipProcedure;
@@ -72,9 +72,6 @@ interface
     ColorComponents           : ColorComponentsProcedure;
     ColorFrom                 : ColorFromProcedure;
     RGBAColor                 : RGBAColorProcedure;
-    // GetSurfaceWidth           : GetSurfaceWidthProcedure;
-    // GetSurfaceHeight          : GetSurfaceHeightProcedure;
-    // ToGfxColor                : ToGfxColorProcedure;
     GetScreenWidth            : GetScreenWidthProcedure;
     GetScreenHeight           : GetScreenHeightProcedure;
     AvailableResolutions      : AvaialbleResolutionsProcedure;
@@ -161,10 +158,10 @@ uses
 		GraphicsDriver.DrawEllipse(clr,  xPos, yPos, halfWidth, halfHeight, opts);
 	end;
 	
-	procedure DefaultFillRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+	procedure DefaultFillRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.FillRectangle(rect, clr, opts);
+		GraphicsDriver.FillRectangle(clr, rect, opts);
 	end;
 	
 	procedure DefaultDrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
@@ -173,16 +170,16 @@ uses
 		GraphicsDriver.DrawLine(clr, x1, y1, x2, y2, opts);
 	end;
 	
-	procedure DefaultSetPixelColorProcedure(dest : Bitmap; x, y : Single; clr : Color);
+	procedure DefaultDrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.SetPixelColor(dest, x, y, clr);
+		GraphicsDriver.DrawPixel(clr, x, y, opts);
 	end;
   
-  procedure DefaultDrawRectangleProcedure (rect : Rectangle; clr : Color; const opts : DrawingOptions);
+  procedure DefaultDrawRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
-		GraphicsDriver.DrawRectangle(rect, clr, opts);
+		GraphicsDriver.DrawRectangle(clr, rect, opts);
 	end;
   
   procedure DefaultSetClipRectangleProcedure(dest : Bitmap; rect : Rectangle);
@@ -292,7 +289,7 @@ uses
 		GraphicsDriver.DrawEllipse              := @DefaultDrawEllipseProcedure;
 		GraphicsDriver.FillRectangle            := @DefaultFillRectangleProcedure;
 		GraphicsDriver.DrawLine                 := @DefaultDrawLineProcedure;
-		GraphicsDriver.SetPixelColor            := @DefaultSetPixelColorProcedure;
+		GraphicsDriver.DrawPixel                := @DefaultDrawPixelProcedure;
     GraphicsDriver.DrawRectangle            := @DefaultDrawRectangleProcedure;
     GraphicsDriver.SetClipRectangle         := @DefaultSetClipRectangleProcedure;
     GraphicsDriver.ResetClip                := @DefaultResetClipProcedure;

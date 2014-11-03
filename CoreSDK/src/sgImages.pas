@@ -992,11 +992,7 @@ begin
 
   if (not Assigned(opts.dest)) or (not Assigned(src)) then exit;
   
-  // if world coordinates then map to screen... default to world
-  if not (opts.ToWorld) then
-    ImagesDriver.BlitSurface(src, x, y, opts)
-  else
-    ImagesDriver.BlitSurface(src, sgCamera.ToScreenX(x), sgCamera.ToScreenY(y), opts);
+  ImagesDriver.BlitSurface(src, x, y, opts)
 
   {$IFDEF TRACE}
     finally
@@ -1189,7 +1185,8 @@ begin
   begin
     for y := 0 to src^.Height - 1 do
     begin
-      if (GetPixel(src, x, y) = clr) then DrawPixel(src,RGBAColor(0,0,0,0),x,y);
+      if (GetPixel(src, x, y) = clr) then 
+        DrawPixel(RGBAColor(0,0,0,0),x,y, OptionDrawTo(src));
     end;
   end;
 end;
