@@ -247,8 +247,6 @@ implementation
   end;
 
   procedure ProcessTextEntry(input: String);
-  var
-    i: Integer;
   begin
     if _readingString then
     begin
@@ -295,7 +293,7 @@ implementation
     begin
       outStr := text + '|';
       FreeOldSurface();
-      _textBitmap := DrawTextTo(_font, outStr, _forecolor, _backgroundColor);
+      _textBitmap := DrawTextToBitmap(_font, outStr, _forecolor, _backgroundColor);
     end
     else
       _textBitmap := _cursorBitmap;  
@@ -319,7 +317,7 @@ implementation
     newStr := '|';
 
     if imagesDriver.SurfaceExists(_cursorBitmap) then FreeBitmap(_cursorBitmap);
-    _cursorBitmap := DrawTextTo(_font, newStr, _foreColor,_backgroundColor);
+    _cursorBitmap := DrawTextToBitmap(_font, newStr, _foreColor,_backgroundColor);
     _textBitmap := _cursorBitmap;
   end;
   

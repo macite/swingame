@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-03 12:54:57.527776
+// SwinGame.pas was generated on 2014-11-03 14:04:04.586392
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2927,7 +2927,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
   // good idea if the text does not change frequently.
-  function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
+  function DrawTextToBitmap(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
 
   // Returns the style settings for the font.
   function FontFontStyle(font: Font): FontStyle; overload;
@@ -7467,9 +7467,9 @@ implementation
     sgText.DrawText(theText,textColor,backColor,name,size,align,area,opts);
   end;
 
-  function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
+  function DrawTextToBitmap(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
   begin
-    result := sgText.DrawTextTo(font,str,clrFg,backgroundColor);
+    result := sgText.DrawTextToBitmap(font,str,clrFg,backgroundColor);
   end;
 
   function FontFontStyle(font: Font): FontStyle; overload;

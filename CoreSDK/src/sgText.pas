@@ -200,7 +200,7 @@ interface
 	/// @lib DrawTextToBitmapAtPointWithFontNamedAndSize
 	/// @sn drawTextFont:%s string:%s textColor:%s backgroundColor:%s   
 	/// @doc_details
-	function DrawTextTo(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
+	function DrawTextToBitmap(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
 	
 	
 //---------------------------------------------------------------------------
@@ -464,28 +464,25 @@ implementation
 		result := (Longint(toCheck) and Longint(checkFor)) = Longint(checkFor);
 	end;
 	
-	/// This function prints "str" with font "font" and color "clrFg"
-	///  * onto a rectangle of color "clrBg".
-	///  * It does not pad the text.
-	procedure PrintStrings(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	//
+	// Converts a string into an array of lines.
+	// Updates width and height so that the values are sufficient to create
+	// a bitmap that will surround these with the given font.
+	// -- note initial values for width and height need to be supplied.
+	//
+	function ToLineArray(str: String; font: Font; var width, height: Longint): StringArray;
 	var
-		lineSkip, width, height: Longint;
-		lines: Array of String;
+		n, i, w, h, newHeight, baseHeight: Longint;
 		subStr: String;
-		n, i, w, h: Longint;
-		x, y: Single;
 	begin
-		// If there's nothing to draw, return NULL
-		if (Length(str) = 0) or (font = nil) then exit;
-
-		// Get basic metrics
-		lineSkip  := TextDriver.LineSkip( font );
-		width     := Round(rc.width);
-		height    := 0;
-
 		// Break the String into its lines:
-		SetLength(lines, 1);
-		n := -1; i := 0;
+		SetLength(result, 0);
+		n := -1;
+		i := 0;
+		newHeight := 0;
+
+		// get a height value to use for each empty line
+		TextDriver.SizeOfText(font, 'I', w, baseHeight);
 
 		while n <> 0 do // n = position in string
 		begin
@@ -493,33 +490,64 @@ implementation
 			n := Pos(eol, str);
 
 			//Copy all except EOL
-			if n = 0 then subStr := str
-			else if n = 1 then subStr := ''
-			else subStr := Copy(str, 1, n - 1); // copy to new string
+			if n = 0 then subStr := str 		// no newlines
+			else if n = 1 then subStr := ''		// no text then new line
+			else subStr := Copy(str, 1, n - 1); // a new line... copy to new string
 
-			//Remove the line from the original string
-			if n <> 0 then
+			if n <> 0 then // there was some substr copied...
 			begin
+				//Remove the line from the original string
 				str := Copy( str, n + Length(eol), Length(str) );
 			end;
 
 			//Store in the lines array
 			i := i + 1;
-			SetLength(lines, i);
-			lines[i - 1] := subStr;
+			SetLength(result, i);
+			result[i - 1] := subStr;
 
 			w := 0;
 			// Get the size of the rendered text.
-			if Length(subStr) > 0 then TextDriver.SizeOfText(font, subStr, w, height);
+			if Length(subStr) > 0 then 
+			begin
+				TextDriver.SizeOfText(font, subStr, w, h);
+				newHeight += h;
+			end
+			else
+			begin
+				newHeight += baseHeight;
+			end;
 
 			if w > width then width := w;
 		end;
 
-		if (width <= 0) or (height <= 0) then exit;
-
-		// Length(lines) = Number of Lines.
+		// Length(result) = Number of Lines.
 		// we assume that height is the same for all lines.
-		height := (Length(lines) - 1) * lineSkip + (height * Length(lines));
+		// newHeight += (Length(result) - 1) * TextDriver.LineSkip( font );
+		if newHeight > height then height := newHeight;
+	end;
+
+	/// This function prints "str" with font "font" and color "clrFg"
+	///  * onto a rectangle of color "clrBg".
+	///  * It does not pad the text.
+	procedure PrintStrings(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	var
+		lineSkip, width, height: Longint;
+		lines: StringArray;
+		i, w, h: Longint;
+		x, y: Single;
+	begin
+		// If there's nothing to draw, return NULL
+		if (Length(str) = 0) or (font = nil) then exit;
+
+		// Get basic metrics
+		lineSkip  := TextDriver.LineSkip( font );
+
+		width     := Round(rc.width);
+		height    := 0;
+
+		lines := ToLineArray(str, font, width, height);
+
+		if (width <= 0) or (height <= 0) then exit;
 
 		if (rc.width < 0) or (rc.height < 0) then
 		begin
@@ -565,10 +593,11 @@ implementation
 		PopClip(dest);
 	end;
 
-	function DrawTextTo(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
+	function DrawTextToBitmap(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
 	var
 		resultBitmap : Bitmap;
 		bitmapSize : Rectangle;
+		w, h: Longint;
 	begin
 		result := nil;
 		// If there's nothing to draw, return NULL
@@ -576,8 +605,13 @@ implementation
 
 		bitmapSize.x := 0;
 		bitmapSize.y := 0;
-		bitmapSize.width := TextWidth(font, str) + 2;
-		bitmapSize.height := TextHeight(font,str) + 2;
+		
+		w := 0;
+		h := 0;
+		ToLineArray(str, font, w, h);
+
+		bitmapSize.width := w;
+		bitmapSize.height := h;
 
 		//WriteLn(bitmapSize.width, 'x', bitmapSize.height);
 
@@ -697,33 +731,27 @@ implementation
 	/// Calculates the width of a string when drawn with a given font.
 	function TextWidth(theFont: Font; theText: String): Longint; overload;
 	var
-		y: Longint; //SizeText returns both... store and ignore y
+		height: Longint; //SizeText returns both... store and ignore height
 	begin
 		result := 0;
+		height := 0;
+		if length(theText) = 0 then result := 0;
 		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextWidth'); exit; end;
-		try
-			y := 0;
-			if length(theText) = 0 then result := 0 
-		else TextDriver.SizeOfText(theFont, theText, result, y);
-		except
-			begin RaiseException('Unable to get the text width'); exit; end;
-		end;
+
+		ToLineArray(theText, theFont, result, height);
 	end;
 
 	/// Calculates the height of a string when drawn with a given font.
 	function TextHeight(theFont: Font; theText: String): Longint; overload;
 	var
-		w: Longint; //SizeText returns both... store and ignore w
+		width: Longint; //SizeText returns both... store and ignore w
 	begin
-		result :=  0;
-		
+		result := 0;
+		width := 0;
+		if length(theText) = 0 then result := 0;
 		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextHeight'); exit; end;
-		try
-			w := 0;
-			TextDriver.SizeOfText(theFont, theText, w, result);
-		except
-			begin RaiseException('Unable to get the text height'); exit; end;
-		end;
+
+		ToLineArray(theText, theFont, width, result);
 	end;
 	
 	procedure DrawFramerate(x, y: Single); overload;
