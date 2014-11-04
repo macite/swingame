@@ -237,14 +237,14 @@ interface
 	
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
-	/// @lib DrawTextInRectOnBitmapWithFontNamed
+	/// @lib DrawTextInRectWithFontNamedOpts
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s align:%s in:%s opts:%s
 	/// @doc_details
 	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
-	/// @lib DrawTextInRectOnBitmapWithFontNamedAndSize
+	/// @lib DrawTextInRectWithFontNamedAndSizeOpts
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s in:%s opts:%s
 	/// @doc_details
 	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
