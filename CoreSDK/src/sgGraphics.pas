@@ -3,8 +3,7 @@
 //=============================================================================
 //
 // The Graphics unit is responsible for all of the drawing of anything to the
-// screen or other surfaces. The ...OnScreen routines draw directly onto the
-// screen ignoring the camera settings. The standard draw routines draw to the
+// screen or other surfaces. The standard draw routines draw to the
 // screen using the camera settings. Finally the overloaded drawing methods
 // with a destination Bitmap will draw onto the supplied bitmap.
 //
@@ -237,7 +236,6 @@ interface
   ///
   /// @doc_group colors
   procedure ColorComponents(c: Color; out r, g, b, a: Byte);
-
 
   /// returns color to string.
   ///

@@ -770,7 +770,7 @@ end;
 
 function LoadBitmap(filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
 begin
-  result := DoLoadBitmap(filename + IntToStr(transparentColor),filename, transparent, transparentColor);
+  result := DoLoadBitmap(filename + ColorToString(transparentColor),filename, transparent, transparentColor);
 end;
 
 function LoadBitmap(filename: String): Bitmap; overload;
