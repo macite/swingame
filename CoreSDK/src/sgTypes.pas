@@ -41,10 +41,6 @@ interface
 
   type
 
-
-
-
-
     /// @type LongintArray
     /// @array_wrapper
     /// @field data: array of Longint
@@ -1074,6 +1070,31 @@ interface
       DrawAsVectors:        Boolean;
     end;
 
+    /// @enum ConnectionType
+    ConnectionType = (
+      TCP,
+      UDP,
+      HTTP
+    );
+
+    /// @enum HTTPMethod
+    HTTPMethod = (
+      HTTP_GET,
+      HTTP_POST,
+      HTTP_PUT,
+      HTTP_DELETE
+    );
+
+    /// @struct HTTPRequest
+    HTTPRequest = packed record
+      requestType: HTTPMethod;
+      url        : String;
+      version    : String;
+      headername : StringArray;
+      headervalue: StringArray;
+      body       : String;
+    end;
+
     /// The Pointer to a MessageLink Creating a String LinkedList
     ///
     /// @struct MessagePtr
@@ -1097,8 +1118,9 @@ interface
       firstMsg        : MessagePtr;
       lastMsg         : MessagePtr;
       msgCount        : LongInt;
-      isTCP           : Boolean;
-      
+      conType         : ConnectionType;
+      stringIP        : String; //Allow for Reconnection
+
       msgLen          : LongInt;  // This data is used to handle splitting of messages
       partMsgData     : String;   //   over multiple packets
     end;

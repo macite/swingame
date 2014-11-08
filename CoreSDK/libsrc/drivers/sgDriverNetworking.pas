@@ -7,66 +7,72 @@ type
 
     //TCP Connection
     CreateTCPHostProcedure             = function (const aPort : LongInt) : Boolean;
-    CreateTCPConnectionProcedure   		 = function (const aDestIP : String; const aDestPort : LongInt) : Connection;
-    AcceptTCPConnectionProcedure 			 = function () : LongInt;
+    CreateTCPConnectionProcedure       = function (const aDestIP : String; const aDestPort : LongInt; aConType : ConnectionType) : Connection;
+    AcceptTCPConnectionProcedure       = function () : LongInt;
 
     //TCP Message
     BroadcastTCPMessageProcedure       = procedure (const aMsg : String);
     SendTCPMessageProcedure            = function (const aMsg : String; const aConnection : Connection) : Connection;
     TCPMessageReceivedProcedure        = function () : Boolean;
 
+    //HTTP Message
+    SendHTTPRequestProcedure           = function (const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+
     //UDP Connection
     CreateUDPHostProcedure             = function (const aPort : LongInt) : LongInt;
     CreateUDPConnectionProcedure       = function (const aDestIP : String; const aDestPort, aInPort : LongInt) : Connection; 
-		
-		//UDP Message
+    
+    //UDP Message
     UDPMessageReceivedProcedure        = function () : Boolean;
     SendUDPMessageProcedure            = function (const aMsg : String; const aConnection : Connection) : Boolean;
-		BroadcastUDPMessageProcedure			 = procedure (const aMsg : String);
+    BroadcastUDPMessageProcedure       = procedure (const aMsg : String);
 
     //Close Sockets
     CloseTCPHostSocketProcedure        = function (const aPort: LongInt) : Boolean;  
     CloseConnectionProcedure           = function (var aConnection : Connection; const aCloseUDPSocket : Boolean) : Boolean;
-    CloseUDPSocketProcedure      			 = function (const aPort : LongInt) : Boolean;
+    CloseUDPSocketProcedure            = function (const aPort : LongInt) : Boolean;
 
     CloseAllTCPHostSocketProcedure     = procedure();
     CloseAllConnectionsProcedure       = procedure(const aCloseUDPSockets : Boolean);
-    CloseAllUDPSocketProcedure  			 = procedure();
+    CloseAllUDPSocketProcedure         = procedure();
 
     FreeAllNetworkingResourcesProcedure = procedure();
 
     MyIPProcedure                      = function () : String;
-		ConnectionCountProcedure					 = function () : LongInt;
-		RetreiveConnectionProcedure				 = function (const aConnectionAt : LongInt) : Connection;
-		
+    ConnectionCountProcedure           = function () : LongInt;
+    RetreiveConnectionProcedure        = function (const aConnectionAt : LongInt) : Connection;
+    
 
   NetworkingDriverRecord = record
     CreateTCPHost               : CreateTCPHostProcedure;
-    CreateTCPConnection     		: CreateTCPConnectionProcedure;
-    AcceptTCPConnection   		  : AcceptTCPConnectionProcedure;
-		
+    CreateTCPConnection         : CreateTCPConnectionProcedure;
+    AcceptTCPConnection         : AcceptTCPConnectionProcedure;
+
+    
     TCPMessageReceived          : TCPMessageReceivedProcedure;
     BroadcastTCPMessage         : BroadcastTCPMessageProcedure;
-    SendTCPMessage	            : SendTCPMessageProcedure;
+    SendTCPMessage              : SendTCPMessageProcedure;
 
-    CreateUDPHost	              : CreateUDPHostProcedure;
+    SendHTTPRequest             : SendHTTPRequestProcedure;
+
+    CreateUDPHost               : CreateUDPHostProcedure;
     CreateUDPConnection         : CreateUDPConnectionProcedure;
-		
+    
     UDPMessageReceived          : UDPMessageReceivedProcedure;
     SendUDPMessage              : SendUDPMessageProcedure;
-		BroadcastUDPMessage					: BroadcastUDPMessageProcedure;
+    BroadcastUDPMessage         : BroadcastUDPMessageProcedure;
 
     CloseTCPHostSocket          : CloseTCPHostSocketProcedure;  
     CloseConnection             : CloseConnectionProcedure;         
-    CloseUDPSocket        			: CloseUDPSocketProcedure;     
+    CloseUDPSocket              : CloseUDPSocketProcedure;     
 
     MyIP                        : MyIPProcedure; 
-		ConnectionCount							: ConnectionCountProcedure;
-		RetreiveConnection					: RetreiveConnectionProcedure;
+    ConnectionCount             : ConnectionCountProcedure;
+    RetreiveConnection          : RetreiveConnectionProcedure;
 
     CloseAllTCPHostSocket       : CloseAllTCPHostSocketProcedure;     
     CloseAllConnections         : CloseAllConnectionsProcedure; 
-    CloseAllUDPSocket     			: CloseAllUDPSocketProcedure; 
+    CloseAllUDPSocket           : CloseAllUDPSocketProcedure; 
 
     FreeAllNetworkingResources  : FreeAllNetworkingResourcesProcedure;
   end;
@@ -76,23 +82,15 @@ var
 
 implementation
 uses
-  {$IFDEF SWINGAME_SDL2}
-    sgDriverNetworkingSDL
-  {$ELSE}
-    sgDriverNetworkingSDL
-  {$ENDIF};
+  {$IFDEF SWINGAME_SDL13}sgDriverNetworkingSDL{$ELSE}sgDriverNetworkingSDL{$ENDIF};
 
   procedure LoadDefaultNetworkingDriver(); 
   begin
-    {$IFDEF SWINGAME_SDL2}
-        LoadSDLNetworkingDriver();
+    {$IFDEF SWINGAME_SDL13}
+      LoadSDLNetworkingDriver();
     {$ELSE}
-      {$IFDEF SWINGAME_SDL13}
-        LoadSDLNetworkingDriver();
-      {$ELSE}
-        LoadSDLNetworkingDriver();
-      {$ENDIF}
-    {$ENDIF};
+      LoadSDLNetworkingDriver();
+    {$ENDIF}
   end;
 
   function DefaultMyIPProcedure() : String;
@@ -123,10 +121,10 @@ uses
     result := NetworkingDriver.CreateTCPHost(aPort);
   end;
 
-  function DefaultCreateTCPConnectionProcedure(const aDestIP : String; const aDestPort : LongInt) : Connection;
+  function DefaultCreateTCPConnectionProcedure(const aDestIP : String; const aDestPort : LongInt; aConType : ConnectionType) : Connection;
   begin    
     LoadDefaultNetworkingDriver();
-    result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort);
+    result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort, aConType);
   end;  
 
   function DefaultAcceptTCPConnectionProcedure() : LongInt;
@@ -155,6 +153,16 @@ uses
   begin
     LoadDefaultNetworkingDriver();
     NetworkingDriver.BroadcastTCPMessage(aMsg);
+  end;
+
+//----------------------------------------------------------------------------
+// HTTP Message Handling
+//----------------------------------------------------------------------------
+
+  function DefaultSendHTTPRequestProcedure(const aReq: HTTPRequest; const aConnection : Connection) : Connection;
+  begin
+    LoadDefaultNetworkingDriver();
+    result := NetworkingDriver.SendHTTPRequest(aReq, aConnection);
   end;
 
 //----------------------------------------------------------------------------
@@ -188,12 +196,12 @@ uses
     LoadDefaultNetworkingDriver();
     result := NetworkingDriver.SendUDPMessage(aMsg, aConnection);
   end;
-	
-	procedure DefaultBroadcastUDPMessageProcedure(const aMsg : String);
-	begin
+  
+  procedure DefaultBroadcastUDPMessageProcedure(const aMsg : String);
+  begin
     LoadDefaultNetworkingDriver();
-		NetworkingDriver.BroadcastUDPMessage(aMsg);
-	end;
+    NetworkingDriver.BroadcastUDPMessage(aMsg);
+  end;
 
 //----------------------------------------------------------------------------
 // Close Single
@@ -248,29 +256,32 @@ uses
   initialization 
   begin
     NetworkingDriver.CreateTCPHost               := @DefaultCreateTCPHostProcedure;
-    NetworkingDriver.CreateTCPConnection     		 := @DefaultCreateTCPConnectionProcedure;
-    NetworkingDriver.AcceptTCPConnection   			 := @DefaultAcceptTCPConnectionProcedure;
+    NetworkingDriver.CreateTCPConnection         := @DefaultCreateTCPConnectionProcedure;
+    NetworkingDriver.AcceptTCPConnection         := @DefaultAcceptTCPConnectionProcedure;
+
     NetworkingDriver.TCPMessageReceived          := @DefaultTCPMessageReceivedProcedure;
     NetworkingDriver.BroadcastTCPMessage         := @DefaultBroadcastTCPMessageProcedure;
-    NetworkingDriver.SendTCPMessage	             := @DefaultSendTCPMessageProcedure;
+    NetworkingDriver.SendTCPMessage              := @DefaultSendTCPMessageProcedure;
+
+    NetworkingDriver.SendHTTPRequest             := @DefaultSendHTTPRequestProcedure;    
 
     NetworkingDriver.CreateUDPHost               := @DefaultCreateUDPHostProcedure;
     NetworkingDriver.CreateUDPConnection         := @DefaultCreateUDPConnectionProcedure;
     NetworkingDriver.UDPMessageReceived          := @DefaultUDPMessageReceivedProcedure;
     NetworkingDriver.SendUDPMessage              := @DefaultSendUDPMessageProcedure;
-		NetworkingDriver.BroadcastUDPMessage				 := @DefaultBroadcastUDPMessageProcedure;
+    NetworkingDriver.BroadcastUDPMessage         := @DefaultBroadcastUDPMessageProcedure;
 
     NetworkingDriver.CloseTCPHostSocket          := @DefaultCloseTCPHostSocketProcedure;
     NetworkingDriver.CloseConnection             := @DefaultCloseConnectionProcedure;
-    NetworkingDriver.CloseUDPSocket        			 := @DefaultCloseUDPSocketProcedure;
+    NetworkingDriver.CloseUDPSocket              := @DefaultCloseUDPSocketProcedure;
 
     NetworkingDriver.MyIP                        := @DefaultMyIPProcedure;
-		NetworkingDriver.ConnectionCount						 := @DefaultConnectionCountProcedure;
-		NetworkingDriver.RetreiveConnection					 := @DefaultRetreiveConnectionProcedure;
+    NetworkingDriver.ConnectionCount             := @DefaultConnectionCountProcedure;
+    NetworkingDriver.RetreiveConnection          := @DefaultRetreiveConnectionProcedure;
 
     NetworkingDriver.CloseAllTCPHostSocket       := @DefaultCloseAllTCPHostSocketProcedure;     
     NetworkingDriver.CloseAllConnections         := @DefaultCloseAllConnectionsProcedure; 
-    NetworkingDriver.CloseAllUDPSocket     			 := @DefaultCloseAllUDPSocketProcedure; 
+    NetworkingDriver.CloseAllUDPSocket           := @DefaultCloseAllUDPSocketProcedure; 
 
     NetworkingDriver.FreeAllNetworkingResources  := @DefaultFreeAllNetworkingResourcesProcedure;
   end;

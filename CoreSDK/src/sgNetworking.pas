@@ -1,12 +1,8 @@
 //=============================================================================
 // sgNetworking.pas
 //=============================================================================
-//
-//
-//
-// Version 1.0:
-//
-//=============================================================================
+
+
 /// The networking code of SwinGame is used for TCP and UDP connections to
 /// and from multiple clients.
 /// 
@@ -52,6 +48,18 @@ uses
   ///
   /// @lib
   function AcceptTCPConnection  () : LongInt; 
+
+  /// Attempts to recconnect a connection that was closed using the IP and port
+  /// stored in the connection
+  ///
+  /// @param aConnection The connection to reconnect
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method ReconnectConnection
+  /// @self 1
+  /// @sn reconnectConnection:%s
+  procedure ReconnectConnection(var aConnection : Connection);
    
   /// Checks if a message has been received. If a message has been received,
   /// It will automatically add it to the message queue, with the message,
@@ -83,6 +91,144 @@ uses
   /// @self 2
   /// @sn sendTCPMessage:%s toConnection:%s
   function SendTCPMessage           ( aMsg : String; aConnection : Connection) : Connection;
+
+//----------------------------------------------------------------------------
+// HTTP
+//----------------------------------------------------------------------------
+  
+  function HostName(const address: String): String;
+  function HostIP(const name: String): String;
+
+  /// Opens a HTTP Connection. This is the same as the TCP connection except
+  /// that the HTTP flag is set. 
+  /// Opens a connection to a peer using the IP and port
+  /// Creates a Socket for the purpose of two way messages. 
+  /// Returns a new connection if successful or nil if failed.
+  ///
+  /// @param aDestIP The IP Address of the host
+  /// @param aDestPort The port the host is listening to connections on
+  ///
+  /// @lib
+  /// @uname CreateHTTPConnection
+  /// @sn createHTTPConnection:%s port:%s
+  function CreateHTTPConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
+
+  /// Sends the message to the specified server, attached to the socket
+  /// Retuns the connection if the message fails to
+  /// send so that it may be closed. Returns nil if the message has been sent
+  /// successfully.
+  ///
+  /// @param aReq The HTTP Request message to be sent
+  /// @param aConnection Send the message through this connection's socket.
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method SendHTTPRequest
+  /// @self 2
+  /// @sn sendHTTPRequest:%s toConnection:%s
+  function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+
+  /// Adds a header to the HTTP request with the name and value.
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param name The name of the header
+  /// @param value The value of the header
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method HTTPAddHeader
+  /// @sn httpAddHeader:%s
+  procedure HTTPAddHeader(var aHTTPRequest : HTTPRequest; const name, value : String);
+
+  /// Removes a header of the HTTP request at the specified index.
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aIdx The index of the header
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpRemoveHeaderAt
+  /// @sn httpRemoveHeaderAt:%s
+  procedure HTTPRemoveHeaderAt(var aHTTPRequest : HTTPRequest; const aIdx : LongInt);
+
+  /// Returns a header of the HTTP Request at the specified index.
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aIdx The index of the header
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method HTTPHeaderAt
+  /// @sn httpHeaderAt:%s
+  function HTTPHeaderAt(const aHTTPRequest : HTTPRequest; const aIdx : LongInt) : String;
+
+  /// Returns a header of the HTTP Request at the specified index.
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aBody The body data
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpSetBody
+  /// @sn httpSetBody:%s
+  procedure HTTPSetBody(var aHTTPRequest : HTTPRequest; const aBody : String);
+
+  /// Sets the method of the HTTP Request
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aMethod The type of request method
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpSetMethod
+  /// @sn httpSetMethod:%s
+  procedure HTTPSetMethod(var aHTTPRequest : HTTPRequest; const aMethod : HTTPMethod);
+
+  /// Sets the version of the HTTP Request
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aVersion The version of the request
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpSetVersion
+  /// @sn httpSetVersion:%s
+  procedure HTTPSetVersion(var aHTTPRequest : HTTPRequest; const aVersion : String);
+
+  /// Sets the URL of the HTTP Request
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  /// @param aURL The URL for the HTTP Request
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpSetURL
+  /// @sn httpSetURL:%s
+  procedure HTTPSetURL(var aHTTPRequest : HTTPRequest; const aURL : String);
+
+  /// Converts the HTTP Request to a string
+  ///
+  /// @param aHTTPRequest The HTTP Request data
+  ///
+  /// @lib
+  /// @class Connection
+  /// @method httpRequestToString
+  /// @sn httpRequestToString:%s
+  function HTTPRequestToString(const aHTTPRequest : HTTPRequest) : String;
+
+  /// Encodes a string from username:password format to Base64
+  ///
+  /// @param aData The credentials
+  ///
+  /// @lib
+  function EncodeBase64(const aData : String) : String;
+
+
+  function HTTPGet(host: String; port: LongInt; path: String) : HTTPResponse;
+
+//----------------------------------------------------------------------------
+// Misc
+//----------------------------------------------------------------------------
 
   /// Adds a connection to the list of new connections. This is called by the 
   /// Accept connection in TCP and Receive message in UDP (if the message has
@@ -373,7 +519,14 @@ uses
           
 //=============================================================================
 implementation
-  uses SysUtils, sgUtils, sgDriverNetworking, sgNamedIndexCollection, sgShared, StrUtils;
+  uses SysUtils, sgUtils, sgDriverNetworking, sgNamedIndexCollection, 
+    {$ifdef WINDOWS}
+      Winsock2,
+    {$endif}
+    {$ifdef UNIX}
+      BaseUnix, NetDB,
+    {$endif}
+    Sockets, sgShared, StrUtils;
 //=============================================================================
 
 type
@@ -460,6 +613,69 @@ var
     result := 16777216 * w + 65536 * x + 256 * y + z;
     WriteLn('Result: ', result);
   end;
+
+  function Encode(const c : Byte) : Char;
+  begin
+    if (c < 26) then
+      result := Char(65 + c)        //65 = A
+    else if (c < 52) then
+      result := Char(97 + (c - 26)) // 97 = a
+    else if (c < 62) then
+      result := Char(48 + (c - 52)) //48 = 0
+    else if (c = 62) then
+      result := Char(43)           //43 = +
+    else result := Char(47);       //47 = /
+  end;
+
+  function EncodeBase64(const aData : String) : String;
+  var
+    i : Integer = 1;
+    lC1, lC2, lC3, lC4, lC5, lC6, lC7 : Char;
+    lLen : Integer;
+  begin
+    result := '';
+
+    if Length(aData) = 0 then exit;
+
+    lLen := Length(aData) + 1;
+
+    while i < lLen do
+    begin
+      lC1 := aData[i];
+
+      if i + 1 < lLen then
+        lC2 := aData[i + 1]
+      else
+        lC2 := Char(0);
+
+      if i + 2 < lLen then
+        lC3 := aData[i + 2]
+      else
+        lC3 := Char(0);
+
+      lC4 := Char(Byte(lC1) >> 2);
+      lC5 := Char(((Byte(lC1) and Byte($03)) << 4) or (Byte(lC2) >> 4)); 
+      lC6 := Char(((Byte(lC2) and Byte($0F)) << 2) or (Byte(lC3) >> 6)); 
+      lC7 := Char(Byte(lC3) and Byte($3F)); 
+
+      result += Encode(Byte(lC4));
+      result += Encode(Byte(lC5));
+
+      if i + 1 < lLen then
+        result += Encode(Byte(lC6))
+      else
+        result += '=';
+
+      if i + 2 < lLen then
+        result += Encode(Byte(lC7))
+      else
+        result += '=';
+
+      if ((i mod (74 div 4*3)) = 0) then
+        result += #13#10;
+      i += 3;
+    end;
+  end;
   
 //----------------------------------------------------------------------------
 // TCP
@@ -472,8 +688,20 @@ var
   
   function CreateTCPConnection( aIP : String;  aPort : LongInt) : Connection;
   begin
-    result := NetworkingDriver.CreateTCPConnection(aIP, aPort);
+    result := NetworkingDriver.CreateTCPConnection(aIP, aPort, TCP);
   end;   
+
+  procedure ReconnectConnection(var aConnection : Connection);
+  var
+    lIPString : String;
+    lPort : LongInt;
+  begin
+    lIPString := aConnection^.stringIP;
+    lPort := aConnection^.port;
+
+    CloseConnection(aConnection);
+    aConnection := NetworkingDriver.CreateTCPConnection(lIPString, lPort, HTTP);
+  end;
   
   function AcceptTCPConnection() : LongInt;
   begin
@@ -676,6 +904,184 @@ var
   begin
     result := NetworkingDriver.SendTCPMessage(aMsg, aConnection);
   end;
+
+//----------------------------------------------------------------------------
+// HTTP
+//----------------------------------------------------------------------------
+
+  function HostName(const address: String): String;
+  var
+    host: THostEntry;
+    host6: THostEntry6;
+  begin
+    Result := '';
+    if GetHostbyAddr(in_addr(StrToHostAddr(address)), host) 
+      or ResolveHostbyAddr(in_addr(StrToHostAddr(address)), host) then
+      result := host.Name
+    else if ResolveHostbyAddr6(StrToHostAddr6(address), host6) then
+      result := host6.Name;
+  end;
+
+  function HostIP(const name: String): String;
+  var
+    host: THostEntry;
+    host6: THostEntry6;
+  begin
+    result := '';
+    if GetHostByName(name, host) or ResolveHostByName(name, host) then
+      result := NetAddrToStr(host.Addr)
+    else if ResolveHostByName6(name, host6) then
+      result := NetAddrToStr6(host6.Addr);
+  end;
+
+  function CreateHTTPConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
+  begin
+    result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort, HTTP);
+  end;
+  
+  function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+  begin
+    result := NetworkingDriver.SendHTTPRequest(aReq, aConnection);
+  end;
+
+  procedure HTTPAddHeader(var aHTTPRequest : HTTPRequest; const name, value : String);
+  begin
+    SetLength(aHTTPRequest.headername, Length(aHTTPRequest.headername) + 1);
+    SetLength(aHTTPRequest.headervalue, Length(aHTTPRequest.headervalue) + 1);
+    aHTTPRequest.headername[High(aHTTPRequest.headername)] := name;
+    aHTTPRequest.headervalue[High(aHTTPRequest.headervalue)] := value;
+  end;
+
+  procedure HTTPRemoveHeaderAt(var aHTTPRequest : HTTPRequest; const aIdx : LongInt);
+  var
+    i : Integer;
+  begin
+    for i := aIdx to High(aHTTPRequest.headername) do 
+    begin
+      if i = High(aHTTPRequest.headername) then continue;
+
+      aHTTPRequest.headername[i] := aHTTPRequest.headername[i + 1];
+      aHTTPRequest.headervalue[i] := aHTTPRequest.headervalue[i + 1];
+    end;
+
+    SetLength(aHTTPRequest.headername, Length(aHTTPRequest.headername) - 1);
+    SetLength(aHTTPRequest.headervalue, Length(aHTTPRequest.headervalue) - 1);
+  end;
+
+  function HTTPHeaderAt(const aHTTPRequest : HTTPRequest; const aIdx : LongInt) : String;
+  begin
+    result := '';
+    if (aIdx < 0) or (aIdx > High(aHTTPRequest.headername)) then exit;
+
+    result := aHTTPRequest.headername[aIdx] + ': '+ aHTTPRequest.headervalue[aIdx];
+  end;
+
+  procedure HTTPSetBody(var aHTTPRequest : HTTPRequest; const aBody : String);
+  begin
+    aHTTPRequest.body := aBody;
+  end;
+
+  procedure HTTPSetMethod(var aHTTPRequest : HTTPRequest; const aMethod : HTTPMethod);
+  begin
+    aHTTPRequest.requestType := aMethod;
+  end;
+
+  procedure HTTPSetVersion(var aHTTPRequest : HTTPRequest; const aVersion : String);
+  begin
+    aHTTPRequest.version := aVersion;
+  end;
+
+  procedure HTTPSetURL(var aHTTPRequest : HTTPRequest; const aURL : String);
+  begin
+    aHTTPRequest.url := aURL;
+  end;
+
+  function HTTPRequestToString(const aHTTPRequest : HTTPRequest) : String;
+  var
+    i, len : Integer;
+  begin
+    result := '';
+    case aHTTPRequest.requestType of
+      HTTP_GET: result += 'GET ';
+      HTTP_POST: result += 'POST ';
+      HTTP_PUT: result += 'PUT ';
+      HTTP_DELETE: result += 'DELETE ';
+    end;
+    result += aHTTPRequest.url;
+    result += ' HTTP/' + aHTTPRequest.version;
+    result += #13#10;
+    for i := Low(aHTTPRequest.headername) to High(aHTTPRequest.headername) do
+      result += aHTTPRequest.headername[i] + ': ' + aHTTPRequest.headervalue[i] + #13#10;
+    len := Length(aHTTPRequest.body);
+
+    if len <> 0 then
+      result += 'Content-Length: ' + IntToStr(len) + #13#10#13#10;
+    result += aHTTPRequest.body;
+  end;
+
+  type
+    HTTPHeader = record
+      name : String;
+      value: String;
+    end;
+
+    HTTPResponse = record
+      protocol : String;  //eg: HTTP/1.1
+      status : LongInt;   //eg: 200
+      headers : array of HTTPHeader;
+      body: array of Byte;
+    end;
+
+  function ReadHttpResponse(var con: Connection): HTTPResponse;
+  var
+    buffer: array [0..511] of Byte;
+    line: String;
+  begin
+    result.
+  end;
+
+  function HTTPGet(host: String; port: LongInt; path: String) : HTTPResponse;
+  var
+    ip: String;
+    con : Connection;
+    request : HTTPRequest;
+    body : String;
+  begin
+    ip := HostIP(host);
+    HTTPAddHeader(request, 'Host', host + ':' + IntToStr(port));
+    HTTPAddHeader(request, 'Connection', 'close');
+
+    // Create HTTP message
+    HTTPSetMethod(request, HTTP_GET);
+    HTTPSetURL(request, path);
+    HTTPSetVersion(request, '1.1');
+
+    body := '';
+
+    HTTPSetBody(request, body);
+    
+    con := CreateHTTPConnection(ip, port);
+    SendHTTPRequest(request, con);
+
+    repeat
+      Delay(50);
+    until TCPMessageReceived() and (MessageCount(con) > 0);
+
+    CloseConnection(con);
+    result := '';
+
+    while MessageCount(con) > 0 do
+    begin
+      result += ReadMessage(con);
+      Delay(50);
+      TCPMessageReceived();
+    end;
+  end;
+
+
+
+
+
 
 //----------------------------------------------------------------------------
 // UDP
