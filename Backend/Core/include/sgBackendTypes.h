@@ -119,6 +119,21 @@ typedef struct sg_sound_data
     void * _data;
 } sg_sound_data;
 
+typedef enum sg_connection_kind
+{
+    SGCK_UNKNOWN = 0,
+    SGCK_TCP = 1,
+    SGCK_UDP = 2
+} sg_connection_kind;
+
+typedef struct sg_network_connection
+{
+    sg_connection_kind kind;
+    
+    // private data used by the backend
+    void * _socket;
+} sg_network_connection;
+
 #ifdef __cplusplus
 }
 #endif

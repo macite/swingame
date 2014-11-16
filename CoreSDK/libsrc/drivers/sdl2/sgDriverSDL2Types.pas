@@ -8,6 +8,7 @@ interface
 	// Types from sgBackendTypes.pas
 	//
 	type
+		BytePtr = ^Byte;
 		int = longint;
 		pint = ^int;
 		float = single;
@@ -91,6 +92,12 @@ interface
 			SG_FONT_STYLE_ITALIC := 2,SG_FONT_STYLE_UNDERLINE := 4,
 			SG_FONT_STYLE_STRIKETHROUGH := 8);
 
+		sg_connection_kind = ( SGCK_UNKNOWN = 0, SGCK_TCP = 1, SGCK_UDP = 2);
+
+		sg_network_connection = record
+			kind : sg_connection_kind;
+			_socket: pointer;
+		end;
 
 	//
 	// sgInterface types
@@ -174,6 +181,15 @@ interface
 		//
 		sg_load_surface_fn = function(title: pchar): sg_drawing_surface; cdecl;
 		sg_drawing_surface_surface_proc = procedure(src, dst: psg_drawing_surface; src_data: pfloat; src_data_sz: int; dst_data: pfloat; dst_data_sz:int; flip: sg_renderer_flip ); cdecl;
+
+		//
+		// Network related
+		//
+		psg_network_connection = ^sg_network_connection;
+
+		sg_create_network_fn = function(host: pchar; port: uint16): sg_network_connection; cdecl;
+    	sg_network_data_fn = function(connection: psg_network_connection; buffer: BytePtr; size: Longint): Longint;
+    	sg_connection_fn = procedure (connection: psg_network_connection);
 
 		//
 		// Input related
@@ -273,6 +289,13 @@ interface
 				set_font_style : sg_font_int_proc;
 				draw_text : sg_draw_text_proc;
 			end;
+
+		sg_network_interface = record
+			open_tcp_connection : sg_create_network_fn;
+			read_bytes : sg_network_data_fn;
+			send_bytes : sg_network_data_fn;
+        	close_connection : sg_connection_fn;
+		end;
 (* Const before type ignored *)
 
 		sg_interface = record
@@ -286,6 +309,7 @@ interface
 				input : sg_input_interface;
 				text : sg_text_interface;
 				utils : sg_utils_interface;
+				network : sg_network_interface;
 				input_callbacks : sg_input_callbacks;
 				read_system_data : sg_system_data_fn;
 			end;

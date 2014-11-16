@@ -55,8 +55,8 @@ type
     port   : LongInt;
   end;
   
-  PacketData = array [0..511] of Char;
-  
+  PacketData = array [0..511] of Char;  
+  BytePtr = ^Byte;
 
 var
   _ListenSockets          : Array of TCPListenSocket;
@@ -104,24 +104,6 @@ var
     end;
   end;
 
-  procedure ExtractHTTPData(var buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection);
-  var
-    msg       : String;
-    i : Integer;
-  begin
-    msg := '';
-    repeat
-      for i := 0 to aReceivedCount - 1 do
-        msg += buffer[i];
-      // WriteLn('Extract: ', msg, ' ', aReceivedCount);
-      aReceivedCount := SDLNet_TCP_Recv(aConnection^.socket, @buffer, 512);
-    until aReceivedCount <= 0;
-
-
-    // WriteLn(msg);
-    EnqueueMessage(msg, aConnection);
-  end;
-
   procedure ExtractData(const buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection);
   var
     msgLen    : Byte = 0;
@@ -151,7 +133,7 @@ var
         begin
           aConnection^.partMsgData := msg;
           aConnection^.msgLen      := msgLen;
-        WriteLn('Message: ', msg, ' ');
+          // WriteLn('Message: ', msg, ' ');
           // WriteLn('Part message: ', msg);
           exit;                           // Exit... end of buffer, but not end of message
         end;
@@ -293,12 +275,17 @@ var
      begin
        if SDLNET_SocketReady(PSDLNet_GenericSocket(_Connections[i]^.socket)) then
        begin
-         lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
-         if (lReceived <= 0) then continue;
-         if (_Connections[i]^.conType = TCP) then
-           ExtractData(buffer, lReceived, _Connections[i])
-         else if (_Connections[i]^.conType = HTTP) then
-           ExtractHTTPData(buffer, lReceived, _Connections[i]);
+          if (_Connections[i]^.conType = TCP) then
+          begin
+            lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
+            if (lReceived <= 0) then continue;
+            ExtractData(buffer, lReceived, _Connections[i])
+          end
+          else if (_Connections[i]^.conType = HTTP) then
+          begin
+            WriteLn('ERROR -- ExtractHTTPData');
+            // ExtractHTTPData(_Connections[i]);
+          end;
          result := True;
        end;
      end;
@@ -325,7 +312,7 @@ var
     
     lLen := Length(lMsg);
     
-    WriteLn(lMsg);
+    // WriteLn(lMsg);
 
     if (SDLNet_TCP_Send(aConnection^.socket, @buffer[0], lLen) < lLen) then
     begin

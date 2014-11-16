@@ -22,6 +22,7 @@
 #include "SGSDL2Utils.h"
 #include "SGSDL2Input.h"
 #include "SGSDL2Text.h"
+#include "SGSDL2Network.h"
 
 
 using namespace std;
@@ -180,6 +181,7 @@ sg_interface * sg_load(sg_input_callbacks callbacks)
     sgsdl2_load_input_fns(&_functions);
     sgsdl2_load_text_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
+    sgsdl2_load_network_fns(&_functions);
     
     return &_functions;
 }

@@ -1085,6 +1085,11 @@ interface
       HTTP_DELETE
     );
 
+    HTTPHeader = record
+      name : String;
+      value: String;
+    end;
+
     /// @struct HTTPRequest
     HTTPRequest = packed record
       requestType: HTTPMethod;
@@ -1095,6 +1100,15 @@ interface
       body       : String;
     end;
 
+    HTTPResponse = record
+      protocol : String;  //eg: HTTP/1.1
+      status : LongInt;   //eg: 200
+      statusText: String; //eg: OK
+      headers : array of HTTPHeader;
+      body: array of Byte;
+    end;
+
+
     /// The Pointer to a MessageLink Creating a String LinkedList
     ///
     /// @struct MessagePtr
@@ -1104,7 +1118,9 @@ interface
     ///@struct MessageLink
     ///@via_pointer
     MessageLink = packed record
-      data  : String;
+      data: String;
+      httpData: HTTPResponse;
+
       prev  : MessagePtr;
       next  : MessagePtr;
     end;  

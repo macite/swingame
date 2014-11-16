@@ -37,6 +37,8 @@
 		9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB2183B732800BE3771 /* libSDL2.a */; };
 		9471BDBF183B732800BE3771 /* libwebp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDB3183B732800BE3771 /* libwebp.a */; };
 		9471BDCD183B737F00BE3771 /* libsgsdl2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BD8C183B6E5700BE3771 /* libsgsdl2.a */; };
+		947756751A183593002CBE9A /* SGSDL2Network.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 947756731A183593002CBE9A /* SGSDL2Network.cpp */; };
+		947756761A183593002CBE9A /* SGSDL2Network.h in Headers */ = {isa = PBXBuildFile; fileRef = 947756741A183593002CBE9A /* SGSDL2Network.h */; };
 		947D3E68184F1DB300F9F685 /* on_med.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 947D3E67184F1DA700F9F685 /* on_med.png */; };
 		94821585184C701400C89CBE /* error.wav in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94821583184C6FE800C89CBE /* error.wav */; };
 		94821586184C701700C89CBE /* test.ogg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9499C6A0184C630E00B71B41 /* test.ogg */; };
@@ -124,6 +126,8 @@
 		9471BDB2183B732800BE3771 /* libSDL2.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2.a; path = ../../lib/mac/libSDL2.a; sourceTree = "<group>"; };
 		9471BDB3183B732800BE3771 /* libwebp.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwebp.a; path = ../../lib/mac/libwebp.a; sourceTree = "<group>"; };
 		9471BDC4183B737000BE3771 /* SGSDL2Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SGSDL2Test; sourceTree = BUILT_PRODUCTS_DIR; };
+		947756731A183593002CBE9A /* SGSDL2Network.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Network.cpp; path = ../../src/SGSDL2Network.cpp; sourceTree = "<group>"; };
+		947756741A183593002CBE9A /* SGSDL2Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Network.h; path = ../../src/SGSDL2Network.h; sourceTree = "<group>"; };
 		947D3E67184F1DA700F9F685 /* on_med.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = on_med.png; path = ../../../Test/Resources/on_med.png; sourceTree = "<group>"; };
 		94821583184C6FE800C89CBE /* error.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = error.wav; path = ../../../Test/Resources/error.wav; sourceTree = "<group>"; };
 		94821624184CA04200C89CBE /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = ../../lib/mac/libogg.a; sourceTree = "<group>"; };
@@ -246,6 +250,8 @@
 		9471BD97183B70ED00BE3771 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				947756731A183593002CBE9A /* SGSDL2Network.cpp */,
+				947756741A183593002CBE9A /* SGSDL2Network.h */,
 				94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */,
 				94FEB50B18582F7900AFF9D7 /* SGSDL2Text.h */,
 				94BF1470185572AE004191DF /* SGSDL2Audio.cpp */,
@@ -341,6 +347,7 @@
 				943177F91855802100A0D403 /* sgBackendUtils.h in Headers */,
 				94FEB51118582F8700AFF9D7 /* test_text.h in Headers */,
 				94FEB50D18582F7900AFF9D7 /* SGSDL2Text.h in Headers */,
+				947756761A183593002CBE9A /* SGSDL2Network.h in Headers */,
 				9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -417,6 +424,7 @@
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
+				947756751A183593002CBE9A /* SGSDL2Network.cpp in Sources */,
 				94FEB50C18582F7900AFF9D7 /* SGSDL2Text.cpp in Sources */,
 				94BF1472185572AE004191DF /* SGSDL2Audio.cpp in Sources */,
 				94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */,
@@ -538,6 +546,7 @@
 					../../external/SDL_image,
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
+					../../external/SDL_net,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -581,6 +590,7 @@
 					../../external/SDL_image,
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
+					../../external/SDL_net,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

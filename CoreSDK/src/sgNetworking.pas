@@ -96,6 +96,8 @@ uses
 // HTTP
 //----------------------------------------------------------------------------
   
+  function HttpResponseBodyAsString(httpData: HTTPResponse): String;
+
   function HostName(const address: String): String;
   function HostIP(const name: String): String;
 
@@ -126,7 +128,7 @@ uses
   /// @method SendHTTPRequest
   /// @self 2
   /// @sn sendHTTPRequest:%s toConnection:%s
-  function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+  // function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
 
   /// Adds a header to the HTTP request with the name and value.
   ///
@@ -398,6 +400,10 @@ uses
   /// @self 2
   procedure EnqueueMessage            ( aMsg : String; aConnection : Connection);
 
+  procedure EnqueueMessage( aMsg : String; const httpData: HTTPResponse; aConnection : Connection);
+
+  procedure EnqueueMessage( const httpData: HTTPResponse; aConnection : Connection);
+
 
 //----------------------------------------------------------------------------
 // Hexadecimal and Decimal Conversion
@@ -526,7 +532,7 @@ implementation
     {$ifdef UNIX}
       BaseUnix, NetDB,
     {$endif}
-    Sockets, sgShared, StrUtils;
+    Sockets, sgShared, StrUtils, sgDriverSDL2Types;
 //=============================================================================
 
 type
@@ -611,7 +617,7 @@ var
     y := StrToInt(ExtractDelimited(3, aIP, ['.']));
     z := StrToInt(ExtractDelimited(4, aIP, ['.']));
     result := 16777216 * w + 65536 * x + 256 * y + z;
-    WriteLn('Result: ', result);
+    // WriteLn('Result: ', result);
   end;
 
   function Encode(const c : Byte) : Char;
@@ -768,7 +774,7 @@ var
 // Messages
 //----------------------------------------------------------------------------
   
-  procedure EnqueueMessage( aMsg : String; aConnection : Connection);
+  procedure EnqueueMessage( aMsg : String; const httpData: HTTPResponse; aConnection : Connection);
   var
     msgData   : MessagePtr;
   begin
@@ -776,6 +782,7 @@ var
 
     New(msgData); 
     msgData^.data := aMsg;
+    msgData^.httpData := httpData;
     msgData^.next := nil;
     msgData^.prev := aConnection^.lastMsg;
 
@@ -787,8 +794,39 @@ var
     end;  
 
     aConnection^.lastMsg  := msgData;
-    aConnection^.msgCount += 1;    
+    aConnection^.msgCount += 1;
   end;
+
+  procedure EnqueueMessage( aMsg : String; aConnection : Connection);
+  var
+    httpData: HTTPResponse;
+  begin
+    httpData.protocol := '';
+    httpData.status  := 0;
+    httpData.statusText := '';
+    SetLength(httpData.headers, 0);
+    SetLength(httpData.body, 0);
+
+    EnqueueMessage( aMsg, httpData, aConnection );
+  end;
+
+  function HttpResponseBodyAsString(httpData: HTTPResponse): String;
+  var
+    i: Integer;
+  begin
+    result := '';
+    for i := 0 to High(httpData.body) do
+    begin
+      result += Char(httpData.body[i]);
+    end;
+  end;
+
+  procedure EnqueueMessage(const httpData: HTTPResponse; aConnection : Connection);
+  begin
+    EnqueueMessage( HttpResponseBodyAsString(httpData), httpData, aConnection);
+  end;
+
+
    
   function ReadMessage(aConnection : Connection) : String;
   var
@@ -914,7 +952,7 @@ var
     host: THostEntry;
     host6: THostEntry6;
   begin
-    Result := '';
+    result := '';
     if GetHostbyAddr(in_addr(StrToHostAddr(address)), host) 
       or ResolveHostbyAddr(in_addr(StrToHostAddr(address)), host) then
       result := host.Name
@@ -939,9 +977,34 @@ var
     result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort, HTTP);
   end;
   
-  function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+  procedure SendHTTPRequest(const aReq : HttpRequest; const aConnection : sg_network_connection);
+  var
+    lLen, i : LongInt;
+    buffer : Array of Char;
+    lMsg : String = '';
   begin
-    result := NetworkingDriver.SendHTTPRequest(aReq, aConnection);
+    // result := nil;
+    // if (aConnection = nil) or (aConnection^.socket = nil) or (aConnection^.conType <> HTTP) then 
+    // begin 
+    //   RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement (nil or not HTTP)'); 
+    //   exit; 
+    // end;
+
+    lMsg := HTTPRequestToString(aReq) + #13#10#13#10;
+    SetLength(buffer, Length(lMsg));
+
+    for i := 0 to Length(lMsg) - 1 do
+      buffer[i] := lMsg[i + 1];
+    
+    lLen := Length(lMsg);
+    
+    // WriteLn(lMsg);
+
+    if _sg_functions^.network.send_bytes(@aConnection, @buffer[0], lLen) < lLen then
+    // if (SDLNet_TCP_Send(aConnection^.socket, @buffer[0], lLen) < lLen) then
+    begin
+      // RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError() + ' HTTP Connection may have been refused.');
+    end;
   end;
 
   procedure HTTPAddHeader(var aHTTPRequest : HTTPRequest; const name, value : String);
@@ -1019,35 +1082,190 @@ var
     result += aHTTPRequest.body;
   end;
 
-  type
-    HTTPHeader = record
-      name : String;
-      value: String;
-    end;
-
-    HTTPResponse = record
-      protocol : String;  //eg: HTTP/1.1
-      status : LongInt;   //eg: 200
-      headers : array of HTTPHeader;
-      body: array of Byte;
-    end;
-
-  function ReadHttpResponse(var con: Connection): HTTPResponse;
+  function ExtractLine(const aConnection: sg_network_connection): String;
   var
-    buffer: array [0..511] of Byte;
-    line: String;
+    aReceivedCount: Integer;
+    ch: Char;
   begin
-    result.
+    result := '';
+
+    while true do
+    begin
+      aReceivedCount := _sg_functions^.network.read_bytes(@aConnection, @ch, 1) ; //SDLNet_TCP_Recv(aConnection^.socket, @ch, 1);
+
+      if aReceivedCount = 0 then 
+        exit;
+
+      if ch = #13 then // skip cr
+        continue;
+      if ch = #10 then // end at lf
+        exit;
+      
+      result += ch;
+    end;
+  end;
+
+  // procedure ReadBytes(const aConnection: sg_network_connection; buffer: BytePtr; var size: Integer);
+  // // var
+  // //   i: Integer;
+  // begin
+  //   size := SDLNet_TCP_Recv(aConnection^.socket, buffer, size);
+  //   // WriteLn('read ', size);
+  //   // for i := 0 to size - 1 do
+  //   // begin
+  //   //   Write(Char((buffer + i)^));
+  //   // end;
+  // end;
+
+  function GetHeader(const response: HttpResponse; const name: String; var header: HttpHeader): Boolean;
+  var
+    i: Integer;
+  begin
+    result := false;
+
+    for i := 0 to High(response.headers) do
+    begin
+      if CompareText(response.headers[i].name, name) = 0 then
+      begin
+        header := response.headers[i];
+        result := true;
+        exit;
+      end;
+    end;
+  end;
+
+  procedure ReadHeaders(const aConnection: sg_network_connection; var response: HttpResponse);
+  var
+    header: HttpHeader;
+    line: String;
+    pos: Integer;
+  begin
+    header.value := '';
+    header.name := '';
+
+    line := ExtractLine(aConnection);
+
+    while Length(line) > 0 do
+    begin
+      // WriteLn(line);
+      if (line[1] = ' ') or (line[1] = #9) then
+      begin
+         // add to last header
+         header.value += Trim(line);
+      end
+      else
+      begin
+        pos := 1;
+        // new header
+        header.name := Trim(ExtractSubstr(line, pos, [ ':' ]));
+        header.value := Trim(ExtractSubstr(line, pos, [ #13, #10 ]));
+
+        SetLength(response.headers, Length(response.headers) + 1);
+      end;
+
+      // copy in header to last location -- override in case of extending value
+      response.headers[High(response.headers)] := header;
+
+      // WriteLn('GOT Header: ', response.headers[High(response.headers)].name);
+      // WriteLn('    Value : ', response.headers[High(response.headers)].value);
+
+      line := ExtractLine(aConnection); // read next line
+    end;
+  end;
+
+  function ReadHttpResponse(const aConnection : sg_network_connection): HttpResponse;
+  var
+    header: HttpHeader;
+    line : String;
+    i, pos, size, readSize, code: Integer;
+  begin
+    try
+      result.protocol := 'HTTP/1.1';
+      result.status := 500;
+      result.statusText := 'Internal Server Error';
+      SetLength(result.body, 0);
+      SetLength(result.headers, 0);
+
+      // first line is status and protocol
+      line := ExtractLine(aConnection);
+      // WriteLn('line: ', line);
+      if length(line) = 0 then exit; //end but add message
+      pos := 1;
+
+      result.protocol := ExtractSubstr(line, pos, [ ' ' ]);
+      TryStrToInt(ExtractSubstr(line, pos, [ ' ' ]), result.status);
+      result.statusText := ExtractSubstr(line, pos, [ #13, #10 ]);
+      // WriteLn('GOT ', result.protocol, ' ', result.status, ' ', result.statusText);
+      
+      ReadHeaders(aConnection, result);
+
+      // Read body
+      // Look for content size header
+      if GetHeader(result, 'Content-Length', header) and TryStrToInt(header.value, size) then
+      begin
+        // read a fixed size body
+        SetLength(result.body, size);
+        _sg_functions^.network.read_bytes(@aConnection, @result.body[0], size);
+      end
+      else if GetHeader(result, 'Transfer-Encoding', header) and ( CompareText(header.value, 'chunked') = 0 ) then
+      begin
+        // read body in chunks
+        line := ExtractLine(aConnection);
+        // WriteLn(line);
+        size := 0;
+        pos := 0;
+        Val('x' + Trim(ExtractSubstr(line, pos, [ ';' ])), size, code);
+
+        while size > 0 do
+        begin
+          i := Length(result.body);
+          // WriteLn(line, ' = ', size, ' ', i + size) ;
+          SetLength(result.body, i + size); // make more space
+          readSize := _sg_functions^.network.read_bytes(@aConnection, @result.body[i], size); // read in next chunk
+          while readSize < size do
+          begin
+            size -= readSize;
+            i += readSize;
+            readSize := _sg_functions^.network.read_bytes(@aConnection, @result.body[i], size); // read in next chunk
+          end;
+
+          // WriteLn('size - ', size, ' = ', HttpResponseBodyAsString(result));
+          // WriteLn(#10);
+
+          size := 0;
+          pos := 0;
+          line := ExtractLine(aConnection); // read the #13#10 after body before next chunk
+          // WriteLn(' got --> ', line);
+          if Length(line) = 0 then
+            line := ExtractLine(aConnection); // read size of next chunk
+          // WriteLn(' got --> ', line);
+          if Length(line) > 0 then
+            Val('x' + Trim(ExtractSubstr(line, pos, [ ';' ])), size, code);
+        end;
+
+        if code <> 0 then
+        begin
+          WriteLn('Error reading size of chunk from: ', line);
+          exit;
+        end;
+
+        // read the footers...
+        ReadHeaders(aConnection, result);
+        // WriteLn('here - ', HttpResponseBodyAsString(result));
+      end;
+    // except
+    finally
+      // EnqueueMessage(result, aConnection);  
+    end;
   end;
 
   function HTTPGet(host: String; port: LongInt; path: String) : HTTPResponse;
   var
-    ip: String;
-    con : Connection;
+    con : sg_network_connection;
     request : HTTPRequest;
-    body : String;
   begin
-    ip := HostIP(host);
+    // ip := HostIP(host);
+    // ip := host;
     HTTPAddHeader(request, 'Host', host + ':' + IntToStr(port));
     HTTPAddHeader(request, 'Connection', 'close');
 
@@ -1056,30 +1274,16 @@ var
     HTTPSetURL(request, path);
     HTTPSetVersion(request, '1.1');
 
-    body := '';
-
-    HTTPSetBody(request, body);
+    HTTPSetBody(request, '');
     
-    con := CreateHTTPConnection(ip, port);
+    con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
+
+    // CreateHTTPConnection(ip, port);
     SendHTTPRequest(request, con);
-
-    repeat
-      Delay(50);
-    until TCPMessageReceived() and (MessageCount(con) > 0);
-
-    CloseConnection(con);
-    result := '';
-
-    while MessageCount(con) > 0 do
-    begin
-      result += ReadMessage(con);
-      Delay(50);
-      TCPMessageReceived();
-    end;
+    result := ReadHttpResponse(con);
+    // WriteLn('here - ', HttpResponseBodyAsString(result));
+    _sg_functions^.network.close_connection(@con);
   end;
-
-
-
 
 
 

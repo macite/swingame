@@ -113,6 +113,13 @@ extern "C" {
     typedef void (sg_surface_xy_proc)(sg_drawing_surface *surface, int x, int y);
     
     //
+    // Network related
+    //
+    typedef sg_network_connection (sg_create_network_fn)(const char *host, unsigned short port);
+    typedef int (sg_network_data_fn)(sg_network_connection *connection, char *buffer, int size);
+    typedef void (sg_connection_fn)(sg_network_connection *connection);
+    
+    //
     // Utility relation functions
     //
     // - delay = Function to delay by a specified number of milliseconds.
@@ -274,23 +281,31 @@ extern "C" {
 
     enum sg_font_style 
     { 
-      SG_FONT_STYLE_NORMAL = 0,
-      SG_FONT_STYLE_BOLD = 1,
-      SG_FONT_STYLE_ITALIC = 2,
-      SG_FONT_STYLE_UNDERLINE = 4,
-      SG_FONT_STYLE_STRIKETHROUGH = 8
+        SG_FONT_STYLE_NORMAL = 0,
+        SG_FONT_STYLE_BOLD = 1,
+        SG_FONT_STYLE_ITALIC = 2,
+        SG_FONT_STYLE_UNDERLINE = 4,
+        SG_FONT_STYLE_STRIKETHROUGH = 8
     };
 
     typedef struct sg_text_interface
     {
-      sg_font_load_fn * load_font;
-      sg_font_data_proc * close_font;
-      sg_font_int_fn * text_line_skip;
-      sg_font_size_fn * text_size; 
-      sg_font_int_fn * get_font_style; 
-      sg_font_int_proc * set_font_style; 
-      sg_draw_text_proc * draw_text;
+        sg_font_load_fn * load_font;
+        sg_font_data_proc * close_font;
+        sg_font_int_fn * text_line_skip;
+        sg_font_size_fn * text_size; 
+        sg_font_int_fn * get_font_style; 
+        sg_font_int_proc * set_font_style; 
+        sg_draw_text_proc * draw_text;
     } sg_text_interface;
+    
+    typedef struct sg_network_interface
+    {
+        sg_create_network_fn * open_tcp_connection;
+        sg_network_data_fn * read_bytes;
+        sg_network_data_fn * send_bytes;
+        sg_connection_fn * close_connection;
+    } sg_network_interface;
 
     //
     // All sg functions.
@@ -322,12 +337,16 @@ extern "C" {
         sg_input_interface      input;
         sg_text_interface       text;
         sg_utils_interface      utils;
+        sg_network_interface    network;
         
         //
         // callback
         //
         sg_input_callbacks      input_callbacks;
         
+        //
+        // system data
+        //
         sg_system_data_fn   *read_system_data;        
     } sg_interface;
 
