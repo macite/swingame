@@ -82,7 +82,7 @@ var
 
 implementation
 uses
-  {$IFDEF SWINGAME_SDL13}sgDriverNetworkingSDL{$ELSE}sgDriverNetworkingSDL{$ENDIF};
+  {$IFDEF SWINGAME_SDL2}sgDriverNetworkingSDL2{$ELSE}sgDriverNetworkingSDL{$ENDIF};
 
   procedure LoadDefaultNetworkingDriver(); 
   begin

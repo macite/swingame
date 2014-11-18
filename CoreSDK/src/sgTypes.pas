@@ -5,31 +5,6 @@
 // The Types unit contains the data types used by SwinGames for shapes,
 // Sprites, Bitmaps, Sounds, etc.
 //
-// Change History:
-//
-// Version 3.0:g
-// - 2013-11-08: Andrew : Add Sprite Event Details
-//
-// ... long missing history --sadface--
-// - 2010-01-13: Aaron  : Changed function pointer of ShapeDrawingFn to accept offset
-// - 2009-12-18: Andrew : Moved to new sprite format.
-// - 2009-12-15: Andrew : Updated animation handling to use new NamedIndexCollection.
-// - 2009-12-10: Andrew : Added cell details to bitmap
-// - 2009-11-06: Andrew : Changed to Sound and Music Data records
-// - 2009-10-16: Andrew : Changed to consistent array names TypeArray eg. Point2DArray
-//                      : Added shapes and shape prototypes
-// - 2009-07-13: Clinton: Renamed Event to MapEvent to MapTag
-//                      : Renamed EventDetails to MapTagDetails
-//                      : Renamed LayerData to MapLayerData
-//                      : Renamed Tile to MapTile
-//                      : Renamed CollisionData to MapCollisionData
-// - 2009-07-06: Andrew : Changed movement to velocity and x,y to position for Sprite 
-// - 2009-07-03: Andrew : Added sameas attribute to allow implicit casts in C#
-// - 2009-07-02: Andrew : Formatting, added @via_pointer for types accessed via a pointer
-//                      : Added fields to meta comments for Vector
-// - 2009-06-29: Andrew : Added Circle
-// -                    : Started Polygon (removed for version 3)
-// - 2009-06-20: Andrew : Created types unit.
 //=============================================================================
 
 /// @header sgTypes
@@ -1077,22 +1052,22 @@ interface
       HTTP
     );
 
-    /// @enum HTTPMethod
-    HTTPMethod = (
+    /// @enum HttpMethod
+    HttpMethod = (
       HTTP_GET,
       HTTP_POST,
       HTTP_PUT,
       HTTP_DELETE
     );
 
-    HTTPHeader = record
+    HttpHeader = record
       name : String;
       value: String;
     end;
 
     /// @struct HTTPRequest
-    HTTPRequest = packed record
-      requestType: HTTPMethod;
+    HttpRequest = packed record
+      requestType: HttpMethod;
       url        : String;
       version    : String;
       headername : StringArray;
@@ -1100,13 +1075,14 @@ interface
       body       : String;
     end;
 
-    HTTPResponse = record
+     HttpResponse = record
       protocol : String;  //eg: HTTP/1.1
       status : LongInt;   //eg: 200
       statusText: String; //eg: OK
-      headers : array of HTTPHeader;
+      headers : array of HttpHeader;
       body: array of Byte;
     end;
+
 
 
     /// The Pointer to a MessageLink Creating a String LinkedList
@@ -1119,7 +1095,6 @@ interface
     ///@via_pointer
     MessageLink = packed record
       data: String;
-      httpData: HTTPResponse;
 
       prev  : MessagePtr;
       next  : MessagePtr;
@@ -1134,7 +1109,7 @@ interface
       firstMsg        : MessagePtr;
       lastMsg         : MessagePtr;
       msgCount        : LongInt;
-      conType         : ConnectionType;
+      protocol        : ConnectionType;
       stringIP        : String; //Allow for Reconnection
 
       msgLen          : LongInt;  // This data is used to handle splitting of messages
@@ -1147,6 +1122,21 @@ interface
     /// @pointer_wrapper
     /// @field pointer : ^ConnectionData
     Connection  = ^ConnectionData;
+
+    /// @struct ServerData
+    /// @via_pointer
+    ServerData = packed record
+      socket: Pointer; // socket used to accept connections
+      port: LongInt;
+      newConnections: LongInt; // the number of new connections -- reset on new scan for connections
+      protocol: ConnectionType;
+      connections: array of Connection;
+    end;
+
+    /// @class Server
+    /// @pointer_wrapper
+    /// @field pointer : ^ServerData
+    Server = ^ServerData;
 
     ///@struct ArduinoData
     ///@via_pointer

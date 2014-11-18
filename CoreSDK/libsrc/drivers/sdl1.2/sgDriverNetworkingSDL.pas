@@ -738,8 +738,8 @@ var
   
   initialization 
   begin
-    if (SDLNet_Init() < 0) then
-      RaiseWarning('SDLNet_Init: ' + SDLNet_GetError());
+    // if (SDLNet_Init() < 0) then
+    //   RaiseWarning('SDLNet_Init: ' + SDLNet_GetError());
     
     _SocketSet := SDLNET_AllocSocketSet(16);
     InitNamedIndexCollection(_UDPSocketIDs);
@@ -749,6 +749,6 @@ var
   finalization
   begin
     FreeAllNetworkingResourcesProcedure();
-    SDLNet_Quit();
+    // SDLNet_Quit();
   end;
 end.
