@@ -1110,7 +1110,7 @@ interface
       lastMsg         : MessagePtr;
       msgCount        : LongInt;
       protocol        : ConnectionType;
-      stringIP        : String; //Allow for Reconnection
+      stringIP        : String;   //Allow for Reconnection
 
       msgLen          : LongInt;  // This data is used to handle splitting of messages
       partMsgData     : String;   //   over multiple packets
@@ -1126,6 +1126,7 @@ interface
     /// @struct ServerData
     /// @via_pointer
     ServerData = packed record
+      name: String;
       socket: Pointer; // socket used to accept connections
       port: LongInt;
       newConnections: LongInt; // the number of new connections -- reset on new scan for connections
@@ -1133,10 +1134,10 @@ interface
       connections: array of Connection;
     end;
 
-    /// @class Server
+    /// @class ServerSocket
     /// @pointer_wrapper
     /// @field pointer : ^ServerData
-    Server = ^ServerData;
+    ServerSocket = ^ServerData;
 
     ///@struct ArduinoData
     ///@via_pointer

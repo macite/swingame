@@ -188,8 +188,10 @@ interface
 		psg_network_connection = ^sg_network_connection;
 
 		sg_create_network_fn = function(host: pchar; port: uint16): sg_network_connection; cdecl;
-    	sg_network_data_fn = function(connection: psg_network_connection; buffer: BytePtr; size: Longint): Longint;
-    	sg_connection_fn = procedure (connection: psg_network_connection);
+    	sg_network_data_fn = function(connection: psg_network_connection; buffer: BytePtr; size: Longint): Longint; cdecl;
+    	sg_connection_fn = procedure (connection: psg_network_connection); cdecl;
+    	sg_connection_uint_fn = function (connection: psg_network_connection): uint; cdecl;
+    	sg_accept_connection_fn = function (connection: psg_network_connection): sg_network_connection; cdecl;
 
 		//
 		// Input related
@@ -291,10 +293,12 @@ interface
 			end;
 
 		sg_network_interface = record
-			open_tcp_connection : sg_create_network_fn;
-			read_bytes : sg_network_data_fn;
-			send_bytes : sg_network_data_fn;
-        	close_connection : sg_connection_fn;
+			open_tcp_connection: 	sg_create_network_fn;
+			read_bytes: 			sg_network_data_fn;
+			send_bytes: 			sg_network_data_fn;
+        	close_connection: 		sg_connection_fn;
+        	network_address: 		sg_connection_uint_fn;
+        	accept_new_connection: 	sg_accept_connection_fn;
 		end;
 (* Const before type ignored *)
 

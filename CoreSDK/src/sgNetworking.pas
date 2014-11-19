@@ -19,35 +19,47 @@ uses
 // TCP
 //----------------------------------------------------------------------------
 
-  /// Creates a socket that listens for connections based
-  /// on the port given. Returns true if success or false
-  /// if the binding failed. Uses TCP.
+  /// Creates a server socket that listens for TCP connections 
+  /// on the port given. Returns the server if this succeeds, otherwise
+  /// it returns nil/null.
   ///
-  /// @param aPort The port to bind the socket to.
-  ///
-  /// @lib
-  /// @uname CreateTCPHost
-  /// @sn createTCPHost:%s
-  function CreateTCPHost              (aPort : LongInt) : Boolean;
-
-  /// Opens a connection to a peer using the IP and port
-  /// Creates a Socket for the purpose of two way messages. 
-  /// Returns a new connection if successful or nil if failed.
-  ///
-  /// @param aIP The IP Address of the host
-  /// @param aPort The port the host is listening to connections on
+  /// @param port The number of the port to listen to for new connections
   ///
   /// @lib
-  /// @uname CreateTCPConnectionToHost
-  /// @sn createTCPConnection:%s port:%s
-  function CreateTCPConnection    (aIP : String;  aPort : LongInt) : Connection;
+  /// @sn createTCPServerNamed:%s onPort:%s
+  function CreateTCPServer(const name: String; port : LongInt) : ServerSocket;
 
-  /// Accepts an incomming connection from another client.
-  /// Returns the amount of new connections that have been
+  /// Opens a connection to a server using the IP and port.
+  /// Creates a Connection for the purpose of two way messages. 
+  /// Returns a new connection if successful or nil/null if it fails.
+  ///
+  /// @param aIP The IP Address or DNS name of the host
+  /// @param aPort The port number the server is using to listen for connections
+  ///
+  /// @lib
+  /// @sn openTCPConnection:%s port:%s
+  function OpenTCPConnection(const host: String; port: LongInt) : Connection;
+
+  /// Check all servers for incomming connections from clients.
+  /// Returns the number of new connections that have been
   /// accepted.
   ///
   /// @lib
-  function AcceptTCPConnection  () : LongInt; 
+  function AcceptAllNewConnections () : LongInt;
+
+  /// Check the server for incomming connections from clients.
+  /// Returns the number of new connections that have been
+  /// accepted.
+  ///
+  /// @lib
+  function AcceptNewConnection (server: ServerSocket) : LongInt;
+
+  // /// Check the server (based on its name) for incomming connections from clients.
+  // /// Returns the number of new connections that have been
+  // /// accepted.
+  // ///
+  // /// @lib AcceptNewConnectionByName
+  // function AcceptNewConnections (const server: String) : LongInt;
 
   /// Attempts to recconnect a connection that was closed using the IP and port
   /// stored in the connection
@@ -93,16 +105,16 @@ uses
   function SendTCPMessage           ( aMsg : String; aConnection : Connection) : Connection;
 
 //----------------------------------------------------------------------------
-// HTTP
+// Http
 //----------------------------------------------------------------------------
   
-  function HttpResponseBodyAsString(httpData: HTTPResponse): String;
+  function HttpResponseBodyAsString(httpData: HttpResponse): String;
 
   function HostName(const address: String): String;
   function HostIP(const name: String): String;
 
-  /// Opens a HTTP Connection. This is the same as the TCP connection except
-  /// that the HTTP flag is set. 
+  /// Opens a Http Connection. This is the same as the TCP connection except
+  /// that the Http flag is set. 
   /// Opens a connection to a peer using the IP and port
   /// Creates a Socket for the purpose of two way messages. 
   /// Returns a new connection if successful or nil if failed.
@@ -111,112 +123,112 @@ uses
   /// @param aDestPort The port the host is listening to connections on
   ///
   /// @lib
-  /// @uname CreateHTTPConnection
-  /// @sn createHTTPConnection:%s port:%s
-  function CreateHTTPConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
+  /// @uname CreateHttpConnection
+  /// @sn createHttpConnection:%s port:%s
+  function CreateHttpConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
 
   /// Sends the message to the specified server, attached to the socket
   /// Retuns the connection if the message fails to
   /// send so that it may be closed. Returns nil if the message has been sent
   /// successfully.
   ///
-  /// @param aReq The HTTP Request message to be sent
+  /// @param aReq The Http Request message to be sent
   /// @param aConnection Send the message through this connection's socket.
   ///
   /// @lib
   /// @class Connection
-  /// @method SendHTTPRequest
+  /// @method SendHttpRequest
   /// @self 2
-  /// @sn sendHTTPRequest:%s toConnection:%s
-  // function SendHTTPRequest(const aReq : HTTPRequest; const aConnection : Connection) : Connection;
+  /// @sn sendHttpRequest:%s toConnection:%s
+  // function SendHttpRequest(const aReq : HttpRequest; const aConnection : Connection) : Connection;
 
-  /// Adds a header to the HTTP request with the name and value.
+  /// Adds a header to the Http request with the name and value.
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param name The name of the header
   /// @param value The value of the header
   ///
   /// @lib
   /// @class Connection
-  /// @method HTTPAddHeader
+  /// @method HttpAddHeader
   /// @sn httpAddHeader:%s
-  procedure HTTPAddHeader(var aHTTPRequest : HTTPRequest; const name, value : String);
+  procedure HttpAddHeader(var aHttpRequest : HttpRequest; const name, value : String);
 
-  /// Removes a header of the HTTP request at the specified index.
+  /// Removes a header of the Http request at the specified index.
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param aIdx The index of the header
   ///
   /// @lib
   /// @class Connection
   /// @method httpRemoveHeaderAt
   /// @sn httpRemoveHeaderAt:%s
-  procedure HTTPRemoveHeaderAt(var aHTTPRequest : HTTPRequest; const aIdx : LongInt);
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
 
-  /// Returns a header of the HTTP Request at the specified index.
+  /// Returns a header of the Http Request at the specified index.
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param aIdx The index of the header
   ///
   /// @lib
   /// @class Connection
-  /// @method HTTPHeaderAt
+  /// @method HttpHeaderAt
   /// @sn httpHeaderAt:%s
-  function HTTPHeaderAt(const aHTTPRequest : HTTPRequest; const aIdx : LongInt) : String;
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
 
-  /// Returns a header of the HTTP Request at the specified index.
+  /// Returns a header of the Http Request at the specified index.
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param aBody The body data
   ///
   /// @lib
   /// @class Connection
   /// @method httpSetBody
   /// @sn httpSetBody:%s
-  procedure HTTPSetBody(var aHTTPRequest : HTTPRequest; const aBody : String);
+  procedure HttpSetBody(var aHttpRequest : HttpRequest; const aBody : String);
 
-  /// Sets the method of the HTTP Request
+  /// Sets the method of the Http Request
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param aMethod The type of request method
   ///
   /// @lib
   /// @class Connection
   /// @method httpSetMethod
   /// @sn httpSetMethod:%s
-  procedure HTTPSetMethod(var aHTTPRequest : HTTPRequest; const aMethod : HTTPMethod);
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
 
-  /// Sets the version of the HTTP Request
+  /// Sets the version of the Http Request
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   /// @param aVersion The version of the request
   ///
   /// @lib
   /// @class Connection
   /// @method httpSetVersion
   /// @sn httpSetVersion:%s
-  procedure HTTPSetVersion(var aHTTPRequest : HTTPRequest; const aVersion : String);
+  procedure HttpSetVersion(var aHttpRequest : HttpRequest; const aVersion : String);
 
-  /// Sets the URL of the HTTP Request
+  /// Sets the URL of the Http Request
   ///
-  /// @param aHTTPRequest The HTTP Request data
-  /// @param aURL The URL for the HTTP Request
+  /// @param aHttpRequest The Http Request data
+  /// @param aURL The URL for the Http Request
   ///
   /// @lib
   /// @class Connection
   /// @method httpSetURL
   /// @sn httpSetURL:%s
-  procedure HTTPSetURL(var aHTTPRequest : HTTPRequest; const aURL : String);
+  procedure HttpSetURL(var aHttpRequest : HttpRequest; const aURL : String);
 
-  /// Converts the HTTP Request to a string
+  /// Converts the Http Request to a string
   ///
-  /// @param aHTTPRequest The HTTP Request data
+  /// @param aHttpRequest The Http Request data
   ///
   /// @lib
   /// @class Connection
   /// @method httpRequestToString
   /// @sn httpRequestToString:%s
-  function HTTPRequestToString(const aHTTPRequest : HTTPRequest) : String;
+  function HttpRequestToString(const aHttpRequest : HttpRequest) : String;
 
   /// Encodes a string from username:password format to Base64
   ///
@@ -226,47 +238,28 @@ uses
   function EncodeBase64(const aData : String) : String;
 
 
-  function HTTPGet(host: String; port: LongInt; path: String) : HTTPResponse;
+  function HttpGet(host: String; port: LongInt; path: String) : HttpResponse;
 
 //----------------------------------------------------------------------------
 // Misc
 //----------------------------------------------------------------------------
 
-  /// Adds a connection to the list of new connections. This is called by the 
-  /// Accept connection in TCP and Receive message in UDP (if the message has
-  /// been sent by a new connection). This is used in conjunction with Fetch
-  /// connection, that will pop the new connection out of the list.
-  ///
-  /// @param aConnection The new connection to add to the list
+  /// Returns the number of connections to a Server socket.
   ///
   /// @lib
-  /// @class Connection
-  /// @method EnqueueNewConnection
-  /// @sn enqueueNewConnection:%s
-  procedure EnqueueNewConnection(aConnection : Connection);
-
-  /// Removes the top connection from the New connection queue and
-  /// returns it.
-  ///
-  /// @lib
-  function FetchConnection() : Connection;
-
-  /// Returns the size of the New Connection List
-  ///
-  /// @lib
-  function ConnectionQueueSize() : LongInt;
-  
-  /// Returns the count of Active Connections
-  ///
-  /// @lib
-  function ConnectionCount() : LongInt;
+  function ConnectionCount(server: ServerSocket) : LongInt;
   
   /// Retrieves the connection at the specified index
   ///
   /// @param idx The index of the connection
   ///
   /// @lib
-  function RetreiveConnection(idx: LongInt) : Connection;
+  function RetreiveConnection(server: ServerSocket; idx: LongInt) : Connection;
+
+  /// Returns the last connection made to a server socket.
+  ///
+  /// @lib
+  function LastConnection(server: ServerSocket) : Connection;
 
 //----------------------------------------------------------------------------
 // UDP
@@ -398,11 +391,7 @@ uses
   /// @class Connection
   /// @method EnqueueMessage
   /// @self 2
-  procedure EnqueueMessage            ( aMsg : String; aConnection : Connection);
-
-  procedure EnqueueMessage( aMsg : String; const httpData: HTTPResponse; aConnection : Connection);
-
-  procedure EnqueueMessage( const httpData: HTTPResponse; aConnection : Connection);
+  procedure EnqueueMessage( const aMsg : String; aConnection : Connection);
 
 
 //----------------------------------------------------------------------------
@@ -536,7 +525,7 @@ implementation
 //=============================================================================
 
 type
-  ServerArray = array of Server;
+  ServerArray = array of ServerSocket;
   ConnectionArray = array of Connection;
   PacketData = array [0..511] of Char;
   BytePtr = ^Byte;
@@ -545,12 +534,12 @@ var
   _Servers                : ServerArray;
   _Connections            : ConnectionArray;
   
-  _UDPListenSockets       : UDPSocketArray;
-  _UDPSocketIDs           : NamedIndexCollection;
-  _UDPConnectionIDs       : NamedIndexCollection;
+  // _UDPListenSockets       : UDPSocketArray;
+  // _UDPSocketIDs           : NamedIndexCollection;
+  // _UDPConnectionIDs       : NamedIndexCollection;
 
-  _UDPSendPacket          : PUDPPacket = nil;
-  _UDPReceivePacket       : PUDPPacket = nil;
+  // _UDPSendPacket          : PUDPPacket = nil;
+  // _UDPReceivePacket       : PUDPPacket = nil;
 
 
 //----------------------------------------------------------------------------
@@ -567,19 +556,19 @@ var
     result^.firstmsg    := nil;
     result^.lastMsg     := nil;
     result^.msgCount    := 0;
-    result^.conType     := TCP;
+    result^.protocol     := TCP;
     result^.partMsgData := '';
     result^.msgLen      := -1;
   end;
 
-  function GetConnectionWithID(const aIP : LongWord; const aPort : LongInt; aConType : ConnectionType) : Connection;
+  function GetConnectionWithID(const aIP : LongWord; const aPort : LongInt; aprotocol : ConnectionType) : Connection;
   var
     i : LongInt;
   begin
     result := nil;
     for i := Low(_Connections) to High(_Connections) do
     begin
-      if (_Connections[i]^.ip = aIP) and (_Connections[i]^.port = aPort) and (_Connections[i]^.conType = aConType) then
+      if (_Connections[i]^.ip = aIP) and (_Connections[i]^.port = aPort) and (_Connections[i]^.protocol = aprotocol) then
       begin
         result := _Connections[i];
       end;
@@ -630,21 +619,21 @@ var
     end;
   end;
     
-  function TCPIP(aNewSocket : PTCPSocket) : LongWord;
-  var
-    lRemoteIP : PIPAddress;
-  begin
-    lRemoteIP := SDLNet_TCP_GetPeerAddress(aNewSocket);
-    result := SDLNet_Read32(@lRemoteIP^.host);
-  end;
+  // function TCPIP(aNewSocket : PTCPSocket) : LongWord;
+  // var
+  //   lRemoteIP : PIPAddress;
+  // begin
+  //   lRemoteIP := SDLNet_TCP_GetPeerAddress(aNewSocket);
+  //   result := SDLNet_Read32(@lRemoteIP^.host);
+  // end;
 
-  function TCPPort(aNewSocket : PTCPSocket) : LongInt;
-  var
-    lRemoteIP : PIPAddress;
-  begin
-    lRemoteIP := SDLNet_TCP_GetPeerAddress(aNewSocket);
-    result := SDLNet_Read16(@lRemoteIP^.port);
-  end;
+  // function TCPPort(aNewSocket : PTCPSocket) : LongInt;
+  // var
+  //   lRemoteIP : PIPAddress;
+  // begin
+  //   lRemoteIP := SDLNet_TCP_GetPeerAddress(aNewSocket);
+  //   result := SDLNet_Read16(@lRemoteIP^.port);
+  // end;
   
 //----------------------------------------------------------------------------
 // Misc Function
@@ -655,84 +644,122 @@ var
     result := '127.0.0.1';
   end;
   
-  function ConnectionCountProcedure() : LongInt;
-  begin
-    result := Length(_Connections);
-  end;
   
 //----------------------------------------------------------------------------
 // TCP Connection Handling
 //----------------------------------------------------------------------------
 
-  function OpenTCPConnection(aIP : PChar; aPort : LongInt) : PTCPSocket;
+  function OpenTCPConnection(const host: String; port: LongInt) : Connection;
   var
-    lIPAddress : TIPAddress;  
+    con : psg_network_connection;
   begin
     result := nil;
-    if (SDLNet_ResolveHost(lIPAddress, aIP, aPort) < 0) then
-      exit;
-    
-    result := SDLNet_TCP_Open(lIPAddress); 
-  end;
 
-  function CreateTCPHostProcedure(const aPort : LongInt) : Boolean;
-  var
-    lTempSocket  : PTCPSocket = nil;
-  begin
-    lTempSocket := OpenTCPConnection(nil, aPort);
-    if Assigned(lTempSocket) then
-    begin
-      SetLength(_ListenSockets, Length(_ListenSockets) + 1);
-      _ListenSockets[High(_ListenSockets)].socket := lTempSocket;
-      _ListenSockets[High(_ListenSockets)].port   := aPort;
-    end;
-    result := Assigned(lTempSocket);    
-  end;
-
-  function CreateTCPConnectionProcedure(const aDestIP : String; const aDestPort : LongInt; aConType : ConnectionType) : Connection;
-  var
-    lTempSocket : PTCPSocket = nil; 
-  begin    
-    result := nil;
-    lTempSocket := OpenTCPConnection(PChar(aDestIP), aDestPort);
-    if Assigned(lTempSocket) then
+    New(con);
+    con^ := _sg_functions^.network.open_tcp_connection(PChar(host), port);
+    // WriteLn('client con = ', HexStr(con^._socket), ' ', con^.kind);
+    if Assigned(con^._socket) and (con^.kind = SGCK_TCP) then
     begin
       result := CreateConnection();
-      result^.IP            := TCPIP(lTempSocket);
-      result^.port          := aDestPort;
-      result^.socket        := lTempSocket;
-      result^.conType       := aConType;
-      result^.stringIP      := aDestIP;
+      result^.stringIP      := host;
+      result^.IP            := _sg_functions^.network.network_address(con);
+      result^.port          := port;
+      result^.socket        := con;
+      result^.protocol      := TCP;
+      
       SetLength(_Connections, Length(_Connections) + 1);
       _Connections[High(_Connections)] := result;
       
-      SDLNet_AddSocket(_SocketSet, PSDLNet_GenericSocket(lTempSocket));
+      // SDLNet_AddSocket(_SocketSet, PSDLNet_GenericSocket(lTempSocket));
     end;
   end;  
 
-  function AcceptTCPConnectionProcedure() : LongInt;
+  function CreateTCPServer(const name: String; port : LongInt) : ServerSocket;
   var
-    lTempSocket : PTCPSocket = nil;
-    lNewConnection : Connection;
-    i : LongInt;
+    con : psg_network_connection;
+  begin
+    result := nil;
+    New(con);
+    con^ := _sg_functions^.network.open_tcp_connection(nil, port);
+
+    // WriteLn('svr con = ', HexStr(con^._socket), ' ', con^.kind);
+
+    if Assigned(con^._socket) and (con^.kind = SGCK_TCP) then
+    begin
+      New(result);
+      result^.name := name;
+      result^.socket := con;
+      result^.port := port;
+      result^.newConnections := 0;
+      result^.protocol := TCP;
+      SetLength(result^.connections, 0);
+
+      SetLength(_Servers, Length(_Servers) + 1);
+      _Servers[High(_Servers)] := result;
+    end
+    else
+    begin
+      FreeAndNil(con);
+    end;
+  end;
+
+  function AcceptAllNewConnections () : LongInt;
+  var
+    i: Integer;
+  begin
+    result := 0;
+    for i := 0 to High(_Servers) do
+    begin
+      result += AcceptNewConnection(_Servers[i]);
+    end;
+  end;
+
+  function AcceptNewConnection(server: ServerSocket) : LongInt;
+  var
+    con : sg_network_connection;
+    conP: psg_network_connection;
+    client: Connection;
+  //   lTempSocket : PTCPSocket = nil;
+  //   lNewConnection : Connection;
+  //   i : LongInt;
   begin  
     result := 0;
-    for i := Low(_ListenSockets) to High(_ListenSockets) do
+    server^.newConnections := 0;
+    con := _sg_functions^.network.accept_new_connection(server^.socket);
+
+    // WriteLn('svr client con = ', HexStr(con._socket), ' ', con.kind);
+
+    if Assigned(con._socket) and (con.kind = SGCK_TCP) then
     begin
-      lTempSocket := SDLNet_TCP_Accept(_ListenSockets[i].socket);
-      if Assigned(lTempSocket) then
-      begin
-        lNewConnection                := CreateConnection();
-        lNewConnection^.IP            := TCPIP(lTempSocket);
-        lNewConnection^.socket        := lTempSocket;
-        lNewConnection^.port          := _ListenSockets[i].port;
-        SetLength(_Connections, Length(_Connections) + 1);
-        _Connections[High(_Connections)] := lNewConnection;
-        SDLNet_AddSocket(_SocketSet, PSDLNet_GenericSocket(lTempSocket));
-        EnqueueNewConnection(lNewConnection);
-        result += 1;
-      end;
+      client := CreateConnection();
+      client^.IP := _sg_functions^.network.network_address(@con);
+      client^.port := server^.port;
+      New(conP);
+      conP^ := con;
+      client^.socket := conP;
+
+      SetLength(server^.connections, Length(server^.connections) + 1);
+      server^.connections[High(server^.connections)] := client;
+      server^.newConnections := 1;
+      result := 1;
     end;
+
+    // for i := Low(_ListenSockets) to High(_ListenSockets) do
+    // begin
+    //   lTempSocket := SDLNet_TCP_Accept(_ListenSockets[i].socket);
+    //   if Assigned(lTempSocket) then
+    //   begin
+    //     lNewConnection                := CreateConnection();
+    //     lNewConnection^.IP            := _sg_functions^.network.network_address(con);
+    //     lNewConnection^.socket        := lTempSocket;
+    //     lNewConnection^.port          := _ListenSockets[i].port;
+    //     SetLength(_Connections, Length(_Connections) + 1);
+    //     _Connections[High(_Connections)] := lNewConnection;
+    //     SDLNet_AddSocket(_SocketSet, PSDLNet_GenericSocket(lTempSocket));
+    //     EnqueueNewConnection(lNewConnection);
+    //     result += 1;
+    //   end;
+    // end;
   end;
 
 //----------------------------------------------------------------------------
@@ -740,112 +767,112 @@ var
 //----------------------------------------------------------------------------
 
   function TCPMessageReceivedProcedure() : Boolean;
-   var
-     i, lReceived : LongInt;
-     buffer: PacketData;
+   // var
+   //   i, lReceived : LongInt;
+   //   buffer: PacketData;
    begin
      result := False;
-     if SDLNet_CheckSockets(_SocketSet, 0) < 1 then exit;
-     for i := Low(_Connections) to High(_Connections) do
-     begin
-       if SDLNET_SocketReady(PSDLNet_GenericSocket(_Connections[i]^.socket)) then
-       begin
-          if (_Connections[i]^.conType = TCP) then
-          begin
-            lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
-            if (lReceived <= 0) then continue;
-            ExtractData(buffer, lReceived, _Connections[i])
-          end
-          else if (_Connections[i]^.conType = HTTP) then
-          begin
-            WriteLn('ERROR -- ExtractHTTPData');
-            // ExtractHTTPData(_Connections[i]);
-          end;
-         result := True;
-       end;
-     end;
+     // if SDLNet_CheckSockets(_SocketSet, 0) < 1 then exit;
+     // for i := Low(_Connections) to High(_Connections) do
+     // begin
+     //   if SDLNET_SocketReady(PSDLNet_GenericSocket(_Connections[i]^.socket)) then
+     //   begin
+     //      if (_Connections[i]^.protocol = TCP) then
+     //      begin
+     //        lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
+     //        if (lReceived <= 0) then continue;
+     //        ExtractData(buffer, lReceived, _Connections[i])
+     //      end
+     //      else if (_Connections[i]^.protocol = Http) then
+     //      begin
+     //        WriteLn('ERROR -- ExtractHttpData');
+     //        // ExtractHttpData(_Connections[i]);
+     //      end;
+     //     result := True;
+     //   end;
+     // end;
    end;
 
-  function SendHTTPRequestProcedure(const aReq: HTTPRequest; const aConnection : Connection) : Connection;
-  var
-    lLen, i : LongInt;
-    buffer : Array of Char;
-    lMsg : String = '';
+  function SendHttpRequestProcedure(const aReq: HttpRequest; const aConnection : Connection) : Connection;
+  // var
+  //   lLen, i : LongInt;
+  //   buffer : Array of Char;
+  //   lMsg : String = '';
   begin
     result := nil;
-    if (aConnection = nil) or (aConnection^.socket = nil) or (aConnection^.conType <> HTTP) then 
-    begin 
-      RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement (nil or not HTTP)'); 
-      exit; 
-    end;
+    // if (aConnection = nil) or (aConnection^.socket = nil) or (aConnection^.protocol <> Http) then 
+    // begin 
+    //   RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement (nil or not Http)'); 
+    //   exit; 
+    // end;
 
-    lMsg := HTTPRequestToString(aReq) + #13#10#13#10;
-    SetLength(buffer, Length(lMsg));
+    // lMsg := HttpRequestToString(aReq) + #13#10#13#10;
+    // SetLength(buffer, Length(lMsg));
 
-    for i := 0 to Length(lMsg) - 1 do
-      buffer[i] := lMsg[i + 1];
+    // for i := 0 to Length(lMsg) - 1 do
+    //   buffer[i] := lMsg[i + 1];
     
-    lLen := Length(lMsg);
+    // lLen := Length(lMsg);
     
-    // WriteLn(lMsg);
+    // // WriteLn(lMsg);
 
-    if (SDLNet_TCP_Send(aConnection^.socket, @buffer[0], lLen) < lLen) then
-    begin
-          result := aConnection;
-          RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError() + ' HTTP Connection may have been refused.');
-    end;
+    // if (SDLNet_TCP_Send(aConnection^.socket, @buffer[0], lLen) < lLen) then
+    // begin
+    //       result := aConnection;
+    //       RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError() + ' Http Connection may have been refused.');
+    // end;
   end;
 
   function SendTCPMessageProcedure(const aMsg : String; const aConnection : Connection) : Connection;
-  var
-    lLen, i : LongInt;
-    buffer: PacketData;
+  // var
+  //   lLen, i : LongInt;
+  //   buffer: PacketData;
   begin
     result := nil;
-    if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement'); exit; end;
-    if Length(aMsg) > 255 then begin RaiseWarning('SwinGame messages must be less than 256 characters in length'); exit; end;
+    // if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement'); exit; end;
+    // if Length(aMsg) > 255 then begin RaiseWarning('SwinGame messages must be less than 256 characters in length'); exit; end;
 
-    for i := 0 to Length(aMsg) + 1 do
-    begin
-      if i = 0 then
-        buffer[i] := Char(Length(aMsg))
-      else if  i < Length(aMsg) + 1 then
-        buffer[i] := aMsg[i];
-    end;
+    // for i := 0 to Length(aMsg) + 1 do
+    // begin
+    //   if i = 0 then
+    //     buffer[i] := Char(Length(aMsg))
+    //   else if  i < Length(aMsg) + 1 then
+    //     buffer[i] := aMsg[i];
+    // end;
 
         
-    lLen := Length(aMsg) + 1;
+    // lLen := Length(aMsg) + 1;
     
-    if (SDLNet_TCP_Send(aConnection^.socket, @buffer, lLen) < lLen) then
-    begin
-      result := aConnection;
-      RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError());
-    end;
+    // if (SDLNet_TCP_Send(aConnection^.socket, @buffer, lLen) < lLen) then
+    // begin
+    //   result := aConnection;
+    //   RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError());
+    // end;
   end;
 
   procedure BroadcastTCPMessageProcedure(const aMsg : String);
-  var
-    lLen, i : LongInt;
-    buffer: PacketData;
+  // var
+  //   lLen, i : LongInt;
+  //   buffer: PacketData;
   begin
-    if Length(aMsg) > 255 then begin RaiseWarning('SwinGame messages must be less than 256 characters in length'); exit; end;
+    // if Length(aMsg) > 255 then begin RaiseWarning('SwinGame messages must be less than 256 characters in length'); exit; end;
       
-    for i := 0 to Length(aMsg) + 1 do
-    begin
-      if i = 0 then
-        buffer[i] := Char(Length(aMsg))
-      else if  i < Length(aMsg) + 1 then
-        buffer[i] := aMsg[i];
-    end;
+    // for i := 0 to Length(aMsg) + 1 do
+    // begin
+    //   if i = 0 then
+    //     buffer[i] := Char(Length(aMsg))
+    //   else if  i < Length(aMsg) + 1 then
+    //     buffer[i] := aMsg[i];
+    // end;
     
-    lLen := Length(aMsg) + 1;
-    for i := Low(_Connections) to High(_Connections) do
-    begin
-      if (SDLNet_TCP_Send(_Connections[i]^.socket, @buffer[0], lLen) < lLen) then
-      begin
-        RaiseWarning('Error broadcasting message: SDLNet_TCP_Send: ' + SDLNet_GetError());
-      end;
-    end;
+    // lLen := Length(aMsg) + 1;
+    // for i := Low(_Connections) to High(_Connections) do
+    // begin
+    //   if (SDLNet_TCP_Send(_Connections[i]^.socket, @buffer[0], lLen) < lLen) then
+    //   begin
+    //     RaiseWarning('Error broadcasting message: SDLNet_TCP_Send: ' + SDLNet_GetError());
+    //   end;
+    // end;
   end;
 
 //----------------------------------------------------------------------------
@@ -854,60 +881,60 @@ var
 
   procedure CreatePackets();
   begin
-    if _UDPSendPacket = nil then
-      _UDPSendPacket := SDLNet_AllocPacket(512);
-    if _UDPReceivePacket = nil then
-      _UDPReceivePacket := SDLNet_AllocPacket(512);
+    // if _UDPSendPacket = nil then
+    //   _UDPSendPacket := SDLNet_AllocPacket(512);
+    // if _UDPReceivePacket = nil then
+    //   _UDPReceivePacket := SDLNet_AllocPacket(512);
   end;
 
   function CreateUDPHostProcedure(const aPort : LongInt) : LongInt;
-  var
-    lTempSocket  : PUDPSocket = nil;  
-    lPortID      : String;  
+  // var
+  //   lTempSocket  : PUDPSocket = nil;  
+  //   lPortID      : String;  
   begin    
-    lPortID := IntToStr(aPort);
+    // lPortID := IntToStr(aPort);
     result := -1;
-    if HasName(_UDPSocketIDs, lPortID) then begin result := IndexOf(_UDPSocketIDs, lPortID); exit; end;
-    lTempSocket := SDLNet_UDP_Open(aPort);
-    if Assigned(lTempSocket) then
-    begin
-      SetLength(_UDPListenSockets, Length(_UDPListenSockets) + 1);
-      _UDPListenSockets[High(_UDPListenSockets)] := lTempSocket;
-      AddName(_UDPSocketIDs, lPortID);
-      result := High(_UDPListenSockets);
-    end;
-    CreatePackets();
-    if result = -1 then RaiseWarning('OpenUDPListenerPort: ' + SDLNET_GetError());
+    // if HasName(_UDPSocketIDs, lPortID) then begin result := IndexOf(_UDPSocketIDs, lPortID); exit; end;
+    // lTempSocket := SDLNet_UDP_Open(aPort);
+    // if Assigned(lTempSocket) then
+    // begin
+    //   SetLength(_UDPListenSockets, Length(_UDPListenSockets) + 1);
+    //   _UDPListenSockets[High(_UDPListenSockets)] := lTempSocket;
+    //   AddName(_UDPSocketIDs, lPortID);
+    //   result := High(_UDPListenSockets);
+    // end;
+    // CreatePackets();
+    // if result = -1 then RaiseWarning('OpenUDPListenerPort: ' + SDLNET_GetError());
   end;
    
   function CreateUDPConnectionProcedure(const aDestIP : String; const aDestPort, aInPort : LongInt) : Connection; 
-  var
-    lIdx : LongInt;
-    lDecDestIP : LongWord;
-    lDecIPStr : String;
+  // var
+  //   lIdx : LongInt;
+  //   lDecDestIP : LongWord;
+  //   lDecIPStr : String;
   begin    
     result := nil;
-    lDecDestIP := IPv4ToDec(aDestIP);
-    lDecIPStr  := IntToStr(lDecDestIP);
+    // lDecDestIP := IPv4ToDec(aDestIP);
+    // lDecIPStr  := IntToStr(lDecDestIP);
 
-    if HasName(_UDPConnectionIDs, lDecIPStr + ':' + IntToStr(aDestPort)) then exit;
-    lIdx := CreateUDPHostProcedure(aInPort);
+    // if HasName(_UDPConnectionIDs, lDecIPStr + ':' + IntToStr(aDestPort)) then exit;
+    // lIdx := CreateUDPHostProcedure(aInPort);
 
-    if (lIdx = -1) then begin RaiseWarning('SDL 1.2 - CreateUDPConnectionProcedure: Could not Bind Socket.'); exit; end;
+    // if (lIdx = -1) then begin RaiseWarning('SDL 1.2 - CreateUDPConnectionProcedure: Could not Bind Socket.'); exit; end;
 
-    AddName(_UDPConnectionIDs, lDecIPStr + ':' + IntToStr(aDestPort));
-    result := CreateConnection();
-    result^.ip := lDecDestIP;
-    result^.port := aDestPort;
-    result^.conType := UDP;
-    result^.stringIP := lDecIPStr;
+    // AddName(_UDPConnectionIDs, lDecIPStr + ':' + IntToStr(aDestPort));
+    // result := CreateConnection();
+    // result^.ip := lDecDestIP;
+    // result^.port := aDestPort;
+    // result^.protocol := UDP;
+    // result^.stringIP := lDecIPStr;
     
-    lIdx := CreateUDPHostProcedure(aInPort);
-    result^.socket := _UDPListenSockets[lIdx];
-    SetLength(_Connections, Length(_Connections) + 1);
-    _Connections[High(_Connections)] := result;
-    CreatePackets();
-    if not Assigned(result^.socket) then RaiseWarning('OpenUDPSendPort: ' + SDLNET_GetError());
+    // lIdx := CreateUDPHostProcedure(aInPort);
+    // result^.socket := _UDPListenSockets[lIdx];
+    // SetLength(_Connections, Length(_Connections) + 1);
+    // _Connections[High(_Connections)] := result;
+    // CreatePackets();
+    // if not Assigned(result^.socket) then RaiseWarning('OpenUDPSendPort: ' + SDLNET_GetError());
   end;
 
 //----------------------------------------------------------------------------
@@ -915,197 +942,197 @@ var
 //----------------------------------------------------------------------------
 
   function UDPMessageReceivedProcedure() : Boolean;
-  var
-    i, j          : LongInt;    
-    lMsg          : String = '';
-    lConnection   : Connection;
-    lSrcIPString  : String;
-    lNewConnection: Boolean = False;
-    lSrcPort : LongInt;
-    lSrcIP  : LongWord;
+  // var
+  //   i, j          : LongInt;    
+  //   lMsg          : String = '';
+  //   lConnection   : Connection;
+  //   lSrcIPString  : String;
+  //   lNewConnection: Boolean = False;
+  //   lSrcPort : LongInt;
+  //   lSrcIP  : LongWord;
   begin
     result := False;
-    for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
-    begin
-      if SDLNet_UDP_Recv(_UDPListenSockets[i], _UDPReceivePacket) > 0 then
-      begin        
-        lSrcIP      := SDLNet_Read32(@_UDPReceivePacket^.address.host);
-        lSrcPort    := SDLNet_Read16(@_UDPReceivePacket^.address.port);
-        lConnection := GetConnectionWithID(lSrcIP, lSrcPort, UDP);
+    // for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
+    // begin
+    //   if SDLNet_UDP_Recv(_UDPListenSockets[i], _UDPReceivePacket) > 0 then
+    //   begin        
+    //     lSrcIP      := SDLNet_Read32(@_UDPReceivePacket^.address.host);
+    //     lSrcPort    := SDLNet_Read16(@_UDPReceivePacket^.address.port);
+    //     lConnection := GetConnectionWithID(lSrcIP, lSrcPort, UDP);
 
-        if not Assigned(lConnection) then
-        begin
-          lSrcIPString := HexStrToIPv4(DecToHex(lSrcIP));
-          lConnection := CreateUDPConnectionProcedure(lSrcIPString, lSrcPort, StrToInt(NameAt(_UDPSocketIDs, i)));
-          lNewConnection := True;
-        end;
+    //     if not Assigned(lConnection) then
+    //     begin
+    //       lSrcIPString := HexStrToIPv4(DecToHex(lSrcIP));
+    //       lConnection := CreateUDPConnectionProcedure(lSrcIPString, lSrcPort, StrToInt(NameAt(_UDPSocketIDs, i)));
+    //       lNewConnection := True;
+    //     end;
         
-        if not Assigned(lConnection) then begin RaiseWarning('SDL 1.2 - UDPMessageReceivedProcedure: Could Not Create Connection.'); exit; end;
+    //     if not Assigned(lConnection) then begin RaiseWarning('SDL 1.2 - UDPMessageReceivedProcedure: Could Not Create Connection.'); exit; end;
 
-        for j := 0 to _UDPReceivePacket^.len - 1 do
-          lMsg += Char((_UDPReceivePacket^.data)[j]);
+    //     for j := 0 to _UDPReceivePacket^.len - 1 do
+    //       lMsg += Char((_UDPReceivePacket^.data)[j]);
         
-        if lNewConnection then
-          EnqueueNewConnection(lConnection);
+    //     if lNewConnection then
+    //       EnqueueNewConnection(lConnection);
 
-        EnqueueMessage(lMsg, lConnection);
-        result := True;
-      end; 
-    end;
+    //     EnqueueMessage(lMsg, lConnection);
+    //     result := True;
+    //   end; 
+    // end;
   end;
     
   function SendUDPMessageProcedure(const aMsg : String; const aConnection : Connection) : Boolean;
-  var
-    lIPAddress : TIPaddress;
+  // var
+  //   lIPAddress : TIPaddress;
   begin
     result := False;
-    if not Assigned(aConnection) then begin RaiseWarning('SDL 1.2 - SendUDPMessageProcedure: Unassigned Connection.'); exit; end;
-    SDLNet_ResolveHost(lIPAddress, PChar(HexStrToIPv4(DecToHex(aConnection^.ip))), aConnection^.port);
+    // if not Assigned(aConnection) then begin RaiseWarning('SDL 1.2 - SendUDPMessageProcedure: Unassigned Connection.'); exit; end;
+    // SDLNet_ResolveHost(lIPAddress, PChar(HexStrToIPv4(DecToHex(aConnection^.ip))), aConnection^.port);
 
-    _UDPSendPacket^.address.host   := lIPAddress.host;
-    _UDPSendPacket^.address.port   := lIPAddress.port;
-    _UDPSendPacket^.len            := Length(aMsg);
-    _UDPSendPacket^.data           := @(aMsg[1]);
-    SDLNet_UDP_Send(aConnection^.socket, -1, _UDPSendPacket);
-    result := True; 
+    // _UDPSendPacket^.address.host   := lIPAddress.host;
+    // _UDPSendPacket^.address.port   := lIPAddress.port;
+    // _UDPSendPacket^.len            := Length(aMsg);
+    // _UDPSendPacket^.data           := @(aMsg[1]);
+    // SDLNet_UDP_Send(aConnection^.socket, -1, _UDPSendPacket);
+    // result := True; 
   end;
   
   procedure BroadcastUDPMessageProcedure(const aMsg : String);
-  var
-    lIPAddress : TIPaddress;
-    i : LongInt;
+  // var
+  //   lIPAddress : TIPaddress;
+  //   i : LongInt;
   begin
-    for i := Low(_Connections) to High(_Connections) do
-    begin
-      SDLNet_ResolveHost(lIPAddress, PChar(HexStrToIPv4(DecToHex(_Connections[i]^.ip))), _Connections[i]^.port);
+    // for i := Low(_Connections) to High(_Connections) do
+    // begin
+    //   SDLNet_ResolveHost(lIPAddress, PChar(HexStrToIPv4(DecToHex(_Connections[i]^.ip))), _Connections[i]^.port);
 
-      _UDPSendPacket^.address.host   := lIPAddress.host;
-      _UDPSendPacket^.address.port   := lIPAddress.port;
-      _UDPSendPacket^.len            := Length(aMsg);
-      _UDPSendPacket^.data           := @(aMsg[1]);
-      SDLNet_UDP_Send(_Connections[i]^.socket, -1, _UDPSendPacket);
-    end;
+    //   _UDPSendPacket^.address.host   := lIPAddress.host;
+    //   _UDPSendPacket^.address.port   := lIPAddress.port;
+    //   _UDPSendPacket^.len            := Length(aMsg);
+    //   _UDPSendPacket^.data           := @(aMsg[1]);
+    //   SDLNet_UDP_Send(_Connections[i]^.socket, -1, _UDPSendPacket);
+    // end;
   end;
 
 //----------------------------------------------------------------------------
 // Close Single
 //----------------------------------------------------------------------------
 
-  function CloseUDPSocket(var aSocket : PUDPSocket) : Boolean;
-  var
-    lTmpSockets   : Array of PUDPSocket;
-    i, j, lOffset : LongInt;
-  begin
-    result := False;
-    if (Length(_UDPListenSockets) = 0) or not Assigned(aSocket) then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close UDP Socket.'); exit; end;
+  // function CloseUDPSocket(var aSocket : PUDPSocket) : Boolean;
+  // // var
+  // //   lTmpSockets   : Array of PUDPSocket;
+  // //   i, j, lOffset : LongInt;
+  // begin
+  //   result := False;
+  //   // if (Length(_UDPListenSockets) = 0) or not Assigned(aSocket) then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close UDP Socket.'); exit; end;
     
-    lOffset := 0;
-    SetLength(lTmpSockets, Length(_UDPListenSockets) - 1);
-    for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
-    begin
-      if aSocket = _UDPListenSockets[i] then 
-      begin
-        lOffset := 1;
-        for j := Low(_Connections) to High(_Connections) do
-          if _Connections[j]^.socket = _UDPListenSockets[i] then
-            _Connections[j]^.socket := nil;
-        SDLNet_UDP_Close(_UDPListenSockets[i]);
-        RemoveName(_UDPSocketIDs, i);
-      end else
-        lTmpSockets[i - lOffset] := _UDPListenSockets[i];
-    end;
-    _UDPListenSockets := lTmpSockets; 
-    result := True;
-  end;
+  //   // lOffset := 0;
+  //   // SetLength(lTmpSockets, Length(_UDPListenSockets) - 1);
+  //   // for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
+  //   // begin
+  //   //   if aSocket = _UDPListenSockets[i] then 
+  //   //   begin
+  //   //     lOffset := 1;
+  //   //     for j := Low(_Connections) to High(_Connections) do
+  //   //       if _Connections[j]^.socket = _UDPListenSockets[i] then
+  //   //         _Connections[j]^.socket := nil;
+  //   //     SDLNet_UDP_Close(_UDPListenSockets[i]);
+  //   //     RemoveName(_UDPSocketIDs, i);
+  //   //   end else
+  //   //     lTmpSockets[i - lOffset] := _UDPListenSockets[i];
+  //   // end;
+  //   // _UDPListenSockets := lTmpSockets; 
+  //   // result := True;
+  // end;
   
   function CloseTCPHostSocketProcedure(const aPort : LongInt) : Boolean;
-  var
-    lTmpListenArray : Array of TCPListenSocket;
-    offSet: LongInt = 0;
-    i   : LongInt;
+  // var
+  //   lTmpListenArray : Array of TCPListenSocket;
+  //   offSet: LongInt = 0;
+  //   i   : LongInt;
   begin
     result := False;
-    if Length(_ListenSockets) = 0 then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close TCP Socket.'); exit; end;
-    SetLength(lTmpListenArray, Length(_ListenSockets));
-    for i := Low(_ListenSockets) to High(_ListenSockets) do
-    begin
-      if (_ListenSockets[i].port = aPort) then
-      begin
-        offSet := 1;
-        if Assigned(_ListenSockets[i].socket) then 
-        begin
-          SDLNet_TCP_Close(_ListenSockets[i].socket);
-          result := True;
-        end;
-      end else
-        lTmpListenArray[i - offset] := _ListenSockets[i];
-    end;
-    if (result) then
-    begin
-      _ListenSockets := lTmpListenArray; 
-      SetLength(_ListenSockets, Length(_ListenSockets) - 1);
-    end;
+    // if Length(_ListenSockets) = 0 then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close TCP Socket.'); exit; end;
+    // SetLength(lTmpListenArray, Length(_ListenSockets));
+    // for i := Low(_ListenSockets) to High(_ListenSockets) do
+    // begin
+    //   if (_ListenSockets[i].port = aPort) then
+    //   begin
+    //     offSet := 1;
+    //     if Assigned(_ListenSockets[i].socket) then 
+    //     begin
+    //       SDLNet_TCP_Close(_ListenSockets[i].socket);
+    //       result := True;
+    //     end;
+    //   end else
+    //     lTmpListenArray[i - offset] := _ListenSockets[i];
+    // end;
+    // if (result) then
+    // begin
+    //   _ListenSockets := lTmpListenArray; 
+    //   SetLength(_ListenSockets, Length(_ListenSockets) - 1);
+    // end;
   end;
 
   function CloseConnectionProcedure(var aConnection : Connection; const aCloseUDPSocket : Boolean) : Boolean;
-  var
-    lTmpConnectionArray : ConnectionArray;
-    offSet: LongInt = 0;
-    i : LongInt;
+  // var
+  //   lTmpConnectionArray : ConnectionArray;
+  //   offSet: LongInt = 0;
+  //   i : LongInt;
   begin
     result := False;
-    if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
-    SetLength(lTmpConnectionArray, Length(_Connections) - 1);
-    for i := Low(_Connections) to High(_Connections) do
-    begin
-      if (_Connections[i] = aConnection) then
-      begin
-        offSet := 1;
-        if (aConnection^.conType <> UDP) and Assigned(aConnection^.socket) then 
-        begin
-          SDLNet_TCP_DelSocket(_Socketset, aConnection^.socket);
-          SDLNet_TCP_Close(aConnection^.socket);
-        end else if (aConnection^.conType = UDP) then
-          RemoveName(_UDPConnectionIDs, IntToStr(aConnection^.ip) + ':' + IntToStr(aConnection^.port));
-        result := True;
-      end else begin
-        lTmpConnectionArray[i - offset] := _Connections[i];
-      end;
-    end;    
-    if aCloseUDPSocket and Assigned(aConnection^.socket) then 
-      CloseUDPSocket(aConnection^.socket);
-    ClearMessageQueue(aConnection);
-    FreeConnection(aConnection);
-    if (result) then
-      _Connections := lTmpConnectionArray;
+    // if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
+    // SetLength(lTmpConnectionArray, Length(_Connections) - 1);
+    // for i := Low(_Connections) to High(_Connections) do
+    // begin
+    //   if (_Connections[i] = aConnection) then
+    //   begin
+    //     offSet := 1;
+    //     if (aConnection^.protocol <> UDP) and Assigned(aConnection^.socket) then 
+    //     begin
+    //       SDLNet_TCP_DelSocket(_Socketset, aConnection^.socket);
+    //       SDLNet_TCP_Close(aConnection^.socket);
+    //     end else if (aConnection^.protocol = UDP) then
+    //       RemoveName(_UDPConnectionIDs, IntToStr(aConnection^.ip) + ':' + IntToStr(aConnection^.port));
+    //     result := True;
+    //   end else begin
+    //     lTmpConnectionArray[i - offset] := _Connections[i];
+    //   end;
+    // end;    
+    // if aCloseUDPSocket and Assigned(aConnection^.socket) then 
+    //   CloseUDPSocket(aConnection^.socket);
+    // ClearMessageQueue(aConnection);
+    // FreeConnection(aConnection);
+    // if (result) then
+    //   _Connections := lTmpConnectionArray;
   end;
  
   function CloseUDPSocketProcedure(const aPort : LongInt) : Boolean;
-  var
-    lTmpSockets : Array of PUDPSocket;
-    i, j, lOffset, lIdx  : LongInt;
+  // var
+  //   lTmpSockets : Array of PUDPSocket;
+  //   i, j, lOffset, lIdx  : LongInt;
   begin
     result := False;
-    if Length(_UDPListenSockets) = 0 then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close UDP Socket.'); exit; end;
-    lIdx := IndexOf(_UDPSocketIDs, IntToStr(aPort));
-    if lIdx = -1 then exit;
-    RemoveName(_UDPSocketIDs, lIdx);
-    lOffset := 0;
-    SetLength(lTmpSockets, Length(_UDPListenSockets) - 1);
-    for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
-    begin
-      if i = lIdx then 
-      begin
-        lOffset := 1;
-        for j := Low(_Connections) to High(_Connections) do
-          if _Connections[j]^.socket = _UDPListenSockets[i] then
-            _Connections[j]^.socket := nil;
-        SDLNet_UDP_Close(_UDPListenSockets[i])
-      end else
-        lTmpSockets[i - lOffset] := _UDPListenSockets[i];
-    end;
-    _UDPListenSockets := lTmpSockets; 
-    result := True;
+    // if Length(_UDPListenSockets) = 0 then begin RaiseWarning('SDL 1.2 - CloseUDPListenSocketProcedure: Could Not Close UDP Socket.'); exit; end;
+    // lIdx := IndexOf(_UDPSocketIDs, IntToStr(aPort));
+    // if lIdx = -1 then exit;
+    // RemoveName(_UDPSocketIDs, lIdx);
+    // lOffset := 0;
+    // SetLength(lTmpSockets, Length(_UDPListenSockets) - 1);
+    // for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
+    // begin
+    //   if i = lIdx then 
+    //   begin
+    //     lOffset := 1;
+    //     for j := Low(_Connections) to High(_Connections) do
+    //       if _Connections[j]^.socket = _UDPListenSockets[i] then
+    //         _Connections[j]^.socket := nil;
+    //     SDLNet_UDP_Close(_UDPListenSockets[i])
+    //   end else
+    //     lTmpSockets[i - lOffset] := _UDPListenSockets[i];
+    // end;
+    // _UDPListenSockets := lTmpSockets; 
+    // result := True;
   end;
   
 //----------------------------------------------------------------------------
@@ -1113,42 +1140,42 @@ var
 //----------------------------------------------------------------------------
 
   procedure CloseAllTCPHostSocketProcedure();
-  var
-    i : LongInt;
+  // var
+  //   i : LongInt;
   begin    
-    for i := Low(_ListenSockets) to High(_ListenSockets) do
-      SDLNet_TCP_Close(_ListenSockets[i].socket);
-    SetLength(_ListenSockets, 0);
+    // for i := Low(_ListenSockets) to High(_ListenSockets) do
+    //   SDLNet_TCP_Close(_ListenSockets[i].socket);
+    // SetLength(_ListenSockets, 0);
   end;
 
   procedure CloseAllConnectionsProcedure(const aCloseUDPSockets : Boolean);
   begin
-    while (Length(_Connections) <> 0) do
-      CloseConnectionProcedure(_Connections[High(_Connections)], aCloseUDPSockets);
-   { for i := Low(_Connections) to High(_Connections) do
-    begin
-      if (_Connections[i]^.isTCP) and Assigned(_Connections[i]^.socket) then 
-      begin
-        SDLNet_DelSocket(_SocketSet, _Connections[i]^.socket);
-        SDLNet_TCP_Close(_Connections[i]^.socket);
-      end else begin
-        RemoveAllNamesInCollection(_UDPConnectionIDs);
-        if Assigned(_Connections[i]^.socket) and aCloseUDPSocket then
-          SDLNet_UDP_Close(_Connections[i]^.socket);
-      end;
-      ClearMessageQueue(_Connections[i]);
-      FreeConnection(_Connections[i]);
-    end;
-    SetLength(_Connections, 0);}
+   //  while (Length(_Connections) <> 0) do
+   //    CloseConnectionProcedure(_Connections[High(_Connections)], aCloseUDPSockets);
+   // { for i := Low(_Connections) to High(_Connections) do
+   //  begin
+   //    if (_Connections[i]^.isTCP) and Assigned(_Connections[i]^.socket) then 
+   //    begin
+   //      SDLNet_DelSocket(_SocketSet, _Connections[i]^.socket);
+   //      SDLNet_TCP_Close(_Connections[i]^.socket);
+   //    end else begin
+   //      RemoveAllNamesInCollection(_UDPConnectionIDs);
+   //      if Assigned(_Connections[i]^.socket) and aCloseUDPSocket then
+   //        SDLNet_UDP_Close(_Connections[i]^.socket);
+   //    end;
+   //    ClearMessageQueue(_Connections[i]);
+   //    FreeConnection(_Connections[i]);
+   //  end;
+   //  SetLength(_Connections, 0);}
   end;
 
   procedure CloseAllUDPSocketProcedure();
-  var
-    i : LongInt;
+  // var
+  //   i : LongInt;
   begin
-    for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
-      SDLNet_UDP_Close(_UDPListenSockets[i]);
-    SetLength(_UDPListenSockets, 0);
+    // for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
+    //   SDLNet_UDP_Close(_UDPListenSockets[i]);
+    // SetLength(_UDPListenSockets, 0);
   end;  
 
   procedure FreeAllNetworkingResourcesProcedure();
@@ -1157,21 +1184,21 @@ var
     CloseAllTCPHostSocketProcedure();
     CloseAllUDPSocketProcedure();
       
-    if Assigned(_UDPReceivePacket) then
-    begin
-      SDLNet_FreePacket(_UDPReceivePacket);
-      _UDPReceivePacket := nil;
-    end;
-    if Assigned(_SocketSet) then
-    begin
-      SDLNet_FreeSocketSet(_SocketSet);
-      _SocketSet := nil;
-    end;
- //   _UDPSendPacket is not Allocated
- //   if Assigned(_UDPSendPacket) then
- //     SDLNet_FreePacket(_UDPSendPacket);   
-    FreeNamedIndexCollection(_UDPSocketIDs);
-    FreeNamedIndexCollection(_UDPConnectionIDs);
+ //    if Assigned(_UDPReceivePacket) then
+ //    begin
+ //      SDLNet_FreePacket(_UDPReceivePacket);
+ //      _UDPReceivePacket := nil;
+ //    end;
+ //    if Assigned(_SocketSet) then
+ //    begin
+ //      SDLNet_FreeSocketSet(_SocketSet);
+ //      _SocketSet := nil;
+ //    end;
+ // //   _UDPSendPacket is not Allocated
+ // //   if Assigned(_UDPSendPacket) then
+ // //     SDLNet_FreePacket(_UDPSendPacket);   
+ //    FreeNamedIndexCollection(_UDPSocketIDs);
+ //    FreeNamedIndexCollection(_UDPConnectionIDs);
   end;
 
 
@@ -1308,17 +1335,7 @@ var
 //----------------------------------------------------------------------------
 // TCP
 //----------------------------------------------------------------------------
-    
-  function CreateTCPHost( aPort : LongInt) : Boolean;
-  begin
-    result := NetworkingDriver.CreateTCPHost(aPort);
-  end;
-  
-  function CreateTCPConnection( aIP : String;  aPort : LongInt) : Connection;
-  begin
-    result := NetworkingDriver.CreateTCPConnection(aIP, aPort, TCP);
-  end;   
-
+      
   procedure ReconnectConnection(var aConnection : Connection);
   var
     lIPString : String;
@@ -1328,7 +1345,7 @@ var
     lPort := aConnection^.port;
 
     CloseConnection(aConnection);
-    aConnection := NetworkingDriver.CreateTCPConnection(lIPString, lPort, HTTP);
+    aConnection := NetworkingDriver.CreateTCPConnection(lIPString, lPort, Http);
   end;
   
   function AcceptTCPConnection() : LongInt;
@@ -1340,65 +1357,32 @@ var
 // Connection
 //----------------------------------------------------------------------------
 
-  procedure EnqueueNewConnection(aConnection : Connection);
-  var
-    lNewConLink : NewConnectionPtr;
-    lLastLink : NewConnectionPtr = nil;
+  function ConnectionCount(server: ServerSocket) : LongInt;
   begin
-    New(lNewConLink);  
-    lNewConLink^.con        := aConnection;
-    lNewConLink^.nextCon    := nil;
-
-    if _NewConnectionQueue = nil then
-      _NewConnectionQueue   := lNewConLink
-    else begin
-      lLastLink := _NewConnectionQueue;
-
-      while lLastLink^.nextCon <> nil do
-        lLastLink := lLastLink^.nextCon;
-
-      lLastLink^.nextCon := lNewConLink;
-    end;  
-    _NewConnectionCount += 1; 
+    result := 0;
+    if (not Assigned(server)) then exit;
+    result := Length(server^.connections);
   end;
 
-  function FetchConnection() : Connection;
-  var
-    lTmp : NewConnectionPtr;
-  begin  
-    result := nil;
-    if _NewConnectionQueue = nil then exit;
-
-    result := _NewConnectionQueue^.con;
-
-    lTmp := _NewConnectionQueue^.nextCon;
-    Dispose(_NewConnectionQueue);
-    _NewConnectionQueue := lTmp;
-    _NewConnectionCount -= 1; 
-  end;
-
-  function ConnectionQueueSize() : LongInt;
-  begin
-    result := _NewConnectionCount;
-  end;
-  
-  function ConnectionCount() : LongInt;
-  begin
-    result := NetworkingDriver.ConnectionCount();
-  end;
-
-  function RetreiveConnection(idx: LongInt) : Connection;
+  function RetreiveConnection(server: ServerSocket; idx: LongInt) : Connection;
   begin
     result := nil;
-    if (idx < 0) or (idx > High(_Connections)) then exit;
-    result := _Connections[idx];
+    if (not Assigned(server)) or (idx < 0) or (idx > High(server^.connections)) then exit;
+    result := server^.connections[idx];
+  end;
+
+  function LastConnection(server: ServerSocket) : Connection;
+  begin
+    result := nil;
+    if (not Assigned(server)) or (Length(server^.connections) <= 0) then exit;
+    result := server^.connections[High(server^.connections)];
   end;
 
 //----------------------------------------------------------------------------
 // Messages
 //----------------------------------------------------------------------------
   
-  procedure EnqueueMessage( aMsg : String; const httpData: HTTPResponse; aConnection : Connection);
+  procedure EnqueueMessage( const aMsg : String; aConnection : Connection);
   var
     msgData   : MessagePtr;
   begin
@@ -1406,7 +1390,6 @@ var
 
     New(msgData); 
     msgData^.data := aMsg;
-    msgData^.httpData := httpData;
     msgData^.next := nil;
     msgData^.prev := aConnection^.lastMsg;
 
@@ -1421,20 +1404,7 @@ var
     aConnection^.msgCount += 1;
   end;
 
-  procedure EnqueueMessage( aMsg : String; aConnection : Connection);
-  var
-    httpData: HTTPResponse;
-  begin
-    httpData.protocol := '';
-    httpData.status  := 0;
-    httpData.statusText := '';
-    SetLength(httpData.headers, 0);
-    SetLength(httpData.body, 0);
-
-    EnqueueMessage( aMsg, httpData, aConnection );
-  end;
-
-  function HttpResponseBodyAsString(httpData: HTTPResponse): String;
+  function HttpResponseBodyAsString(httpData: HttpResponse): String;
   var
     i: Integer;
   begin
@@ -1445,13 +1415,6 @@ var
     end;
   end;
 
-  procedure EnqueueMessage(const httpData: HTTPResponse; aConnection : Connection);
-  begin
-    EnqueueMessage( HttpResponseBodyAsString(httpData), httpData, aConnection);
-  end;
-
-
-   
   function ReadMessage(aConnection : Connection) : String;
   var
     lTmp : MessagePtr;
@@ -1568,7 +1531,7 @@ var
   end;
 
 //----------------------------------------------------------------------------
-// HTTP
+// Http
 //----------------------------------------------------------------------------
 
   function HostName(const address: String): String;
@@ -1596,25 +1559,25 @@ var
       result := NetAddrToStr6(host6.Addr);
   end;
 
-  function CreateHTTPConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
+  function CreateHttpConnection(const aDestIP : String; const aDestPort : LongInt) : Connection;
   begin
-    result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort, HTTP);
+    result := NetworkingDriver.CreateTCPConnection(aDestIP, aDestPort, Http);
   end;
   
-  procedure SendHTTPRequest(const aReq : HttpRequest; const aConnection : sg_network_connection);
+  procedure SendHttpRequest(const aReq : HttpRequest; const aConnection : sg_network_connection);
   var
     lLen, i : LongInt;
     buffer : Array of Char;
     lMsg : String = '';
   begin
     // result := nil;
-    // if (aConnection = nil) or (aConnection^.socket = nil) or (aConnection^.conType <> HTTP) then 
+    // if (aConnection = nil) or (aConnection^.socket = nil) or (aConnection^.protocol <> Http) then 
     // begin 
-    //   RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement (nil or not HTTP)'); 
+    //   RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement (nil or not Http)'); 
     //   exit; 
     // end;
 
-    lMsg := HTTPRequestToString(aReq) + #13#10#13#10;
+    lMsg := HttpRequestToString(aReq) + #13#10#13#10;
     SetLength(buffer, Length(lMsg));
 
     for i := 0 to Length(lMsg) - 1 do
@@ -1627,83 +1590,83 @@ var
     if _sg_functions^.network.send_bytes(@aConnection, @buffer[0], lLen) < lLen then
     // if (SDLNet_TCP_Send(aConnection^.socket, @buffer[0], lLen) < lLen) then
     begin
-      // RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError() + ' HTTP Connection may have been refused.');
+      // RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError() + ' Http Connection may have been refused.');
     end;
   end;
 
-  procedure HTTPAddHeader(var aHTTPRequest : HTTPRequest; const name, value : String);
+  procedure HttpAddHeader(var aHttpRequest : HttpRequest; const name, value : String);
   begin
-    SetLength(aHTTPRequest.headername, Length(aHTTPRequest.headername) + 1);
-    SetLength(aHTTPRequest.headervalue, Length(aHTTPRequest.headervalue) + 1);
-    aHTTPRequest.headername[High(aHTTPRequest.headername)] := name;
-    aHTTPRequest.headervalue[High(aHTTPRequest.headervalue)] := value;
+    SetLength(aHttpRequest.headername, Length(aHttpRequest.headername) + 1);
+    SetLength(aHttpRequest.headervalue, Length(aHttpRequest.headervalue) + 1);
+    aHttpRequest.headername[High(aHttpRequest.headername)] := name;
+    aHttpRequest.headervalue[High(aHttpRequest.headervalue)] := value;
   end;
 
-  procedure HTTPRemoveHeaderAt(var aHTTPRequest : HTTPRequest; const aIdx : LongInt);
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
   var
     i : Integer;
   begin
-    for i := aIdx to High(aHTTPRequest.headername) do 
+    for i := aIdx to High(aHttpRequest.headername) do 
     begin
-      if i = High(aHTTPRequest.headername) then continue;
+      if i = High(aHttpRequest.headername) then continue;
 
-      aHTTPRequest.headername[i] := aHTTPRequest.headername[i + 1];
-      aHTTPRequest.headervalue[i] := aHTTPRequest.headervalue[i + 1];
+      aHttpRequest.headername[i] := aHttpRequest.headername[i + 1];
+      aHttpRequest.headervalue[i] := aHttpRequest.headervalue[i + 1];
     end;
 
-    SetLength(aHTTPRequest.headername, Length(aHTTPRequest.headername) - 1);
-    SetLength(aHTTPRequest.headervalue, Length(aHTTPRequest.headervalue) - 1);
+    SetLength(aHttpRequest.headername, Length(aHttpRequest.headername) - 1);
+    SetLength(aHttpRequest.headervalue, Length(aHttpRequest.headervalue) - 1);
   end;
 
-  function HTTPHeaderAt(const aHTTPRequest : HTTPRequest; const aIdx : LongInt) : String;
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
   begin
     result := '';
-    if (aIdx < 0) or (aIdx > High(aHTTPRequest.headername)) then exit;
+    if (aIdx < 0) or (aIdx > High(aHttpRequest.headername)) then exit;
 
-    result := aHTTPRequest.headername[aIdx] + ': '+ aHTTPRequest.headervalue[aIdx];
+    result := aHttpRequest.headername[aIdx] + ': '+ aHttpRequest.headervalue[aIdx];
   end;
 
-  procedure HTTPSetBody(var aHTTPRequest : HTTPRequest; const aBody : String);
+  procedure HttpSetBody(var aHttpRequest : HttpRequest; const aBody : String);
   begin
-    aHTTPRequest.body := aBody;
+    aHttpRequest.body := aBody;
   end;
 
-  procedure HTTPSetMethod(var aHTTPRequest : HTTPRequest; const aMethod : HTTPMethod);
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
   begin
-    aHTTPRequest.requestType := aMethod;
+    aHttpRequest.requestType := aMethod;
   end;
 
-  procedure HTTPSetVersion(var aHTTPRequest : HTTPRequest; const aVersion : String);
+  procedure HttpSetVersion(var aHttpRequest : HttpRequest; const aVersion : String);
   begin
-    aHTTPRequest.version := aVersion;
+    aHttpRequest.version := aVersion;
   end;
 
-  procedure HTTPSetURL(var aHTTPRequest : HTTPRequest; const aURL : String);
+  procedure HttpSetURL(var aHttpRequest : HttpRequest; const aURL : String);
   begin
-    aHTTPRequest.url := aURL;
+    aHttpRequest.url := aURL;
   end;
 
-  function HTTPRequestToString(const aHTTPRequest : HTTPRequest) : String;
+  function HttpRequestToString(const aHttpRequest : HttpRequest) : String;
   var
     i, len : Integer;
   begin
     result := '';
-    case aHTTPRequest.requestType of
-      HTTP_GET: result += 'GET ';
-      HTTP_POST: result += 'POST ';
-      HTTP_PUT: result += 'PUT ';
-      HTTP_DELETE: result += 'DELETE ';
+    case aHttpRequest.requestType of
+      Http_GET: result += 'GET ';
+      Http_POST: result += 'POST ';
+      Http_PUT: result += 'PUT ';
+      Http_DELETE: result += 'DELETE ';
     end;
-    result += aHTTPRequest.url;
-    result += ' HTTP/' + aHTTPRequest.version;
+    result += aHttpRequest.url;
+    result += ' Http/' + aHttpRequest.version;
     result += #13#10;
-    for i := Low(aHTTPRequest.headername) to High(aHTTPRequest.headername) do
-      result += aHTTPRequest.headername[i] + ': ' + aHTTPRequest.headervalue[i] + #13#10;
-    len := Length(aHTTPRequest.body);
+    for i := Low(aHttpRequest.headername) to High(aHttpRequest.headername) do
+      result += aHttpRequest.headername[i] + ': ' + aHttpRequest.headervalue[i] + #13#10;
+    len := Length(aHttpRequest.body);
 
     if len <> 0 then
       result += 'Content-Length: ' + IntToStr(len) + #13#10#13#10;
-    result += aHTTPRequest.body;
+    result += aHttpRequest.body;
   end;
 
   function ExtractLine(const aConnection: sg_network_connection): String;
@@ -1804,7 +1767,7 @@ var
     i, pos, size, readSize, code: Integer;
   begin
     try
-      result.protocol := 'HTTP/1.1';
+      result.protocol := 'Http/1.1';
       result.status := 500;
       result.statusText := 'Internal Server Error';
       SetLength(result.body, 0);
@@ -1883,27 +1846,27 @@ var
     end;
   end;
 
-  function HTTPGet(host: String; port: LongInt; path: String) : HTTPResponse;
+  function HttpGet(host: String; port: LongInt; path: String) : HttpResponse;
   var
     con : sg_network_connection;
-    request : HTTPRequest;
+    request : HttpRequest;
   begin
     // ip := HostIP(host);
     // ip := host;
-    HTTPAddHeader(request, 'Host', host + ':' + IntToStr(port));
-    HTTPAddHeader(request, 'Connection', 'close');
+    HttpAddHeader(request, 'Host', host + ':' + IntToStr(port));
+    HttpAddHeader(request, 'Connection', 'close');
 
-    // Create HTTP message
-    HTTPSetMethod(request, HTTP_GET);
-    HTTPSetURL(request, path);
-    HTTPSetVersion(request, '1.1');
+    // Create Http message
+    HttpSetMethod(request, Http_GET);
+    HttpSetURL(request, path);
+    HttpSetVersion(request, '1.1');
 
-    HTTPSetBody(request, '');
+    HttpSetBody(request, '');
     
     con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
 
-    // CreateHTTPConnection(ip, port);
-    SendHTTPRequest(request, con);
+    // CreateHttpConnection(ip, port);
+    SendHttpRequest(request, con);
     result := ReadHttpResponse(con);
     // WriteLn('here - ', HttpResponseBodyAsString(result));
     _sg_functions^.network.close_connection(@con);
@@ -1994,9 +1957,9 @@ var
   begin
     NetworkingDriver.FreeAllNetworkingResources();
 
-    for i := 0 to _NewConnectionCount - 1 do
-      FetchConnection();
-    _NewConnectionCount := 0;
+    // for i := 0 to _NewConnectionCount - 1 do
+    //   FetchConnection();
+    // _NewConnectionCount := 0;
   end;
 
 //----------------------------------------------------------------------------
@@ -2013,8 +1976,8 @@ var
   initialization 
   begin
     // _SocketSet := SDLNET_AllocSocketSet(16);
-    InitNamedIndexCollection(_UDPSocketIDs);
-    InitNamedIndexCollection(_UDPConnectionIDs);
+    // InitNamedIndexCollection(_UDPSocketIDs);
+    // InitNamedIndexCollection(_UDPConnectionIDs);
   end;
 
   finalization

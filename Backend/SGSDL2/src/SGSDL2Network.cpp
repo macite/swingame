@@ -48,10 +48,34 @@ void sgsdl2_close_connection(sg_network_connection *con)
     con->kind = SGCK_UNKNOWN;
 }
 
+unsigned int sgsdl2_network_address(sg_network_connection *con)
+{
+    IPaddress *remote;
+    remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    return SDLNet_Read32(&remote->host);
+}
+
+sg_network_connection sgsdl2_accept_connection(sg_network_connection *con)
+{
+    sg_network_connection result;
+    result._socket = NULL;
+    result.kind = SGCK_UNKNOWN;
+    
+    TCPsocket client;
+    if ((client = SDLNet_TCP_Accept((TCPsocket)con->_socket)) != NULL)
+    {
+        result._socket = client;
+        result.kind = SGCK_TCP;
+    }
+    return result;
+}
+
 void sgsdl2_load_network_fns(sg_interface *functions)
 {
     functions->network.open_tcp_connection = &sgsdl2_open_tcp_connection;
     functions->network.read_bytes = &sgsdl2_read_bytes;
     functions->network.send_bytes = &sgsdl2_send_bytes;
     functions->network.close_connection = &sgsdl2_close_connection;
+    functions->network.network_address = &sgsdl2_network_address;
+    functions->network.accept_new_connection = &sgsdl2_accept_connection;
 }

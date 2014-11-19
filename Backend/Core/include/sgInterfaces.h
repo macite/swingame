@@ -118,6 +118,8 @@ extern "C" {
     typedef sg_network_connection (sg_create_network_fn)(const char *host, unsigned short port);
     typedef int (sg_network_data_fn)(sg_network_connection *connection, char *buffer, int size);
     typedef void (sg_connection_fn)(sg_network_connection *connection);
+    typedef unsigned int (sg_connection_uint_fn)(sg_network_connection *connection);
+    typedef sg_network_connection (sg_accept_connection_fn)(sg_network_connection *connection);
     
     //
     // Utility relation functions
@@ -305,6 +307,8 @@ extern "C" {
         sg_network_data_fn * read_bytes;
         sg_network_data_fn * send_bytes;
         sg_connection_fn * close_connection;
+        sg_connection_uint_fn * network_address;
+        sg_accept_connection_fn * accept_new_connection;
     } sg_network_interface;
 
     //
