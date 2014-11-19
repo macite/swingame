@@ -36,17 +36,21 @@ begin
   // WriteLn('Connection Queue Size: ', ConnectionQueueSize());
   WriteLn('Connection Retreived Successfully? : ', Assigned(lConB));
 
-  // Pause();
+  Pause();
 
-  // SendTCPMessageTo('1234567', lConA);
-  // SendTCPMessageTo('0987654', lConA);
-  // SendTCPMessageTo('ABCDEFG', lConA);
+  WriteLn('Sending messages');
+  SendMessageTo('1234567', lConA);
+  SendMessageTo('0987654', lConA);
+  SendMessageTo(StringOfChar('A', 255), lConA);
+
+  Pause();
 
   // WriteLn('Con A Address: ', HexStr(@lConA^) );
   // WriteLn('Con B Address: ', HexStr(@lConB^) );
  
   // ReadLn();
  
+
   // lMsgReceived := TCPMessageReceived();
   // WriteLn('Message Received? ', lMsgReceived);
   // WriteLn('Message From [A], Received By [B]: ', ReadMessage(lConB));

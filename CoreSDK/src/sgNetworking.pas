@@ -73,13 +73,11 @@ uses
   /// @sn reconnectConnection:%s
   procedure ReconnectConnection(var aConnection : Connection);
    
-  /// Checks if a message has been received. If a message has been received,
-  /// It will automatically add it to the message queue, with the message,
-  /// source's IP and the port it received the message on. Returns true if
-  /// a new message has been received.
+  /// Checks if any messages have been received for any open connections. 
+  /// Messages received are added to the connection they were received from.
   ///
   /// @lib
-  function TCPMessageReceived         () : Boolean;    
+  function MessagesReceived () : Boolean;
 
   /// Broadcasts a message through all open connections.
   ///
@@ -89,20 +87,19 @@ uses
   /// @sn broadcastTCPMessage:%s
   procedure BroadcastTCPMessage        ( aMsg : String);
 
-  /// Sends the message to the specified client, attached to the socket
-  /// Retuns the connection if the message fails to
-  /// send so that it may be closed. Returns nil if the message has been sent
-  /// successfully.
+  /// Sends the message over the provided network connection.
+  /// Returns true if this succeeds, or false if it fails.
   ///
   /// @param aMsg The message to be sent
-  /// @param aConnection Send the message through this connection's socket.
+  /// @param aConnection Send the message through this connection
   ///
   /// @lib
+  /// @sn sendMessage:%s toConnection:%s
+  ///
   /// @class Connection
-  /// @method SendTCPMessage
+  /// @method SendMessage
   /// @self 2
-  /// @sn sendTCPMessage:%s toConnection:%s
-  function SendTCPMessage           ( aMsg : String; aConnection : Connection) : Connection;
+  function SendMessageTo(const aMsg : String; aConnection : Connection) : Boolean;
 
 //----------------------------------------------------------------------------
 // Http
@@ -823,31 +820,30 @@ var
     // end;
   end;
 
-  function SendTCPMessageProcedure(const aMsg : String; const aConnection : Connection) : Connection;
-  // var
-  //   lLen, i : LongInt;
-  //   buffer: PacketData;
+  function SendMessageTo(const aMsg : String; aConnection: Connection) : Boolean;
+  var
+    len, i : LongInt;
+    buffer: PacketData;
   begin
-    result := nil;
-    // if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SDL 1.2 SendTCPMessageProcedure Illegal Connection Arguement'); exit; end;
-    // if Length(aMsg) > 255 then begin RaiseWarning('SwinGame messages must be less than 256 characters in length'); exit; end;
+    result := false;
 
-    // for i := 0 to Length(aMsg) + 1 do
-    // begin
-    //   if i = 0 then
-    //     buffer[i] := Char(Length(aMsg))
-    //   else if  i < Length(aMsg) + 1 then
-    //     buffer[i] := aMsg[i];
-    // end;
+    if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SendMessageTo Missing Connection, or connection closed'); exit; end;
+    if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
 
-        
-    // lLen := Length(aMsg) + 1;
-    
-    // if (SDLNet_TCP_Send(aConnection^.socket, @buffer, lLen) < lLen) then
-    // begin
-    //   result := aConnection;
-    //   RaiseWarning('Error sending message: SDLNet_TCP_Send: ' + SDLNet_GetError());
-    // end;
+    len := Length((aMsg)) + 1;
+
+    for i := 0 to Length(aMsg) do
+    begin
+      if i = 0 then
+        buffer[i] := Char(Length(aMsg))
+      else
+        buffer[i] := aMsg[i]; // 1 to Length
+    end;
+
+    if _sg_functions^.network.send_bytes(aConnection^.socket, @buffer[0], len) = len then
+    begin
+      result := true;
+    end;
   end;
 
   procedure BroadcastTCPMessageProcedure(const aMsg : String);
@@ -1515,21 +1511,11 @@ var
     result := aConnection^.msgCount;
   end;
 
-  function TCPMessageReceived() : Boolean;
-  begin
-    result := NetworkingDriver.TCPMessageReceived();
-  end;
-  
   procedure BroadcastTCPMessage(aMsg : String);
   begin
     NetworkingDriver.BroadcastTCPMessage(aMsg);
   end;
   
-  function SendTCPMessage( aMsg : String; aConnection : Connection) : Connection;
-  begin
-    result := NetworkingDriver.SendTCPMessage(aMsg, aConnection);
-  end;
-
 //----------------------------------------------------------------------------
 // Http
 //----------------------------------------------------------------------------
