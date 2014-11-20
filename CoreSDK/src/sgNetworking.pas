@@ -101,6 +101,14 @@ uses
   /// @self 2
   function SendMessageTo(const aMsg : String; aConnection : Connection) : Boolean;
 
+
+  /// Check for any messages that have come in from Clients. 
+  /// This is called automatically by ProcessEvents, but can be called
+  /// manually.
+  ///
+  /// @lib
+  procedure CheckNetworkActivity();
+
 //----------------------------------------------------------------------------
 // Http
 //----------------------------------------------------------------------------
@@ -763,32 +771,53 @@ var
 // TCP Message Handling
 //----------------------------------------------------------------------------
 
-  function TCPMessageReceivedProcedure() : Boolean;
-   // var
-   //   i, lReceived : LongInt;
-   //   buffer: PacketData;
-   begin
-     result := False;
-     // if SDLNet_CheckSockets(_SocketSet, 0) < 1 then exit;
-     // for i := Low(_Connections) to High(_Connections) do
-     // begin
-     //   if SDLNET_SocketReady(PSDLNet_GenericSocket(_Connections[i]^.socket)) then
-     //   begin
-     //      if (_Connections[i]^.protocol = TCP) then
-     //      begin
-     //        lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
-     //        if (lReceived <= 0) then continue;
-     //        ExtractData(buffer, lReceived, _Connections[i])
-     //      end
-     //      else if (_Connections[i]^.protocol = Http) then
-     //      begin
-     //        WriteLn('ERROR -- ExtractHttpData');
-     //        // ExtractHttpData(_Connections[i]);
-     //      end;
-     //     result := True;
-     //   end;
-     // end;
-   end;
+  procedure CheckNetworkActivity();
+  var
+    svr, i: Integer;
+  begin
+    // check if there is data on the network
+    if _sg_functions^.network.network_has_data() > 0 then
+    begin
+      WriteLn('should be some data...');
+      for svr := 0 to High(_servers) do
+      begin
+        for i := 0 to High(_servers[svr]^.connections) do
+        begin
+          if _sg_functions^.network.connection_has_data(_servers[svr]^.connections[i]^.socket) > 0 then
+          begin
+            WriteLn('Data for connection: ', i);
+          end;
+        end;
+      end;
+    end;
+  end;
+
+  function MessagesReceived() : Boolean;
+  // var
+  //   i, lReceived : LongInt;
+  //   buffer: PacketData;
+  begin
+    result := False;
+    // if SDLNet_CheckSockets(_SocketSet, 0) < 1 then exit;
+    // for i := Low(_Connections) to High(_Connections) do
+    // begin
+    //   if SDLNET_SocketReady(PSDLNet_GenericSocket(_Connections[i]^.socket)) then
+    //   begin
+    //      if (_Connections[i]^.protocol = TCP) then
+    //      begin
+    //        lReceived := SDLNet_TCP_Recv(_Connections[i]^.socket, @buffer, 512);
+    //        if (lReceived <= 0) then continue;
+    //        ExtractData(buffer, lReceived, _Connections[i])
+    //      end
+    //      else if (_Connections[i]^.protocol = Http) then
+    //      begin
+    //        WriteLn('ERROR -- ExtractHttpData');
+    //        // ExtractHttpData(_Connections[i]);
+    //      end;
+    //     result := True;
+    //   end;
+    // end;
+  end;
 
   function SendHttpRequestProcedure(const aReq: HttpRequest; const aConnection : Connection) : Connection;
   // var

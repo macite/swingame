@@ -346,7 +346,7 @@ interface
 implementation
 //=============================================================================
 
-  uses SysUtils, Classes, sgPhysics, sgTrace, sgShared, sgText, sgGeometry, sgSharedUtils, sgInputBackend, sgDriverInput, sgDriver{$IFDEF IOS}, sgDriveriOS {$ENDIF};
+  uses SysUtils, Classes, sgPhysics, sgTrace, sgShared, sgText, sgGeometry, sgSharedUtils, sgInputBackend, sgDriverInput, sgDriver, sgNetworking{$IFDEF IOS}, sgDriveriOS {$ENDIF};
 
   var
   // seems to work well with this value
@@ -381,6 +381,7 @@ implementation
     {$endif}
     InputDriver.GetRelativeMouseState(x, y);
     InputBackendProcessEvents();
+    CheckNetworkActivity();
     {$IFDEF TRACE}
       TraceExit('sgInput', 'ProcessEvents');
     {$ENDIF}

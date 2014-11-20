@@ -97,7 +97,7 @@ extern "C" {
     //
     // Utility related
     //
-    typedef unsigned int  (uint_fn)();
+    typedef unsigned int  (sg_uint_fn)();
     
     //
     // Image related
@@ -129,7 +129,7 @@ extern "C" {
     typedef struct sg_utils_interface
     {
         sg_single_uint32param_proc *    delay;
-        uint_fn *   get_ticks;
+        sg_uint_fn *   get_ticks;
         
     } sg_utils_interface;
     
@@ -309,6 +309,9 @@ extern "C" {
         sg_connection_fn * close_connection;
         sg_connection_uint_fn * network_address;
         sg_accept_connection_fn * accept_new_connection;
+        sg_uint_fn * network_has_data;
+        sg_connection_uint_fn * connection_has_data;
+        
     } sg_network_interface;
 
     //

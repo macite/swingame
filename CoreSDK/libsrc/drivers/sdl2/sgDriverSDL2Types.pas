@@ -174,7 +174,7 @@ interface
 		//
 		// Utility related
 		//
-		uint_fn = function(): uint; cdecl;
+		sg_uint_fn = function(): uint; cdecl;
 
 		// 
 		// Image related
@@ -202,7 +202,7 @@ interface
 		
 		sg_utils_interface = record
 				delay : sg_single_uint32param_proc;
-				get_ticks : uint_fn;
+				get_ticks : sg_uint_fn;
 			end;
 
 		sg_image_interface = record
@@ -299,7 +299,10 @@ interface
         	close_connection: 		sg_connection_fn;
         	network_address: 		sg_connection_uint_fn;
         	accept_new_connection: 	sg_accept_connection_fn;
+        	network_has_data:		sg_uint_fn;
+        	connection_has_data:	sg_connection_uint_fn;
 		end;
+
 (* Const before type ignored *)
 
 		sg_interface = record

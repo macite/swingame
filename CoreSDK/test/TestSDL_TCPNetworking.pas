@@ -37,6 +37,11 @@ begin
   WriteLn('Connection Retreived Successfully? : ', Assigned(lConB));
 
   Pause();
+  WriteLn('Checking for messages -- shouldn''t be any');
+  CheckNetworkActivity();
+  WriteLn('');
+
+  Pause();
 
   WriteLn('Sending messages');
   SendMessageTo('1234567', lConA);
@@ -44,6 +49,8 @@ begin
   SendMessageTo(StringOfChar('A', 255), lConA);
 
   Pause();
+  WriteLn('Checking for messages');
+  CheckNetworkActivity();
 
   // WriteLn('Con A Address: ', HexStr(@lConA^) );
   // WriteLn('Con B Address: ', HexStr(@lConB^) );
