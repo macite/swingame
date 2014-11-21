@@ -1,6 +1,5 @@
 program TestHttp;
-uses SwinGame, 
-	sgNetworking, fpjson, jsonparser;
+uses sgNetworking, fpjson, jsonparser;
 
 procedure Main();
 var
