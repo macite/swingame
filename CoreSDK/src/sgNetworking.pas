@@ -580,6 +580,9 @@ var
     end;
   end;
 
+  ///
+  /// Reads a message from the connection and stores it in the connection's message queue
+  ///
   procedure ExtractData(const buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection);
   var
     msgLen    : Byte = 0;
@@ -773,19 +776,22 @@ var
 
   procedure CheckNetworkActivity();
   var
-    svr, i: Integer;
+    svr, i, received: Integer;
+    buffer: PacketData;
   begin
     // check if there is data on the network
     if _sg_functions^.network.network_has_data() > 0 then
     begin
-      WriteLn('should be some data...');
+      // WriteLn('should be some data...');
       for svr := 0 to High(_servers) do
       begin
         for i := 0 to High(_servers[svr]^.connections) do
         begin
           if _sg_functions^.network.connection_has_data(_servers[svr]^.connections[i]^.socket) > 0 then
           begin
-            WriteLn('Data for connection: ', i);
+            received := _sg_functions^.network.read_bytes(_servers[svr]^.connections[i]^.socket, @buffer[0], 512);
+            ExtractData(buffer, received, _servers[svr]^.connections[i]);
+            // WriteLn('Data for connection: ', i);
           end;
         end;
       end;
@@ -1412,6 +1418,8 @@ var
     msgData   : MessagePtr;
   begin
     if not Assigned(aConnection) then exit;
+
+    WriteLn('Adding message: ', aMsg);
 
     New(msgData); 
     msgData^.data := aMsg;

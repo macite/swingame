@@ -445,7 +445,7 @@ var
     lMsg          : String = '';
     lConnection   : Connection;
     lSrcIPString  : String;
-    lNewConnection: Boolean = False;
+    // lNewConnection: Boolean = False;
     lSrcPort : LongInt;
     lSrcIP  : LongWord;
   begin
@@ -462,7 +462,7 @@ var
         begin
           lSrcIPString := HexStrToIPv4(DecToHex(lSrcIP));
           lConnection := CreateUDPConnectionProcedure(lSrcIPString, lSrcPort, StrToInt(NameAt(_UDPSocketIDs, i)));
-          lNewConnection := True;
+          // lNewConnection := True;
         end;
         
         if not Assigned(lConnection) then begin RaiseWarning('SDL 1.2 - UDPMessageReceivedProcedure: Could Not Create Connection.'); exit; end;
