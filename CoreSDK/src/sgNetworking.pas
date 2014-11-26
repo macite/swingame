@@ -536,6 +536,7 @@ type
   ConnectionArray = array of Connection;
   PacketData = array [0..511] of Char;
   BytePtr = ^Byte;
+  Bytes = array[0..3] of Byte;
 
 var
   _Servers                : ServerArray;
@@ -587,27 +588,67 @@ var
   ///
   /// Reads a message from the connection and stores it in the connection's message queue
   ///
-  procedure ExtractData(const buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection);
+  /// return true if expecting more data...
+  function ExtractData(var buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection): Boolean;
   var
-    msgLen    : Byte = 0;
+    msgLen    : LongInt;
     bufIdx    : LongInt = 0;               // Index of current data in the buffer
+    i, missing, got: Integer;
     msg       : String;
+    size      : Bytes;
   begin
-    while bufIdx < aReceivedCount do      // Loop until all messages are extracted from the buffer
-    begin            
-      if aConnection^.msgLen > 0 then     // Size of the message is based on the data in the connection, or from packet
+    result := false;
+    while bufIdx < aReceivedCount do      // Loop until all characters are extracted from the buffer
+    begin  
+      // Check if we already know the length of the message          
+      if aConnection^.msgLen > 0 then
       begin
-        msg := aConnection^.partMsgData;
+        msg := aConnection^.partMsgData;  // get old part of message
         msgLen := aConnection^.msgLen - Length(msg);  // Adjusted length for previous read
-        aConnection^.msgLen := -1;
-        aConnection^.partMsgData := '';
+        aConnection^.msgLen := -1;  // reset this...
+        aConnection^.partMsgData := ''; // clear
       end
       else
       begin
-        msg := '';
-        msgLen := Byte(buffer[bufIdx]);    // Get the length of the next message
+        msg := '';  // a new message
+
+        if Length(buffer) - bufIdx < 4 then
+        begin
+          // WriteLn('length: ', Length(buffer));
+          // WriteLn('Idx: ', bufIdx);
+          missing := 4 - (Length(buffer) - bufIdx);
+          // WriteLn('Missing ', missing);
+
+          // need to read in size...
+          for i := 0 to missing do
+            buffer[Length(buffer) - 4 + i] := buffer[bufIdx + i]; // copy back to last 4 positions...
+          
+          // fill at the 4 positions for the size
+          // WriteLn('Reading ', missing);
+
+          got := _sg_functions^.network.read_bytes(aConnection^.socket, @buffer[Length(buffer) - missing], missing);
+          // WriteLn('got ', got);
+          if got <> missing then
+          begin
+            RaiseWarning('Issue reading message size from network. Report to acain@swin.edu.au');
+            exit;
+          end;
+
+          bufIdx := Length(buffer) - 4;
+        end;
+
+        size[0] := Byte(buffer[bufIdx]);
+        size[1] := Byte(buffer[bufIdx + 1]);
+        size[2] := Byte(buffer[bufIdx + 2]);
+        size[3] := Byte(buffer[bufIdx + 3]);
+
+        // WriteLn('bytes = ', size[0], ' ', size[1], ' ', size[2], ' ', size[3]);
+        // WriteLn('calc = ', (size[0] shl 24) + (size[1] shl 16) + (size[2] shl 8) + size[3]);
+
+        // data is Big Endian
+        msgLen := (size[0] shl 24) + (size[1] shl 16) + (size[2] shl 8) + size[3];    // Get the length of the next message
         // WriteLn('msglen: ', msgLen);
-        bufIdx += 1;
+        bufIdx += 4;
       end;
       
       for bufIdx := bufIdx to bufIdx + msgLen - 1 do
@@ -618,6 +659,7 @@ var
           aConnection^.msgLen      := msgLen;
           // WriteLn('Message: ', msg, ' ');
           // WriteLn('Part message: ', msg);
+          result := true;
           exit;                           // Exit... end of buffer, but not end of message
         end;
         
@@ -790,8 +832,10 @@ var
   begin
     if _sg_functions^.network.connection_has_data(con^.socket) > 0 then
     begin
-      received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
-      ExtractData(buffer, received, con);
+      // WriteLn('getting data');
+      repeat
+        received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
+      until not ExtractData(buffer, received, con);
     end;
   end;
 
@@ -813,6 +857,7 @@ var
 
       for i := 0 to High(_Connections) do
       begin
+        // WriteLn('Checking connection ', i);
         CheckConnectionForData(_Connections[i]);
       end;
 
@@ -879,21 +924,30 @@ var
   function SendMessageTo(const aMsg : String; aConnection: Connection) : Boolean;
   var
     len, i : LongInt;
-    buffer: PacketData;
+    buffer: array of Byte;
+    size: Bytes;
   begin
     result := false;
 
     if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SendMessageTo Missing Connection, or connection closed'); exit; end;
-    if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
+    // if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
+    size := Bytes(NtoBE(LongInt(Length(aMsg))));
+    // WriteLn('send size: ', size[0], ' ', size[1], ' ', size[2], ' ', size[3], ' ');
 
-    len := Length((aMsg)) + 1;
+    len := Length((aMsg)) + 4;
+    SetLength(buffer, len);
 
-    for i := 0 to Length(aMsg) do
+    for i := 0 to len do
     begin
-      if i = 0 then
-        buffer[i] := Char(Length(aMsg))
+      if i < 4 then
+      begin
+        buffer[i] := size[i];
+        // WriteLn('* ', buffer[i]);
+      end
       else
-        buffer[i] := aMsg[i]; // 1 to Length
+      begin
+        buffer[i] := Byte(aMsg[i - 3]); // 1 to Length
+      end;
     end;
 
     if _sg_functions^.network.send_bytes(aConnection^.socket, @buffer[0], len) = len then

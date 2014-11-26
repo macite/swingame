@@ -46,6 +46,7 @@ begin
   Pause();
 
   WriteLn('Sending messages');
+  SendMessageTo(StringOfChar('7', 509 - 4), lConA);
   SendMessageTo('1234567', lConA);
   SendMessageTo('0987654', lConA);
   SendMessageTo(StringOfChar('A', 876), lConA);
@@ -56,14 +57,14 @@ begin
   WriteLn('Checking for messages');
   CheckNetworkActivity();
 
-  WriteLn(' Reading messages received by client');
+  WriteLn(' Reading messages received for client');
 
   while HasMessages(lConA) do
   begin
     WriteLn(' -> ', ReadMessage(lConA));
   end;
 
-  WriteLn(' Reading messages received by server');
+  WriteLn(' Reading messages received for server');
 
   while HasMessages(lConB) do
   begin

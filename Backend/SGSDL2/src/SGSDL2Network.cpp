@@ -22,6 +22,7 @@ SDLNet_SocketSet _sockets; // allocate on setup of functions.
 sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned short port)
 {
     IPaddress addr;
+    TCPsocket client;
     
     sg_network_connection result;
     result.kind = SGCK_UNKNOWN;
@@ -31,7 +32,10 @@ sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned shor
         return result;
     
     result.kind = SGCK_TCP;
-    result._socket = SDLNet_TCP_Open(&addr);
+    client = SDLNet_TCP_Open(&addr);
+    result._socket = client;
+    SDLNet_TCP_AddSocket(_sockets, client);
+    
     return result;
 }
 
