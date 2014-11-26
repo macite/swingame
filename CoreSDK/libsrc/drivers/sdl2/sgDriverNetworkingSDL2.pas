@@ -105,47 +105,47 @@ var
   end;
 
   procedure ExtractData(const buffer: PacketData; aReceivedCount: LongInt; const aConnection : Connection);
-  var
-    msgLen    : Byte = 0;
-    bufIdx    : LongInt = 0;               // Index of current data in the buffer
-    msg       : String;
+  // var
+  //   msgLen    : Byte = 0;
+  //   bufIdx    : LongInt = 0;               // Index of current data in the buffer
+  //   msg       : String;
   begin
-    while bufIdx < aReceivedCount do      // Loop until all messages are extracted from the buffer
-    begin            
-      if aConnection^.msgLen > 0 then     // Size of the message is based on the data in the connection, or from packet
-      begin
-        msg := aConnection^.partMsgData;
-        msgLen := aConnection^.msgLen - Length(msg);  // Adjusted length for previous read
-        aConnection^.msgLen := -1;
-        aConnection^.partMsgData := '';
-      end
-      else
-      begin
-        msg := '';
-        msgLen := Byte(buffer[bufIdx]);    // Get the length of the next message
-        // WriteLn('msglen: ', msgLen);
-        bufIdx += 1;
-      end;
+    // while bufIdx < aReceivedCount do      // Loop until all messages are extracted from the buffer
+    // begin            
+    //   if aConnection^.msgLen > 0 then     // Size of the message is based on the data in the connection, or from packet
+    //   begin
+    //     msg := aConnection^.partMsgData;
+    //     msgLen := aConnection^.msgLen - Length(msg);  // Adjusted length for previous read
+    //     aConnection^.msgLen := -1;
+    //     aConnection^.partMsgData := '';
+    //   end
+    //   else
+    //   begin
+    //     msg := '';
+    //     msgLen := Byte(buffer[bufIdx]);    // Get the length of the next message
+    //     // WriteLn('msglen: ', msgLen);
+    //     bufIdx += 1;
+    //   end;
       
-      for bufIdx := bufIdx to bufIdx + msgLen - 1 do
-      begin
-        if (bufIdx >= aReceivedCount) or (bufIdx > Length(buffer)) then 
-        begin
-          aConnection^.partMsgData := msg;
-          aConnection^.msgLen      := msgLen;
-          // WriteLn('Message: ', msg, ' ');
-          // WriteLn('Part message: ', msg);
-          exit;                           // Exit... end of buffer, but not end of message
-        end;
+    //   for bufIdx := bufIdx to bufIdx + msgLen - 1 do
+    //   begin
+    //     if (bufIdx >= aReceivedCount) or (bufIdx > Length(buffer)) then 
+    //     begin
+    //       aConnection^.partMsgData := msg;
+    //       aConnection^.msgLen      := msgLen;
+    //       // WriteLn('Message: ', msg, ' ');
+    //       // WriteLn('Part message: ', msg);
+    //       exit;                           // Exit... end of buffer, but not end of message
+    //     end;
         
-        msg += buffer[bufIdx];
-      end;
+    //     msg += buffer[bufIdx];
+    //   end;
       
-      EnqueueMessage(msg, aConnection);
-      // WriteLn('Receive message: ', msg, ' ');
+    //   EnqueueMessage(msg, aConnection);
+    //   // WriteLn('Receive message: ', msg, ' ');
       
-      bufIdx += 1;                        // Advance to start of next message
-    end;
+    //   bufIdx += 1;                        // Advance to start of next message
+    // end;
   end;
     
   function TCPIP(aNewSocket : PTCPSocket) : LongWord;

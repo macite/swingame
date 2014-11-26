@@ -26,7 +26,9 @@ begin
   
   // WriteLn('Connection Queue Size: ', ConnectionQueueSize());
   // WriteLn('New Connections to 2001: ', AcceptNewConnection('svr2001'));
-  WriteLn('New Connection to 2000: ', AcceptNewConnection(svr));
+  AcceptAllNewConnections();
+
+  WriteLn('New Connection to 2000: ', ServerHasNewConnection(svr));
   WriteLn('2000 connections: ', ConnectionCount(svr));
 
   lConB := LastConnection(svr);
@@ -46,11 +48,30 @@ begin
   WriteLn('Sending messages');
   SendMessageTo('1234567', lConA);
   SendMessageTo('0987654', lConA);
-  SendMessageTo(StringOfChar('A', 255), lConA);
+  SendMessageTo(StringOfChar('A', 876), lConA);
+
+  SendMessageTo('Hello Client', lConB);
 
   Pause();
   WriteLn('Checking for messages');
   CheckNetworkActivity();
+
+  WriteLn(' Reading messages received by client');
+
+  while HasMessages(lConA) do
+  begin
+    WriteLn(' -> ', ReadMessage(lConA));
+  end;
+
+  WriteLn(' Reading messages received by server');
+
+  while HasMessages(lConB) do
+  begin
+    WriteLn(' -> ', ReadMessage(lConB));
+  end;
+
+  // Read the message from the server...
+  // WriteLn('Message was received by svr: ', ServerHasMessages(svr));
 
   // WriteLn('Con A Address: ', HexStr(@lConA^) );
   // WriteLn('Con B Address: ', HexStr(@lConB^) );

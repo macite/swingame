@@ -45,14 +45,14 @@ uses
   /// accepted.
   ///
   /// @lib
-  function AcceptAllNewConnections () : LongInt;
+  function AcceptAllNewConnections () : Boolean;
 
   /// Check the server for incomming connections from clients.
   /// Returns the number of new connections that have been
   /// accepted.
   ///
   /// @lib
-  function AcceptNewConnection (server: ServerSocket) : LongInt;
+  function AcceptNewConnection (server: ServerSocket) : Boolean;
 
   // /// Check the server (based on its name) for incomming connections from clients.
   // /// Returns the number of new connections that have been
@@ -60,6 +60,12 @@ uses
   // ///
   // /// @lib AcceptNewConnectionByName
   // function AcceptNewConnections (const server: String) : LongInt;
+
+  /// Indicates if there is a new connection to a server.
+  ///
+  /// @lib
+  function ServerHasNewConnection(server: ServerSocket) : Boolean;
+
 
   /// Attempts to recconnect a connection that was closed using the IP and port
   /// stored in the connection
@@ -261,7 +267,9 @@ uses
   /// @lib
   function RetreiveConnection(server: ServerSocket; idx: LongInt) : Connection;
 
-  /// Returns the last connection made to a server socket.
+  /// Returns the last connection made to a server socket. When a new client 
+  /// has connected to the server, this function can be used to get their
+  /// connection.
   ///
   /// @lib
   function LastConnection(server: ServerSocket) : Connection;
@@ -347,6 +355,13 @@ uses
   /// @sn connectionPort:%s
   function  ConnectionPort(aConnection : Connection) : LongInt;
 
+  /// Returns true if a connection has messages that you can read.
+  /// Use this to control a loop that reads all of the messages from
+  /// a connection.
+  ///
+  /// @lib
+  function HasMessages(con: Connection) : Boolean; 
+
   /// Dequeues the Top (Oldest) Message
   ///
   /// @param aConnection The connection to extract data from
@@ -384,19 +399,6 @@ uses
   /// @class Connection
   /// @method MessageCount
   function  MessageCount            (aConnection : Connection) : LongInt;
-
-  /// Queues a message to the end of the Message Queue
-  ///
-  /// @param aMsg The message Sent
-  /// @param aConnection The connection to enqueue the message into
-  ///
-  /// @lib
-  /// @sn enqueueMessage:%s toConnection:%s
-  ///
-  /// @class Connection
-  /// @method EnqueueMessage
-  /// @self 2
-  procedure EnqueueMessage( const aMsg : String; aConnection : Connection);
 
 
 //----------------------------------------------------------------------------
@@ -550,6 +552,8 @@ var
 //----------------------------------------------------------------------------
 // Internal Functions
 //----------------------------------------------------------------------------
+
+  procedure EnqueueMessage( const aMsg : String; aConnection : Connection); forward;
 
   function CreateConnection() : Connection;
   begin
@@ -711,18 +715,18 @@ var
     end;
   end;
 
-  function AcceptAllNewConnections () : LongInt;
+  function AcceptAllNewConnections () : Boolean;
   var
     i: Integer;
   begin
-    result := 0;
+    result := false;
     for i := 0 to High(_Servers) do
     begin
-      result += AcceptNewConnection(_Servers[i]);
+      if AcceptNewConnection(_Servers[i]) then result := true;
     end;
   end;
 
-  function AcceptNewConnection(server: ServerSocket) : LongInt;
+  function AcceptNewConnection(server: ServerSocket) : Boolean;
   var
     con : sg_network_connection;
     conP: psg_network_connection;
@@ -731,7 +735,7 @@ var
   //   lNewConnection : Connection;
   //   i : LongInt;
   begin  
-    result := 0;
+    result := false;
     server^.newConnections := 0;
     con := _sg_functions^.network.accept_new_connection(server^.socket);
 
@@ -749,7 +753,7 @@ var
       SetLength(server^.connections, Length(server^.connections) + 1);
       server^.connections[High(server^.connections)] := client;
       server^.newConnections := 1;
-      result := 1;
+      result := true;
     end;
 
     // for i := Low(_ListenSockets) to High(_ListenSockets) do
@@ -770,14 +774,30 @@ var
     // end;
   end;
 
+  function ServerHasNewConnection(server: ServerSocket) : Boolean;
+  begin
+    result := server^.newConnections > 0;
+  end;
+
 //----------------------------------------------------------------------------
 // TCP Message Handling
 //----------------------------------------------------------------------------
 
-  procedure CheckNetworkActivity();
+  procedure CheckConnectionForData(con: Connection);
   var
     svr, i, received: Integer;
     buffer: PacketData;
+  begin
+    if _sg_functions^.network.connection_has_data(con^.socket) > 0 then
+    begin
+      received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
+      ExtractData(buffer, received, con);
+    end;
+  end;
+
+  procedure CheckNetworkActivity();
+  var
+    svr, i: Integer;
   begin
     // check if there is data on the network
     if _sg_functions^.network.network_has_data() > 0 then
@@ -787,14 +807,15 @@ var
       begin
         for i := 0 to High(_servers[svr]^.connections) do
         begin
-          if _sg_functions^.network.connection_has_data(_servers[svr]^.connections[i]^.socket) > 0 then
-          begin
-            received := _sg_functions^.network.read_bytes(_servers[svr]^.connections[i]^.socket, @buffer[0], 512);
-            ExtractData(buffer, received, _servers[svr]^.connections[i]);
-            // WriteLn('Data for connection: ', i);
-          end;
+          CheckConnectionForData(_servers[svr]^.connections[i]);
         end;
       end;
+
+      for i := 0 to High(_Connections) do
+      begin
+        CheckConnectionForData(_Connections[i]);
+      end;
+
     end;
   end;
 
@@ -1419,7 +1440,7 @@ var
   begin
     if not Assigned(aConnection) then exit;
 
-    WriteLn('Adding message: ', aMsg);
+    // WriteLn('Adding message: ', aMsg);
 
     New(msgData); 
     msgData^.data := aMsg;
@@ -1446,6 +1467,12 @@ var
     begin
       result += Char(httpData.body[i]);
     end;
+  end;
+
+  function HasMessages(con: Connection) : Boolean; 
+  begin
+    if not Assigned(con) then result := false
+    else result := con^.msgCount > 0;
   end;
 
   function ReadMessage(aConnection : Connection) : String;

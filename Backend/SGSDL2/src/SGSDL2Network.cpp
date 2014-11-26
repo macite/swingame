@@ -85,7 +85,7 @@ unsigned int sgsdl2_network_has_data()
 unsigned int sgsdl2_connection_has_data(sg_network_connection *con)
 {
     int got = SDLNet_SocketReady((TCPsocket)con->_socket);
-    printf("Checking %p %d\n", con->_socket, got);
+//    printf("Checking %p %d\n", con->_socket, got);
     if (got > 0)
         return 1;
     else
