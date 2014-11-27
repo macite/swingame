@@ -16,6 +16,7 @@
 #include "test_audio.h"
 #include "test_input.h"
 #include "test_text.h"
+#include "test_network.h"
 
 #define SHAPE_COUNT 60
 
@@ -28,30 +29,31 @@ sg_drawing_surface img, img2;
 
 enum test_options 
 { 
-  BASIC_DRAWING = 1, 
-  WINDOW_OPERATIONS = 2,  
-  BITMAP_DRAWING = 4, 
-  AUDIO = 8,
-  INPUT = 16,
-  TEXT = 32
+    BASIC_DRAWING = 1,
+    WINDOW_OPERATIONS = 2,  
+    BITMAP_DRAWING = 4, 
+    AUDIO = 8,
+    INPUT = 16,
+    TEXT = 32,
+    NETWORK = 64
 }; 
 
 enum test_drawing_options 
 {
-  TEST_COLORS = 1, 
-  TEST_READ_PIXELS = 2, 
-  TEST_POSITIONS = 4, 
-  TEST_ALPHA = 8, 
-  TEST_CLIP = 16, 
-  TEST_PIXELS = 32, 
-  TEST_SHAPES = 64, 
-  TEST_RESIZE = 128, 
-  TEST_LINES = 256,
-  TEST_BITMAPS = 512, 
-  TEST_INPUT = 1024,
-  TEST_FULLSCREEN = 2048
+    TEST_COLORS = 1,
+    TEST_READ_PIXELS = 2, 
+    TEST_POSITIONS = 4, 
+    TEST_ALPHA = 8, 
+    TEST_CLIP = 16, 
+    TEST_PIXELS = 32, 
+    TEST_SHAPES = 64, 
+    TEST_RESIZE = 128, 
+    TEST_LINES = 256,
+    TEST_BITMAPS = 512, 
+    TEST_INPUT = 1024,
+    TEST_FULLSCREEN = 2048
+};
 
-}; 
 void print_options() 
 {
     cout << "0: all " << endl; 
@@ -60,7 +62,8 @@ void print_options()
     cout << "4: bitmap drawing"  << endl; 
     cout << "8: audio "  << endl; 
     cout << "16: input "  << endl; 
-    cout << "32: text "  << endl; 
+    cout << "32: text "  << endl;
+    cout << "64: network "  << endl;
 }
 
 void print_drawing_options() 
@@ -1082,6 +1085,11 @@ int main(int argc, const char * argv[])
     if  (test_run & TEXT) 
     {
         test_text();
+    }
+    
+    if (test_run & NETWORK)
+    {
+        test_network();
     }
     
     _sg_functions->finalise();

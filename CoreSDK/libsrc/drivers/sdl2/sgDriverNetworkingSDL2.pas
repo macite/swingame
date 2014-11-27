@@ -573,36 +573,36 @@ var
   end;
 
   function CloseConnectionProcedure(var aConnection : Connection; const aCloseUDPSocket : Boolean) : Boolean;
-  var
-    lTmpConnectionArray : ConnectionArray;
-    offSet: LongInt = 0;
-    i : LongInt;
+  // var
+  //   lTmpConnectionArray : ConnectionArray;
+  //   offSet: LongInt = 0;
+  //   i : LongInt;
   begin
     result := False;
-    if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
-    SetLength(lTmpConnectionArray, Length(_Connections) - 1);
-    for i := Low(_Connections) to High(_Connections) do
-    begin
-      if (_Connections[i] = aConnection) then
-      begin
-        offSet := 1;
-        if (aConnection^.protocol <> UDP) and Assigned(aConnection^.socket) then 
-        begin
-          SDLNet_TCP_DelSocket(_Socketset, aConnection^.socket);
-          SDLNet_TCP_Close(aConnection^.socket);
-        end else if (aConnection^.protocol = UDP) then
-          RemoveName(_UDPConnectionIDs, IntToStr(aConnection^.ip) + ':' + IntToStr(aConnection^.port));
-        result := True;
-      end else begin
-        lTmpConnectionArray[i - offset] := _Connections[i];
-      end;
-    end;    
-    if aCloseUDPSocket and Assigned(aConnection^.socket) then 
-      CloseUDPSocket(aConnection^.socket);
-    ClearMessageQueue(aConnection);
-    FreeConnection(aConnection);
-    if (result) then
-      _Connections := lTmpConnectionArray;
+    // if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
+    // SetLength(lTmpConnectionArray, Length(_Connections) - 1);
+    // for i := Low(_Connections) to High(_Connections) do
+    // begin
+    //   if (_Connections[i] = aConnection) then
+    //   begin
+    //     offSet := 1;
+    //     if (aConnection^.protocol <> UDP) and Assigned(aConnection^.socket) then 
+    //     begin
+    //       SDLNet_TCP_DelSocket(_Socketset, aConnection^.socket);
+    //       SDLNet_TCP_Close(aConnection^.socket);
+    //     end else if (aConnection^.protocol = UDP) then
+    //       RemoveName(_UDPConnectionIDs, IntToStr(aConnection^.ip) + ':' + IntToStr(aConnection^.port));
+    //     result := True;
+    //   end else begin
+    //     lTmpConnectionArray[i - offset] := _Connections[i];
+    //   end;
+    // end;    
+    // if aCloseUDPSocket and Assigned(aConnection^.socket) then 
+    //   CloseUDPSocket(aConnection^.socket);
+    // ClearMessageQueue(aConnection);
+    // FreeConnection(aConnection);
+    // if (result) then
+    //   _Connections := lTmpConnectionArray;
   end;
  
   function CloseUDPSocketProcedure(const aPort : LongInt) : Boolean;

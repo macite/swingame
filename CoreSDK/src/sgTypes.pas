@@ -1106,6 +1106,7 @@ interface
       socket          : Pointer;
       ip              : LongWord;
       port            : LongInt;
+      open            : Boolean;
       firstMsg        : MessagePtr;
       lastMsg         : MessagePtr;
       msgCount        : LongInt;
@@ -1128,7 +1129,7 @@ interface
     ServerData = packed record
       name: String;
       socket: Pointer; // socket used to accept connections
-      port: LongInt;
+      port: Word;
       newConnections: LongInt; // the number of new connections -- reset on new scan for connections
       protocol: ConnectionType;
       connections: array of Connection;

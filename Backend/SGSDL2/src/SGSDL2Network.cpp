@@ -31,17 +31,29 @@ sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned shor
     if (SDLNet_ResolveHost(&addr, host, port) < 0)
         return result;
     
-    result.kind = SGCK_TCP;
     client = SDLNet_TCP_Open(&addr);
-    result._socket = client;
-    SDLNet_TCP_AddSocket(_sockets, client);
+    
+    if (client)
+    {
+        result.kind = SGCK_TCP;
+        result._socket = client;
+        SDLNet_TCP_AddSocket(_sockets, client);
+    }
+    else
+    {
+        result.kind = SGCK_UNKNOWN;
+        result._socket = NULL;
+    }
     
     return result;
 }
 
 int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
 {
-    return SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
+//    printf("Sending %d\n", size);
+    int sent = SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
+//    printf("Sent %d\n", sent);
+    return sent;
 }
 
 int sgsdl2_read_bytes(sg_network_connection *con, char *buffer, int size)
@@ -98,6 +110,7 @@ unsigned int sgsdl2_connection_has_data(sg_network_connection *con)
 
 void sgsdl2_load_network_fns(sg_interface *functions)
 {
+    SDLNet_Init();
     _sockets = SDLNet_AllocSocketSet(1024);
     if(!_sockets)
     {

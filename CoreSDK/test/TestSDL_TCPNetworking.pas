@@ -8,68 +8,146 @@ begin
   ReadLn();
 end;
 
+const 
+  SVR1_PORT = 49876;
+  SVR2_PORT = SVR1_PORT + 1; 
+
 procedure Main();
 var
   svr: ServerSocket;
   lConA, lConB, lTmp, lTmpA : Connection;
   lMsgReceived : Boolean = False;
+
+  procedure CheckMessages();
+  begin
+    WriteLn('Checking for messages');
+    CheckNetworkActivity();
+
+    if MessagesReceived() then
+    begin
+      WriteLn(' Reading messages received for client');
+
+      while HasMessages(lConA) do
+      begin
+        WriteLn(' -> ', ReadMessage(lConA));
+      end;
+
+      WriteLn(' Reading messages received for server');
+
+      while HasMessages(lConB) do
+      begin
+        WriteLn(' -> ', ReadMessage(lConB));
+      end;    
+    end
+    else
+    begin
+      WriteLn('No messages received');
+    end;
+  end;
+
 begin
-  svr := CreateTCPServer('svr2000', 2000);
-  CreateTCPServer('svr2001', 2001);
+  WriteLn('Starting');
+
+  svr := CreateServer('svr1', SVR1_PORT);
+  CreateServer('svr2', SVR2_PORT);
   // IPv4ToDec('127.0.0.1');
 
-  WriteLn('Listening on 2000 and 2001.');
+  WriteLn('Listening on ', SVR1_PORT, ' and ', SVR2_PORT, '.');
   Pause();
 
-  WriteLn('Connecting to Port 2000');
-  lConA := OpenTCPConnection('127.0.0.1', 2000);
-  
-  // WriteLn('Connection Queue Size: ', ConnectionQueueSize());
-  // WriteLn('New Connections to 2001: ', AcceptNewConnection('svr2001'));
-  AcceptAllNewConnections();
+  WriteLn('Attempting to open connection twice: ', Assigned(CreateServer('svr3', SVR2_PORT)));
 
-  WriteLn('New Connection to 2000: ', ServerHasNewConnection(svr));
-  WriteLn('2000 connections: ', ConnectionCount(svr));
+  WriteLn('Connecting to Port ', SVR1_PORT);
+  lConA := OpenConnection('127.0.0.1', SVR1_PORT);
+  
+  CheckNetworkActivity();
+  
+  WriteLn('Are there new connections? ', HasNewConnections());
+  WriteLn('New Connection to ', SVR1_PORT, ': ', ServerHasNewConnection(svr));
+  WriteLn(' Number of connections: ', ConnectionCount(svr));
 
   lConB := LastConnection(svr);
 
-  // CloseTCPHostSocket(2001);      
-
-  // WriteLn('Connection Queue Size: ', ConnectionQueueSize());
   WriteLn('Connection Retreived Successfully? : ', Assigned(lConB));
 
   Pause();
   WriteLn('Checking for messages -- shouldn''t be any');
-  CheckNetworkActivity();
-  WriteLn('');
+  CheckMessages();
 
   Pause();
-
   WriteLn('Sending messages');
   SendMessageTo(StringOfChar('7', 509 - 4), lConA);
   SendMessageTo('1234567', lConA);
   SendMessageTo('0987654', lConA);
   SendMessageTo(StringOfChar('A', 876), lConA);
 
+  SendMessageTo(StringOfChar('7', 509 - 4), lConB);
   SendMessageTo('Hello Client', lConB);
+  SendMessageTo(StringOfChar('A', 876), lConB);
 
   Pause();
-  WriteLn('Checking for messages');
+  CheckMessages();
+
+  Pause();
+  WriteLn('Closing client - ', CloseConnection(lConA));
+  Pause();
+
+  WriteLn('Client still: ', Assigned(lConA));
+  WriteLn('Test message send (to closed client): ', SendMessageTo(StringOfChar('A', 876), lConB));
+  // WriteLn('Test message send (expect false): ', SendMessageTo('Hello Client', lConA));
+
+  Pause();
+  WriteLn('Test message send (expect false): ', SendMessageTo(StringOfChar('A', 876), lConB));
+  // WriteLn('Test message send (expect false): ', SendMessageTo('Hello Client', lConA));
+
+  WriteLn('Server still connected to client: ', ConnectionOpen(RetreiveConnection(svr, 0)));
+
+  WriteLn('Closing server'' client connection: ', CloseConnection(lConB));
+  WriteLn('Server connections: ', ConnectionCount(svr));
+  Pause();
+
+  WriteLn('Opening a new connection');
+
+  lConA := OpenConnection('127.0.0.1', SVR1_PORT);
+  WriteLn('Reconnected: ', Assigned(lConA));
+
   CheckNetworkActivity();
+  lConB := LastConnection(svr);
+  WriteLn('Connections = ', ConnectionCount(svr));
 
-  WriteLn(' Reading messages received for client');
+  SendMessageTo('New connection --> to server', lConA);
+  SendMessageTo('New connection --> to client', lConB);
 
-  while HasMessages(lConA) do
-  begin
-    WriteLn(' -> ', ReadMessage(lConA));
-  end;
+  CheckMessages();
 
-  WriteLn(' Reading messages received for server');
+  Pause();
+  WriteLn('Closing server: ', CloseServer(svr));
+  Pause();
 
-  while HasMessages(lConB) do
-  begin
-    WriteLn(' -> ', ReadMessage(lConB));
-  end;
+  WriteLn('Can connect to old server? ', Assigned(OpenConnection('127.0.0.1', SVR1_PORT)));
+  Pause();
+
+  WriteLn('Restarting server...');
+  svr := CreateServer('svr1', SVR1_PORT);
+
+  ReconnectConnection(lConA);
+  CheckNetworkActivity();
+  lConB := LastConnection(svr);
+
+  BroadcastMessage('Hello Everyone');
+  BroadcastMessage('Hello Everyone on svr', svr);
+
+  SendMessageTo('Another message --> to server', lConA);
+  SendMessageTo('Another message --> to client', lConB);
+
+  CheckMessages();
+  Pause();
+
+  WriteLn('Close all');
+  CloseAllConnections();
+  CloseAllServers();
+  Pause();
+
 
   // Read the message from the server...
   // WriteLn('Message was received by svr: ', ServerHasMessages(svr));
