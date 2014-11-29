@@ -96,6 +96,8 @@ _type_switcher = {
     'connection'        :   'Connection',
     'arduinodevice'     :   'ArduinoDevice',
 
+    'httpheader' : 'HttpHeader',
+    'httpresponse' : 'HttpResponse',
 
 }
  

@@ -39,8 +39,8 @@ uses
   /// Creates a Connection for the purpose of two way messages. 
   /// Returns a new connection if successful or nil/null if it fails.
   ///
-  /// @param aIP The IP Address or DNS name of the host
-  /// @param aPort The port number the server is using to listen for connections
+  /// @param host The IP Address or domain name of the host
+  /// @param port The port number the server is using to listen for connections
   ///
   /// @lib
   /// @sn openConnection:%s port:%s
@@ -53,8 +53,8 @@ uses
   /// access it via its name.
   ///
   /// @param name The name of the connection, used to access it in networking calls
-  /// @param aIP The IP Address or DNS name of the host
-  /// @param aPort The port number the server is using to listen for connections
+  /// @param host The IP Address or domain name of the host
+  /// @param port The port number the server is using to listen for connections
   ///
   /// @lib OpenConnectionNamed
   /// @sn openConnectionNamed:%s toHost:%s port:%s
@@ -122,7 +122,7 @@ uses
 
   /// Broadcasts a message to all connections to a given server.
   ///
-  /// @lib
+  /// @lib BroadcastMessageToServer
   /// @sn broadcastMessage: %s toServer:%s
   procedure BroadcastMessage(const aMsg : String; svr: ServerSocket);
 
@@ -152,7 +152,7 @@ uses
   /// @param aMsg The message to be sent
   /// @param name The name of the connection to send the message over
   ///
-  /// @lib
+  /// @lib SendMessageToConnectionNamed
   /// @sn sendMessage:%s toConnectionNamed:%s
   function SendMessageTo(const aMsg : String; name: String) : Boolean;
 
@@ -169,9 +169,19 @@ uses
 // Http
 //----------------------------------------------------------------------------
   
+  /// Converts the body of an HttpResponse to a string.
+  ///
+  /// @lib
   function HttpResponseBodyAsString(httpData: HttpResponse): String;
 
+  /// Returns the host name of a given ip address.
+  ///
+  /// @lib
   function HostName(const address: String): String;
+
+  /// Returns the ip address of a given host.
+  ///
+  /// @lib
   function HostIP(const name: String): String;
 
   /// Adds a header to the Http request with the name and value.
@@ -270,6 +280,9 @@ uses
   function EncodeBase64(const aData : String) : String;
 
 
+  /// Performs a get request for the resourse at the specified host, path and port.
+  ///
+  /// @lib
   function HttpGet(host: String; port: Word; path: String) : HttpResponse;
 
 //----------------------------------------------------------------------------
@@ -404,7 +417,7 @@ uses
 
   /// Gets the Port of the destination for the connectiom
   ///
-  /// @param aConnection The connection to get the port from
+  /// @param name The name of the connection to get the port from
   ///
   /// @lib ConnectionPortNamed
   function  ConnectionPort(const name: String) : Word;
@@ -421,7 +434,7 @@ uses
   /// Use this to control a loop that reads all of the messages from
   /// a connection.
   ///
-  /// @lib
+  /// @lib HasMessageConnectionNamed
   function HasMessages(const name: String) : Boolean; 
 
   /// Reads the next message that was sent to the connection. You use this
@@ -467,8 +480,7 @@ uses
 
   /// Gets the number of messages waiting to be read from the connection (found via its named)
   ///
-  /// @lib
-  /// @sn messageCountOnConnectionNamed:%s
+  /// @lib MessageCountOnConnectionNamed
   function  MessageCount(const name: String) : LongInt;
 
 
@@ -545,7 +557,7 @@ uses
 
   /// Closes the specified connection.
   ///
-  /// @param aConnection  The Connection to close
+  /// @param name  The name of the Connection to close
   ///
   /// @lib CloseConnectionNamed
   function CloseConnection (const name: String) : Boolean;

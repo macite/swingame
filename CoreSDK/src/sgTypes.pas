@@ -1045,7 +1045,7 @@ interface
       DrawAsVectors:        Boolean;
     end;
 
-    /// @enum   
+    /// @enum ConnectionType
     ConnectionType = (
       TCP,
       UDP
@@ -1059,12 +1059,13 @@ interface
       HTTP_DELETE
     );
 
+    /// @struct HttpHeader
     HttpHeader = record
       name : String;
       value: String;
     end;
 
-    /// @struct HTTPRequest
+    /// @struct HttpRequest
     HttpRequest = packed record
       requestType: HttpMethod;
       url        : String;
@@ -1074,15 +1075,14 @@ interface
       body       : String;
     end;
 
-     HttpResponse = record
+    /// @struct HttpResponse
+    HttpResponse = record
       protocol : String;  //eg: HTTP/1.1
       status : LongInt;   //eg: 200
       statusText: String; //eg: OK
       headers : array of HttpHeader;
       body: array of Byte;
     end;
-
-
 
     /// The Pointer to a MessageLink Creating a String LinkedList
     ///

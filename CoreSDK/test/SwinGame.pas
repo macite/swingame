@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-03 14:04:04.586392
+// SwinGame.pas was generated on 2014-11-29 18:38:41.185192
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -155,6 +155,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type PanelData = sgTypes.PanelData;
 
+  type ConnectionType = sgTypes.ConnectionType;
+
+  type HttpMethod = sgTypes.HttpMethod;
+
+  type HttpHeader = sgTypes.HttpHeader;
+
+  type HttpRequest = sgTypes.HttpRequest;
+
+  type HttpResponse = sgTypes.HttpResponse;
+
   type MessagePtr = sgTypes.MessagePtr;
 
   type MessageLink = sgTypes.MessageLink;
@@ -162,6 +172,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type ConnectionData = sgTypes.ConnectionData;
 
   type Connection = sgTypes.Connection;
+
+  type ServerData = sgTypes.ServerData;
+
+  type ServerSocket = sgTypes.ServerSocket;
 
   type ArduinoData = sgTypes.ArduinoData;
 
@@ -1901,99 +1915,123 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // is updated by the `ProcessEvents` routine.
   function WindowCloseRequested(): Boolean; overload;
 
-  // Accepts an incomming connection from another client.
-  // Returns the amount of new connections that have been
-  // accepted.
-  function AcceptTCPConnection(): Longint; overload;
+  // Broadcasts a message to all connections (all servers and opened connections).
+  procedure BroadcastMessage(const aMsg: String); overload;
 
-  // Broadcasts a message through all open connections.
-  procedure BroadcastTCPMessage(aMsg: String); overload;
+  // Broadcasts a message to all connections to a given server.
+  procedure BroadcastMessage(const aMsg: String; svr: ServerSocket); overload;
+
+  // Broadcasts a message to all connections to a given server.
+  procedure BroadcastMessage(const aMsg: String; const name: String); overload;
 
   // Sends a UDP packet to All connections with the message.
-  procedure BroadcastUDPMessage(aMsg: String); overload;
+  procedure BroadcastUDPMessage(const aMsg: String); overload;
+
+  // This procedure checks for any network activity.
+  // It first check all servers for incomming connections from clients,
+  // then it checks for any messages received over any of 
+  // the connections SwinGame is managing.
+  procedure CheckNetworkActivity(); overload;
+
+  // Clears all of the messages from a connection.
+  procedure ClearMessages(aConnection: Connection); overload;
 
   // Clears the Message Queue
-  procedure ClearMessageQueue(aConnection: Connection); overload;
+  procedure ClearMessages(const name: String); overload;
 
   // Closes All TCP Receiver Sockets
   procedure CloseAllConnections(); overload;
 
   // Closes all sockets that have been created.
-  procedure CloseAllSockets(); overload;
-
-  // Closes All TCP Host Sockets
-  procedure CloseAllTCPHostSockets(); overload;
+  procedure CloseAllServers(); overload;
 
   // Closes All UDP Listener Sockets
   procedure CloseAllUDPSockets(); overload;
 
-  // Closes the specified Socket, removed it from the Socket Array, and removes
-  // the identifier from the NamedIndexCollection.
-  // Refers to TCP Receiver Sockets
+  // Closes the specified connection.
+  function CloseConnection(const name: String): Boolean; overload;
+
+  // Closes the specified connection.
   function CloseConnection(var aConnection: Connection): Boolean; overload;
 
-  // Closes the specified Socket, removed it from the Socket Array, and removes
-  // the identifier from the NamedIndexCollection.
-  // Refers to TCP Host Sockets
-  function CloseTCPHostSocket(aPort: Longint): Boolean; overload;
+  // Closes the specified server socket. This will close all connections to
+  // the server, as will stop listening for new connections.
+  function CloseServer(var svr: ServerSocket): Boolean; overload;
+
+  // Closes the specified server socket. This will close all connections to
+  // the server, as will stop listening for new connections.
+  function CloseServer(const name: String): Boolean; overload;
 
   // Closes the specified Socket, removed it from the Socket Array, and removes
   // the identifier from the NamedIndexCollection.
   // Refers to UDP Listener Sockets
-  function CloseUDPSocket(aPort: Longint): Boolean; overload;
+  function CloseUDPSocket(aPort: Word): Boolean; overload;
 
-  // Returns the count of Active Connections
-  function ConnectionCount(): Longint; overload;
+  // Returns the number of connections to a Server socket.
+  function ConnectionCount(const name: String): Longint; overload;
 
-  // Gets the Decimal IP of the destination for the connection
+  // Returns the number of connections to a Server socket.
+  function ConnectionCount(server: ServerSocket): Longint; overload;
+
+  // Gets the IP address (an number) of the destination for the connection (found by its name).
+  function ConnectionIP(const name: String): Longword; overload;
+
+  // Gets the IP address (an number) of the destination for the connection.
   function ConnectionIP(aConnection: Connection): Longword; overload;
 
+  // Returns the connection for the give name, or nil/null if there is no
+  // connection with that name.
+  function ConnectionNamed(const name: String): Connection; overload;
+
+  // You can use this to check if a connection is currently open.
+  // A connection may be closed by the remote machine.
+  function ConnectionOpen(con: Connection): Boolean; overload;
+
+  // You can use this to check if a connection is currently open.
+  // A connection may be closed by the remote machine.
+  function ConnectionOpen(const name: String): Boolean; overload;
+
   // Gets the Port of the destination for the connectiom
-  function ConnectionPort(aConnection: Connection): Longint; overload;
+  function ConnectionPort(aConnection: Connection): Word; overload;
 
-  // Returns the size of the New Connection List
-  function ConnectionQueueSize(): Longint; overload;
+  // Gets the Port of the destination for the connectiom
+  function ConnectionPort(const name: String): Word; overload;
 
-  // Opens a connection to a peer using the IP and port
-  // Creates a Socket for the purpose of two way messages. 
-  // Returns a new connection if successful or nil if failed.
-  function CreateTCPConnection(aIP: String; aPort: Longint): Connection; overload;
-
-  // Creates a socket that listens for connections based
-  // on the port given. Returns true if success or false
-  // if the binding failed. Uses TCP.
-  function CreateTCPHost(aPort: Longint): Boolean; overload;
+  // Creates a server socket that listens for TCP connections 
+  // on the port given. Returns the server if this succeeds, otherwise
+  // it returns nil/null.
+  function CreateServer(const name: String; port: Word): ServerSocket; overload;
 
   // Creates the connection and sets the ip and port values. Creates a
   // socket if there is no socket attached to the specified port. this
   // socket can be used to send and receive messages. Returns the connection
   // if this has been successful, or will return nil on failure.
-  function CreateUDPConnection(aDestIP: String; aDestPort: Longint; aInPort: Longint): Connection; overload;
+  function CreateUDPConnection(aDestIP: String; aDestPort: Word; aInPort: Word): Connection; overload;
 
   // Creates a socket that listens for connections based
   // on the port given. Returns the index of the Socket in the
   // socket array.
-  function CreateUDPHost(aPort: Longint): Longint; overload;
+  function CreateUDPHost(aPort: Word): Longint; overload;
 
   // Converts an Integer to a Hex value and returns it as a string.
   function DecToHex(aDec: Longword): String; overload;
 
-  // Queues a message to the end of the Message Queue
-  procedure EnqueueMessage(aMsg: String; aConnection: Connection); overload;
+  // Encodes a string from username:password format to Base64
+  function EncodeBase64(const aData: String): String; overload;
 
-  // Adds a connection to the list of new connections. This is called by the 
-  // Accept connection in TCP and Receive message in UDP (if the message has
-  // been sent by a new connection). This is used in conjunction with Fetch
-  // connection, that will pop the new connection out of the list.
-  procedure EnqueueNewConnection(aConnection: Connection); overload;
+  // Returns true if a connection has messages that you can read.
+  // Use this to control a loop that reads all of the messages from
+  // a connection.
+  function HasMessages(con: Connection): Boolean; overload;
 
-  // Removes the top connection from the New connection queue and
-  // returns it.
-  function FetchConnection(): Connection; overload;
+  // Returns true if a connection (found via its name) has messages that you can read.
+  // Use this to control a loop that reads all of the messages from
+  // a connection.
+  function HasMessages(const name: String): Boolean; overload;
 
-  // An internal function used to close the specified Socket. 
-  // Call ``CloseConnection`` instead.
-  procedure FreeConnection(var aConnection: Connection); overload;
+  // Indicates if there is a new connection to any of the servers
+  // that are currently listening for new clients.
+  function HasNewConnections(): Boolean; overload;
 
   // Converts a Hex String to an IPV4 Address (0.0.0.0)
   function HexStrToIPv4(aHex: String): String; overload;
@@ -2001,42 +2039,129 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Converts a Hex String to a Decimal Value as a String.
   function HexToDecString(aHex: String): String; overload;
 
+  // Returns the ip address of a given host.
+  function HostIP(const name: String): String; overload;
+
+  // Returns the host name of a given ip address.
+  function HostName(const address: String): String; overload;
+
+  // Adds a header to the Http request with the name and value.
+  procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
+
+  // Performs a get request for the resourse at the specified host, path and port.
+  function HttpGet(host: String; port: Word; path: String): HttpResponse; overload;
+
+  // Returns a header of the Http Request at the specified index.
+  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
+
+  // Removes a header of the Http request at the specified index.
+  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
+
+  // Converts the Http Request to a string
+  function HttpRequestToString(const aHttpRequest: HttpRequest): String; overload;
+
+  // Converts the body of an HttpResponse to a string.
+  function HttpResponseBodyAsString(httpData: HttpResponse): String; overload;
+
+  // Returns a header of the Http Request at the specified index.
+  procedure HttpSetBody(var aHttpRequest: HttpRequest; const aBody: String); overload;
+
+  // Sets the method of the Http Request
+  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
+
+  // Sets the URL of the Http Request
+  procedure HttpSetURL(var aHttpRequest: HttpRequest; const aURL: String); overload;
+
+  // Sets the version of the Http Request
+  procedure HttpSetVersion(var aHttpRequest: HttpRequest; const aVersion: String); overload;
+
   // Converts an IP to a decimal value
   function IPv4ToDec(aIP: String): Longword; overload;
 
-  // Gets the Size of the Message Queue
+  // Converts an integer representation of a ip address to a string representation.
+  function IPv4ToStr(ip: Longword): String; overload;
+
+  // Returns the last connection made to a server socket. When a new client 
+  // has connected to the server, this function can be used to get their
+  // connection.
+  function LastConnection(const name: String): Connection; overload;
+
+  // Returns the last connection made to a server socket. When a new client 
+  // has connected to the server, this function can be used to get their
+  // connection.
+  function LastConnection(server: ServerSocket): Connection; overload;
+
+  // Gets the number of messages waiting to be read from the connection (found via its named)
+  function MessageCount(const name: String): Longint; overload;
+
+  // Gets the number of messages waiting to be read from this connection
   function MessageCount(aConnection: Connection): Longint; overload;
+
+  // Checks if any messages have been received for any open connections. 
+  // Messages received are added to the connection they were received from.
+  function MessagesReceived(): Boolean; overload;
 
   // Returns the caller's IP.
   function MyIP(): String; overload;
 
-  // Dequeues the Last (Newest) Message
-  function ReadLastMessage(aConnection: Connection): String; overload;
+  // Opens a connection to a server using the IP and port.
+  // Creates a Connection for the purpose of two way messages. 
+  // Returns a new connection if successful or nil/null if it fails.
+  function OpenConnection(const host: String; port: Word): Connection; overload;
 
-  // Dequeues the Top (Oldest) Message
+  // Opens a connection to a server using the IP and port.
+  // Creates a Connection for the purpose of two way messages. 
+  // Returns a new connection if successful or nil/null if it fails.
+  // This version allows you to name the connection, so that you can
+  // access it via its name.
+  function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
+
+  // Reads the next message that was sent to the connection. You use this
+  // to read the values that were sent to this connection.
   function ReadMessage(aConnection: Connection): String; overload;
+
+  // Reads the next message that was sent to the connection (found from its name). You use this
+  // to read the values that were sent to this connection.
+  function ReadMessage(const name: String): String; overload;
+
+  // Attempts to recconnect a connection that was closed using the IP and port
+  // stored in the connection
+  procedure ReconnectConnection(aConnection: Connection); overload;
+
+  // Attempts to recconnect a connection that was closed using the IP and port
+  // stored in the connection. Finds the connection using its name.
+  procedure ReconnectConnection(const name: String); overload;
 
   // Releases All resources used by the Networking code.
   procedure ReleaseAllConnections(); overload;
 
   // Retrieves the connection at the specified index
-  function RetreiveConnection(aConnectionAt: Longint): Connection; overload;
+  function RetreiveConnection(const name: String; idx: Longint): Connection; overload;
 
-  // Sends the message to the specified client, attached to the socket
-  // Retuns the connection if the message fails to
-  // send so that it may be closed. Returns nil if the message has been sent
-  // successfully.
-  function SendTCPMessage(aMsg: String; aConnection: Connection): Connection; overload;
+  // Retrieves the connection at the specified index
+  function RetreiveConnection(server: ServerSocket; idx: Longint): Connection; overload;
+
+  // Sends the message over the provided network connection (found from its name).
+  // Returns true if this succeeds, or false if it fails.
+  function SendMessageTo(const aMsg: String; name: String): Boolean; overload;
+
+  // Sends the message over the provided network connection.
+  // Returns true if this succeeds, or false if it fails.
+  function SendMessageTo(const aMsg: String; aConnection: Connection): Boolean; overload;
 
   // Sends a UDP packet to the port and ip specified in the connection
   // with the message.
   function SendUDPMessage(aMsg: String; aConnection: Connection): Boolean; overload;
 
-  // Checks if a message has been received. If a message has been received,
-  // It will automatically add it to the message queue, with the message,
-  // source's IP and the port it received the message on. Returns true if
-  // a new message has been received.
-  function TCPMessageReceived(): Boolean; overload;
+  // Indicates if there is a new connection to a server.
+  function ServerHasNewConnection(const name: String): Boolean; overload;
+
+  // Indicates if there is a new connection to a server.
+  function ServerHasNewConnection(server: ServerSocket): Boolean; overload;
+
+  // Returns the Server socket for the give name, or nil/null if there is no
+  // server with that name.
+  function ServerNamed(const name: String): ServerSocket; overload;
 
   // Checks all UDP listening sockets to see if a packet has been received.
   // If a packet has been received, it will Enqueue the message into the message
@@ -6182,24 +6307,39 @@ implementation
     result := sgInput.WindowCloseRequested();
   end;
 
-  function AcceptTCPConnection(): Longint; overload;
+  procedure BroadcastMessage(const aMsg: String); overload;
   begin
-    result := sgNetworking.AcceptTCPConnection();
+    sgNetworking.BroadcastMessage(aMsg);
   end;
 
-  procedure BroadcastTCPMessage(aMsg: String); overload;
+  procedure BroadcastMessage(const aMsg: String; svr: ServerSocket); overload;
   begin
-    sgNetworking.BroadcastTCPMessage(aMsg);
+    sgNetworking.BroadcastMessage(aMsg,svr);
   end;
 
-  procedure BroadcastUDPMessage(aMsg: String); overload;
+  procedure BroadcastMessage(const aMsg: String; const name: String); overload;
+  begin
+    sgNetworking.BroadcastMessage(aMsg,name);
+  end;
+
+  procedure BroadcastUDPMessage(const aMsg: String); overload;
   begin
     sgNetworking.BroadcastUDPMessage(aMsg);
   end;
 
-  procedure ClearMessageQueue(aConnection: Connection); overload;
+  procedure CheckNetworkActivity(); overload;
   begin
-    sgNetworking.ClearMessageQueue(aConnection);
+    sgNetworking.CheckNetworkActivity();
+  end;
+
+  procedure ClearMessages(aConnection: Connection); overload;
+  begin
+    sgNetworking.ClearMessages(aConnection);
+  end;
+
+  procedure ClearMessages(const name: String); overload;
+  begin
+    sgNetworking.ClearMessages(name);
   end;
 
   procedure CloseAllConnections(); overload;
@@ -6207,14 +6347,9 @@ implementation
     sgNetworking.CloseAllConnections();
   end;
 
-  procedure CloseAllSockets(); overload;
+  procedure CloseAllServers(); overload;
   begin
-    sgNetworking.CloseAllSockets();
-  end;
-
-  procedure CloseAllTCPHostSockets(); overload;
-  begin
-    sgNetworking.CloseAllTCPHostSockets();
+    sgNetworking.CloseAllServers();
   end;
 
   procedure CloseAllUDPSockets(); overload;
@@ -6222,24 +6357,44 @@ implementation
     sgNetworking.CloseAllUDPSockets();
   end;
 
+  function CloseConnection(const name: String): Boolean; overload;
+  begin
+    result := sgNetworking.CloseConnection(name);
+  end;
+
   function CloseConnection(var aConnection: Connection): Boolean; overload;
   begin
     result := sgNetworking.CloseConnection(aConnection);
   end;
 
-  function CloseTCPHostSocket(aPort: Longint): Boolean; overload;
+  function CloseServer(var svr: ServerSocket): Boolean; overload;
   begin
-    result := sgNetworking.CloseTCPHostSocket(aPort);
+    result := sgNetworking.CloseServer(svr);
   end;
 
-  function CloseUDPSocket(aPort: Longint): Boolean; overload;
+  function CloseServer(const name: String): Boolean; overload;
+  begin
+    result := sgNetworking.CloseServer(name);
+  end;
+
+  function CloseUDPSocket(aPort: Word): Boolean; overload;
   begin
     result := sgNetworking.CloseUDPSocket(aPort);
   end;
 
-  function ConnectionCount(): Longint; overload;
+  function ConnectionCount(const name: String): Longint; overload;
   begin
-    result := sgNetworking.ConnectionCount();
+    result := sgNetworking.ConnectionCount(name);
+  end;
+
+  function ConnectionCount(server: ServerSocket): Longint; overload;
+  begin
+    result := sgNetworking.ConnectionCount(server);
+  end;
+
+  function ConnectionIP(const name: String): Longword; overload;
+  begin
+    result := sgNetworking.ConnectionIP(name);
   end;
 
   function ConnectionIP(aConnection: Connection): Longword; overload;
@@ -6247,32 +6402,42 @@ implementation
     result := sgNetworking.ConnectionIP(aConnection);
   end;
 
-  function ConnectionPort(aConnection: Connection): Longint; overload;
+  function ConnectionNamed(const name: String): Connection; overload;
+  begin
+    result := sgNetworking.ConnectionNamed(name);
+  end;
+
+  function ConnectionOpen(con: Connection): Boolean; overload;
+  begin
+    result := sgNetworking.ConnectionOpen(con);
+  end;
+
+  function ConnectionOpen(const name: String): Boolean; overload;
+  begin
+    result := sgNetworking.ConnectionOpen(name);
+  end;
+
+  function ConnectionPort(aConnection: Connection): Word; overload;
   begin
     result := sgNetworking.ConnectionPort(aConnection);
   end;
 
-  function ConnectionQueueSize(): Longint; overload;
+  function ConnectionPort(const name: String): Word; overload;
   begin
-    result := sgNetworking.ConnectionQueueSize();
+    result := sgNetworking.ConnectionPort(name);
   end;
 
-  function CreateTCPConnection(aIP: String; aPort: Longint): Connection; overload;
+  function CreateServer(const name: String; port: Word): ServerSocket; overload;
   begin
-    result := sgNetworking.CreateTCPConnection(aIP,aPort);
+    result := sgNetworking.CreateServer(name,port);
   end;
 
-  function CreateTCPHost(aPort: Longint): Boolean; overload;
-  begin
-    result := sgNetworking.CreateTCPHost(aPort);
-  end;
-
-  function CreateUDPConnection(aDestIP: String; aDestPort: Longint; aInPort: Longint): Connection; overload;
+  function CreateUDPConnection(aDestIP: String; aDestPort: Word; aInPort: Word): Connection; overload;
   begin
     result := sgNetworking.CreateUDPConnection(aDestIP,aDestPort,aInPort);
   end;
 
-  function CreateUDPHost(aPort: Longint): Longint; overload;
+  function CreateUDPHost(aPort: Word): Longint; overload;
   begin
     result := sgNetworking.CreateUDPHost(aPort);
   end;
@@ -6282,24 +6447,24 @@ implementation
     result := sgNetworking.DecToHex(aDec);
   end;
 
-  procedure EnqueueMessage(aMsg: String; aConnection: Connection); overload;
+  function EncodeBase64(const aData: String): String; overload;
   begin
-    sgNetworking.EnqueueMessage(aMsg,aConnection);
+    result := sgNetworking.EncodeBase64(aData);
   end;
 
-  procedure EnqueueNewConnection(aConnection: Connection); overload;
+  function HasMessages(con: Connection): Boolean; overload;
   begin
-    sgNetworking.EnqueueNewConnection(aConnection);
+    result := sgNetworking.HasMessages(con);
   end;
 
-  function FetchConnection(): Connection; overload;
+  function HasMessages(const name: String): Boolean; overload;
   begin
-    result := sgNetworking.FetchConnection();
+    result := sgNetworking.HasMessages(name);
   end;
 
-  procedure FreeConnection(var aConnection: Connection); overload;
+  function HasNewConnections(): Boolean; overload;
   begin
-    sgNetworking.FreeConnection(aConnection);
+    result := sgNetworking.HasNewConnections();
   end;
 
   function HexStrToIPv4(aHex: String): String; overload;
@@ -6312,9 +6477,89 @@ implementation
     result := sgNetworking.HexToDecString(aHex);
   end;
 
+  function HostIP(const name: String): String; overload;
+  begin
+    result := sgNetworking.HostIP(name);
+  end;
+
+  function HostName(const address: String): String; overload;
+  begin
+    result := sgNetworking.HostName(address);
+  end;
+
+  procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
+  begin
+    sgNetworking.HttpAddHeader(aHttpRequest,name,value);
+  end;
+
+  function HttpGet(host: String; port: Word; path: String): HttpResponse; overload;
+  begin
+    result := sgNetworking.HttpGet(host,port,path);
+  end;
+
+  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
+  begin
+    result := sgNetworking.HttpHeaderAt(aHttpRequest,aIdx);
+  end;
+
+  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
+  begin
+    sgNetworking.HttpRemoveHeaderAt(aHttpRequest,aIdx);
+  end;
+
+  function HttpRequestToString(const aHttpRequest: HttpRequest): String; overload;
+  begin
+    result := sgNetworking.HttpRequestToString(aHttpRequest);
+  end;
+
+  function HttpResponseBodyAsString(httpData: HttpResponse): String; overload;
+  begin
+    result := sgNetworking.HttpResponseBodyAsString(httpData);
+  end;
+
+  procedure HttpSetBody(var aHttpRequest: HttpRequest; const aBody: String); overload;
+  begin
+    sgNetworking.HttpSetBody(aHttpRequest,aBody);
+  end;
+
+  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
+  begin
+    sgNetworking.HttpSetMethod(aHttpRequest,aMethod);
+  end;
+
+  procedure HttpSetURL(var aHttpRequest: HttpRequest; const aURL: String); overload;
+  begin
+    sgNetworking.HttpSetURL(aHttpRequest,aURL);
+  end;
+
+  procedure HttpSetVersion(var aHttpRequest: HttpRequest; const aVersion: String); overload;
+  begin
+    sgNetworking.HttpSetVersion(aHttpRequest,aVersion);
+  end;
+
   function IPv4ToDec(aIP: String): Longword; overload;
   begin
     result := sgNetworking.IPv4ToDec(aIP);
+  end;
+
+  function IPv4ToStr(ip: Longword): String; overload;
+  begin
+    result := sgNetworking.IPv4ToStr(ip);
+  end;
+
+  function LastConnection(const name: String): Connection; overload;
+  begin
+    result := sgNetworking.LastConnection(name);
+  end;
+
+  function LastConnection(server: ServerSocket): Connection; overload;
+  begin
+    result := sgNetworking.LastConnection(server);
+  end;
+
+  function MessageCount(const name: String): Longint; overload;
+  begin
+    result := sgNetworking.MessageCount(name);
   end;
 
   function MessageCount(aConnection: Connection): Longint; overload;
@@ -6322,14 +6567,24 @@ implementation
     result := sgNetworking.MessageCount(aConnection);
   end;
 
+  function MessagesReceived(): Boolean; overload;
+  begin
+    result := sgNetworking.MessagesReceived();
+  end;
+
   function MyIP(): String; overload;
   begin
     result := sgNetworking.MyIP();
   end;
 
-  function ReadLastMessage(aConnection: Connection): String; overload;
+  function OpenConnection(const host: String; port: Word): Connection; overload;
   begin
-    result := sgNetworking.ReadLastMessage(aConnection);
+    result := sgNetworking.OpenConnection(host,port);
+  end;
+
+  function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
+  begin
+    result := sgNetworking.OpenConnection(name,host,port);
   end;
 
   function ReadMessage(aConnection: Connection): String; overload;
@@ -6337,19 +6592,44 @@ implementation
     result := sgNetworking.ReadMessage(aConnection);
   end;
 
+  function ReadMessage(const name: String): String; overload;
+  begin
+    result := sgNetworking.ReadMessage(name);
+  end;
+
+  procedure ReconnectConnection(aConnection: Connection); overload;
+  begin
+    sgNetworking.ReconnectConnection(aConnection);
+  end;
+
+  procedure ReconnectConnection(const name: String); overload;
+  begin
+    sgNetworking.ReconnectConnection(name);
+  end;
+
   procedure ReleaseAllConnections(); overload;
   begin
     sgNetworking.ReleaseAllConnections();
   end;
 
-  function RetreiveConnection(aConnectionAt: Longint): Connection; overload;
+  function RetreiveConnection(const name: String; idx: Longint): Connection; overload;
   begin
-    result := sgNetworking.RetreiveConnection(aConnectionAt);
+    result := sgNetworking.RetreiveConnection(name,idx);
   end;
 
-  function SendTCPMessage(aMsg: String; aConnection: Connection): Connection; overload;
+  function RetreiveConnection(server: ServerSocket; idx: Longint): Connection; overload;
   begin
-    result := sgNetworking.SendTCPMessage(aMsg,aConnection);
+    result := sgNetworking.RetreiveConnection(server,idx);
+  end;
+
+  function SendMessageTo(const aMsg: String; name: String): Boolean; overload;
+  begin
+    result := sgNetworking.SendMessageTo(aMsg,name);
+  end;
+
+  function SendMessageTo(const aMsg: String; aConnection: Connection): Boolean; overload;
+  begin
+    result := sgNetworking.SendMessageTo(aMsg,aConnection);
   end;
 
   function SendUDPMessage(aMsg: String; aConnection: Connection): Boolean; overload;
@@ -6357,9 +6637,19 @@ implementation
     result := sgNetworking.SendUDPMessage(aMsg,aConnection);
   end;
 
-  function TCPMessageReceived(): Boolean; overload;
+  function ServerHasNewConnection(const name: String): Boolean; overload;
   begin
-    result := sgNetworking.TCPMessageReceived();
+    result := sgNetworking.ServerHasNewConnection(name);
+  end;
+
+  function ServerHasNewConnection(server: ServerSocket): Boolean; overload;
+  begin
+    result := sgNetworking.ServerHasNewConnection(server);
+  end;
+
+  function ServerNamed(const name: String): ServerSocket; overload;
+  begin
+    result := sgNetworking.ServerNamed(name);
   end;
 
   function UDPMessageReceived(): Boolean; overload;
