@@ -639,6 +639,7 @@ var
 
   procedure EnqueueMessage( const aMsg : String; aConnection : Connection); forward;
   procedure FreeConnection(var aConnection : Connection); forward;
+  procedure ShutConnection(con: Connection); forward;
 
   function CreateConnection(const name: String) : Connection;
   begin
@@ -793,13 +794,13 @@ var
   var
     socket : psg_network_connection;
   begin
-    New(socket);
+    socket := con^.socket;
     socket^ := _sg_functions^.network.open_tcp_connection(PChar(host), port);
     // WriteLn('client con = ', HexStr(con^._socket), ' ', con^.kind);
     if Assigned(socket^._socket) and (socket^.kind = SGCK_TCP) then
     begin
       con^.stringIP      := host;
-      con^.socket        := socket;
+      // con^.socket        := socket;
       con^.IP            := _sg_functions^.network.network_address(socket);
       con^.port          := port;
       con^.protocol      := TCP;
@@ -820,11 +821,16 @@ var
   function OpenConnection(const name, host: String; port: Word) : Connection;
   var
     idx: Integer;
+    socket: psg_network_connection;
   begin
     result := CreateConnection(name);
 
+    New(socket);
+    result^.socket := socket;
+
     if EstablishConnection(result, host, port) then
     begin
+
       SetLength(_Connections, Length(_Connections) + 1);
       idx := AddName(_ConnectionIds, name);
       // WriteLn('Adding at idx: ', idx);
@@ -1051,12 +1057,20 @@ var
   begin
     if (not Assigned(con)) or (not Assigned(con^.socket)) then begin RaiseWarning('Error checking connection: closed or error.'); exit; end;
 
+    if con^.open = false then exit;
+
     // WriteLn(HexStr(con), ' -> ', HexStr(con^.socket) );
     if _sg_functions^.network.connection_has_data(con^.socket) > 0 then
     begin
       // WriteLn('getting data');
       repeat
         received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
+
+        if received <= 0 then
+        begin
+          ShutConnection(con);
+          exit;
+        end;
       until not ExtractData(buffer, received, con);
     end;
   end;
@@ -1125,6 +1139,8 @@ var
     result := false;
 
     if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SendMessageTo Missing Connection, or connection closed'); exit; end;
+    if aConnection^.open = false then exit;
+
     // if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
     size := Bytes(NtoBE(LongInt(Length(aMsg))));
     // WriteLn('send size: ', size[0], ' ', size[1], ' ', size[2], ' ', size[3], ' ');
@@ -1376,6 +1392,7 @@ var
   var
     i, idx: LongInt;
     toClose: ServerSocket;
+    socket: psg_network_connection;
   begin
     result := False;
     if not Assigned(svr) then exit;
@@ -1406,6 +1423,9 @@ var
     SetLength(_Servers, Length(_Servers) - 1);
 
     // free memory
+    socket := psg_network_connection(toClose^.socket);
+    Dispose(socket);
+    toClose^.socket := nil;
     Dispose(toClose);
     result := True;
   end;
@@ -1415,7 +1435,7 @@ var
     svr: ServerSocket;
   begin
     svr := ServerNamed(name);
-    result := CloseServer(name);
+    result := CloseServer(svr);
   end;
 
   function CloseUDPSocketProcedure(const aPort : Word) : Boolean;
@@ -2217,7 +2237,6 @@ var
 // Close
 //----------------------------------------------------------------------------
 
-
   function IndexOfConnection(con: Connection; const list: array of Connection): Integer;
   begin
     for result := 0 to High(list) do
@@ -2240,6 +2259,17 @@ var
     // WriteLn('There are now ', Length(list), ' connections.');
   end;
 
+  procedure ShutConnection(con: Connection);
+  var
+    socket: psg_network_connection;
+  begin
+    con^.open := false;
+    _sg_functions^.network.close_connection(con^.socket);
+    socket := psg_network_connection(con^.socket);
+    Dispose(socket);
+    con^.socket := nil;
+  end;
+
   function CloseConnection(var aConnection : Connection) : Boolean;
   var
     idx, svr: Integer;
@@ -2252,13 +2282,12 @@ var
 
     // toClose := aConnection; // as it may be removed from 
     name := aConnection^.name;
-    aConnection^.open := false;
 
     // clear all of the messages
     ClearMessages(aConnection);
 
     // close socket
-    _sg_functions^.network.close_connection(aConnection^.socket);
+    ShutConnection(aConnection);
 
     toClose := aConnection; //so we keep track of the pointer, in case we are removing from array
 
@@ -2294,38 +2323,6 @@ var
     end;
 
     FreeConnection(toClose);
-
-
-    // WriteLn('here 4: ', HexStr(aConnection));
-    // WriteLn('Close connection: ', aConnection^.name);
-    // WriteLn(' Socket: ', HexStr(aConnection^.socket));
-    // ReadLn();
-
-    // if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
-    // SetLength(lTmpConnectionArray, Length(_Connections) - 1);
-    // for i := Low(_Connections) to High(_Connections) do
-    // begin
-    //   if (_Connections[i] = aConnection) then
-    //   begin
-    //     offSet := 1;
-    //     if (aConnection^.protocol <> UDP) and Assigned(aConnection^.socket) then 
-    //     begin
-    //       SDLNet_TCP_DelSocket(_Socketset, aConnection^.socket);
-    //       SDLNet_TCP_Close(aConnection^.socket);
-    //     end else if (aConnection^.protocol = UDP) then
-    //       RemoveName(_UDPConnectionIDs, IntToStr(aConnection^.ip) + ':' + IntToStr(aConnection^.port));
-    //     result := True;
-    //   end else begin
-    //     lTmpConnectionArray[i - offset] := _Connections[i];
-    //   end;
-    // end;    
-    // if aCloseUDPSocket and Assigned(aConnection^.socket) then 
-    //   CloseUDPSocket(aConnection^.socket);
-    // ClearMessages(aConnection);
-    // FreeConnection(aConnection);
-    // if (result) then
-    //   _Connections := lTmpConnectionArray;
-
   end;
 
   function CloseConnection (const name: String) : Boolean;

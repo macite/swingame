@@ -97,13 +97,58 @@ begin
 end;
 
 procedure Main();
+var
+	answer: String;
+	i: Integer;
 begin
 	OpenGraphicsWindow('My Chat', 600, 600);
 	LoadDefaultColors();
+	LoadResources();
+
+	ClearScreen(ColorWhite);
+	answer := ReadString('Do you want to be a server?', 100, 100);
+
+	if answer = 'yes' then
+	begin
+		if CreateServer('MyChat', 50000) = nil then
+		begin
+			DisplayDialog('Server failed to start.', 100, 100);
+			exit;
+		end;
+	end
+	else
+	begin
+		if OpenConnection('ToServer', ReadString('Enter host address.', 100, 100), 50000) = nil then
+		begin
+			DisplayDialog('Unable to connect to that server.', 100, 100);
+			exit;
+		end;
+
+		SendMessageTo('Hello Server', 'ToServer');
+	end;
 
 	repeat
 		ProcessEvents();
+		CheckNetworkActivity();
 		ClearScreen(ColorWhite);
+
+		if MessagesReceived() then
+		begin
+			WriteLn('here');
+			if answer = 'yes' then
+			begin
+				WriteLn('checking: ', ConnectionCount('MyChat'));
+
+				//we are a server
+				for i := 0 to ConnectionCount('MyChat') do
+				begin
+					if HasMessages(RetreiveConnection('MyChat', i)) then
+					begin
+						WriteLn(ReadMessage(RetreiveConnection('MyChat', i)));
+					end;
+				end;
+			end;
+		end;
 
 		RefreshScreen(60);
 	until WindowCloseRequested();
