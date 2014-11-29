@@ -29,6 +29,12 @@ uses
   /// @sn createServerNamed:%s onPort:%s
   function CreateServer(const name: String; port : Word) : ServerSocket;
 
+  /// Returns the Server socket for the give name, or nil/null if there is no
+  /// server with that name.
+  ///
+  /// @lib
+  function ServerNamed(const name: String): ServerSocket;
+
   /// Opens a connection to a server using the IP and port.
   /// Creates a Connection for the purpose of two way messages. 
   /// Returns a new connection if successful or nil/null if it fails.
@@ -77,6 +83,12 @@ uses
   /// @lib
   function ServerHasNewConnection(server: ServerSocket) : Boolean;
 
+  /// Indicates if there is a new connection to a server.
+  ///
+  /// @lib ServerNamedHasNewConnection
+  function ServerHasNewConnection(const name: String) : Boolean;
+
+
   /// Indicates if there is a new connection to any of the servers
   /// that are currently listening for new clients.
   ///
@@ -113,6 +125,12 @@ uses
   /// @lib
   /// @sn broadcastMessage: %s toServer:%s
   procedure BroadcastMessage(const aMsg : String; svr: ServerSocket);
+
+  /// Broadcasts a message to all connections to a given server.
+  ///
+  /// @lib BroadcastMessageToServerNamed
+  /// @sn broadcastMessage: %s toServerNamed:%s
+  procedure BroadcastMessage(const aMsg : String; const name: String);
 
   /// Sends the message over the provided network connection.
   /// Returns true if this succeeds, or false if it fails.
@@ -262,6 +280,11 @@ uses
   ///
   /// @lib
   function ConnectionCount(server: ServerSocket) : LongInt;
+
+  /// Returns the number of connections to a Server socket.
+  ///
+  /// @lib ConnectionCountForServerNamed
+  function ConnectionCount(const name: String) : LongInt;
   
   /// Retrieves the connection at the specified index
   ///
@@ -270,12 +293,26 @@ uses
   /// @lib
   function RetreiveConnection(server: ServerSocket; idx: LongInt) : Connection;
 
+  /// Retrieves the connection at the specified index
+  ///
+  /// @param idx The index of the connection
+  ///
+  /// @lib RetrieveConnectionFromServerNamed
+  function RetreiveConnection(const name: String; idx: LongInt) : Connection;
+
   /// Returns the last connection made to a server socket. When a new client 
   /// has connected to the server, this function can be used to get their
   /// connection.
   ///
   /// @lib
   function LastConnection(server: ServerSocket) : Connection;
+
+  /// Returns the last connection made to a server socket. When a new client 
+  /// has connected to the server, this function can be used to get their
+  /// connection.
+  ///
+  /// @lib LastConnectionForServerNamed
+  function LastConnection(const name: String) : Connection;
 
 //----------------------------------------------------------------------------
 // UDP
@@ -490,9 +527,13 @@ uses
   /// @lib
   function CloseServer ( var svr: ServerSocket ) : Boolean;
 
-  /// Closes the specified Socket, removed it from the Socket Array, and removes
-  /// the identifier from the NamedIndexCollection.
-  /// Refers to TCP Receiver Sockets
+  /// Closes the specified server socket. This will close all connections to
+  /// the server, as will stop listening for new connections.
+  ///
+  /// @lib CloseServerNamed
+  function CloseServer ( const name: String ) : Boolean;
+
+  /// Closes the specified connection.
   ///
   /// @param aConnection  The Connection to close
   ///
@@ -501,6 +542,13 @@ uses
   /// @class Connection
   /// @method Close
   function CloseConnection (var aConnection : Connection) : Boolean;
+
+  /// Closes the specified connection.
+  ///
+  /// @param aConnection  The Connection to close
+  ///
+  /// @lib CloseConnectionNamed
+  function CloseConnection (const name: String) : Boolean;
   
   /// Closes the specified Socket, removed it from the Socket Array, and removes
   /// the identifier from the NamedIndexCollection.
@@ -866,6 +914,17 @@ var
     end;
   end;
 
+  function ServerNamed(const name: String): ServerSocket;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ServerIds, name);
+    if idx >= 0 then
+      result := _Servers[idx]
+    else
+      result := nil;
+  end;
+
   function ConnectionOpen(con: Connection) : Boolean;
   begin
     if Assigned(con) and con^.open then 
@@ -946,6 +1005,11 @@ var
       result := server^.newConnections > 0
     else
       result := false;
+  end;
+
+  function ServerHasNewConnection(const name: String) : Boolean;
+  begin
+    result := ServerHasNewConnection(ServerNamed(name));
   end;
 
   function HasNewConnections() : Boolean;
@@ -1104,6 +1168,11 @@ var
     begin
       SendMessageTo(aMsg, svr^.connections[i]);
     end;
+  end;
+
+  procedure BroadcastMessage(const aMsg : String; const name: String);
+  begin
+    BroadcastMessage(aMsg, ServerNamed(name));
   end;
 
   procedure BroadcastMessage(const aMsg : String);
@@ -1327,6 +1396,14 @@ var
     // free memory
     Dispose(toClose);
     result := True;
+  end;
+
+  function CloseServer ( const name: String ) : Boolean;
+  var
+    svr: ServerSocket;
+  begin
+    svr := ServerNamed(name);
+    result := CloseServer(name);
   end;
 
   function CloseUDPSocketProcedure(const aPort : Word) : Boolean;
@@ -1559,6 +1636,11 @@ var
     result := Length(server^.connections);
   end;
 
+  function ConnectionCount(const name: String) : LongInt;
+  begin
+    result := ConnectionCount(ServerNamed(name));
+  end;
+
   function RetreiveConnection(server: ServerSocket; idx: LongInt) : Connection;
   begin
     result := nil;
@@ -1566,11 +1648,21 @@ var
     result := server^.connections[idx];
   end;
 
+  function RetreiveConnection(const name: String; idx: LongInt) : Connection;
+  begin
+    result := RetreiveConnection(ServerNamed(name), idx);
+  end;
+
   function LastConnection(server: ServerSocket) : Connection;
   begin
     result := nil;
     if (not Assigned(server)) or (Length(server^.connections) <= 0) then exit;
     result := server^.connections[High(server^.connections)];
+  end;
+
+  function LastConnection(const name: String) : Connection;
+  begin
+    result := LastConnection(ServerNamed(name));
   end;
 
 //----------------------------------------------------------------------------
@@ -2222,6 +2314,14 @@ var
     // if (result) then
     //   _Connections := lTmpConnectionArray;
 
+  end;
+
+  function CloseConnection (const name: String) : Boolean;
+  var
+    con: Connection;
+  begin
+    con := ConnectionNamed(name);
+    result := CloseConnection(con);
   end;
 
   function CloseUDPSocket( aPort : Word) : Boolean;
