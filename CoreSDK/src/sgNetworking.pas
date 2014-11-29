@@ -1055,8 +1055,7 @@ var
     received: Integer;
     buffer: PacketData;
   begin
-    if (not Assigned(con)) or (not Assigned(con^.socket)) then begin RaiseWarning('Error checking connection: closed or error.'); exit; end;
-
+    if (not Assigned(con)) or (not Assigned(con^.socket)) then exit;
     if con^.open = false then exit;
 
     // WriteLn(HexStr(con), ' -> ', HexStr(con^.socket) );
@@ -2263,11 +2262,14 @@ var
   var
     socket: psg_network_connection;
   begin
-    con^.open := false;
-    _sg_functions^.network.close_connection(con^.socket);
-    socket := psg_network_connection(con^.socket);
-    Dispose(socket);
-    con^.socket := nil;
+    if con^.open then
+    begin
+      con^.open := false;
+      _sg_functions^.network.close_connection(con^.socket);
+      socket := psg_network_connection(con^.socket);
+      Dispose(socket);
+      con^.socket := nil;
+    end;
   end;
 
   function CloseConnection(var aConnection : Connection) : Boolean;
