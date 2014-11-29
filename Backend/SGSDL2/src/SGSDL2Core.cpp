@@ -60,10 +60,18 @@ void init_sgsdl2()
     
     SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
     
+//    printf("Network port C a-1: %p\n", _functions.network.network_port);
+    
     sgsdl2_init_audio();
+    
+//    printf("Network port C a-2: %p\n", _functions.network.network_port);
+    
     sgsdl2_init_text();
     
+//    printf("Network port C a-3: %p\n", _functions.network.network_port);
+    
     sgsdk_setup_displays();
+//    printf("Network port C a-4: %p\n", _functions.network.network_port);
 }
 
 void sgsdk2_setup_display(int idx, sg_display &disp)
@@ -126,18 +134,31 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
 
 void sgsdk_setup_displays()
 {
+//    printf("Network port C b-1: %p\n", _functions.network.network_port);
     int num_displays = SDL_GetNumVideoDisplays();
     // 0 = zero displays
     // less than 0 = use SDL_GetError() for failure
+    
+//    printf("Network port C b-2: %p\n", _functions.network.network_port);
     if (num_displays <= 0) {
       exit(-1);
     }
+    
+//    printf("Network port C b-3: %p\n", _functions.network.network_port);
+    
     _sgsdk_system_data.num_displays = static_cast<unsigned int>(num_displays);
+    
+//    printf("Network port C b-4: %p\n", _functions.network.network_port);
+//    printf("num displays is: %d\n", _sgsdk_system_data.num_displays);
+//    printf("num displays: %p\n", &_sgsdk_system_data.num_displays);
+//    printf("ports: %p\n", &_functions.network.network_port);
     _sgsdk_system_data.displays = (sg_display *)malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays);
     
     for (unsigned int i = 0; i < _sgsdk_system_data.num_displays; i++)
     {
+//        printf("Network port C b-5: %p\n", _functions.network.network_port);
         sgsdk2_setup_display(static_cast<int>(i), _sgsdk_system_data.displays[i]);
+//        printf("Network port C b-6: %p\n", _functions.network.network_port);
     }
 }
 
@@ -165,6 +186,8 @@ void sgsdl2_finalise()
 extern "C"
 {
     
+#include <stdio.h>
+    
 sg_interface * sg_load(sg_input_callbacks callbacks)
 {
     clear_functions();
@@ -182,6 +205,9 @@ sg_interface * sg_load(sg_input_callbacks callbacks)
     sgsdl2_load_text_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     sgsdl2_load_network_fns(&_functions);
+    
+//    cout << "function size C: " << sizeof(sg_interface) << endl;
+//    printf("Network port C (post load): %p\n", _functions.network.network_port);
     
     return &_functions;
 }

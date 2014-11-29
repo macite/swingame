@@ -1045,11 +1045,10 @@ interface
       DrawAsVectors:        Boolean;
     end;
 
-    /// @enum ConnectionType
+    /// @enum   
     ConnectionType = (
       TCP,
-      UDP,
-      HTTP
+      UDP
     );
 
     /// @enum HttpMethod
@@ -1103,6 +1102,7 @@ interface
     ///@struct ConnectionData
     ///@via_pointer
     ConnectionData = packed record
+      name            : String;
       socket          : Pointer;
       ip              : LongWord;
       port            : LongInt;

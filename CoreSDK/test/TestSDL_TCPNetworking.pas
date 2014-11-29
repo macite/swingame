@@ -1,6 +1,6 @@
 program TestSDL_NetServer;
 uses
-  sgNetworking, sgTypes, sgUtils;
+  sgNetworking, sgTypes, sgUtils, sgDriverSDL2Types;
 
 procedure Pause();
 begin
@@ -19,6 +19,8 @@ var
   lMsgReceived : Boolean = False;
 
   procedure CheckMessages();
+  var
+    i: Integer;
   begin
     WriteLn('Checking for messages');
     CheckNetworkActivity();
@@ -32,12 +34,28 @@ var
         WriteLn(' -> ', ReadMessage(lConA));
       end;
 
+      WriteLn(' Reading messages received for ToSvr client');
+
+      while HasMessages('ToSvr') do
+      begin
+        WriteLn(' -> ', ReadMessage('ToSvr'));
+      end;
+
       WriteLn(' Reading messages received for server');
 
-      while HasMessages(lConB) do
+      // while HasMessages(lConB) do
+      // begin
+      //   WriteLn(' -> ', ReadMessage(lConB));
+      // end;
+
+      for i := 0 to ConnectionCount(svr) - 1 do
       begin
-        WriteLn(' -> ', ReadMessage(lConB));
-      end;    
+        lTmp := RetreiveConnection(svr, i);
+        if HasMessages(lTmp) then
+          WriteLn(' -> ', ReadMessage(lTmp) , ' from ', ConnectionPort(lTmp));
+      end;
+
+      Pause();
     end
     else
     begin
@@ -50,32 +68,39 @@ begin
 
   svr := CreateServer('svr1', SVR1_PORT);
   CreateServer('svr2', SVR2_PORT);
-  // IPv4ToDec('127.0.0.1');
 
   WriteLn('Listening on ', SVR1_PORT, ' and ', SVR2_PORT, '.');
   Pause();
 
-  WriteLn('Attempting to open connection twice: ', Assigned(CreateServer('svr3', SVR2_PORT)));
+  WriteLn('Attempting to open connection twice (should fail): ', Assigned(CreateServer('svr3', SVR2_PORT)));
 
-  WriteLn('Connecting to Port ', SVR1_PORT);
+  WriteLn('Connecting to Port (x2) ', SVR1_PORT);
   lConA := OpenConnection('127.0.0.1', SVR1_PORT);
-  
+  OpenConnection('ToSvr', '127.0.0.1', SVR1_PORT);
+
+  WriteLn('ToSvr is open: ', ConnectionOpen('ToSvr') );
+  WriteLn('Fred is open: ', ConnectionOpen('Fred') );
+
   CheckNetworkActivity();
-  
+
   WriteLn('Are there new connections? ', HasNewConnections());
   WriteLn('New Connection to ', SVR1_PORT, ': ', ServerHasNewConnection(svr));
   WriteLn(' Number of connections: ', ConnectionCount(svr));
 
   lConB := LastConnection(svr);
 
-  WriteLn('Connection Retreived Successfully? : ', Assigned(lConB));
+  CheckNetworkActivity();
+  WriteLn('Are there new connections? ', HasNewConnections());
+  WriteLn('New Connection to ', SVR1_PORT, ': ', ServerHasNewConnection(svr));
+  WriteLn(' Number of connections: ', ConnectionCount(svr));
 
   Pause();
   WriteLn('Checking for messages -- shouldn''t be any');
   CheckMessages();
 
-  Pause();
   WriteLn('Sending messages');
+  SendMessageTo('To server --> from client', lConA);
+  SendMessageTo('To server --> from named client', 'ToSvr');
   SendMessageTo(StringOfChar('7', 509 - 4), lConA);
   SendMessageTo('1234567', lConA);
   SendMessageTo('0987654', lConA);
@@ -87,18 +112,17 @@ begin
 
   Pause();
   CheckMessages();
+  CheckMessages();
+  CheckMessages();
 
-  Pause();
   WriteLn('Closing client - ', CloseConnection(lConA));
   Pause();
 
   WriteLn('Client still: ', Assigned(lConA));
   WriteLn('Test message send (to closed client): ', SendMessageTo(StringOfChar('A', 876), lConB));
-  // WriteLn('Test message send (expect false): ', SendMessageTo('Hello Client', lConA));
 
   Pause();
   WriteLn('Test message send (expect false): ', SendMessageTo(StringOfChar('A', 876), lConB));
-  // WriteLn('Test message send (expect false): ', SendMessageTo('Hello Client', lConA));
 
   WriteLn('Server still connected to client: ', ConnectionOpen(RetreiveConnection(svr, 0)));
 
@@ -120,7 +144,6 @@ begin
 
   CheckMessages();
 
-  Pause();
   WriteLn('Closing server: ', CloseServer(svr));
   Pause();
 
@@ -131,17 +154,23 @@ begin
   svr := CreateServer('svr1', SVR1_PORT);
 
   ReconnectConnection(lConA);
+  ReconnectConnection('ToSvr');
+
   CheckNetworkActivity();
   lConB := LastConnection(svr);
+
+  CheckNetworkActivity();
 
   BroadcastMessage('Hello Everyone');
   BroadcastMessage('Hello Everyone on svr', svr);
 
   SendMessageTo('Another message --> to server', lConA);
   SendMessageTo('Another message --> to client', lConB);
+  SendMessageTo('Another message --> from named client', 'ToSvr');
+  SendMessageTo('Another message --> to named client', LastConnection(svr));
 
   CheckMessages();
-  Pause();
+  CheckMessages();
 
   WriteLn('Close all');
   CloseAllConnections();

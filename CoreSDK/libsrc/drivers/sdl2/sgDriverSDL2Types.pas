@@ -298,6 +298,7 @@ interface
 			send_bytes: 			sg_network_data_fn;
         	close_connection: 		sg_connection_fn;
         	network_address: 		sg_connection_uint_fn;
+        	network_port: 			sg_connection_uint_fn;
         	accept_new_connection: 	sg_accept_connection_fn;
         	network_has_data:		sg_uint_fn;
         	connection_has_data:	sg_connection_uint_fn;

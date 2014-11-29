@@ -5,13 +5,9 @@
 // This private SwinGame library unit is responsible for managing named
 // collections of indexes.
 //
-// Change History:
+// This can be used to track names of resources in an array -- though the two
+// need to be kept in sync (ensure add/remove update both).
 //
-// Version 3.0:
-// - 2010-02-05: Aaron  : Added AddNamesToCollection
-// - 2010-02-03: Aaron  : Added NamedIndexCollectionNameList
-// - 2010-01-20: David  : Added NamesOf to return names in collection
-// - 2009-12-15: Andrew : Created
 //=============================================================================
 
 unit sgNamedIndexCollection;
@@ -38,6 +34,7 @@ interface
   /// -1 if the add fails.
   ///
   function AddName(var col: NamedIndexCollection; name: String): Integer;
+
   //adds more than one name delimited by ',' i.e. name1,name2..
   Procedure AddNamesToCollection(var col: NamedIndexCollection; names: String);
 
@@ -156,17 +153,21 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
     name: String;
     i: Integer;
   begin
+    // WriteLn('remove name');
     hash := TStringHash(col.ids);
     if not Assigned(hash) then exit;
 
     name := NameAt(col, idx);
+    // WriteLn(name);
     hash.remove(name).Free();
 
     for i := idx to High(col.names) - 1 do
     begin
-      col.names[idx] := col.names[idx + 1];
-      TIntegerContainer(hash.values[col.names[idx]]).Value := i;
+      // WriteLn(i);
+      col.names[i] := col.names[i + 1];
+      TIntegerContainer(hash.values[col.names[i]]).Value := i;
     end;
+    // WriteLn('length: ', Length(col.names));
     SetLength(col.names, Length(col.names) - 1);
   end;
   

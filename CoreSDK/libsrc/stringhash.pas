@@ -174,7 +174,7 @@ implementation
     try
       result := fHashTable.remove(s);
     finally
-      //s.free;
+      // s.free; //freed in fHashTable
     end;
   end;
 

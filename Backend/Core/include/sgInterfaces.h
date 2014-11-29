@@ -308,10 +308,10 @@ extern "C" {
         sg_network_data_fn * send_bytes;
         sg_connection_fn * close_connection;
         sg_connection_uint_fn * network_address;
+        sg_connection_uint_fn * network_port;
         sg_accept_connection_fn * accept_new_connection;
         sg_uint_fn * network_has_data;
         sg_connection_uint_fn * connection_has_data;
-        
     } sg_network_interface;
 
     //

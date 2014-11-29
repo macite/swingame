@@ -8,6 +8,8 @@
 
 #include "SGSDL2Network.h"
 
+#include <stdio.h>
+
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_net.h>
@@ -37,7 +39,8 @@ sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned shor
     {
         result.kind = SGCK_TCP;
         result._socket = client;
-        SDLNet_TCP_AddSocket(_sockets, client);
+        if (host)
+            SDLNet_TCP_AddSocket(_sockets, client);
     }
     else
     {
@@ -73,6 +76,13 @@ unsigned int sgsdl2_network_address(sg_network_connection *con)
     IPaddress *remote;
     remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
     return SDLNet_Read32(&remote->host);
+}
+
+unsigned int sgsdl2_get_network_port(sg_network_connection *con)
+{
+    IPaddress *remote;
+    remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    return SDLNet_Read16(&remote->port);
 }
 
 sg_network_connection sgsdl2_accept_connection(sg_network_connection *con)
@@ -126,4 +136,7 @@ void sgsdl2_load_network_fns(sg_interface *functions)
     functions->network.accept_new_connection = &sgsdl2_accept_connection;
     functions->network.network_has_data = &sgsdl2_network_has_data;
     functions->network.connection_has_data = &sgsdl2_connection_has_data;
+    functions->network.network_port = &sgsdl2_get_network_port;
+    
+//    printf("Network port C: %p = %p\n", functions->network.network_port, &sgsdl2_get_network_port);
 }

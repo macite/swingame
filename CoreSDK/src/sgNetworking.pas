@@ -40,11 +40,37 @@ uses
   /// @sn openConnection:%s port:%s
   function OpenConnection(const host: String; port: Word) : Connection;
 
+  /// Opens a connection to a server using the IP and port.
+  /// Creates a Connection for the purpose of two way messages. 
+  /// Returns a new connection if successful or nil/null if it fails.
+  /// This version allows you to name the connection, so that you can
+  /// access it via its name.
+  ///
+  /// @param name The name of the connection, used to access it in networking calls
+  /// @param aIP The IP Address or DNS name of the host
+  /// @param aPort The port number the server is using to listen for connections
+  ///
+  /// @lib OpenConnectionNamed
+  /// @sn openConnectionNamed:%s toHost:%s port:%s
+  function OpenConnection(const name, host: String; port: Word) : Connection;
+
   /// You can use this to check if a connection is currently open.
   /// A connection may be closed by the remote machine.
   ///
   /// @lib
   function ConnectionOpen(con: Connection) : Boolean;
+
+  /// You can use this to check if a connection is currently open.
+  /// A connection may be closed by the remote machine.
+  ///
+  /// @lib ConnectionOpenNamed
+  function ConnectionOpen(const name: String) : Boolean;
+
+  /// Returns the connection for the give name, or nil/null if there is no
+  /// connection with that name.
+  ///
+  /// @lib
+  function ConnectionNamed(const name: String): Connection;
 
   /// Indicates if there is a new connection to a server.
   ///
@@ -64,6 +90,12 @@ uses
   /// @class Connection
   /// @method Reconnect
   procedure ReconnectConnection(aConnection : Connection);
+
+  /// Attempts to recconnect a connection that was closed using the IP and port
+  /// stored in the connection. Finds the connection using its name.
+  ///
+  /// @lib ReconnectConnectionNamed
+  procedure ReconnectConnection(const name: String);
    
   /// Checks if any messages have been received for any open connections. 
   /// Messages received are added to the connection they were received from.
@@ -95,6 +127,16 @@ uses
   /// @method SendMessage
   /// @self 2
   function SendMessageTo(const aMsg : String; aConnection : Connection) : Boolean;
+
+  /// Sends the message over the provided network connection (found from its name).
+  /// Returns true if this succeeds, or false if it fails.
+  ///
+  /// @param aMsg The message to be sent
+  /// @param name The name of the connection to send the message over
+  ///
+  /// @lib
+  /// @sn sendMessage:%s toConnectionNamed:%s
+  function SendMessageTo(const aMsg : String; name: String) : Boolean;
 
 
   /// This procedure checks for any network activity.
@@ -296,70 +338,102 @@ uses
 // Messages and Connection Data Access
 //----------------------------------------------------------------------------
 
-  /// Gets the Decimal IP of the destination for the connection
+  /// Gets the IP address (an number) of the destination for the connection.
   ///
-  /// @param aConnection The connection to extract data from
+  /// @param aConnection The connection to get the ip address from
   ///
   /// @lib
+  ///
   /// @class Connection
-  /// @method ConnectionIP
-  /// @sn connectionIP:%s
+  /// @method IpAddress
   function  ConnectionIP(aConnection : Connection) : LongWord;
+
+  /// Gets the IP address (an number) of the destination for the connection (found by its name).
+  ///
+  /// @param name The name of the connection to get the ip address from
+  ///
+  /// @lib ConnectionIPNamed
+  function  ConnectionIP(const name: String) : LongWord;
 
   /// Gets the Port of the destination for the connectiom
   ///
-  /// @param aConnection The connection to extract data from
+  /// @param aConnection The connection to get the port from
   ///
   /// @lib
+  ///
   /// @class Connection
-  /// @method ConnectionPort
-  /// @sn connectionPort:%s
+  /// @method Port
   function  ConnectionPort(aConnection : Connection) : Word;
+
+  /// Gets the Port of the destination for the connectiom
+  ///
+  /// @param aConnection The connection to get the port from
+  ///
+  /// @lib ConnectionPortNamed
+  function  ConnectionPort(const name: String) : Word;
+
 
   /// Returns true if a connection has messages that you can read.
   /// Use this to control a loop that reads all of the messages from
   /// a connection.
   ///
   /// @lib
-  function HasMessages(con: Connection) : Boolean; 
+  function HasMessages(con: Connection) : Boolean;
 
-  /// Dequeues the Top (Oldest) Message
-  ///
-  /// @param aConnection The connection to extract data from
+  /// Returns true if a connection (found via its name) has messages that you can read.
+  /// Use this to control a loop that reads all of the messages from
+  /// a connection.
   ///
   /// @lib
+  function HasMessages(const name: String) : Boolean; 
+
+  /// Reads the next message that was sent to the connection. You use this
+  /// to read the values that were sent to this connection.
+  ///
+  /// @param aConnection The connection to read the message from
+  ///
+  /// @lib
+  ///
   /// @class Connection
   /// @method ReadMessage
-  /// @sn readMessage:%s
-  function ReadMessage            (aConnection : Connection) : String ;
+  function ReadMessage(aConnection : Connection): String ;
   
-  /// Dequeues the Last (Newest) Message
+  /// Reads the next message that was sent to the connection (found from its name). You use this
+  /// to read the values that were sent to this connection.
   ///
-  /// @param aConnection The connection to extract data from
+  /// @param name The name of the connection to read the message from
+  ///
+  /// @lib ReadMessageNamed
+  function ReadMessage(const name: String): String ;
+
+  /// Clears all of the messages from a connection.
   ///
   /// @lib
+  ///
   /// @class Connection
-  /// @method ReadLastMessage
-  /// @sn readLastMessage:%s
-  function ReadLastMessage(aConnection : Connection) : String;
+  /// @method ClearMessages
+  procedure ClearMessages(aConnection : Connection) ;
 
   /// Clears the Message Queue
   ///
-  /// @lib
-  /// @sn clearMessageQueue:%s
-  ///
-  /// @class Connection
-  /// @method ClearMessageQueue
-  procedure ClearMessageQueue          (aConnection : Connection) ;
+  /// @lib ClearMessagesNamed
+  procedure ClearMessages(const name: String);
 
-  /// Gets the Size of the Message Queue
+  /// Gets the number of messages waiting to be read from this connection
   ///
   /// @lib
   /// @sn messageCountOnConnection:%s
   ///
   /// @class Connection
   /// @method MessageCount
-  function  MessageCount            (aConnection : Connection) : LongInt;
+  function  MessageCount(aConnection : Connection) : LongInt;
+
+  /// Gets the number of messages waiting to be read from the connection (found via its named)
+  ///
+  /// @lib
+  /// @sn messageCountOnConnectionNamed:%s
+  function  MessageCount(const name: String) : LongInt;
+
 
 
 //----------------------------------------------------------------------------
@@ -399,7 +473,12 @@ uses
   ///
   /// @lib
   /// @sn iPv4ToDec:%s
-  function IPv4ToDec(aIP : String) : LongWord; 
+  function IPv4ToDec(aIP : String) : LongWord;
+
+  /// Converts an integer representation of a ip address to a string representation.
+  ///
+  /// @lib
+  function IPv4ToStr(ip : LongWord) : String; 
 
 //----------------------------------------------------------------------------
 // Close
@@ -482,6 +561,9 @@ type
 var
   _Servers                : ServerArray;
   _Connections            : ConnectionArray;
+
+  _ServerIds      : NamedIndexCollection;
+  _ConnectionIds  : NamedIndexCollection;
   
   // _UDPListenSockets       : UDPSocketArray;
   // _UDPSocketIDs           : NamedIndexCollection;
@@ -498,9 +580,10 @@ var
   procedure EnqueueMessage( const aMsg : String; aConnection : Connection); forward;
   procedure FreeConnection(var aConnection : Connection); forward;
 
-  function CreateConnection() : Connection;
+  function CreateConnection(const name: String) : Connection;
   begin
     New(result);
+    result^.name        := name;
     result^.socket      := nil;
     result^.ip          := 0;
     result^.stringIP    := '';
@@ -669,14 +752,29 @@ var
     end;
   end;  
 
-  function OpenConnection(const host: String; port: Word) : Connection;
+  function NameForConnection(const host: String; port: Word) : String;
   begin
-    result := CreateConnection();
+    result := host + ':' + IntToStr(port);
+  end;
+
+  function OpenConnection(const name, host: String; port: Word) : Connection;
+  var
+    idx: Integer;
+  begin
+    result := CreateConnection(name);
 
     if EstablishConnection(result, host, port) then
     begin
       SetLength(_Connections, Length(_Connections) + 1);
-      _Connections[High(_Connections)] := result;
+      idx := AddName(_ConnectionIds, name);
+      // WriteLn('Adding at idx: ', idx);
+
+      if idx <> High(_Connections) then
+      begin
+        RaiseWarning('ERROR adding connection -- named index collection out of sync. Contact SwinGame dev team.');
+      end;
+      // WriteLn('Connection is ', HexStr(result));
+      _Connections[idx] := result;
     end
     else
     begin
@@ -684,6 +782,23 @@ var
       result := nil;
     end;
   end;
+
+  function OpenConnection(const host: String; port: Word) : Connection;
+  begin
+    result := OpenConnection(NameForConnection(host, port), host, port);
+  end;
+
+  function ConnectionNamed(const name: String): Connection;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := _Connections[idx]
+    else
+      result := nil;
+  end;
+
 
   procedure ReconnectConnection(aConnection : Connection);
   var
@@ -707,6 +822,12 @@ var
       aConnection^.open := false;
     end;
   end;
+
+  procedure ReconnectConnection(const name: String);
+  begin
+    ReconnectConnection(ConnectionNamed(name));  
+  end;
+
 
   function CreateServer(const name: String; port : Word) : ServerSocket;
   var
@@ -746,26 +867,49 @@ var
       result := false;
   end;
 
+  function ConnectionOpen(const name: String) : Boolean;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := ConnectionOpen(_Connections[idx])
+    else
+      result := false;
+  end;
+
   function AcceptNewConnection(server: ServerSocket) : Boolean;
   var
     con : sg_network_connection;
     conP: psg_network_connection;
     client: Connection;
+    ip, port: Integer;
   //   lTempSocket : PTCPSocket = nil;
   //   lNewConnection : Connection;
   //   i : LongInt;
   begin  
     result := false;
     server^.newConnections := 0;
+    // WriteLn('Network port Pascal 0: ', HexStr(_sg_functions^.network.network_port));
     con := _sg_functions^.network.accept_new_connection(server^.socket);
 
     // WriteLn('svr client con = ', HexStr(con._socket), ' ', con.kind);
 
     if Assigned(con._socket) and (con.kind = SGCK_TCP) then
     begin
-      client := CreateConnection();
-      client^.IP := _sg_functions^.network.network_address(@con);
-      client^.port := server^.port;
+      // WriteLn('Network port Pascal 1: ', HexStr(_sg_functions^.network.network_port));
+      ip := _sg_functions^.network.network_address(@con);
+
+      // WriteLn('Network port Pascal 2: ', HexStr(_sg_functions^.network.network_port));
+
+      port := _sg_functions^.network.network_port(@con);
+
+      client := CreateConnection(server^.name + '->' + NameForConnection(IPv4ToStr(ip), port));
+      client^.IP := ip;
+      client^.port := port;
+
+      // WriteLn(client^.name, ' ', client^.port);
+
       New(conP);
       conP^ := con;
       client^.socket := conP;
@@ -774,6 +918,7 @@ var
       server^.connections[High(server^.connections)] := client;
       server^.newConnections := 1;
       result := true;
+      // WriteLn('Added ', HexStr(client), ' to ', server^.name);
     end;
   end;
 
@@ -821,6 +966,9 @@ var
     received: Integer;
     buffer: PacketData;
   begin
+    if (not Assigned(con)) or (not Assigned(con^.socket)) then begin RaiseWarning('Error checking connection: closed or error.'); exit; end;
+
+    // WriteLn(HexStr(con), ' -> ', HexStr(con^.socket) );
     if _sg_functions^.network.connection_has_data(con^.socket) > 0 then
     begin
       // WriteLn('getting data');
@@ -837,7 +985,7 @@ var
     AcceptAllNewConnections();
 
     // check if there is data on the network
-    if _sg_functions^.network.network_has_data() > 0 then
+    while _sg_functions^.network.network_has_data() > 0 do
     begin
       // WriteLn('should be some data...');
       for svr := 0 to High(_servers) do
@@ -926,6 +1074,17 @@ var
       aConnection^.open := false;
     end;
     // WriteLn('bye');
+  end;
+
+  function SendMessageTo(const aMsg : String; name: String) : Boolean;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := SendMessageTo(aMsg, _Connections[idx])
+    else
+      result := false;
   end;
 
   procedure BroadcastMessage(const aMsg : String; svr: ServerSocket);
@@ -1309,6 +1468,16 @@ var
     // WriteLn('Result: ', result);
   end;
 
+  function IPv4ToStr(ip : LongWord) : String;
+  var
+    parts: Bytes;
+  begin
+    parts := Bytes(ip);
+
+    result := IntToStr(parts[3]) + '.' + IntToStr(parts[2]) + '.' + IntToStr(parts[1]) + '.' + IntToStr(parts[0]);
+    // WriteLn('Result: ', result);
+  end;
+
   function Encode(const c : Byte) : Char;
   begin
     if (c < 26) then
@@ -1442,6 +1611,17 @@ var
     else result := con^.msgCount > 0;
   end;
 
+  function HasMessages(const name: String) : Boolean;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := HasMessages(_Connections[idx])
+    else
+      result := false;
+  end;
+
   function ReadMessage(aConnection : Connection) : String;
   var
     lTmp : MessagePtr;
@@ -1473,43 +1653,18 @@ var
     end;
   end;
   
-  function ReadLastMessage(aConnection : Connection) : String;
+  function ReadMessage(const name: String): String;
   var
-    lTmp : MessagePtr;
+    idx: Integer;
   begin
-    result := '';      
-    if not Assigned(aConnection) or (aConnection^.msgCount = 0) then exit;
-    if not Assigned(aConnection^.lastMsg) then begin aConnection^.firstMsg := nil; exit; end; 
-
-    // Get the message text from the last node
-    result := aConnection^.lastMsg^.data;
-
-    // Remember so we can dispose
-    lTmp := aConnection^.lastMsg;
-
-    // Change last message
-    aConnection^.lastMsg := aConnection^.lastMsg^.prev;
-
-    // Delete old node
-    Dispose(lTmp);
-    aConnection^.msgCount -= 1;
-
-    // If there is a node, then remove its next
-    if Assigned(aConnection^.lastMsg) then
-    begin
-      // New last message is not followed by anything
-      aConnection^.lastMsg^.next := nil;
-    end;
-
-    if aConnection^.msgCount = 0 then
-    begin
-      aConnection^.lastMsg := nil;
-      aConnection^.firstMsg := nil;
-      exit;
-    end;
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := ReadMessage(_Connections[idx])
+    else
+      result := '';
   end;
   
-  procedure ClearMessageQueue(aConnection : Connection);
+  procedure ClearMessages(aConnection : Connection);
   var
     i : LongInt;
   begin
@@ -1521,11 +1676,31 @@ var
     end;
   end;  
 
+  procedure ClearMessages(const name: String);
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      ClearMessages(_Connections[idx]);
+  end;
+
   function ConnectionIP(aConnection : Connection) : LongWord;
   begin
     result := 0;
     if not Assigned(aConnection) then exit;
     result := aConnection^.ip;
+  end;
+
+  function ConnectionIP(const name: String) : LongWord;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := ConnectionIP(_Connections[idx])
+    else
+      result := 0;
   end;
 
   function ConnectionPort(aConnection : Connection) : Word;
@@ -1535,11 +1710,33 @@ var
     result := aConnection^.port;
   end;
 
+  function ConnectionPort(const name: String) : Word;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := ConnectionPort(_Connections[idx])
+    else
+      result := 0;
+  end;
+
   function MessageCount(aConnection : Connection) : LongInt;
   begin
     result := 0;
     if not Assigned(aConnection) then exit;
     result := aConnection^.msgCount;
+  end;
+
+  function MessageCount(const name: String) : LongInt;
+  var
+    idx: Integer;
+  begin
+    idx := IndexOf(_ConnectionIds, name);
+    if idx >= 0 then
+      result := MessageCount(_Connections[idx])
+    else
+      result := 0;
   end;
 
 //----------------------------------------------------------------------------
@@ -1914,6 +2111,7 @@ var
   begin
     for result := 0 to High(list) do
     begin
+      // WriteLn('Checking ', HexStr(con), ' = ', HexStr(list[result]));
       if list[result] = con then exit;
     end;
     result := -1;
@@ -1928,41 +2126,69 @@ var
       list[i] := list[i + 1];
     end;
     SetLength(list, Length(list) - 1);
+    // WriteLn('There are now ', Length(list), ' connections.');
   end;
 
   function CloseConnection(var aConnection : Connection) : Boolean;
   var
     idx, svr: Integer;
+    name: String;
+    toClose: Connection;
   begin
+    // WriteLn('Closing connection ', HexStr(aConnection));
     result := false;
-    if not Assigned(aConnection) then exit;
+    if not Assigned(aConnection) then begin WriteLn('Error freeing connection'); exit; end;
 
+    // toClose := aConnection; // as it may be removed from 
+    name := aConnection^.name;
     aConnection^.open := false;
 
-    idx := IndexOfConnection(aConnection, _Connections);
+    // clear all of the messages
+    ClearMessages(aConnection);
+
+    // close socket
+    _sg_functions^.network.close_connection(aConnection^.socket);
+
+    toClose := aConnection; //so we keep track of the pointer, in case we are removing from array
+
+    idx := IndexOf(_ConnectionIds, toClose^.name);
+
     if idx > -1 then
     begin
+      // nil aConnection before removing from array in case we have the reference to the array
+      // in which case it would corrupt the array's new value
+      aConnection := nil;
       result := true;
+      RemoveName(_ConnectionIds, idx);
+      // WriteLn('Removing from clients...');
       RemoveConnection(idx, _Connections);
     end
     else // check if the connection is a client of a server
     begin
+      // WriteLn('searching servers.');
       for svr := 0 to High(_Servers) do
       begin
-        idx := IndexOfConnection(aConnection, _Servers[svr]^.Connections);
+        idx := IndexOfConnection(toClose, _Servers[svr]^.Connections);
+        // WriteLn('Server:', svr, ' idx:', idx);
         if idx > -1 then
         begin
           result := true;
+          // WriteLn('Removing from server...');
           RemoveConnection(idx, _Servers[svr]^.Connections);
+          // now nil the pointer...
+          aConnection := nil;
           break;
         end
       end;
     end;
 
-    // clear all of the messages
-    _sg_functions^.network.close_connection(aConnection^.socket);
-    ClearMessageQueue(aConnection);
-    FreeConnection(aConnection);
+    FreeConnection(toClose);
+
+
+    // WriteLn('here 4: ', HexStr(aConnection));
+    // WriteLn('Close connection: ', aConnection^.name);
+    // WriteLn(' Socket: ', HexStr(aConnection^.socket));
+    // ReadLn();
 
     // if (Length(_Connections) = 0) or (not Assigned(aConnection)) then begin RaiseWarning('SDL 1.2 - CloseConnectionProcedure: Could Not Close Connection.'); exit; end;
     // SetLength(lTmpConnectionArray, Length(_Connections) - 1);
@@ -1984,7 +2210,7 @@ var
     // end;    
     // if aCloseUDPSocket and Assigned(aConnection^.socket) then 
     //   CloseUDPSocket(aConnection^.socket);
-    // ClearMessageQueue(aConnection);
+    // ClearMessages(aConnection);
     // FreeConnection(aConnection);
     // if (result) then
     //   _Connections := lTmpConnectionArray;
@@ -2003,35 +2229,34 @@ var
 
   procedure FreeConnection(var aConnection : Connection);
   begin
-    ClearMessageQueue(aConnection);
+    ClearMessages(aConnection);
     CallFreeNotifier(aConnection);
     Dispose(aConnection);
     aConnection := nil;
   end;
 
   procedure ReleaseAllConnections();
-  // var
-  //   i : LongInt;
   begin
-    //NetworkingDriver.FreeAllNetworkingResources();
-
-    // for i := 0 to _NewConnectionCount - 1 do
-    //   FetchConnection();
-    // _NewConnectionCount := 0;
+    CloseAllConnections();
+    CloseAllServers();
   end;
 
 //=============================================================================
 
   initialization 
   begin
-    // _SocketSet := SDLNET_AllocSocketSet(16);
-    // InitNamedIndexCollection(_UDPSocketIDs);
-    // InitNamedIndexCollection(_UDPConnectionIDs);
+    // Create the dictionaries used to manage the connection and server names
+    // WriteLn('Network port Pascal b-0: ', HexStr(_sg_functions^.network.network_port));
+    InitNamedIndexCollection(_ConnectionIds);
+    InitNamedIndexCollection(_ServerIds);
+    // WriteLn('Network port Pascal b-1: ', HexStr(_sg_functions^.network.network_port));
   end;
 
   finalization
   begin
-    CloseAllConnections();
-    CloseAllServers();
+    ReleaseAllConnections();
+
+    FreeNamedIndexCollection(_ConnectionIds);
+    FreeNamedIndexCollection(_ServerIds);
   end;
 end.

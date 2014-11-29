@@ -318,5 +318,7 @@ implementation
 
         callbacks       := GetInputCallbackFunction();
         _sg_functions   := sg_load(callbacks);
+        // WriteLn('Size of functions Pascal: ', sizeof(sg_interface));
+        // WriteLn('Network port Pascal: ', HexStr(_sg_functions^.network.network_port));
 	end;
 end.
