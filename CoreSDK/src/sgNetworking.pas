@@ -832,6 +832,7 @@ var
   function CreateServer(const name: String; port : Word) : ServerSocket;
   var
     con : psg_network_connection;
+    idx: Integer;
   begin
     result := nil;
     New(con);
@@ -850,6 +851,12 @@ var
       SetLength(result^.connections, 0);
 
       SetLength(_Servers, Length(_Servers) + 1);
+
+      idx := AddName(_ServerIds, name);
+      if idx <> High(_Servers) then
+      begin
+        RaiseWarning('ERROR adding server -- named index collection out of sync. Contact SwinGame dev team.');
+      end;
       _Servers[High(_Servers)] := result;
     end
     else
@@ -1286,40 +1293,40 @@ var
   
   function CloseServer ( var svr: ServerSocket ) : Boolean;
   var
-    i: LongInt;
-    found: Boolean;
+    i, idx: LongInt;
+    toClose: ServerSocket;
   begin
     result := False;
     if not Assigned(svr) then exit;
 
+    // copy pointer in case parameter is also array element
+    toClose := svr;
+
     // close all connections to the server
-    while Length(svr^.connections) > 0 do
+    while Length(toClose^.connections) > 0 do
     begin
-      CloseConnection(svr^.connections[High(svr^.connections)]);
+      CloseConnection(toClose^.connections[High(toClose^.connections)]);
     end;
 
     // close the socket
-    _sg_functions^.network.close_connection(svr^.socket);
+    _sg_functions^.network.close_connection(toClose^.socket);
+
+    idx := IndexOf(_ServerIds, toClose^.name);
+    if _Servers[idx] <> toClose then RaiseWarning('Error closing server, names out of sync. Contact SwinGame dev team.');
+    RemoveName(_ServerIds, idx);
 
     // remove from list of servers
-    found := false;
-    for i := 0 to High(_Servers) do
+    for i := idx + 1 to High(_Servers) do
     begin
-      if found then
-      begin
-        _Servers[i-1] := _Servers[i];
-      end
-      else
-      begin
-        found := svr = _Servers[i];
-      end;
+      _Servers[i-1] := _Servers[i];
     end;
+    // nil at this point -- in case it is in the array... cannot be earlier as it may be needed
+    svr := nil;
     SetLength(_Servers, Length(_Servers) - 1);
 
     // free memory
-    Dispose(svr);
-    svr := nil;
-    result := found;    
+    Dispose(toClose);
+    result := True;
   end;
 
   function CloseUDPSocketProcedure(const aPort : Word) : Boolean;
