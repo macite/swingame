@@ -132,21 +132,11 @@ begin
 		CheckNetworkActivity();
 		ClearScreen(ColorWhite);
 
-		if MessagesReceived() then
+		while HasMessages() do
 		begin
-			WriteLn('here');
 			if answer = 'yes' then
 			begin
-				WriteLn('checking: ', ConnectionCount('MyChat'));
-
-				//we are a server
-				for i := 0 to ConnectionCount('MyChat') do
-				begin
-					if HasMessages(RetreiveConnection('MyChat', i)) then
-					begin
-						WriteLn(ReadMessage(RetreiveConnection('MyChat', i)));
-					end;
-				end;
+				WriteLn(ReadMessage('MyChat'));
 			end;
 		end;
 

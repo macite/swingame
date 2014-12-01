@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-11-29 18:38:41.185192
+// SwinGame.pas was generated on 2014-12-01 12:18:22.361139
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2019,10 +2019,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Encodes a string from username:password format to Base64
   function EncodeBase64(const aData: String): String; overload;
 
+  // Checks if any messages have been received for any open connections. 
+  // Messages received are added to the connection they were received from.
+  function HasMessages(): Boolean; overload;
+
   // Returns true if a connection has messages that you can read.
   // Use this to control a loop that reads all of the messages from
   // a connection.
   function HasMessages(con: Connection): Boolean; overload;
+
+  // Returns true if a server has messages that you can read.
+  // Use this to control a loop that reads all of the messages from
+  // a server.
+  function HasMessages(svr: ServerSocket): Boolean; overload;
 
   // Returns true if a connection (found via its name) has messages that you can read.
   // Use this to control a loop that reads all of the messages from
@@ -2097,10 +2106,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Gets the number of messages waiting to be read from this connection
   function MessageCount(aConnection: Connection): Longint; overload;
 
-  // Checks if any messages have been received for any open connections. 
-  // Messages received are added to the connection they were received from.
-  function MessagesReceived(): Boolean; overload;
-
   // Returns the caller's IP.
   function MyIP(): String; overload;
 
@@ -2116,12 +2121,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // access it via its name.
   function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
 
+  // Reads the next message from any of the clients that have connected to the server.
+  function ReadMessage(svr: ServerSocket): String; overload;
+
   // Reads the next message that was sent to the connection. You use this
   // to read the values that were sent to this connection.
   function ReadMessage(aConnection: Connection): String; overload;
 
-  // Reads the next message that was sent to the connection (found from its name). You use this
-  // to read the values that were sent to this connection.
+  // Reads the next message that was sent to the connection or server (found from its name).
+  // You use this to read the values that were sent to this connection or server.
   function ReadMessage(const name: String): String; overload;
 
   // Attempts to recconnect a connection that was closed using the IP and port
@@ -6452,9 +6460,19 @@ implementation
     result := sgNetworking.EncodeBase64(aData);
   end;
 
+  function HasMessages(): Boolean; overload;
+  begin
+    result := sgNetworking.HasMessages();
+  end;
+
   function HasMessages(con: Connection): Boolean; overload;
   begin
     result := sgNetworking.HasMessages(con);
+  end;
+
+  function HasMessages(svr: ServerSocket): Boolean; overload;
+  begin
+    result := sgNetworking.HasMessages(svr);
   end;
 
   function HasMessages(const name: String): Boolean; overload;
@@ -6567,11 +6585,6 @@ implementation
     result := sgNetworking.MessageCount(aConnection);
   end;
 
-  function MessagesReceived(): Boolean; overload;
-  begin
-    result := sgNetworking.MessagesReceived();
-  end;
-
   function MyIP(): String; overload;
   begin
     result := sgNetworking.MyIP();
@@ -6585,6 +6598,11 @@ implementation
   function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
   begin
     result := sgNetworking.OpenConnection(name,host,port);
+  end;
+
+  function ReadMessage(svr: ServerSocket): String; overload;
+  begin
+    result := sgNetworking.ReadMessage(svr);
   end;
 
   function ReadMessage(aConnection: Connection): String; overload;

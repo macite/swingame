@@ -113,7 +113,7 @@ uses
   /// Messages received are added to the connection they were received from.
   ///
   /// @lib
-  function MessagesReceived () : Boolean;
+  function HasMessages () : Boolean;
 
   /// Broadcasts a message to all connections (all servers and opened connections).
   ///
@@ -422,19 +422,25 @@ uses
   /// @lib ConnectionPortNamed
   function  ConnectionPort(const name: String) : Word;
 
+  /// Returns true if a server has messages that you can read.
+  /// Use this to control a loop that reads all of the messages from
+  /// a server.
+  ///
+  /// @lib HasMessageOnServer
+  function HasMessages(svr: ServerSocket) : Boolean;
 
   /// Returns true if a connection has messages that you can read.
   /// Use this to control a loop that reads all of the messages from
   /// a connection.
   ///
-  /// @lib
+  /// @lib HasMessageOnConnection
   function HasMessages(con: Connection) : Boolean;
 
   /// Returns true if a connection (found via its name) has messages that you can read.
   /// Use this to control a loop that reads all of the messages from
   /// a connection.
   ///
-  /// @lib HasMessageConnectionNamed
+  /// @lib HasMessageOnConnectionNamed
   function HasMessages(const name: String) : Boolean; 
 
   /// Reads the next message that was sent to the connection. You use this
@@ -448,13 +454,20 @@ uses
   /// @method ReadMessage
   function ReadMessage(aConnection : Connection): String ;
   
-  /// Reads the next message that was sent to the connection (found from its name). You use this
-  /// to read the values that were sent to this connection.
+  /// Reads the next message that was sent to the connection or server (found from its name).
+  /// You use this to read the values that were sent to this connection or server.
   ///
-  /// @param name The name of the connection to read the message from
+  /// @param name The name of the connection or server to read the message from
   ///
   /// @lib ReadMessageNamed
   function ReadMessage(const name: String): String ;
+
+  /// Reads the next message from any of the clients that have connected to the server.
+  ///
+  /// @param svr The server to read the message from.
+  ///
+  /// @lib ReadMessageFromServer
+  function ReadMessage(svr: ServerSocket): String;
 
   /// Clears all of the messages from a connection.
   ///
@@ -1100,20 +1113,17 @@ var
     end;
   end;
 
-  function MessagesReceived() : Boolean;
+  function HasMessages() : Boolean;
   var
     svr, i: Integer;
   begin
     // WriteLn('should be some data...');
     for svr := 0 to High(_servers) do
     begin
-      for i := 0 to High(_servers[svr]^.connections) do
+      if HasMessages(_servers[svr]) then
       begin
-        if MessageCount(_servers[svr]^.connections[i]) > 0 then
-        begin
-          result := true;
-          exit;
-        end;
+        result := true;
+        exit;
       end;
     end;
 
@@ -1749,7 +1759,28 @@ var
     if idx >= 0 then
       result := HasMessages(_Connections[idx])
     else
-      result := false;
+    begin
+      result := HasMessages(ServerNamed(name));
+    end;
+  end;
+
+  function HasMessages(svr: ServerSocket) : Boolean;
+  var
+    i: Integer;
+  begin
+    result := false;
+
+    if Assigned(svr) then
+    begin
+      for i := 0 to High(svr^.connections) do
+      begin
+        if MessageCount(svr^.connections[i]) > 0 then
+        begin
+          result := true;
+          exit;
+        end;
+      end;
+    end;
   end;
 
   function ReadMessage(aConnection : Connection) : String;
@@ -1791,7 +1822,24 @@ var
     if idx >= 0 then
       result := ReadMessage(_Connections[idx])
     else
-      result := '';
+      result := ReadMessage(ServerNamed(name));
+  end;
+
+  function ReadMessage(svr: ServerSocket): String;
+  var
+    i: Integer;
+    con: Connection;
+  begin
+    for i := 0 to ConnectionCount(svr) - 1 do
+    begin
+      con := RetreiveConnection(svr, i);
+      if HasMessages(con) then
+      begin
+        result := ReadMessage(con);
+        exit;
+      end;
+    end;
+    result := '';
   end;
   
   procedure ClearMessages(aConnection : Connection);
@@ -2275,15 +2323,11 @@ var
   function CloseConnection(var aConnection : Connection) : Boolean;
   var
     idx, svr: Integer;
-    name: String;
     toClose: Connection;
   begin
     // WriteLn('Closing connection ', HexStr(aConnection));
     result := false;
     if not Assigned(aConnection) then begin WriteLn('Error freeing connection'); exit; end;
-
-    // toClose := aConnection; // as it may be removed from 
-    name := aConnection^.name;
 
     // clear all of the messages
     ClearMessages(aConnection);
