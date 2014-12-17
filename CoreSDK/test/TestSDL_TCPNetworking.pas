@@ -25,7 +25,7 @@ var
     WriteLn('Checking for messages');
     CheckNetworkActivity();
 
-    if MessagesReceived() then
+    if HasMessages() then
     begin
       WriteLn(' Reading messages received for client');
 
@@ -126,9 +126,12 @@ begin
 
   WriteLn('Server still connected to client: ', ConnectionOpen(RetreiveConnection(svr, 0)));
 
-  WriteLn('Closing server'' client connection: ', CloseConnection(lConB));
+  WriteLn('Closing server''s client connection (should already by closed -- just testing): ', CloseConnection(lConB));
   WriteLn('Server connections: ', ConnectionCount(svr));
   Pause();
+
+  WriteLn('Checking for activity');
+  CheckNetworkActivity();
 
   WriteLn('Opening a new connection');
 

@@ -109,12 +109,6 @@ uses
   /// @lib ReconnectConnectionNamed
   procedure ReconnectConnection(const name: String);
    
-  /// Checks if any messages have been received for any open connections. 
-  /// Messages received are added to the connection they were received from.
-  ///
-  /// @lib
-  function HasMessages () : Boolean;
-
   /// Broadcasts a message to all connections (all servers and opened connections).
   ///
   /// @lib
@@ -421,6 +415,12 @@ uses
   ///
   /// @lib ConnectionPortNamed
   function  ConnectionPort(const name: String) : Word;
+
+  /// Checks if any messages have been received for any open connections. 
+  /// Messages received are added to the connection they were received from.
+  ///
+  /// @lib
+  function HasMessages () : Boolean;
 
   /// Returns true if a server has messages that you can read.
   /// Use this to control a loop that reads all of the messages from
@@ -892,14 +892,7 @@ var
     // close old socket
     _sg_functions^.network.close_connection(aConnection^.socket);
 
-    if EstablishConnection(aConnection, host, port) then
-    begin
-      aConnection^.open := true;
-    end
-    else
-    begin
-      aConnection^.open := false;
-    end;
+    aConnection^.open := EstablishConnection(aConnection, host, port);
   end;
 
   procedure ReconnectConnection(const name: String);
@@ -1063,17 +1056,19 @@ var
 // TCP Message Handling
 //----------------------------------------------------------------------------
 
-  procedure CheckConnectionForData(con: Connection);
+  function CheckConnectionForData(con: Connection): Boolean;
   var
     received: Integer;
     buffer: PacketData;
   begin
+    result := false;
     if (not Assigned(con)) or (not Assigned(con^.socket)) then exit;
     if con^.open = false then exit;
 
     // WriteLn(HexStr(con), ' -> ', HexStr(con^.socket) );
     if _sg_functions^.network.connection_has_data(con^.socket) > 0 then
     begin
+      result := true;
       // WriteLn('getting data');
       repeat
         received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
@@ -1090,27 +1085,37 @@ var
   procedure CheckNetworkActivity();
   var
     svr, i: Integer;
+    gotData: Boolean;
   begin
     AcceptAllNewConnections();
+    gotData := true;
 
     // check if there is data on the network
-    while _sg_functions^.network.network_has_data() > 0 do
+    while (_sg_functions^.network.network_has_data() > 0) and (gotData) do
     begin
+      gotData := false;
+
       // WriteLn('should be some data...');
       for svr := 0 to High(_servers) do
       begin
         for i := 0 to High(_servers[svr]^.connections) do
         begin
-          CheckConnectionForData(_servers[svr]^.connections[i]);
+          // WriteLn('Checking svr ', svr, ' connection ', i, ' ', HexStr(_servers[svr]^.connections[i]));
+          gotData := CheckConnectionForData(_servers[svr]^.connections[i]) or gotData;
         end;
       end;
 
       for i := 0 to High(_Connections) do
       begin
-        // WriteLn('Checking connection ', i);
-        CheckConnectionForData(_Connections[i]);
+        // WriteLn('Checking connection ', i, ' ', HexStr(_Connections[i]));
+        gotData := CheckConnectionForData(_Connections[i]) or gotData;
       end;
     end;
+
+    // if (_sg_functions^.network.network_has_data() > 0) and (not gotData) then
+    // begin
+    //   WriteLn('hmmmm -- no data but data expected!');
+    // end;
   end;
 
   function HasMessages() : Boolean;
@@ -1178,8 +1183,8 @@ var
     end
     else
     begin
-      // Connection is probably closed
-      aConnection^.open := false;
+      // Error on read... close connection
+      ShutConnection(aConnection);
     end;
     // WriteLn('bye');
   end;

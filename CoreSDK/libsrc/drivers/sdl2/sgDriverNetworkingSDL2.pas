@@ -1,7 +1,7 @@
 unit sgDriverNetworkingSDL2;
 
 interface
-uses sgShared, sdl_net, sgNamedIndexCollection, sgTypes;
+uses sgShared, sgNamedIndexCollection, sgTypes;
 
     //TCP Connection
     function CreateTCPHostProcedure             (const aPort : LongInt) : Boolean;
