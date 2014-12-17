@@ -620,6 +620,16 @@ uses sgTypes;
   ///
   /// @lib
   function MyIP                  () : String;
+
+  /// Indicates the maximum size of a UDP message.
+  ///
+  /// @lib
+  function UDPPacketSize(): Longint;
+
+  /// Allows you to change the maximum size for a UDP message (sending and receiving)
+  ///
+  /// @lib
+  procedure SetUDPPacketSize(val: Longint);
           
 //=============================================================================
 implementation
@@ -647,13 +657,8 @@ var
 
   _ServerIds      : NamedIndexCollection;
   _ConnectionIds  : NamedIndexCollection;
-  
-  // _UDPListenSockets       : UDPSocketArray;
-  // _UDPSocketIDs           : NamedIndexCollection;
-  // _UDPConnectionIDs       : NamedIndexCollection;
 
-  // _UDPSendPacket          : PUDPPacket = nil;
-  // _UDPReceivePacket       : PUDPPacket = nil;
+  _UDPPacketSize : Integer = 1024;  
 
 
 //----------------------------------------------------------------------------
@@ -1085,16 +1090,24 @@ var
   end;
 
 //----------------------------------------------------------------------------
-// TCP Message Handling
+// Message Handling
 //----------------------------------------------------------------------------
 
+  function UDPPacketSize(): Longint;
+  begin
+    result := _UDPPacketSize;
+  end;
+
+  procedure SetUDPPacketSize(val: Longint);
+  begin
+    _UDPPacketSize := val;
+  end;
+
   function ReadUDPMessageFrom(socket: psg_network_connection; var messages: MessageArray): Boolean;
-  const
-    BUFFER_SZ = 1024;
   var
     size, host: UInt;
     port: Word;
-    data: array [0..BUFFER_SZ - 1] of char;
+    data: array of char;
     times: Integer;
   begin
     result := false;
@@ -1103,12 +1116,13 @@ var
     if _sg_functions^.network.connection_has_data(socket) > 0 then
     begin
       result := true;
+      SetLength(data, _UDPPacketSize);
       // WriteLn('getting data');
 
       times := 0;
 
       repeat
-        size := BUFFER_SZ;
+        size := Length(data);
         host := 0;
         port := 0;
         // WriteLn('reading data...');
