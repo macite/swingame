@@ -708,6 +708,7 @@ var
 //----------------------------------------------------------------------------
 
   procedure EnqueueTCPMessage( const aMsg : String; aConnection : Connection); forward;
+  procedure EnqueueUDPMessage( svr: ServerSocket; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word); forward;
   procedure FreeConnection(var aConnection : Connection); forward;
   procedure ShutConnection(con: Connection); forward;
 
@@ -1178,6 +1179,43 @@ var
     end;
   end;
 
+  function CheckUDPSocketForData(svr: ServerSocket): Boolean;
+  const
+    BUFFER_SZ = 1024;
+  var
+    size, host: UInt;
+    port: Word;
+    data: array [0..BUFFER_SZ - 1] of char;
+    times: Integer;
+  begin
+    result := false;
+    if (not Assigned(svr)) or (not Assigned(svr^.socket)) then exit;
+
+    if _sg_functions^.network.connection_has_data(svr^.socket) > 0 then
+    begin
+      // result := true;
+      // WriteLn('getting data');
+
+      times := 0;
+
+      repeat
+        size := BUFFER_SZ;
+        host := 0;
+        port := 0;
+        _sg_functions^.network.read_udp_message(svr^.socket, @host, @port, @data[0], @size);
+        
+        // WriteLn('Got message ', size, ' ', IPv4ToStr(host), ' ', port);
+
+        if (size > 0) or (host > 0) then
+        begin
+          EnqueueUDPMessage(svr, data, size, host, port);
+        end;  
+
+        times += 1;
+      until ((size = 0) and (host = 0)) or (times >= 10);
+    end;
+  end;
+
   procedure CheckNetworkActivity();
   var
     svr, i: Integer;
@@ -1194,10 +1232,17 @@ var
       // WriteLn('should be some data...');
       for svr := 0 to High(_servers) do
       begin
-        for i := 0 to High(_servers[svr]^.connections) do
+        if _servers[svr]^.protocol = TCP then
         begin
-          // WriteLn('Checking svr ', svr, ' connection ', i, ' ', HexStr(_servers[svr]^.connections[i]));
-          gotData := CheckConnectionForData(_servers[svr]^.connections[i]) or gotData;
+          for i := 0 to High(_servers[svr]^.connections) do
+          begin
+            // WriteLn('Checking svr ', svr, ' connection ', i, ' ', HexStr(_servers[svr]^.connections[i]));
+            gotData := CheckConnectionForData(_servers[svr]^.connections[i]) or gotData;
+          end;
+        end
+        else //UDP
+        begin
+          gotData := CheckUDPSocketForData(_servers[svr]) or gotData;
         end;
       end;
 
@@ -1251,37 +1296,54 @@ var
     if (aConnection = nil) or (aConnection^.socket = nil) then begin RaiseWarning('SendMessageTo Missing Connection, or connection closed'); exit; end;
     if aConnection^.open = false then exit;
 
-    // if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
-    size := Bytes(NtoBE(LongInt(Length(aMsg))));
-    // WriteLn('send size: ', size[0], ' ', size[1], ' ', size[2], ' ', size[3], ' ');
-
-    len := Length((aMsg)) + 4;
-    SetLength(buffer, len);
-
-    for i := 0 to len do
+    if aConnection^.protocol = TCP then
     begin
-      if i < 4 then
+      // if Length(aMsg) > 255 then begin RaiseWarning('SendMessageTo: SwinGame messages must be less than 256 characters in length'); exit; end;
+      size := Bytes(NtoBE(LongInt(Length(aMsg))));
+      // WriteLn('send size: ', size[0], ' ', size[1], ' ', size[2], ' ', size[3], ' ');
+
+      len := Length((aMsg)) + 4;
+      SetLength(buffer, len);
+
+      for i := 0 to len do
       begin
-        buffer[i] := size[i];
-        // WriteLn('* ', buffer[i]);
+        if i < 4 then
+        begin
+          buffer[i] := size[i];
+          // WriteLn('* ', buffer[i]);
+        end
+        else
+        begin
+          buffer[i] := Byte(aMsg[i - 3]); // 1 to Length
+        end;
+      end;
+
+      // WriteLn('sending');
+      if _sg_functions^.network.send_bytes(aConnection^.socket, @buffer[0], len) = len then
+      begin
+        // WriteLn('sent');
+        result := true;
       end
       else
       begin
-        buffer[i] := Byte(aMsg[i - 3]); // 1 to Length
+        // Error on read... close connection
+        ShutConnection(aConnection);
+      end;
+    end
+    else //UDP
+    begin
+      // WriteLn('Sending udp packet');
+      if Length(aMsg) < 1024 then
+      begin
+        _sg_functions^.network.send_udp_message(aConnection^.socket, PChar(aConnection^.stringIP), aConnection^.port, @aMsg[1], Length(aMsg));
+        result := true;
+      end
+      else
+      begin
+        result := false; // message too long
       end;
     end;
 
-    // WriteLn('sending');
-    if _sg_functions^.network.send_bytes(aConnection^.socket, @buffer[0], len) = len then
-    begin
-      // WriteLn('sent');
-      result := true;
-    end
-    else
-    begin
-      // Error on read... close connection
-      ShutConnection(aConnection);
-    end;
     // WriteLn('bye');
   end;
 
@@ -1838,6 +1900,30 @@ var
     end;
   end;
 
+  procedure EnqueueUDPMessage( svr: ServerSocket; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word);
+  var
+    i: Integer;
+  begin
+    if not Assigned(svr) then exit;
+
+    // WriteLn('Adding message: ', aMsg);
+    SetLength(svr^.messages, Length(svr^.messages) + 1);
+
+    with svr^.messages[High(svr^.messages)] do
+    begin
+      data := '';
+      for i := 0 to size - 1 do
+      begin
+        data += msg[i];
+      end;
+
+      protocol := UDP;
+      connection := nil;
+      host := IPv4ToStr(hostNum);
+      port := portNum;
+    end;
+  end;
+
   function HttpResponseBodyAsString(httpData: HttpResponse): String;
   var
     i: Integer;
@@ -1872,19 +1958,26 @@ var
   var
     i: Integer;
   begin
-    result := false;
+    result := true;
 
     if Assigned(svr) then
     begin
+
+      if Length(svr^.messages) > 0 then
+      begin
+        exit;    
+      end;
+
       for i := 0 to High(svr^.connections) do
       begin
         if MessageCount(svr^.connections[i]) > 0 then
         begin
-          result := true;
           exit;
         end;
       end;
     end;
+
+    result := false;
   end;
 
   type MessageArray = array of Message;
@@ -1948,6 +2041,12 @@ var
         result := ReadMessage(con);
         exit;
       end;
+    end;
+
+    if Length(svr^.messages) > 0 then
+    begin
+      result := PopMessage(svr^.messages);
+      exit;
     end;
 
     with result do

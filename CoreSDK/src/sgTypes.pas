@@ -1134,7 +1134,8 @@ interface
       port: Word;
       newConnections: LongInt; // the number of new connections -- reset on new scan for connections
       protocol: ConnectionType;
-      connections: array of Connection;
+      connections: array of Connection; // TCP connections
+      messages: array of Message; // UDP messages
     end;
 
     /// @class ServerSocket

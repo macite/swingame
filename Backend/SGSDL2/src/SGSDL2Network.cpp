@@ -36,8 +36,7 @@ sg_network_connection sgsdl2_open_udp_connection(const char *host, unsigned shor
         result.kind = SGCK_UDP;
         result._socket = svr;
         result._channel = -1; // get local address
-//        if (host)
-//            SDLNet_TCP_AddSocket(_sockets, client);
+        SDLNet_UDP_AddSocket(_sockets, svr);
     }
     else
     {
@@ -84,6 +83,42 @@ int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
     int sent = SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
 //    printf("Sent %d\n", sent);
     return sent;
+}
+
+int sgsdl2_send_udp_message(sg_network_connection *con, const char *host, unsigned short port, const char *buffer, int size)
+{
+    UDPpacket packet;
+    SDLNet_ResolveHost(&packet.address, host, port);
+  
+    packet.len = size;
+    packet.data = (Uint8*)buffer;
+    return SDLNet_UDP_Send((UDPsocket)con->_socket, -1, &packet);
+}
+
+void sgsdl2_read_udp_message(sg_network_connection *con, unsigned int *host, unsigned short *port, char *buffer, unsigned int *size)
+{
+//    printf("Reading up to %d bytes\n", *size);
+    
+    UDPpacket *packet;
+    packet = SDLNet_AllocPacket((int)*size);
+    
+    *size = 0;
+    *host = 0;
+    if ( SDLNet_UDP_Recv((UDPsocket)con->_socket, packet) > 0 )
+    {
+//        printf("Read %d bytes\n", packet->len);
+        
+        *host = SDLNet_Read32(&packet->address.host);
+        *port = SDLNet_Read16(&packet->address.port);
+        
+        if ( packet->len > 0 )
+        {
+            unsigned int buf_sz = sizeof(char) * (unsigned int)packet->len;
+            memcpy(buffer, packet->data, buf_sz);
+            *size = buf_sz;
+        }
+    }
+    SDLNet_FreePacket(packet);
 }
 
 int sgsdl2_read_bytes(sg_network_connection *con, char *buffer, int size)
@@ -148,8 +183,9 @@ unsigned int sgsdl2_network_has_data()
 
 unsigned int sgsdl2_connection_has_data(sg_network_connection *con)
 {
-    int got = SDLNet_SocketReady((TCPsocket)con->_socket);
-//    printf("Checking %p %d\n", con->_socket, got);
+    int got = SDLNet_SocketReady(con->_socket);
+
+    //    printf("Checking %p %d\n", con->_socket, got);
     if (got > 0)
         return 1;
     else
@@ -176,6 +212,8 @@ void sgsdl2_load_network_fns(sg_interface *functions)
     functions->network.network_has_data = &sgsdl2_network_has_data;
     functions->network.connection_has_data = &sgsdl2_connection_has_data;
     functions->network.network_port = &sgsdl2_get_network_port;
+    functions->network.send_udp_message = &sgsdl2_send_udp_message;
+    functions->network.read_udp_message = &sgsdl2_read_udp_message;
     
 //    printf("Network port C: %p = %p\n", functions->network.network_port, &sgsdl2_get_network_port);
 }

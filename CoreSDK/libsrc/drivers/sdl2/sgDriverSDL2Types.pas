@@ -104,6 +104,8 @@ interface
 	// sgInterface types
 	//
 	type
+		puint = ^uint;
+
 		sg_color = record
 				r : single;
 				g : single;
@@ -193,6 +195,9 @@ interface
     	sg_connection_fn = procedure (connection: psg_network_connection); cdecl;
     	sg_connection_uint_fn = function (connection: psg_network_connection): uint; cdecl;
     	sg_accept_connection_fn = function (connection: psg_network_connection): sg_network_connection; cdecl;
+    	sg_udp_send_fn = function (con: psg_network_connection; host: pchar; port: uint16; buffer: pchar; size: LongInt): LongInt; cdecl;
+		sg_read_udp_fn = procedure (con: psg_network_connection; host: puint; port: puint16; buffer: pchar; size: puint);
+
 
 		//
 		// Input related
@@ -304,6 +309,8 @@ interface
         	accept_new_connection: 	sg_accept_connection_fn;
         	network_has_data:		sg_uint_fn;
         	connection_has_data:	sg_connection_uint_fn;
+        	send_udp_message:		sg_udp_send_fn;
+        	read_udp_message:		sg_read_udp_fn;
 		end;
 
 (* Const before type ignored *)

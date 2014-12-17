@@ -120,6 +120,8 @@ extern "C" {
     typedef void (sg_connection_fn)(sg_network_connection *connection);
     typedef unsigned int (sg_connection_uint_fn)(sg_network_connection *connection);
     typedef sg_network_connection (sg_accept_connection_fn)(sg_network_connection *connection);
+    typedef int (sg_udp_send_fn)(sg_network_connection *con, const char *host, unsigned short port, const char *buffer, int size);
+    typedef void (sg_read_udp_fn)(sg_network_connection *con, unsigned int *host, unsigned short *port, char *buffer, unsigned int *size);
     
     //
     // Utility relation functions
@@ -313,6 +315,8 @@ extern "C" {
         sg_accept_connection_fn * accept_new_connection;
         sg_uint_fn * network_has_data;
         sg_connection_uint_fn * connection_has_data;
+        sg_udp_send_fn * send_udp_message;
+        sg_read_udp_fn * read_udp_message;
     } sg_network_interface;
 
     //

@@ -17,14 +17,29 @@ procedure Main();
 var
   svr: ServerSocket;
   toSvr : Connection = nil;
-  lConB : Connection = nil;
   lReceivedMsg : Boolean;
 begin
   WriteLn('Listening for UDP connections on port ', LISTEN_PORTB);
   svr := CreateServer('MyServer', LISTEN_PORTB, UDP);
   Pause();
 
+  WriteLn('Creating connection to send data to server');
   toSvr := OpenConnection('toSvr', '127.0.0.1', LISTEN_PORTB, UDP);
+  Pause();
+
+  WriteLn('Sending message to server');
+  SendMessageTo('Hello UDP', toSvr);
+  Pause();
+
+  WriteLn('Checking activity');
+  CheckNetworkActivity();
+  Pause();
+  CheckNetworkActivity();
+  WriteLn('Server got message: ', HasMessages(svr));
+  WriteLn('Message ', ReadMessageData(svr));
+  Pause();
+
+  CloseConnection(toSvr);
 
   WriteLn('Closing UDP socket on port ', LISTEN_PORTB);
   CloseServer(svr);
