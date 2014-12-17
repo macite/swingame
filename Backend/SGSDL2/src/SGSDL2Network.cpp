@@ -21,7 +21,7 @@
 // This set keeps track of all of the sockets to see if there is activity
 SDLNet_SocketSet _sockets; // allocate on setup of functions.
 
-sg_network_connection sgsdl2_open_udp_connection(const char *host, unsigned short port)
+sg_network_connection sgsdl2_open_udp_connection(unsigned short port)
 {
     UDPsocket svr;
     
@@ -35,7 +35,6 @@ sg_network_connection sgsdl2_open_udp_connection(const char *host, unsigned shor
     {
         result.kind = SGCK_UDP;
         result._socket = svr;
-        result._channel = -1; // get local address
         SDLNet_UDP_AddSocket(_sockets, svr);
     }
     else
@@ -135,6 +134,7 @@ void sgsdl2_close_connection(sg_network_connection *con)
     }
     else
     {
+        SDLNet_UDP_DelSocket(_sockets, (UDPsocket)con->_socket);
         SDLNet_UDP_Close((UDPsocket)con->_socket);
     }
     
@@ -147,14 +147,17 @@ unsigned int sgsdl2_network_address(sg_network_connection *con)
     if (con->kind == SGCK_TCP)
         remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
     else
-        remote = SDLNet_UDP_GetPeerAddress((UDPsocket)con->_socket, con->_channel);
+        remote = SDLNet_UDP_GetPeerAddress((UDPsocket)con->_socket, -1);
     return SDLNet_Read32(&remote->host);
 }
 
 unsigned int sgsdl2_get_network_port(sg_network_connection *con)
 {
     IPaddress *remote;
-    remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    if (con->kind == SGCK_TCP)
+        remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    else
+        remote = SDLNet_UDP_GetPeerAddress((UDPsocket)con->_socket, -1);
     return SDLNet_Read16(&remote->port);
 }
 

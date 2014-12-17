@@ -8,8 +8,9 @@ const
 
 procedure Pause();
 begin
-  Write('Press enter to continue.');
-  ReadLn();
+  // Write('Press enter to continue.');
+  // ReadLn();
+  Delay(1000);
 end;
 
 
@@ -44,6 +45,8 @@ begin
   WriteLn('Closing UDP socket on port ', LISTEN_PORTB);
   CloseServer(svr);
   Pause();
+
+  Delay(3000);
 
   // WriteLn('Listening On: ', LISTEN_PORTB);
 

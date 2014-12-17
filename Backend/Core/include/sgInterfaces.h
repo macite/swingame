@@ -116,6 +116,7 @@ extern "C" {
     // Network related
     //
     typedef sg_network_connection (sg_create_network_fn)(const char *host, unsigned short port);
+    typedef sg_network_connection (sg_create_udp_network_fn)(unsigned short port);
     typedef int (sg_network_data_fn)(sg_network_connection *connection, char *buffer, int size);
     typedef void (sg_connection_fn)(sg_network_connection *connection);
     typedef unsigned int (sg_connection_uint_fn)(sg_network_connection *connection);
@@ -306,7 +307,7 @@ extern "C" {
     typedef struct sg_network_interface
     {
         sg_create_network_fn * open_tcp_connection;
-        sg_create_network_fn * open_udp_connection;
+        sg_create_udp_network_fn * open_udp_connection;
         sg_network_data_fn * read_bytes;
         sg_network_data_fn * send_bytes;
         sg_connection_fn * close_connection;

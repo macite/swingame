@@ -131,13 +131,13 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method Reconnect
-  procedure ReconnectConnection(aConnection : Connection);
+  procedure Reconnect(aConnection : Connection);
 
   /// Attempts to recconnect a connection that was closed using the IP and port
   /// stored in the connection. Finds the connection using its name.
   ///
   /// @lib ReconnectConnectionNamed
-  procedure ReconnectConnection(const name: String);
+  procedure Reconnect(const name: String);
    
   /// Broadcasts a message to all connections (all servers and opened connections).
   ///
@@ -352,63 +352,6 @@ uses sgTypes;
   function LastConnection(const name: String) : Connection;
 
 //----------------------------------------------------------------------------
-// UDP
-//----------------------------------------------------------------------------
-
-  /// Creates a socket that listens for connections based
-  /// on the port given. Returns the index of the Socket in the
-  /// socket array.
-  ///
-  /// @param aPort The port to bind the socket to.
-  ///
-  /// @lib
-  /// @sn createUDPHost:%s
-  function CreateUDPHost ( aPort : Word) : LongInt;
-
-  /// Creates the connection and sets the ip and port values. Creates a
-  /// socket if there is no socket attached to the specified port. this
-  /// socket can be used to send and receive messages. Returns the connection
-  /// if this has been successful, or will return nil on failure.
-  ///
-  /// @param aDestIP The destination IP
-  /// @param aDestPort The Destination Port
-  /// @param aInPort The port to receive messages
-  ///
-  /// @lib
-  /// @sn createUDPConnectionIP:%s port:%s inPort:%s
-  function CreateUDPConnection(aDestIP : String; aDestPort, aInPort : Word) : Connection; 
-
-  /// Checks all UDP listening sockets to see if a packet has been received.
-  /// If a packet has been received, it will Enqueue the message into the message
-  /// queue. This will set the message, sender's address and sender's port. it
-  /// will return true if a message has been received or false if there has been
-  /// no message.
-  ///
-  /// @lib
-  function UDPMessageReceived() : Boolean;
-
-  /// Sends a UDP packet to the port and ip specified in the connection
-  /// with the message.
-  ///
-  /// @param aMsg The message to be sent
-  /// @param aConnection Send the Message through this connection's Socket.
-  ///
-  /// @lib
-  /// @class Connection
-  /// @method SendUDPMessage
-  /// @self 2
-  /// @sn sendUDPMessage:%s toConnection:%s
-  function SendUDPMessage( aMsg : String; aConnection : Connection) : Boolean;
-  
-  /// Sends a UDP packet to All connections with the message.
-  ///
-  /// @param aMsg The message to be sent
-  ///
-  /// @lib
-  /// @sn broadcastUDPMessage:%s
-  procedure BroadcastUDPMessage(const aMsg : String );
-
-//----------------------------------------------------------------------------
 // Messages and Connection Data Access
 //----------------------------------------------------------------------------
 
@@ -528,21 +471,25 @@ uses sgTypes;
 
   /// Clears all of the messages from a connection.
   ///
-  /// @lib
+  /// @lib ConnectionClearMessages
   ///
   /// @class Connection
   /// @method ClearMessages
-  procedure ClearMessages(aConnection : Connection) ;
+  procedure ClearMessages(aConnection: Connection);
 
-  /// Clears the Message Queue
+  /// Clears all of the messages from a server.
+  ///
+  /// @lib ServerClearMessages
+  procedure ClearMessages(svr: ServerSocket);
+
+  /// Clears the Messages from a connection or server.
   ///
   /// @lib ClearMessagesNamed
   procedure ClearMessages(const name: String);
 
   /// Gets the number of messages waiting to be read from this connection
   ///
-  /// @lib
-  /// @sn messageCountOnConnection:%s
+  /// @lib ConnectionMessageCount
   ///
   /// @class Connection
   /// @method MessageCount
@@ -552,6 +499,11 @@ uses sgTypes;
   ///
   /// @lib MessageCountOnConnectionNamed
   function  MessageCount(const name: String) : LongInt;
+
+  /// Gets the number of messages waiting to be read from this connection
+  ///
+  /// @lib ServerMessageCount
+  function  MessageCount(svr: ServerSocket) : LongInt;
 
 
 
@@ -684,6 +636,7 @@ implementation
 type
   ServerArray = array of ServerSocket;
   ConnectionArray = array of Connection;
+  MessageArray = array of Message;
   PacketData = array [0..511] of Char;
   BytePtr = ^Byte;
   Bytes = array[0..3] of Byte;
@@ -708,7 +661,7 @@ var
 //----------------------------------------------------------------------------
 
   procedure EnqueueTCPMessage( const aMsg : String; aConnection : Connection); forward;
-  procedure EnqueueUDPMessage( svr: ServerSocket; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word); forward;
+  procedure EnqueueUDPMessage( var messages: MessageArray; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word); forward;
   procedure FreeConnection(var aConnection : Connection); forward;
   procedure ShutConnection(con: Connection); forward;
 
@@ -717,7 +670,6 @@ var
     New(result);
     result^.name        := name;
     result^.socket      := nil;
-    result^.socketShared := false;
     result^.ip          := 0;
     result^.stringIP    := '';
     result^.port        := 0;
@@ -857,23 +809,8 @@ var
   
   
 //----------------------------------------------------------------------------
-// TCP Connection Handling
+// Connection Handling
 //----------------------------------------------------------------------------
-
-  var
-    hasUDPSendSocket: Boolean = false;
-    udpSendSocket: sg_network_connection;
-
-  function GetUDPSendSocket(): sg_network_connection;
-  begin
-    if not hasUDPSendSocket then
-    begin
-      hasUDPSendSocket := true;
-      udpSendSocket := _sg_functions^.network.open_udp_connection(nil, 0);
-    end;
-
-    result := udpSendSocket;
-  end;
 
   function EstablishConnection(con: Connection; const host: String; port: Word; protocol: ConnectionType): Boolean;
   var
@@ -892,8 +829,8 @@ var
 
       if Assigned(socket^._socket) and (socket^.kind = SGCK_TCP) then
       begin
-        con^.IP            := _sg_functions^.network.network_address(socket);
-        result := true;
+        con^.IP := _sg_functions^.network.network_address(socket);
+        result  := true;
       end
       else
       begin
@@ -903,9 +840,9 @@ var
     end
     else //UDP
     begin
-      socket^ := GetUDPSendSocket();
-      con^.socketShared := true;
+      socket^ := _sg_functions^.network.open_udp_connection(0);
       con^.IP := IPv4ToDec(HostIP(host));
+      result  := true;
     end
 
     // WriteLn('client con = ', HexStr(con^._socket), ' ', con^.kind);
@@ -967,8 +904,7 @@ var
       result := nil;
   end;
 
-
-  procedure ReconnectConnection(aConnection : Connection);
+  procedure Reconnect(aConnection : Connection);
   var
     host : String;
     port : Word;
@@ -984,11 +920,10 @@ var
     aConnection^.open := EstablishConnection(aConnection, host, port, aConnection^.protocol);
   end;
 
-  procedure ReconnectConnection(const name: String);
+  procedure Reconnect(const name: String);
   begin
-    ReconnectConnection(ConnectionNamed(name));  
+    Reconnect(ConnectionNamed(name));  
   end;
-
 
   function CreateServer(const name: String; port: Word; protocol: ConnectionType) : ServerSocket;
   var
@@ -998,7 +933,7 @@ var
     result := nil;
     New(con);
     if protocol = UDP then
-      con^ := _sg_functions^.network.open_udp_connection(nil, port)
+      con^ := _sg_functions^.network.open_udp_connection(port)
     else
       con^ := _sg_functions^.network.open_tcp_connection(nil, port);
 
@@ -1153,10 +1088,50 @@ var
 // TCP Message Handling
 //----------------------------------------------------------------------------
 
+  function ReadUDPMessageFrom(socket: psg_network_connection; var messages: MessageArray): Boolean;
+  const
+    BUFFER_SZ = 1024;
+  var
+    size, host: UInt;
+    port: Word;
+    data: array [0..BUFFER_SZ - 1] of char;
+    times: Integer;
+  begin
+    result := false;
+    if not Assigned(socket) then exit;
+
+    if _sg_functions^.network.connection_has_data(socket) > 0 then
+    begin
+      result := true;
+      // WriteLn('getting data');
+
+      times := 0;
+
+      repeat
+        size := BUFFER_SZ;
+        host := 0;
+        port := 0;
+        // WriteLn('reading data...');
+        _sg_functions^.network.read_udp_message(socket, @host, @port, @data[0], @size);
+        
+        // WriteLn('Got message ', size, ' ', IPv4ToStr(host), ' ', port);
+
+        if (size > 0) or (host > 0) then
+        begin
+          EnqueueUDPMessage(messages, data, size, host, port);
+        end;  
+
+        times += 1;
+      until ((size = 0) and (host = 0)) or (times >= 10);
+    end;
+  end;
+
   function CheckConnectionForData(con: Connection): Boolean;
   var
     received: Integer;
     buffer: PacketData;
+    gotData: Boolean = false;
+    times: Integer = 0;
   begin
     result := false;
     if (not Assigned(con)) or (not Assigned(con^.socket)) then exit;
@@ -1168,52 +1143,36 @@ var
       result := true;
       // WriteLn('getting data');
       repeat
-        received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
+        // WriteLn('checking...');
 
-        if received <= 0 then
+        if con^.protocol = TCP then
         begin
-          ShutConnection(con);
-          exit;
+          received := _sg_functions^.network.read_bytes(con^.socket, @buffer[0], 512);
+
+          if received <= 0 then
+          begin
+            ShutConnection(con);
+            exit;
+          end;
+
+          gotData := ExtractData(buffer, received, con);
+        end
+        else //UDP
+        begin
+          gotData := ReadUDPMessageFrom(con^.socket, con^.messages);
         end;
-      until not ExtractData(buffer, received, con);
+
+        times += 1;
+      until (not gotData) or (times >= 10);
     end;
   end;
 
   function CheckUDPSocketForData(svr: ServerSocket): Boolean;
-  const
-    BUFFER_SZ = 1024;
-  var
-    size, host: UInt;
-    port: Word;
-    data: array [0..BUFFER_SZ - 1] of char;
-    times: Integer;
   begin
-    result := false;
-    if (not Assigned(svr)) or (not Assigned(svr^.socket)) then exit;
-
-    if _sg_functions^.network.connection_has_data(svr^.socket) > 0 then
-    begin
-      // result := true;
-      // WriteLn('getting data');
-
-      times := 0;
-
-      repeat
-        size := BUFFER_SZ;
-        host := 0;
-        port := 0;
-        _sg_functions^.network.read_udp_message(svr^.socket, @host, @port, @data[0], @size);
-        
-        // WriteLn('Got message ', size, ' ', IPv4ToStr(host), ' ', port);
-
-        if (size > 0) or (host > 0) then
-        begin
-          EnqueueUDPMessage(svr, data, size, host, port);
-        end;  
-
-        times += 1;
-      until ((size = 0) and (host = 0)) or (times >= 10);
-    end;
+    if Assigned(svr) then
+      result := ReadUDPMessageFrom(svr^.socket, svr^.messages)
+    else
+      result := false;
   end;
 
   procedure CheckNetworkActivity();
@@ -1654,46 +1613,7 @@ var
   begin
     while Length(_Connections) > 0 do
       CloseConnection(_Connections[High(_Connections)]);
-
-    if hasUDPSendSocket then
-    begin
-      _sg_functions^.network.close_connection(@udpSendSocket);
-      hasUDPSendSocket := false;
-    end;
   end;
-
-  procedure CloseAllUDPSocketProcedure();
-  // var
-  //   i : LongInt;
-  begin
-    // for i := Low(_UDPListenSockets) to High(_UDPListenSockets) do
-    //   SDLNet_UDP_Close(_UDPListenSockets[i]);
-    // SetLength(_UDPListenSockets, 0);
-  end;  
-
- //  procedure FreeAllNetworkingResourcesProcedure();
- //  begin
- //    CloseAllConnections();
- //    CloseAllServers();
- //    // CloseAllUDPSocketProcedure();
-      
- // //    if Assigned(_UDPReceivePacket) then
- // //    begin
- // //      SDLNet_FreePacket(_UDPReceivePacket);
- // //      _UDPReceivePacket := nil;
- // //    end;
- // //    if Assigned(_SocketSet) then
- // //    begin
- // //      SDLNet_FreeSocketSet(_SocketSet);
- // //      _SocketSet := nil;
- // //    end;
- // // //   _UDPSendPacket is not Allocated
- // // //   if Assigned(_UDPSendPacket) then
- // // //     SDLNet_FreePacket(_UDPSendPacket);   
- // //    FreeNamedIndexCollection(_UDPSocketIDs);
- // //    FreeNamedIndexCollection(_UDPConnectionIDs);
- //  end;
-
 
 //----------------------------------------------------------------------------
 // Hexadecimal and Decimal Conversion
@@ -1900,16 +1820,14 @@ var
     end;
   end;
 
-  procedure EnqueueUDPMessage( svr: ServerSocket; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word);
+  procedure EnqueueUDPMessage(var messages: MessageArray; const msg : array of char; size: Integer; hostNum: UInt; portNum: Word);
   var
     i: Integer;
   begin
-    if not Assigned(svr) then exit;
-
     // WriteLn('Adding message: ', aMsg);
-    SetLength(svr^.messages, Length(svr^.messages) + 1);
+    SetLength(messages, Length(messages) + 1);
 
-    with svr^.messages[High(svr^.messages)] do
+    with messages[High(messages)] do
     begin
       data := '';
       for i := 0 to size - 1 do
@@ -1980,8 +1898,6 @@ var
     result := false;
   end;
 
-  type MessageArray = array of Message;
-  
   function PopMessage(var messages: MessageArray): Message;
   var
     i: Integer;
@@ -2076,12 +1992,16 @@ var
 
   
   procedure ClearMessages(aConnection : Connection);
-  var
-    i : LongInt;
   begin
     if not Assigned(aConnection) then exit;
     SetLength(aConnection^.messages, 0);
-  end;  
+  end;
+
+  procedure ClearMessages(svr: ServerSocket);
+  begin
+    if not Assigned(svr) then exit;
+    SetLength(svr^.messages, 0);
+  end;
 
   procedure ClearMessages(const name: String);
   var
@@ -2089,7 +2009,9 @@ var
   begin
     idx := IndexOf(_ConnectionIds, name);
     if idx >= 0 then
-      ClearMessages(_Connections[idx]);
+      ClearMessages(_Connections[idx])
+    else
+      ClearMessages(ServerNamed(name));
   end;
 
   function ConnectionIP(aConnection : Connection) : LongWord;
@@ -2135,6 +2057,13 @@ var
     result := Length(aConnection^.messages);
   end;
 
+  function MessageCount(svr: ServerSocket) : LongInt;
+  begin
+    result := 0;
+    if not Assigned(svr) then exit;
+    result := Length(svr^.messages);
+  end;
+
   function MessageCount(const name: String) : LongInt;
   var
     idx: Integer;
@@ -2143,7 +2072,7 @@ var
     if idx >= 0 then
       result := MessageCount(_Connections[idx])
     else
-      result := 0;
+      result := MessageCount(ServerNamed(name));
   end;
 
 //----------------------------------------------------------------------------
@@ -2484,31 +2413,13 @@ var
   end;
 
 
-
 //----------------------------------------------------------------------------
-// UDP
+// Message methods
 //----------------------------------------------------------------------------
 
-  function CreateUDPHost( aPort : Word) : LongInt;
-  begin
-    result := -1; //NetworkingDriver.CreateUDPHost(aPort);
-  end;
-  
-  function CreateUDPConnection(aDestIP : String; aDestPort, aInPort : Word) : Connection; 
-  begin
-    result := nil; //NetworkingDriver.CreateUDPConnection(aDestIP, aDestPort, aInPort);
-  end;
 
-  function UDPMessageReceived() : Boolean;
-  begin
-    result := false; //NetworkingDriver.UDPMessageReceived();
-  end;
-  
-  function SendUDPMessage( aMsg : String; aConnection : Connection) : Boolean;
-  begin
-    result := false; //NetworkingDriver.SendUDPMessage(aMsg, aConnection);
-  end;
-  
+
+
 //----------------------------------------------------------------------------
 // Close
 //----------------------------------------------------------------------------
@@ -2542,12 +2453,9 @@ var
     if con^.open then
     begin
       con^.open := false;
-      if not con^.socketShared then
-      begin
-        _sg_functions^.network.close_connection(con^.socket);
-        socket := psg_network_connection(con^.socket);
-        Dispose(socket);
-      end;
+      _sg_functions^.network.close_connection(con^.socket);
+      socket := psg_network_connection(con^.socket);
+      Dispose(socket);
       con^.socket := nil;
     end;
   end;

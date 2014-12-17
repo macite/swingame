@@ -1114,7 +1114,6 @@ interface
     ConnectionData = packed record
       name            : String;
       socket          : Pointer;
-      socketShared    : Boolean;
       ip              : LongWord;
       port            : LongInt;
       open            : Boolean;

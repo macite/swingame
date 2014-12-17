@@ -97,7 +97,6 @@ interface
 		sg_network_connection = record
 			kind : sg_connection_kind;
 			_socket: pointer;
-			_channel: Longint;
 		end;
 
 	//
@@ -191,6 +190,7 @@ interface
 		psg_network_connection = ^sg_network_connection;
 
 		sg_create_network_fn = function(host: pchar; port: uint16): sg_network_connection; cdecl;
+		sg_create_udp_network_fn = function(port: uint16): sg_network_connection; cdecl;
     	sg_network_data_fn = function(connection: psg_network_connection; buffer: BytePtr; size: Longint): Longint; cdecl;
     	sg_connection_fn = procedure (connection: psg_network_connection); cdecl;
     	sg_connection_uint_fn = function (connection: psg_network_connection): uint; cdecl;
@@ -300,7 +300,7 @@ interface
 
 		sg_network_interface = record
 			open_tcp_connection: 	sg_create_network_fn;
-			open_udp_connection: 	sg_create_network_fn;
+			open_udp_connection: 	sg_create_udp_network_fn;
 			read_bytes: 			sg_network_data_fn;
 			send_bytes: 			sg_network_data_fn;
         	close_connection: 		sg_connection_fn;

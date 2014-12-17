@@ -159,8 +159,8 @@ begin
   WriteLn('Restarting server...');
   svr := CreateServer('svr1', SVR1_PORT);
 
-  ReconnectConnection(lConA);
-  ReconnectConnection('ToSvr');
+  Reconnect(lConA);
+  Reconnect('ToSvr');
 
   CheckNetworkActivity();
   lConB := LastConnection(svr);

@@ -132,7 +132,6 @@ typedef struct sg_network_connection
     
     // private data used by the backend
     void * _socket;
-    int _channel;
 } sg_network_connection;
 
 #ifdef __cplusplus
