@@ -21,6 +21,7 @@ var
   procedure CheckMessages();
   var
     i: Integer;
+    msg: Message;
   begin
     WriteLn('Checking for messages');
     CheckNetworkActivity();
@@ -31,14 +32,16 @@ var
 
       while HasMessages(lConA) do
       begin
-        WriteLn(' -> ', ReadMessageData(lConA));
+        msg := ReadMessage(lConA);
+        WriteLn(' -> ', msg.data, ' from ', msg.host, ':', msg.port);
       end;
 
       WriteLn(' Reading messages received for ToSvr client');
 
       while HasMessages('ToSvr') do
       begin
-        WriteLn(' -> ', ReadMessageData('ToSvr'));
+        msg := ReadMessage('ToSvr');
+        WriteLn(' -> ', msg.data, ' from ', msg.host, ':', msg.port);
       end;
 
       WriteLn(' Reading messages received for server');
