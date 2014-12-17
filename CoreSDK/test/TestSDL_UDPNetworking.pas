@@ -3,60 +3,76 @@ uses
   sgNetworking, sgTypes, sgUtils;
 
 const 
-  LISTEN_PORTB = 2000;
-  LISTEN_PORTA = 2001;
+  LISTEN_PORTB = 49876;
+  LISTEN_PORTA = LISTEN_PORTB + 1;
+
+procedure Pause();
+begin
+  Write('Press enter to continue.');
+  ReadLn();
+end;
+
 
 procedure Main();
 var
-  lConA : Connection = nil;
+  svr: ServerSocket;
+  toSvr : Connection = nil;
   lConB : Connection = nil;
   lReceivedMsg : Boolean;
 begin
-  CreateUDPSocket(LISTEN_PORTB);
+  WriteLn('Listening for UDP connections on port ', LISTEN_PORTB);
+  svr := CreateServer('MyServer', LISTEN_PORTB, UDP);
+  Pause();
 
-  WriteLn('Listening On: ', LISTEN_PORTB);
+  toSvr := OpenConnection('toSvr', '127.0.0.1', LISTEN_PORTB, UDP);
 
-  lConA := CreateUDPConnection('127.0.0.1', LISTEN_PORTB, LISTEN_PORTA); 
+  WriteLn('Closing UDP socket on port ', LISTEN_PORTB);
+  CloseServer(svr);
+  Pause();
 
-  WriteLn('Created New Connection: ', HexStr(lConA));
+  // WriteLn('Listening On: ', LISTEN_PORTB);
 
-  ReadLn();
+  // lConA := CreateUDPConnection('127.0.0.1', LISTEN_PORTB, LISTEN_PORTA); 
 
-  WriteLn('Sending Message to: ', LISTEN_PORTB);
-  SendUDPMessage('Hello Connection B', lConA);
+  // WriteLn('Created New Connection: ', HexStr(lConA));
 
-  ReadLn();
+  // ReadLn();
 
-  WriteLn('New Connection Queue Size: ', ConnectionQueueSize());
-  lReceivedMsg := UDPMessageReceived();
-  WriteLn('Received Message? ', lReceivedMsg);
-  WriteLn('New Connection Queue Size: ', ConnectionQueueSize());
+  // WriteLn('Sending Message to: ', LISTEN_PORTB);
+  // SendUDPMessage('Hello Connection B', lConA);
 
-  lConB := FetchConnection();
-  WriteLn('lCon IP Dec Address: ', ConnectionPort(lConA));
-  WriteLn('Message From A to B: ', ReadMessage(lConB));
-  ReadLn();
+  // ReadLn();
 
-  WriteLn('Sending Message to: ', LISTEN_PORTA);
-  SendUDPMessage('Hey Connection A', lConB);
-  ReadLn();
-  lReceivedMsg := UDPMessageReceived();
-  WriteLn('Received Message? ', lReceivedMsg);
-  WriteLn('Message From B to A: ', ReadMessage(lConA));
+  // WriteLn('New Connection Queue Size: ', ConnectionQueueSize());
+  // lReceivedMsg := UDPMessageReceived();
+  // WriteLn('Received Message? ', lReceivedMsg);
+  // WriteLn('New Connection Queue Size: ', ConnectionQueueSize());
 
-  WriteLn('Closing...');
+  // lConB := FetchConnection();
+  // WriteLn('lCon IP Dec Address: ', ConnectionPort(lConA));
+  // WriteLn('Message From A to B: ', ReadMessage(lConB));
+  // ReadLn();
 
-  CloseConnection(lConB);
-  CloseConnection(lConA);
-  WriteLn('Connections Closed');
-  CloseUDPListenSocket(LISTEN_PORTB);
-  CloseUDPListenSocket(LISTEN_PORTA);
-  WriteLn('Closed.');
+  // WriteLn('Sending Message to: ', LISTEN_PORTA);
+  // SendUDPMessage('Hey Connection A', lConB);
+  // ReadLn();
+  // lReceivedMsg := UDPMessageReceived();
+  // WriteLn('Received Message? ', lReceivedMsg);
+  // WriteLn('Message From B to A: ', ReadMessage(lConA));
 
-  WriteLn(HexStr(lConB));
-  WriteLn(HexStr(lConA));
+  // WriteLn('Closing...');
+
+  // CloseConnection(lConB);
+  // CloseConnection(lConA);
+  // WriteLn('Connections Closed');
+  // CloseUDPListenSocket(LISTEN_PORTB);
+  // CloseUDPListenSocket(LISTEN_PORTA);
+  // WriteLn('Closed.');
+
+  // WriteLn(HexStr(lConB));
+  // WriteLn(HexStr(lConA));
   
-   // ReleaseAllConnections();
+  //  // ReleaseAllConnections();
 end;
 
 begin

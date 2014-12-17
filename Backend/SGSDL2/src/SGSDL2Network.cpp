@@ -21,6 +21,33 @@
 // This set keeps track of all of the sockets to see if there is activity
 SDLNet_SocketSet _sockets; // allocate on setup of functions.
 
+sg_network_connection sgsdl2_open_udp_connection(const char *host, unsigned short port)
+{
+    UDPsocket svr;
+    
+    sg_network_connection result;
+    result.kind = SGCK_UNKNOWN;
+    result._socket = NULL;
+    
+    svr = SDLNet_UDP_Open(port);
+    
+    if (svr)
+    {
+        result.kind = SGCK_UDP;
+        result._socket = svr;
+        result._channel = -1; // get local address
+//        if (host)
+//            SDLNet_TCP_AddSocket(_sockets, client);
+    }
+    else
+    {
+        result.kind = SGCK_UNKNOWN;
+        result._socket = NULL;
+    }
+    
+    return result;
+}
+
 sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned short port)
 {
     IPaddress addr;
@@ -66,15 +93,26 @@ int sgsdl2_read_bytes(sg_network_connection *con, char *buffer, int size)
 
 void sgsdl2_close_connection(sg_network_connection *con)
 {
-    SDLNet_TCP_DelSocket(_sockets, (TCPsocket)con->_socket);
-    SDLNet_TCP_Close((TCPsocket)con->_socket);
+    if ( con->kind == SGCK_TCP )
+    {
+        SDLNet_TCP_DelSocket(_sockets, (TCPsocket)con->_socket);
+        SDLNet_TCP_Close((TCPsocket)con->_socket);
+    }
+    else
+    {
+        SDLNet_UDP_Close((UDPsocket)con->_socket);
+    }
+    
     con->kind = SGCK_UNKNOWN;
 }
 
 unsigned int sgsdl2_network_address(sg_network_connection *con)
 {
     IPaddress *remote;
-    remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    if (con->kind == SGCK_TCP)
+        remote = SDLNet_TCP_GetPeerAddress((TCPsocket)con->_socket);
+    else
+        remote = SDLNet_UDP_GetPeerAddress((UDPsocket)con->_socket, con->_channel);
     return SDLNet_Read32(&remote->host);
 }
 
@@ -129,6 +167,7 @@ void sgsdl2_load_network_fns(sg_interface *functions)
     }
     
     functions->network.open_tcp_connection = &sgsdl2_open_tcp_connection;
+    functions->network.open_udp_connection = &sgsdl2_open_udp_connection;
     functions->network.read_bytes = &sgsdl2_read_bytes;
     functions->network.send_bytes = &sgsdl2_send_bytes;
     functions->network.close_connection = &sgsdl2_close_connection;

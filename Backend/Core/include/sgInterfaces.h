@@ -304,6 +304,7 @@ extern "C" {
     typedef struct sg_network_interface
     {
         sg_create_network_fn * open_tcp_connection;
+        sg_create_network_fn * open_udp_connection;
         sg_network_data_fn * read_bytes;
         sg_network_data_fn * send_bytes;
         sg_connection_fn * close_connection;

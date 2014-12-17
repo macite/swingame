@@ -1084,39 +1084,6 @@ interface
       body: array of Byte;
     end;
 
-    /// The Pointer to a MessageLink Creating a String LinkedList
-    ///
-    /// @struct MessagePtr
-    /// @via_pointer
-    MessagePtr = ^MessageLink;
-    
-    ///@struct MessageLink
-    ///@via_pointer
-    MessageLink = packed record
-      data: String;
-
-      prev  : MessagePtr;
-      next  : MessagePtr;
-    end;  
-    
-    ///@struct ConnectionData
-    ///@via_pointer
-    ConnectionData = packed record
-      name            : String;
-      socket          : Pointer;
-      ip              : LongWord;
-      port            : LongInt;
-      open            : Boolean;
-      firstMsg        : MessagePtr;
-      lastMsg         : MessagePtr;
-      msgCount        : LongInt;
-      protocol        : ConnectionType;
-      stringIP        : String;   //Allow for Reconnection
-
-      msgLen          : LongInt;  // This data is used to handle splitting of messages
-      partMsgData     : String;   //   over multiple packets
-    end;
-    
     /// The Pointer to ConnectionData
     ///
     /// @class Connection
@@ -1124,6 +1091,41 @@ interface
     /// @field pointer : ^ConnectionData
     Connection  = ^ConnectionData;
 
+
+    /// You can use the networking code to send
+    /// Messages between programs over the network.
+    ///
+    /// @struct Message
+    /// @via_pointer
+    Message = packed record
+      data: String;
+      protocol: ConnectionType;
+      
+      //TCP has a
+      connection: Connection;
+
+      //UDP is from
+      host: String;
+      port: Word;
+    end;  
+    
+    ///@struct ConnectionData
+    ///@via_pointer
+    ConnectionData = packed record
+      name            : String;
+      socket          : Pointer;
+      socketShared    : Boolean;
+      ip              : LongWord;
+      port            : LongInt;
+      open            : Boolean;
+      protocol        : ConnectionType;
+      stringIP        : String;   //Allow for Reconnection
+      messages        : array of Message;
+
+      msgLen          : LongInt;  // This data is used to handle splitting of messages
+      partMsgData     : String;   //   over multiple packets
+    end;
+    
     /// @struct ServerData
     /// @via_pointer
     ServerData = packed record

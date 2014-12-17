@@ -97,6 +97,7 @@ interface
 		sg_network_connection = record
 			kind : sg_connection_kind;
 			_socket: pointer;
+			_channel: Longint;
 		end;
 
 	//
@@ -294,6 +295,7 @@ interface
 
 		sg_network_interface = record
 			open_tcp_connection: 	sg_create_network_fn;
+			open_udp_connection: 	sg_create_network_fn;
 			read_bytes: 			sg_network_data_fn;
 			send_bytes: 			sg_network_data_fn;
         	close_connection: 		sg_connection_fn;

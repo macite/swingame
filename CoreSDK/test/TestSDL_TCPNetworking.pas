@@ -31,28 +31,28 @@ var
 
       while HasMessages(lConA) do
       begin
-        WriteLn(' -> ', ReadMessage(lConA));
+        WriteLn(' -> ', ReadMessageData(lConA));
       end;
 
       WriteLn(' Reading messages received for ToSvr client');
 
       while HasMessages('ToSvr') do
       begin
-        WriteLn(' -> ', ReadMessage('ToSvr'));
+        WriteLn(' -> ', ReadMessageData('ToSvr'));
       end;
 
       WriteLn(' Reading messages received for server');
 
       // while HasMessages(lConB) do
       // begin
-      //   WriteLn(' -> ', ReadMessage(lConB));
+      //   WriteLn(' -> ', ReadMessageData(lConB));
       // end;
 
       for i := 0 to ConnectionCount(svr) - 1 do
       begin
         lTmp := RetreiveConnection(svr, i);
         if HasMessages(lTmp) then
-          WriteLn(' -> ', ReadMessage(lTmp) , ' from ', ConnectionPort(lTmp));
+          WriteLn(' -> ', ReadMessageData(lTmp) , ' from ', ConnectionPort(lTmp));
       end;
 
       Pause();
@@ -179,29 +179,6 @@ begin
   CloseAllConnections();
   CloseAllServers();
   Pause();
-
-
-  // Read the message from the server...
-  // WriteLn('Message was received by svr: ', ServerHasMessages(svr));
-
-  // WriteLn('Con A Address: ', HexStr(@lConA^) );
-  // WriteLn('Con B Address: ', HexStr(@lConB^) );
- 
-  // ReadLn();
- 
-
-  // lMsgReceived := TCPMessageReceived();
-  // WriteLn('Message Received? ', lMsgReceived);
-  // WriteLn('Message From [A], Received By [B]: ', ReadMessage(lConB));
-  // WriteLn('Message From [B], Received By [A]: ', ReadMessage(lConb));
-  // lMsgReceived := TCPMessageReceived();
-  // WriteLn('Message Received? ', lMsgReceived);
-  // WriteLn('Message From [A], Received By [B]: ', ReadMessage(lConB));
-
-  // CloseConnection(lConB);
-  // CloseConnection(lConA);
-  // WriteLn('Connections Closed');
-  // CloseTCPHostSocket(2000);
 end;
 
 begin
