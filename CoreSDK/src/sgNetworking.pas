@@ -505,6 +505,45 @@ uses sgTypes;
   /// @lib ServerMessageCount
   function  MessageCount(svr: ServerSocket) : LongInt;
 
+  /// Gets the data from a Message. This will be a string.
+  ///
+  /// @lib
+  ///
+  /// @class Message
+  /// @getter Data
+  function MessageData(const msg: Message): String;
+
+  /// Gets the protocol that was used to send the Message.
+  ///
+  /// @lib
+  ///
+  /// @class Message
+  /// @getter Protocol
+  function MessageProtocol(const msg: Message): ConnectionType;
+
+  /// Gets the connection used to send the message (TCP only).
+  ///
+  /// @lib
+  ///
+  /// @class Message
+  /// @getter Connection
+  function MessageConnection(const msg: Message): Connection;
+
+  /// Gets the host that sent the message.
+  ///
+  /// @lib
+  ///
+  /// @class Message
+  /// @getter Host
+  function MessageHost(const msg: Message): String;
+
+  /// Gets the port that the host sent the message from.
+  ///
+  /// @lib
+  ///
+  /// @class Message
+  /// @getter Port
+  function MessagePort(const msg: Message): Word;
 
 
 //----------------------------------------------------------------------------
@@ -2431,7 +2470,30 @@ var
 // Message methods
 //----------------------------------------------------------------------------
 
+  function MessageData(const msg: Message): String;
+  begin
+    result := msg.data;
+  end;
 
+  function MessageProtocol(const msg: Message): ConnectionType;
+  begin
+    result := msg.protocol;
+  end;
+
+  function MessageConnection(const msg: Message): Connection;
+  begin
+    result := msg.connection;
+  end;
+
+  function MessageHost(const msg: Message): String;
+  begin
+    result := msg.host;
+  end;
+
+  function MessagePort(const msg: Message): Word;
+  begin
+    result := msg.port;
+  end;
 
 
 //----------------------------------------------------------------------------

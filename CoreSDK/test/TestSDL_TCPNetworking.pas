@@ -33,7 +33,7 @@ var
       while HasMessages(lConA) do
       begin
         msg := ReadMessage(lConA);
-        WriteLn(' -> ', msg.data, ' from ', msg.host, ':', msg.port);
+        WriteLn(' -> ', msg.data, ' from ', MessageHost(msg), ':', MessagePort(msg));
       end;
 
       WriteLn(' Reading messages received for ToSvr client');
@@ -41,7 +41,7 @@ var
       while HasMessages('ToSvr') do
       begin
         msg := ReadMessage('ToSvr');
-        WriteLn(' -> ', msg.data, ' from ', msg.host, ':', msg.port);
+        WriteLn(' -> ', msg.data, ' from ', MessageHost(msg), ':', MessagePort(msg));
       end;
 
       WriteLn(' Reading messages received for server');
