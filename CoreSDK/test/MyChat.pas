@@ -136,7 +136,7 @@ begin
 		begin
 			if answer = 'yes' then
 			begin
-				WriteLn(ReadMessage('MyChat'));
+				WriteLn(ReadMessageData('MyChat'));
 			end;
 		end;
 
