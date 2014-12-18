@@ -59,7 +59,7 @@ interface
     end;
 
     // Used by release all
-    ReleaseFunction = procedure(name: String);
+    ReleaseFunction = procedure(const name: String);
     IntProc = procedure(val: Longword);
 
   // Immediate if

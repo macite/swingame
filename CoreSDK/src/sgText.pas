@@ -38,7 +38,7 @@ interface
 	/// @class Font
 	/// @constructor
 	/// @csn initWithFontName:%s andSize:%s
-	function LoadFont(fontName: String; size: Longint): Font;
+	function LoadFont(const fontName: String; size: Longint): Font;
 	
 	/// Frees the resources used by the loaded Font.
 	/// 
@@ -59,40 +59,40 @@ interface
 	/// @class Font
 	/// @constructor
 	/// @csn initWithName:%s fromFile:%s size:%s
-	function LoadFontNamed(name, filename: String; size: Longint): Font;
+	function LoadFontNamed(const name, filename: String; size: Longint): Font;
 	
 	/// Determines if SwinGame has a font loaded for the supplied name.
 	/// This checks against all fonts loaded, those loaded without a name
 	/// are assigned the filename as a default.
 	/// 
 	/// @lib
-	function HasFont(name: String): Boolean;
+	function HasFont(const name: String): Boolean;
 	
 	/// Determines the name that will be used for a font loaded with
 	/// the indicated fontName and size.
 	/// 
 	/// @lib
 	/// @sn fontName:%s size:%s
-	function FontNameFor(fontName: String; size: Longint): String;
+	function FontNameFor(const fontName: String; size: Longint): String;
 	
 	/// Returns the `Font` that has been loaded with the specified name,
 	/// and font size using `LoadFont`.
 	///
 	/// @lib FontNamedWithSize
 	/// @sn fontNamed:%s withSize:%s
-	function FontNamed(name: String; size: Longint): Font; overload;
+	function FontNamed(const name: String; size: Longint): Font; overload;
 	
 	/// Returns the `Font` that has been loaded with the specified name,
 	/// see `LoadFontNamed`.
 	///
 	/// @lib
-	function FontNamed(name: String): Font; overload;
+	function FontNamed(const name: String): Font; overload;
 	
 	/// Releases the SwinGame resources associated with the font of the
 	/// specified ``name``.
 	///
 	/// @lib
-	procedure ReleaseFont(name: String);
+	procedure ReleaseFont(const name: String);
 	
 	/// Releases all of the fonts that have been loaded.
 	///
@@ -130,7 +130,7 @@ interface
 	///
 	/// @class Font
 	/// @method TextWidth
-	function TextWidth(theFont: Font; theText: String): Longint; overload;
+	function TextWidth(theFont: Font; const theText: String): Longint; overload;
 
 	/// Returns the height (in pixels) of the passed in text and the font it will be drawn with.
 	///
@@ -139,12 +139,12 @@ interface
 	///
 	/// @class Font
 	/// @method TextHeight
-	function TextHeight(theFont: Font; theText: String): Longint; overload;
+	function TextHeight(theFont: Font; const theText: String): Longint; overload;
 
 	/// Returns the font alignment for the passed in character (l = left. r = right, c = center).
 	/// 
 	/// @lib
-	function TextAlignmentFrom(str: String): FontAlignment;
+	function TextAlignmentFrom(const str: String): FontAlignment;
 	
 	
 	
@@ -157,41 +157,41 @@ interface
 	/// @lib
 	/// @sn drawText:%s color:%s font:%s x:%s y:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
 	
 	/// Draws the text at the specified point using the color and font indicated.
 	///
 	/// @lib DrawTextWithFontNamed
 	/// @sn drawText:%s color:%s fontNamed:%s x:%s y:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; x, y: Single); overload;
 	
 	/// Draws theText at the specified point using the color and font indicated.
 	///
 	/// @lib DrawTextWithFontNamedSize
 	/// @sn drawText:%s color:%s fontNamed:%s size:%s x:%s y:%s
-	procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x, y: Single); overload;
 	
 	/// Draws the text at the specified x,y location using the color, font, and options indicated.
 	///
 	/// @lib DrawTextOpts
 	/// @sn drawText:%s color:%s font:%s atX:%s y:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text at the specified x,y location using the color, font, and options indicated.
 	///
 	/// @lib DrawTextWithFontNamedOpts
 	/// @sn drawText:%s color:%s fontNamed:%s atX:%s y:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text at the specified x,y location using the color, font, and options indicated.
 	///
 	/// @lib DrawTextWithFontNamedAndSizeOpts
 	/// @sn drawText:%s color:%s fontNamed:%s size:%s atX:%s y:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
 	/// Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
@@ -200,7 +200,7 @@ interface
 	/// @lib DrawTextToBitmapAtPointWithFontNamedAndSize
 	/// @sn drawTextFont:%s string:%s textColor:%s backgroundColor:%s   
 	/// @doc_details
-	function DrawTextToBitmap(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
+	function DrawTextToBitmap(font: Font; const str: String; clrFg, backgroundColor : Color) : Bitmap;
 	
 	
 //---------------------------------------------------------------------------
@@ -212,42 +212,42 @@ interface
 	/// @lib DrawTextInRect
 	/// @sn drawText:%s textColor:%s backColor:%s font:%s align:%s inRect:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
 	
 	/// Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
 	///
 	/// @lib DrawTextInRectWithFontNamed
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s align:%s inRect:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; align: FontAlignment; const area: Rectangle); overload;
 	
 	/// Draws theText in the specified rectangle using the fore and back colors, and the font indicated.
 	///
 	/// @lib DrawTextInRectWithFontNamedAndSize
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s inRect:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
 	
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
 	/// @lib DrawTextInRectOpts
 	/// @sn bitmap:%s drawText:%s textColor:%s backColor:%s font:%s align:%s in:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
 	/// @lib DrawTextInRectWithFontNamedOpts
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s align:%s in:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
 	/// @lib DrawTextInRectWithFontNamedAndSizeOpts
 	/// @sn drawText:%s textColor:%s backColor:%s fontNamed:%s size:%s align:%s in:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	
 	
 //---------------------------------------------------------------------------
@@ -258,14 +258,14 @@ interface
 	///
 	/// @lib DrawSimpleText
 	/// @sn drawText:%s color:%s x:%s y:%s
-	procedure DrawText(theText: String; textColor: Color; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; x, y: Single); overload;
 	
 	/// Draws text using a simple bitmap font that is built into SwinGame.
 	///
 	/// @lib DrawSimpleTextOpts
 	/// @sn drawText:%s color:%s atX:%s y:%s opts:%s
 	/// @doc_details
-	procedure DrawText(theText: String; textColor: Color; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; x, y: Single; const opts: DrawingOptions); overload;
 	
 	/// 
 	/// @lib DrawFramerateWithSimpleFont
@@ -287,7 +287,7 @@ implementation
 
 //----------------------------------------------------------------------------
 	
-	function LoadFont(fontName: String; size: Longint): Font;
+	function LoadFont(const fontName: String; size: Longint): Font;
 	begin
 		result := LoadFontNamed(FontNameFor(fontName, size), fontName, size);
 	end;
@@ -327,12 +327,12 @@ implementation
 
 //----------------------------------------------------------------------------
 
-	function LoadFontNamed(name, filename: String; size: Longint): Font;
+	function LoadFontNamed(const name, filename: String; size: Longint): Font;
 	var
 		obj: tResourceContainer;
 		fnt: Font;
 		
-		function _DoLoadFont(fontName: String; size: Longint): Font;
+		function _DoLoadFont(const fontName: String; size: Longint): Font;
 		var
 			filename: String;
 			originalFilename: String; 
@@ -400,22 +400,22 @@ implementation
 		
 	end;
 
-	function HasFont(name: String): Boolean;
+	function HasFont(const name: String): Boolean;
 	begin
 		result := _Fonts.containsKey(name);
 	end;
 	
-	function FontNameFor(fontName: String; size: Longint): String;
+	function FontNameFor(const fontName: String; size: Longint): String;
 	begin
 		result := fontName + '|' + IntToStr(size);
 	end;
 	
-	function FontNamed(name: String; size: Longint): Font;
+	function FontNamed(const name: String; size: Longint): Font;
 	begin
 		result := FontNamed(FontNameFor(name, size));
 	end;
 	
-	function FontNamed(name: String): Font;
+	function FontNamed(const name: String): Font;
 	var
 		tmp : TObject;
 	begin
@@ -424,7 +424,7 @@ implementation
 		else result := nil;
 	end;
 	
-	procedure ReleaseFont(name: String);
+	procedure ReleaseFont(const name: String);
 	var
 		fnt: Font;
 	begin
@@ -529,7 +529,7 @@ implementation
 	/// This function prints "str" with font "font" and color "clrFg"
 	///  * onto a rectangle of color "clrBg".
 	///  * It does not pad the text.
-	procedure PrintStrings(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	procedure PrintStrings(dest: Bitmap; font: Font; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	var
 		lineSkip, width, height: Longint;
 		lines: StringArray;
@@ -593,7 +593,7 @@ implementation
 		PopClip(dest);
 	end;
 
-	function DrawTextToBitmap(font: Font; str: String; clrFg, backgroundColor : Color) : Bitmap;
+	function DrawTextToBitmap(font: Font; const str: String; clrFg, backgroundColor : Color) : Bitmap;
 	var
 		resultBitmap : Bitmap;
 		bitmapSize : Rectangle;
@@ -626,7 +626,7 @@ implementation
 // Draw Text
 //----------------------------------------------------------------------------
 	
-	procedure DrawText(theText: String; textColor: Color; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; x, y: Single; const opts: DrawingOptions); overload;
 	begin
 		if not Assigned(opts.dest) then exit;
 
@@ -634,7 +634,7 @@ implementation
 		TextDriver.stringColor(opts.dest, x, y, theText, textColor);
 	end;
 
-	procedure DrawText(theText: String; textColor: Color; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; x, y: Single); overload;
 	begin
 		DrawText(theText, textColor, x, y, OptionDefaults());
 	end;
@@ -643,7 +643,7 @@ implementation
 // Draw Text using font
 //----------------------------------------------------------------------------
 
-	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
 	var
 		rect: Rectangle;
 	begin
@@ -660,27 +660,27 @@ implementation
 		PrintStrings(opts.dest, theFont, theText, rect, textColor, ColorTransparent, AlignLeft);
 	end;
 
-	procedure DrawText(theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
 	begin
 		DrawText(theText, textColor, theFont, x, y, OptionDefaults());
 	end;
 	
-	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; x, y: Single); overload;
 	begin
 		DrawText(theText, textColor, FontNamed(name), x, y, OptionDefaults());
 	end;
 	
-	procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x, y: Single); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x, y: Single); overload;
 	begin
 		DrawText(theText, textColor, LoadFontNamed(FontNameFor(name, size), name, size), x, y, OptionDefaults());
 	end;
 
-	procedure DrawText(theText: String; textColor: Color; name: String; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; x, y: Single; const opts: DrawingOptions); overload;
 	begin
 		DrawText(theText, textColor, FontNamed(name), x, y, opts);
 	end;
 	
-	procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x, y: Single; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x, y: Single; const opts: DrawingOptions); overload;
 	begin
 		DrawText(theText, textColor, LoadFontNamed(FontNameFor(name, size), name, size), x, y, opts);
 	end;
@@ -689,7 +689,7 @@ implementation
 // Draw Text in Area
 //----------------------------------------------------------------------------
 
-	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
 		if not Assigned(theFont) then exit;
 		if not Assigned(opts.dest) then begin RaiseWarning('Cannot draw text, as no destination was supplied'); exit; end;
@@ -699,27 +699,27 @@ implementation
 		PrintStrings(opts.dest, theFont, theText, area, textColor, backColor, align);
 	end;
 	
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
 		DrawText(theText, textColor, backColor, FontNamed(name), align, area, opts);
 	end;
 	
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	begin
 		DrawText(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, area, opts);
 	end;
 		
-	procedure DrawText(theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
 	begin
 		DrawText(theText, textColor, backColor, theFont, align, area, OptionDefaults());
 	end;
 	
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; align: FontAlignment; const area: Rectangle); overload;
 	begin
 		DrawText(theText, textColor, backColor, FontNamed(name), align, area, OptionDefaults());
 	end;
 	
-	procedure DrawText(theText: String; textColor, backColor: Color; name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
+	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
 	begin
 		DrawText(theText, textColor, backColor, LoadFontNamed(FontNameFor(name, size), name, size), align, area, OptionDefaults());
 	end;
@@ -729,7 +729,7 @@ implementation
 //----------------------------------------------------------------------------
 	
 	/// Calculates the width of a string when drawn with a given font.
-	function TextWidth(theFont: Font; theText: String): Longint; overload;
+	function TextWidth(theFont: Font; const theText: String): Longint; overload;
 	var
 		height: Longint; //SizeText returns both... store and ignore height
 	begin
@@ -742,7 +742,7 @@ implementation
 	end;
 
 	/// Calculates the height of a string when drawn with a given font.
-	function TextHeight(theFont: Font; theText: String): Longint; overload;
+	function TextHeight(theFont: Font; const theText: String): Longint; overload;
 	var
 		width: Longint; //SizeText returns both... store and ignore w
 	begin
@@ -765,11 +765,13 @@ implementation
 		DrawText('FPS: (' + highest + ', ' + lowest + ') ' + average, textColor, x + 2, y + 2, OptionToScreen())
 	end;
 	
-	function TextAlignmentFrom(str: String): FontAlignment;
-	var ch: Char;
+	function TextAlignmentFrom(const str: String): FontAlignment;
+	var 
+		ch: Char;
+		tstr: String;
 	begin
-		str := trim(str);
-		if length(str) > 0 then ch := str[1] else ch := 'l';
+		tstr := trim(str);
+		if length(tstr) > 0 then ch := tstr[1] else ch := 'l';
 		
 		case ch of
 			'c', 'C': result := AlignCenter;

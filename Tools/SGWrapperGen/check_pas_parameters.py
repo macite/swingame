@@ -19,8 +19,16 @@ _errors = 0
 
 def param_visitor(param, last, other):
     '''Check that all types in the types list are passed by reference...'''
-    
-    if param.modifier in ['const', 'var', 'out', 'result']: return    
+    global _errors
+
+    if param.modifier in ['const', 'var', 'out', 'result']: return
+    if param.data_type.name == 'String':
+        print ' ******* ERROR *********'
+        print param.name
+        print param.file_line_details
+        print ' ***********************'
+        _errors += 1
+
     if param.being_updated:
         print ' -------- NOTE --------'
         print param.name, 'is updating data passed in.'
@@ -32,15 +40,14 @@ def param_visitor(param, last, other):
         print param.name
         print param.file_line_details
         print ' ***********************'
-        global _errors
         _errors += 1
 
 def method_visitor(method, other):
-    print 'checking method   %s' % method.name
+    # print 'checking method   %s' % method.name
     method.visit_params(param_visitor, other)
 
 def property_visitor(prop, other):
-    print 'checking property %s' % prop.name
+    # print 'checking property %s' % prop.name
     
     if prop.getter != None:
         method_visitor(prop.getter, None)

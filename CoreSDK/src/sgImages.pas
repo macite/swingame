@@ -50,7 +50,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initNamed:%s withWidth:%s andHeight:%s
-  function CreateBitmap(name: String; width, height: Longint): Bitmap; overload;
+  function CreateBitmap(const name: String; width, height: Longint): Bitmap; overload;
   
   /// Creates a new bitmap by combining together the bitmaps from an array. 
   /// The bitmaps will be arranged in the number of columns specified, the 
@@ -71,7 +71,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initWithPath:%s withTransparency:%s usingColor:%s
-  function LoadBitmap(filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
+  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
 
   /// Loads a bitmap from file into a Bitmap variable. This can then be drawn to
   /// the screen. Bitmaps can be of bmp, jpeg, gif, png, etc. Images may also
@@ -85,7 +85,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initWithPath:%s
-  function LoadBitmap(filename : String): Bitmap; overload;
+  function LoadBitmap(const filename : String): Bitmap; overload;
 
   /// Loads a bitmap with a transparent color key. The transparent color is then
   /// setup as the color key to ensure the image is drawn correctly. Alpha
@@ -98,7 +98,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initWithPath:%s transparentColor:%s
-  function LoadTransparentBitmap(filename : String; transparentColor : Color): Bitmap; overload;
+  function LoadTransparentBitmap(const filename : String; transparentColor : Color): Bitmap; overload;
 
   /// Frees a loaded bitmap. Use this when you will no longer be drawing the
   /// bitmap (including within Sprites), and when the program exits.
@@ -126,7 +126,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initWithName:%s fromFile:%s
-  function LoadBitmapNamed(name, filename: String): Bitmap;
+  function LoadBitmapNamed(const name, filename: String): Bitmap;
   
   /// Loads and returns a bitmap with a given color code use for transparency.
   /// The supplied ``filename`` is used to locate the Bitmap to load. The supplied
@@ -139,26 +139,26 @@ uses sgTypes;
   /// @class Bitmap
   /// @constructor
   /// @csn initWithName:%s fromFile:%s colorKey:%s
-  function LoadTransparentBitmapNamed(name, filename: String; transparentColor: Color): Bitmap;
+  function LoadTransparentBitmapNamed(const name, filename: String; transparentColor: Color): Bitmap;
   
   /// Determines if SwinGame has a bitmap loaded for the supplied name.
   /// This checks against all bitmaps loaded, those loaded without a name
   /// are assigned the filename as a default.
   ///
   /// @lib
-  function HasBitmap(name: String): Boolean;
+  function HasBitmap(const name: String): Boolean;
   
   /// Returns the `Bitmap` that has been loaded with the specified name,
   /// see `LoadBitmapNamed`.
   ///
   /// @lib
-  function BitmapNamed(name: String): Bitmap;
+  function BitmapNamed(const name: String): Bitmap;
   
   /// Releases the SwinGame resources associated with the bitmap of the
   /// specified ``name``.
   ///
   /// @lib
-  procedure ReleaseBitmap(name: String);
+  procedure ReleaseBitmap(const name: String);
   
   /// Releases all of the bitmaps that have been loaded.
   ///
@@ -372,7 +372,7 @@ uses sgTypes;
   ///
   /// @class Bitmap
   /// @method SaveToPNG
-  procedure SaveToPNG(bmp: Bitmap; filename: String);
+  procedure SaveToPNG(bmp: Bitmap; const filename: String);
     
   /// Setup the passed in bitmap for pixel level collisions.
   ///
@@ -499,7 +499,7 @@ uses sgTypes;
   ///
   /// @lib DrawBitmapNamedWithOpts
   /// @sn drawBitmapNamed:%s atX:%s y:%s withOptions:%s
-  procedure DrawBitmap(name: String; x, y: Single; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(const name: String; x, y: Single; const opts: DrawingOptions); overload;
   
 
 //---------------------------------------------------------------------------
@@ -524,7 +524,7 @@ uses sgTypes;
   /// @sn drawBitmapNamed:%s x:%s y:%s
   ///
   /// @doc_idx 1
-  procedure DrawBitmap(name: String; x, y : Single); overload;
+  procedure DrawBitmap(const name: String; x, y : Single); overload;
   
   /// Draw a cell from a bitmap onto the game.
   ///
@@ -559,7 +559,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @method Save
   /// @csn saveToFile:%s
-  procedure SaveBitmap(src : Bitmap; filepath : string);
+  procedure SaveBitmap(src: Bitmap; const filepath: String);
   
   
   
@@ -598,7 +598,7 @@ begin
   result := CreateBitmap('Bitmap', width, height);
 end;
 
-function CreateBitmap(name: String; width, height: Longint): Bitmap; overload;
+function CreateBitmap(const name: String; width, height: Longint): Bitmap; overload;
 var
   realName: String;
   idx: Longint;
@@ -705,9 +705,10 @@ begin
   BitmapSetCellDetails(result, w, h, cols, rows, Length(bitmaps));
 end;
 
-function DoLoadBitmap(name, filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+function DoLoadBitmap(const name, filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 var
   obj: tResourceContainer;
+  fn: String;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'LoadBitmap', filename);
@@ -721,24 +722,25 @@ begin
   
   result := nil; //start at nil to exit cleanly on error
   
+  fn := filename;
   // Check for file
-  if not FileExists(filename) then
+  if not FileExists(fn) then
   begin
-    filename := PathToResource(filename, BitmapResource);
+    fn := PathToResource(fn, BitmapResource);
     
-    if not FileExists(filename) then
+    if not FileExists(fn) then
     begin
-      RaiseWarning('Unable to locate bitmap ' + filename);
+      RaiseWarning('Unable to locate bitmap ' + fn);
       exit;
     end;
   end;  
   
-  result := ImagesDriver.DoLoadBitmap(filename, transparent, transparentColor);
+  result := ImagesDriver.DoLoadBitmap(fn, transparent, transparentColor);
 
   // if it failed to load then exit
   if not assigned(result) then 
   begin
-    RaiseWarning('Error loading image ' + filename);
+    RaiseWarning('Error loading image ' + fn);
     exit;
   end;
 
@@ -748,7 +750,7 @@ begin
   result^.cellRows  := 1;
   result^.cellCount := 1;
   result^.name      := name;
-  result^.filename  := filename;
+  result^.filename  := fn;
   SetLength(result^.clipStack, 0);
   
   // Place the bitmap in the _Images hashtable
@@ -759,7 +761,7 @@ begin
   if not _Images.setValue(name, obj) then
   begin
     FreeBitmap(result);
-    RaiseException('Error loaded Bitmap resource twice: ' + name + ' for file ' + filename);
+    RaiseException('Error loaded Bitmap resource twice: ' + name + ' for file ' + fn);
     exit;
   end;
   
@@ -768,17 +770,17 @@ begin
   {$ENDIF}
 end;
 
-function LoadBitmap(filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
+function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
 begin
   result := DoLoadBitmap(filename + ColorToString(transparentColor),filename, transparent, transparentColor);
 end;
 
-function LoadBitmap(filename: String): Bitmap; overload;
+function LoadBitmap(const filename: String): Bitmap; overload;
 begin
   result := DoLoadBitmap(filename, filename, false, ColorBlack);
 end;
 
-function LoadTransparentBitmap(filename: String; transparentColor: Color): Bitmap; overload;
+function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
 begin
   result := LoadBitmap(filename, true, transparentColor);
 end;
@@ -814,7 +816,7 @@ end;
 
 //----------------------------------------------------------------------------
 
-function LoadBitmapNamed(name, filename: String): Bitmap;
+function LoadBitmapNamed(const name, filename: String): Bitmap;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'LoadBitmapNamed', name + ' -> ' + filename);
@@ -827,7 +829,7 @@ begin
   {$ENDIF}
 end;
 
-function LoadTransparentBitmapNamed(name, filename: String; transparentColor: Color): Bitmap;
+function LoadTransparentBitmapNamed(const name, filename: String; transparentColor: Color): Bitmap;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'LoadTransparentBitmapNamed', name + ' -> ' + filename);
@@ -840,12 +842,12 @@ begin
   {$ENDIF}
 end;
 
-function HasBitmap(name: String): Boolean;
+function HasBitmap(const name: String): Boolean;
 begin
   result := _Images.containsKey(name);
 end;
 
-function BitmapNamed(name: String): Bitmap;
+function BitmapNamed(const name: String): Bitmap;
 var
   tmp : TObject;
 begin
@@ -865,7 +867,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ReleaseBitmap(name: String);
+procedure ReleaseBitmap(const name: String);
 var
   bmp: Bitmap;
 begin
@@ -1006,12 +1008,12 @@ begin
   DrawBitmap(src, x, y, OptionDefaults());
 end;
 
-procedure DrawBitmap(name: String; x, y : Single; const opts: DrawingOptions); overload;
+procedure DrawBitmap(const name: String; x, y : Single; const opts: DrawingOptions); overload;
 begin
     DrawBitmap(BitmapNamed(name), x, y, opts);
 end;
 
-procedure DrawBitmap(name: String; x, y : Single); overload;
+procedure DrawBitmap(const name: String; x, y : Single); overload;
 begin
   DrawBitmap(BitmapNamed(name), x, y, OptionDefaults());
 end;
@@ -1168,7 +1170,7 @@ end;
 
 //---------------------------------------------------------------------------
 
-procedure SaveBitmap(src: Bitmap; filepath: String);
+procedure SaveBitmap(src: Bitmap; const filepath: String);
 begin
   ImagesDriver.SaveBitmap(src, filepath);
 end;
@@ -1191,7 +1193,7 @@ begin
   end;
 end;
 
-procedure SaveToPNG(bmp: Bitmap; filename: String);
+procedure SaveToPNG(bmp: Bitmap; const filename: String);
 begin
   if not assigned(bmp) then exit;
   

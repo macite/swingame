@@ -4,29 +4,6 @@
 //
 // Create and manage sprites in SwinGame.
 //
-// Change History:
-//
-// Version 3.0:
-// - 2013-11-13: Andrew : Add Sprite Packs
-// - 2013-11-12: Andrew : Updated Sprite constructors
-// - 2013-11-08: Andrew : Add Sprite Event Details
-//
-// ... long missing history --sadface--
-// - 2010-12-31: Andrew : Added name to sprite
-//                      : Added standard resource management code
-// - 2009-12-21: Andrew : Added the ability to toggle visible layers.
-//                      : Added width/height of layers and layer offsets
-//                      : Added rectangle calculation code for sprite layers
-// - 2009-12-20: Andrew : Added code to manage sprite layers (show, hide, reorder, etc)
-// - 2009-12-18: Andrew : Moved to new sprite format.
-// - 2009-11-10: Andrew : Changed sn and csn tags
-// - 2009-10-16: Andrew : Called the free notifier to ensure Sprites are freed
-// - 2009-07-06: Andrew : Added property access routines for Sprite data
-// - 2009-06-29: Andrew : Renamed CurrentWidth to SpriteWidth
-//                      : Renamed CurrentHeight to SpriteHeight
-//                      : Renamed IsSpriteOnScreenAt to SpriteOnScreenAt
-// - 2009-06-20: Andrew : Created Sprites unit.
-//
 //=============================================================================
 
 
@@ -69,7 +46,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initWithBitmapNamed:%s animationScriptNamed:%s
-  function CreateSprite(bitmapName, animationName: String): Sprite; overload;
+  function CreateSprite(const bitmapName, animationName: String): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -99,7 +76,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initWithBitmap:%s position:%s
-  function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -113,7 +90,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initWithBitmap:%s layerNamed:%s
-  function CreateSprite(layer: Bitmap; layerName: String): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -157,7 +134,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initWithBitmap:%s animationScript:%s position:%s
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; pt: Point2D): Sprite; overload;
+  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -171,7 +148,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initWithBitmap:%s layerNamed:%s animationScript:%s
-  function CreateSprite(layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -239,7 +216,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s
-  function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
 
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -251,7 +228,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s layerNamed:%s
-  function CreateSprite(name: String; layer: Bitmap; layerName: String): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -263,7 +240,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s animationScript:%s
-  function CreateSprite(name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -275,7 +252,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s layerNamed:%s animationScript:%s
-  function CreateSprite(name: String; layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -287,7 +264,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmaps:%s
-  function CreateSprite(name: String; const layers: BitmapArray): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -299,7 +276,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmaps:%s layerNames:%s
-  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -311,7 +288,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed: %s withBitmaps:%s animationScript:%s
-  function CreateSprite(name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
   
   /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -323,7 +300,7 @@ interface
   /// @class Sprite
   /// @constructor
   /// @csn initNamed:%s withBitmaps:%s layerNames:%s animationScript:%s
-  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
   
   /// Free the resources associated with a sprite.
   /// 
@@ -343,19 +320,19 @@ interface
   /// are assigned a default.
   ///
   /// @lib
-  function HasSprite(name: String): Boolean;
+  function HasSprite(const name: String): Boolean;
   
   /// Returns the `Sprite` with the specified name,
   /// see `CreateBasicSprite`.
   ///
   /// @lib
-  function SpriteNamed(name: String): Sprite;
+  function SpriteNamed(const name: String): Sprite;
   
   /// Releases the SwinGame resources associated with the sprite of the
   /// specified ``name``.
   ///
   /// @lib
-  procedure ReleaseSprite(name: String);
+  procedure ReleaseSprite(const name: String);
   
   /// Releases all of the sprites that have been loaded.
   ///
@@ -412,7 +389,7 @@ interface
   /// @class Sprite
   /// @method AddLayer
   /// @csn addLayer:%s named:%s
-  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint;
+  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; const layerName: String): Longint;
   
   /// Returns the bitmap of the indicated layer of the sprite.
   ///
@@ -422,7 +399,7 @@ interface
   /// @class Sprite
   /// @method LayerNamed
   /// @csn layerNamed:%s
-  function SpriteLayer(s: Sprite; name: String): Bitmap; overload;
+  function SpriteLayer(s: Sprite; const name: String): Bitmap; overload;
   
   /// Returns the bitmap of the indicated layer of the sprite.
   ///
@@ -442,7 +419,7 @@ interface
   /// @class Sprite
   /// @method IndexOfLayer
   /// @csn indexOfLayer:%s
-  function SpriteLayerIndex(s: Sprite; name: String): Longint;
+  function SpriteLayerIndex(s: Sprite; const name: String): Longint;
   
   /// Returns the name of the specified layer.
   ///
@@ -462,7 +439,7 @@ interface
   /// @class Sprite
   /// @overload ShowLayer ShowLayerNamed
   /// @csn showLayerNamed:%s
-  function SpriteShowLayer(s: Sprite; name: String): Longint; overload;
+  function SpriteShowLayer(s: Sprite; const name: String): Longint; overload;
   
   /// Show the specified layer of the sprite.
   ///
@@ -482,7 +459,7 @@ interface
   /// @class Sprite
   /// @overload HideLayer HideLayerNamed
   /// @csn hideLayerNamed:%s
-  procedure SpriteHideLayer(s: Sprite; name: String); overload;
+  procedure SpriteHideLayer(s: Sprite; const name: String); overload;
   
   /// Hide the specified layer of the sprite.
   ///
@@ -502,7 +479,7 @@ interface
   /// @class Sprite
   /// @overload ToggleLayerVisible ToggleLayerNamedVisible
   /// @csn toggleLayerNamedVisible:%s
-  procedure SpriteToggleLayerVisible(s: Sprite; name: String); overload;
+  procedure SpriteToggleLayerVisible(s: Sprite; const name: String); overload;
   
   /// Toggle the visibility of the specified layer of the sprite.
   ///
@@ -522,7 +499,7 @@ interface
   /// @class Sprite
   /// @overload VisibleIndexOfLayer VisibleIndexOfLayerNamed
   /// @csn visibleIndexOfLayerNamed:%s
-  function SpriteVisibleIndexOfLayer(s: Sprite; name: String): Longint; overload;
+  function SpriteVisibleIndexOfLayer(s: Sprite; const name: String): Longint; overload;
   
   /// Returns the index (z-order) of the sprite's layer.
   ///
@@ -595,7 +572,7 @@ interface
   /// @class Sprite
   /// @overload LayerOffset LayerNamedOffset
   /// @csn offsetOfLayerNamed:%s 
-  function SpriteLayerOffset(s: Sprite; name: String): Point2D; overload;
+  function SpriteLayerOffset(s: Sprite; const name: String): Point2D; overload;
   
   /// Gets the offset of the specified layer.
   ///
@@ -615,7 +592,7 @@ interface
   /// @class Sprite
   /// @overload SetLayerOffset SetLayerNamedOffset
   /// @csn layerNamed:%s setOffset:%s 
-  procedure SpriteSetLayerOffset(s: Sprite; name: String; const value: Point2D); overload;
+  procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D); overload;
   
   /// Sets the offset of the specified layer.
   ///
@@ -679,7 +656,7 @@ interface
   /// 
   /// @class Sprite
   /// @method RectangleForLayerNamed
-  function SpriteLayerRectangle(s: Sprite; name: String): Rectangle; overload;
+  function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
   
   /// Gets a rectangle that surrounds the indicated layer.
   ///
@@ -705,7 +682,7 @@ interface
   /// 
   /// @class Sprite
   /// @method CircleForLayerNamed
-  function SpriteLayerCircle(s: Sprite; name: String): Circle; overload;
+  function SpriteLayerCircle(s: Sprite; const name: String): Circle; overload;
   
   /// Gets a circle in the bounds of the indicated layer.
   ///
@@ -769,7 +746,7 @@ interface
   /// @class Sprite
   /// @overload StartAnimation StartAnimationNamed
   /// @csn startAnimationNamed:%s
-  procedure SpriteStartAnimation(s: Sprite; named: String); overload;
+  procedure SpriteStartAnimation(s: Sprite; const named: String); overload;
   
   /// Start playing an animation from the sprite's animation template.
   /// The withSound parameter determines whether to play a sound effect 
@@ -781,7 +758,7 @@ interface
   /// @class Sprite
   /// @overload StartAnimation StartAnimationNamedWithSound
   /// @csn startAnimationNamed:%s withSound:%s
-  procedure SpriteStartAnimation(s: Sprite; named: String; withSound: Boolean); overload;
+  procedure SpriteStartAnimation(s: Sprite; const named: String; withSound: Boolean); overload;
   
   /// Start playing an animation from the sprite's animation template.
   /// This will play a sound effect if the first cell of the animation
@@ -1142,7 +1119,7 @@ interface
   /// @class Sprite
   /// @overload LayerHeight LayerNamedHeight
   /// @csn heightOfLayerNamed:%s
-  function SpriteLayerHeight(s: Sprite; name: String): Longint; overload;
+  function SpriteLayerHeight(s: Sprite; const name: String): Longint; overload;
   
   /// The height of a given layer of the Sprite (aligned to the Y axis).
   ///
@@ -1169,7 +1146,7 @@ interface
   /// @class Sprite
   /// @overload LayerWidth LayerNamedWidth
   /// @csn widthOfLayerNamed:%s
-  function SpriteLayerWidth(s: Sprite; name: String): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
   
   /// The width of a given layer of the Sprite (aligned to the X axis).
   ///
@@ -1566,7 +1543,7 @@ interface
   ///
   /// @class Sprite
   /// @method Value
-  function SpriteValue(s: Sprite; name: String): Single; overload;
+  function SpriteValue(s: Sprite; const name: String): Single; overload;
   
   /// Adds a new kind of value to the Sprite
   /// 
@@ -1575,7 +1552,7 @@ interface
   /// 
   /// @class Sprite
   /// @method AddValue
-  procedure SpriteAddValue(s: Sprite; name: String);
+  procedure SpriteAddValue(s: Sprite; const name: String);
   
   /// Adds a new kind of value to the Sprite, setting the initial value
   /// to the value passed in.
@@ -1586,7 +1563,7 @@ interface
   /// @class Sprite
   /// @overload AddValue AddValueWithDefault
   /// @csn addValue:%s initally:%s
-  procedure SpriteAddValue(s: Sprite; name: String; initVal: Single);
+  procedure SpriteAddValue(s: Sprite; const name: String; initVal: Single);
   
   /// Assigns a value to the Sprite.
   ///
@@ -1596,7 +1573,7 @@ interface
   /// @class Sprite
   /// @overload SetValue SetValueNamed
   /// @csn setValueNamed:%s to:%s
-  procedure SpriteSetValue(s: Sprite; name: String; val: Single); overload;
+  procedure SpriteSetValue(s: Sprite; const name: String; val: Single); overload;
   
   /// Assigns a value to the Sprite.
   ///
@@ -1655,19 +1632,19 @@ interface
   /// the calls to DrawAllSprites and UpdateAllSprites.
   ///
   /// @lib
-  procedure CreateSpritePack(name: String);
+  procedure CreateSpritePack(const name: String);
 
   /// Indicates if a given SpritePack has already been created.
   ///
   /// @lib
-  function HasSpritePack(name: String): Boolean;
+  function HasSpritePack(const name: String): Boolean;
 
   /// Selects the named SpritePack (if it has been created). The
   /// selected SpritePack determines which sprites are drawn and updated
   /// with the DrawAllSprites and UpdateAllSprites code.
   ///
   /// @lib
-  procedure SelectSpritePack(name: String);
+  procedure SelectSpritePack(const name: String);
 
   /// Returns the name of the currently selected SpritePack.
   ///
@@ -1754,13 +1731,13 @@ implementation
     SpriteSetY(result, y);
   end;
   
-  function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
   begin
     result := CreateSprite(layer);
     SpriteSetPosition(result, pt);
   end;
   
-  function CreateSprite(layer: Bitmap; layerName: String): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
   begin
     result := CreateSprite(layer, layerName, nil);
   end;
@@ -1770,7 +1747,7 @@ implementation
     result := CreateSprite(layer, 'layer0', ani);
   end;
 
-  function CreateSprite(bitmapName, animationName: String): Sprite; overload;
+  function CreateSprite(const bitmapName, animationName: String): Sprite; overload;
   begin
     result := CreateSprite(BitmapNamed(bitmapName), AnimationScriptNamed(animationName));
   end;
@@ -1782,13 +1759,13 @@ implementation
     SpriteSetY(result, y);
   end;
   
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; pt: Point2D): Sprite; overload;
+  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
   begin
     result := CreateSprite(layer);
     SpriteSetPosition(result, pt);
   end;
   
-  function CreateSprite(layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
   var
     layerNames: StringArray;
     layers: BitmapArray;
@@ -1831,22 +1808,22 @@ implementation
     result := CreateSprite('Sprite', layers, layerNames, ani);
   end;
   
-  function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
   begin
     result := CreateSprite(name, layer, 'layer0', nil);
   end;
   
-  function CreateSprite(name: String; layer: Bitmap; layerName: String): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
   begin
     result := CreateSprite(name, layer, layerName, nil);
   end;
   
-  function CreateSprite(name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
   begin
     result := CreateSprite(name, layer, 'layer0', ani);
   end;
   
-  function CreateSprite(name: String; layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
   var
     layerNames: StringArray;
     layers: BitmapArray;
@@ -1860,17 +1837,17 @@ implementation
     result := CreateSprite(name, layers, layerNames, ani);
   end;
   
-  function CreateSprite(name: String; const layers: BitmapArray): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
   begin
     result := CreateSprite(name, layers, AnimationScript(nil));
   end;
   
-  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
   begin
     result := CreateSprite(name, layers, layerNames, nil);
   end;
   
-  function CreateSprite(name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
   var
     layerNames: StringArray;
     i: Longint;
@@ -1884,9 +1861,9 @@ implementation
     result := CreateSprite(name, layers, layerNames, ani);
   end;
   
-  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
   var
-    nameBase: String;
+    sn: String;
     i, idx, count, cellCount: Longint;
     obj: tResourceContainer;
   begin
@@ -1898,18 +1875,18 @@ implementation
     
     // Find a unique name for this sprite
     idx := 0;
-    nameBase := name;
+    sn := name;
     
-    while HasSprite(name) do
+    while HasSprite(sn) do
     begin
-      name := nameBase + IntToStr(idx);
+      sn := name + IntToStr(idx);
       idx += 1;
     end;
     
     //Allocate the space for the sprite
     New(result);
     
-    result^.name := name;
+    result^.name := sn;
     
     //Set lengths of the layer arrays
     SetLength(result^.layers, count);
@@ -1985,9 +1962,9 @@ implementation
     // Register in _Sprites
     obj := tResourceContainer.Create(result);
     // WriteLn('Adding for ', name, ' ', HexStr(obj));
-    if not _Sprites.setValue(name, obj) then
+    if not _Sprites.setValue(sn, obj) then
     begin
-        RaiseWarning('** Leaking: Caused by loading Sprite created twice, ' + name);
+        RaiseWarning('** Leaking: Caused by loading Sprite created twice, ' + sn);
         result := nil;
         exit;
     end;
@@ -1996,12 +1973,12 @@ implementation
     _CurrentPack.AddSprite(result);
   end;
   
-  function HasSprite(name: String): Boolean;
+  function HasSprite(const name: String): Boolean;
   begin
     result := _Sprites.containsKey(name);
   end;
 
-  function SpriteNamed(name: String): Sprite;
+  function SpriteNamed(const name: String): Sprite;
   var
     tmp : TObject;
   begin
@@ -2012,7 +1989,7 @@ implementation
       result := nil;
   end;
 
-  procedure ReleaseSprite(name: String);
+  procedure ReleaseSprite(const name: String);
   var
     sprt: Sprite;
   begin
@@ -2147,7 +2124,7 @@ implementation
     s := nil;
   end;
   
-  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint;
+  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; const layerName: String): Longint;
   begin
     if newLayer = nil then begin RaiseWarning('Cannot add non-existing bitmap as layer to Sprite'); exit; end;
     if s = nil then begin RaiseWarning('No sprite to add layer to'); exit; end;
@@ -2179,12 +2156,12 @@ implementation
     if not SpriteAnimationHasEnded(s) then s^.announcedAnimationEnd := false;
   end;
   
-  procedure SpriteStartAnimation(s: Sprite; named: String);
+  procedure SpriteStartAnimation(s: Sprite; const named: String);
   begin
     SpriteStartAnimation(s, named, true);
   end;
   
-  procedure SpriteStartAnimation(s: Sprite; named: String; withSound: Boolean);
+  procedure SpriteStartAnimation(s: Sprite; const named: String; withSound: Boolean);
   var
 	idx: Integer;
   begin
@@ -2520,7 +2497,7 @@ implementation
     result := s^.position.y;
   end;
   
-  function SpriteLayer(s: Sprite; name: String): Bitmap;
+  function SpriteLayer(s: Sprite; const name: String): Bitmap;
   begin
     if not Assigned(s) then result := nil
     else result := SpriteLayer(s, IndexOf(s^.layerIds, name));
@@ -2533,7 +2510,7 @@ implementation
     else result := s^.layers[idx];
   end;
   
-  function SpriteLayerIndex(s: Sprite; name: String): Longint;
+  function SpriteLayerIndex(s: Sprite; const name: String): Longint;
   begin
     if not Assigned(s) then result := -1
     else result := IndexOf(s^.layerIds, name);
@@ -2545,7 +2522,7 @@ implementation
     else result := NameAt(s^.layerIds, idx);
   end;
   
-  function SpriteShowLayer(s: Sprite; name: String): Longint;
+  function SpriteShowLayer(s: Sprite; const name: String): Longint;
   begin
     if not Assigned(s) then result := -1
     else result := SpriteShowLayer(s, IndexOf(s^.layerIds, name));
@@ -2571,7 +2548,7 @@ implementation
     end;
   end;
   
-  procedure SpriteHideLayer(s: Sprite; name: String);
+  procedure SpriteHideLayer(s: Sprite; const name: String);
   begin
     if not Assigned(s) then exit
     else SpriteHideLayer(s, IndexOf(s^.layerIds, name));
@@ -2597,7 +2574,7 @@ implementation
     _UpdateSpriteImageCache(s);
   end;
   
-  procedure SpriteToggleLayerVisible(s: Sprite; name: String); overload;
+  procedure SpriteToggleLayerVisible(s: Sprite; const name: String); overload;
   begin
     if not Assigned(s) then exit
     else SpriteToggleLayerVisible(s, IndexOf(s^.layerIds, name));
@@ -2655,7 +2632,7 @@ implementation
     _UpdateSpriteImageCache(s);
   end;
   
-  function SpriteLayerOffset(s: Sprite; name: String): Point2D;
+  function SpriteLayerOffset(s: Sprite; const name: String): Point2D;
   begin
     if not Assigned(s) then result := PointAt(0,0)
     else result := SpriteLayerOffset(s, IndexOf(s^.layerIds, name));
@@ -2668,7 +2645,7 @@ implementation
     else result := s^.layerOffsets[idx];
   end;
   
-  procedure SpriteSetLayerOffset(s: Sprite; name: String; const value: Point2D);
+  procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D);
   begin
     if Assigned(s) then
       SpriteSetLayerOffset(s, IndexOf(s^.layerIds, name), value);
@@ -2680,7 +2657,7 @@ implementation
       s^.layerOffsets[idx] := value;
   end;
   
-  function SpriteVisibleIndexOfLayer(s: Sprite; name: String): Longint;
+  function SpriteVisibleIndexOfLayer(s: Sprite; const name: String): Longint;
   begin
     if not Assigned(s) then result := -1
     else result := SpriteVisibleIndexOfLayer(s, IndexOf(s^.layerIds, name));
@@ -2775,7 +2752,7 @@ implementation
     _UpdateSpriteImageCache(s);
   end;
   
-  function SpriteLayerRectangle(s: Sprite; name: String): Rectangle; overload;
+  function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
   begin
     if not Assigned(s) then result := RectangleFrom(0,0,0,0)
     else result := SpriteLayerRectangle(s, IndexOf(s^.layerIds, name));
@@ -2814,7 +2791,7 @@ implementation
     result := SpriteLayerCircle(s, 0);
   end;
   
-  function SpriteLayerCircle(s: Sprite; name: String): Circle; overload;
+  function SpriteLayerCircle(s: Sprite; const name: String): Circle; overload;
   begin
     if not Assigned(s) then result := CircleAt(0,0,0)
     else result := SpriteLayerCircle(s, IndexOf(s^.layerIds, name));
@@ -2941,7 +2918,7 @@ implementation
 // Sprite width/height
 //---------------------------------------------------------------------------
   
-  function SpriteLayerHeight(s: Sprite; name: String): Longint; overload;
+  function SpriteLayerHeight(s: Sprite; const name: String): Longint; overload;
   begin
     if not Assigned(s) then result := 0
     else result := SpriteLayerHeight(s, IndexOf(s^.layerIds, name));
@@ -2954,7 +2931,7 @@ implementation
     else result := s^.layers[idx]^.cellH;
   end;
   
-  function SpriteLayerWidth(s: Sprite; name: String): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
   begin
     if not Assigned(s) then result := 0
     else result := SpriteLayerWidth(s, IndexOf(s^.layerIds, name));
@@ -3109,7 +3086,7 @@ implementation
     result := s^.values[index];
   end;
   
-  function SpriteValue(s: Sprite; name: String): Single; overload;
+  function SpriteValue(s: Sprite; const name: String): Single; overload;
   begin
     result := 0;
     if not Assigned(s) then exit;
@@ -3117,12 +3094,12 @@ implementation
     result := SpriteValue(s, IndexOf(s^.valueIds, name));
   end;
   
-  procedure SpriteAddValue(s: Sprite; name: String);
+  procedure SpriteAddValue(s: Sprite; const name: String);
   begin
     SpriteAddValue(s, name, 0);
   end;
   
-  procedure SpriteAddValue(s: Sprite; name: String; initVal: Single);
+  procedure SpriteAddValue(s: Sprite; const name: String; initVal: Single);
   var
     idx: Longint;
   begin
@@ -3134,7 +3111,7 @@ implementation
     s^.values[idx] := initVal;
   end;
   
-  procedure SpriteSetValue(s: Sprite; name: String; val: Single); overload;
+  procedure SpriteSetValue(s: Sprite; const name: String; val: Single); overload;
   begin
     if not Assigned(s) then exit;
     
@@ -3268,7 +3245,7 @@ implementation
     UpdateAllSprites(1.0);
   end;
 
-  procedure CreateSpritePack(name: String);
+  procedure CreateSpritePack(const name: String);
   begin
     if not HasSpritePack(name) then
     begin
@@ -3281,7 +3258,7 @@ implementation
     end;
   end;
 
-  function HasSpritePack(name: String): Boolean;
+  function HasSpritePack(const name: String): Boolean;
   begin
     result := _SpritePacks.ContainsKey(name);
   end;
@@ -3291,7 +3268,7 @@ implementation
     result := _CurrentPack.Name;
   end;
 
-  procedure SelectSpritePack(name: String);
+  procedure SelectSpritePack(const name: String);
   begin
     if HasSpritePack(name) then
     begin

@@ -178,7 +178,7 @@ uses sgTypes;
   ///
   /// @lib SendMessageToConnectionNamed
   /// @sn sendMessage:%s toConnectionNamed:%s
-  function SendMessageTo(const aMsg : String; name: String) : Boolean;
+  function SendMessageTo(const aMsg, name: String) : Boolean;
 
 
   /// This procedure checks for any network activity.
@@ -196,7 +196,7 @@ uses sgTypes;
   /// Converts the body of an HttpResponse to a string.
   ///
   /// @lib
-  function HttpResponseBodyAsString(httpData: HttpResponse): String;
+  function HttpResponseBodyAsString(const httpData: HttpResponse): String;
 
   /// Returns the host name of a given ip address.
   ///
@@ -307,7 +307,7 @@ uses sgTypes;
   /// Performs a get request for the resourse at the specified host, path and port.
   ///
   /// @lib
-  function HttpGet(host: String; port: Word; path: String) : HttpResponse;
+  function HttpGet(const host: String; port: Word; const path: String) : HttpResponse;
 
 //----------------------------------------------------------------------------
 // Misc
@@ -557,7 +557,7 @@ uses sgTypes;
   /// @lib
   /// @uname DecToHex 
   /// @sn decToHex:%s
-  function DecToHex                   (aDec : LongWord) : String;
+  function DecToHex(aDec : LongWord) : String;
 
   /// Converts a Hex String to a Decimal Value as a String.
   ///
@@ -566,7 +566,7 @@ uses sgTypes;
   /// @lib
   /// @uname HexToDecString 
   /// @sn hexToDecString:%s
-  function HexToDecString             (aHex : String) : String;
+  function HexToDecString(const aHex : String) : String;
 
   /// Converts a Hex String to an IPV4 Address (0.0.0.0)
   ///
@@ -575,7 +575,7 @@ uses sgTypes;
   /// @lib
   /// @uname HexStrToIPv4 
   /// @sn hexStrToIPv4:%s
-  function HexStrToIPv4               (aHex : String) : String;
+  function HexStrToIPv4(const aHex : String) : String;
 
   /// Converts an IP to a decimal value
   ///
@@ -583,7 +583,7 @@ uses sgTypes;
   ///
   /// @lib
   /// @sn iPv4ToDec:%s
-  function IPv4ToDec(aIP : String) : LongWord;
+  function IPv4ToDec(const aIP : String) : LongWord;
 
   /// Converts an integer representation of a ip address to a string representation.
   ///
@@ -1359,7 +1359,7 @@ var
     // WriteLn('bye');
   end;
 
-  function SendMessageTo(const aMsg : String; name: String) : Boolean;
+  function SendMessageTo(const aMsg, name: String): Boolean;
   var
     idx: Integer;
   begin
@@ -1684,7 +1684,7 @@ var
       result := DecToHex( (aDec - lRemainder) div 16 ) + lHexAlpha[lRemainder + 1]
   end;
       
-  function HexToDecString(aHex : String) : String;
+  function HexToDecString(const aHex : String) : String;
   var
     i    : LongInt;
     lVal  : LongInt = 0;
@@ -1715,7 +1715,7 @@ var
     result := IntToStr(lVal); 
   end;
   
-  function HexStrToIPv4(aHex : String) : String;
+  function HexStrToIPv4(const aHex : String) : String;
   begin
     result :=       HexToDecString(aHex[1] + aHex[2]);
     result += '.' + HexToDecString(aHex[3] + aHex[4]);
@@ -1723,7 +1723,7 @@ var
     result += '.' + HexToDecString(aHex[7] + aHex[8]);
   end;
 
-  function IPv4ToDec(aIP : String) : LongWord;
+  function IPv4ToDec(const aIP : String) : LongWord;
   var
     w, x, y, z : LongInt;
   begin
@@ -1895,7 +1895,7 @@ var
     end;
   end;
 
-  function HttpResponseBodyAsString(httpData: HttpResponse): String;
+  function HttpResponseBodyAsString(const httpData: HttpResponse): String;
   var
     i: Integer;
   begin
@@ -2439,7 +2439,7 @@ var
     end;
   end;
 
-  function HttpGet(host: String; port: Word; path: String) : HttpResponse;
+  function HttpGet(const host: String; port: Word; const path: String): HttpResponse;
   var
     con : sg_network_connection;
     request : HttpRequest;

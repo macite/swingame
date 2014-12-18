@@ -86,7 +86,7 @@ interface
     /// @class SoundEffect
     /// @constructor
     /// @csn initFromFile:%s
-    function LoadSoundEffect(filename: String): SoundEffect;
+    function LoadSoundEffect(const filename: String): SoundEffect;
     
     /// Loads and returns a sound effect. The supplied ``filename`` is used to
     /// locate the sound effect to load. The supplied ``name`` indicates the 
@@ -99,26 +99,26 @@ interface
     /// @class SoundEffect
     /// @constructor
     /// @csn initWithName:%s fromFile:%s
-    function LoadSoundEffectNamed(name, filename: String): SoundEffect;
+    function LoadSoundEffectNamed(const name, filename: String): SoundEffect;
     
     /// Determines if SwinGame has a sound effect loaded for the supplied name.
     /// This checks against all sounds loaded, those loaded without a name
     /// are assigned the filename as a default
     ///
     /// @lib
-    function HasSoundEffect(name: String): Boolean;
+    function HasSoundEffect(const name: String): Boolean;
     
     /// Returns the `SoundEffect` that has been loaded with the specified name,
     /// see `LoadSoundEffectNamed`.
     ///
     /// @lib
-    function SoundEffectNamed(name: String): SoundEffect;
+    function SoundEffectNamed(const name: String): SoundEffect;
     
     /// Releases the SwinGame resources associated with the sound effect of the
     /// specified ``name``.
     ///
     /// @lib
-    procedure ReleaseSoundEffect(name: String);
+    procedure ReleaseSoundEffect(const name: String);
     
     /// Releases all of the sound effects that have been loaded.
     ///
@@ -151,24 +151,24 @@ interface
     /// @class Music
     /// @constructor
     /// @csn initWithName:%s fromFile:%s
-    function LoadMusicNamed(name, filename: String): Music;
+    function LoadMusicNamed(const name, filename: String): Music;
     
     /// Determines if SwinGame has a music value loaded for the supplied name.
     /// This checks against all music values loaded using `LoadMusicNamed`.
     ///
     /// @lib
-    function HasMusic(name: String): Boolean;
+    function HasMusic(const name: String): Boolean;
     
     /// Returns the `Music` that has been loaded with the specified name.
     /// This works with music data loaded using `LoadMusicNamed`.
     ///
     /// @lib
-    function MusicNamed(name: String): Music;
+    function MusicNamed(const name: String): Music;
     
     /// Releases the music that have been loaded with the supplied name.
     ///
     /// @lib
-    procedure ReleaseMusic(name: String);
+    procedure ReleaseMusic(const name: String);
     
     /// Releases all of the music data that have been loaded.
     ///
@@ -194,7 +194,7 @@ interface
     /// @class Music
     /// @constructor
     /// @csn initFromFile:%s
-    function LoadMusic(filename: String): Music;
+    function LoadMusic(const filename: String): Music;
     
     /// Frees the resources used by a `Music` resource. All loaded
     /// `Music` should be freed once it is no longer needed. 
@@ -306,7 +306,7 @@ interface
     /// @sn playSoundEffectNamed:%s looped:%s atVolume:%s
     ///
     /// @doc_details
-    procedure PlaySoundEffect(name: String; loops: Longint; vol: Single); overload;
+    procedure PlaySoundEffect(const name: String; loops: Longint; vol: Single); overload;
     
     /// This version of PlaySoundEffect allows you to indicate the number of times
     /// the sound effect is repeated. Setting the loops parameter to -1 will cause
@@ -324,7 +324,7 @@ interface
     /// @sn playSoundEffectNamed:%s looped:%s
     ///
     /// @doc_details
-    procedure PlaySoundEffect(name: String; loops: Longint); overload;
+    procedure PlaySoundEffect(const name: String; loops: Longint); overload;
     
     /// There are several versions of PlaySoundEffect that can be used to control
     /// the way the sound effect plays, allowing you to control its volume and 
@@ -338,7 +338,7 @@ interface
     ///
     /// @lib PlaySoundEffectNamedWithLoopAndVolume(name,1,1.0)
     /// @uname PlaySoundEffectNamed
-    procedure PlaySoundEffect(name: String); overload;
+    procedure PlaySoundEffect(const name: String); overload;
     
     /// This version of PlaySoundEffect allows you to control the volume of the 
     /// sounds playback. The vol parameter will take a value between 0 and 1 
@@ -354,7 +354,7 @@ interface
     /// @sn playSoundEffectNamed:%s atVolume:%s
     ///
     /// @doc_details
-    procedure PlaySoundEffect(name: String; vol: Single); overload;
+    procedure PlaySoundEffect(const name: String; vol: Single); overload;
     
     
     
@@ -454,7 +454,7 @@ interface
     ///
     /// @lib PlayMusicNamedWithLoops
     /// @sn playMusicNamed:%s looped:%s
-    procedure PlayMusic(name: String; loops: Longint); overload;
+    procedure PlayMusic(const name: String; loops: Longint); overload;
     
     /// PlayMusic starts playing a `Music` resource. SwinGame only allows one 
     /// music resource to be played at a time. Starting to play a new music 
@@ -477,7 +477,7 @@ interface
     ///
     /// @lib PlayMusicNamedWithLoops(name, -1)
     /// @uname PlayMusicNamed
-    procedure PlayMusic(name: String); overload;
+    procedure PlayMusic(const name: String); overload;
     
     /// This version of FadeMusicIn fades the music in then plays the 'Music' 
     /// for a given number of loops.Setting loops to -1 repeats the music 
@@ -492,7 +492,7 @@ interface
     ///
     /// @lib FadeMusicNamedInWithLoops
     /// @sn playMusicNamed:%s looped:%s fadeIn:%s
-    procedure FadeMusicIn(name: String; loops, ms: Longint); overload;
+    procedure FadeMusicIn(const name: String; loops, ms: Longint); overload;
     
     /// Fades the music in over a number of milliseconds, and then continues to
     /// play the music repeatedly until the program ends or the music is stopped. 
@@ -504,7 +504,7 @@ interface
     ///
     /// @lib FadeMusicNamedIn
     /// @sn playMusicNamed:%s fadeIn:%s
-    procedure FadeMusicIn(name: String; ms: Longint); overload;
+    procedure FadeMusicIn(const name: String; ms: Longint); overload;
     
     /// Pauses the currently playing music. See `ResumeMusic`.
     ///
@@ -603,7 +603,7 @@ interface
     /// @returns true if the effect `SoundEffect` is playing.
     ///
     /// @lib SoundEffectNamedPlaying
-    function SoundEffectPlaying(name: String): Boolean; overload;
+    function SoundEffectPlaying(const name: String): Boolean; overload;
     
     /// Returns the name that SwinGame uses to refer to this sound effect. This
     /// name can be used to fetch and release this sound effect resource.
@@ -643,7 +643,7 @@ interface
     /// @param name The name of the sound effect to stop.
     ///
     /// @lib StopSoundEffectNamed
-    procedure StopSoundEffect(name: String);
+    procedure StopSoundEffect(const name: String);
     
     /// Stops playing the current music resource.
     ///
@@ -766,31 +766,34 @@ implementation
     
     // Private:
     // Called by LoadSoundEffectNamed
-    function DoLoadSoundEffect(filename, name: String): SoundEffect;
+    function DoLoadSoundEffect(const filename, name: String): SoundEffect;
+    var
+        fn: String;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'DoLoadSoundEffect', name + ' = ' + filename);
         {$ENDIF}
         
-        if not FileExists(filename) then
+        fn := filename;
+        if not FileExists(fn) then
         begin
-            filename := PathToResource(filename, SoundResource);
-            if not FileExists(filename) then
+            fn := PathToResource(fn, SoundResource);
+            if not FileExists(fn) then
             begin
-                RaiseWarning('Unable to locate ' + name + ' sound effect file at ' + filename);
+                RaiseWarning('Unable to locate ' + name + ' sound effect file at ' + fn);
                 result := nil;
                 exit;
             end;
         end;
 		
-		result := AudioDriver.LoadSoundEffect(filename, name);
+		result := AudioDriver.LoadSoundEffect(fn, name);
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'DoLoadSoundEffect', HexStr(result));
         {$ENDIF}
     end;
     
-    function LoadSoundEffect(filename: String): SoundEffect;
+    function LoadSoundEffect(const filename: String): SoundEffect;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'LoadSoundEffect', filename);
@@ -803,7 +806,7 @@ implementation
         {$ENDIF}
     end;
     
-    function LoadSoundEffectNamed(name, filename: String): SoundEffect;
+    function LoadSoundEffectNamed(const name, filename: String): SoundEffect;
     var
         obj: tResourceContainer;
         snd: SoundEffect;
@@ -886,7 +889,7 @@ implementation
         {$ENDIF}
     end;
     
-    procedure ReleaseSoundEffect(name: String);
+    procedure ReleaseSoundEffect(const name: String);
     var
         snd: SoundEffect;
     begin
@@ -921,31 +924,33 @@ implementation
     
     //----------------------------------------------------------------------------
     
-    function DoLoadMusic(filename, name: String): Music;
+    function DoLoadMusic(const filename, name: String): Music;
+    var
+        fn: String;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'DoLoadMusic', name + ' = ' + filename);
         {$ENDIF}
-        
-        if not FileExists(filename) then
+        fn := filename;
+        if not FileExists(fn) then
         begin
-            filename := PathToResource(filename, SoundResource);
-            if not FileExists(filename) then
+            fn := PathToResource(fn, SoundResource);
+            if not FileExists(fn) then
             begin
-                RaiseWarning('Unable to locate ' + name + ' music file at ' + filename);
+                RaiseWarning('Unable to locate ' + name + ' music file at ' + fn);
                 result := nil;
                 exit;
             end;
         end;
 		
-		result := AudioDriver.LoadMusic(filename, name);
+		result := AudioDriver.LoadMusic(fn, name);
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'DoLoadMusic');
         {$ENDIF}
     end;
     
-    function LoadMusic(filename: String): Music;
+    function LoadMusic(const filename: String): Music;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'LoadMusic', filename);
@@ -958,7 +963,7 @@ implementation
         {$ENDIF}
     end;
     
-    function LoadMusicNamed(name, filename: String): Music;
+    function LoadMusicNamed(const name, filename: String): Music;
     var
         obj: tResourceContainer;
         mus: Music;
@@ -1038,7 +1043,7 @@ implementation
         {$ENDIF}
     end;
     
-    procedure ReleaseMusic(name: String);
+    procedure ReleaseMusic(const name: String);
     var
         mus: Music;
     begin
@@ -1075,7 +1080,7 @@ implementation
     
     //----------------------------------------------------------------------------
     
-    procedure PlaySoundEffect(name: String; loops: Longint; vol: Single); overload;
+    procedure PlaySoundEffect(const name: String; loops: Longint; vol: Single); overload;
     begin
         PlaySoundEffect(SoundEffectNamed(name), loops, vol);
     end;
@@ -1121,7 +1126,7 @@ implementation
         {$ENDIF}        
     end;
     
-    procedure PlaySoundEffect(name: String; loops: Longint); overload;
+    procedure PlaySoundEffect(const name: String; loops: Longint); overload;
     begin
         PlaySoundEffect(SoundEffectNamed(name), loops);
     end;
@@ -1139,7 +1144,7 @@ implementation
         {$ENDIF}
     end;
     
-    procedure PlaySoundEffect(name: String); overload;
+    procedure PlaySoundEffect(const name: String); overload;
     begin
         PlaySoundEffect(SoundEffectNamed(name));
     end;
@@ -1157,7 +1162,7 @@ implementation
         {$ENDIF}        
     end;
     
-    procedure PlaySoundEffect(name: String; vol: Single); overload;
+    procedure PlaySoundEffect(const name: String; vol: Single); overload;
     begin
         PlaySoundEffect(SoundEffectNamed(name), vol);
     end;
@@ -1178,7 +1183,7 @@ implementation
     
     //----------------------------------------------------------------------------
     
-    procedure PlayMusic(name: String; loops: Longint); overload;
+    procedure PlayMusic(const name: String; loops: Longint); overload;
     begin
         PlayMusic(MusicNamed(name), loops);
     end;
@@ -1209,7 +1214,7 @@ implementation
         {$ENDIF}        
     end;
     
-    procedure PlayMusic(name: String); overload;
+    procedure PlayMusic(const name: String); overload;
     begin
         PlayMusic(MusicNamed(name));
     end;
@@ -1227,7 +1232,7 @@ implementation
         {$ENDIF}        
     end;
     
-    procedure FadeMusicIn(name: String; loops, ms: Longint); overload;
+    procedure FadeMusicIn(const name: String; loops, ms: Longint); overload;
     begin
         FadeMusicIn(MusicNamed(name), loops, ms);
     end;
@@ -1258,7 +1263,7 @@ implementation
         {$ENDIF}
     end;
     
-    procedure FadeMusicIn(name: String; ms: Longint); overload;
+    procedure FadeMusicIn(const name: String; ms: Longint); overload;
     begin
         FadeMusicIn(MusicNamed(name), ms);
     end;
@@ -1297,7 +1302,7 @@ implementation
         {$ENDIF}
     end;
     
-    function SoundEffectPlaying(name: String): Boolean; overload;
+    function SoundEffectPlaying(const name: String): Boolean; overload;
     begin
         result := SoundEffectPlaying(SoundEffectNamed(name));
     end;
@@ -1349,7 +1354,7 @@ implementation
     
     //----------------------------------------------------------------------------
     
-    function HasSoundEffect(name: String): Boolean;
+    function HasSoundEffect(const name: String): Boolean;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'HasSoundEffect', name);
@@ -1362,7 +1367,7 @@ implementation
         {$ENDIF}
     end;
 
-    function SoundEffectNamed(name: String): SoundEffect;
+    function SoundEffectNamed(const name: String): SoundEffect;
     var
         tmp : TObject;
         filename: String;
@@ -1424,7 +1429,7 @@ implementation
     
     //----------------------------------------------------------------------------
     
-    function HasMusic(name: String): Boolean;
+    function HasMusic(const name: String): Boolean;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'HasMusic', name);
@@ -1437,7 +1442,7 @@ implementation
         {$ENDIF}
     end;
     
-    function MusicNamed(name: String): Music;
+    function MusicNamed(const name: String): Music;
     var
         tmp : TObject;
     begin
@@ -1497,7 +1502,7 @@ implementation
         {$ENDIF}
     end;
     
-    procedure StopSoundEffect(name: String);
+    procedure StopSoundEffect(const name: String);
     begin
         StopSoundEffect(SoundEffectNamed(name));
     end;

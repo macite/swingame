@@ -66,7 +66,7 @@ interface
   ///
   /// @class Panel
   /// @constructor
-  function NewPanel(pnlName: String): Panel;
+  function NewPanel(const pnlName: String): Panel;
   
   /// shows dialog panel
   ///
@@ -87,7 +87,7 @@ interface
   /// Display the panel on screen at panel's co-ordinates.
   ///
   /// @lib ShowPanelNamed
-  procedure ShowPanel(name: String);
+  procedure ShowPanel(const name: String);
   
   /// Hide the panel, stop drawing it. Panels which are not being draw can not be interacted with by the user.
   ///
@@ -100,7 +100,7 @@ interface
   /// Hide the panel, stop drawing it. Panels which are not being draw can not be interacted with by the user.
   ///
   /// @lib HidePanelNamed
-  procedure HidePanel(name: String);
+  procedure HidePanel(const name: String);
   
   /// Toggles whether the panel is being shown or not.
   ///
@@ -229,7 +229,7 @@ interface
   /// Disposes of the panel by name, removing it from the index collection, setting its dragging to nil, and hiding it first to avoid crashes.
   ///
   /// @lib
-  procedure ReleasePanel(name: String);
+  procedure ReleasePanel(const name: String);
   
   /// Disposes of the panel by panel
   ///
@@ -247,7 +247,7 @@ interface
   /// @class Panel
   /// @constructor
   /// @csn initWithName:%s fromFile:%s
-  function LoadPanelNamed(name, filename: String): Panel;
+  function LoadPanelNamed(const name, filename: String): Panel;
   
   /// Loads panel from panel directory with filename
   ///
@@ -256,17 +256,17 @@ interface
   /// @class Panel
   /// @constructor
   /// @csn initFromFile:%s
-  function LoadPanel(filename: String): Panel;
+  function LoadPanel(const filename: String): Panel;
   
   /// Returns if panel is in Index Collection
   ///
   /// @lib
-  function HasPanel(name: String): Boolean;
+  function HasPanel(const name: String): Boolean;
   
   /// Returns panel with the name name
   ///
   /// @lib
-  function PanelNamed(name: String): Panel;  
+  function PanelNamed(const name: String): Panel;  
   
   /// Returns the name of the panel
   ///
@@ -324,7 +324,7 @@ interface
   /// Returns height of the panel
   ///
   /// @lib PanelNamedHeight
-  function PanelHeight(name: String): Longint;
+  function PanelHeight(const name: String): Longint;
 
   /// Returns the panel's width
   ///
@@ -337,7 +337,7 @@ interface
   /// Returns the panel's width
   ///
   /// @lib PanelNamedWidth
-  function PanelWidth(name: String): Longint;
+  function PanelWidth(const name: String): Longint;
 
 
 
@@ -353,7 +353,7 @@ interface
   /// Returns true when the region has been clicked.
   ///
   /// @lib ButtonNamedClicked
-  function ButtonClicked(name: String) : Boolean;
+  function ButtonClicked(const name: String) : Boolean;
   
   
   
@@ -386,12 +386,12 @@ interface
   ///
   /// @class Panel
   /// @method RegionWithID
-  function RegionWithID(pnl: Panel; ID: String): Region; overload;
+  function RegionWithID(pnl: Panel; const ID: String): Region; overload;
   
   /// Returns the Region with the ID passed
   ///
   /// @lib GlobalRegionWithID
-  function RegionWithID(ID: String): Region; overload;
+  function RegionWithID(const ID: String): Region; overload;
 
   /// Returns the Region with the ID passed from the panel passed
   ///
@@ -483,7 +483,7 @@ interface
 /// Returns checkbox state of the checkbox with ID from string
 ///
 /// @lib
-function CheckboxState(s: String): Boolean; overload;
+function CheckboxState(const s: String): Boolean; overload;
 
 /// Returns checkbox state of the checkbox with ID in a given Panel
 ///
@@ -492,7 +492,7 @@ function CheckboxState(s: String): Boolean; overload;
 /// @class Panel
 /// @method CheckboxState
 /// @csn checkboxStateWithId:%s
-function CheckboxState(p: Panel; s: String): Boolean; overload;
+function CheckboxState(p: Panel; const s: String): Boolean; overload;
 
 /// Returns checkbox state of the given checkbox
 ///
@@ -533,13 +533,13 @@ procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
 /// 
 /// @lib CheckBoxSetStateWithId
 /// @sn checkbox:%s setState:%s
-procedure CheckboxSetState(id: String ; val: Boolean); overload;
+procedure CheckboxSetState(const id: String ; val: Boolean); overload;
 
 
 /// Sets the checkbox state to val.
 /// 
 /// @lib CheckboxSetStateOnPanel/// @sn checkboxOnPanel:%s withID:%s setState:%s
-procedure CheckboxSetState( pnl: Panel;id: String; val: Boolean); overload;
+procedure CheckboxSetState( pnl: Panel; const id: String; val: Boolean); overload;
 
 
 /// Toggles the state of a checkbox (ticked/unticked)
@@ -557,13 +557,13 @@ procedure ToggleCheckboxState(c: GUICheckbox);
 /// @class Panel
 /// @method ToggleCheckboxStateWithID
 /// @csn toggleCheckBoxWithID:%s
-procedure ToggleCheckboxState(pnl : Panel; id: String);
+procedure ToggleCheckboxState(pnl : Panel; const id: String);
 
   
 /// Toggles the state of a checkbox (ticked/unticked)
 ///
 /// @lib ToggleCheckboxStateFromID
-procedure ToggleCheckboxState(id: String);
+procedure ToggleCheckboxState(const id: String);
 
 /// Takes a region and returns the checkbox of that region
 ///
@@ -584,12 +584,12 @@ function CheckboxFromRegion(r: Region): GUICheckbox;
 /// @class GUIRadioGroup
 /// @constructor
 /// @csn initOnPanel:%s withId :%s
-function RadioGroupFromId(pnl: Panel; id: String): GUIRadioGroup;overload;
+function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup;overload;
 
 /// Takes an ID and returns the RadioGroup.
 ///
 /// @lib
-function RadioGroupFromId(id: String): GUIRadioGroup;overload;
+function RadioGroupFromId(const id: String): GUIRadioGroup;overload;
 
 /// Takes region and returns the RadioGroup.
 ///
@@ -610,7 +610,7 @@ function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): LongInt;
 /// Takes a radiogroup and returns the active button's index.
 ///
 /// @lib ActiveRadioButtonIndexFromID
-function ActiveRadioButtonIndex(id: String): LongInt;
+function ActiveRadioButtonIndex(const id: String): LongInt;
 
 /// Takes a radiogroup and returns the active button's index.
 ///
@@ -618,7 +618,7 @@ function ActiveRadioButtonIndex(id: String): LongInt;
 ///
 /// @class Panel
 /// @method ActiveRadioButtonIndexWithID
-function ActiveRadioButtonIndex(pnl:Panel; id: String): LongInt;
+function ActiveRadioButtonIndex(pnl:Panel; const id: String): LongInt;
 
 
 /// Takes a radiogroup and returns the active button
@@ -632,7 +632,7 @@ function ActiveRadioButton(grp: GUIRadioGroup): Region; overload;
 /// Takes an ID and returns the active button
 ///
 /// @lib ActiveRadioButtonWithID
-function ActiveRadioButton(id: String): Region; overload;
+function ActiveRadioButton(const id: String): Region; overload;
 
 /// Takes a panel and an ID and returns the active button
 ///
@@ -641,7 +641,7 @@ function ActiveRadioButton(id: String): Region; overload;
 ///
 /// @class RadioGroup
 /// @getter ActiveButton
-function ActiveRadioButton(pnl: Panel; id: String): Region; overload;
+function ActiveRadioButton(pnl: Panel; const id: String): Region; overload;
 
 /// Takes a region and an ID and selects the button
 ///
@@ -669,7 +669,7 @@ procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: LongInt); overload;
 /// Takes an ID and returns the active button
 ///
 /// @lib SelectRadioButtonWithID
-procedure SelectRadioButton(id: String); overload;
+procedure SelectRadioButton(const id: String); overload;
 
 /// Takes a panel and an ID and selects the button
 ///
@@ -678,7 +678,7 @@ procedure SelectRadioButton(id: String); overload;
 ///
 /// @class Panel
 /// @method SelectRadioButton
-procedure SelectRadioButton(pnl : Panel; id: String); overload;
+procedure SelectRadioButton(pnl : Panel; const id: String); overload;
 
 // ===========
 // = Textbox =
@@ -712,14 +712,14 @@ procedure TextboxSetFont(Tb: GUITextbox; f: Font);
 /// Gets the textbox text from region
 /// 
 /// @lib TextboxTextWithId
-function TextBoxText(id: String): String; overload;
+function TextBoxText(const id: String): String; overload;
 
 
 /// Gets the textbox text from region
 /// 
 /// @lib TextboxTextOnPanelWithId
 /// @sn textboxTextOnPanel:%s withId:%s
-function TextBoxText(pnl : Panel; id: String): String; overload;
+function TextBoxText(pnl : Panel; const id: String): String; overload;
 
 /// Gets the textbox text from region
 /// 
@@ -744,19 +744,19 @@ function TextBoxText(tb: GUITextBox): String; overload;
 ///
 /// @class Region
 /// @setter TextboxText
-procedure TextboxSetText(r: Region; s: string); overload;
+procedure TextboxSetText(r: Region; const s: string); overload;
 
 /// Sets the textbox text from Id
 /// 
 /// @lib TextboxSetTextFromId
 /// @sn textboxWithId:%s setText:%s
-procedure TextboxSetText(id: String; s: string); overload;
+procedure TextboxSetText(const id, s: string); overload;
 
 /// Sets the textbox text from Panel and Id
 /// 
 /// @lib TextboxSetTextOnPanelAndId
 /// @sn textboxOnPanel:%s withId:%s setText:%s
-procedure TextboxSetText(pnl: Panel; id, s: string); overload;
+procedure TextboxSetText(pnl: Panel; const id, s: string); overload;
 
 /// Sets the textbox text from region
 /// 
@@ -765,7 +765,7 @@ procedure TextboxSetText(pnl: Panel; id, s: string); overload;
 ///
 /// @class Textbox
 /// @setter Text
-procedure TextboxSetText(tb: GUITextBox; s: string); overload;
+procedure TextboxSetText(tb: GUITextBox; const s: string); overload;
 
 /// Sets the textbox text from region
 /// 
@@ -784,14 +784,14 @@ procedure TextboxSetText(tb: GUITextBox; i: Longint); overload;
 /// 
 /// @lib TextboxSetTextToIntWithId
 /// @sn textboxForId:%s setInt:%s
-procedure TextboxSetText(id : String; i : LongInt); overload;
+procedure TextboxSetText(const id : String; i : LongInt); overload;
 
 
 /// Sets the textbox text from panel and Id
 /// 
 /// @lib TextboxSetTextToIntOnPanelWithId
 /// @sn textboxOnPanel:%s withId:%s setInt:%s
-procedure TextboxSetText(pnl : Panel; id : String; i : LongInt); overload;
+procedure TextboxSetText(pnl : Panel; const id : String; i : LongInt); overload;
     
 /// Sets the textbox text from Textbox
 /// 
@@ -809,13 +809,13 @@ procedure TextboxSetText(r: Region; single: Single); overload;
 /// 
 /// @lib TextboxSetTextToSingleFromId
 /// @sn textboxWithId:%s setFloat:%s
-procedure TextboxSetText(id : String; single: Single); overload;
+procedure TextboxSetText(const id : String; single: Single); overload;
                         
 /// Sets the textbox text from Panel and Id
 /// 
 /// @lib TextboxSetTextToSingleOnPanel
 /// @sn textboxOnPanel:%s withId:%s setFloat:%s
-procedure TextboxSetText(pnl : Panel; id : String; single: Single); overload;
+procedure TextboxSetText(pnl : Panel; const id : String; single: Single); overload;
 
 
 /// Sets the textbox text from region
@@ -833,7 +833,7 @@ procedure GUISetActiveTextbox(r: Region); overload;
 /// indicated name.
 /// 
 /// @lib GUISetActiveTextboxNamed
-procedure GUISetActiveTextbox(name: String); overload;
+procedure GUISetActiveTextbox(const name: String); overload;
 
 
 /// Sets the active textbox
@@ -922,7 +922,7 @@ procedure TextboxSetAlignment(r: Region; align: FontAlignment);
 /// The the TextBox from an ID
 ///
 /// @lib
-function TextBoxFromID(id : String) : GUITextbox;
+function TextBoxFromID(const id : String) : GUITextbox;
 
 
 
@@ -941,13 +941,13 @@ procedure ListRemoveActiveItem(r : region); overload;
 /// Removes the active item from a list
 /// 
 /// @lib ListRemoveActiveItemFromId
-procedure ListRemoveActiveItem(id : string); overload;
+procedure ListRemoveActiveItem(const id : string); overload;
 
 /// Removes the active item from a list
 /// 
 /// @lib ListRemoveActiveItemOnPanelWithId
 /// @sn listRemoveActiveItemOnPanel:%s withId:%s
-procedure ListRemoveActiveItem(pnl : Panel; id: string); overload;
+procedure ListRemoveActiveItem(pnl : Panel; const id: string); overload;
 
 
 /// Set the active item in the list to the item at index idx
@@ -963,13 +963,13 @@ procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint);
 ///
 /// @lib ListSetActiveItemIndexWithId
 /// @sn listSetActiveItemWithId:%s atIndex:%s
-procedure ListSetActiveItemIndex(id : String; idx: Longint);
+procedure ListSetActiveItemIndex(const id : String; idx: Longint);
 
 /// Set the active item in the list to the item at index idx
 ///
 /// @lib ListSet
 /// @sn listSetActiveItemFromPane:%s withId:%s at:%s
-procedure ListSetActiveItemIndex(pnl : Panel; id : String; idx: Longint);
+procedure ListSetActiveItemIndex(pnl : Panel; const id : String; idx: Longint);
 
 
 
@@ -1028,13 +1028,13 @@ function ListItemText(lst: GUIList; idx: Longint): String; overload;
 ///
 /// @lib ListItemTextFromId
 /// @sn listWithId:%s textAtIndex:%s
-function ListItemText(id : String; idx: Longint): String; overload;
+function ListItemText(const id : String; idx: Longint): String; overload;
 
 /// Returns the text of the item at index idx
 ///
 /// @lib ListItemTextOnPanelWithId
 /// @sn listOnPanel:%s withId :%s textAtIndex:%s
-function ListItemText(pnl : Panel; id : String; idx: Longint): String; overload;
+function ListItemText(pnl : Panel; const id : String; idx: Longint): String; overload;
 
 /// Returns the text of the active item in the list of the region
 ///
@@ -1057,12 +1057,12 @@ function ListActiveItemText(r: Region): String; overload;
 ///
 /// @lib ListActiveItemTextOnPanelWithId
 /// @sn listActiveItemTextOnPanel:%s withId:%s
-function ListActiveItemText(pnl: Panel; ID: String): String; overload;
+function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
 
 /// Returns the active item text of the List in with ID
 ///
 /// @lib ListWithIdActiveItemText
-function ListActiveItemText(ID: String): String; overload;
+function ListActiveItemText(const ID: String): String; overload;
                             
 /// Returns the number of items in the list of the region
 ///
@@ -1083,13 +1083,13 @@ function ListItemCount(lst:GUIList): Longint; overload;
 /// Returns the number of items in the list
 ///
 /// @lib ListItemCountWithId
-function ListItemCount(id : String): Longint; overload;
+function ListItemCount(const id : String): Longint; overload;
 
 /// Returns the number of items in the list
 ///
 /// @lib ListItemCountOnPanelWithId
 /// @sn listItemCountFrom:%s withId:%s
-function ListItemCount(pnl : Panel; id : String): Longint; overload;
+function ListItemCount(pnl : Panel; const id : String): Longint; overload;
 
 /// Returns active item's index from the list of the region
 ///
@@ -1111,13 +1111,13 @@ function ListActiveItemIndex(lst: GUIList): Longint; overload;
 ///
 /// @lib ListActiveItemIndexWithId
 ///
-function ListActiveItemIndex(id: String): Longint; overload;
+function ListActiveItemIndex(const id: String): Longint; overload;
 
 /// Returns active item's index from the list
 ///
 /// @lib ListActiveItemIndexOnPanelWithId
 /// @sn listActiveItemIndexOnPanel:%s withId:%s
-function ListActiveItemIndex(pnl : Panel; id: String): Longint; overload;
+function ListActiveItemIndex(pnl : Panel; const id: String): Longint; overload;
 
 
 /// Removes item at index idx from the list
@@ -1133,13 +1133,13 @@ procedure ListRemoveItem(lst: GUIList; idx: Longint);
 ///
 /// @lib ListRemoveItemOnPanelWithId
 /// @sn listOnPanel:%s withId:%s removeItemAtIndex:%s
-procedure ListRemoveItem(pnl : Panel; id : String; idx: Longint);
+procedure ListRemoveItem(pnl : Panel; const id : String; idx: Longint);
 
 /// Removes item at index idx from the list
 ///
 /// @lib ListRemoveItemFromWithId
 /// @sn listWithId:%s removeItemAtIndex:%s
-procedure ListRemoveItem(id : String; idx: Longint);
+procedure ListRemoveItem(const id : String; idx: Longint);
 
 /// Removes all items from the list.
 ///
@@ -1153,13 +1153,13 @@ procedure ListClearItems(lst: GUIList); overload;
 ///
 /// @lib ListclearItemsWithId
 ///
-procedure ListClearItems(id : String); overload;
+procedure ListClearItems(const id : String); overload;
 
 /// Removes all items from the list.
 ///
 /// @lib ListClearItemsGivenPanelWithId
 /// @sn clearItemsListOnPanel:%s withId:%s
-procedure ListClearItems(pnl : Panel; id : String); overload;
+procedure ListClearItems(pnl : Panel; const id : String); overload;
 
 /// Removes all items from the list of the region
 ///
@@ -1176,21 +1176,21 @@ procedure ListClearItems(r : Region); overload;
 ///
 /// @class GUIList
 /// @method AddTextItem
-procedure ListAddItem(lst: GUIList; text: String); overload;
+procedure ListAddItem(lst: GUIList; const text: String); overload;
   
 
 /// Adds an item to the list by text
 ///
 /// @lib AddItemWithIdByText
 /// @sn listWithId:%s addText:%s
-procedure ListAddItem(id : String; text: String); overload;
+procedure ListAddItem(const id, text: String); overload;
 
 
 /// Adds an item to the list by text
 ///
 /// @lib AddItemOnPanelWithIdByText
 /// @sn listOnPanel:%s withId:%s addText:%s
-procedure ListAddItem(pnl : Panel; id : String; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id, text: String); overload;
 
 
 
@@ -1207,13 +1207,13 @@ procedure ListAddItem(lst: GUIList; img:Bitmap); overload;
 ///
 /// @lib AddItemWithIdByBitmap
 /// @sn listWithId:%s addBitmap:%s
-procedure ListAddItem(id : String; img:Bitmap); overload;
+procedure ListAddItem(const id : String; img:Bitmap); overload;
   
 /// Adds an item to the list by bitmap
 ///
 /// @lib ListAddItemBitmap
 /// @sn listOnPanel:%s withId:%s addBitmap:%s
-procedure ListAddItem(pnl : Panel; id : String; img:Bitmap); overload;
+procedure ListAddItem(pnl : Panel; const id : String; img:Bitmap); overload;
 
 /// Adds an item to the list by text and Bitmap
 ///
@@ -1223,19 +1223,19 @@ procedure ListAddItem(pnl : Panel; id : String; img:Bitmap); overload;
 /// @class GUIList
 /// @method AddBitmapWithTextItem
 /// @csn addImg:%s andText:%s
-procedure ListAddItem(lst: GUIList; img:Bitmap; text: String); overload;
+procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
 
 /// Adds an item to the list by text and Bitmap
 ///
 /// @lib ListWithIDAddBitmapWithTextItem
 /// @sn listById:%s addBitmap:%s andText:%s
-procedure ListAddItem(id : String;img:Bitmap; text: String); overload;
+procedure ListAddItem(const id : String; img: Bitmap; const text: String); overload;
 
 /// Adds an item to the list by text and Bitmap
 ///
 /// @lib ListOnPanelWithIdAddBitmapWithTextItem
 /// @sn listOnPanel:%s withId:%s addBitmap:%s andText:%s
-procedure ListAddItem(pnl : Panel; id : String;img:Bitmap; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; const text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
@@ -1254,7 +1254,7 @@ procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
 /// @lib ListWithIdAddItemWithCell
 /// @sn listWithId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(id : String; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
@@ -1262,7 +1262,7 @@ procedure ListAddItem(id : String; const img: Bitmap; cell: Longint); overload;
 /// @lib ListOnPanelWithIdAddItemWithCell
 /// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(pnl : Panel;id : String; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: Longint); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1273,7 +1273,7 @@ procedure ListAddItem(pnl : Panel;id : String; const img: Bitmap; cell: Longint)
 /// @class GUIList
 /// @overload AddItem AddItemWithCellAndText
 /// @csn addBitmap:%s cell:%s andText:%s
-procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1281,7 +1281,7 @@ procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; text: Stri
 /// @lib ListWithIdAddItemWithCellAndText
 /// @sn listWithId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(id : String; const img: Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint; const text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1289,7 +1289,7 @@ procedure ListAddItem(id : String; const img: Bitmap; cell: Longint; text: Strin
 /// @lib ListOnPanelWithIdAddItemWithCellAndText
 /// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(pnl : Panel; id : String; const img: Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: Longint; const text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1300,7 +1300,7 @@ procedure ListAddItem(pnl : Panel; id : String; const img: Bitmap; cell: Longint
 /// @class Region
 /// @overload AddItem AddItemWithCellAndTextFromRegion
 /// @csn addBitmap:%s cell:%s andText:%s
-procedure ListAddItem(r: Region; const img:Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(r: Region; const img:Bitmap; cell: Longint; const text: String); overload;
 
 
 /// Adds an item to the list where the items shows a cell of a
@@ -1322,7 +1322,7 @@ procedure ListAddItem(r : Region; const img: Bitmap; cell: Longint); overload;
 ///
 /// @class Region
 /// @method ListAddTextItem
-procedure ListAddItem(r : Region; text: String); overload;
+procedure ListAddItem(r : Region; const text: String); overload;
 
 
 /// Adds an item to the list by bitmap
@@ -1342,7 +1342,7 @@ procedure ListAddItem(r : Region; img:Bitmap); overload;
 /// @class Region
 /// @method ListAddBitmapAndTextItem
 /// @csn listAddBitmap:%s andText:%s
-procedure ListAddItem(r : Region; img:Bitmap; text: String); overload;
+procedure ListAddItem(r : Region; img:Bitmap; const text: String); overload;
 
 /// Returns the index of the item with the bitmap, img
 ///
@@ -1369,7 +1369,7 @@ function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longin
 ///
 /// @class GUIList
 /// @method IndexOfTextItem
-function ListTextIndex(lst: GUIList; value: String): Longint;
+function ListTextIndex(lst: GUIList; const value: String): Longint;
 
 /// Returns the starting point for the list
 ///
@@ -1481,7 +1481,7 @@ function  LabelFont(r: Region): Font; overload;
 ///
 /// @class Label
 /// @method setFont
-procedure LabelSetFont(l: GUILabel; s: String);
+procedure LabelSetFont(l: GUILabel; const s: String);
 
 /// Get text From Label
 ///
@@ -1498,19 +1498,19 @@ function  LabelText(r: Region): string; overload;
 /// Get text From Label
 ///
 /// @lib LabelTextWithId
-function  LabelText(id : String): string; overload;
+function  LabelText(const id : String): string; overload;
 
 /// Get text From Label
 ///
 /// @lib LabelTextOnPanelWithId
 /// @sn textOfLabelOnPanel:%s withId:%s
-function  LabelText(pnl : Panel;id : String): string; overload;
+function  LabelText(pnl : Panel; const id : String): string; overload;
 
 /// Set text for Label
 ///
 /// @lib LabelWithIdSetText
 /// @sn labelWithId:%s setText:%s
-procedure LabelSetText(id: String; newString: String); overload;
+procedure LabelSetText(const id, newString: String); overload;
 
 /// Set text for Label
 ///
@@ -1519,19 +1519,19 @@ procedure LabelSetText(id: String; newString: String); overload;
 ///
 /// @class Label
 /// @setter Text
-procedure LabelSetText(lb: GUILabel; newString: String); overload;
+procedure LabelSetText(lb: GUILabel; const newString: String); overload;
 
 /// Set text for Label
 ///
 /// @lib LabelFromRegionSetText
 /// @sn labelForRegion:%s setText:%s
-procedure LabelSetText(r: Region; newString: String); overload;
+procedure LabelSetText(r: Region; const newString: String); overload;
 
 /// Set text for Label
 ///
 /// @lib LabelOnPanelWithIdSetText
 /// @sn labelOnPanel:%s withId:%s setText:%s
-procedure LabelSetText(pnl: Panel; id, newString: String); overload;
+procedure LabelSetText(pnl: Panel; const id, newString: String); overload;
 
 /// returns a GUILabel From given region
 ///
@@ -1578,7 +1578,7 @@ procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment);
 /// @lib 
 /// @class Dialog
 /// @method setPath
-procedure DialogSetPath(fullname: String);
+procedure DialogSetPath(const fullname: String);
   
 /// Gets the path of the dialog
 ///
@@ -2329,7 +2329,7 @@ begin
   forRegion^.active := not forRegion^.active;
 end;
 
-function RegionWithID(pnl: Panel; ID: String): Region; overload;
+function RegionWithID(pnl: Panel; const ID: String): Region; overload;
 var
   idx: Longint;
 begin
@@ -2343,7 +2343,7 @@ begin
   end;  
 end;
 
-function RegionWithID(ID: String): Region; overload;
+function RegionWithID(const ID: String): Region; overload;
 var
   i: LongInt;
 begin
@@ -2609,18 +2609,19 @@ begin
   result := @r^.parent^.radioGroups[r^.elementIndex];
 end;
 
-function RadioGroupFromId(pnl: Panel; id: String): GUIRadioGroup;
+function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup;
 var
   i: Longint;
+  lid: String;
 begin
   result := nil;
   if not assigned(pnl) then exit;
   
-  id := LowerCase(id);
+  lid := LowerCase(id);
   
   for i := 0 to High(pnl^.radioGroups) do
   begin
-    if LowerCase(pnl^.radioGroups[i].groupID) = id then
+    if LowerCase(pnl^.radioGroups[i].groupID) = lid then
     begin
       result := @pnl^.radioGroups[i];
       exit;
@@ -2628,7 +2629,7 @@ begin
   end;
 end;
 
-function RadioGroupFromId(id : String): GUIRadioGroup;
+function RadioGroupFromId(const id : String): GUIRadioGroup;
 begin
   result := RadioGroupFromRegion(RegionWithID(id));
 end;
@@ -2700,12 +2701,12 @@ begin
 end;
 }
 
-function ActiveRadioButtonIndex(pnl : Panel; id : String): LongInt;
+function ActiveRadioButtonIndex(pnl : Panel; const id : String): LongInt;
 begin
   result := ActiveRadioButtonIndex(RadioGroupFromRegion(RegionWithID(pnl,id)));
 end;
 
-function ActiveRadioButtonIndex(id : String): LongInt;
+function ActiveRadioButtonIndex(const id : String): LongInt;
 begin
   result := ActiveRadioButtonIndex(RadioGroupFromRegion(RegionWithID(id)));
 end;
@@ -2719,12 +2720,12 @@ begin
   result := grp^.buttons[grp^.activeButton];
 end;
 
-function ActiveRadioButton(pnl : Panel; id : String): Region;
+function ActiveRadioButton(pnl : Panel; const id : String): Region;
 begin
   result := ActiveRadioButton(RadioGroupFromRegion(RegionWithID(pnl,id)));
 end;
 
-function ActiveRadioButton(id : String): Region;
+function ActiveRadioButton(const id : String): Region;
 begin
   result := ActiveRadioButton(RadioGroupFromRegion(RegionWithID(id)));
 end;
@@ -2756,12 +2757,12 @@ begin
   end;
 end;
 
-procedure SelectRadioButton(id : String);
+procedure SelectRadioButton(const id : String);
 begin
   SelectRadioButton(RegionWithID(id));
 end;
 
-procedure SelectRadioButton(pnl : Panel; id : String);
+procedure SelectRadioButton(pnl : Panel; const id : String);
 begin
   SelectRadioButton(RegionWithID(pnl, id));
 end;
@@ -2777,29 +2778,29 @@ end;
 // Label Code
 //---------------------------------------------------------------------------------------
 
-procedure LabelSetText(id: String; newString: String); overload;
+procedure LabelSetText(const id, newString: String); overload;
 begin
   LabelSetText(LabelFromRegion(RegionWithID(id)), newString);
 end;
 
-procedure LabelSetText(pnl: Panel; id, newString: String); overload;
+procedure LabelSetText(pnl: Panel; const id, newString: String); overload;
 begin
   LabelSetText(LabelFromRegion(RegionWithID(pnl, id)), newString);
 end;
 
-procedure LabelSetText(r: Region; newString: String); overload;
+procedure LabelSetText(r: Region; const newString: String); overload;
 begin
   LabelSetText(LabelFromRegion(r), newString);
 end;
 
-procedure LabelSetText(lb: GUILabel; newString: String);
+procedure LabelSetText(lb: GUILabel; const newString: String);
 begin
   if not assigned(lb) then exit;  
   
   lb^.contentString := newString;
 end;
 
-procedure LabelSetFont(l: GUILabel; s: String);
+procedure LabelSetFont(l: GUILabel; const s: String);
 begin
   if not assigned(l) then exit;
   l^.font := FontNamed(s);
@@ -2857,12 +2858,12 @@ begin
   result := LabelText(LabelFromRegion(r));
 end;
 
-function LabelText(id : String): String; overload;
+function LabelText(const id : String): String; overload;
 begin
   result := LabelText(LabelFromRegion(RegionWithID(id)));
 end;
 
-function LabelText(pnl : Panel; id : String): String; overload;
+function LabelText(pnl : Panel; const id : String): String; overload;
 begin
   result := LabelText(LabelFromRegion(RegionWithID(pnl,id)));
 end;
@@ -2891,38 +2892,38 @@ begin
   result := tb^.font;
 end;
 
-procedure TextboxSetText(id : String; s: string); overload;
+procedure TextboxSetText(const id, s: string); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(id)), s);
 end;
 
-procedure TextboxSetText(id : String;i: Longint); overload;
+procedure TextboxSetText(const id : String; i: Longint); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(id)), IntToStr(i));
 end;
 
-procedure TextboxSetText(id : String; single: Single); overload;
+procedure TextboxSetText(const id : String; single: Single); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(id)), FloatToStr(single));
 end;
 
-procedure TextboxSetText(pnl : Panel; id : String; s: string); overload;
+procedure TextboxSetText(pnl : Panel; const id, s: string); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(pnl,id)), s);
 end;
 
-procedure TextboxSetText(pnl : Panel; id : String; i: Longint); overload;
+procedure TextboxSetText(pnl : Panel; const id : String; i: Longint); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(pnl,id)), IntToStr(i));
 end;
 
-procedure TextboxSetText(pnl : Panel; id : String; single: Single); overload;
+procedure TextboxSetText(pnl : Panel; const id : String; single: Single); overload;
 begin
   TextboxSetText(TextBoxFromRegion(RegionWithId(pnl,id)), FloatToStr(single));
 end;
 
 
-procedure TextboxSetText(r: Region; s: string); overload;
+procedure TextboxSetText(r: Region; const s: string); overload;
 begin
   TextboxSetText(TextBoxFromRegion(r), s);
 end;
@@ -2937,7 +2938,7 @@ begin
   TextboxSetText(TextBoxFromRegion(r), FloatToStr(single));
 end;
 
-procedure TextboxSetText(tb: GUITextBox; s: string); overload;
+procedure TextboxSetText(tb: GUITextBox; const s: string); overload;
 begin
   if assigned(tb) then
     tb^.contentString := s;
@@ -2953,12 +2954,12 @@ begin
   TextboxSetText(tb, FloatToStr(single));
 end;
 
-function TextBoxText(id: String): String; overload;
+function TextBoxText(const id: String): String; overload;
 begin
   result := TextBoxText(RegionWithID(id));
 end;
 
-function TextBoxText(pnl : Panel; id: String): String; overload;
+function TextBoxText(pnl : Panel; const id: String): String; overload;
 begin
   result := TextBoxText(RegionWithID(pnl, id));
 end;
@@ -2979,7 +2980,7 @@ end;
 /// The the TextBox from an ID
 ///
 /// @lib TextBoxFromId
-function TextBoxFromId(id : String) : GUITextbox;
+function TextBoxFromId(const id : String) : GUITextbox;
 begin
   result := TextBoxFromRegion(RegionWithId(id));
 end;
@@ -3018,7 +3019,7 @@ begin
   GUISetActiveTextbox(TextBoxFromRegion(r));
 end;
 
-procedure GUISetActiveTextbox(name: String); overload;
+procedure GUISetActiveTextbox(const name: String); overload;
 begin
   GUISetActiveTextbox(TextBoxFromRegion(RegionWithId(name)));
 end;
@@ -3072,12 +3073,12 @@ begin
   result := ListItemText(list, ListActiveItemIndex(list));
 end;
 
-function ListActiveItemText(ID: String): String; overload;
+function ListActiveItemText(const ID: String): String; overload;
 begin
   result := ListActiveItemText(RegionWithID(id));
 end;
 
-function ListActiveItemText(pnl: Panel; ID: String): String; overload;
+function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
 var
   r: Region;
 begin
@@ -3100,12 +3101,12 @@ begin
   lst^.activeItem := idx;
 end;
 
-procedure ListSetActiveItemIndex(pnl : Panel; id : String; idx : LongInt);
+procedure ListSetActiveItemIndex(pnl : Panel; const id : String; idx : LongInt);
 begin
   ListSetActiveItemIndex(ListFromRegion(RegionWithID(pnl, id)),idx);
 end;
 
-procedure ListSetActiveItemIndex(id : String; idx : LongInt);
+procedure ListSetActiveItemIndex(const id : String; idx : LongInt);
 begin
   ListSetActiveItemIndex(ListFromRegion(RegionWithID(id)),idx);
 end;
@@ -3146,12 +3147,12 @@ begin
   result := lst^.items[idx].text;
 end;
 
-function ListItemText(id: String; idx: Longint): String; overload;
+function ListItemText(const id: String; idx: Longint): String; overload;
 begin
   result := ListItemText(RegionWithID(id),idx);
 end;
 
-function ListItemText(pnl : Panel; id: String; idx: Longint): String; overload;
+function ListItemText(pnl : Panel; const id: String; idx: Longint): String; overload;
 begin
   result := ListItemText(RegionWithID(pnl,id),idx);
 end;
@@ -3169,17 +3170,17 @@ begin
   result := Length(lst^.items);
 end;
 
-function ListItemCount(id : String): Longint; overload;
+function ListItemCount(const id : String): Longint; overload;
 begin
   result := ListItemCount(RegionWithID(id));
 end;
 
-function ListItemCount(pnl : Panel; id : String): Longint; overload;
+function ListItemCount(pnl : Panel; const id : String): Longint; overload;
 begin
   result := ListItemCount(RegionWithID(pnl,id));
 end;
 
-procedure ListAddItem(lst: GUIList; text: String); overload;
+procedure ListAddItem(lst: GUIList; const text: String); overload;
 begin
   ListAddItem(lst, nil, -1, text);
 end;
@@ -3189,7 +3190,7 @@ begin
   ListAddItem(lst, img, -1, '');
 end;
 
-procedure ListAddItem(lst: GUIList; img:Bitmap; text: String); overload;
+procedure ListAddItem(lst: GUIList; img:Bitmap; const text: String); overload;
 begin
   ListAddItem(lst, img, -1, text);
 end;
@@ -3199,7 +3200,7 @@ begin
   ListAddItem(lst, img, cell, '');
 end;
 
-procedure ListAddItem(lst: GUIList; const img:Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(lst: GUIList; const img:Bitmap; cell: Longint; const text: String); overload;
 begin
     if not assigned(lst) then exit;
     
@@ -3214,12 +3215,12 @@ begin
   ListAddItem(r,img, cell, '');
 end;
 
-procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(ListFromRegion(r), img, cell, text);
 end;
 
-procedure ListAddItem(r : Region; text: String); overload;
+procedure ListAddItem(r : Region; const text: String); overload;
 begin
   ListAddItem(ListFromRegion(r), text);
 end;
@@ -3229,58 +3230,58 @@ begin
   ListAddItem(ListFromRegion(r), img);
 end;
 
-procedure ListAddItem(r : Region; img:Bitmap; text: String); overload;
+procedure ListAddItem(r : Region; img:Bitmap; const text: String); overload;
 begin
   ListAddItem(ListFromRegion(r),img, text);
 end;
 
 
-procedure ListAddItem(id : String; const img:Bitmap; cell: Longint); overload;
+procedure ListAddItem(const id : String; const img:Bitmap; cell: Longint); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(id: String; const img:Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(const id: String; const img:Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, text);
 end;
 
-procedure ListAddItem(id: String; text: String); overload;
+procedure ListAddItem(const id, text: String); overload;
 begin
   ListAddItem(RegionWithID(id), text);
 end;
 
-procedure ListAddItem(id: String; img:Bitmap); overload;
+procedure ListAddItem(const id: String; img:Bitmap); overload;
 begin
   ListAddItem(RegionWithID(id), img);
 end;
 
-procedure ListAddItem(id: String; img:Bitmap; text: String); overload;
+procedure ListAddItem(const id: String; img:Bitmap; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id),img, text);
 end;
 
-procedure ListAddItem(pnl : Panel; id : String; const img:Bitmap; cell: Longint); overload;
+procedure ListAddItem(pnl : Panel; const id : String; const img:Bitmap; cell: Longint); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(pnl : Panel; id: String; const img:Bitmap; cell: Longint; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id: String; const img:Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, text);
 end;
 
-procedure ListAddItem(pnl : Panel; id: String; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id, text: String); overload;
 begin
   ListAddItem(RegionWithID(id), text);
 end;
 
-procedure ListAddItem(pnl : Panel; id: String;img:Bitmap); overload;
+procedure ListAddItem(pnl : Panel; const id: String; img:Bitmap); overload;
 begin
   ListAddItem(RegionWithID(id), img);
 end;
 
-procedure ListAddItem(pnl : Panel; id: String; img:Bitmap; text: String); overload;
+procedure ListAddItem(pnl : Panel; const id: String; img:Bitmap; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id),img, text);
 end;
@@ -3299,12 +3300,12 @@ begin
   ListClearItems(ListFromRegion(r));
 end;
 
-procedure ListClearItems(id : String); overload;
+procedure ListClearItems(const id : String); overload;
 begin
   ListClearItems(RegionWithID(id));
 end;
 
-procedure ListClearItems(pnl : Panel; id : String); overload;
+procedure ListClearItems(pnl : Panel; const id : String); overload;
 begin
   ListClearItems(RegionWithID(pnl,id));
 end;
@@ -3314,12 +3315,12 @@ begin
   ListRemoveItem(ListFromRegion(r), ListActiveItemIndex(r));
 end;
 
-procedure ListRemoveActiveItem(id : string); overload;
+procedure ListRemoveActiveItem(const id : string); overload;
 begin
   ListRemoveActiveItem(RegionWithID(id));
 end;
 
-procedure ListRemoveActiveItem(pnl : Panel; id : string); overload;
+procedure ListRemoveActiveItem(pnl : Panel; const id : string); overload;
 begin
   ListRemoveActiveItem(RegionWithID(pnl, id));
 end;
@@ -3345,17 +3346,17 @@ begin
 end;
 
 
-procedure ListRemoveItem(id : String; idx: Longint);
+procedure ListRemoveItem(const id : String; idx: Longint);
 begin
   ListRemoveItem(ListFromRegion(RegionWithID(id)),idx);
 end;
 
-procedure ListRemoveItem(pnl : Panel; id : String; idx: Longint);
+procedure ListRemoveItem(pnl : Panel; const id : String; idx: Longint);
 begin
   ListRemoveItem(ListFromRegion(RegionWithID(pnl, id)),idx);
 end;
 
-function ListTextIndex(lst: GUIList; value: String): Longint;
+function ListTextIndex(lst: GUIList; const value: String): Longint;
 var
   i: Longint;
 begin
@@ -3421,12 +3422,12 @@ begin
   result := lst^.activeItem;
 end;
 
-function ListActiveItemIndex(id: string): Longint; overload;
+function ListActiveItemIndex(const id: string): Longint; overload;
 begin
   result := ListActiveItemIndex(RegionWithID(id));
 end;
 
-function ListActiveItemIndex(pnl: Panel; id: string): Longint; overload;
+function ListActiveItemIndex(pnl: Panel; const id: string): Longint; overload;
 begin
   result := ListActiveItemIndex(RegionWithID(pnl, id));
 end;
@@ -3515,12 +3516,12 @@ begin
   result := CheckboxState(CheckboxFromRegion(r));
 end;
 
-function CheckboxState(s: String): Boolean; overload;
+function CheckboxState(const s: String): Boolean; overload;
 begin
   result := CheckboxState(CheckboxFromRegion(RegionWithID(s)));
 end;
 
-function CheckboxState(p: Panel; s: String): Boolean; overload;
+function CheckboxState(p: Panel; const s: String): Boolean; overload;
 begin
   result := CheckboxState(CheckboxFromRegion(RegionWithID(p, s)));
 end;
@@ -3537,11 +3538,11 @@ begin
   CheckboxSetState(CheckboxFromRegion(r), val);
 end;
 
-procedure CheckBoxSetState(id : String; val : Boolean);overload; 
+procedure CheckBoxSetState(const id : String; val : Boolean);overload; 
 begin
   CheckboxSetState(RegionWithID(id), val);
 end;
-procedure CheckBoxSetState(pnl: Panel; id : String; val : Boolean);overload; 
+procedure CheckBoxSetState(pnl: Panel; const id : String; val : Boolean);overload; 
 begin
   CheckboxSetState(RegionWithID(pnl, id), val);
 end;
@@ -3562,12 +3563,12 @@ begin
   c^.state := not c^.state;
 end;
 
-procedure ToggleCheckboxState(id : String);
+procedure ToggleCheckboxState(const id : String);
 begin
   ToggleCheckboxState(CheckboxFromRegion(RegionWithID(id)));
 end;
 
-procedure ToggleCheckboxState(pnl: Panel; id : String);
+procedure ToggleCheckboxState(pnl: Panel; const id : String);
 begin
   ToggleCheckboxState(CheckboxFromRegion(RegionWithID(pnl, id)));
 end;
@@ -3604,7 +3605,7 @@ begin
   p^.area.Y := nY;
 end;
 
-function PanelWidth(name: String): Longint;
+function PanelWidth(const name: String): Longint;
 begin
     result := PanelWidth(PanelNamed(name));
 end;
@@ -3617,7 +3618,7 @@ begin
   result := Round(p^.area.width);
 end;
 
-function PanelHeight(name: String): Longint;
+function PanelHeight(const name: String): Longint;
 begin
     result := PanelHeight(PanelNamed(name));
 end;
@@ -3678,7 +3679,7 @@ begin
   if assigned(p) then p^.active := not p^.active;
 end;
 
-function InitPanel(name, filename:string): Panel;
+function InitPanel(const name, filename:string): Panel;
 begin
   New(result);
 
@@ -3710,7 +3711,7 @@ begin
   end;
 end;
 
-function NewPanel(pnlName: String): Panel;
+function NewPanel(const pnlName: String): Panel;
 var
   pnl: Panel;
   obj: tResourceContainer;
@@ -3756,7 +3757,7 @@ begin
   if assigned(p) and (not p^.visible) then ToggleShowPanel(p);
 end;
 
-procedure ShowPanel(name: String);
+procedure ShowPanel(const name: String);
 begin
   ShowPanel(PanelNamed(name));
 end;
@@ -3766,7 +3767,7 @@ begin
   if assigned(p) and (p^.visible) then ToggleShowPanel(p);
 end;
 
-procedure HidePanel(name: String);
+procedure HidePanel(const name: String);
 begin
   HidePanel(PanelNamed(name));
 end;
@@ -3843,7 +3844,7 @@ end;
 // Create Panels/GUI Elements/Regions etc.
 //=============================================================================
 
-function StringToKind(s: String): GUIElementKind;
+function StringToKind(const s: String): GUIElementKind;
   begin
     if Lowercase(s) = 'button' then
       result := gkButton
@@ -3861,7 +3862,7 @@ function StringToKind(s: String): GUIElementKind;
       RaiseException(s + ' is an invalid kind for region.');
   end;
   
-  procedure CreateLabel(forRegion: Region; d: string; result: Panel);
+  procedure CreateLabel(forRegion: Region; const d: string; result: Panel);
   var
     newLbl: GUILabelData;
   begin
@@ -3883,7 +3884,7 @@ function StringToKind(s: String): GUIElementKind;
     groupToRecieve^.buttons[High(groupToRecieve^.buttons)] := regToAdd;    
   end;
   
-  procedure CreateRadioButton(forRegion: Region; data: String; result: Panel);
+  procedure CreateRadioButton(forRegion: Region; const data: String; result: Panel);
   var
     newRadioGroup: GUIRadioGroupData;
     i: Longint;
@@ -3912,14 +3913,14 @@ function StringToKind(s: String): GUIElementKind;
     forRegion^.elementIndex := High(result^.radioGroups);
   end;
   
-  procedure CreateCheckbox(forRegion: Region; data: string; result: Panel);
+  procedure CreateCheckbox(forRegion: Region; const data: string; result: Panel);
   begin
     SetLength(result^.Checkboxes, Length(result^.Checkboxes) + 1);
     result^.Checkboxes[High(result^.Checkboxes)].state := LowerCase(ExtractDelimited(7, data, [','])) = 'true';
     forRegion^.elementIndex := High(result^.Checkboxes);
   end;
   
-  procedure CreateTextbox(r: region; data: string; result: panel);
+  procedure CreateTextbox(r: region; const data: string; result: panel);
   var
     newTextbox: GUITextboxData;
   begin
@@ -3944,7 +3945,7 @@ function StringToKind(s: String): GUIElementKind;
     r^.ElementIndex := High(result^.textBoxes);
   end;
   
-  procedure CreateList(r: Region; data: string; result: Panel);
+  procedure CreateList(r: Region; const data: string; result: Panel);
   var
     newList: GUIListData;
     scrollSz, rhs, btm, height, width: Single;
@@ -4055,7 +4056,7 @@ function StringToKind(s: String): GUIElementKind;
     p^.regions := newRegions;    
   end;
   
-  procedure AddRegionToPanelWithString(d: string; p: panel);
+  procedure AddRegionToPanelWithString(const d: string; p: panel);
   var
     regID: string;
     regX, regY: Single;
@@ -4114,14 +4115,14 @@ function StringToKind(s: String): GUIElementKind;
     end;    
   end;
   
-function DoLoadPanel(filename, name: string): Panel;
+function DoLoadPanel(const filename, name: string): Panel;
 var
   pathToFile, line, id, data: string;
   panelFile: text;
   lineNo: LongInt;
   regionDataArr: Array of String;
   
-  procedure StoreRegionData(data: String);
+  procedure StoreRegionData(const data: String);
   begin
     SetLength(regionDataArr, Length(regionDataArr) + 1);
     regionDataArr[High(regionDataArr)] := data;
@@ -4400,7 +4401,7 @@ begin
   result := RegionClicked() = r;
 end;
 
-function ButtonClicked(name: String) : Boolean;
+function ButtonClicked(const name: String) : Boolean;
 begin
   result := ButtonClicked(RegionWithId(name));
 end;
@@ -4438,7 +4439,7 @@ end;
 //   {$ENDIF}
 // end;
 
-function LoadPanel(filename: String): Panel;
+function LoadPanel(const filename: String): Panel;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgUserInterface', 'LoadPanel', filename);
@@ -4452,7 +4453,7 @@ begin
 end;
 
 
-function LoadPanelNamed(name, filename: String): Panel;
+function LoadPanelNamed(const name, filename: String): Panel;
 var
   obj: tResourceContainer;
   pnl: Panel;
@@ -4584,7 +4585,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ReleasePanel(name: String);
+procedure ReleasePanel(const name: String);
 var
   pnl: Panel;
 begin
@@ -4617,7 +4618,7 @@ begin
   {$ENDIF}
 end;
 
-function HasPanel(name: String): Boolean;
+function HasPanel(const name: String): Boolean;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgUserInterface', 'HasPanel', name);
@@ -4630,7 +4631,7 @@ function HasPanel(name: String): Boolean;
     {$ENDIF}
   end;
 
-  function PanelNamed(name: String): Panel;
+  function PanelNamed(const name: String): Panel;
   var
     tmp : TObject;
   begin
@@ -4799,13 +4800,13 @@ begin
   result := (Longint(toCheck) and Longint(checkFor)) = Longint(checkFor);
 end;
 
-procedure ShowErrorMessage(msg: String);
+procedure ShowErrorMessage(const msg: String);
 begin
   LabelSetText(dialog.dialogPanel, 'ErrorLabel', msg);
   PlaySoundEffect(SoundEffectNamed('fdDialogError'), 0.5);
 end;
 
-procedure DialogSetPath(fullname: String);
+procedure DialogSetPath(const fullname: String);
 var
   tmpPath, path, filename: String;
   paths: Array [0..255] of PChar;

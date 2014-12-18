@@ -6,34 +6,6 @@
 // button clicks (including the scroll wheel as button clicks) and keyboard
 // events for text input and key state checking.
 //
-// Change History:
-//
-// Version 3.0:
-// - 2012-01-12: Aaron : changed input to use InputDrivers.
-// - 2010-02-02: Andrew : Added starting text reading within a region
-// - 2009-07-24: Andrew : Renamed mouse code
-// - 2009-07-10: Andrew : Added call to initialise SwinGame.
-//                      : Fixed missing const modifier on struct parameters
-// - 2009-06-15: Clinton: renamed+removed Is/Was and placed Key/Mouse first
-//                        moved and added meta comments, tweaked formatting.
-// - 2009-06-05: Andrew : Using sgShared
-//
-// Version 2.2.2:
-// - 2008-12-17: Andrew : Moved all integers to Longint
-// - 2008-12-16: Andrew : Added WasAKeyPressed
-//
-// Version 1.1.5:
-// - 2008-04-18: Andrew : Added EndTextRead
-//
-// Version 1.1:
-// - 2008-02-13: James  : changed MoveMouse so it dosnt generate mouse movement event
-// - 2008-01-25: Stephen: Fixed IsMouseShown
-// - 2008-01-25: Andrew : Fixed compiler hints
-// - 2008-01-22: James  : changed MoveMouse to Point2D
-// - 2008-01-17: Aki + Andrew: Refactor
-//
-// Version 1.0:
-// - Various
 //=============================================================================
 
 
@@ -177,7 +149,7 @@ interface
   ///
   /// @lib StartReadingTextWithTextInArea
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s area:%s
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
     
   
   /// The same as `StartReadingTextWithText` but with ``text`` and ``bgColor`` parameter
@@ -185,7 +157,7 @@ interface
   ///
   /// @lib StartReadingTextWithTextAndColorInArea
   /// @sn startReadingTextWith:%s color:%s bgColor:%s maxLen:%s font:%s area:%s  
-  procedure StartReadingTextWithText(text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(const text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   
   /// Starts the reading of a string of characters from the user. Entry is 
   /// completed when the user presses ENTER, and aborted with ESCAPE.
@@ -202,14 +174,14 @@ interface
   ///
   /// @lib StartReadingTextWithText
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s x:%s y:%s
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
   
   /// The same as `StartReadingText` but with an additional ``text`` parameter
   /// that is displayed as default text to the user.  
   ///
   /// @lib StartReadingTextWithTextAtPt
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s at:%s
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
   
   /// Returns the string that has been read since `StartReadingText` or 
   /// `StartReadingTextWithText` was called.
@@ -533,25 +505,25 @@ end;
     StartReadingText(textColor, maxLength, theFont, RectangleFrom(x, y, TextWidth(theFont, StringOfChar('M', maxLength)), TextHeight(theFont, 'M')));
   end;
   
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, area);
     SetText(text);    
   end;
   
-  procedure StartReadingTextWithText(text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(const text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, backGroundColor, maxLength, theFont, area);
     SetText(text);    
   end;
   
   
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
   begin
     StartReadingTextWithText(text, textColor, maxLength, theFont, RoundInt(pt.x), RoundInt(pt.y));
   end;
   
-  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
+  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, x, y);
     SetText(text);

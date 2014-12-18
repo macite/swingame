@@ -23,7 +23,7 @@ interface
 	/// @class ArduinoDevice
 	/// @constructor
 	/// @csn initOnPort:%s atBaud:%s
-	function CreateArduinoDevice(port: String; baud: LongInt) : ArduinoDevice;
+	function CreateArduinoDevice(const port: String; baud: LongInt) : ArduinoDevice;
 
 	/// Creates an Arduino device with the given name, 
 	/// at the specified port, with the indicated baud.
@@ -34,22 +34,22 @@ interface
 	/// @class ArduinoDevice
 	/// @constructor
 	/// @csn initWithName:%s OnPort:%s atBaud:%s
-	function CreateArduinoDevice(name, port: String; baud: LongInt) : ArduinoDevice;
+	function CreateArduinoDevice(const name, port: String; baud: LongInt) : ArduinoDevice;
 
 	/// Returns the ArduinoDevice with the indicated name.
 	///
 	/// @lib
-	function ArduinoDeviceNamed(name: String): ArduinoDevice;
+	function ArduinoDeviceNamed(const name: String): ArduinoDevice;
 
 	/// Does an ArduinoDevice exist with the indicated name?
 	///
 	/// @lib
-	function HasArduinoDevice(name: String): Boolean;
+	function HasArduinoDevice(const name: String): Boolean;
 
 	/// Release the ArduinoDevice with the indicated name.
 	///
 	/// @lib
-	procedure ReleaseArduinoDevice(name: String);
+	procedure ReleaseArduinoDevice(const name: String);
 
 	/// Close the connection to the Arduino Device and dispose
 	/// of the resources associated with the Device.
@@ -119,7 +119,7 @@ interface
 	///
 	/// @class ArduinoDevice
 	/// @method SendString
-	procedure ArduinoSendString(dev: ArduinoDevice; value: String);
+	procedure ArduinoSendString(dev: ArduinoDevice; const value: String);
 
 	/// Send a string value to the arduino device, along with a newline
 	/// so the arduino can identify the end of the sent data.
@@ -129,7 +129,7 @@ interface
 	///
 	/// @class ArduinoDevice
 	/// @method SendStringLine
-	procedure ArduinoSendStringLine(dev: ArduinoDevice; value: String);
+	procedure ArduinoSendStringLine(dev: ArduinoDevice; const value: String);
 
 	/// Returns true if there is data waiting to be read from the device.
 	///
@@ -151,12 +151,12 @@ uses
     var _ArduinoDevices: TStringHash;
 
 
-	function CreateArduinoDevice(port: String; baud: LongInt) : ArduinoDevice;
+	function CreateArduinoDevice(const port: String; baud: LongInt) : ArduinoDevice;
 	begin
 		result := CreateArduinoDevice(port, port, baud);
 	end;
 
-	function CreateArduinoDevice(name, port: String; baud: LongInt) : ArduinoDevice;
+	function CreateArduinoDevice(const name, port: String; baud: LongInt) : ArduinoDevice;
     var
         obj: tResourceContainer;
 	    ser: TBlockSerial;	
@@ -260,7 +260,7 @@ uses
 		end;
 	end;
 
-    procedure ArduinoSendStringLine(dev: ArduinoDevice; value: String);
+    procedure ArduinoSendStringLine(dev: ArduinoDevice; const value: String);
 	var
 	    ser: TBlockSerial;	
 	begin
@@ -272,7 +272,7 @@ uses
 		end;
 	end;
 
-    procedure ArduinoSendString(dev: ArduinoDevice; value: String);
+    procedure ArduinoSendString(dev: ArduinoDevice; const value: String);
 	var
 	    ser: TBlockSerial;	
 	begin
@@ -317,7 +317,7 @@ uses
         dev := nil;
     end;
     
-    procedure ReleaseArduinoDevice(name: String);
+    procedure ReleaseArduinoDevice(const name: String);
     var
         dev: ArduinoDevice;
     begin
@@ -334,12 +334,12 @@ uses
         ReleaseAll(_ArduinoDevices, @ReleaseArduinoDevice);
     end;
 
-    function HasArduinoDevice(name: String): Boolean;
+    function HasArduinoDevice(const name: String): Boolean;
     begin
         result := _ArduinoDevices.containsKey(name);
     end;
 
-    function ArduinoDeviceNamed(name: String): ArduinoDevice;
+    function ArduinoDeviceNamed(const name: String): ArduinoDevice;
     var
         tmp : TObject;
     begin

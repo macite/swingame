@@ -51,7 +51,7 @@ interface
   /// @class Timer
   /// @constructor
   /// @sn initWithName:%s
-  function CreateTimer(name: String): Timer; overload;
+  function CreateTimer(const name: String): Timer; overload;
   
   /// Free a created timer.
   ///
@@ -64,13 +64,13 @@ interface
   /// Get the timer created with the indicated named.
   ///
   /// @lib
-  function TimerNamed(name: String): Timer;
+  function TimerNamed(const name: String): Timer;
   
   /// Release the resources used by the timer with
   /// the indicated name.
   ///
   /// @lib
-  procedure ReleaseTimer(name: String);
+  procedure ReleaseTimer(const name: String);
   
   /// Releases all of the timers that have been loaded.
   ///
@@ -89,7 +89,7 @@ interface
   /// Start a timer recording the time that has passed.
   ///
   /// @lib StartTimerNamed
-  procedure StartTimer(name: String);
+  procedure StartTimer(const name: String);
 
   /// Stop the timer. The time is reset to 0 and you must
   /// recall start to begin the timer ticking again.
@@ -104,7 +104,7 @@ interface
   /// recall start to begin the timer ticking again.
   /// 
   /// @lib StopTimerNamed
-  procedure StopTimer(name: String);
+  procedure StopTimer(const name: String);
 
   
   /// Pause the timer, getting ticks from a paused timer
@@ -120,7 +120,7 @@ interface
   /// will continue to return the same time.
   /// 
   /// @lib PauseTimerNamed
-  procedure PauseTimer(name: String);
+  procedure PauseTimer(const name: String);
   
   /// Resumes a paused timer.
   ///
@@ -133,7 +133,7 @@ interface
   /// Resumes a paused timer.
   ///
   /// @lib ResumeTimerNamed
-  procedure ResumeTimer(name: String);
+  procedure ResumeTimer(const name: String);
 
   
   /// Resets the time of a given timer
@@ -147,7 +147,7 @@ interface
   /// Resets the time of a given timer
   ///
   /// @lib ResetTimerNamed
-  procedure ResetTimer(name: String);
+  procedure ResetTimer(const name: String);
 
   
   /// Gets the number of ticks (milliseconds) that have passed since the timer
@@ -165,7 +165,7 @@ interface
   /// the timer is once again resumed.
   ///
   /// @lib TimerTicksNamed
-  function TimerTicks(name: String): Longword;
+  function TimerTicks(const name: String): Longword;
   
   
   
@@ -197,7 +197,7 @@ begin
   result := CreateTimer(name);
 end;
 
-function CreateTimer(name: String): Timer; overload;
+function CreateTimer(const name: String): Timer; overload;
 var
   obj: tResourceContainer;
 begin
@@ -231,7 +231,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ResetTimer(name: String);
+procedure ResetTimer(const name: String);
 begin
   ResetTimer(TimerNamed(name));
 end;
@@ -251,7 +251,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ReleaseTimer(name: String);
+procedure ReleaseTimer(const name: String);
 var
   tmr: Timer;
 begin
@@ -309,7 +309,7 @@ begin
   {$ENDIF}
 end;
 
-function TimerNamed(name: String): Timer;
+function TimerNamed(const name: String): Timer;
 var
   tmp : TObject;
 begin
@@ -327,7 +327,7 @@ begin
 end;
 
 
-procedure StartTimer(name: String);
+procedure StartTimer(const name: String);
 begin
   StartTimer(TimerNamed(name));
 end;
@@ -350,7 +350,7 @@ begin
   {$ENDIF}
 end;
 
-procedure StopTimer(name: String);
+procedure StopTimer(const name: String);
 begin
   StopTimer(TimerNamed(name));
 end;
@@ -371,7 +371,7 @@ begin
   {$ENDIF}
 end;
 
-procedure PauseTimer(name: String);
+procedure PauseTimer(const name: String);
 begin
   PauseTimer(TimerNamed(name));
 end;
@@ -395,7 +395,7 @@ begin
   {$ENDIF}
 end;
 
-procedure ResumeTimer(name: String);
+procedure ResumeTimer(const name: String);
 begin
   ResumeTimer(TimerNamed(name));
 end;
@@ -420,7 +420,7 @@ begin
   {$ENDIF}
 end;
 
-function TimerTicks(name: String): Longword;
+function TimerTicks(const name: String): Longword;
 begin
   result := TimerTicks(TimerNamed(name));
 end;

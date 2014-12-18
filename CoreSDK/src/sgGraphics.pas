@@ -39,7 +39,7 @@ interface
   /// is opened.
   ///
   /// @lib
-  procedure SetIcon(filename: String);
+  procedure SetIcon(const filename: String);
 
   /// Returns the number of resolutions in the list of available resolutions.
   ///
@@ -68,7 +68,7 @@ interface
   /// @lib
   /// @uname OpenGraphicsWindow
   /// @sn openGraphicsWindow:%s width:%s height:%s
-  procedure OpenGraphicsWindow(caption: String; width, height: Longint); overload;
+  procedure OpenGraphicsWindow(const caption: String; width, height: Longint); overload;
 
   /// Opens the graphical window as an 800 x 600 window. See OpenGramhicsWinddow
   /// for more options.
@@ -80,7 +80,7 @@ interface
   /// @lib OpenGraphicsWindow(caption, 800, 600)
   /// @uname OpenGraphicsWindow800x600
   /// @sn openGraphicsWindow:%s
-  procedure OpenGraphicsWindow(caption: String); overload;
+  procedure OpenGraphicsWindow(const caption: String); overload;
 
   /// Shows the SwinGame intro splash screen.
   /// It would be great if you could include this at the start of
@@ -146,7 +146,7 @@ interface
   /// - Saves the current screen image to a bitmap file.
   ///
   /// @lib TakeScreenshot
-  procedure TakeScreenshot(basename: String);
+  procedure TakeScreenshot(const basename: String);
   
   
   
@@ -1238,7 +1238,7 @@ implementation
 // Set Icon / Window Open / Screen Size / Resize
 //----------------------------------------------------------------------------
 
-  procedure SetIcon(filename: String);
+  procedure SetIcon(const filename: String);
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'SetIcon');
@@ -1249,7 +1249,7 @@ implementation
     {$ENDIF}
   end;
   
-  procedure OpenGraphicsWindow(caption: String; width: Longint; height: Longint); overload;
+  procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'OpenGraphicsWindow', caption + ': W' + IntToStr(width) + ': H' + IntToStr(height));
@@ -1297,7 +1297,7 @@ implementation
   end;
   
 
-  procedure OpenGraphicsWindow(caption: String); overload;
+  procedure OpenGraphicsWindow(const caption: String); overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'OpenGraphicsWindow');
@@ -1396,7 +1396,7 @@ implementation
     {$ENDIF}
   end;
 
-  procedure TakeScreenShot(basename: String);
+  procedure TakeScreenShot(const basename: String);
   var
     path: String;
     filename: String;

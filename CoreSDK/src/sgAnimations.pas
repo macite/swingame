@@ -28,7 +28,7 @@ interface
     /// @class AnimationScript
     /// @constructor
     /// @csn initFromFile:%s
-    function LoadAnimationScript(filename: String) : AnimationScript;
+    function LoadAnimationScript(const filename: String) : AnimationScript;
     
     /// Frees loaded animation frames data. Use this when you will no longer be 
     /// using the animation for any purpose, including within sprites.
@@ -55,7 +55,7 @@ interface
     /// @csn indexOfAnimation:%s
     ///
     /// @doc_details
-    function AnimationIndex(temp: AnimationScript; name: String): Longint;
+    function AnimationIndex(temp: AnimationScript; const name: String): Longint;
     
     /// The name of the animation within the animation template at the specified index.
     ///
@@ -96,7 +96,7 @@ interface
     /// @class AnimationScript
     /// @constructor
     /// @csn initWithName:%s fromFile:%s
-    function LoadAnimationScriptNamed(name, filename: String): AnimationScript;
+    function LoadAnimationScriptNamed(const name, filename: String): AnimationScript;
     
     /// Determines if SwinGame has animation frames loaded for the supplied ``name``.
     /// This checks against all loaded animation frames, those loaded without a name
@@ -105,19 +105,19 @@ interface
     /// @lib
     ///
     /// @doc_details
-    function HasAnimationScript(name: String): Boolean;
+    function HasAnimationScript(const name: String): Boolean;
     
     /// Returns the `AnimationScript` that has been loaded with the specified ``name``,
     /// see `LoadAnimationScriptNamed`.
     ///
     /// @lib
-    function AnimationScriptNamed(name: String): AnimationScript;
+    function AnimationScriptNamed(const name: String): AnimationScript;
     
     /// Releases the SwinGame resources associated with the animation template of the
     /// specified ``name``.
     ///
     /// @lib
-    procedure ReleaseAnimationScript(name: String);
+    procedure ReleaseAnimationScript(const name: String);
     
     /// Releases all of the animation templates that have been loaded.
     ///
@@ -147,7 +147,7 @@ interface
     /// @class Animation
     /// @constructor
     /// @csn initAsName:%s from:%s
-    function CreateAnimation(identifier: String; script: AnimationScript): Animation; overload;
+    function CreateAnimation(const identifier: String; script: AnimationScript): Animation; overload;
     
     /// Creates an animation from a `AnimationScript`. If ``withSound`` is ``true``, this may
     /// play a sound effect if the animation is set to play a sound effect on its first frame.
@@ -160,7 +160,7 @@ interface
     /// @csn initAsName:%s from:%s withSound:%s
     ///
     /// @doc_details
-    function CreateAnimation(identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+    function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
     
     /// Creates an animation from an `AnimationScript`. If ``withSound`` is ``true``, this may
     /// play a sound effect if the animation is set to play a sound effect on its first frame.
@@ -211,7 +211,7 @@ interface
     /// @class Animation
     /// @overload AssignAnimation AssignAnimationNamed
     /// @csn assignAnimationNamed:%s from:%s
-    procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript); overload;
+    procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript); overload;
     
     /// Assign a new starting animation to the passed in animation from the `AnimationScript`.
     /// This may play a sound if the first frame of the animation is linked to a sound effect, and withSound is true.
@@ -224,7 +224,7 @@ interface
     /// @csn assignAnimationNamed:%s from:%s withSound:%s
     ///
     /// @doc_details
-    procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript; withSound: Boolean); overload;
+    procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript; withSound: Boolean); overload;
     
     /// Assign a new starting animation to the passed in animation from the `AnimationScript`.
     /// This may play a sound if the first frame of the animation is linked to a sound effect.
@@ -444,7 +444,7 @@ implementation
 var
     _Animations: TStringHash;
 
-function DoLoadAnimationScript(name, filename: String) : AnimationScript;
+function DoLoadAnimationScript(const name, filename: String) : AnimationScript;
 type
     RowData = record
         id,cell,dur,next: Longint;
@@ -901,7 +901,7 @@ begin
     {$ENDIF}    
 end;
 
-function LoadAnimationScript(filename: String) : AnimationScript;
+function LoadAnimationScript(const filename: String) : AnimationScript;
 begin
     result := LoadAnimationScriptNamed(filename, filename);
 end;
@@ -919,7 +919,7 @@ begin
     scriptToFree := nil;
 end;
 
-function LoadAnimationScriptNamed(name, filename: String): AnimationScript;
+function LoadAnimationScriptNamed(const name, filename: String): AnimationScript;
 var
     obj: tResourceContainer;
     frm: AnimationScript;
@@ -959,7 +959,7 @@ begin
     {$ENDIF}
 end;
 
-function HasAnimationScript(name: String): Boolean;
+function HasAnimationScript(const name: String): Boolean;
 begin
     {$IFDEF TRACE}
         TraceEnter('sgAnimations', 'HasAnimationScript', name);
@@ -972,7 +972,7 @@ begin
     {$ENDIF}
 end;
 
-function AnimationScriptNamed(name: String): AnimationScript;
+function AnimationScriptNamed(const name: String): AnimationScript;
 var
     tmp : TObject;
 begin
@@ -1018,7 +1018,7 @@ begin
     frm := nil;
 end;
 
-procedure ReleaseAnimationScript(name: String);
+procedure ReleaseAnimationScript(const name: String);
 var
     frm: AnimationScript;
 begin
@@ -1065,7 +1065,7 @@ end;
 
 //----------------------------------------------------------------------------
 
-function StartFrame(name: String; temp: AnimationScript) : AnimationFrame;
+function StartFrame(const name: String; temp: AnimationScript) : AnimationFrame;
 begin
     if assigned(temp) then
         result := StartFrame(IndexOf(temp^.animationIds, name), temp)
@@ -1136,7 +1136,7 @@ begin
     result := CreateAnimation(identifier, script, True);
 end;
 
-function CreateAnimation(identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
 var
     idx: Integer;
 begin
@@ -1153,17 +1153,17 @@ begin
     result := CreateAnimation(idx, script, withSound);
 end;
 
-function CreateAnimation(identifier: String;    script: AnimationScript): Animation; overload;
+function CreateAnimation(const identifier: String;    script: AnimationScript): Animation; overload;
 begin
     result := CreateAnimation(identifier, script, True);
 end;
 
-procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript); overload;
+procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript); overload;
 begin
     AssignAnimation(anim, name, script, true);
 end;
 
-procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript; withSound: Boolean); overload;
+procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript; withSound: Boolean); overload;
 begin
     AssignAnimation(anim, AnimationIndex(script, name), script, withSound);
 end;
@@ -1340,7 +1340,7 @@ begin
 end;
 
 
-function AnimationIndex(temp: AnimationScript; name: String): Longint;
+function AnimationIndex(temp: AnimationScript; const name: String): Longint;
 begin
     if not assigned(temp) then result := -1
     else result := IndexOf(temp^.animationIds, name);
