@@ -57,22 +57,32 @@ void sgsdl2_close_font(sg_font_data* font)
 
 int sgsdl2_text_line_skip(sg_font_data* font) 
 { 
-    return TTF_FontLineSkip((TTF_Font*)font->_data);
+    if (font->_data)
+        return TTF_FontLineSkip((TTF_Font*)font->_data);
+    else
+        return 0;
 }
 
 int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h) 
 {
-    return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
+    if (font->_data)
+        return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
+    else
+        return 0;
 }
 
 void sgsdl2_set_font_style(sg_font_data* font,int style) 
 {
-    TTF_SetFontStyle((TTF_Font*)font->_data, style); 
+    if (font->_data)
+        TTF_SetFontStyle((TTF_Font*)font->_data, style); 
 }
 
 int sgsdl2_get_font_style(sg_font_data* font) 
 {
-    return TTF_GetFontStyle((TTF_Font*)font->_data); 
+    if (font->_data)
+        return TTF_GetFontStyle((TTF_Font*)font->_data); 
+    else
+        return 0;
 }
 
 void _sgsdl2_draw_bitmap_text( sg_drawing_surface * surface,
@@ -105,11 +115,12 @@ void sgsdl2_draw_text(
         const char * text, 
         sg_color clr)
 {
-    if (!font)
+    if (!font) // draw bitmap based text -- no font
     {
         _sgsdl2_draw_bitmap_text(surface, x, y, text, clr);
         return;
     }
+    if (!font->_data) return; // error with font
     
     SDL_Surface * text_surface = NULL;
     SDL_Texture * text_texture = NULL;

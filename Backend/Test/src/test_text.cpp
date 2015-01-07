@@ -43,7 +43,9 @@ void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style)
 void test_text()
 {
   cout <<  "Testing text " << endl; 
-  sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 54); 
+  sg_font_data font =  _sg_functions->text.load_font("BATTLEST1.TTF", 54);
+
+  cout << " Loaded " << font._data << endl;
 
   int line_skip = _sg_functions->text.text_line_skip(&font); 
   cout << " The line skip is: " << line_skip << endl; 
