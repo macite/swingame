@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Move to src dir
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
@@ -37,13 +37,6 @@ else
     ICON="SwinGame"
 fi
 
-#
-# Library versions
-#
-OPENGL=false
-SDL_13=false
-SDL_2=false
-
 Usage()
 {
     echo "Usage: [-c] [-h] src_name"
@@ -54,9 +47,6 @@ Usage()
     echo "Options:"
     echo " -c   Perform a clean rather than a build"
     echo " -h   Show this help message "
-    echo " -badass Use SDL 1.3 driver"
-    echo " -godly  Use OpenGL driver"
-    echo " -sdl2   Use the SDL 2 driver"
     exit 0
 }
 
@@ -64,19 +54,7 @@ while getopts chb:g:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-        fi 
-        ;;
     h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            OPENGL=true
-        fi 
-        ;;
-    s)  if [ "${OPTARG}" = "dl2" ]; then
-            SDL_2=true
-        fi
-        ;;
     esac
 done
 
@@ -108,38 +86,15 @@ else
 fi
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_2} = true ]; then
-      FPC_BIN=`which ppcx64`
-      TMP_DIR="${APP_PATH}/tmp/sdl2"
-      LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
-    elif [ ${SDL_13} = true ]; then
-      TMP_DIR="${APP_PATH}/tmp/sdl13"
-      LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-      TMP_DIR="${APP_PATH}/tmp/godly"
-      LIB_DIR="${APP_PATH}/staticlib/godly/mac"
-    else
-      TMP_DIR="${APP_PATH}/tmp/sdl12"
-      LIB_DIR="${APP_PATH}/staticlib/sdl12/mac"
-    fi
+    FPC_BIN=`which ppcx64`
+    TMP_DIR="${APP_PATH}/tmp/sdl2"
+    LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 elif [ "$OS" = "$WIN" ]; then
-    if [ ${SDL_13} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    elif [ ${OPENGL} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    else
-      LIB_DIR="${APP_PATH}/lib/win"
-    fi
-fi
-
-if [ ${SDL_2} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
-elif [ ${SDL_13} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL13"
-elif [ ${OPENGL} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_OPENGL -dSWINGAME_SDL13"
-else
-  PAS_FLAGS="${PAS_FLAGS} -k\"-lstdc++\""
+    LIB_DIR="${APP_PATH}/staticlib/sdl2/win"
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+else # Linux
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""
 fi
 
 # echo ${PAS_FLAGS}
@@ -231,15 +186,7 @@ CleanTmp()
 
 DoDriverMessage()
 {
-  if [ ${SDL_2} = true ]; then
-    echo "  ... Using SDL 2 Driver"
-  elif [ ${SDL_13} = true ]; then
-    echo "  ... Using SDL 1.3 Driver"
-  elif [ ${OPENGL} = true ]; then
-    echo "  ... Using OpenGL Driver"
-  else
-    echo "  ... Using SDL 1.2 Driver"
-  fi
+  echo "  ... Using SGSDL2 Driver"
 }
 
 doBasicMacCompile()
@@ -248,73 +195,13 @@ doBasicMacCompile()
     
     echo "  ... Compiling $GAME_NAME - $1"
     
-    # FRAMEWORKS=`ls -d ${LIB_DIR}/*.framework | awk -F . '{split($2,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
-    
     FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework QuickTime -framework Carbon -framework ForceFeedback'
 
-    STATIC_LIBS=`cd ${LIB_DIR};ls -f *.a | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-l%s ", substr(patharr[idx],4)) }'`
-    
+    STATIC_LIBS=`cd ${LIB_DIR};ls -f *.a | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-l%s ", substr(patharr[idx],4)) }'`    
     
     ${FPC_BIN} ${PAS_FLAGS} ${SG_INC} -Mobjfpc -gl -gw2 -Sew -Sh -FE"${TMP_DIR}/${1}" -FU"${TMP_DIR}/${1}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"${STATIC_LIBS}" -k"-rpath @loader_path/../Frameworks" -k"-F${LIB_DIR} -framework Cocoa ${FRAMEWORKS}" -k"-lbz2" $2 -o"${OUT_DIR}/${GAME_NAME}" "./test/${SRC_FILE}" > ${LOG_FILE} 2> ${LOG_FILE}
     
     if [ $? != 0 ]; then DoExitCompile; fi
-}
-
-#
-# Compile for Mac - manually assembles and links files
-# argument 1 is arch
-#
-doMacCompile()
-{
-    mkdir -p ${TMP_DIR}/${1}
-    echo "  ... Compiling $GAME_NAME - $1"
-    
-    FRAMEWORKS=`ls -d ${LIB_DIR}/*.framework | awk -F . '{split($2,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
-    
-    ${FPC_BIN} ${PAS_FLAGS} ${SG_INC} -Mobjfpc -gl -gw2 -Sew -Sh -FE"${TMP_DIR}/${1}" -FU"${TMP_DIR}/${1}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"-F${LIB_DIR} -framework Cocoa ${FRAMEWORKS}" $2 -o"${OUT_DIR}/${GAME_NAME}.${1}" "./test/${SRC_FILE}" > ${LOG_FILE} 2> ${LOG_FILE}
-    
-    #-CioOR
-    
-    if [ $? != 0 ]; then DoExitCompile; fi
-    
-    # mkdir -p ${TMP_DIR}/$1
-    # echo "  ... Compiling $GAME_NAME - $1 (${SRC_FILE})"
-    # 
-    # ${FPC_BIN}  $PAS_FLAGS ${SG_INC} -Mobjfpc -Sh -FE${TMP_DIR}/$1 -Fi${LIB_DIR} -FU${TMP_DIR}/$1 -s ./test/${SRC_FILE} > ${LOG_FILE}
-    # if [ $? != 0 ]; then DoExitCompile; fi
-    # rm -f ${LOG_FILE}
-    # 
-    # #Remove the pascal assembler script
-    # rm ${TMP_DIR}/$1/ppas.sh
-    # 
-    # echo "  ... Assembling for $1"
-    # 
-    # #Assemble all of the .s files
-    # for file in `find ${TMP_DIR}/$1 | grep [.]s$`
-    # do
-    #     /usr/bin/as -o ${file%.s}.o $file -arch $1
-    #     if [ $? != 0 ]; then DoExitAsm $file; fi
-    #     rm $file
-    # done
-    # 
-    # echo "  ... Linking ${GAME_NAME}"
-    # 
-    # FRAMEWORKS=`ls -d ${LIB_DIR}/*.framework | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
-    # 
-    # /usr/bin/ld /usr/lib/crt1.o -F${LIB_DIR} -L/usr/X11R6/lib -L/usr/lib -search_paths_first -multiply_defined suppress -o "${OUT_DIR}/${GAME_NAME}.${1}" `cat ${TMP_DIR}/$1/link.res` -framework Cocoa ${FRAMEWORKS}
-    # if [ $? != 0 ]; then DoExitCompile ${GAME_NAME}; fi
-}
-
-# 
-# Create fat executable (i386 + ppc)
-# 
-doLipo()
-{
-    echo "  ... Creating Universal Binary"
-    lipo -arch ${1} "${OUT_DIR}/${GAME_NAME}.${1}" -arch ${2} "${OUT_DIR}/${GAME_NAME}.${2}" -output "${OUT_DIR}/${GAME_NAME}" -create
-    
-    rm -f "${OUT_DIR}/${GAME_NAME}.${1}"
-    rm -f "${OUT_DIR}/${GAME_NAME}.${2}"
 }
 
 doMacPackage()
@@ -456,6 +343,7 @@ then
     echo "--------------------------------------------------"
     echo "  ... Creating ${GAME_NAME}"    
     DoDriverMessage;
+
     if [ "$OS" = "$MAC" ]; then
         HAS_PPC=false
         HAS_i386=false

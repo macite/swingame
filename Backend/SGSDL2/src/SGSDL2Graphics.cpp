@@ -1200,8 +1200,8 @@ Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
     if(!surface->pixels) return 0;
     
     p = (Uint8 *)surface->pixels
-    + y * surface->pitch
-    + x * surface->format->BytesPerPixel;
+        + y * surface->pitch
+        + x * surface->format->BytesPerPixel;
     
     if(x < 0 || y < 0 || x >= surface->w || y >= surface->h) return 0;
     
@@ -1211,10 +1211,11 @@ Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
         case 2:
             return *(Uint16 *)p;
         case 3:
-            if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                return static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
-            }
-            else return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+            return static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
+#else
+            return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
+#endif
         case 4:
             return *(Uint32 *)p;
         default:
