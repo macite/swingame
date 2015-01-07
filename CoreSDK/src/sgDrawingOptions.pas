@@ -160,7 +160,7 @@ function OptionToScreen(): DrawingOptions;
 function OptionToScreen(const opts: DrawingOptions): DrawingOptions;
 
 implementation
-uses sgShared;
+uses sgShared, sgGeometry;
 
 function OptionDefaults(): DrawingOptions;
 begin
@@ -175,6 +175,7 @@ begin
 		flipX 			:= false;
 		flipY 			:= false;
 		isPart 			:= false;
+		part 			:= RectangleFrom(0,0,1,1);
 		camera	 		:= DrawDefault;
 	end;
 end;

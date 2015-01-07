@@ -274,7 +274,7 @@ doLinuxCompile()
     mkdir -p ${TMP_DIR}
     echo "  ... Compiling $GAME_NAME"
     
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -gh -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o${GAME_NAME} ./test/${SRC_FILE} > ${LOG_FILE}
+    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o${GAME_NAME} ./test/${SRC_FILE} > ${LOG_FILE}
     if [ $? != 0 ]; then DoExitCompile; fi
 }
 
