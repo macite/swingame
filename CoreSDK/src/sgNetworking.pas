@@ -1317,7 +1317,7 @@ var
       len := Length((aMsg)) + 4;
       SetLength(buffer, len);
 
-      for i := 0 to len do
+      for i := 0 to len - 1 do
       begin
         if i < 4 then
         begin
