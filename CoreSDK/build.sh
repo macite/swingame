@@ -95,6 +95,17 @@ elif [ "$OS" = "$WIN" ]; then
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 else # Linux
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""
+
+    if [[ ! -f /usr/lib/libsgsdl2.so ]]; then
+        echo "SwinGame driver must be installed. Super user permissions required."
+        echo "Installing 3rd Party Libraries"
+        sudo apt-get install build-essential libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev
+        if [ $? != 0 ]; then echo "Failed to install"; exit 1; fi
+        echo
+        echo "Installing SwinGame driver"
+        sudo install ./staticlib/sdl2/linux/libsgsdl2.so -t /usr/lib/
+        if [ $? != 0 ]; then echo "Failed to install"; exit 1; fi
+    fi
 fi
 
 # echo ${PAS_FLAGS}
@@ -126,7 +137,8 @@ GAME_NAME="Test"
 locateGameMain()
 {
   cd "${FULL_APP_PATH}/test"
-  fileList=$(find "." -maxdepth 1 -type f -name \*.pas)
+  fileList=$(ls *.pas) #$(find "." -maxdepth 1 -type f -name \*.pas)
+
   FILE_COUNT=$(echo "$fileList" | tr " " "\n" | wc -l)
   
   if [[ ${FILE_COUNT} = 1 ]]; then
