@@ -2514,6 +2514,7 @@ var
   var
     i: Integer;
   begin
+    // WriteLn(' -- Removing Connection ', idx, ' from ', Length(list));
     for i := idx to High(list) - 1 do
     begin
       list[i] := list[i + 1];
@@ -2552,7 +2553,6 @@ var
     ShutConnection(aConnection);
 
     toClose := aConnection; //so we keep track of the pointer, in case we are removing from array
-
     idx := IndexOf(_ConnectionIds, toClose^.name);
 
     if idx > -1 then
@@ -2575,10 +2575,10 @@ var
         if idx > -1 then
         begin
           result := true;
-          // WriteLn('Removing from server...');
-          RemoveConnection(idx, _Servers[svr]^.Connections);
           // now nil the pointer...
           aConnection := nil;
+          // WriteLn('Removing from server...');
+          RemoveConnection(idx, _Servers[svr]^.Connections);
           break;
         end
       end;

@@ -369,9 +369,12 @@ implementation
       iter.next;
     end;
 
-    for i := Low(names) to High(names) do
+    if Assigned(releaser) then
     begin
-      releaser(names[i]);
+      for i := Low(names) to High(names) do
+      begin
+        releaser(names[i]);
+      end;
     end;
     
     iter.Free();

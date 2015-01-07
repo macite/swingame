@@ -3268,6 +3268,14 @@ implementation
     result := _CurrentPack.Name;
   end;
 
+  function SpritePackNamed(const name: String): TSpritePack;
+  begin
+    if HasSpritePack(name) then
+      result := TSpritePack(_SpritePacks.Values[name])
+    else
+      result := nil;
+  end;
+
   procedure SelectSpritePack(const name: String);
   begin
     if HasSpritePack(name) then
@@ -3280,12 +3288,23 @@ implementation
     end;
   end;
 
+  procedure ReleaseSpritePack(const name: String);
+  var
+    pack: TSpritePack;
+  begin
+    pack := SpritePackNamed(name);
+    if (Assigned(pack)) then
+    begin
+      FreeAndNil(pack);
+    end;
+  end;
 
-
-
+  procedure ReleaseAllSpritePacks();
+  begin
+    ReleaseAll(_SpritePacks, nil);
+  end;
 
 //=============================================================================
-
   initialization
   begin
     InitialiseSwinGame();
@@ -3302,12 +3321,15 @@ implementation
 
     // Sprite Event Handlers
     SetLength(_GlobalSpriteEventHandlers, 0);
-end;
+  end;
   
   finalization
   begin
     ReleaseAllSprites();
-    FreeAndNil(_Sprites);
+    ReleaseAllSpritePacks();
+    SetLength(_GlobalSpriteEventHandlers, 0);
+    FreeAndNil(_Sprites); 
+    FreeAndNil(_SpritePacks);
   end;
   
 end.
