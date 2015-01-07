@@ -40,7 +40,7 @@ hg clone http://hg.libsdl.org/SDL_net	./SDL_net >> setup.log
 if [ $? != 0 ]; then DoExit; fi
 
 echo "   Checking out SDL_gfx"
-svn checkout http://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r12
+svn checkout http://svn.code.sf.net/p/sdlgfx/code/ ./SDL_gfx -r r102
 
 # echo "   Cloning SDL_rtf"
 # hg clone http://hg.libsdl.org/SDL_rtf	./SDL_rtf >> setup.log
@@ -53,7 +53,7 @@ if [ $? != 0 ]; then DoExit; fi
 # select used versions
 echo "   Selecing SDL version"
 cd ./SDL
-hg up -r release-2.0.1 >> setup.log
+hg up -r release-2.0.3 >> setup.log
 if [ $? != 0 ]; then DoExit; fi
 
 echo "   Selecing SDL_image version"

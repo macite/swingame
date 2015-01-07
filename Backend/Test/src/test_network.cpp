@@ -18,6 +18,8 @@ extern sg_interface * _sg_functions;
 
 void test_network()
 {
+    cout << "Opening socket at localhost:49000" << endl;
+
     sg_network_connection svr, client_to_svr, svr_to_client;
     svr = _sg_functions->network.open_tcp_connection(nullptr, 49000);
     
@@ -27,13 +29,15 @@ void test_network()
     
     char buffer[1024] = "hello";
     
-    cout << "test" << endl;
+    cout << "Sending 'hello'" << endl;
     
     _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
     _sg_functions->network.read_bytes(&client_to_svr, buffer, 1024);
 
+    cout << "Read " << buffer << endl;
+
     int i;
-    cout << "closing" << endl;
+    cout << "closing (enter number to continue)" << endl;
     _sg_functions->network.close_connection(&client_to_svr);
     cin >> i;
     

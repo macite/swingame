@@ -11,6 +11,7 @@ interface
 		BytePtr = ^Byte;
 		int = longint;
 		pint = ^int;
+		puint16 = ^uint16;
 		float = single;
 		pfloat = ^single;
 		uint = longword;
