@@ -885,7 +885,8 @@ var
     else //UDP
     begin
       socket^ := _sg_functions^.network.open_udp_connection(0);
-      con^.IP := IPv4ToDec(HostIP(host));
+      // con^.IP := IPv4ToDec(HostIP(host));
+      con^.IP := _sg_functions^.network.network_address(socket);
       result  := true;
     end
 
