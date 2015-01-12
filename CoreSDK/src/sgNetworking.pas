@@ -198,15 +198,15 @@ uses sgTypes;
   /// @lib
   function HttpResponseBodyAsString(const httpData: HttpResponse): String;
 
-  /// Returns the host name of a given ip address.
-  ///
-  /// @lib
-  function HostName(const address: String): String;
+  // /// Returns the host name of a given ip address.
+  // ///
+  // /// @lib
+  // function HostName(const address: String): String;
 
-  /// Returns the ip address of a given host.
-  ///
-  /// @lib
-  function HostIP(const name: String): String;
+  // /// Returns the ip address of a given host.
+  // ///
+  // /// @lib
+  // function HostIP(const name: String): String;
 
   /// Adds a header to the Http request with the name and value.
   ///
@@ -2132,30 +2132,30 @@ var
 // Http
 //----------------------------------------------------------------------------
 
-  function HostName(const address: String): String;
-  var
-    host: THostEntry;
-    host6: THostEntry6;
-  begin
-    result := '';
-    if GetHostbyAddr(in_addr(StrToHostAddr(address)), host) 
-      or ResolveHostbyAddr(in_addr(StrToHostAddr(address)), host) then
-      result := host.Name
-    else if ResolveHostbyAddr6(StrToHostAddr6(address), host6) then
-      result := host6.Name;
-  end;
+  // function HostName(const address: String): String;
+  // var
+  //   host: THostEntry;
+  //   host6: THostEntry6;
+  // begin
+  //   result := '';
+  //   if GetHostbyAddr(in_addr(StrToHostAddr(address)), host) 
+  //     or ResolveHostbyAddr(in_addr(StrToHostAddr(address)), host) then
+  //     result := host.Name
+  //   else if ResolveHostbyAddr6(StrToHostAddr6(address), host6) then
+  //     result := host6.Name;
+  // end;
 
-  function HostIP(const name: String): String;
-  var
-    host: THostEntry;
-    host6: THostEntry6;
-  begin
-    result := '';
-    if GetHostByName(name, host) or ResolveHostByName(name, host) then
-      result := NetAddrToStr(host.Addr)
-    else if ResolveHostByName6(name, host6) then
-      result := NetAddrToStr6(host6.Addr);
-  end;
+  // function HostIP(const name: String): String;
+  // var
+  //   host: THostEntry;
+  //   host6: THostEntry6;
+  // begin
+  //   result := '';
+  //   if GetHostByName(name, host) or ResolveHostByName(name, host) then
+  //     result := NetAddrToStr(host.Addr)
+  //   else if ResolveHostByName6(name, host6) then
+  //     result := NetAddrToStr6(host6.Addr);
+  // end;
 
   procedure SendHttpRequest(const aReq : HttpRequest; const aConnection : sg_network_connection);
   var
