@@ -1542,6 +1542,7 @@ implementation
         InitialiseSwinGame();
         _SoundEffects := TStringHash.Create(False, 1024);
         _Music := TStringHash.Create(False, 1024);
+        OpenAudio();
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'Initialise');
