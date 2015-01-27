@@ -14,5 +14,5 @@ using Color = System.Drawing.Color;
 
 namespace SwinGameSDK
 {
-	public class SwinGame
+	public static class SwinGame
 	{
