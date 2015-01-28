@@ -91,8 +91,8 @@ if [ "$OS" = "$MAC" ]; then
     LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 elif [ "$OS" = "$WIN" ]; then
-    LIB_DIR="${APP_PATH}/staticlib/sdl2/win"
-    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+    LIB_DIR="${APP_PATH}/lib/sdl2/win"
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k-L'${LIB_DIR}' -k-lsgsdl2"
 else # Linux
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""
 
@@ -301,7 +301,7 @@ doWindowsCompile()
     #windres ${SRC_DIR}/SwinGame.rc ${SRC_DIR}/GameLauncher.res
     #if [ $? != 0 ]; then DoExitCompile; fi
     
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${LIB_DIR} -o${GAME_NAME}.exe ./test/${SRC_FILE} > ${LOG_FILE}
+    ${FPC_BIN} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${LIB_DIR} ${PAS_FLAGS} -o${GAME_NAME}.exe ./test/${SRC_FILE} > ${LOG_FILE}
     #${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${TMP_DIR} -Fi${LIB_DIR} -FU${TMP_DIR} -s ./test/${SRC_FILE} > ${LOG_FILE}
     if [ $? != 0 ]; then DoExitCompile; fi
 }
