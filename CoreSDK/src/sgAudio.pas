@@ -1395,14 +1395,28 @@ implementation
     function SoundEffectNamed(name: String): SoundEffect;
     var
         tmp : TObject;
+        filename: String;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'SoundEffectNamed', name);
         {$ENDIF}
         
         tmp := _SoundEffects.values[name];
-        if assigned(tmp) then result := SoundEffect(tResourceContainer(tmp).Resource)
-        else result := nil;
+        if assigned(tmp) then 
+            result := SoundEffect(tResourceContainer(tmp).Resource)
+        else
+        begin
+            filename := PathToResource(name, SoundResource);
+
+            if FileExists(name) or FileExists(filename) then
+            begin
+                result := LoadSoundEffectNamed(name, name);
+            end
+            else
+            begin
+                result := nil;
+            end;
+        end;
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'SoundEffectNamed', HexStr(result));

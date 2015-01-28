@@ -14,6 +14,10 @@ begin
   ReleaseSoundEffect('fred');
   ReleaseMusic('fred');
   
+  Write('Playing sound effect -- not loaded but matching filename');
+  PlaySoundEffect('shock.wav');
+  ReadLn();
+
   mus := LoadMusicNamed('fast', 'Fast.mp3');
   mus1 := LoadMusic('menu.ogg');
   snd := LoadSoundEffectNamed('shock', 'shock.wav');
