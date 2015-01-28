@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2014-12-18 14:39:25.851632
+// SwinGame.pas was generated on 2015-01-28 10:53:48.449455
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2040,12 +2040,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Converts a Hex String to a Decimal Value as a String.
   function HexToDecString(const aHex: String): String; overload;
 
-  // Returns the ip address of a given host.
-  function HostIP(const name: String): String; overload;
-
-  // Returns the host name of a given ip address.
-  function HostName(const address: String): String; overload;
-
   // Adds a header to the Http request with the name and value.
   procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
 
@@ -2099,10 +2093,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function MessageCount(const name: String): Longint; overload;
 
   // Gets the number of messages waiting to be read from this connection
-  function MessageCount(aConnection: Connection): Longint; overload;
+  function MessageCount(svr: ServerSocket): Longint; overload;
 
   // Gets the number of messages waiting to be read from this connection
-  function MessageCount(svr: ServerSocket): Longint; overload;
+  function MessageCount(aConnection: Connection): Longint; overload;
 
   // Gets the data from a Message. This will be a string.
   function MessageData(const msg: Message): String; overload;
@@ -6513,16 +6507,6 @@ implementation
     result := sgNetworking.HexToDecString(aHex);
   end;
 
-  function HostIP(const name: String): String; overload;
-  begin
-    result := sgNetworking.HostIP(name);
-  end;
-
-  function HostName(const address: String): String; overload;
-  begin
-    result := sgNetworking.HostName(address);
-  end;
-
   procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
   begin
     sgNetworking.HttpAddHeader(aHttpRequest,name,value);
@@ -6603,14 +6587,14 @@ implementation
     result := sgNetworking.MessageCount(name);
   end;
 
-  function MessageCount(aConnection: Connection): Longint; overload;
-  begin
-    result := sgNetworking.MessageCount(aConnection);
-  end;
-
   function MessageCount(svr: ServerSocket): Longint; overload;
   begin
     result := sgNetworking.MessageCount(svr);
+  end;
+
+  function MessageCount(aConnection: Connection): Longint; overload;
+  begin
+    result := sgNetworking.MessageCount(aConnection);
   end;
 
   function MessageData(const msg: Message): String; overload;
