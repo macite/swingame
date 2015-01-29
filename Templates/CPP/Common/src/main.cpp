@@ -3,9 +3,7 @@
 
 int main()
 {
-    open_audio();
     open_graphics_window("Hello World", 800, 600);
-    load_default_colors();
     show_swin_game_splash_screen();
     
     do

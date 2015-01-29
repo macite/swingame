@@ -1,7 +1,6 @@
 using System;
-using System.Reflection;
 using SwinGameSDK;
-using Color = System.Drawing.Color;
+using SwinGameSDK.SwinGame;
 
 namespace MyGame
 {
@@ -9,32 +8,23 @@ namespace MyGame
     {
         public static void Main()
         {
-            //Start the audio system so sound can be played
-            SwinGame.OpenAudio();
-            
             //Open the game window
-            SwinGame.OpenGraphicsWindow("GameMain", 800, 600);
-            SwinGame.ShowSwinGameSplashScreen();
+            OpenGraphicsWindow("GameMain", 800, 600);
+            ShowSwinGameSplashScreen();
             
             //Run the game loop
-            while(false == SwinGame.WindowCloseRequested())
+            while(false == WindowCloseRequested())
             {
                 //Fetch the next batch of UI interaction
-                SwinGame.ProcessEvents();
+                ProcessEvents();
                 
                 //Clear the screen and draw the framerate
-                SwinGame.ClearScreen(Color.White);
-                SwinGame.DrawFramerate(0,0);
+                ClearScreen(Color.White);
+                DrawFramerate(0,0);
                 
                 //Draw onto the screen
-                SwinGame.RefreshScreen();
+                RefreshScreen();
             }
-            
-            //End the audio
-            SwinGame.CloseAudio();
-            
-            //Close any resources we were using
-            SwinGame.ReleaseAllResources();
         }
     }
 }

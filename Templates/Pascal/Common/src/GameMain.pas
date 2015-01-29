@@ -3,10 +3,7 @@ uses SwinGame;
 
 procedure Main();
 begin
-  OpenAudio();
-  
   OpenGraphicsWindow('Hello World', 800, 600);
-  LoadDefaultColors();
   ShowSwinGameSplashScreen();
   
   repeat // The game loop...
@@ -17,9 +14,6 @@ begin
     
     RefreshScreen();
   until WindowCloseRequested();
-  
-  CloseAudio();
-  ReleaseAllResources();
 end;
 
 begin

@@ -5,7 +5,6 @@ procedure Main();
 begin
 	PlayMusic('Fast.mp3');
 	OpenGraphicsWindow('BitmapDrawingTest', 600, 600);
-	LoadDefaultColors();
 
 	repeat
 		ProcessEvents();

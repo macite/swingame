@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2013-11-21 16:32:18.863611
+// SwinGame.pas was generated on 2015-01-29 15:47:56.540398
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1095,6 +1095,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Returns True if the point ``pt`` is in the circle.
   function PointInCircle(const pt: Point2D; const c: Circle): Boolean; overload;
 
+  // Returns True if the point ``pt`` is in the circle defined by x, y, radius.
+  function PointInCircle(const pt: Point2D; x: Single; y: Single; radius: Single): Boolean; overload;
+
   // Returns True if the point ``ptX``, ``ptY`` is in the circle.
   function PointInCircle(ptX: Single; ptY: Single; cX: Single; cY: Single; radius: Single): Boolean; overload;
 
@@ -1126,6 +1129,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Returns True if point ``pt`` is on the line segment ``line``.
   function PointOnLine(const pt: Point2D; const line: LineSegment): Boolean; overload;
+
+  // Returns True if point ``pt`` is on the line segment ``line``.
+  function PointOnLine(const pt: Point2D; x: Single; y: Single; endX: Single; endY: Single): Boolean; overload;
 
   // Returns True of `pt1` is at the same point as `pt2`.
   function PointOnPoint(const pt1: Point2D; const pt2: Point2D): Boolean; overload;
@@ -1390,15 +1396,444 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Clear the screen to a specified color.
   procedure ClearScreen(toColor: Color); overload;
 
+  // The color AliceBlue
+  function ColorAliceBlue(): Color; overload;
+
+  // The color AntiqueWhite
+  function ColorAntiqueWhite(): Color; overload;
+
+  // The color Aqua
+  function ColorAqua(): Color; overload;
+
+  // The color Aquamarine
+  function ColorAquamarine(): Color; overload;
+
+  // The color Azure
+  function ColorAzure(): Color; overload;
+
+  // The color Beige
+  function ColorBeige(): Color; overload;
+
+  // The color Bisque
+  function ColorBisque(): Color; overload;
+
+  // The color Black
+  function ColorBlack(): Color; overload;
+
+  // The color BlanchedAlmond
+  function ColorBlanchedAlmond(): Color; overload;
+
+  // The color Blue
+  function ColorBlue(): Color; overload;
+
+  // The color BlueViolet
+  function ColorBlueViolet(): Color; overload;
+
+  // The color Brown
+  function ColorBrown(): Color; overload;
+
+  // The color BurlyWood
+  function ColorBurlyWood(): Color; overload;
+
+  // The color CadetBlue
+  function ColorCadetBlue(): Color; overload;
+
+  // The color Chartreuse
+  function ColorChartreuse(): Color; overload;
+
+  // The color Chocolate
+  function ColorChocolate(): Color; overload;
+
   // Gets a color given its RGBA components.
   procedure ColorComponents(c: Color; out r: Byte; out g: Byte; out b: Byte; out a: Byte); overload;
+
+  // The color Coral
+  function ColorCoral(): Color; overload;
+
+  // The color CornflowerBlue
+  function ColorCornflowerBlue(): Color; overload;
+
+  // The color Cornsilk
+  function ColorCornsilk(): Color; overload;
+
+  // The color Crimson
+  function ColorCrimson(): Color; overload;
+
+  // The color Cyan
+  function ColorCyan(): Color; overload;
+
+  // The color DarkBlue
+  function ColorDarkBlue(): Color; overload;
+
+  // The color DarkCyan
+  function ColorDarkCyan(): Color; overload;
+
+  // The color DarkGoldenrod
+  function ColorDarkGoldenrod(): Color; overload;
+
+  // The color DarkGray
+  function ColorDarkGray(): Color; overload;
+
+  // The color DarkGreen
+  function ColorDarkGreen(): Color; overload;
+
+  // The color DarkKhaki
+  function ColorDarkKhaki(): Color; overload;
+
+  // The color DarkMagenta
+  function ColorDarkMagenta(): Color; overload;
+
+  // The color DarkOliveGreen
+  function ColorDarkOliveGreen(): Color; overload;
+
+  // The color DarkOrange
+  function ColorDarkOrange(): Color; overload;
+
+  // The color DarkOrchid
+  function ColorDarkOrchid(): Color; overload;
+
+  // The color DarkRed
+  function ColorDarkRed(): Color; overload;
+
+  // The color DarkSalmon
+  function ColorDarkSalmon(): Color; overload;
+
+  // The color DarkSeaGreen
+  function ColorDarkSeaGreen(): Color; overload;
+
+  // The color DarkSlateBlue
+  function ColorDarkSlateBlue(): Color; overload;
+
+  // The color DarkSlateGray
+  function ColorDarkSlateGray(): Color; overload;
+
+  // The color DarkTurquoise
+  function ColorDarkTurquoise(): Color; overload;
+
+  // The color DarkViolet
+  function ColorDarkViolet(): Color; overload;
+
+  // The color DeepPink
+  function ColorDeepPink(): Color; overload;
+
+  // The color DeepSkyBlue
+  function ColorDeepSkyBlue(): Color; overload;
+
+  // The color DimGray
+  function ColorDimGray(): Color; overload;
+
+  // The color DodgerBlue
+  function ColorDodgerBlue(): Color; overload;
+
+  // The color Firebrick
+  function ColorFirebrick(): Color; overload;
+
+  // The color FloralWhite
+  function ColorFloralWhite(): Color; overload;
+
+  // The color ForestGreen
+  function ColorForestGreen(): Color; overload;
 
   // Maps a color from a given bitmap. This is used when determining color
   // keys for transparent images.
   function ColorFrom(bmp: Bitmap; apiColor: Color): Color; overload;
 
+  // The color Fuchsia
+  function ColorFuchsia(): Color; overload;
+
+  // The color Gainsboro
+  function ColorGainsboro(): Color; overload;
+
+  // The color GhostWhite
+  function ColorGhostWhite(): Color; overload;
+
+  // The color Gold
+  function ColorGold(): Color; overload;
+
+  // The color Goldenrod
+  function ColorGoldenrod(): Color; overload;
+
+  // The color Gray
+  function ColorGray(): Color; overload;
+
+  // The color Green
+  function ColorGreen(): Color; overload;
+
+  // The color GreenYellow
+  function ColorGreenYellow(): Color; overload;
+
+  // The color Grey
+  function ColorGrey(): Color; overload;
+
+  // The color Honeydew
+  function ColorHoneydew(): Color; overload;
+
+  // The color HotPink
+  function ColorHotPink(): Color; overload;
+
+  // The color IndianRed
+  function ColorIndianRed(): Color; overload;
+
+  // The color Indigo
+  function ColorIndigo(): Color; overload;
+
+  // The color Ivory
+  function ColorIvory(): Color; overload;
+
+  // The color Khaki
+  function ColorKhaki(): Color; overload;
+
+  // The color Lavender
+  function ColorLavender(): Color; overload;
+
+  // The color LavenderBlush
+  function ColorLavenderBlush(): Color; overload;
+
+  // The color LawnGreen
+  function ColorLawnGreen(): Color; overload;
+
+  // The color LemonChiffon
+  function ColorLemonChiffon(): Color; overload;
+
+  // The color LightBlue
+  function ColorLightBlue(): Color; overload;
+
+  // The color LightCoral
+  function ColorLightCoral(): Color; overload;
+
+  // The color LightCyan
+  function ColorLightCyan(): Color; overload;
+
+  // The color LightGoldenrodYellow
+  function ColorLightGoldenrodYellow(): Color; overload;
+
+  // The color LightGray
+  function ColorLightGray(): Color; overload;
+
+  // The color LightGreen
+  function ColorLightGreen(): Color; overload;
+
+  // The color Transparent
+  function ColorLightGrey(): Color; overload;
+
+  // The color LightPink
+  function ColorLightPink(): Color; overload;
+
+  // The color LightSalmon
+  function ColorLightSalmon(): Color; overload;
+
+  // The color LightSeaGreen
+  function ColorLightSeaGreen(): Color; overload;
+
+  // The color LightSkyBlue
+  function ColorLightSkyBlue(): Color; overload;
+
+  // The color LightSlateGray
+  function ColorLightSlateGray(): Color; overload;
+
+  // The color LightSteelBlue
+  function ColorLightSteelBlue(): Color; overload;
+
+  // The color LightYellow
+  function ColorLightYellow(): Color; overload;
+
+  // The color Lime
+  function ColorLime(): Color; overload;
+
+  // The color LimeGreen
+  function ColorLimeGreen(): Color; overload;
+
+  // The color Linen
+  function ColorLinen(): Color; overload;
+
+  // The color Magenta
+  function ColorMagenta(): Color; overload;
+
+  // The color Maroon
+  function ColorMaroon(): Color; overload;
+
+  // The color MediumAquamarine
+  function ColorMediumAquamarine(): Color; overload;
+
+  // The color MediumBlue
+  function ColorMediumBlue(): Color; overload;
+
+  // The color MediumOrchid
+  function ColorMediumOrchid(): Color; overload;
+
+  // The color MediumPurple
+  function ColorMediumPurple(): Color; overload;
+
+  // The color MediumSeaGreen
+  function ColorMediumSeaGreen(): Color; overload;
+
+  // The color MediumSlateBlue
+  function ColorMediumSlateBlue(): Color; overload;
+
+  // The color MediumSpringGreen
+  function ColorMediumSpringGreen(): Color; overload;
+
+  // The color MediumTurquoise
+  function ColorMediumTurquoise(): Color; overload;
+
+  // The color MediumVioletRed
+  function ColorMediumVioletRed(): Color; overload;
+
+  // The color MidnightBlue
+  function ColorMidnightBlue(): Color; overload;
+
+  // The color MintCream
+  function ColorMintCream(): Color; overload;
+
+  // The color MistyRose
+  function ColorMistyRose(): Color; overload;
+
+  // The color Moccasin
+  function ColorMoccasin(): Color; overload;
+
+  // The color NavajoWhite
+  function ColorNavajoWhite(): Color; overload;
+
+  // The color Navy
+  function ColorNavy(): Color; overload;
+
+  // The color OldLace
+  function ColorOldLace(): Color; overload;
+
+  // The color Olive
+  function ColorOlive(): Color; overload;
+
+  // The color OliveDrab
+  function ColorOliveDrab(): Color; overload;
+
+  // The color Orange
+  function ColorOrange(): Color; overload;
+
+  // The color OrangeRed
+  function ColorOrangeRed(): Color; overload;
+
+  // The color Orchid
+  function ColorOrchid(): Color; overload;
+
+  // The color PaleGoldenrod
+  function ColorPaleGoldenrod(): Color; overload;
+
+  // The color PaleGreen
+  function ColorPaleGreen(): Color; overload;
+
+  // The color PaleTurquoise
+  function ColorPaleTurquoise(): Color; overload;
+
+  // The color PaleVioletRed
+  function ColorPaleVioletRed(): Color; overload;
+
+  // The color PapayaWhip
+  function ColorPapayaWhip(): Color; overload;
+
+  // The color PeachPuff
+  function ColorPeachPuff(): Color; overload;
+
+  // The color Peru
+  function ColorPeru(): Color; overload;
+
+  // The color Pink
+  function ColorPink(): Color; overload;
+
+  // The color Plum
+  function ColorPlum(): Color; overload;
+
+  // The color PowderBlue
+  function ColorPowderBlue(): Color; overload;
+
+  // The color Purple
+  function ColorPurple(): Color; overload;
+
+  // The color Red
+  function ColorRed(): Color; overload;
+
+  // The color RosyBrown
+  function ColorRosyBrown(): Color; overload;
+
+  // The color RoyalBlue
+  function ColorRoyalBlue(): Color; overload;
+
+  // The color SaddleBrown
+  function ColorSaddleBrown(): Color; overload;
+
+  // The color Salmon
+  function ColorSalmon(): Color; overload;
+
+  // The color SandyBrown
+  function ColorSandyBrown(): Color; overload;
+
+  // The color SeaGreen
+  function ColorSeaGreen(): Color; overload;
+
+  // The color SeaShell
+  function ColorSeaShell(): Color; overload;
+
+  // The color Sienna
+  function ColorSienna(): Color; overload;
+
+  // The color Silver
+  function ColorSilver(): Color; overload;
+
+  // The color SkyBlue
+  function ColorSkyBlue(): Color; overload;
+
+  // The color SlateBlue
+  function ColorSlateBlue(): Color; overload;
+
+  // The color SlateGray
+  function ColorSlateGray(): Color; overload;
+
+  // The color Snow
+  function ColorSnow(): Color; overload;
+
+  // The color SpringGreen
+  function ColorSpringGreen(): Color; overload;
+
+  // The color SteelBlue
+  function ColorSteelBlue(): Color; overload;
+
+  // The color Tan
+  function ColorTan(): Color; overload;
+
+  // The color Teal
+  function ColorTeal(): Color; overload;
+
+  // The color Thistle
+  function ColorThistle(): Color; overload;
+
   // returns color to string.
   function ColorToString(c: Color): String; overload;
+
+  // The color Tomato
+  function ColorTomato(): Color; overload;
+
+  // The color Transparent
+  function ColorTransparent(): Color; overload;
+
+  // The color Turquoise
+  function ColorTurquoise(): Color; overload;
+
+  // The color Violet
+  function ColorViolet(): Color; overload;
+
+  // The color Wheat
+  function ColorWheat(): Color; overload;
+
+  // The color White
+  function ColorWhite(): Color; overload;
+
+  // The color WhiteSmoke
+  function ColorWhiteSmoke(): Color; overload;
+
+  // The color Yellow
+  function ColorYellow(): Color; overload;
+
+  // The color YellowGreen
+  function ColorYellowGreen(): Color; overload;
 
   // Returns the rectangle of the currentl clip of bitmap
   function CurrentClip(): Rectangle; overload;
@@ -4438,40 +4873,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // Release the ArduinoDevice with the indicated name.
   procedure ReleaseArduinoDevice(name: String); overload;
 
-Procedure LoadDefaultColors();
 
-var
-      ColorWhite :        Color = $FFFFFFFF;
-      ColorGreen :        Color = $FF00FF00;
-      ColorBlue :         Color = $FF0000FF;
-      ColorBlack :        Color = $FF000000;
-      ColorRed :          Color = $FFFF0000;
-      ColorYellow :       Color = $FFFFFF00;
-      ColorPink :         Color = $FFFF1493;
-      ColorTurquoise :    Color = $FF00CED1;
-      ColorGrey :         Color = $FF808080;
-      ColorMagenta :      Color = $FF00FFFF;
-      ColorTransparent :  Color = $00000000;
-      ColorLightGrey :    Color = $FFC8C8C8;
+	procedure LoadDefaultColors();
 
 implementation
 
-  procedure LoadDefaultColors();
-  begin
-      ColorWhite :=         sgGraphics.ColorWhite;
-      ColorGreen :=         sgGraphics.ColorGreen;
-      ColorBlue :=          sgGraphics.ColorBlue ;
-      ColorBlack :=         sgGraphics.ColorBlack;
-      ColorRed :=           sgGraphics.ColorRed  ;
-      ColorYellow :=        sgGraphics.ColorYellow;
-      ColorPink :=          sgGraphics.ColorPink;
-      ColorTurquoise :=     sgGraphics.ColorTurquoise;
-      ColorGrey :=          sgGraphics.ColorGrey;
-      ColorMagenta :=       sgGraphics.ColorMagenta;
-      ColorTransparent :=   sgGraphics.ColorTransparent;
-      ColorLightGrey :=     sgGraphics.ColorLightGrey;
-  end;
-    
+	procedure LoadDefaultColors();
+	begin
+	end;
+
   function AnimationCurrentCell(anim: Animation): Longint; overload;
   begin
     result := sgAnimations.AnimationCurrentCell(anim);
@@ -5612,6 +6022,11 @@ implementation
     result := sgGeometry.PointInCircle(pt,c);
   end;
 
+  function PointInCircle(const pt: Point2D; x: Single; y: Single; radius: Single): Boolean; overload;
+  begin
+    result := sgGeometry.PointInCircle(pt,x,y,radius);
+  end;
+
   function PointInCircle(ptX: Single; ptY: Single; cX: Single; cY: Single; radius: Single): Boolean; overload;
   begin
     result := sgGeometry.PointInCircle(ptX,ptY,cX,cY,radius);
@@ -5655,6 +6070,11 @@ implementation
   function PointOnLine(const pt: Point2D; const line: LineSegment): Boolean; overload;
   begin
     result := sgGeometry.PointOnLine(pt,line);
+  end;
+
+  function PointOnLine(const pt: Point2D; x: Single; y: Single; endX: Single; endY: Single): Boolean; overload;
+  begin
+    result := sgGeometry.PointOnLine(pt,x,y,endX,endY);
   end;
 
   function PointOnPoint(const pt1: Point2D; const pt2: Point2D): Boolean; overload;
@@ -6057,9 +6477,234 @@ implementation
     sgGraphics.ClearScreen(toColor);
   end;
 
+  function ColorAliceBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorAliceBlue();
+  end;
+
+  function ColorAntiqueWhite(): Color; overload;
+  begin
+    result := sgGraphics.ColorAntiqueWhite();
+  end;
+
+  function ColorAqua(): Color; overload;
+  begin
+    result := sgGraphics.ColorAqua();
+  end;
+
+  function ColorAquamarine(): Color; overload;
+  begin
+    result := sgGraphics.ColorAquamarine();
+  end;
+
+  function ColorAzure(): Color; overload;
+  begin
+    result := sgGraphics.ColorAzure();
+  end;
+
+  function ColorBeige(): Color; overload;
+  begin
+    result := sgGraphics.ColorBeige();
+  end;
+
+  function ColorBisque(): Color; overload;
+  begin
+    result := sgGraphics.ColorBisque();
+  end;
+
+  function ColorBlack(): Color; overload;
+  begin
+    result := sgGraphics.ColorBlack();
+  end;
+
+  function ColorBlanchedAlmond(): Color; overload;
+  begin
+    result := sgGraphics.ColorBlanchedAlmond();
+  end;
+
+  function ColorBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorBlue();
+  end;
+
+  function ColorBlueViolet(): Color; overload;
+  begin
+    result := sgGraphics.ColorBlueViolet();
+  end;
+
+  function ColorBrown(): Color; overload;
+  begin
+    result := sgGraphics.ColorBrown();
+  end;
+
+  function ColorBurlyWood(): Color; overload;
+  begin
+    result := sgGraphics.ColorBurlyWood();
+  end;
+
+  function ColorCadetBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorCadetBlue();
+  end;
+
+  function ColorChartreuse(): Color; overload;
+  begin
+    result := sgGraphics.ColorChartreuse();
+  end;
+
+  function ColorChocolate(): Color; overload;
+  begin
+    result := sgGraphics.ColorChocolate();
+  end;
+
   procedure ColorComponents(c: Color; out r: Byte; out g: Byte; out b: Byte; out a: Byte); overload;
   begin
     sgGraphics.ColorComponents(c,r,g,b,a);
+  end;
+
+  function ColorCoral(): Color; overload;
+  begin
+    result := sgGraphics.ColorCoral();
+  end;
+
+  function ColorCornflowerBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorCornflowerBlue();
+  end;
+
+  function ColorCornsilk(): Color; overload;
+  begin
+    result := sgGraphics.ColorCornsilk();
+  end;
+
+  function ColorCrimson(): Color; overload;
+  begin
+    result := sgGraphics.ColorCrimson();
+  end;
+
+  function ColorCyan(): Color; overload;
+  begin
+    result := sgGraphics.ColorCyan();
+  end;
+
+  function ColorDarkBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkBlue();
+  end;
+
+  function ColorDarkCyan(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkCyan();
+  end;
+
+  function ColorDarkGoldenrod(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkGoldenrod();
+  end;
+
+  function ColorDarkGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkGray();
+  end;
+
+  function ColorDarkGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkGreen();
+  end;
+
+  function ColorDarkKhaki(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkKhaki();
+  end;
+
+  function ColorDarkMagenta(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkMagenta();
+  end;
+
+  function ColorDarkOliveGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkOliveGreen();
+  end;
+
+  function ColorDarkOrange(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkOrange();
+  end;
+
+  function ColorDarkOrchid(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkOrchid();
+  end;
+
+  function ColorDarkRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkRed();
+  end;
+
+  function ColorDarkSalmon(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkSalmon();
+  end;
+
+  function ColorDarkSeaGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkSeaGreen();
+  end;
+
+  function ColorDarkSlateBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkSlateBlue();
+  end;
+
+  function ColorDarkSlateGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkSlateGray();
+  end;
+
+  function ColorDarkTurquoise(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkTurquoise();
+  end;
+
+  function ColorDarkViolet(): Color; overload;
+  begin
+    result := sgGraphics.ColorDarkViolet();
+  end;
+
+  function ColorDeepPink(): Color; overload;
+  begin
+    result := sgGraphics.ColorDeepPink();
+  end;
+
+  function ColorDeepSkyBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorDeepSkyBlue();
+  end;
+
+  function ColorDimGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorDimGray();
+  end;
+
+  function ColorDodgerBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorDodgerBlue();
+  end;
+
+  function ColorFirebrick(): Color; overload;
+  begin
+    result := sgGraphics.ColorFirebrick();
+  end;
+
+  function ColorFloralWhite(): Color; overload;
+  begin
+    result := sgGraphics.ColorFloralWhite();
+  end;
+
+  function ColorForestGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorForestGreen();
   end;
 
   function ColorFrom(bmp: Bitmap; apiColor: Color): Color; overload;
@@ -6067,9 +6712,499 @@ implementation
     result := sgGraphics.ColorFrom(bmp,apiColor);
   end;
 
+  function ColorFuchsia(): Color; overload;
+  begin
+    result := sgGraphics.ColorFuchsia();
+  end;
+
+  function ColorGainsboro(): Color; overload;
+  begin
+    result := sgGraphics.ColorGainsboro();
+  end;
+
+  function ColorGhostWhite(): Color; overload;
+  begin
+    result := sgGraphics.ColorGhostWhite();
+  end;
+
+  function ColorGold(): Color; overload;
+  begin
+    result := sgGraphics.ColorGold();
+  end;
+
+  function ColorGoldenrod(): Color; overload;
+  begin
+    result := sgGraphics.ColorGoldenrod();
+  end;
+
+  function ColorGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorGray();
+  end;
+
+  function ColorGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorGreen();
+  end;
+
+  function ColorGreenYellow(): Color; overload;
+  begin
+    result := sgGraphics.ColorGreenYellow();
+  end;
+
+  function ColorGrey(): Color; overload;
+  begin
+    result := sgGraphics.ColorGrey();
+  end;
+
+  function ColorHoneydew(): Color; overload;
+  begin
+    result := sgGraphics.ColorHoneydew();
+  end;
+
+  function ColorHotPink(): Color; overload;
+  begin
+    result := sgGraphics.ColorHotPink();
+  end;
+
+  function ColorIndianRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorIndianRed();
+  end;
+
+  function ColorIndigo(): Color; overload;
+  begin
+    result := sgGraphics.ColorIndigo();
+  end;
+
+  function ColorIvory(): Color; overload;
+  begin
+    result := sgGraphics.ColorIvory();
+  end;
+
+  function ColorKhaki(): Color; overload;
+  begin
+    result := sgGraphics.ColorKhaki();
+  end;
+
+  function ColorLavender(): Color; overload;
+  begin
+    result := sgGraphics.ColorLavender();
+  end;
+
+  function ColorLavenderBlush(): Color; overload;
+  begin
+    result := sgGraphics.ColorLavenderBlush();
+  end;
+
+  function ColorLawnGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorLawnGreen();
+  end;
+
+  function ColorLemonChiffon(): Color; overload;
+  begin
+    result := sgGraphics.ColorLemonChiffon();
+  end;
+
+  function ColorLightBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightBlue();
+  end;
+
+  function ColorLightCoral(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightCoral();
+  end;
+
+  function ColorLightCyan(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightCyan();
+  end;
+
+  function ColorLightGoldenrodYellow(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightGoldenrodYellow();
+  end;
+
+  function ColorLightGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightGray();
+  end;
+
+  function ColorLightGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightGreen();
+  end;
+
+  function ColorLightGrey(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightGrey();
+  end;
+
+  function ColorLightPink(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightPink();
+  end;
+
+  function ColorLightSalmon(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightSalmon();
+  end;
+
+  function ColorLightSeaGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightSeaGreen();
+  end;
+
+  function ColorLightSkyBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightSkyBlue();
+  end;
+
+  function ColorLightSlateGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightSlateGray();
+  end;
+
+  function ColorLightSteelBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightSteelBlue();
+  end;
+
+  function ColorLightYellow(): Color; overload;
+  begin
+    result := sgGraphics.ColorLightYellow();
+  end;
+
+  function ColorLime(): Color; overload;
+  begin
+    result := sgGraphics.ColorLime();
+  end;
+
+  function ColorLimeGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorLimeGreen();
+  end;
+
+  function ColorLinen(): Color; overload;
+  begin
+    result := sgGraphics.ColorLinen();
+  end;
+
+  function ColorMagenta(): Color; overload;
+  begin
+    result := sgGraphics.ColorMagenta();
+  end;
+
+  function ColorMaroon(): Color; overload;
+  begin
+    result := sgGraphics.ColorMaroon();
+  end;
+
+  function ColorMediumAquamarine(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumAquamarine();
+  end;
+
+  function ColorMediumBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumBlue();
+  end;
+
+  function ColorMediumOrchid(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumOrchid();
+  end;
+
+  function ColorMediumPurple(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumPurple();
+  end;
+
+  function ColorMediumSeaGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumSeaGreen();
+  end;
+
+  function ColorMediumSlateBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumSlateBlue();
+  end;
+
+  function ColorMediumSpringGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumSpringGreen();
+  end;
+
+  function ColorMediumTurquoise(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumTurquoise();
+  end;
+
+  function ColorMediumVioletRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorMediumVioletRed();
+  end;
+
+  function ColorMidnightBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorMidnightBlue();
+  end;
+
+  function ColorMintCream(): Color; overload;
+  begin
+    result := sgGraphics.ColorMintCream();
+  end;
+
+  function ColorMistyRose(): Color; overload;
+  begin
+    result := sgGraphics.ColorMistyRose();
+  end;
+
+  function ColorMoccasin(): Color; overload;
+  begin
+    result := sgGraphics.ColorMoccasin();
+  end;
+
+  function ColorNavajoWhite(): Color; overload;
+  begin
+    result := sgGraphics.ColorNavajoWhite();
+  end;
+
+  function ColorNavy(): Color; overload;
+  begin
+    result := sgGraphics.ColorNavy();
+  end;
+
+  function ColorOldLace(): Color; overload;
+  begin
+    result := sgGraphics.ColorOldLace();
+  end;
+
+  function ColorOlive(): Color; overload;
+  begin
+    result := sgGraphics.ColorOlive();
+  end;
+
+  function ColorOliveDrab(): Color; overload;
+  begin
+    result := sgGraphics.ColorOliveDrab();
+  end;
+
+  function ColorOrange(): Color; overload;
+  begin
+    result := sgGraphics.ColorOrange();
+  end;
+
+  function ColorOrangeRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorOrangeRed();
+  end;
+
+  function ColorOrchid(): Color; overload;
+  begin
+    result := sgGraphics.ColorOrchid();
+  end;
+
+  function ColorPaleGoldenrod(): Color; overload;
+  begin
+    result := sgGraphics.ColorPaleGoldenrod();
+  end;
+
+  function ColorPaleGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorPaleGreen();
+  end;
+
+  function ColorPaleTurquoise(): Color; overload;
+  begin
+    result := sgGraphics.ColorPaleTurquoise();
+  end;
+
+  function ColorPaleVioletRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorPaleVioletRed();
+  end;
+
+  function ColorPapayaWhip(): Color; overload;
+  begin
+    result := sgGraphics.ColorPapayaWhip();
+  end;
+
+  function ColorPeachPuff(): Color; overload;
+  begin
+    result := sgGraphics.ColorPeachPuff();
+  end;
+
+  function ColorPeru(): Color; overload;
+  begin
+    result := sgGraphics.ColorPeru();
+  end;
+
+  function ColorPink(): Color; overload;
+  begin
+    result := sgGraphics.ColorPink();
+  end;
+
+  function ColorPlum(): Color; overload;
+  begin
+    result := sgGraphics.ColorPlum();
+  end;
+
+  function ColorPowderBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorPowderBlue();
+  end;
+
+  function ColorPurple(): Color; overload;
+  begin
+    result := sgGraphics.ColorPurple();
+  end;
+
+  function ColorRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorRed();
+  end;
+
+  function ColorRosyBrown(): Color; overload;
+  begin
+    result := sgGraphics.ColorRosyBrown();
+  end;
+
+  function ColorRoyalBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorRoyalBlue();
+  end;
+
+  function ColorSaddleBrown(): Color; overload;
+  begin
+    result := sgGraphics.ColorSaddleBrown();
+  end;
+
+  function ColorSalmon(): Color; overload;
+  begin
+    result := sgGraphics.ColorSalmon();
+  end;
+
+  function ColorSandyBrown(): Color; overload;
+  begin
+    result := sgGraphics.ColorSandyBrown();
+  end;
+
+  function ColorSeaGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorSeaGreen();
+  end;
+
+  function ColorSeaShell(): Color; overload;
+  begin
+    result := sgGraphics.ColorSeaShell();
+  end;
+
+  function ColorSienna(): Color; overload;
+  begin
+    result := sgGraphics.ColorSienna();
+  end;
+
+  function ColorSilver(): Color; overload;
+  begin
+    result := sgGraphics.ColorSilver();
+  end;
+
+  function ColorSkyBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorSkyBlue();
+  end;
+
+  function ColorSlateBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorSlateBlue();
+  end;
+
+  function ColorSlateGray(): Color; overload;
+  begin
+    result := sgGraphics.ColorSlateGray();
+  end;
+
+  function ColorSnow(): Color; overload;
+  begin
+    result := sgGraphics.ColorSnow();
+  end;
+
+  function ColorSpringGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorSpringGreen();
+  end;
+
+  function ColorSteelBlue(): Color; overload;
+  begin
+    result := sgGraphics.ColorSteelBlue();
+  end;
+
+  function ColorTan(): Color; overload;
+  begin
+    result := sgGraphics.ColorTan();
+  end;
+
+  function ColorTeal(): Color; overload;
+  begin
+    result := sgGraphics.ColorTeal();
+  end;
+
+  function ColorThistle(): Color; overload;
+  begin
+    result := sgGraphics.ColorThistle();
+  end;
+
   function ColorToString(c: Color): String; overload;
   begin
     result := sgGraphics.ColorToString(c);
+  end;
+
+  function ColorTomato(): Color; overload;
+  begin
+    result := sgGraphics.ColorTomato();
+  end;
+
+  function ColorTransparent(): Color; overload;
+  begin
+    result := sgGraphics.ColorTransparent();
+  end;
+
+  function ColorTurquoise(): Color; overload;
+  begin
+    result := sgGraphics.ColorTurquoise();
+  end;
+
+  function ColorViolet(): Color; overload;
+  begin
+    result := sgGraphics.ColorViolet();
+  end;
+
+  function ColorWheat(): Color; overload;
+  begin
+    result := sgGraphics.ColorWheat();
+  end;
+
+  function ColorWhite(): Color; overload;
+  begin
+    result := sgGraphics.ColorWhite();
+  end;
+
+  function ColorWhiteSmoke(): Color; overload;
+  begin
+    result := sgGraphics.ColorWhiteSmoke();
+  end;
+
+  function ColorYellow(): Color; overload;
+  begin
+    result := sgGraphics.ColorYellow();
+  end;
+
+  function ColorYellowGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorYellowGreen();
   end;
 
   function CurrentClip(): Rectangle; overload;

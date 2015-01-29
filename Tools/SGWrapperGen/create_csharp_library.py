@@ -298,7 +298,7 @@ _type_switcher = {
         'single': 'float %s',
         'longint': 'int %s',
         'byte': 'byte %s',
-        'color': 'System.Drawing.Color %s',
+        'color': 'Color %s',
         'longword': 'uint %s',
         'string': 'String %s',
 
@@ -405,7 +405,7 @@ _data_switcher = {
         
         
         
-        'color': 'System.Drawing.Color.FromArgb(%s)',
+        'color': 'Color.FromArgb(%s)',
         
         'keycode':              '(KeyCode)%s',
         'mousebutton':          '(MouseButton)%s',
@@ -1234,7 +1234,7 @@ def method_visitor(the_method, other, as_accessor_name = None):
                     assert local_var.modifier == 'out' or local_var.maps_result
                     temp_process_result += '\n    %s = %s.ToString();' % (local_var.name[:-5], local_var.name)
                 elif type_name == 'color':
-                    temp_process_result += '\n    %s = System.Drawing.Color.FromArgb(%s);' % (local_var.name[:-5], local_var.name)
+                    temp_process_result += '\n    %s = Color.FromArgb(%s);' % (local_var.name[:-5], local_var.name)
                 
                 if local_var.is_length_param:
                     temp_process_params += '%s = %s.Length;\n    ' % (
