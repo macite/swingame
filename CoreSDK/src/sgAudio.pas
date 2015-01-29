@@ -1470,6 +1470,7 @@ implementation
     function MusicNamed(name: String): Music;
     var
         tmp : TObject;
+        filename: String;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'MusicNamed', name);
@@ -1477,7 +1478,16 @@ implementation
         
         tmp := _Music.values[name];
         if assigned(tmp) then result := Music(tResourceContainer(tmp).Resource)
-        else result := nil;
+        else
+        begin 
+            filename := PathToResource(name, SoundResource);
+
+            if FileExists(name) or FileExists(filename) then
+            begin
+              result := LoadMusicNamed(name, name);
+            end
+            else result := nil;
+        end;
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'MusicNamed', HexStr(result));
