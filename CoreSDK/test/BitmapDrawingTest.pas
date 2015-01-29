@@ -12,6 +12,7 @@ begin
 
 		ClearScreen(ColorBlack);
 		DrawBitmap('bubble.png', 50, 50);
+		DrawText('Hello World', ColorWhite, 'arial.ttf', 32, 50, 150);
 		RefreshScreen();
 
 	until WindowCloseRequested();

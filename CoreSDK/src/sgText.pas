@@ -769,8 +769,19 @@ implementation
   end;
   
   function FontNamed(name: String; size: Longint): Font;
+  var
+    filename: String;
   begin
     result := FontNamed(FontNameFor(name, size));
+    if (result = nil) then
+    begin
+      filename := PathToResource(name, FontResource);
+
+      if FileExists(name) or FileExists(filename) then
+      begin
+        result := LoadFontNamed(name, name, size);
+      end
+    end;
   end;
   
   function FontNamed(name: String): Font;
