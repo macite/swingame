@@ -1180,18 +1180,30 @@ end;
 function BitmapNamed(name: String): Bitmap;
 var
   tmp : TObject;
+  filename: String;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'BitmapNamed', 'name = ' + name);
   {$ENDIF}
+
   tmp := _Images.values[name];
   if assigned(tmp) then
     result := Bitmap(tResourceContainer(tmp).Resource)
-  else 
-  begin
-    RaiseWarning('Unable to find bitmap named: ' + name);
-    result := nil;
-  end;
+  else
+  begin 
+    filename := PathToResource(name, BitmapResource);
+
+    if FileExists(name) or FileExists(filename) then
+    begin
+      result := LoadBitmapNamed(name, name);
+    end
+    else
+    begin
+      RaiseWarning('Unable to find bitmap named: ' + name);
+      result := nil;
+    end;
+  end; 
+  
   {$IFDEF TRACE}
     TraceExit('sgImages', 'BitmapNamed = ' + HexStr(result));
   {$ENDIF}
