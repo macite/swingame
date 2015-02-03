@@ -1361,7 +1361,12 @@ interface
   /// @lib
   /// @sn colorOnScreenAtX:%s y:%s
   function GetPixelFromScreen(x, y: Longint): Color;
-  
+
+
+  /// The color Swinburne Red
+  ///
+  /// @lib
+  function ColorSwinburneRed(): Color;  
 
   /// The color Grey
   ///
@@ -4384,6 +4389,11 @@ implementation
     function ColorYellowGreen(): Color;
     begin
       result := RGBAColor(154, 205, 50, 255);
+    end;
+
+    function ColorSwinburneRed(): Color;  
+    begin
+      result := RGBAColor(237, 36, 25, 255);
     end;
 
 //=============================================================================
