@@ -525,6 +525,7 @@
 		9471BD91183B6E5700BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
@@ -562,6 +563,7 @@
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 					/Users/acain/Source/GitHub/SwinGame/Backend/SGSDL2/lib/mac,
 				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -569,6 +571,7 @@
 		9471BD92183B6E5700BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
@@ -614,6 +617,7 @@
 		9471BDCB183B737000BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
@@ -633,12 +637,14 @@
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		9471BDCC183B737000BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/acain/working/SwinGame/Backend/SGSDL2/external/SDL_mixer/Xcode/Frameworks,
@@ -653,6 +659,7 @@
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
 			};
 			name = Release;
 		};
