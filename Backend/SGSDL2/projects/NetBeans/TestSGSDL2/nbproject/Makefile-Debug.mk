@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1446273465/main.o \
 	${OBJECTDIR}/_ext/1446273465/test_audio.o \
 	${OBJECTDIR}/_ext/1446273465/test_input.o \
+	${OBJECTDIR}/_ext/1446273465/test_network.o \
 	${OBJECTDIR}/_ext/1446273465/test_text.o
 
 
@@ -55,37 +56,42 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../SGSDL2/dist/Debug/MinGW-Windows -L../../../lib/win32 ../SGSDL2/dist/Debug/MinGW-Windows/libsgsdl2.a
+LDLIBSOPTIONS=-L../SGSDL2/dist/Debug/MinGW-Windows -L../../../lib/win32 -L../SGSDL2/dist/Debug/MinGW-Windows -lSGSDL2
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ../SGSDL2/dist/Debug/MinGW-Windows/libsgsdl2.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ../SGSDL2/dist/Debug/MinGW-Windows/libSGSDL2.dll
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2 ${OBJECTFILES} ${LDLIBSOPTIONS} -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2 ${OBJECTFILES} ${LDLIBSOPTIONS} -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net
 
 ${OBJECTDIR}/_ext/1446273465/main.o: ../../../../Test/src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/main.o ../../../../Test/src/main.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/main.o ../../../../Test/src/main.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_audio.o: ../../../../Test/src/test_audio.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_audio.o ../../../../Test/src/test_audio.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_audio.o ../../../../Test/src/test_audio.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_input.o: ../../../../Test/src/test_input.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_input.o ../../../../Test/src/test_input.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_input.o ../../../../Test/src/test_input.cpp
+
+${OBJECTDIR}/_ext/1446273465/test_network.o: ../../../../Test/src/test_network.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_network.o ../../../../Test/src/test_network.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_text.o: ../../../../Test/src/test_text.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_text.o ../../../../Test/src/test_text.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I../../../../Core/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_text.o ../../../../Test/src/test_text.cpp
 
 # Subprojects
 .build-subprojects:

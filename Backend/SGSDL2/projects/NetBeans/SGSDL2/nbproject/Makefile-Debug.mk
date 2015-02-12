@@ -40,6 +40,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Core.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Graphics.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o \
+	${OBJECTDIR}/_ext/1386528437/SGSDL2Network.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o \
 	${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o
 
@@ -58,52 +59,55 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-L../../../lib/win32
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT}
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a
-	${AR} -rv ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a ${OBJECTFILES} 
-	$(RANLIB) ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net -shared
 
 ${OBJECTDIR}/_ext/766657836/sgBackendUtils.o: ../../../../Core/src/sgBackendUtils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/766657836
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/766657836/sgBackendUtils.o ../../../../Core/src/sgBackendUtils.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/766657836/sgBackendUtils.o ../../../../Core/src/sgBackendUtils.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Audio.o: ../../../src/SGSDL2Audio.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Audio.o ../../../src/SGSDL2Audio.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Audio.o ../../../src/SGSDL2Audio.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Core.o: ../../../src/SGSDL2Core.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Core.o ../../../src/SGSDL2Core.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Core.o ../../../src/SGSDL2Core.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Graphics.o: ../../../src/SGSDL2Graphics.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Graphics.o ../../../src/SGSDL2Graphics.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Graphics.o ../../../src/SGSDL2Graphics.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o: ../../../src/SGSDL2Input.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o ../../../src/SGSDL2Input.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Input.o ../../../src/SGSDL2Input.cpp
+
+${OBJECTDIR}/_ext/1386528437/SGSDL2Network.o: ../../../src/SGSDL2Network.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Network.o ../../../src/SGSDL2Network.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o: ../../../src/SGSDL2Text.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o ../../../src/SGSDL2Text.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Text.o ../../../src/SGSDL2Text.cpp
 
 ${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o: ../../../src/SGSDL2Utils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1386528437
-	${RM} $@.d
-	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o ../../../src/SGSDL2Utils.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -s -I../../../../Core/include -I../../../external/SDL/include -I../../../external/SDL_gfx -I../../../external/SDL_image -I../../../external/SDL_mixer -I../../../external/SDL_net -I../../../external/SDL_ttf -std=c++11  -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o ../../../src/SGSDL2Utils.cpp
 
 # Subprojects
 .build-subprojects:
@@ -111,7 +115,7 @@ ${OBJECTDIR}/_ext/1386528437/SGSDL2Utils.o: ../../../src/SGSDL2Utils.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libsgsdl2.a
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT}
 
 # Subprojects
 .clean-subprojects:

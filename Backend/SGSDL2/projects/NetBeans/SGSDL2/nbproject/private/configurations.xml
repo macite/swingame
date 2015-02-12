@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="88">
+<configurationDescriptor version="95">
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug" type="3">
+    <conf name="Debug" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <platform>3</platform>

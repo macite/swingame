@@ -18,6 +18,9 @@
 #include <SDL_net.h>
 #endif
 
+#include <string.h>
+#include <stdlib.h>
+
 // This set keeps track of all of the sockets to see if there is activity
 SDLNet_SocketSet _sockets; // allocate on setup of functions.
 
@@ -79,7 +82,12 @@ sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned shor
 int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
 {
 //    printf("Sending %d\n", size);
-    int sent = SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
+    int sent = 0;
+    if ((TCPsocket)con->_socket)
+    {
+        printf("here -- %p\n", (TCPsocket)con->_socket);
+        sent = SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
+    }
 //    printf("Sent %d\n", sent);
     return sent;
 }

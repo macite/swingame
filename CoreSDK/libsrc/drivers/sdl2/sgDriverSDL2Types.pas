@@ -332,7 +332,7 @@ interface
 				read_system_data : sg_system_data_fn;
 			end;
 
-	function sg_load(callbacks: sg_input_callbacks): psg_interface; cdecl; external;
+	function sg_load(callbacks: sg_input_callbacks): psg_interface; cdecl; external 'libSGSDL2.dll';
 
 	var
 		_sg_functions: ^sg_interface;

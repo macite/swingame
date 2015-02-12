@@ -1126,12 +1126,7 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, float *data, int data_sz)
             window_be = (sg_window_be *)surface->_data;
 
             window_be->clipped = true;
-#ifndef WINDOWS
-            //HACK: Current hack to fix SDL clip rect error
-            window_be->clip = { x1, surface->height - y1 - h, w, h };
-#else
             window_be->clip = { x1, y1, w, h };
-#endif
 
             //Should be: window_be->clip = { x1, y1, w, h };
             SDL_RenderSetClipRect(window_be->renderer, &window_be->clip);

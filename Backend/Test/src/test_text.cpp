@@ -43,7 +43,7 @@ void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style)
 void test_text()
 {
   cout <<  "Testing text " << endl; 
-  sg_font_data font =  _sg_functions->text.load_font("BATTLEST1.TTF", 54);
+  sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 54);
 
   cout << " Loaded " << font._data << endl;
 

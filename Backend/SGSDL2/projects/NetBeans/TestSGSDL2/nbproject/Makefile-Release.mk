@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/_ext/1446273465/main.o \
 	${OBJECTDIR}/_ext/1446273465/test_audio.o \
 	${OBJECTDIR}/_ext/1446273465/test_input.o \
+	${OBJECTDIR}/_ext/1446273465/test_network.o \
 	${OBJECTDIR}/_ext/1446273465/test_text.o
 
 
@@ -67,23 +68,28 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ${OBJECTFILES}
 
 ${OBJECTDIR}/_ext/1446273465/main.o: ../../../../Test/src/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/main.o ../../../../Test/src/main.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/main.o ../../../../Test/src/main.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_audio.o: ../../../../Test/src/test_audio.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_audio.o ../../../../Test/src/test_audio.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_audio.o ../../../../Test/src/test_audio.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_input.o: ../../../../Test/src/test_input.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_input.o ../../../../Test/src/test_input.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_input.o ../../../../Test/src/test_input.cpp
+
+${OBJECTDIR}/_ext/1446273465/test_network.o: ../../../../Test/src/test_network.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_network.o ../../../../Test/src/test_network.cpp
 
 ${OBJECTDIR}/_ext/1446273465/test_text.o: ../../../../Test/src/test_text.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1446273465
-	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1446273465/test_text.o ../../../../Test/src/test_text.cpp
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1446273465/test_text.o ../../../../Test/src/test_text.cpp
 
 # Subprojects
 .build-subprojects:

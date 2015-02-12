@@ -9,11 +9,11 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=MinGW-Windows
 CND_ARTIFACT_DIR_Debug=dist/Debug/MinGW-Windows
-CND_ARTIFACT_NAME_Debug=libsgsdl2.a
-CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW-Windows/libsgsdl2.a
+CND_ARTIFACT_NAME_Debug=libSGSDL2.dll
+CND_ARTIFACT_PATH_Debug=dist/Debug/MinGW-Windows/libSGSDL2.dll
 CND_PACKAGE_DIR_Debug=dist/Debug/MinGW-Windows/package
-CND_PACKAGE_NAME_Debug=SGSDL2.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/MinGW-Windows/package/SGSDL2.tar
+CND_PACKAGE_NAME_Debug=libSGSDL2.dll.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/MinGW-Windows/package/libSGSDL2.dll.tar
 # Release configuration
 CND_PLATFORM_Release=MinGW-Windows
 CND_ARTIFACT_DIR_Release=dist/Release/MinGW-Windows

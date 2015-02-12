@@ -25,6 +25,8 @@
 #include "SGSDL2Network.h"
 
 
+#include <stdlib.h>
+
 using namespace std;
 
 void sgsdk_setup_displays();
