@@ -91,7 +91,15 @@ implementation
 		  	{$IFDEF SWINGAME_SDL13}
 		  		bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and SDL_Swap32($000000FF)) > 0);
 			{$ELSE}
-				bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and ($FF shr surface^.format^.ashift)) > 0);
+				if (c = 0) and (r = 0) then
+				begin
+					WriteLn('not hasAlpha = ', not hasAlpha);
+					WriteLn('Color is ', GetSurfacePixel(surface, c, r));
+					WriteLn('Alpha is ', $000000FF shr surface^.format^.ashift);
+					WriteLn('Alpha shift is ', surface^.format^.ashift);
+				end;
+
+				bmp^.nonTransparentPixels[c, r] := (not hasAlpha) or ((GetSurfacePixel(surface, c, r) and ($FF shl surface^.format^.ashift)) > 0);
 			{$ENDIF}
 		  end;
 		end;
