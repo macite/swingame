@@ -12,7 +12,7 @@ begin
     ClearScreen(ColorWhite);
     DrawFramerate(0,0);
     
-    RefreshScreen();
+    RefreshScreen(60);
   until WindowCloseRequested();
 end;
 

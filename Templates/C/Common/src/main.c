@@ -15,7 +15,7 @@ int main()
         
         draw_framerate_with_simple_font(0,0);
         
-        refresh_screen();
+        refresh_screen_restrict_fps(60);
     } while ( ! window_close_requested() );
     
     return 0;

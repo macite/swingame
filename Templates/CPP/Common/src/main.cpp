@@ -14,10 +14,8 @@ int main()
         
         draw_framerate(0,0);
         
-        refresh_screen();
+        refresh_screen(60);
     } while ( ! window_close_requested() );
-    
-    close_audio();
     
     release_all_resources();
     return 0;

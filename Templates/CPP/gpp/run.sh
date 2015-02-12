@@ -56,7 +56,7 @@ if [ "$OS" = "$MAC" ]; then
 
     if [ ! -f "${APP_PATH}/lib/bring_fg.scpt" ]; then
 
-echo "on run argv \n\
+printf "on run argv \n\
     try \n\
         Delay(0.5) \n\
         set proc to \"\" & item 1 of argv & \"\" \n\

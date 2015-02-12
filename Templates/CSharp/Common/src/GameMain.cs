@@ -23,7 +23,7 @@ namespace MyGame
                 DrawFramerate(0,0);
                 
                 //Draw onto the screen
-                RefreshScreen();
+                RefreshScreen(60);
             }
         }
     }

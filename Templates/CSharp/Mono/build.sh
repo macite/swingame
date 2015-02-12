@@ -36,13 +36,17 @@ SG_INC="-I${APP_PATH}/lib/"
 #Locate the compiler...
 GMCS_BIN=`which csc 2>> /dev/null`
 if [ -z "$GMCS_BIN" ]; then
-    #try locating gmcs
-    GMCS_BIN=`which gmcs 2>> /dev/null`
-    
+    #try locating mcs
+    GMCS_BIN=`which mcs 2>> /dev/null`
     if [ -z "$GMCS_BIN" ]; then
-        #no compiler found :(
-        echo "Unable to find a C# compiler. Install either csc or gmcs."
-        exit -1
+        #try locating gmcs
+        GMCS_BIN=`which gmcs 2>> /dev/null`
+
+        if [ -z "$GMCS_BIN" ]; then
+            #no compiler found :(
+            echo "Unable to find a C# compiler. Install either csc or gmcs."
+            exit -1
+        fi
     fi
 fi
 
