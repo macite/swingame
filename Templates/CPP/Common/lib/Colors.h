@@ -59,6 +59,7 @@
 #define ColorGoldenrod color_goldenrod()
 #define ColorGray color_gray()
 #define ColorGreen color_green()
+#define ColorBrightGreen color_bright_green()
 #define ColorGreenYellow color_green_yellow()
 #define ColorHoneydew color_honeydew()
 #define ColorHotPink color_hot_pink()

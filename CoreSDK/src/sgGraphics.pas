@@ -1644,6 +1644,11 @@ interface
   /// @lib
   function ColorGreen(): Color;
 
+  /// The color Green
+  ///
+  /// @lib
+  function ColorBrightGreen(): Color;
+
   /// The color GreenYellow
   ///
   /// @lib
@@ -3949,6 +3954,11 @@ implementation
     function ColorGreen(): Color;
     begin
       result := RGBAColor(0, 128, 0, 255);
+    end;
+
+    function ColorBrightGreen(): Color;
+    begin
+      result := RGBAColor(0, 255, 0, 255);
     end;
 
     function ColorGreenYellow(): Color;
