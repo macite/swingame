@@ -1,5 +1,5 @@
 program GameMain;
-uses SwinGame;
+uses SwinGame, sgTypes;
 
 procedure Main();
 begin
