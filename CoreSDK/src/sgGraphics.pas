@@ -3693,7 +3693,7 @@ implementation
 
     function ColorTransparent(): Color;
     begin
-      result := RGBAColor(255, 255, 255, 0);
+      result := RGBAColor(0, 0, 0, 0);
     end;
 
     function ColorAliceBlue(): Color;
