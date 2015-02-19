@@ -329,6 +329,11 @@ namespace SwinGameSDK
           get { return RGBAColor(0, 128, 0, 255); }
         }
 
+        public static Color BrightGreen
+        {
+          get { return RGBAColor(0, 255, 0, 255); }
+        }
+
         public static Color GreenYellow
         {
           get { return RGBAColor(173, 255, 47, 255); }
