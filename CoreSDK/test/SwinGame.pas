@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-01-29 15:47:56.540398
+// SwinGame.pas was generated on 2015-03-08 12:34:21.955987
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1429,6 +1429,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // The color BlueViolet
   function ColorBlueViolet(): Color; overload;
 
+  // The color Green
+  function ColorBrightGreen(): Color; overload;
+
   // The color Brown
   function ColorBrown(): Color; overload;
 
@@ -1796,6 +1799,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
   // The color SteelBlue
   function ColorSteelBlue(): Color; overload;
 
+  // The color Swinburne Red
+  function ColorSwinburneRed(): Color; overload;
+
   // The color Tan
   function ColorTan(): Color; overload;
 
@@ -2025,6 +2031,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraph
 
   // Draw a rectangle on the screen (filled or outline).
   procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw a thick line in the game.
+  procedure DrawThickLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; width: Single); overload;
 
   // Draw a triangle in the game.
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -6532,6 +6541,11 @@ implementation
     result := sgGraphics.ColorBlueViolet();
   end;
 
+  function ColorBrightGreen(): Color; overload;
+  begin
+    result := sgGraphics.ColorBrightGreen();
+  end;
+
   function ColorBrown(): Color; overload;
   begin
     result := sgGraphics.ColorBrown();
@@ -7142,6 +7156,11 @@ implementation
     result := sgGraphics.ColorSteelBlue();
   end;
 
+  function ColorSwinburneRed(): Color; overload;
+  begin
+    result := sgGraphics.ColorSwinburneRed();
+  end;
+
   function ColorTan(): Color; overload;
   begin
     result := sgGraphics.ColorTan();
@@ -7520,6 +7539,11 @@ implementation
   procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
     sgGraphics.DrawRectangleOnScreen(clr,filled,xPos,yPos,width,height);
+  end;
+
+  procedure DrawThickLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; width: Single); overload;
+  begin
+    sgGraphics.DrawThickLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd,width);
   end;
 
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;

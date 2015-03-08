@@ -1058,6 +1058,12 @@ interface
   /// @sn draw:%s lineX1:%s y1:%s x2:%s y2:%s
   procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single); overload;
   
+  /// Draw a thick line in the game.
+  /// 
+  /// @lib
+  /// @sn draw:%s thickLineX1:%s y1:%s x2:%s y2:%s width:%s
+  procedure DrawThickLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd, width: Single); overload;
+
   /// Draw a line in the game.
   ///
   /// @lib DrawLineSegment
@@ -2669,6 +2675,14 @@ implementation
 		if dest = nil then begin RaiseWarning('DrawLine - No destination bitmap supplied'); exit; end;
 		GraphicsDriver.DrawLine(dest, xPosStart, yPosStart, xPosEnd, yPosEnd, clr);
   end;
+
+  procedure DrawThickLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd, width: Single); overload;
+  begin
+    // if dest = nil then begin RaiseWarning('DrawLine - No destination bitmap supplied'); exit; end;
+    GraphicsDriver.DrawThickLine(screen, Round(xPosStart), Round(yPosStart), Round(xPosEnd), Round(yPosEnd), Round(width), clr);
+  end;
+
+
 
   /// Draws a pixel onto the destination bitmap.
   ///

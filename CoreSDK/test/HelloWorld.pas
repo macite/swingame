@@ -75,6 +75,8 @@ begin
     
     DrawFramerate(0,0);
     
+    DrawThickLine(ColorGreen, 0, 0, 800, 600, 5);
+
     RefreshScreen();
     // CyclePool();
   until WindowCloseRequested();

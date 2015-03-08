@@ -212,6 +212,12 @@ implementation
 		// Add check to ensure points are less than 32,767
 		aalineColor(dest^.surface, x1, y1, x2, y2, ToGfxColorProcedure(clr));
 	end;
+
+  procedure DrawThinkLineProc(dest : Bitmap; x1, y1, x2, y2, w: LongInt; clr : Color);
+  begin
+    if not Assigned(dest^.surface) then begin RaiseWarning('SDL1.2 Driver - DrawThickLineProcedure recieved empty Bitmap'); exit; end;
+    ThickLineColor(dest^.surface, x1, y1, x2, y2, w, ToGfxColorProcedure(clr));
+  end;
 	
 	// This procedure sets the color of a pixel on a bitmap
 	procedure SetPixelColorProcedure(dest : Bitmap; x, y : Integer; clr : Color);
@@ -389,9 +395,6 @@ implementation
   begin
     result := Assigned( PSDL_Surface(src^.surface)^.format);
   end; 
-  
-
-  
 
   
   procedure GetRGBProcedure(pixel : Byte; r,g,b : Byte); 
@@ -445,6 +448,7 @@ implementation
     GraphicsDriver.SurfaceFormatAssigned    := @SurfaceFormatAssignedProcedure;
     GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;
+    GraphicsDriver.DrawThickLine            := @DrawThinkLineProc;
 	end;
 	
 end.

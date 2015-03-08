@@ -184,6 +184,12 @@ function aalineRGBA( dst : PSDL_Surface; x1 : Sint16; y1 : Sint16;
 cdecl; external {$IFDEF __GPC__}name 'aalineRGBA'{$ELSE} SDLgfxLibName{$ENDIF __GPC__};
 {$EXTERNALSYM aalineRGBA}
 
+// Thick Line 
+function thickLineColor( dst : PSDL_Surface; x1 : Sint16; y1 : Sint16; x2 : Sint16; y2 : Sint16; width: Uint8; color : Uint32 ) : integer;
+cdecl; external {$IFDEF __GPC__}name 'thickLineColor'{$ELSE} SDLgfxLibName{$ENDIF __GPC__};
+{$EXTERNALSYM aalineColor}
+
+
 // Circle 
 
 function circleColor( dst : PSDL_Surface; x : Sint16; y : Sint16; r : Sint16; color : Uint32 ) : integer;
