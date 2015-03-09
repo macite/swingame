@@ -16,7 +16,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SwinGame
+namespace SwinGameSDK
 {
     /// <summary>
     /// A SwinGameException will occur if something has gone wrong in 

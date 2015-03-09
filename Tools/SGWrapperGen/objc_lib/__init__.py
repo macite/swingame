@@ -60,8 +60,8 @@ _type_switcher = {
         #function pointers
         'freenotifier':         'free_notifier',
         'spriteeventhandler':   'sprite_event_handler',
-        'spritefunction':       'sprite_function %s',
-        'spritesinglefunction': 'sprite_single_function %s',
+        'spritefunction':       'sprite_function',
+        'spritesinglefunction': 'sprite_single_function',
 
         'shapedrawingfn':       'shape_drawing_fn',
         'guieventcallback':     'guievent_callback',

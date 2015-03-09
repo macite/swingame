@@ -90,6 +90,7 @@ interface
       {$IFDEF NO_ARC}
           procedure CyclePool();
       {$ENDIF}
+      // procedure BringForeground();
   {$ENDIF}
   
   
@@ -193,12 +194,11 @@ implementation
         procedure NSApplicationLoad(); cdecl; external 'Cocoa'; {$EXTERNALSYM NSApplicationLoad}  
     {$ENDIF}
     
-    {$IFDEF NO_ARC}
-        function objc_getClass(name: PChar): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM objc_getClass}
-        function sel_registerName(name: PChar): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM sel_registerName}
-        function class_respondsToSelector(cls, sel: Pointer): Boolean; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM class_respondsToSelector}
-        function objc_msgSend(self, cmd: Pointer): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM objc_msgSend}
-    {$ENDIF}
+    function objc_getClass(name: PChar): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM objc_getClass}
+    function sel_registerName(name: PChar): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM sel_registerName}
+    function class_respondsToSelector(cls, sel: Pointer): Boolean; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM class_respondsToSelector}
+    function objc_msgSend(self, cmd: Pointer): Pointer; cdecl; external 'libobjc.dylib'; {$EXTERNALSYM objc_msgSend}
+    // function objc_msgSendSender(self, cmd, sender: Pointer): Pointer; cdecl; external 'libobjc.dylib' name 'objc_msgSend'; {$EXTERNALSYM objc_msgSend}
   {$endif}
   
   constructor TResourceContainer.create(data: Pointer);
@@ -213,6 +213,19 @@ implementation
     val := data;
   end;
   
+  // {$ifdef DARWIN}
+  // procedure BringForeground();
+  // var
+  //   NSApplication: Pointer;
+  //   app, wnd: Pointer;
+  // begin
+  //   NSApplication := objc_getClass('NSApplication');
+  //   app := objc_msgSend(NSApplication, sel_registerName('sharedApplication'));
+  //   WriteLn('App: ', HexStr(app));
+  //   objc_msgSendSender(app, sel_registerName('hideOtherApplications:'), nil);
+  // end;
+  // {$endif}
+
   procedure InitialiseSwinGame();
   begin
     if is_initialised then exit;
@@ -247,21 +260,6 @@ implementation
     
     if not Assigned(Driver.Init) then LoadDefaultDriver();
     Driver.Init();
-
-    
-    //Initialise colors... assuming ARGB -  will be recalculated when window is opened
-    ColorWhite        := $FFFFFFFF;
-    ColorGreen        := $FF00FF00;
-    ColorBlue         := $FF0000FF;
-    ColorBlack        := $FF000000;
-    ColorRed          := $FFFF0000;
-    ColorYellow       := $FFFFFF00;
-    ColorPink         := $FFFF1493;
-    ColorTurquoise    := $FF00CED1;
-    ColorGrey         := $FF808080;
-    ColorMagenta      := $FF00FFFF;
-    ColorTransparent  := $00000000;
-    ColorLightGrey    := $FFC8C8C8;
     
     {$IFDEF TRACE}
       TraceExit('sgShared', 'InitialiseSwinGame');

@@ -51,4 +51,27 @@ if [ ! -f "${EXE_PATH}" ]; then
 fi
 
 echo "Running ${VERSION}"
-"$EXE_PATH"
+
+if [ "$OS" = "$MAC" ]; then
+
+    if [ ! -f "${APP_PATH}/lib/bring_fg.scpt" ]; then
+
+printf "on run argv \n\
+    try \n\
+        Delay(0.5) \n\
+        set proc to \"\" & item 1 of argv & \"\" \n\
+        tell application \"System Events\" \n\
+          tell process proc \n\
+              set frontmost to true \n\
+          end tell \n\
+        end tell \n\
+    on error \n\
+    end try \n\
+    return \n\
+end run " >> "${APP_PATH}/lib/bring_fg.scpt"
+    fi
+
+    osascript "${APP_PATH}/lib/bring_fg.scpt" "${GAME_NAME}" & "$EXE_PATH"
+else
+    "$EXE_PATH"
+fi

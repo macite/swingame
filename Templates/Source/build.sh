@@ -272,8 +272,8 @@ if [ ${IOS} = true ]; then
   LIB_DIR="${APP_PATH}/staticlib/godly/ios"
 
 elif [ "$OS" = "$MAC" ]; then
-    if [ "$FPC_VER" != "2.6.2" ]; then
-        echo 'FPC needs to be 2.6.2'
+    if [ "$FPC_VER" != "2.6.4" ]; then
+        echo 'FPC needs to be 2.6.4'
         exit
     fi
 

@@ -1,5 +1,4 @@
 program HelloWorld;
-{$IFNDEF UNIX} {$r GameLauncher.res} {$ENDIF}
 uses
   sgTypes, SwinGame;
 

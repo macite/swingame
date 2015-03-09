@@ -65,9 +65,9 @@ begin
       DrawRectangle(RandomColor(), Rnd(640), Rnd(480), -Rnd(200), -Rnd(200));
       FillRectangle(RandomColor(), Rnd(640), Rnd(480), -Rnd(200), -Rnd(200));
     end
-    else if time < 7000 then
+    else if time < 7500 then
     begin
-      DrawLine(RandomColor(), Rnd(640), Rnd(480), Rnd(640), Rnd(480));
+      DrawLine(RandomColor(), Rnd(640), Rnd(480), Rnd(640), Rnd(480), OptionLineWidth(1 + Rnd(5)));
     end
     else if time < 9000 then
     begin

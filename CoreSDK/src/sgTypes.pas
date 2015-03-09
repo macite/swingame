@@ -328,7 +328,9 @@ interface
         DrawDefault   // camera effect on screen, but not on bitmaps
       );
 
-    /// 
+    /// The drawing options struct contains the data that can 
+    /// be used to provide different options to various drawing
+    /// operations.
     ///
     /// @struct DrawingOptions
     DrawingOptions = packed record
@@ -343,6 +345,7 @@ interface
       isPart : Boolean;         // Draw just a part?
       part : Rectangle;         // Part to draw
       camera: DrawingDest;      // Draw to world or screen coordinates (camera has effect?)
+      lineWidth: Longint;       // Specify the width of line drawings.
     end;
 
     /// @type BitmapArray

@@ -48,6 +48,7 @@ interface
     GetScreenWidthProcedure               = function():LongInt;
     GetScreenHeightProcedure              = function():LongInt;
   	AvaialbleResolutionsProcedure         = function (): ResolutionArray;
+    DrawThinkLineProc                     = procedure (dest : Bitmap; x1, y1, x2, y2, w: Single; clr : Color);
 
 	GraphicsDriverRecord = record
 	  GetPixel32                : GetPixel32Procedure;
@@ -75,6 +76,7 @@ interface
     GetScreenWidth            : GetScreenWidthProcedure;
     GetScreenHeight           : GetScreenHeightProcedure;
     AvailableResolutions      : AvaialbleResolutionsProcedure;
+    DrawThickLine             : DrawThinkLineProc;
 	end;
 	
 	var
@@ -170,7 +172,13 @@ uses
 		GraphicsDriver.DrawLine(clr, x1, y1, x2, y2, opts);
 	end;
 	
-	procedure DefaultDrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);
+  procedure DefaultDrawThickLineProcedure(dest : Bitmap; x1, y1, x2, y2, w : Single; clr : Color);
+  begin
+    LoadDefaultGraphicsDriver();
+    GraphicsDriver.DrawThickLine(dest, x1, y1, x2, y2, w, clr);
+  end;
+
+	procedure DefaultDrawPixelProcedure(clr : Color; x, y : Single; const opts : DrawingOptions);
 	begin
 		LoadDefaultGraphicsDriver();
 		GraphicsDriver.DrawPixel(clr, x, y, opts);
@@ -308,6 +316,7 @@ uses
     GraphicsDriver.GetScreenWidth           := @DefaultGetScreenWidthProcedure;
     GraphicsDriver.GetScreenHeight          := @DefaultGetScreenHeightProcedure;
     GraphicsDriver.AvailableResolutions     := @DefaultAvailableResolutionsProcedure;
+    GraphicsDriver.DrawThickLine            := @DefaultDrawThickLineProcedure;
 	end;
 end.
 	

@@ -160,17 +160,18 @@ implementation
 	
 	procedure DrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
   var
-    pts: array [0..4] of Single;
+    pts: array [0..5] of Single;
   begin
     pts[0] := x1;
     pts[1] := y1;
     pts[2] := x2;
     pts[3] := y2;
+    pts[4] := opts.lineWidth;
 
     XYFromOpts(opts, pts[0], pts[1]);
     XYFromOpts(opts, pts[2], pts[3]);
 
-    _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 5);
   end;
 	
 	procedure DrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);

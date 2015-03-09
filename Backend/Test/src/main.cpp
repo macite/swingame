@@ -506,12 +506,13 @@ void test_lines(sg_drawing_surface *window_arr, int sz)
         float data[] = {    rand() / (float)RAND_MAX * 800,
             rand() / (float)RAND_MAX * 600,
             rand() / (float)RAND_MAX * 800,
-            rand() / (float)RAND_MAX * 600
+            rand() / (float)RAND_MAX * 600,
+            1 + rand() / (float)RAND_MAX * 30
         };
         
         for (int w = 0; w < sz; w++)
         {
-            _sg_functions->graphics.draw_line(&window_arr[w], random_color(), data, 4 );
+            _sg_functions->graphics.draw_line(&window_arr[w], random_color(), data, 5 );
             refresh_or_draw(&window_arr[w]);
         }
     }

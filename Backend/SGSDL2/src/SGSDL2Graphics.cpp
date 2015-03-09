@@ -1083,25 +1083,46 @@ void sgsdl2_fill_circle(sg_drawing_surface *surface, sg_color clr, float *data, 
 
 void sgsdl2_draw_line(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz)
 {
-    if ( ! surface || ! surface->_data || data_sz != 4) return;
+    if ( ! surface || ! surface->_data || data_sz != 5) return;
     
     // 4 values = 2 points
     int x1 = (int)data[0], y1 = (int)data[1];
     int x2 = (int)data[2], y2 = (int)data[3];
+    
+    // 5th value = width (scale)
+    int w = (int)data[4];
+    
+    if ( w == 0 ) return;
     
     unsigned int count = _sgsdl2_renderer_count(surface);
     
     for (unsigned int i = 0; i < count; i++)
     {
         SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
-        SDL_SetRenderDrawColor(renderer, 
-            static_cast<Uint8>(clr.r * 255), 
-            static_cast<Uint8>(clr.g * 255), 
-            static_cast<Uint8>(clr.b * 255), 
-            static_cast<Uint8>(clr.a * 255));
-        
-        SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-        
+
+        if ( w == 1)
+        {
+            SDL_SetRenderDrawColor(renderer,
+                static_cast<Uint8>(clr.r * 255), 
+                static_cast<Uint8>(clr.g * 255), 
+                static_cast<Uint8>(clr.b * 255), 
+                static_cast<Uint8>(clr.a * 255));
+            
+            SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
+        }
+        else
+        {
+            thickLineRGBA(renderer,
+                          static_cast<Sint16>(x1),
+                          static_cast<Sint16>(y1),
+                          static_cast<Sint16>(x2),
+                          static_cast<Sint16>(y2),
+                          static_cast<Uint8>(w),
+                          static_cast<Uint8>(clr.r * 255),
+                          static_cast<Uint8>(clr.g * 255),
+                          static_cast<Uint8>(clr.b * 255),
+                          static_cast<Uint8>(clr.a * 255));
+        }
         _sgsdl2_complete_render(surface, i);
     }
 }

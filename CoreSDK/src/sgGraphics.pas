@@ -564,7 +564,7 @@ interface
 // Line drawing
 //---------------------------------------------------------------------------
   
-  /// Draw a line onto a destination bitmap.
+  /// Draw a line with the provided DrawingOptions.
   /// 
   /// @lib DrawLineOpts
   /// @sn drawLineColor:%s fromX:%s y:%s toX:%s y:%s opts:%s
@@ -578,7 +578,7 @@ interface
   /// @doc_idx 0
   procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
 
-  /// Draw a line onto a destination bitmap.
+  /// Draw a line in the game from one point to another point.
   /// 
   /// @lib DrawLinePt2PtOpts
   /// @sn drawLineColor:%s fromPt:%s toPt:%s opts:%s
@@ -788,11 +788,736 @@ interface
   function GetPixelFromScreen(x, y: Single): Color;
   
   
-  var
-    //Preset colours, do not change these values.
-    ColorBlue, ColorGreen, ColorRed, ColorWhite, ColorBlack, ColorYellow,
-    ColorPink, ColorTurquoise, ColorGrey, ColorMagenta, ColorTransparent,
-    ColorLightGrey: Color;
+  
+//---------------------------------------------------------------------------
+// Color Functions
+//---------------------------------------------------------------------------
+
+  /// The color Swinburne Red
+  ///
+  /// @lib
+  function ColorSwinburneRed(): Color;  
+
+  /// The color Grey
+  ///
+  /// @lib
+  function ColorGrey(): Color;
+
+  /// The color Transparent
+  ///
+  /// @lib
+  function ColorLightGrey(): Color;
+
+  
+  /// The color Transparent
+  ///
+  /// @lib
+  function ColorTransparent(): Color;
+
+  /// The color AliceBlue
+  ///
+  /// @lib
+  function ColorAliceBlue(): Color;
+
+  /// The color AntiqueWhite
+  ///
+  /// @lib
+  function ColorAntiqueWhite(): Color;
+
+  /// The color Aqua
+  ///
+  /// @lib
+  function ColorAqua(): Color;
+
+  /// The color Aquamarine
+  ///
+  /// @lib
+  function ColorAquamarine(): Color;
+
+  /// The color Azure
+  ///
+  /// @lib
+  function ColorAzure(): Color;
+
+  /// The color Beige
+  ///
+  /// @lib
+  function ColorBeige(): Color;
+
+  /// The color Bisque
+  ///
+  /// @lib
+  function ColorBisque(): Color;
+
+  /// The color Black
+  ///
+  /// @lib
+  function ColorBlack(): Color;
+
+  /// The color BlanchedAlmond
+  ///
+  /// @lib
+  function ColorBlanchedAlmond(): Color;
+
+  /// The color Blue
+  ///
+  /// @lib
+  function ColorBlue(): Color;
+
+  /// The color BlueViolet
+  ///
+  /// @lib
+  function ColorBlueViolet(): Color;
+
+  /// The color Brown
+  ///
+  /// @lib
+  function ColorBrown(): Color;
+
+  /// The color BurlyWood
+  ///
+  /// @lib
+  function ColorBurlyWood(): Color;
+
+  /// The color CadetBlue
+  ///
+  /// @lib
+  function ColorCadetBlue(): Color;
+
+  /// The color Chartreuse
+  ///
+  /// @lib
+  function ColorChartreuse(): Color;
+
+  /// The color Chocolate
+  ///
+  /// @lib
+  function ColorChocolate(): Color;
+
+  /// The color Coral
+  ///
+  /// @lib
+  function ColorCoral(): Color;
+
+  /// The color CornflowerBlue
+  ///
+  /// @lib
+  function ColorCornflowerBlue(): Color;
+
+  /// The color Cornsilk
+  ///
+  /// @lib
+  function ColorCornsilk(): Color;
+
+  /// The color Crimson
+  ///
+  /// @lib
+  function ColorCrimson(): Color;
+
+  /// The color Cyan
+  ///
+  /// @lib
+  function ColorCyan(): Color;
+
+  /// The color DarkBlue
+  ///
+  /// @lib
+  function ColorDarkBlue(): Color;
+
+  /// The color DarkCyan
+  ///
+  /// @lib
+  function ColorDarkCyan(): Color;
+
+  /// The color DarkGoldenrod
+  ///
+  /// @lib
+  function ColorDarkGoldenrod(): Color;
+
+  /// The color DarkGray
+  ///
+  /// @lib
+  function ColorDarkGray(): Color;
+
+  /// The color DarkGreen
+  ///
+  /// @lib
+  function ColorDarkGreen(): Color;
+
+  /// The color DarkKhaki
+  ///
+  /// @lib
+  function ColorDarkKhaki(): Color;
+
+  /// The color DarkMagenta
+  ///
+  /// @lib
+  function ColorDarkMagenta(): Color;
+
+  /// The color DarkOliveGreen
+  ///
+  /// @lib
+  function ColorDarkOliveGreen(): Color;
+
+  /// The color DarkOrange
+  ///
+  /// @lib
+  function ColorDarkOrange(): Color;
+
+  /// The color DarkOrchid
+  ///
+  /// @lib
+  function ColorDarkOrchid(): Color;
+
+  /// The color DarkRed
+  ///
+  /// @lib
+  function ColorDarkRed(): Color;
+
+  /// The color DarkSalmon
+  ///
+  /// @lib
+  function ColorDarkSalmon(): Color;
+
+  /// The color DarkSeaGreen
+  ///
+  /// @lib
+  function ColorDarkSeaGreen(): Color;
+
+  /// The color DarkSlateBlue
+  ///
+  /// @lib
+  function ColorDarkSlateBlue(): Color;
+
+  /// The color DarkSlateGray
+  ///
+  /// @lib
+  function ColorDarkSlateGray(): Color;
+
+  /// The color DarkTurquoise
+  ///
+  /// @lib
+  function ColorDarkTurquoise(): Color;
+
+  /// The color DarkViolet
+  ///
+  /// @lib
+  function ColorDarkViolet(): Color;
+
+  /// The color DeepPink
+  ///
+  /// @lib
+  function ColorDeepPink(): Color;
+
+  /// The color DeepSkyBlue
+  ///
+  /// @lib
+  function ColorDeepSkyBlue(): Color;
+
+  /// The color DimGray
+  ///
+  /// @lib
+  function ColorDimGray(): Color;
+
+  /// The color DodgerBlue
+  ///
+  /// @lib
+  function ColorDodgerBlue(): Color;
+
+  /// The color Firebrick
+  ///
+  /// @lib
+  function ColorFirebrick(): Color;
+
+  /// The color FloralWhite
+  ///
+  /// @lib
+  function ColorFloralWhite(): Color;
+
+  /// The color ForestGreen
+  ///
+  /// @lib
+  function ColorForestGreen(): Color;
+
+  /// The color Fuchsia
+  ///
+  /// @lib
+  function ColorFuchsia(): Color;
+
+  /// The color Gainsboro
+  ///
+  /// @lib
+  function ColorGainsboro(): Color;
+
+  /// The color GhostWhite
+  ///
+  /// @lib
+  function ColorGhostWhite(): Color;
+
+  /// The color Gold
+  ///
+  /// @lib
+  function ColorGold(): Color;
+
+  /// The color Goldenrod
+  ///
+  /// @lib
+  function ColorGoldenrod(): Color;
+
+  /// The color Gray
+  ///
+  /// @lib
+  function ColorGray(): Color;
+
+  /// The color Green
+  ///
+  /// @lib
+  function ColorGreen(): Color;
+
+  /// The color Green
+  ///
+  /// @lib
+  function ColorBrightGreen(): Color;
+
+  /// The color GreenYellow
+  ///
+  /// @lib
+  function ColorGreenYellow(): Color;
+
+  /// The color Honeydew
+  ///
+  /// @lib
+  function ColorHoneydew(): Color;
+
+  /// The color HotPink
+  ///
+  /// @lib
+  function ColorHotPink(): Color;
+
+  /// The color IndianRed
+  ///
+  /// @lib
+  function ColorIndianRed(): Color;
+
+  /// The color Indigo
+  ///
+  /// @lib
+  function ColorIndigo(): Color;
+
+  /// The color Ivory
+  ///
+  /// @lib
+  function ColorIvory(): Color;
+
+  /// The color Khaki
+  ///
+  /// @lib
+  function ColorKhaki(): Color;
+
+  /// The color Lavender
+  ///
+  /// @lib
+  function ColorLavender(): Color;
+
+  /// The color LavenderBlush
+  ///
+  /// @lib
+  function ColorLavenderBlush(): Color;
+
+  /// The color LawnGreen
+  ///
+  /// @lib
+  function ColorLawnGreen(): Color;
+
+  /// The color LemonChiffon
+  ///
+  /// @lib
+  function ColorLemonChiffon(): Color;
+
+  /// The color LightBlue
+  ///
+  /// @lib
+  function ColorLightBlue(): Color;
+
+  /// The color LightCoral
+  ///
+  /// @lib
+  function ColorLightCoral(): Color;
+
+  /// The color LightCyan
+  ///
+  /// @lib
+  function ColorLightCyan(): Color;
+
+  /// The color LightGoldenrodYellow
+  ///
+  /// @lib
+  function ColorLightGoldenrodYellow(): Color;
+
+  /// The color LightGreen
+  ///
+  /// @lib
+  function ColorLightGreen(): Color;
+
+  /// The color LightGray
+  ///
+  /// @lib
+  function ColorLightGray(): Color;
+
+  /// The color LightPink
+  ///
+  /// @lib
+  function ColorLightPink(): Color;
+
+  /// The color LightSalmon
+  ///
+  /// @lib
+  function ColorLightSalmon(): Color;
+
+  /// The color LightSeaGreen
+  ///
+  /// @lib
+  function ColorLightSeaGreen(): Color;
+
+  /// The color LightSkyBlue
+  ///
+  /// @lib
+  function ColorLightSkyBlue(): Color;
+
+  /// The color LightSlateGray
+  ///
+  /// @lib
+  function ColorLightSlateGray(): Color;
+
+  /// The color LightSteelBlue
+  ///
+  /// @lib
+  function ColorLightSteelBlue(): Color;
+
+  /// The color LightYellow
+  ///
+  /// @lib
+  function ColorLightYellow(): Color;
+
+  /// The color Lime
+  ///
+  /// @lib
+  function ColorLime(): Color;
+
+  /// The color LimeGreen
+  ///
+  /// @lib
+  function ColorLimeGreen(): Color;
+
+  /// The color Linen
+  ///
+  /// @lib
+  function ColorLinen(): Color;
+
+  /// The color Magenta
+  ///
+  /// @lib
+  function ColorMagenta(): Color;
+
+  /// The color Maroon
+  ///
+  /// @lib
+  function ColorMaroon(): Color;
+
+  /// The color MediumAquamarine
+  ///
+  /// @lib
+  function ColorMediumAquamarine(): Color;
+
+  /// The color MediumBlue
+  ///
+  /// @lib
+  function ColorMediumBlue(): Color;
+
+  /// The color MediumOrchid
+  ///
+  /// @lib
+  function ColorMediumOrchid(): Color;
+
+  /// The color MediumPurple
+  ///
+  /// @lib
+  function ColorMediumPurple(): Color;
+
+  /// The color MediumSeaGreen
+  ///
+  /// @lib
+  function ColorMediumSeaGreen(): Color;
+
+  /// The color MediumSlateBlue
+  ///
+  /// @lib
+  function ColorMediumSlateBlue(): Color;
+
+  /// The color MediumSpringGreen
+  ///
+  /// @lib
+  function ColorMediumSpringGreen(): Color;
+
+  /// The color MediumTurquoise
+  ///
+  /// @lib
+  function ColorMediumTurquoise(): Color;
+
+  /// The color MediumVioletRed
+  ///
+  /// @lib
+  function ColorMediumVioletRed(): Color;
+
+  /// The color MidnightBlue
+  ///
+  /// @lib
+  function ColorMidnightBlue(): Color;
+
+  /// The color MintCream
+  ///
+  /// @lib
+  function ColorMintCream(): Color;
+
+  /// The color MistyRose
+  ///
+  /// @lib
+  function ColorMistyRose(): Color;
+
+  /// The color Moccasin
+  ///
+  /// @lib
+  function ColorMoccasin(): Color;
+
+  /// The color NavajoWhite
+  ///
+  /// @lib
+  function ColorNavajoWhite(): Color;
+
+  /// The color Navy
+  ///
+  /// @lib
+  function ColorNavy(): Color;
+
+  /// The color OldLace
+  ///
+  /// @lib
+  function ColorOldLace(): Color;
+
+  /// The color Olive
+  ///
+  /// @lib
+  function ColorOlive(): Color;
+
+  /// The color OliveDrab
+  ///
+  /// @lib
+  function ColorOliveDrab(): Color;
+
+  /// The color Orange
+  ///
+  /// @lib
+  function ColorOrange(): Color;
+
+  /// The color OrangeRed
+  ///
+  /// @lib
+  function ColorOrangeRed(): Color;
+
+  /// The color Orchid
+  ///
+  /// @lib
+  function ColorOrchid(): Color;
+
+  /// The color PaleGoldenrod
+  ///
+  /// @lib
+  function ColorPaleGoldenrod(): Color;
+
+  /// The color PaleGreen
+  ///
+  /// @lib
+  function ColorPaleGreen(): Color;
+
+  /// The color PaleTurquoise
+  ///
+  /// @lib
+  function ColorPaleTurquoise(): Color;
+
+  /// The color PaleVioletRed
+  ///
+  /// @lib
+  function ColorPaleVioletRed(): Color;
+
+  /// The color PapayaWhip
+  ///
+  /// @lib
+  function ColorPapayaWhip(): Color;
+
+  /// The color PeachPuff
+  ///
+  /// @lib
+  function ColorPeachPuff(): Color;
+
+  /// The color Peru
+  ///
+  /// @lib
+  function ColorPeru(): Color;
+
+  /// The color Pink
+  ///
+  /// @lib
+  function ColorPink(): Color;
+
+  /// The color Plum
+  ///
+  /// @lib
+  function ColorPlum(): Color;
+
+  /// The color PowderBlue
+  ///
+  /// @lib
+  function ColorPowderBlue(): Color;
+
+  /// The color Purple
+  ///
+  /// @lib
+  function ColorPurple(): Color;
+
+  /// The color Red
+  ///
+  /// @lib
+  function ColorRed(): Color;
+
+  /// The color RosyBrown
+  ///
+  /// @lib
+  function ColorRosyBrown(): Color;
+
+  /// The color RoyalBlue
+  ///
+  /// @lib
+  function ColorRoyalBlue(): Color;
+
+  /// The color SaddleBrown
+  ///
+  /// @lib
+  function ColorSaddleBrown(): Color;
+
+  /// The color Salmon
+  ///
+  /// @lib
+  function ColorSalmon(): Color;
+
+  /// The color SandyBrown
+  ///
+  /// @lib
+  function ColorSandyBrown(): Color;
+
+  /// The color SeaGreen
+  ///
+  /// @lib
+  function ColorSeaGreen(): Color;
+
+  /// The color SeaShell
+  ///
+  /// @lib
+  function ColorSeaShell(): Color;
+
+  /// The color Sienna
+  ///
+  /// @lib
+  function ColorSienna(): Color;
+
+  /// The color Silver
+  ///
+  /// @lib
+  function ColorSilver(): Color;
+
+  /// The color SkyBlue
+  ///
+  /// @lib
+  function ColorSkyBlue(): Color;
+
+  /// The color SlateBlue
+  ///
+  /// @lib
+  function ColorSlateBlue(): Color;
+
+  /// The color SlateGray
+  ///
+  /// @lib
+  function ColorSlateGray(): Color;
+
+  /// The color Snow
+  ///
+  /// @lib
+  function ColorSnow(): Color;
+
+  /// The color SpringGreen
+  ///
+  /// @lib
+  function ColorSpringGreen(): Color;
+
+  /// The color SteelBlue
+  ///
+  /// @lib
+  function ColorSteelBlue(): Color;
+
+  /// The color Tan
+  ///
+  /// @lib
+  function ColorTan(): Color;
+
+  /// The color Teal
+  ///
+  /// @lib
+  function ColorTeal(): Color;
+
+  /// The color Thistle
+  ///
+  /// @lib
+  function ColorThistle(): Color;
+
+  /// The color Tomato
+  ///
+  /// @lib
+  function ColorTomato(): Color;
+
+  /// The color Turquoise
+  ///
+  /// @lib
+  function ColorTurquoise(): Color;
+
+  /// The color Violet
+  ///
+  /// @lib
+  function ColorViolet(): Color;
+
+  /// The color Wheat
+  ///
+  /// @lib
+  function ColorWheat(): Color;
+
+  /// The color White
+  ///
+  /// @lib
+  function ColorWhite(): Color;
+
+  /// The color WhiteSmoke
+  ///
+  /// @lib
+  function ColorWhiteSmoke(): Color;
+
+  /// The color Yellow
+  ///
+  /// @lib
+  function ColorYellow(): Color;
+
+  /// The color YellowGreen
+  ///
+  /// @lib
+  function ColorYellowGreen(): Color;
   
 //=============================================================================
 implementation
@@ -876,53 +1601,41 @@ implementation
   procedure DrawTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
     DrawTriangle(clr,
-                 tri.points[0].x,
-                 tri.points[0].y, 
-                 tri.points[1].x, 
-                 tri.points[1].y, 
-                 tri.points[2].x, 
-                 tri.points[2].y,
+                 tri.points[0].x, tri.points[0].y, 
+                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[2].x, tri.points[2].y,
                  opts);
   end;
 
   procedure DrawTriangle(clr : Color; const tri: Triangle);
   begin
     DrawTriangle(clr,
-                 tri.points[0].x,
-                 tri.points[0].y, 
-                 tri.points[1].x, 
-                 tri.points[1].y, 
-                 tri.points[2].x, 
-                 tri.points[2].y,
+                 tri.points[0].x, tri.points[0].y, 
+                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[2].x, tri.points[2].y,
                  OptionDefaults());
   end;
 
   procedure FillTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
   begin
-    DrawTriangle(clr, x1, y1, x2, y2, x3, y3, OptionDefaults());
+    FillTriangle(clr, x1, y1, x2, y2, x3, y3, OptionDefaults());
   end;
 
   procedure FillTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
-    DrawTriangle(clr,
-                 tri.points[0].x,
-                 tri.points[0].y, 
-                 tri.points[1].x, 
-                 tri.points[1].y, 
-                 tri.points[2].x, 
-                 tri.points[2].y,
+    FillTriangle(clr,
+                 tri.points[0].x, tri.points[0].y, 
+                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[2].x, tri.points[2].y,
                  opts);
   end;
 
   procedure FillTriangle(clr : Color; const tri: Triangle);
   begin
-    DrawTriangle(clr,
-                 tri.points[0].x,
-                 tri.points[0].y, 
-                 tri.points[1].x, 
-                 tri.points[1].y, 
-                 tri.points[2].x, 
-                 tri.points[2].y,
+    FillTriangle(clr,
+                 tri.points[0].x, tri.points[0].y, 
+                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[2].x, tri.points[2].y,
                  OptionDefaults());
   end;
 
@@ -1083,21 +1796,41 @@ implementation
 
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   begin
+      if opts.dest = nil then 
+      begin 
+        RaiseWarning('DrawTriangle - No destination bitmap supplied');
+        exit; 
+      end;
     GraphicsDriver.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
 
   procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   begin
+      if opts.dest = nil then 
+      begin 
+        RaiseWarning('FillTriangle - No destination bitmap supplied');
+        exit; 
+      end;
     GraphicsDriver.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
   procedure DrawCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   begin
+      if opts.dest = nil then 
+      begin 
+        RaiseWarning('DrawCircle - No destination bitmap supplied');
+        exit; 
+      end;
     GraphicsDriver.DrawCircle(clr, x, y, radius, opts);
   end;
 
   procedure FillCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions);
   begin
+     if opts.dest = nil then 
+      begin 
+        RaiseWarning('FillCircle - No destination bitmap supplied');
+        exit; 
+      end;
     GraphicsDriver.FillCircle(clr, x, y, radius, opts);
   end;
 
@@ -1234,6 +1967,18 @@ implementation
     result := CurrentClip(screen);
   end;
 
+ //=============================================================================
+  
+  procedure DrawLines(clr: Color; const lines: LinesArray); //TODO: overload;
+  var
+    i: Longint;
+  begin
+    for i := 0 to High(lines) do
+    begin
+      DrawLine(clr, lines[i]);
+    end;
+  end;
+  
 //----------------------------------------------------------------------------
 // Set Icon / Window Open / Screen Size / Resize
 //----------------------------------------------------------------------------
@@ -1263,21 +2008,6 @@ implementation
 
     try         
       GraphicsDriver.InitializeGraphicsWindow(caption, width, height);
-      
-      //Init the colors
-      ColorWhite := RGBAColor(255, 255, 255, 255);
-      ColorGreen := RGBAColor(0, 255, 0, 255);
-      ColorBlue := RGBAColor(0, 0, 255, 255);
-      ColorBlack := RGBAColor(0, 0, 0, 255);
-      ColorRed := RGBAColor(255, 0, 0, 255);
-      ColorYellow := RGBAColor(255, 255, 0, 255);
-      ColorPink := RGBAColor(255, 20, 147, 255);
-      ColorTurquoise := RGBAColor(0, 206, 209, 255);
-      ColorGrey := RGBAColor(128, 128, 128, 255);
-      ColorMagenta := RGBAColor(255, 0, 255, 255);
-      ColorTransparent := RGBAColor(0, 0, 0, 0);
-      ColorLightGrey := RGBAColor(200, 200, 200, 255);
-      
       GraphicsDriver.InitializeScreen(screen, screenWidth div 2 - 30, screenHeight div 2, ColorWhite, ColorGrey, 'Loading ...');
       RefreshScreen();
     except on e: Exception do
@@ -1960,6 +2690,731 @@ implementation
         {$IFDEF TRACE}
             TraceExit('sgGraphics', 'ShowSwinGameSplashScreen');
         {$ENDIF}
+    end;
+
+    function ColorGrey(): Color;
+    begin
+      result := RGBAColor(128, 128, 128, 255);
+    end;
+
+    function ColorLightGrey(): Color;
+    begin
+      result := RGBAColor(200, 200, 200, 255);
+    end;
+
+    function ColorTransparent(): Color;
+    begin
+      result := RGBAColor(0, 0, 0, 0);
+    end;
+
+    function ColorAliceBlue(): Color;
+    begin
+      result := RGBAColor(240, 248, 255, 255);
+    end;
+
+    function ColorAntiqueWhite(): Color;
+    begin
+      result := RGBAColor(250, 235, 215, 255);
+    end;
+
+    function ColorAqua(): Color;
+    begin
+      result := RGBAColor(0, 255, 255, 255);
+    end;
+
+    function ColorAquamarine(): Color;
+    begin
+      result := RGBAColor(127, 255, 212, 255);
+    end;
+
+    function ColorAzure(): Color;
+    begin
+      result := RGBAColor(240, 255, 255, 255);
+    end;
+
+    function ColorBeige(): Color;
+    begin
+      result := RGBAColor(245, 245, 220, 255);
+    end;
+
+    function ColorBisque(): Color;
+    begin
+      result := RGBAColor(255, 228, 196, 255);
+    end;
+
+    function ColorBlack(): Color;
+    begin
+      result := RGBAColor(0, 0, 0, 255);
+    end;
+
+    function ColorBlanchedAlmond(): Color;
+    begin
+      result := RGBAColor(255, 235, 205, 255);
+    end;
+
+    function ColorBlue(): Color;
+    begin
+      result := RGBAColor(0, 0, 255, 255);
+    end;
+
+    function ColorBlueViolet(): Color;
+    begin
+      result := RGBAColor(138, 43, 226, 255);
+    end;
+
+    function ColorBrown(): Color;
+    begin
+      result := RGBAColor(165, 42, 42, 255);
+    end;
+
+    function ColorBurlyWood(): Color;
+    begin
+      result := RGBAColor(222, 184, 135, 255);
+    end;
+
+    function ColorCadetBlue(): Color;
+    begin
+      result := RGBAColor(95, 158, 160, 255);
+    end;
+
+    function ColorChartreuse(): Color;
+    begin
+      result := RGBAColor(127, 255, 0, 255);
+    end;
+
+    function ColorChocolate(): Color;
+    begin
+      result := RGBAColor(210, 105, 30, 255);
+    end;
+
+    function ColorCoral(): Color;
+    begin
+      result := RGBAColor(255, 127, 80, 255);
+    end;
+
+    function ColorCornflowerBlue(): Color;
+    begin
+      result := RGBAColor(100, 149, 237, 255);
+    end;
+
+    function ColorCornsilk(): Color;
+    begin
+      result := RGBAColor(255, 248, 220, 255);
+    end;
+
+    function ColorCrimson(): Color;
+    begin
+      result := RGBAColor(220, 20, 60, 255);
+    end;
+
+    function ColorCyan(): Color;
+    begin
+      result := RGBAColor(0, 255, 255, 255);
+    end;
+
+    function ColorDarkBlue(): Color;
+    begin
+      result := RGBAColor(0, 0, 139, 255);
+    end;
+
+    function ColorDarkCyan(): Color;
+    begin
+      result := RGBAColor(0, 139, 139, 255);
+    end;
+
+    function ColorDarkGoldenrod(): Color;
+    begin
+      result := RGBAColor(184, 134, 11, 255);
+    end;
+
+    function ColorDarkGray(): Color;
+    begin
+      result := RGBAColor(169, 169, 169, 255);
+    end;
+
+    function ColorDarkGreen(): Color;
+    begin
+      result := RGBAColor(0, 100, 0, 255);
+    end;
+
+    function ColorDarkKhaki(): Color;
+    begin
+      result := RGBAColor(189, 183, 107, 255);
+    end;
+
+    function ColorDarkMagenta(): Color;
+    begin
+      result := RGBAColor(139, 0, 139, 255);
+    end;
+
+    function ColorDarkOliveGreen(): Color;
+    begin
+      result := RGBAColor(85, 107, 47, 255);
+    end;
+
+    function ColorDarkOrange(): Color;
+    begin
+      result := RGBAColor(255, 140, 0, 255);
+    end;
+
+    function ColorDarkOrchid(): Color;
+    begin
+      result := RGBAColor(153, 50, 204, 255);
+    end;
+
+    function ColorDarkRed(): Color;
+    begin
+      result := RGBAColor(139, 0, 0, 255);
+    end;
+
+    function ColorDarkSalmon(): Color;
+    begin
+      result := RGBAColor(233, 150, 122, 255);
+    end;
+
+    function ColorDarkSeaGreen(): Color;
+    begin
+      result := RGBAColor(143, 188, 139, 255);
+    end;
+
+    function ColorDarkSlateBlue(): Color;
+    begin
+      result := RGBAColor(72, 61, 139, 255);
+    end;
+
+    function ColorDarkSlateGray(): Color;
+    begin
+      result := RGBAColor(47, 79, 79, 255);
+    end;
+
+    function ColorDarkTurquoise(): Color;
+    begin
+      result := RGBAColor(0, 206, 209, 255);
+    end;
+
+    function ColorDarkViolet(): Color;
+    begin
+      result := RGBAColor(148, 0, 211, 255);
+    end;
+
+    function ColorDeepPink(): Color;
+    begin
+      result := RGBAColor(255, 20, 147, 255);
+    end;
+
+    function ColorDeepSkyBlue(): Color;
+    begin
+      result := RGBAColor(0, 191, 255, 255);
+    end;
+
+    function ColorDimGray(): Color;
+    begin
+      result := RGBAColor(105, 105, 105, 255);
+    end;
+
+    function ColorDodgerBlue(): Color;
+    begin
+      result := RGBAColor(30, 144, 255, 255);
+    end;
+
+    function ColorFirebrick(): Color;
+    begin
+      result := RGBAColor(178, 34, 34, 255);
+    end;
+
+    function ColorFloralWhite(): Color;
+    begin
+      result := RGBAColor(255, 250, 240, 255);
+    end;
+
+    function ColorForestGreen(): Color;
+    begin
+      result := RGBAColor(34, 139, 34, 255);
+    end;
+
+    function ColorFuchsia(): Color;
+    begin
+      result := RGBAColor(255, 0, 255, 255);
+    end;
+
+    function ColorGainsboro(): Color;
+    begin
+      result := RGBAColor(220, 220, 220, 255);
+    end;
+
+    function ColorGhostWhite(): Color;
+    begin
+      result := RGBAColor(248, 248, 255, 255);
+    end;
+
+    function ColorGold(): Color;
+    begin
+      result := RGBAColor(255, 215, 0, 255);
+    end;
+
+    function ColorGoldenrod(): Color;
+    begin
+      result := RGBAColor(218, 165, 32, 255);
+    end;
+
+    function ColorGray(): Color;
+    begin
+      result := RGBAColor(128, 128, 128, 255);
+    end;
+
+    function ColorGreen(): Color;
+    begin
+      result := RGBAColor(0, 128, 0, 255);
+    end;
+
+    function ColorBrightGreen(): Color;
+    begin
+      result := RGBAColor(0, 255, 0, 255);
+    end;
+
+    function ColorGreenYellow(): Color;
+    begin
+      result := RGBAColor(173, 255, 47, 255);
+    end;
+
+    function ColorHoneydew(): Color;
+    begin
+      result := RGBAColor(240, 255, 240, 255);
+    end;
+
+    function ColorHotPink(): Color;
+    begin
+      result := RGBAColor(255, 105, 180, 255);
+    end;
+
+    function ColorIndianRed(): Color;
+    begin
+      result := RGBAColor(205, 92, 92, 255);
+    end;
+
+    function ColorIndigo(): Color;
+    begin
+      result := RGBAColor(75, 0, 130, 255);
+    end;
+
+    function ColorIvory(): Color;
+    begin
+      result := RGBAColor(255, 255, 240, 255);
+    end;
+
+    function ColorKhaki(): Color;
+    begin
+      result := RGBAColor(240, 230, 140, 255);
+    end;
+
+    function ColorLavender(): Color;
+    begin
+      result := RGBAColor(230, 230, 250, 255);
+    end;
+
+    function ColorLavenderBlush(): Color;
+    begin
+      result := RGBAColor(255, 240, 245, 255);
+    end;
+
+    function ColorLawnGreen(): Color;
+    begin
+      result := RGBAColor(124, 252, 0, 255);
+    end;
+
+    function ColorLemonChiffon(): Color;
+    begin
+      result := RGBAColor(255, 250, 205, 255);
+    end;
+
+    function ColorLightBlue(): Color;
+    begin
+      result := RGBAColor(173, 216, 230, 255);
+    end;
+
+    function ColorLightCoral(): Color;
+    begin
+      result := RGBAColor(240, 128, 128, 255);
+    end;
+
+    function ColorLightCyan(): Color;
+    begin
+      result := RGBAColor(224, 255, 255, 255);
+    end;
+
+    function ColorLightGoldenrodYellow(): Color;
+    begin
+      result := RGBAColor(250, 250, 210, 255);
+    end;
+
+    function ColorLightGreen(): Color;
+    begin
+      result := RGBAColor(144, 238, 144, 255);
+    end;
+
+    function ColorLightGray(): Color;
+    begin
+      result := RGBAColor(211, 211, 211, 255);
+    end;
+
+    function ColorLightPink(): Color;
+    begin
+      result := RGBAColor(255, 182, 193, 255);
+    end;
+
+    function ColorLightSalmon(): Color;
+    begin
+      result := RGBAColor(255, 160, 122, 255);
+    end;
+
+    function ColorLightSeaGreen(): Color;
+    begin
+      result := RGBAColor(32, 178, 170, 255);
+    end;
+
+    function ColorLightSkyBlue(): Color;
+    begin
+      result := RGBAColor(135, 206, 250, 255);
+    end;
+
+    function ColorLightSlateGray(): Color;
+    begin
+      result := RGBAColor(119, 136, 153, 255);
+    end;
+
+    function ColorLightSteelBlue(): Color;
+    begin
+      result := RGBAColor(176, 196, 222, 255);
+    end;
+
+    function ColorLightYellow(): Color;
+    begin
+      result := RGBAColor(255, 255, 224, 255);
+    end;
+
+    function ColorLime(): Color;
+    begin
+      result := RGBAColor(0, 255, 0, 255);
+    end;
+
+    function ColorLimeGreen(): Color;
+    begin
+      result := RGBAColor(50, 205, 50, 255);
+    end;
+
+    function ColorLinen(): Color;
+    begin
+      result := RGBAColor(250, 240, 230, 255);
+    end;
+
+    function ColorMagenta(): Color;
+    begin
+      result := RGBAColor(255, 0, 255, 255);
+    end;
+
+    function ColorMaroon(): Color;
+    begin
+      result := RGBAColor(128, 0, 0, 255);
+    end;
+
+    function ColorMediumAquamarine(): Color;
+    begin
+      result := RGBAColor(102, 205, 170, 255);
+    end;
+
+    function ColorMediumBlue(): Color;
+    begin
+      result := RGBAColor(0, 0, 205, 255);
+    end;
+
+    function ColorMediumOrchid(): Color;
+    begin
+      result := RGBAColor(186, 85, 211, 255);
+    end;
+
+    function ColorMediumPurple(): Color;
+    begin
+      result := RGBAColor(147, 112, 219, 255);
+    end;
+
+    function ColorMediumSeaGreen(): Color;
+    begin
+      result := RGBAColor(60, 179, 113, 255);
+    end;
+
+    function ColorMediumSlateBlue(): Color;
+    begin
+      result := RGBAColor(123, 104, 238, 255);
+    end;
+
+    function ColorMediumSpringGreen(): Color;
+    begin
+      result := RGBAColor(0, 250, 154, 255);
+    end;
+
+    function ColorMediumTurquoise(): Color;
+    begin
+      result := RGBAColor(72, 209, 204, 255);
+    end;
+
+    function ColorMediumVioletRed(): Color;
+    begin
+      result := RGBAColor(199, 21, 133, 255);
+    end;
+
+    function ColorMidnightBlue(): Color;
+    begin
+      result := RGBAColor(25, 25, 112, 255);
+    end;
+
+    function ColorMintCream(): Color;
+    begin
+      result := RGBAColor(245, 255, 250, 255);
+    end;
+
+    function ColorMistyRose(): Color;
+    begin
+      result := RGBAColor(255, 228, 225, 255);
+    end;
+
+    function ColorMoccasin(): Color;
+    begin
+      result := RGBAColor(255, 228, 181, 255);
+    end;
+
+    function ColorNavajoWhite(): Color;
+    begin
+      result := RGBAColor(255, 222, 173, 255);
+    end;
+
+    function ColorNavy(): Color;
+    begin
+      result := RGBAColor(0, 0, 128, 255);
+    end;
+
+    function ColorOldLace(): Color;
+    begin
+      result := RGBAColor(253, 245, 230, 255);
+    end;
+
+    function ColorOlive(): Color;
+    begin
+      result := RGBAColor(128, 128, 0, 255);
+    end;
+
+    function ColorOliveDrab(): Color;
+    begin
+      result := RGBAColor(107, 142, 35, 255);
+    end;
+
+    function ColorOrange(): Color;
+    begin
+      result := RGBAColor(255, 165, 0, 255);
+    end;
+
+    function ColorOrangeRed(): Color;
+    begin
+      result := RGBAColor(255, 69, 0, 255);
+    end;
+
+    function ColorOrchid(): Color;
+    begin
+      result := RGBAColor(218, 112, 214, 255);
+    end;
+
+    function ColorPaleGoldenrod(): Color;
+    begin
+      result := RGBAColor(238, 232, 170, 255);
+    end;
+
+    function ColorPaleGreen(): Color;
+    begin
+      result := RGBAColor(152, 251, 152, 255);
+    end;
+
+    function ColorPaleTurquoise(): Color;
+    begin
+      result := RGBAColor(175, 238, 238, 255);
+    end;
+
+    function ColorPaleVioletRed(): Color;
+    begin
+      result := RGBAColor(219, 112, 147, 255);
+    end;
+
+    function ColorPapayaWhip(): Color;
+    begin
+      result := RGBAColor(255, 239, 213, 255);
+    end;
+
+    function ColorPeachPuff(): Color;
+    begin
+      result := RGBAColor(255, 218, 185, 255);
+    end;
+
+    function ColorPeru(): Color;
+    begin
+      result := RGBAColor(205, 133, 63, 255);
+    end;
+
+    function ColorPink(): Color;
+    begin
+      result := RGBAColor(255, 192, 203, 255);
+    end;
+
+    function ColorPlum(): Color;
+    begin
+      result := RGBAColor(221, 160, 221, 255);
+    end;
+
+    function ColorPowderBlue(): Color;
+    begin
+      result := RGBAColor(176, 224, 230, 255);
+    end;
+
+    function ColorPurple(): Color;
+    begin
+      result := RGBAColor(128, 0, 128, 255);
+    end;
+
+    function ColorRed(): Color;
+    begin
+      result := RGBAColor(255, 0, 0, 255);
+    end;
+
+    function ColorRosyBrown(): Color;
+    begin
+      result := RGBAColor(188, 143, 143, 255);
+    end;
+
+    function ColorRoyalBlue(): Color;
+    begin
+      result := RGBAColor(65, 105, 225, 255);
+    end;
+
+    function ColorSaddleBrown(): Color;
+    begin
+      result := RGBAColor(139, 69, 19, 255);
+    end;
+
+    function ColorSalmon(): Color;
+    begin
+      result := RGBAColor(250, 128, 114, 255);
+    end;
+
+    function ColorSandyBrown(): Color;
+    begin
+      result := RGBAColor(244, 164, 96, 255);
+    end;
+
+    function ColorSeaGreen(): Color;
+    begin
+      result := RGBAColor(46, 139, 87, 255);
+    end;
+
+    function ColorSeaShell(): Color;
+    begin
+      result := RGBAColor(255, 245, 238, 255);
+    end;
+
+    function ColorSienna(): Color;
+    begin
+      result := RGBAColor(160, 82, 45, 255);
+    end;
+
+    function ColorSilver(): Color;
+    begin
+      result := RGBAColor(192, 192, 192, 255);
+    end;
+
+    function ColorSkyBlue(): Color;
+    begin
+      result := RGBAColor(135, 206, 235, 255);
+    end;
+
+    function ColorSlateBlue(): Color;
+    begin
+      result := RGBAColor(106, 90, 205, 255);
+    end;
+
+    function ColorSlateGray(): Color;
+    begin
+      result := RGBAColor(112, 128, 144, 255);
+    end;
+
+    function ColorSnow(): Color;
+    begin
+      result := RGBAColor(255, 250, 250, 255);
+    end;
+
+    function ColorSpringGreen(): Color;
+    begin
+      result := RGBAColor(0, 255, 127, 255);
+    end;
+
+    function ColorSteelBlue(): Color;
+    begin
+      result := RGBAColor(70, 130, 180, 255);
+    end;
+
+    function ColorTan(): Color;
+    begin
+      result := RGBAColor(210, 180, 140, 255);
+    end;
+
+    function ColorTeal(): Color;
+    begin
+      result := RGBAColor(0, 128, 128, 255);
+    end;
+
+    function ColorThistle(): Color;
+    begin
+      result := RGBAColor(216, 191, 216, 255);
+    end;
+
+    function ColorTomato(): Color;
+    begin
+      result := RGBAColor(255, 99, 71, 255);
+    end;
+
+    function ColorTurquoise(): Color;
+    begin
+      result := RGBAColor(64, 224, 208, 255);
+    end;
+
+    function ColorViolet(): Color;
+    begin
+      result := RGBAColor(238, 130, 238, 255);
+    end;
+
+    function ColorWheat(): Color;
+    begin
+      result := RGBAColor(245, 222, 179, 255);
+    end;
+
+    function ColorWhite(): Color;
+    begin
+      result := RGBAColor(255, 255, 255, 255);
+    end;
+
+    function ColorWhiteSmoke(): Color;
+    begin
+      result := RGBAColor(245, 245, 245, 255);
+    end;
+
+    function ColorYellow(): Color;
+    begin
+      result := RGBAColor(255, 255, 0, 255);
+    end;
+
+    function ColorYellowGreen(): Color;
+    begin
+      result := RGBAColor(154, 205, 50, 255);
+    end;
+
+    function ColorSwinburneRed(): Color;  
+    begin
+      result := RGBAColor(237, 36, 25, 255);
     end;
 
 

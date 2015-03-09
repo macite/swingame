@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 
 using Color = System.Drawing.Color;
 
-namespace SwinGame
+namespace SwinGameSDK
 {
-	public class SwinGame
+	public static class SwinGame
 	{

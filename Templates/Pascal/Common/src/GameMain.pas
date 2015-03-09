@@ -1,12 +1,9 @@
 program GameMain;
-uses SwinGame;
+uses SwinGame, sgTypes;
 
 procedure Main();
 begin
-  OpenAudio();
-  
   OpenGraphicsWindow('Hello World', 800, 600);
-  LoadDefaultColors();
   ShowSwinGameSplashScreen();
   
   repeat // The game loop...
@@ -15,11 +12,8 @@ begin
     ClearScreen(ColorWhite);
     DrawFramerate(0,0);
     
-    RefreshScreen();
+    RefreshScreen(60);
   until WindowCloseRequested();
-  
-  CloseAudio();
-  ReleaseAllResources();
 end;
 
 begin

@@ -56,7 +56,8 @@
     <Import Include="System.Collections" />
     <Import Include="System.Collections.Generic" />
     <Import Include="Color=System.Drawing.Color" />
-    <Import Include="SwinGame" />
+    <Import Include="SwinGameSDK" />
+    <Import Include="SwinGameSDK.SwinGame" />
     <Import Include="System.Reflection" />
   </ItemGroup>
   <ItemGroup>

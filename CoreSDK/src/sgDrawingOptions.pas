@@ -159,6 +159,16 @@ function OptionToScreen(): DrawingOptions;
 /// @lib OptionToScreenOpts
 function OptionToScreen(const opts: DrawingOptions): DrawingOptions;
 
+/// Use this option to change the width of line drawings.
+///
+/// @lib
+function OptionLineWidth(width: Longint): DrawingOptions;
+
+/// Use this option to change the width of line drawings.
+///
+/// @lib OptionLineWidthOpts
+function OptionLineWidth(width: Longint; const opts: DrawingOptions): DrawingOptions;
+
 implementation
 uses sgShared, sgGeometry;
 
@@ -177,6 +187,7 @@ begin
 		isPart 			:= false;
 		part 			:= RectangleFrom(0,0,1,1);
 		camera	 		:= DrawDefault;
+		lineWidth 		:= 1;
 	end;
 end;
 
@@ -189,6 +200,17 @@ function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions;
 begin
 	result := opts;
 	result.dest := dest;
+end;
+
+function OptionLineWidth(width: Longint): DrawingOptions;
+begin
+	result := OptionLineWidth(width, OptionDefaults());
+end;
+
+function OptionLineWidth(width: Longint; const opts: DrawingOptions): DrawingOptions;
+begin
+	result := opts;
+	result.lineWidth := width;
 end;
 
 function OptionScaleBmp(scaleX, scaleY: Single): DrawingOptions;

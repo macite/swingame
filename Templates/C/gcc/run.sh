@@ -52,21 +52,27 @@ fi
 
 echo "Running ${VERSION}"
 if [ "$OS" = "$MAC" ]; then
-    "$EXE_PATH" & 
-    WAIT_PID=$!
-    osascript <<EOF
-    try
-    tell application "System Events"
-        delay 0.25
-        tell process "${GAME_NAME}"
-            set frontmost to true
-        end tell
-    end tell
+
+    if [ ! -f "${APP_PATH}/lib/bring_fg.scpt" ]; then
+
+printf "on run argv \n\
+    try \n\
+        Delay(0.5) \n\
+        set proc to \"\" & item 1 of argv & \"\" \n\
+        tell application \"System Events\" \n\
+          tell process proc \n\
+              set frontmost to true \n\
+          end tell \n\
+        end tell \n\
+    on error \n\
+    end try \n\
     on error
     end try
     return
-EOF
-    wait ${WAIT_PID}
+end run " >> "${APP_PATH}/lib/bring_fg.scpt"
+    fi
+
+    osascript "${APP_PATH}/lib/bring_fg.scpt" "${GAME_NAME}" & "$EXE_PATH"
 else
-"$EXE_PATH"
+    "$EXE_PATH"
 fi
