@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		82C5AAE11AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */; };
+		82C5AAE21AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */; };
+		82C5AAE61AB04F640005429A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEE1183C211C00876830 /* OpenGL.framework */; };
+		82C5AAEA1AB14D7D0005429A /* test_graphics3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */; };
+		82C5AAEB1AB14D7D0005429A /* test_graphics3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */; };
+		82C5AAEC1AB14D7D0005429A /* test_graphics3d.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAE91AB14D7D0005429A /* test_graphics3d.h */; };
+		82C5AAF41AB4458D0005429A /* SGSDL2Graphics3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAE01AB027440005429A /* SGSDL2Graphics3D.h */; };
+		82C5AAF71AB51E040005429A /* SGSDL2Graphics3DTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAF61AB51E040005429A /* SGSDL2Graphics3DTypes.h */; };
+		82C5AAFC1AB7B0450005429A /* Matrix4f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFB1AB7B0450005429A /* Matrix4f.h */; };
+		82C5AB001AB7B1F30005429A /* Vector3f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFE1AB7B1F30005429A /* Vector3f.h */; };
+		82C5AB011AB7B1F30005429A /* Vector4f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFF1AB7B1F30005429A /* Vector4f.h */; };
 		942DBED2183C1DBA00876830 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBED1183C1DBA00876830 /* main.cpp */; };
 		942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED3183C202F00876830 /* Cocoa.framework */; };
 		942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED5183C203900876830 /* ForceFeedback.framework */; };
@@ -28,7 +39,7 @@
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
 		9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA9183B732800BE3771 /* libfreetype.a */; };
 		9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAA183B732800BE3771 /* libmikmod.a */; };
-		9471BDB8183B732800BE3771 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAC183B732800BE3771 /* libpng.a */; };
+		9471BDB8183B732800BE3771 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAC183B732800BE3771 /* libpng.a */; settings = {ATTRIBUTES = (Required, ); }; };
 		9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAD183B732800BE3771 /* libSDL2_gfx.a */; };
 		9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAE183B732800BE3771 /* libSDL2_image.a */; };
 		9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAF183B732800BE3771 /* libSDL2_mixer.a */; };
@@ -92,6 +103,22 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Graphics3D.cpp; path = ../../src/SGSDL2Graphics3D.cpp; sourceTree = "<group>"; };
+		82C5AAE01AB027440005429A /* SGSDL2Graphics3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Graphics3D.h; path = ../../src/SGSDL2Graphics3D.h; sourceTree = "<group>"; };
+		82C5AAE71AB057780005429A /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_graphics3d.cpp; path = ../../../Test/src/test_graphics3d.cpp; sourceTree = "<group>"; };
+		82C5AAE91AB14D7D0005429A /* test_graphics3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_graphics3d.h; path = ../../../Test/src/test_graphics3d.h; sourceTree = "<group>"; };
+		82C5AAF11AB2865C0005429A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		82C5AAF61AB51E040005429A /* SGSDL2Graphics3DTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Graphics3DTypes.h; path = ../../src/SGSDL2Graphics3DTypes.h; sourceTree = "<group>"; };
+		82C5AAF81AB51E1D0005429A /* solidColorFrag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = solidColorFrag.glsl; path = ../../src/shaders/solidColorFrag.glsl; sourceTree = "<group>"; };
+		82C5AAF91AB51E1D0005429A /* solidColorVert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = solidColorVert.glsl; path = ../../src/shaders/solidColorVert.glsl; sourceTree = "<group>"; };
+		82C5AAFB1AB7B0450005429A /* Matrix4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Matrix4f.h; path = ../../src/math/Matrix4f.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		82C5AAFE1AB7B1F30005429A /* Vector3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3f.h; path = ../../src/math/Vector3f.h; sourceTree = "<group>"; };
+		82C5AAFF1AB7B1F30005429A /* Vector4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector4f.h; path = ../../src/math/Vector4f.h; sourceTree = "<group>"; };
+		82C5AB021AB8098D0005429A /* vertexColorFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = vertexColorFrag.glsl; path = ../../src/shaders/vertexColorFrag.glsl; sourceTree = "<group>"; };
+		82C5AB031AB8098D0005429A /* vertexColorVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = vertexColorVert.glsl; path = ../../src/shaders/vertexColorVert.glsl; sourceTree = "<group>"; };
+		82C5AB041AB8F01E0005429A /* textureFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureFrag.glsl; path = ../../src/shaders/textureFrag.glsl; sourceTree = "<group>"; };
+		82C5AB051AB8F01E0005429A /* textureVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureVert.glsl; path = ../../src/shaders/textureVert.glsl; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
 		942DBED3183C202F00876830 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		942DBED5183C203900876830 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -165,6 +192,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82C5AAE61AB04F640005429A /* OpenGL.framework in Frameworks */,
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
 				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
@@ -187,13 +215,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				942DBEE8183C217E00876830 /* OpenGL.framework in Frameworks */,
 				94FEB5171858302500AFF9D7 /* libz.dylib in Frameworks */,
 				94FEB5151858301A00AFF9D7 /* libbz2.dylib in Frameworks */,
 				942DBEEA183C218300876830 /* AudioToolbox.framework in Frameworks */,
 				942DBEEB183C218600876830 /* AudioUnit.framework in Frameworks */,
 				942DBEEC183C218A00876830 /* CoreAudio.framework in Frameworks */,
 				942DBEE7183C217B00876830 /* Carbon.framework in Frameworks */,
-				942DBEE8183C217E00876830 /* OpenGL.framework in Frameworks */,
 				942DBEE9183C218000876830 /* IOKit.framework in Frameworks */,
 				942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */,
 				942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */,
@@ -204,9 +232,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		82C5AAEE1AB278450005429A /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				82C5AB021AB8098D0005429A /* vertexColorFrag.glsl */,
+				82C5AB031AB8098D0005429A /* vertexColorVert.glsl */,
+				82C5AB041AB8F01E0005429A /* textureFrag.glsl */,
+				82C5AB051AB8F01E0005429A /* textureVert.glsl */,
+				82C5AAF81AB51E1D0005429A /* solidColorFrag.glsl */,
+				82C5AAF91AB51E1D0005429A /* solidColorVert.glsl */,
+			);
+			name = shaders;
+			sourceTree = "<group>";
+		};
+		82C5AAFD1AB7B0560005429A /* math */ = {
+			isa = PBXGroup;
+			children = (
+				82C5AAFB1AB7B0450005429A /* Matrix4f.h */,
+				82C5AAFE1AB7B1F30005429A /* Vector3f.h */,
+				82C5AAFF1AB7B1F30005429A /* Vector4f.h */,
+			);
+			name = math;
+			sourceTree = "<group>";
+		};
 		9471BD83183B6E5700BE3771 = {
 			isa = PBXGroup;
 			children = (
+				82C5AAE71AB057780005429A /* Notes.txt */,
 				9471BDA1183B72A900BE3771 /* Libraries */,
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
@@ -254,6 +306,11 @@
 		9471BD97183B70ED00BE3771 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				82C5AAFD1AB7B0560005429A /* math */,
+				82C5AAEE1AB278450005429A /* shaders */,
+				82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */,
+				82C5AAE01AB027440005429A /* SGSDL2Graphics3D.h */,
+				82C5AAF61AB51E040005429A /* SGSDL2Graphics3DTypes.h */,
 				947756731A183593002CBE9A /* SGSDL2Network.cpp */,
 				947756741A183593002CBE9A /* SGSDL2Network.h */,
 				94FEB50A18582F7900AFF9D7 /* SGSDL2Text.cpp */,
@@ -285,6 +342,8 @@
 				945BB79F1857C5B000148796 /* test_input.h */,
 				94F995171A26A98B00AF0613 /* test_network.cpp */,
 				94F995181A26A98B00AF0613 /* test_network.h */,
+				82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */,
+				82C5AAE91AB14D7D0005429A /* test_graphics3d.h */,
 			);
 			name = Test;
 			sourceTree = "<group>";
@@ -292,6 +351,7 @@
 		9471BDA1183B72A900BE3771 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				82C5AAF11AB2865C0005429A /* GLKit.framework */,
 				94FEB5161858302500AFF9D7 /* libz.dylib */,
 				94FEB51318582FEE00AFF9D7 /* libbz2.dylib */,
 				942DBEE5183C213300876830 /* Carbon.framework */,
@@ -348,9 +408,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				94BF146F18530C79004191DF /* SGSDL2Input.h in Headers */,
+				82C5AAF71AB51E040005429A /* SGSDL2Graphics3DTypes.h in Headers */,
+				82C5AB001AB7B1F30005429A /* Vector3f.h in Headers */,
 				94F9951A1A26A98B00AF0613 /* test_network.h in Headers */,
+				82C5AAF41AB4458D0005429A /* SGSDL2Graphics3D.h in Headers */,
 				94BF1473185572AE004191DF /* SGSDL2Audio.h in Headers */,
+				82C5AAFC1AB7B0450005429A /* Matrix4f.h in Headers */,
+				82C5AB011AB7B1F30005429A /* Vector4f.h in Headers */,
 				9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */,
+				82C5AAEC1AB14D7D0005429A /* test_graphics3d.h in Headers */,
 				943177F91855802100A0D403 /* sgBackendUtils.h in Headers */,
 				94FEB51118582F8700AFF9D7 /* test_text.h in Headers */,
 				94FEB50D18582F7900AFF9D7 /* SGSDL2Text.h in Headers */,
@@ -428,6 +494,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				82C5AAEA1AB14D7D0005429A /* test_graphics3d.cpp in Sources */,
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
@@ -436,6 +503,7 @@
 				94FEB50C18582F7900AFF9D7 /* SGSDL2Text.cpp in Sources */,
 				94BF1472185572AE004191DF /* SGSDL2Audio.cpp in Sources */,
 				94BF146E18530C79004191DF /* SGSDL2Input.cpp in Sources */,
+				82C5AAE11AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */,
 				9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -447,6 +515,8 @@
 				943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */,
 				945BB7A01857C5B000148796 /* test_input.cpp in Sources */,
 				94FEB51218582F8D00AFF9D7 /* test_text.cpp in Sources */,
+				82C5AAEB1AB14D7D0005429A /* test_graphics3d.cpp in Sources */,
+				82C5AAE21AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */,
 				942DBED2183C1DBA00876830 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -629,6 +699,12 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					../../external/SDL/include,
+					../../external/SDL_image,
+					../../external/SDL_ttf,
+					../../external/SDL_net,
+					../../external/SDL_mixer,
+					../../external/SDL_gfx,
 				);
 				LD_RUNPATH_SEARCH_PATHS = .;
 				LIBRARY_SEARCH_PATHS = (
@@ -652,6 +728,12 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					../../external/SDL/include,
+					../../external/SDL_image,
+					../../external/SDL_ttf,
+					../../external/SDL_net,
+					../../external/SDL_mixer,
+					../../external/SDL_gfx,
 				);
 				LD_RUNPATH_SEARCH_PATHS = .;
 				LIBRARY_SEARCH_PATHS = (

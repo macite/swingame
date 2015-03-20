@@ -1,0 +1,6 @@
+- Some of the include paths in the build settings are absolute, yet I can still build fine with them
+	They are probably not all needed.
+- Header search paths for the static lib and the test program are different.
+	There are no SDL file in the test program.
+- Each VBO can only be associated with one OpenGL context (not sure of the best way around this, probably have to allow the user to change the current rendering context)
+- Same for VAOs

@@ -40,7 +40,7 @@ hg clone http://hg.libsdl.org/SDL_net	./SDL_net >> setup.log
 if [ $? != 0 ]; then DoExit; fi
 
 echo "   Checking out SDL_gfx"
-svn checkout http://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r29
+svn checkout svn://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r29
 
 # echo "   Cloning SDL_rtf"
 # hg clone http://hg.libsdl.org/SDL_rtf	./SDL_rtf >> setup.log

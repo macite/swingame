@@ -17,7 +17,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    
+	
+	// Note: changing the order of these will break texture border color
     typedef struct sg_color
     {
         float r, g, b, a;
@@ -49,6 +50,22 @@ extern "C" {
     
     typedef sg_system_data * psg_system_data;
     typedef psg_system_data (sg_system_data_fn)();
+	
+	
+	//
+	// 3d functions
+	//
+	// TODO
+	
+	
+	//
+	// 3d struct (no need to use typedef as it is pointless in c++)
+	//
+	struct sg_graphics3d_interface
+	{
+		// TODO
+	};
+	
 
     //
     // Text related function pointers
@@ -205,7 +222,8 @@ extern "C" {
     typedef struct sg_graphics_interface
     {
         sg_new_surface_fn       * open_window;
-        
+//		sg_new_surface_fn		* open_3d_window;
+		
         sg_drawing_surface_proc * close_drawing_surface;
         sg_drawing_surface_proc * refresh_window;
         

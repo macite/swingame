@@ -17,6 +17,7 @@
 #include "test_input.h"
 #include "test_text.h"
 #include "test_network.h"
+#include "test_graphics3d.h"
 
 #define SHAPE_COUNT 60
 
@@ -35,7 +36,8 @@ enum test_options
     AUDIO = 8,
     INPUT = 16,
     TEXT = 32,
-    NETWORK = 64
+    NETWORK = 64,
+	GRAPHICS3D = 128
 }; 
 
 enum test_drawing_options 
@@ -64,6 +66,7 @@ void print_options()
     cout << "16: input "  << endl; 
     cout << "32: text "  << endl;
     cout << "64: network "  << endl;
+	cout << "128: graphics" << endl;
 }
 
 void print_drawing_options() 
@@ -1015,6 +1018,81 @@ void output_system_details()
     cout << "Time is " << _sg_functions->utils.get_ticks() << endl;
 }
 
+//#include <SDL.h>
+//#include <OpenGL/gl3.h>
+//
+//int main(int argc, const char *argv[])
+//{
+//	cout << "Calling load_sg..." << endl;
+//	_sg_functions = sg_load(get_input_callbacks());
+//	
+//	SDL_Window *mainwindow; /* Our window handle */
+//	SDL_GLContext maincontext; /* Our opengl context handle */
+// 
+//	if (SDL_Init(SDL_INIT_EVERYTHING) < 0) /* Initialize SDL's Video subsystem */
+//		cout << "Unable to initialize SDL" << endl; /* Or die on error */
+// 
+//	/* Request opengl 3.2 context.
+//	 * SDL doesn't have the ability to choose which profile at this time of writing,
+//	 * but it should default to the core profile */
+//	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+//	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+//	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+//	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+// 
+//	/* Turn on double buffering with a 24bit Z buffer.
+//	 * You may need to change this to 16 or 32 for your system */
+//	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+//	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+// 
+//	/* Create our window centered at 512x512 resolution */
+//	mainwindow = SDL_CreateWindow("Testing", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+//								  512, 512, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+//	if (!mainwindow) /* Die if creation failed */
+//		cout << "Unable to create window" << endl;
+// 
+////	checkSDLError(__LINE__);
+// 
+//	/* Create our opengl context and attach it to our window */
+//	maincontext = SDL_GL_CreateContext(mainwindow);
+////	checkSDLError(__LINE__);
+// 
+// 
+//	/* This makes our buffer swap syncronized with the monitor's vertical refresh */
+//	SDL_GL_SetSwapInterval(1);
+//	
+//	const unsigned char *string = glGetString(GL_VERSION);
+//	if (string != nullptr) cout << "OPENGL VERSION: " << string << endl;
+//	else cout << "OPENGL ERROR";
+// 
+//	/* Clear our buffer with a red background */
+//	glClearColor ( 1.0, 0.0, 0.0, 1.0 );
+//	glClear ( GL_COLOR_BUFFER_BIT );
+//	/* Swap our back buffer to the front */
+//	SDL_GL_SwapWindow(mainwindow);
+//	/* Wait 2 seconds */
+//	SDL_Delay(2000);
+// 
+//	/* Same as above, but green */
+//	glClearColor ( 0.0, 1.0, 0.0, 1.0 );
+//	glClear ( GL_COLOR_BUFFER_BIT );
+//	SDL_GL_SwapWindow(mainwindow);
+//	SDL_Delay(2000);
+// 
+//	/* Same as above, but blue */
+//	glClearColor ( 0.0, 0.0, 1.0, 1.0 );
+//	glClear ( GL_COLOR_BUFFER_BIT );
+//	SDL_GL_SwapWindow(mainwindow);
+//	SDL_Delay(2000);
+// 
+//	/* Delete our opengl context, destroy our window, and shutdown SDL */
+//	SDL_GL_DeleteContext(maincontext);
+//	SDL_DestroyWindow(mainwindow);
+//	SDL_Quit();
+//	
+//	return 0;
+//}
+
 int main(int argc, const char * argv[])
 {
     cout << "Starting driver backend test" << endl;
@@ -1026,7 +1104,8 @@ int main(int argc, const char * argv[])
         return -1;
     }
 
-    test_bitmap_loading_saving();
+	// This must be disabled to allow for an opengl context
+//	test_bitmap_loading_saving();
 
     cout << " Which tests do you want to run? " << endl; 
     print_options(); 
@@ -1034,7 +1113,7 @@ int main(int argc, const char * argv[])
     int test_run = 0; 
     int test_drawing_run = INT_MAX; 
     scanf("%d", &test_run); 
-    if (test_run == 0) 
+    if (test_run == 0)
     {
       test_run |= 255; 
     }
@@ -1046,7 +1125,7 @@ int main(int argc, const char * argv[])
     }
 
     output_system_details();
-    
+	
     if (test_run & BASIC_DRAWING && ! test_basic_drawing(test_drawing_run) )
     {
         cout << "Basic drawing failed with error: " << endl;
@@ -1092,7 +1171,12 @@ int main(int argc, const char * argv[])
     {
         test_network();
     }
-    
+	
+	if (test_run & GRAPHICS3D)
+	{
+		test_graphics3d();
+	}
+		
     _sg_functions->finalise();
     cout << "Success" << endl;
     

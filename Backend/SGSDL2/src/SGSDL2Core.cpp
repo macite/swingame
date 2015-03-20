@@ -49,8 +49,16 @@ void init_sgsdl2()
         return;
     }
 
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-    
+	// This may need to be changed on windows systems.
+	// SDL by default picks the first available driver for the system.
+	// http://wiki.libsdl.org/SDL_HINT_RENDER_DRIVER?highlight=%28%5CbCategoryDefine%5Cb%29%7C%28SGHints%29
+	// On second thoughts maybe not
+//    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+	
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -59,8 +67,6 @@ void init_sgsdl2()
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,  8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,   8);
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE,  8);
-    
-    SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL,  1);
     
 //    printf("Network port C a-1: %p\n", _functions.network.network_port);
     

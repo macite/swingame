@@ -326,6 +326,11 @@ void _sgsdl2_destroy_window(sg_window_be *window_be)
     _sgsdl2_remove_window(window_be);
     
     SDL_DestroyRenderer(window_be->renderer);
+	// Destroy context if needed
+	if (window_be->context)
+	{
+//		SDL_GL_DeleteContext(window_be->context);
+	}
     SDL_DestroyWindow(window_be->window);
     if (window_be->backing)
     {
@@ -435,6 +440,43 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 //--------------------------------------------------------------------------------------
 
 
+bool _sgsdl2_open_3d_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
+{
+	window_be->window = SDL_CreateWindow(title,
+										 SDL_WINDOWPOS_CENTERED,
+										 SDL_WINDOWPOS_CENTERED,
+										 width,
+										 height,
+										 options | SDL_WINDOW_OPENGL);
+	if ( ! window_be->window)
+	{
+		set_error_state(SDL_GetError());
+		return false;
+	}
+	
+	//std::cout << "Renderer is " << window_be->renderer << std::endl;
+	
+//	SDL_SetRenderDrawColor(window_be->renderer, 120, 120, 120, 255);
+//	SDL_RenderClear(window_be->renderer);
+//	SDL_RenderPresent(window_be->renderer);
+//	SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+//	
+//	window_be->backing = SDL_CreateTexture(window_be->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, width, height);
+//	
+//	SDL_SetRenderTarget(window_be->renderer, window_be->backing);
+//	SDL_SetRenderDrawBlendMode(window_be->renderer, SDL_BLENDMODE_BLEND);
+//	SDL_RenderClear(window_be->renderer);
+	
+	window_be->context = SDL_GL_CreateContext(window_be->window);
+	SDL_GL_MakeCurrent(window_be->window, window_be->context);
+	SDL_GL_SetSwapInterval(1);
+	
+	// This must be commented to allow for a proper opengl context
+//	_sgsdl2_add_window(window_be);
+	
+	return true;
+}
+
 bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
 {
     window_be->window = SDL_CreateWindow(title,
@@ -506,6 +548,44 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     result.width = width;
     result.height = height;
+	
+	return result;
+}
+
+sg_drawing_surface sgsdl2_open_3d_window(const char *title, int width, int height)
+{
+	sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
+	
+	sg_window_be *      window_be;
+	
+	window_be = (sg_window_be *) malloc(sizeof(sg_window_be));
+	
+	if ( ! window_be )
+	{
+		set_error_state("Unable to open window: Out of memory");
+		return result;
+	}
+	
+	if ( ! _sgsdl2_open_3d_window(title, width, height, SDL_WINDOW_SHOWN, window_be) )
+	{
+		free ( window_be );
+		return result;
+	}
+	
+	result._data = window_be;
+	
+	window_be->clipped = false;
+	window_be->clip = {0,0,0,0};
+	
+	window_be->close_requested = false;
+	window_be->has_focus = false;
+	window_be->mouse_over = false;
+	window_be->shown = true;
+	
+	result.kind = SGDS_Window;
+	
+	result.width = width;
+	result.height = height;
 	
 	return result;
 }
@@ -1443,7 +1523,9 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
 
 void sgsdl2_load_graphics_fns(sg_interface * functions)
 {
-    functions->graphics.open_window = &sgsdl2_open_window;
+//    functions->graphics.open_window = &sgsdl2_open_window;
+	functions->graphics.open_window = &sgsdl2_open_3d_window;
+//	functions->graphics.open_3d_window = &sgsdl2_open_3d_window;
     functions->graphics.close_drawing_surface = &sgsdl2_close_drawing_surface;
     functions->graphics.refresh_window = &sgsdl2_refresh_window;
     functions->graphics.clear_drawing_surface = &sgsdl2_clear_drawing_surface;

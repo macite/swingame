@@ -30,7 +30,8 @@ void _sgsdl2_complete_render(sg_drawing_surface* surface, unsigned int idx);
 typedef struct sg_window_be
 {
     SDL_Window *    window;
-    SDL_Renderer *  renderer;
+	SDL_Renderer *  renderer;	// 2D renderer
+	SDL_GLContext	context;	// 3D context
     SDL_Texture *   backing;
     bool            clipped;
     SDL_Rect        clip;
