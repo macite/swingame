@@ -45,12 +45,112 @@ void sgsdl2_draw_test(sg_drawing_surface *surface);
 
 
 //
+// Scenes
+//
+#pragma mark Scenes
+
+// Creates an empty scene
+sgsdl2_scene* sgsdl2_make_scene();
+
+// Sets the active camera for a scene
+void sgsdl2_set_active_camera(sgsdl2_scene * const scene, sgsdl2_camera * const new_active_cam);
+
+// Adds an element to the root set of this scene
+void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element * const element);
+
+// Removes an element from the root set of this scene
+// Assumes the element has no parent
+void sgsdl2_remove_element_from_root(sgsdl2_scene_element * const element);
+
+// Starts caching a new element
+// Assumes the element has already been added to the node tree.
+//void sgsdl2_add_element_to_caches(sgsdl2_scene_element * const element);
+
+// Removes an element from any scene caches
+// Used to seperate the node tree from the cache system
+//void sgsdl2_remove_element_from_caches(sgsdl2_scene_element * const element);
+
+// Adds an element reference to the root set of this scene
+// Alias of sgsdl2_add_element_to_root();
+void sgsdl2_add_element(sgsdl2_scene * const scene, sgsdl2_scene_element * const element, sgsdl2_scene_element * const parent = nullptr);
+
+// Depending on where the element is in the tree, removes it from the root set,
+// or dettaches it from its parent
+void sgsdl2_remove_element(sgsdl2_scene_element * const element);
+
+// Attaches an element to a parent (automatically detaches it from its previous
+// parent if it had one)
+void sgsdl2_attach_element(sgsdl2_scene_element * const parent, sgsdl2_scene_element * const child);
+
+// Dettaches an element from its parent and makes its new parent the root scene
+void sgsdl2_dettach_from_parent(sgsdl2_scene_element * const element);
+
+// Flags a shader to be updated by the scene
+void sgsdl2_add_shader(sgsdl2_scene * const scene, GLuint const shader);
+
+// shader will no longer be updated by the scene
+void sgsdl2_remove_shader(sgsdl2_scene * const scene, GLuint const shader);
+
+// Cleans up all the resources used by a scene and then deletes the pointer
+void sgsdl2_delete_scene(sgsdl2_scene *scene);
+
+
+
+//
+// Transforms
+//
+#pragma mark Transforms
+
+// Invalidates the model transform on the given element
+void sgsdl2_invalidate_transform(sgsdl2_scene_element * const element);
+
+// Calculates the model transform for a given element
+// Walking the parent chain if needed
+Matrix4f sgsdl2_calculate_model_transform(sgsdl2_scene_element * const element);
+
+// Calculates the view transform for a camera
+Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element);
+
+Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect);
+
+
+
+//
+// Elements
+//
+#pragma mark Elements
+
+// Creates an empty element at the origin facing -z
+//sgsdl2_scene_element* sgsdl2_make_element();
+
+// Creates an element at the given location
+//sgsdl2_scene_element* sgsdl2_make_element(Vector3f location, Vector3f direction, Vector3f up);
+
+
+
+//
+// Cameras
+//
+#pragma mark Cameras
+
+// Creates the default camera
+sgsdl2_camera* sgsdl2_make_camera();
+
+// Creates a camera at a location
+sgsdl2_camera* sgsdl2_make_camera(Vector3f const location, Vector3f const direction, Vector3f const up);
+
+
+
+//
 // Geometry
 //
 #pragma mark Geometry
 
-// Creates and empty geometry
-sgsdl2_geometry sgsdl2_make_geometry();
+// Creates a basic geometry object
+sgsdl2_geometry* sgsdl2_make_geometry();
+
+// Creates a geometry object at a location
+sgsdl2_geometry* sgsdl2_make_geometry(Vector3f const location, Vector3f const direction, Vector3f const up);
 
 // Creates a new vbo with the given vertex data in it
 // and attaches it to an existing geometry,
@@ -58,14 +158,14 @@ sgsdl2_geometry sgsdl2_make_geometry();
 // Assumes the data is tightly packed.
 // count is the number of elements in the vertices array
 // dimensions is the number of floats per vertex, ie. 3 for 3D.
-void sgsdl2_attach_vertices(sgsdl2_geometry &geometry, GLfloat const * const vertices, GLuint const count, GLint const dimensions);
+void sgsdl2_attach_vertices(sgsdl2_geometry *geometry, GLfloat const * const vertices, GLuint const count, GLint const dimensions);
 
 // Creates a new vbo with the given index data in it
 // and attaches it to an existing geometry,
 // deleting the existing vbo if needed.
 // Assumes the data is tightly packed.
 // count is the number of elements in the indices array
-void sgsdl2_attach_indices(sgsdl2_geometry &geometry, GLushort const * const indices, GLuint const count);
+void sgsdl2_attach_indices(sgsdl2_geometry *geometry, GLushort const * const indices, GLuint const count);
 
 // Creates a new vbo with the given color data in it
 // and attaches it to an existing geometry,
@@ -73,7 +173,7 @@ void sgsdl2_attach_indices(sgsdl2_geometry &geometry, GLushort const * const ind
 // Assumes the data is tightly packed.
 // count is the number of elements in the color array
 // dimensions is the number of floats per color, ie. 3 for rgb.
-void sgsdl2_attach_colors(sgsdl2_geometry &geometry, const GLfloat *colors, const GLuint count, const GLint dimensions);
+void sgsdl2_attach_colors(sgsdl2_geometry *geometry, const GLfloat *colors, const GLuint count, const GLint dimensions);
 
 // Creates a new vbo with the given color data in it
 // and attaches it to an existing geometry,
@@ -81,7 +181,7 @@ void sgsdl2_attach_colors(sgsdl2_geometry &geometry, const GLfloat *colors, cons
 // Assumes the data is tightly packed.
 // count is the number of elements in the color array
 // dimensions is the number of floats per color, ie. 3 for rgb.
-void sgsdl2_attach_texcoords(sgsdl2_geometry &geometry, const GLfloat *coords, const GLuint count);
+void sgsdl2_attach_texcoords(sgsdl2_geometry *geometry, const GLfloat *coords, const GLuint count);
 
 // Creates a geometry with all the given data.
 // If any of the arrays posses a count that is zero, that data is ignored.
@@ -94,10 +194,29 @@ void sgsdl2_attach_texcoords(sgsdl2_geometry &geometry, const GLfloat *coords, c
 // Returns true if the geometry has the minimum amount of information to be rendered.
 // This does not validate the data on the opengl side,
 // just that the required buffers are non-zero
-bool sgsdl2_can_geometry_be_rendered(sgsdl2_geometry const geometry);
+bool sgsdl2_can_geometry_be_rendered(sgsdl2_geometry const * const geometry);
 
-// Deletes each of the VBOs attached to this geometry
-void sgsdl2_delete_geometry(sgsdl2_geometry geometry);
+// Deletes each of the VBOs attached to this geometry and then deletes the pointer
+void sgsdl2_delete_geometry(sgsdl2_geometry *geometry);
+
+
+
+//
+// Lights
+//
+#pragma mark Lights
+
+// Creates a basic white light
+sgsdl2_light* sgsdl2_make_light();
+
+// Creates a basic white light at a location
+sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up);
+
+// Creates a custom light
+sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const intensities, float attenuation);
+
+// Deletes a light and removes it from any scene caches and then deletes the pointer
+void sgsdl2_delete_light(sgsdl2_light *light);
 
 
 
@@ -107,21 +226,26 @@ void sgsdl2_delete_geometry(sgsdl2_geometry geometry);
 #pragma mark Textures
 
 // Creates an empty texture
-sgsdl2_texture sgsdl2_make_texture();
+sgsdl2_texture* sgsdl2_make_texture();
 
 // Changes the wrapping parameters for a texture
-void sgsdl2_change_texture_wrapping(sgsdl2_texture const texture, GLint const wrapping_s = GL_REPEAT, GLint const wrapping_t = GL_REPEAT, sg_color const color = {0, 0, 0, 1});
+// The value of -1 means don't change that value
+void sgsdl2_change_texture_wrapping(sgsdl2_texture const * const texture, GLint const wrapping_s = -1, GLint const wrapping_t = -1, sg_color const color = {0, 0, 0, 1});
 
 // Changes the filtering for a texture
-// Min is when the image is too small, mag is when the image is too big
-void sgsdl2_change_texture_filtering(sgsdl2_texture const texture, GLint const min = GL_LINEAR, GLint const mag = GL_LINEAR);
+// Min is when the image is too small, mag is when the image is too big ???
+// The value of -1 means don't change that value
+void sgsdl2_change_texture_filtering(sgsdl2_texture const * const texture, GLint const min = -1, GLint const mag = -1);
 
 // Generates texture mipmaps
-void sgsdl2_generate_texture_mipmaps(sgsdl2_texture const texture);
+void sgsdl2_generate_texture_mipmaps(sgsdl2_texture const * const texture);
 
 // Attaches image data to the texture
-bool sgsdl2_attach_texture_image(sgsdl2_texture const texture, string const image_path, GLenum format);
-bool sgsdl2_attach_texture_image(sgsdl2_texture const texture, const char * image_path, GLenum format);
+bool sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, string const image_path, GLenum format);
+bool sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, const char * image_path, GLenum format);
+
+// Deletes the texture from opengl then deletes the pointer
+void sgsdl2_delete_texture(sgsdl2_texture *texture);
 
 
 
@@ -133,19 +257,25 @@ bool sgsdl2_attach_texture_image(sgsdl2_texture const texture, const char * imag
 // Renders a geometry using the default shaders.
 // transform is a 4x4 matrix representing the geometry location, direction and up vectors.
 // SHOULD NOT BE USED
-void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform);
+//void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform);
 
-// Renders a geometry in a solid color
-void sgsdl2_solid_render_geometry(sgsdl2_geometry const geometry, sg_color const color, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
+// Renders a single piece of geometry in a solid color
+void sgsdl2_solid_render_geometry(sgsdl2_geometry const * const geometry, sg_color const color, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
-// Just renders a geometry
-void sgsdl2_render_geometry(sgsdl2_geometry const geometry, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
+// Renders a single piece of geometry using vertex colors
+void sgsdl2_render_geometry(sgsdl2_geometry const * const geometry, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
-// Renders geometry with a texture
-void sgsdl2_texture_render_geometry(sgsdl2_geometry geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
+// Renders a single piece of geometry with a texture
+void sgsdl2_texture_render_geometry(sgsdl2_geometry const * const geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
+
+// Renders an entire scene
+void sgsdl2_render_scene(sgsdl2_scene *scene);
+
+// Renders a single element and all its children recursively
+void sgsdl2_render_element(sgsdl2_scene_element *element);
 
 // Returns the handle of the default shaders that is best equipped to render the given geometry.
-GLuint sgsdl2_select_shader(sgsdl2_geometry const geometry);
+GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry);
 
 
 
