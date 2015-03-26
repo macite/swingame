@@ -34,7 +34,7 @@ CS_FLAGS="-optimize+"
 SG_INC="-I${APP_PATH}/lib/"
 
 if [ "$OS" = "$WIN" ]; then
-   export PATH=$APP_PATH/lib:/c/Program\ Files\ \(x86\)/Mono/bin/:$PATH:/c/Windows/Microsoft.NET/Framework/v4.0.30319
+   export PATH=$APP_PATH/lib:/c/Program\ Files\ \(x86\)/Mono/bin/:/c/Program\ Files/Mono/bin/:$PATH:/c/Windows/Microsoft.NET/Framework/v4.0.30319
    GMCS_FLAGS="$GMCS_FLAGS -platform:x86"
 fi
 
