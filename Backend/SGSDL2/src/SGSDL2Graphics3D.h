@@ -62,6 +62,9 @@ void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element
 // Assumes the element has no parent
 void sgsdl2_remove_element_from_root(sgsdl2_scene_element * const element);
 
+// Removes an element from the light cache
+void sgsdl2_remove_light_from_cache(sgsdl2_light * const light);
+
 // Starts caching a new element
 // Assumes the element has already been added to the node tree.
 //void sgsdl2_add_element_to_caches(sgsdl2_scene_element * const element);
@@ -159,6 +162,14 @@ sgsdl2_geometry* sgsdl2_make_geometry(Vector3f const location, Vector3f const di
 // count is the number of elements in the vertices array
 // dimensions is the number of floats per vertex, ie. 3 for 3D.
 void sgsdl2_attach_vertices(sgsdl2_geometry *geometry, GLfloat const * const vertices, GLuint const count, GLint const dimensions);
+
+// Creates a new vbo with the given normal data in it
+// and attaches it to an existing geometry,
+// deleting the existing vbo if needed.
+// Assumes the data is tightly packed.
+// count is the number of elements in the normals array
+// dimensions is the number of floats per normal, ie. 3 for 3D.
+void sgsdl2_attach_normals(sgsdl2_geometry *geometry, GLfloat const * const normals, GLuint const count, GLint const dimensions);
 
 // Creates a new vbo with the given index data in it
 // and attaches it to an existing geometry,
@@ -260,19 +271,36 @@ void sgsdl2_delete_texture(sgsdl2_texture *texture);
 //void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform);
 
 // Renders a single piece of geometry in a solid color
+__attribute__((deprecated))
 void sgsdl2_solid_render_geometry(sgsdl2_geometry const * const geometry, sg_color const color, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
+__attribute__((deprecated))
 // Renders a single piece of geometry using vertex colors
 void sgsdl2_render_geometry(sgsdl2_geometry const * const geometry, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
+__attribute__((deprecated))
 // Renders a single piece of geometry with a texture
 void sgsdl2_texture_render_geometry(sgsdl2_geometry const * const geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
 // Renders an entire scene
 void sgsdl2_render_scene(sgsdl2_scene *scene);
 
+// Prepares all the lighting data
+void sgsdl2_prepare_lighting(sgsdl2_scene *scene);
+
+// Prepares a single light
+void sgsdl2_recalculate_light(sgsdl2_light *light);
+
 // Renders a single element and all its children recursively
 void sgsdl2_render_element(sgsdl2_scene_element *element);
+
+// Passes the light array to the given shader
+void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_scene * const scene);
+
+// Passes the material data to the shader
+void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const geometry);
+
+void sgsdl2_perform_render(sgsdl2_geometry const * const geometry);
 
 // Returns the handle of the default shaders that is best equipped to render the given geometry.
 GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry);

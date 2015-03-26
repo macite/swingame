@@ -1112,12 +1112,13 @@ int main(int argc, const char * argv[])
 
     int test_run = 0; 
     int test_drawing_run = INT_MAX; 
-    scanf("%d", &test_run); 
+//    scanf("%d", &test_run);
+	test_run = 128;
     if (test_run == 0)
     {
       test_run |= 255; 
     }
-    else if (test_run & BASIC_DRAWING) 
+	else if (test_run & BASIC_DRAWING)
     {
       cout << "Which drawing functions would you like to run? " << endl; 
       print_drawing_options(); 

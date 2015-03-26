@@ -4,10 +4,10 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 proj;
 
-layout(location = 1) in vec3 position; // Stream 0
-layout(location = 3) in vec2 texCoord;
+in vec3 position;
+in vec2 texCoord;
 
-out vec3 fragmentColor;
+out vec3 fragColor;
 out vec2 fragTexCoord;
 
 void main() {

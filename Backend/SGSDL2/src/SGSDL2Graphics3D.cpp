@@ -16,20 +16,34 @@
 using namespace std;
 
 
-// Names and locations of variables in the shaders
-#define SHAD_SOLID_COLOR 	"solidColor"
-#define SHAD_PROJ_MATRIX 	"proj"
-#define SHAD_VIEW_MATRIX 	"view"
-#define SHAD_MODEL_MATRIX 	"model"
-//#define SHAD_LOC_ELEMENTS 	0	// not used
-#define SHAD_LOC_VERTICES 	1
-#define SHAD_LOC_COLORS 	2
-#define SHAD_LOC_TEXTURES	3
+// Uniform names
+#define SHAD_SOLID_COLOR 			"solidColor"
+#define SHAD_PROJ_MATRIX 			"proj"
+#define SHAD_VIEW_MATRIX 			"view"
+#define SHAD_MODEL_MATRIX 			"model"
+#define SHAD_NORM_MODEL_MATRIX 		"normModel"
+#define SHAD_LIGHTS_ARRAY			"lights"
+#define SHAD_MAT_DIFFUSE_COLOR		"material.diffuseColor"
+#define SHAD_MAT_SPECULAR_COLOR		"material.specularColor"
+#define SHAD_MAT_SPECULAR_EXPONENT	"material.specularExponent"
+#define SHAD_MAT_TEXTURE			"material.texture"
+#define SHAD_MAT_USE_TEXTURE		"material.useTexture"
+// Attribute names
+#define SHAD_VERTICES				"position"
+#define SHAD_NORMALS				"normal"
+#define SHAD_COLORS					"vertexColor"
+#define SHAD_TEX_COORDS				"texCoord"
+// Attribute locations
+#define SHAD_LOC_VERTICES 			1
+#define SHAD_LOC_NORMALS			2
+#define SHAD_LOC_COLORS 			3
+#define SHAD_LOC_TEX_COORDS			4
 
 
 
 //
 // Scenes
+//
 #pragma mark Scenes
 
 sgsdl2_scene* sgsdl2_make_scene()
@@ -47,6 +61,12 @@ void sgsdl2_set_active_camera(sgsdl2_scene * const scene, sgsdl2_camera * const 
 
 void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element * const element)
 {
+	// Cache it if it is a light
+	if (element->type == sgsdl2_scene_element_type::LIGHT)
+	{
+		scene->lights.push_back(static_cast<sgsdl2_light*>(element));
+	}
+	
 	scene->elements.push_back(element);
 	element->root = scene;
 }
@@ -56,6 +76,14 @@ void sgsdl2_remove_element_from_root(sgsdl2_scene_element * const element)
 	// Element must belong to a scene for it to be removed
 	if (element->root != nullptr)
 	{
+		// Also remove it from the cache if it is a light
+		if (element->type == sgsdl2_scene_element_type::LIGHT)
+		{
+			sgsdl2_light *light = static_cast<sgsdl2_light*>(element);
+			sgsdl2_remove_light_from_cache(light);
+		}
+		
+		// Remove the element from root set
 		for (vector<sgsdl2_scene_element*>::iterator it = element->root->elements.begin();
 			 it != element->root->elements.end(); ++it)
 		{
@@ -68,12 +96,24 @@ void sgsdl2_remove_element_from_root(sgsdl2_scene_element * const element)
 	}
 }
 
+void sgsdl2_remove_light_from_cache(sgsdl2_light * const light)
+{
+	for (vector<sgsdl2_light*>::iterator it = light->root->lights.begin();
+		 it != light->root->lights.end();
+		 ++it)
+	{
+		if (*it == light)
+		{
+			light->root->lights.erase(it);
+			return;
+		}
+	}
+	cout << "Warning: Light element was not correctly added to scene cache." << endl;
+}
+
 void sgsdl2_add_element(sgsdl2_scene * const scene, sgsdl2_scene_element * const element)
 {
 	sgsdl2_add_element_to_root(scene, element);
-//	scene->elements.push_back(element);
-//	element->root = scene;
-//	sgsdl2_add_element_to_caches(element);
 }
 
 void sgsdl2_remove_element(sgsdl2_scene_element * const element)
@@ -88,7 +128,12 @@ void sgsdl2_remove_element(sgsdl2_scene_element * const element)
 		// Element actually has a parent
 		else
 		{
-//			sgsdl2_dettach_from_parent(element);
+			// Remove it from the cache if it is a light
+			if (element->type == sgsdl2_scene_element_type::LIGHT)
+			{
+				sgsdl2_remove_light_from_cache(static_cast<sgsdl2_light*>(element));
+			}
+			
 			for (vector<sgsdl2_scene_element*>::iterator it = element->parent->children.begin();
 				 it != element->parent->children.end();
 				 ++it)
@@ -129,6 +174,12 @@ void sgsdl2_attach_element(sgsdl2_scene_element * const parent, sgsdl2_scene_ele
 	parent->children.push_back(child);
 	child->parent = parent;
 	child->root = parent->root;
+	
+	// Add it to the cache if it is a light
+	if (child->type == sgsdl2_scene_element_type::LIGHT)
+	{
+		parent->root->lights.push_back(static_cast<sgsdl2_light*>(child));
+	}
 }
 
 void sgsdl2_dettach_from_parent(sgsdl2_scene_element * const element)
@@ -168,8 +219,6 @@ void sgsdl2_delete_scene(sgsdl2_scene *scene)
 {
 	// TODO clean up
 }
-
-
 
 
 
@@ -213,18 +262,28 @@ Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element)
 		// Post multiply by parent matrix
 		trans = multiplyMatrixByMatrix4f(trans, parent_trans);
 	}
+	
+	// Cache the transform if it is a camera
+//	if (element->type == sgsdl2_scene_element_type::CAMERA)
+//	{
+//		sgsdl2_camera *camera = static_cast<sgsdl2_camera*>(element);
+//		camera->view_trans = trans;
+//	}
 	return trans;
 }
 
-Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect)
+Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera * const camera, float aspect)
 {
-	return makeMatrix4fFromProjection(camera->field_of_view, aspect, camera->near_z, camera->far_z);
+	Matrix4f trans = makeMatrix4fFromProjection(camera->field_of_view, aspect, camera->near_z, camera->far_z);
+	camera->proj_trans = trans;
+	return trans;
 }
 
 
 
 //
 // Cameras
+//
 #pragma mark Cameras
 
 sgsdl2_camera* sgsdl2_make_camera()
@@ -236,7 +295,7 @@ sgsdl2_camera* sgsdl2_make_camera(Vector3f const location, Vector3f const direct
 {
 	// TODO this should call the next function down
 	sgsdl2_camera *camera = new sgsdl2_camera();
-	camera->field_of_view = M_PI_4;
+	camera->field_of_view = (float) M_PI_4;
 	camera->near_z = 1;
 	camera->far_z = 100;
 	camera->location = location;
@@ -263,10 +322,11 @@ sgsdl2_geometry* sgsdl2_make_geometry()
 	glGenVertexArrays(1, &geometry->vao);
 	sgsdl2_check_opengl_error("make_geometry: ");
 	
-	geometry->texture = sgsdl2_make_texture();
-	geometry->color = {1, 1, 1, 1};
-	geometry->shader = -1;
+	geometry->texture = nullptr;
+	geometry->color = {1, 0, 1, 1};			// Gross pink color
+	geometry->shader = 0;					// Shader will be automatically selected
 	geometry->type = sgsdl2_scene_element_type::GEOMETRY;
+	geometry->render_solid_color = false;
 	return geometry;
 }
 
@@ -297,6 +357,30 @@ void sgsdl2_attach_vertices(sgsdl2_geometry *geometry, GLfloat const * const ver
 	glEnableVertexAttribArray(SHAD_LOC_VERTICES);
 	glVertexAttribPointer(SHAD_LOC_VERTICES, dimensions, GL_FLOAT, false, 0, 0);
 	sgsdl2_check_opengl_error("attach_vertices@data_format: ");
+	
+	// Unbind buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
+
+void sgsdl2_attach_normals(sgsdl2_geometry *geometry, GLfloat const * const normals, GLuint const count, GLint const dimensions)
+{
+	// Delete the previous buffer if needed
+	if (geometry->vertex_buffer != 0)
+	{
+		glDeleteBuffers(1, &geometry->normal_buffer);
+	}
+	
+	glGenBuffers(1, &geometry->normal_buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, geometry->normal_buffer);
+	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (sizeof(GLfloat) * count), normals, GL_STATIC_DRAW);
+	sgsdl2_check_opengl_error("attach_normals@buffer_data: ");
+	
+	// Specify the format of the data
+	glBindVertexArray(geometry->vao);
+	glEnableVertexAttribArray(SHAD_LOC_NORMALS);
+	glVertexAttribPointer(SHAD_LOC_NORMALS, dimensions, GL_FLOAT, false, 0, 0);
+	sgsdl2_check_opengl_error("attach_normals@data_format: ");
 	
 	// Unbind buffers
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -362,8 +446,8 @@ void sgsdl2_attach_texcoords(sgsdl2_geometry *geometry, const GLfloat *coords, c
 	
 	// Specify the format of the data
 	glBindVertexArray(geometry->vao);
-	glEnableVertexAttribArray(SHAD_LOC_TEXTURES);
-	glVertexAttribPointer(SHAD_LOC_TEXTURES, 2, GL_FLOAT, false, 0, 0);
+	glEnableVertexAttribArray(SHAD_LOC_TEX_COORDS);
+	glVertexAttribPointer(SHAD_LOC_TEX_COORDS, 2, GL_FLOAT, false, 0, 0);
 	sgsdl2_check_opengl_error("attach_texcoords@data_format: ");
 	
 	// Unbind buffers
@@ -401,6 +485,8 @@ sgsdl2_light* sgsdl2_make_light()
 	light->intensities = {{1, 1, 1}};
 	light->attenuation = 1;
 	light->type = sgsdl2_scene_element_type::LIGHT;
+	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
+	light->is_shadow_map_valid = false;
 	return light;
 }
 
@@ -519,8 +605,6 @@ void sgsdl2_delete_texture(sgsdl2_texture *texture)
 
 //void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform)
 //{
-//	// TODO: complete this function
-//	
 //	// Check if the geometry can be rendered
 //	if (!sgsdl2_can_geometry_be_rendered(geometry))
 //	{
@@ -648,21 +732,13 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 		return;
 	}
 	
-	// Calculate the view and proj matrices
-	float window_aspect = scene->surface->width / scene->surface->height;
-	Matrix4f view_trans = sgsdl2_calculate_view_transform(scene->active_camera);
-	Matrix4f proj_trans = sgsdl2_calculate_proj_transform(scene->active_camera, window_aspect);
+	// Recalculates shadowmaps if needed
+	sgsdl2_prepare_lighting(scene);
 	
-	// Pass them to all the shaders
-	for (vector<GLuint>::iterator it = scene->shaders.begin();
-		 it != scene->shaders.end();
-		 ++it)
-	{
-		glUseProgram(*it);
-		glUniformMatrix4fv(glGetUniformLocation(*it, SHAD_VIEW_MATRIX), 1, false, view_trans.m);
-		glUniformMatrix4fv(glGetUniformLocation(*it, SHAD_PROJ_MATRIX), 1, false, proj_trans.m);
-	}
-	glUseProgram(0);
+	// Calculate the view and proj matrices and store them in the camera
+	float window_aspect = scene->surface->width / scene->surface->height;
+	scene->active_camera->view_trans = sgsdl2_calculate_view_transform(scene->active_camera);
+	scene->active_camera->proj_trans = sgsdl2_calculate_proj_transform(scene->active_camera, window_aspect);
 	
 	// Iterate through the scene
 	for (vector<sgsdl2_scene_element*>::iterator it = scene->elements.begin();
@@ -671,6 +747,30 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 	{
 		sgsdl2_render_element(*it);
 	}
+}
+
+void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
+{
+	for (vector<sgsdl2_light*>::iterator it = scene->lights.begin();
+		 it != scene->lights.end();
+		 ++it)
+	{
+		if ((*it)->shadow_type != sgsdl2_shadowing_type::NONE)
+		{
+			// Light is dynamic, or it is static and invalid
+			if ((*it)->shadow_type == sgsdl2_shadowing_type::DYNAMIC
+				|| ((*it)->shadow_type == sgsdl2_shadowing_type::STATIC
+					&& !(*it)->is_shadow_map_valid))
+			{
+				sgsdl2_recalculate_light(*it);
+			}
+		}
+	}
+}
+
+void sgsdl2_recalculate_light(sgsdl2_light *light)
+{
+	// TODO perform render pass
 }
 
 void sgsdl2_render_element(sgsdl2_scene_element *element)
@@ -691,36 +791,13 @@ void sgsdl2_render_element(sgsdl2_scene_element *element)
 		GLuint shader = sgsdl2_select_shader(geometry);
 		glUseProgram(shader);
 		
-		// Generate and bind the model matrix
-		Matrix4f model_trans = sgsdl2_calculate_model_transform(element);
-		glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_MODEL_MATRIX), 1, false, model_trans.m);
+		// Assigns light uniforms and shadow map array
+		sgsdl2_pass_scene_data_to_shader(shader, geometry->root);
 		
-		// Pass any other needed uniforms
-		if (geometry->render_solid_color)
-		{
-			glUniform3f(glGetUniformLocation(shader, SHAD_SOLID_COLOR), geometry->color.r, geometry->color.g, geometry->color.b);
-		}
-		else if (geometry->texture != nullptr)
-		{
-			glBindTexture(GL_TEXTURE_2D, geometry->texture->handle);
-		}
-		sgsdl2_check_opengl_error("render_element.uniforms: ");
+		// Assigns the material data and model matrices
+		sgsdl2_pass_material_data_to_shader(shader, geometry);
 		
-		
-		// Start the rendering process (same no matter what other data is present)
-		glBindVertexArray(geometry->vao);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
-		glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindVertexArray(0);
-		sgsdl2_check_opengl_error("render_element.render: ");
-		
-		
-		// Unbind the texture if needed
-		if (geometry->texture != nullptr)
-		{
-			glBindTexture(GL_TEXTURE_2D, 0);
-		}
+		sgsdl2_perform_render(geometry);
 		
 		glUseProgram(0);
 	}
@@ -734,6 +811,83 @@ void sgsdl2_render_element(sgsdl2_scene_element *element)
 	}
 }
 
+void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_scene * const scene)
+{
+	// Light data
+	int i = 0;
+	for (vector<sgsdl2_light*>::iterator it = scene->lights.begin();
+		 it != scene->lights.end();
+		 ++it, ++i)
+	{
+		sgsdl2_light *light = *it;
+		string uniformName = SHAD_LIGHTS_ARRAY;
+		uniformName += "[" + to_string(i) + "]";
+		
+		int loc1 = glGetUniformLocation(shader, (uniformName + ".position").c_str());
+		int loc2 = glGetUniformLocation(shader, (uniformName + ".intensities").c_str());
+		int loc3 = glGetUniformLocation(shader, (uniformName + ".attenuation").c_str());
+		
+		glUniform3f(loc1, light->location.x, light->location.y, light->location.z);
+		glUniform3f(loc2, light->intensities.x, light->intensities.y, light->intensities.z);
+		glUniform1f(loc3, light->attenuation);
+		glUniform1f(glGetUniformLocation(shader, (uniformName + ".ambientCoefficient").c_str()), light->ambientCoefficient);
+		// TODO pass shadowmap
+		// TODO pass booleans
+	}
+	glUniform1i(glGetUniformLocation(shader, "numberOfLights"), i);
+	
+	// Matrices
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_VIEW_MATRIX), 1, false, scene->active_camera->view_trans.m);
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_PROJ_MATRIX), 1, false, scene->active_camera->proj_trans.m);
+	
+	// Camera location
+	glUniform3f(glGetUniformLocation(shader, "cameraPosition"), scene->active_camera->location.x, scene->active_camera->location.y, scene->active_camera->location.z);
+	
+	sgsdl2_check_opengl_error("pass_scene_data_to_shaders: ");
+}
+
+void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const geometry)
+{
+	// Generate and bind additional matrices
+	Matrix4f model_trans = sgsdl2_calculate_model_transform(geometry);
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_MODEL_MATRIX), 1, false, model_trans.m);
+	
+	// Pass material data
+	sgsdl2_material *mat = geometry->material;
+	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_DIFFUSE_COLOR), mat->diffuse_color.r, mat->diffuse_color.g, mat->diffuse_color.b);
+	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_COLOR), mat->specular_color.r, mat->specular_color.g, mat->specular_color.b);
+	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_EXPONENT), mat->specular_exponent);
+	
+	// Texture
+	if (glIsTexture(mat->texture))
+	{
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, geometry->material->texture);
+		int matLoc = glGetUniformLocation(shader, SHAD_MAT_TEXTURE);
+//		int matLoc = glGetUniformLocation(shader, "testTexture");
+		glUniform1i(matLoc, 0);
+		glUniform1i(glGetUniformLocation(shader, SHAD_MAT_USE_TEXTURE), 1);
+	}
+	else
+	{
+		glUniform1i(glGetUniformLocation(shader, SHAD_MAT_USE_TEXTURE), 0);
+	}
+	
+	sgsdl2_check_opengl_error("pass_material_data_to_shaders: ");
+		
+}
+
+void sgsdl2_perform_render(sgsdl2_geometry const * const geometry)
+{
+	// Start the rendering process (same no matter what other data is present)
+	glBindVertexArray(geometry->vao);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
+	glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	sgsdl2_check_opengl_error("perform_render: ");
+}
+
 GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry)
 {
 	// Check for color override
@@ -742,26 +896,43 @@ GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry)
 		return geometry->root->default_solid_shader;
 	}
 	
-	// Check if the geometry knows its shader
-	if (geometry->shader == -1)
+	// Determine the shader
+	switch (geometry->material->shader)
 	{
-		// Tex coords are present
-		if (geometry->texcoords_buffer > 0)
+		case SHADER_DEFAULT_SOLID:
+			return geometry->root->default_solid_shader;
+			break;
+		case SHADER_DEFAULT_VERTEX_COLOR:
+			return geometry->root->default_vertex_color_shader;
+			break;
+		case SHADER_DEFAULT_TEXTURE:
+			return geometry->root->default_texture_shader;
+			break;
+		case SHADER_UNSELECTED:
 		{
-			geometry->shader = geometry->root->default_texture_shader;
+			// Tex coords and texture are present
+			if (geometry->texcoords_buffer > 0 && geometry->texture != nullptr)
+			{
+				return geometry->root->default_texture_shader;
+			}
+			// Vertex colors are present
+			else if (geometry->color_buffer > 0)
+			{
+				return geometry->root->default_vertex_color_shader;
+			}
+			// Fallback
+			else
+			{
+				return geometry->root->default_solid_shader;
+			}
 		}
-		// Vertex colors are present
-		else if (geometry->color_buffer > 0)
-		{
-			geometry->shader = geometry->root->default_vertex_color_shader;
-		}
-		// Fallback
-		else
-		{
-			geometry->shader = geometry->root->default_solid_shader;
-		}
+			break;
+			
+			// Geometry knows what shader it wants to use
+		default:
+			return (GLuint) geometry->material->shader;
+			break;
 	}
-	return geometry->shader;
 }
 
 
@@ -818,6 +989,12 @@ bool sgsdl2_make_shader_program(GLuint const * const shaders, int const count, G
 	{
 		glAttachShader(program, shaders[i]);
 	}
+	
+	// Set the default locations for attributes
+	glBindAttribLocation(program, SHAD_LOC_VERTICES, SHAD_VERTICES);
+	glBindAttribLocation(program, SHAD_LOC_NORMALS, SHAD_NORMALS);
+	glBindAttribLocation(program, SHAD_LOC_COLORS, SHAD_COLORS);
+	glBindAttribLocation(program, SHAD_LOC_TEX_COORDS, SHAD_TEX_COORDS);
 	
 	glLinkProgram(program);
 	GLint isLinked = 0;

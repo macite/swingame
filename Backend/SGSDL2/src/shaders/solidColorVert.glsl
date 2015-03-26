@@ -6,11 +6,11 @@ uniform mat4 proj;
 
 uniform vec3 solidColor;
 
-layout(location = 1) in vec3 position; // Stream 0
+in vec3 position;
 
-out vec3 fragmentColor;
+out vec3 fragColor;
 
 void main() {
-	fragmentColor = solidColor;
+	fragColor = solidColor;
 	gl_Position = proj * view * model * vec4(position, 1.0);
 }

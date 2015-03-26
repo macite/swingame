@@ -1,6 +1,6 @@
 #version 330
 
-in vec3 fragmentColor;
+in vec3 fragColor;
 in vec2 fragTexCoord;
 
 out vec4 finalColor;

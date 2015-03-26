@@ -119,6 +119,8 @@
 		82C5AB031AB8098D0005429A /* vertexColorVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = vertexColorVert.glsl; path = ../../src/shaders/vertexColorVert.glsl; sourceTree = "<group>"; };
 		82C5AB041AB8F01E0005429A /* textureFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureFrag.glsl; path = ../../src/shaders/textureFrag.glsl; sourceTree = "<group>"; };
 		82C5AB051AB8F01E0005429A /* textureVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureVert.glsl; path = ../../src/shaders/textureVert.glsl; sourceTree = "<group>"; };
+		82E026131AC0E643001758B3 /* lightVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = lightVert.glsl; path = ../../src/shaders/lightVert.glsl; sourceTree = "<group>"; };
+		82E026141AC0FBF3001758B3 /* lightFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = lightFrag.glsl; path = ../../src/shaders/lightFrag.glsl; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
 		942DBED3183C202F00876830 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		942DBED5183C203900876830 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -241,6 +243,8 @@
 				82C5AB051AB8F01E0005429A /* textureVert.glsl */,
 				82C5AAF81AB51E1D0005429A /* solidColorFrag.glsl */,
 				82C5AAF91AB51E1D0005429A /* solidColorVert.glsl */,
+				82E026131AC0E643001758B3 /* lightVert.glsl */,
+				82E026141AC0FBF3001758B3 /* lightFrag.glsl */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
