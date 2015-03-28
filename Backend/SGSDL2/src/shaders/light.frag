@@ -38,12 +38,8 @@ out vec4 finalColor;
 
 void main() {
 	vec3 normal = normalize(mat3(normalModel) * fragNormal);
-//	vec3 normal = normalize(transpose(inverse(mat3(model))) * fragNormal);
-//	vec3 normal = fragNormal;
 	vec3 surfacePos = vec3(model) * fragCoord;
 	vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
-	
-	vec1 normal;
 
 	vec4 surfaceColor;
 	if (material.useTexture)
