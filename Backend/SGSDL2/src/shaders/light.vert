@@ -7,7 +7,7 @@ struct LightData
 	vec3 intensities;
 	float attenuation;
 	float ambientCoefficient;
-	//	sampler2D shadowMap;
+//	sampler2D shadowMap;
 };
 
 struct MaterialData

@@ -110,17 +110,17 @@
 		82C5AAE91AB14D7D0005429A /* test_graphics3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_graphics3d.h; path = ../../../Test/src/test_graphics3d.h; sourceTree = "<group>"; };
 		82C5AAF11AB2865C0005429A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		82C5AAF61AB51E040005429A /* SGSDL2Graphics3DTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Graphics3DTypes.h; path = ../../src/SGSDL2Graphics3DTypes.h; sourceTree = "<group>"; };
-		82C5AAF81AB51E1D0005429A /* solidColorFrag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = solidColorFrag.glsl; path = ../../src/shaders/solidColorFrag.glsl; sourceTree = "<group>"; };
-		82C5AAF91AB51E1D0005429A /* solidColorVert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = solidColorVert.glsl; path = ../../src/shaders/solidColorVert.glsl; sourceTree = "<group>"; };
+		82C5AAF81AB51E1D0005429A /* solidColor.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = solidColor.frag; path = ../../src/shaders/solidColor.frag; sourceTree = "<group>"; };
+		82C5AAF91AB51E1D0005429A /* solidColor.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = solidColor.vert; path = ../../src/shaders/solidColor.vert; sourceTree = "<group>"; };
 		82C5AAFB1AB7B0450005429A /* Matrix4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Matrix4f.h; path = ../../src/math/Matrix4f.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		82C5AAFE1AB7B1F30005429A /* Vector3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3f.h; path = ../../src/math/Vector3f.h; sourceTree = "<group>"; };
 		82C5AAFF1AB7B1F30005429A /* Vector4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector4f.h; path = ../../src/math/Vector4f.h; sourceTree = "<group>"; };
-		82C5AB021AB8098D0005429A /* vertexColorFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = vertexColorFrag.glsl; path = ../../src/shaders/vertexColorFrag.glsl; sourceTree = "<group>"; };
-		82C5AB031AB8098D0005429A /* vertexColorVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = vertexColorVert.glsl; path = ../../src/shaders/vertexColorVert.glsl; sourceTree = "<group>"; };
-		82C5AB041AB8F01E0005429A /* textureFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureFrag.glsl; path = ../../src/shaders/textureFrag.glsl; sourceTree = "<group>"; };
-		82C5AB051AB8F01E0005429A /* textureVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = textureVert.glsl; path = ../../src/shaders/textureVert.glsl; sourceTree = "<group>"; };
-		82E026131AC0E643001758B3 /* lightVert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = lightVert.glsl; path = ../../src/shaders/lightVert.glsl; sourceTree = "<group>"; };
-		82E026141AC0FBF3001758B3 /* lightFrag.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = lightFrag.glsl; path = ../../src/shaders/lightFrag.glsl; sourceTree = "<group>"; };
+		82C5AB021AB8098D0005429A /* vertexColor.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = vertexColor.frag; path = ../../src/shaders/vertexColor.frag; sourceTree = "<group>"; };
+		82C5AB031AB8098D0005429A /* vertexColor.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = vertexColor.vert; path = ../../src/shaders/vertexColor.vert; sourceTree = "<group>"; };
+		82C5AB041AB8F01E0005429A /* texture.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.frag; path = ../../src/shaders/texture.frag; sourceTree = "<group>"; };
+		82C5AB051AB8F01E0005429A /* texture.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.vert; path = ../../src/shaders/texture.vert; sourceTree = "<group>"; };
+		82E0262B1AC6AF1B001758B3 /* light.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.frag; path = ../../src/shaders/light.frag; sourceTree = "<group>"; };
+		82E0262C1AC6AF1B001758B3 /* light.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.vert; path = ../../src/shaders/light.vert; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
 		942DBED3183C202F00876830 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		942DBED5183C203900876830 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -237,14 +237,14 @@
 		82C5AAEE1AB278450005429A /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				82C5AB021AB8098D0005429A /* vertexColorFrag.glsl */,
-				82C5AB031AB8098D0005429A /* vertexColorVert.glsl */,
-				82C5AB041AB8F01E0005429A /* textureFrag.glsl */,
-				82C5AB051AB8F01E0005429A /* textureVert.glsl */,
-				82C5AAF81AB51E1D0005429A /* solidColorFrag.glsl */,
-				82C5AAF91AB51E1D0005429A /* solidColorVert.glsl */,
-				82E026131AC0E643001758B3 /* lightVert.glsl */,
-				82E026141AC0FBF3001758B3 /* lightFrag.glsl */,
+				82C5AB021AB8098D0005429A /* vertexColor.frag */,
+				82C5AB031AB8098D0005429A /* vertexColor.vert */,
+				82C5AB041AB8F01E0005429A /* texture.frag */,
+				82C5AB051AB8F01E0005429A /* texture.vert */,
+				82C5AAF81AB51E1D0005429A /* solidColor.frag */,
+				82C5AAF91AB51E1D0005429A /* solidColor.vert */,
+				82E0262B1AC6AF1B001758B3 /* light.frag */,
+				82E0262C1AC6AF1B001758B3 /* light.vert */,
 			);
 			name = shaders;
 			sourceTree = "<group>";
