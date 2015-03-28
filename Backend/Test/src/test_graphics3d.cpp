@@ -289,24 +289,28 @@ sgsdl2_scene_element* build_scene(sgsdl2_scene *scene)
 	sgsdl2_material *material2 = new sgsdl2_material();
 	sgsdl2_material *material3 = new sgsdl2_material();
 	
+	light->intensity = 0.5;
 	light->attenuation = 0.01f;
 	light->ambientCoefficient = 0.3f;
 	
 	material1->diffuse_color = {1, 0 ,0, 1};
 	material1->specular_color = {1, 0.8f, 0.8f, 1};
 	material1->specular_exponent = 50;
+	material1->specular_intensity = 1;
 //	material1->shader = SHADER_DEFAULT_SOLID;
 	material1->shader = (int) compiledShaders.lights;
 	
 	material2->diffuse_color = {1, 1, 1, 1};
 	material2->specular_color = {0.5, 0.5, 0.5, 1};
 	material2->specular_exponent = 25;
+	material2->specular_intensity = 0.5;
 //	material2->shader = SHADER_DEFAULT_VERTEX_COLOR;
 	material2->shader = (int) compiledShaders.lights;
 	
 	material3->diffuse_color = {1, 0, 0, 1};
 	material3->specular_color = {1, 1, 1, 1};
-	material3->specular_exponent = 150;
+	material3->specular_exponent = 30;
+	material3->specular_intensity = 0.1f;
 	material3->texture = cat_texture->handle;
 //	material3->shader = SHADER_DEFAULT_TEXTURE;
 	material3->shader = (int) compiledShaders.lights;

@@ -15,6 +15,7 @@ struct MaterialData
 	vec3 diffuseColor;
 	vec3 specularColor;
 	float specularExponent;
+	float specularIntensity;
 	sampler2D texture;
 	bool useTexture;
 };
@@ -72,7 +73,7 @@ void main() {
 		// Specular can only occur if diffuse is not zero
 		if (diffuseCoefficient > 0.0)
 		{
-			specularCoefficient = pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.specularExponent);
+			specularCoefficient = material.specularIntensity * pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.specularExponent);
 			specular = specularCoefficient * material.specularColor * lights[i].intensities;
 		}
 		

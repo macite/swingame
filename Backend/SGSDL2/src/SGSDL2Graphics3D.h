@@ -224,7 +224,7 @@ sgsdl2_light* sgsdl2_make_light();
 sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up);
 
 // Creates a custom light
-sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const intensities, float attenuation);
+sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const color, float intensity, float attenuation);
 
 // Deletes a light and removes it from any scene caches and then deletes the pointer
 void sgsdl2_delete_light(sgsdl2_light *light);

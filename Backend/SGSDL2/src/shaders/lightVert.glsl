@@ -15,6 +15,7 @@ struct MaterialData
 	vec3 diffuseColor;
 	vec3 specularColor;
 	float specularExponent;
+	float specularIntesity;
 	sampler2D texture;
 	bool useTexture;
 };

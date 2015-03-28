@@ -23,9 +23,11 @@ using namespace std;
 #define SHAD_MODEL_MATRIX 			"model"
 #define SHAD_NORM_MODEL_MATRIX 		"normModel"
 #define SHAD_LIGHTS_ARRAY			"lights"
+
 #define SHAD_MAT_DIFFUSE_COLOR		"material.diffuseColor"
 #define SHAD_MAT_SPECULAR_COLOR		"material.specularColor"
 #define SHAD_MAT_SPECULAR_EXPONENT	"material.specularExponent"
+#define SHAD_MAT_SPECULAR_INTENSITY	"material.specularIntensity"
 #define SHAD_MAT_TEXTURE			"material.texture"
 #define SHAD_MAT_USE_TEXTURE		"material.useTexture"
 // Attribute names
@@ -217,6 +219,7 @@ void sgsdl2_remove_shader(sgsdl2_scene * const scene, GLuint const shader)
 
 void sgsdl2_delete_scene(sgsdl2_scene *scene)
 {
+	#pragma unused(scene)
 	// TODO clean up
 }
 
@@ -482,7 +485,8 @@ void sgsdl2_delete_geometry(sgsdl2_geometry *geometry)
 sgsdl2_light* sgsdl2_make_light()
 {
 	sgsdl2_light *light = new sgsdl2_light();
-	light->intensities = {{1, 1, 1}};
+	light->color = {{1, 1, 1}};
+	light->intensity = 1;
 	light->attenuation = 1;
 	light->type = sgsdl2_scene_element_type::LIGHT;
 	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
@@ -499,10 +503,11 @@ sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const directio
 	return light;
 }
 
-sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const intensities, float attenuation)
+sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const color, float intensity, float attenuation)
 {
 	sgsdl2_light *light = sgsdl2_make_light(location, direction, up);
-	light->intensities = intensities;
+	light->color = color;
+	light->intensity = intensity;
 	light->attenuation = attenuation;
 	return light;
 }
@@ -828,7 +833,7 @@ void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_scene * const scene)
 		int loc3 = glGetUniformLocation(shader, (uniformName + ".attenuation").c_str());
 		
 		glUniform3f(loc1, light->location.x, light->location.y, light->location.z);
-		glUniform3f(loc2, light->intensities.x, light->intensities.y, light->intensities.z);
+		glUniform3f(loc2, light->color.x * light->intensity, light->color.y * light->intensity, light->color.z * light->intensity);
 		glUniform1f(loc3, light->attenuation);
 		glUniform1f(glGetUniformLocation(shader, (uniformName + ".ambientCoefficient").c_str()), light->ambientCoefficient);
 		// TODO pass shadowmap
@@ -857,6 +862,7 @@ void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const 
 	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_DIFFUSE_COLOR), mat->diffuse_color.r, mat->diffuse_color.g, mat->diffuse_color.b);
 	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_COLOR), mat->specular_color.r, mat->specular_color.g, mat->specular_color.b);
 	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_EXPONENT), mat->specular_exponent);
+	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_INTENSITY), mat->specular_intensity);
 	
 	// Texture
 	if (glIsTexture(mat->texture))

@@ -63,11 +63,11 @@ struct sgsdl2_material;
 
 
 // The type of rendering pass to perform
-enum class sgsdl2_render_mode
-{
-	DEPTH_ONLY,
-	FULL
-};
+//enum class sgsdl2_render_mode
+//{
+//	DEPTH_ONLY,
+//	FULL
+//};
 
 
 // Represents the available types of scene_elements
@@ -118,6 +118,7 @@ struct sgsdl2_material
 	sg_color diffuse_color;
 	sg_color specular_color;
 	float specular_exponent;
+	float specular_intensity;
 	GLuint texture;
 };
 
@@ -174,8 +175,11 @@ struct sgsdl2_scene_element
 
 struct sgsdl2_light : public sgsdl2_scene_element
 {
-	// In other words, the color
-	Vector3f intensities;
+	// Color of the light
+	Vector3f color;
+	
+	// How powerful the light is
+	float intensity;
 	
 	// How quickly the light drops off with distance
 	// (however will always follow inverse square law)
