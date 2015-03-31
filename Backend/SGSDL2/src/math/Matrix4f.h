@@ -218,7 +218,7 @@ Matrix4f makeMatrix4fFromLookAtWithPositiveZ(float eyeX, float eyeY, float eyeZ,
 		dotProduct3f(negateVector3f(n), ev),
 		1.0f
 			} };
-	Matrix4f rotate = makeMatrix4fFromYRotation(M_PI);
+	Matrix4f rotate = makeMatrix4fFromYRotation((float) M_PI);
 	m = multiplyMatrixByMatrix4f(m, rotate);
 	return m;
 }

@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 #define SHAD_VERTEX_COLOR_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/vertexColor.vert"
 #define SHAD_VERTEX_COLOR_FRAG_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/vertexColor.frag"
@@ -40,127 +41,6 @@ struct ShaderPrograms
 };
 
 ShaderPrograms compiledShaders;
-
-//float vertices[] = {
-//	-1.0f,-1.0f,-1.0f,
-//	1.0f,-1.0f,-1.0f,
-//	-1.0f,-1.0f, 1.0f,
-//	1.0f,-1.0f,-1.0f,
-//	1.0f,-1.0f, 1.0f,
-//	-1.0f,-1.0f, 1.0f,
-//	-1.0f, 1.0f,-1.0f,
-//	-1.0f, 1.0f, 1.0f,
-//	1.0f, 1.0f,-1.0f,
-//	1.0f, 1.0f,-1.0f,
-//	-1.0f, 1.0f, 1.0f,
-//	1.0f, 1.0f, 1.0f,
-//	-1.0f,-1.0f, 1.0f,
-//	1.0f,-1.0f, 1.0f,
-//	-1.0f, 1.0f, 1.0f,
-//	1.0f,-1.0f, 1.0f,
-//	1.0f, 1.0f, 1.0f,
-//	-1.0f, 1.0f, 1.0f,
-//	-1.0f,-1.0f,-1.0f,
-//	-1.0f, 1.0f,-1.0f,
-//	1.0f,-1.0f,-1.0f,
-//	1.0f,-1.0f,-1.0f,
-//	-1.0f, 1.0f,-1.0f,
-//	1.0f, 1.0f,-1.0f,
-//	-1.0f,-1.0f, 1.0f,
-//	-1.0f, 1.0f,-1.0f,
-//	-1.0f,-1.0f,-1.0f,
-//	-1.0f,-1.0f, 1.0f,
-//	-1.0f, 1.0f, 1.0f,
-//	-1.0f, 1.0f,-1.0f,
-//	1.0f,-1.0f, 1.0f,
-//	1.0f,-1.0f,-1.0f,
-//	1.0f, 1.0f,-1.0f,
-//	1.0f,-1.0f, 1.0f,
-//	1.0f, 1.0f,-1.0f,
-//	1.0f, 1.0f, 1.0f
-//};
-//
-//float texCoords[] = {
-//	0.0f, 0.0f,
-//	1.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 0.0f,
-//	1.0f, 1.0f,
-//	0.0f, 1.0f,
-//	0.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 0.0f,
-//	1.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 1.0f,
-//	1.0f, 0.0f,
-//	0.0f, 0.0f,
-//	1.0f, 1.0f,
-//	0.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 1.0f,
-//	0.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 0.0f,
-//	1.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 1.0f,
-//	0.0f, 1.0f,
-//	1.0f, 0.0f,
-//	0.0f, 0.0f,
-//	0.0f, 1.0f,
-//	1.0f, 1.0f,
-//	1.0f, 0.0f,
-//	1.0f, 1.0f,
-//	1.0f, 0.0f,
-//	0.0f, 0.0f,
-//	1.0f, 1.0f,
-//	0.0f, 0.0f,
-//	0.0f, 1.0f
-//};
-//
-//float normals[] = {
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, -1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 1.0f, 0.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, 1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	0.0f, 0.0f, -1.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	-1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f,
-//	1.0f, 0.0f, 0.0f
-//};
-//
-//unsigned short indices[] = {
-//	
-//}
 
 float vertices[] = {
 	1.0,	1.0,	-1.0,
@@ -274,11 +154,11 @@ sgsdl2_scene_element* build_scene(sgsdl2_scene *scene)
 	sgsdl2_geometry *cube3 = sgsdl2_make_geometry({{-5, 0, 0}},
 												  {{0, 0, -1}},
 												  {{0, 1, 0}});
-	sgsdl2_camera *camera = sgsdl2_make_camera({{0, 5, -15}},
-											   {{0, -0.5f, 1}},
+	sgsdl2_camera *camera = sgsdl2_make_camera({{0, 1.5, -3}},
+											   {{0, -1.0, 3}},
 											   {{0, 1, 0}});
-	sgsdl2_light *light = sgsdl2_make_light({{0, 5, 0}},
-											{{0, 0, -1}},
+	sgsdl2_light *light = sgsdl2_make_light({{0, 1.5, 0}},
+											{{0, -1, 0}},
 											{{0, 1, 0}});
 
 	sgsdl2_texture *cat_texture = sgsdl2_make_texture();
@@ -289,9 +169,10 @@ sgsdl2_scene_element* build_scene(sgsdl2_scene *scene)
 	sgsdl2_material *material2 = new sgsdl2_material();
 	sgsdl2_material *material3 = new sgsdl2_material();
 	
-	light->intensity = 0.5;
+	light->intensity = 1.2f;
 	light->attenuation = 0.01f;
-	light->ambientCoefficient = 0.3f;
+	light->ambient_coefficient = 0.1f;
+	light->light_type = sgsdl2_light_type::SPOT;
 	
 	material1->diffuse_color = {1, 0 ,0, 1};
 	material1->specular_color = {1, 0.8f, 0.8f, 1};
@@ -360,8 +241,8 @@ void test_graphics3d()
 	float radians = 0;
 	float rotateSpeed = (float) (M_PI * 0.01);
 	
-	rotate_element->location = {{15 * sinf(radians), 0, 15 * cosf(radians)}};
-	rotate_element->direction = negateVector3f(rotate_element->location);
+//	rotate_element->location = {{15 * sinf(radians), 0, 15 * cosf(radians)}};
+//	rotate_element->direction = negateVector3f(rotate_element->location);
 	
 	while (radians < 20 * M_PI)
 	{
@@ -371,8 +252,12 @@ void test_graphics3d()
 		sgsdl2_update_opengl_render(&surface);
 		
 		radians += rotateSpeed;
-		rotate_element->location = {{15 * sinf(radians), 0, 15 * cosf(radians)}};
-//		rotate_element->direction = negateVector3f(main_camera->location);
+//		Vector3f lookat = {{sinf(radians), -cosf(radians), 0}};
+//		rotate_element->direction = lookat;
+		((sgsdl2_light*)rotate_element)->cos_inner_cone = cosf(abs(M_PI_4 * sinf(radians)));
+//		rotate_element->location = {{15 * sinf(radians), 0, 15 * cosf(radians)}};
+//		rotate_element->direction = negateVector3f(rotate_element->location);
+		
 		_sg_functions->utils.delay(1000 / 60);
 	}
 	

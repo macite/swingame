@@ -78,6 +78,13 @@ enum class sgsdl2_scene_element_type
 	CAMERA
 };
 
+// The type of light
+enum class sgsdl2_light_type : int
+{
+	POINT 		= 1,	// Constant lighting in all directions
+	DIRECTIONAL	= 2,	// Uses an orthogonal matrix to calculate directions
+	SPOT		= 3 	// Similar to point but light comes out in a cone
+};
 
 // What method is used to render a piece of geometry
 enum class sgsdl2_render_type
@@ -186,7 +193,14 @@ struct sgsdl2_light : public sgsdl2_scene_element
 	float attenuation;
 	
 	// How much of this light is ambient
-	float ambientCoefficient;
+	float ambient_coefficient;
+	
+	// The cos of the angle of the inner cone formed when the light type is SPOT
+	float cos_inner_cone;
+	float cos_outer_cone;
+	
+	// The type of light
+	sgsdl2_light_type light_type;
 	
 	// Type of shadows the light casts
 	sgsdl2_shadowing_type shadow_type;
@@ -216,11 +230,11 @@ struct sgsdl2_geometry : public sgsdl2_scene_element
 	GLint num_of_indices;
 	
 	// Uniforms
-	sg_color color;
-	sgsdl2_texture *texture;
+//	sg_color color;
+//	sgsdl2_texture *texture;
 	
 	// The shader to use with this object
-	int shader;
+//	int shader;
 	
 	// An override that will force the piece of geometry to be rendered in a solid color
 	bool render_solid_color;

@@ -219,7 +219,7 @@ void sgsdl2_remove_shader(sgsdl2_scene * const scene, GLuint const shader)
 
 void sgsdl2_delete_scene(sgsdl2_scene *scene)
 {
-	#pragma unused(scene)
+#pragma unused(scene)
 	// TODO clean up
 }
 
@@ -325,9 +325,6 @@ sgsdl2_geometry* sgsdl2_make_geometry()
 	glGenVertexArrays(1, &geometry->vao);
 	sgsdl2_check_opengl_error("make_geometry: ");
 	
-	geometry->texture = nullptr;
-	geometry->color = {1, 0, 1, 1};			// Gross pink color
-	geometry->shader = 0;					// Shader will be automatically selected
 	geometry->type = sgsdl2_scene_element_type::GEOMETRY;
 	geometry->render_solid_color = false;
 	return geometry;
@@ -471,7 +468,6 @@ void sgsdl2_delete_geometry(sgsdl2_geometry *geometry)
 	glDeleteBuffers(1, &geometry->color_buffer);
 	glDeleteBuffers(1, &geometry->texcoords_buffer);
 	glDeleteVertexArrays(1, &geometry->vao);
-	sgsdl2_delete_texture(geometry->texture);
 	delete geometry;
 }
 
@@ -485,6 +481,9 @@ void sgsdl2_delete_geometry(sgsdl2_geometry *geometry)
 sgsdl2_light* sgsdl2_make_light()
 {
 	sgsdl2_light *light = new sgsdl2_light();
+	light->light_type = sgsdl2_light_type::POINT;
+	light->cos_inner_cone = cosf((float)(0.0 * M_PI / 180.0));
+	light->cos_outer_cone = cosf((float)(M_PI_4));
 	light->color = {{1, 1, 1}};
 	light->intensity = 1;
 	light->attenuation = 1;
@@ -515,6 +514,7 @@ sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const directio
 // Deletes a light and removes it from any scene caches
 void sgsdl2_delete_light(sgsdl2_light *light)
 {
+	// TODO
 	delete light;
 }
 
@@ -775,6 +775,7 @@ void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
 
 void sgsdl2_recalculate_light(sgsdl2_light *light)
 {
+#pragma unused(light)
 	// TODO perform render pass
 }
 
@@ -825,17 +826,26 @@ void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_scene * const scene)
 		 ++it, ++i)
 	{
 		sgsdl2_light *light = *it;
-		string uniformName = SHAD_LIGHTS_ARRAY;
-		uniformName += "[" + to_string(i) + "]";
+		string uniform_name = SHAD_LIGHTS_ARRAY;
+		uniform_name += "[" + to_string(i) + "]";
 		
-		int loc1 = glGetUniformLocation(shader, (uniformName + ".position").c_str());
-		int loc2 = glGetUniformLocation(shader, (uniformName + ".intensities").c_str());
-		int loc3 = glGetUniformLocation(shader, (uniformName + ".attenuation").c_str());
+		int pos_loc = glGetUniformLocation(shader, (uniform_name + ".position").c_str());
+		int dir_loc = glGetUniformLocation(shader, (uniform_name + ".direction").c_str());
+		int intesity_loc = glGetUniformLocation(shader, (uniform_name + ".intensities").c_str());
+		int atten_loc = glGetUniformLocation(shader, (uniform_name + ".attenuation").c_str());
+		int amb_loc = glGetUniformLocation(shader, (uniform_name + ".ambientCoefficient").c_str());
+		int inner_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosInnerCone").c_str());
+		int outer_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosOuterCone").c_str());
+		int type_loc = glGetUniformLocation(shader, (uniform_name + ".lightType").c_str());
 		
-		glUniform3f(loc1, light->location.x, light->location.y, light->location.z);
-		glUniform3f(loc2, light->color.x * light->intensity, light->color.y * light->intensity, light->color.z * light->intensity);
-		glUniform1f(loc3, light->attenuation);
-		glUniform1f(glGetUniformLocation(shader, (uniformName + ".ambientCoefficient").c_str()), light->ambientCoefficient);
+		glUniform3f(pos_loc, light->location.x, light->location.y, light->location.z);
+		glUniform3f(dir_loc, light->direction.x, light->direction.y, light->direction.z);
+		glUniform3f(intesity_loc, light->color.x * light->intensity, light->color.y * light->intensity, light->color.z * light->intensity);
+		glUniform1f(atten_loc, light->attenuation);
+		glUniform1f(amb_loc, light->ambient_coefficient);
+		glUniform1f(inner_angle_loc, light->cos_inner_cone);
+		glUniform1f(outer_angle_loc, light->cos_outer_cone);
+		glUniform1i(type_loc, int(light->light_type));
 		// TODO pass shadowmap
 		// TODO pass booleans
 	}
@@ -917,7 +927,7 @@ GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry)
 		case SHADER_UNSELECTED:
 		{
 			// Tex coords and texture are present
-			if (geometry->texcoords_buffer > 0 && geometry->texture != nullptr)
+			if (geometry->texcoords_buffer > 0 && glIsTexture(geometry->material->texture))
 			{
 				return geometry->root->default_texture_shader;
 			}
@@ -1132,6 +1142,7 @@ void sgsdl2_update_opengl_render(sg_drawing_surface *surface)
 
 void sgsdl2_clear_opengl_window(sg_drawing_surface *surface, sg_color color)
 {
+	#pragma unused(surface)
 	glClearColor(color.r, color.g, color.b, color.a);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glClearColor(0, 0, 0, 1);

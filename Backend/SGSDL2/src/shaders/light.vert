@@ -1,34 +1,17 @@
 #version 330
 #define MAX_NUMBER_OF_LIGHTS 12
 
-struct LightData
-{
-	vec3 position;
-	vec3 intensities;
-	float attenuation;
-	float ambientCoefficient;
-//	sampler2D shadowMap;
-};
-
-struct MaterialData
-{
-	vec3 diffuseColor;
-	vec3 specularColor;
-	float specularExponent;
-	float specularIntesity;
-	sampler2D texture;
-	bool useTexture;
-};
-
 
 uniform mat4 model;
 out		mat4 normalModel;
 uniform mat4 view;
 uniform mat4 proj;
+uniform vec3 cameraPosition;
 
-uniform MaterialData material;
-uniform LightData lights[12];
-uniform int numberOfLights;
+//uniform MaterialData material;
+//uniform LightData lights[12];
+//uniform int numberOfLights;
+
 
 in vec3 position;
 in vec3 normal;
