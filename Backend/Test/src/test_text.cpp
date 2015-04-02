@@ -15,15 +15,14 @@ using namespace std;
 
 extern sg_interface * _sg_functions;
 
-void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style)
+void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style, sg_drawing_surface *window)
 {
     _sg_functions->text.set_font_style(font, style);
     int font_style = _sg_functions->text.get_font_style(font); 
     cout << " The font style is: " << font_style <<  endl; 
 
     cout << "Drawing text on screen" << endl;
-    sg_drawing_surface window = _sg_functions->graphics.open_window("Text", 800, 600);
-    _sg_functions->text.draw_text(&window, font, x + 400, y, "AWESOME!", {0.0, 1.0, 0.0, 1.0});
+    _sg_functions->text.draw_text(window, font, x + 400, y, "AWESOME!", {0.0, 1.0, 0.0, 1.0});
 
     sg_drawing_surface bitmap = _sg_functions->image.create_bitmap(400, 400);
     _sg_functions->graphics.clear_drawing_surface(&bitmap, {0.0, 0.0, 0.0, 0.0});
@@ -31,17 +30,18 @@ void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style)
 
     float src_data[] = {0, 0, 400, 400};
     float dst_data[] = {x, y, 0, 0, 0, 1, 1};
-    _sg_functions->image.draw_bitmap(&bitmap, &window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
+    _sg_functions->image.draw_bitmap(&bitmap, window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
 
-    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->graphics.refresh_window(window);
     _sg_functions->utils.delay(1000);
 
     _sg_functions->graphics.close_drawing_surface(&bitmap);
-    _sg_functions->graphics.close_drawing_surface(&window);
 }
 
 void test_text()
 {
+  sg_drawing_surface window = _sg_functions->graphics.open_window("Text", 800, 600);
+
   cout <<  "Testing text " << endl; 
   sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 54);
 
@@ -56,14 +56,17 @@ void test_text()
   cout << "Result for text size is : " << text_size << " with a width of: " << w << " and a height of: " << h << endl; 
 
   cout << "Testing drawing of different font styles" << endl;
-  test_draw_text(&font, 0, 100, SG_FONT_STYLE_NORMAL);
-  test_draw_text(&font, 0, 200, SG_FONT_STYLE_BOLD);
-  test_draw_text(&font, 0, 300, SG_FONT_STYLE_ITALIC);
-  test_draw_text(&font, 0, 400, SG_FONT_STYLE_UNDERLINE);
-  test_draw_text(&font, 0, 500, SG_FONT_STYLE_STRIKETHROUGH);
+  test_draw_text(&font, 0, 100, SG_FONT_STYLE_NORMAL, &window);
+  test_draw_text(&font, 0, 200, SG_FONT_STYLE_BOLD, &window);
+  test_draw_text(&font, 0, 300, SG_FONT_STYLE_ITALIC, &window);
+  test_draw_text(&font, 0, 400, SG_FONT_STYLE_UNDERLINE, &window);
+  test_draw_text(&font, 0, 500, SG_FONT_STYLE_STRIKETHROUGH, &window);
 
   cout << "Closing same font twice." << endl;
   _sg_functions->text.close_font(&font); 
   _sg_functions->text.close_font(&font); 
+
+  cout << "Closing text window" << endl;
+  _sg_functions->graphics.close_drawing_surface(&window);
 }
 

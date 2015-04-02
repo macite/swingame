@@ -1182,7 +1182,7 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
             window_be->clipped = false;
             window_be->clip = { 0, 0, surface->width, surface->height };
             SDL_RenderSetClipRect(window_be->renderer, NULL);
-            SDL_RenderPresent(window_be->renderer);
+            //SDL_RenderPresent(window_be->renderer);
             break;
         }
         case SGDS_Bitmap:
@@ -1193,14 +1193,14 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
             bitmap_be->clipped = false;
             bitmap_be->clip = { 0, 0, surface->width, surface->height };
             
-            unsigned int count = _sgsdl2_renderer_count(surface);
+            // unsigned int count = _sgsdl2_renderer_count(surface);
             
-            for (unsigned int i = 0; i < count; i++)
-            {
-                SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
-                SDL_RenderPresent(renderer);
-                _sgsdl2_complete_render(surface, i);
-            }
+            // for (unsigned int i = 0; i < count; i++)
+            // {
+            //     SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
+            //     SDL_RenderPresent(renderer);
+            //     _sgsdl2_complete_render(surface, i);
+            // }
 
             break;
         }
