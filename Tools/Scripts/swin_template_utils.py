@@ -429,7 +429,7 @@ template_details = {
                 { 
                   'source':         'Mono',
                   'target':         'mono',
-                  'os':             [ 'Mac OS X', 'Linux' ],
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
                   'post_copy':      make_sh_exec
@@ -442,6 +442,12 @@ template_details = {
                   'staticsgsdk':    False,
                 },
                 { 
+                  'source':         'VS13',
+                  'target':         'vs13',
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
+                  'lib':            'lib',
+                  'staticsgsdk':    False,
+                },                { 
                   'source':         'XamarianStudio',
                   'target':         'XamarianStudio',
                   'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
