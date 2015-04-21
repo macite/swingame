@@ -197,7 +197,7 @@ interface
     	sg_connection_uint_fn = function (connection: psg_network_connection): uint; cdecl;
     	sg_accept_connection_fn = function (connection: psg_network_connection): sg_network_connection; cdecl;
     	sg_udp_send_fn = function (con: psg_network_connection; host: pchar; port: uint16; buffer: pchar; size: LongInt): LongInt; cdecl;
-		sg_read_udp_fn = procedure (con: psg_network_connection; host: puint; port: puint16; buffer: pchar; size: puint);
+		sg_read_udp_fn = procedure (con: psg_network_connection; host: puint; port: puint16; buffer: pchar; size: puint); cdecl;
 
 
 		//
