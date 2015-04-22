@@ -435,6 +435,14 @@ template_details = {
                   'post_copy':      make_sh_exec
                 },
                 { 
+                  'source':         'WinCmd',
+                  'target':         'WinCmd',
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
+                  'lib':            'lib',
+                  'staticsgsdk':    False,
+                  'post_copy':      make_sh_exec
+                },
+                { 
                   'source':         'MonoDevelop',
                   'target':         'MonoDevelop',
                   'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
