@@ -103,6 +103,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8276F05F1AD8DCDA00D51508 /* shadowmap.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.frag; path = ../../src/shaders/shadowmap.frag; sourceTree = "<group>"; };
+		8276F0601AD8DCDA00D51508 /* shadowmap.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.vert; path = ../../src/shaders/shadowmap.vert; sourceTree = "<group>"; };
 		82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Graphics3D.cpp; path = ../../src/SGSDL2Graphics3D.cpp; sourceTree = "<group>"; };
 		82C5AAE01AB027440005429A /* SGSDL2Graphics3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Graphics3D.h; path = ../../src/SGSDL2Graphics3D.h; sourceTree = "<group>"; };
 		82C5AAE71AB057780005429A /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
@@ -245,6 +247,8 @@
 				82C5AAF91AB51E1D0005429A /* solidColor.vert */,
 				82E0262B1AC6AF1B001758B3 /* light.frag */,
 				82E0262C1AC6AF1B001758B3 /* light.vert */,
+				8276F05F1AD8DCDA00D51508 /* shadowmap.frag */,
+				8276F0601AD8DCDA00D51508 /* shadowmap.vert */,
 			);
 			name = shaders;
 			sourceTree = "<group>";

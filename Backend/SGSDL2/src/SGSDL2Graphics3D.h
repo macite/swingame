@@ -52,6 +52,9 @@ void sgsdl2_draw_test(sg_drawing_surface *surface);
 // Creates an empty scene
 sgsdl2_scene* sgsdl2_make_scene();
 
+// Compiles the default shaders that are used behind the scenes
+void sgsdl2_compile_default_shaders(sgsdl2_scene * const scene);
+
 // Sets the active camera for a scene
 void sgsdl2_set_active_camera(sgsdl2_scene * const scene, sgsdl2_camera * const new_active_cam);
 
@@ -111,10 +114,22 @@ void sgsdl2_invalidate_transform(sgsdl2_scene_element * const element);
 // Walking the parent chain if needed
 Matrix4f sgsdl2_calculate_model_transform(sgsdl2_scene_element * const element);
 
-// Calculates the view transform for a camera
+// Calculates the view transform for an element
 Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element);
 
+// Calculates a proj transform for a camera
+__attribute__((deprecated))
 Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect);
+
+// Calculates a proj transform for a camera using the scenes viewport for aspect calculations
+Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera);
+
+// Returns the shadow transform matrix
+Matrix4f sgsdl2_calculate_shadow_transform(sgsdl2_light const * const light);
+
+
+// Recalculates the matrices for a camera
+//void sgsdl2_recalculate_camera_matrices(sgsdl2_camera * const camera);
 
 
 
@@ -141,6 +156,9 @@ sgsdl2_camera* sgsdl2_make_camera();
 
 // Creates a camera at a location
 sgsdl2_camera* sgsdl2_make_camera(Vector3f const location, Vector3f const direction, Vector3f const up);
+
+// Sets the camera frustum based on an fov
+void sgsdl2_set_camera_frustum(sgsdl2_camera *camera, float fovx, float fovy, float near, float far);
 
 
 
@@ -226,6 +244,9 @@ sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const directio
 // Creates a custom light
 sgsdl2_light* sgsdl2_make_light(Vector3f const location, Vector3f const direction, Vector3f const up, Vector3f const color, float intensity, float attenuation);
 
+// Generates a camera at the position of the given light
+sgsdl2_camera* sgsdl2_generate_camera_at(sgsdl2_light const * const light);
+
 // Deletes a light and removes it from any scene caches and then deletes the pointer
 void sgsdl2_delete_light(sgsdl2_light *light);
 
@@ -261,6 +282,16 @@ void sgsdl2_delete_texture(sgsdl2_texture *texture);
 
 
 //
+// Array Textures
+//
+#pragma mark Array Textures
+
+// Generates an array texture object
+sgsdl2_array_texture sgsdl2_make_array_texture(int num_of_levels, int width, int height, GLint internal_format, GLenum format, GLenum type);
+
+
+
+//
 // Rendering
 //
 #pragma mark Rendering
@@ -282,7 +313,7 @@ __attribute__((deprecated))
 // Renders a single piece of geometry with a texture
 void sgsdl2_texture_render_geometry(sgsdl2_geometry const * const geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
 
-// Renders an entire scene
+// Performs a full render of the scene
 void sgsdl2_render_scene(sgsdl2_scene *scene);
 
 // Prepares all the lighting data
@@ -291,11 +322,30 @@ void sgsdl2_prepare_lighting(sgsdl2_scene *scene);
 // Prepares a single light
 void sgsdl2_recalculate_light(sgsdl2_light *light);
 
+// Assigns the light a level in the global shadow map array
+void sgsdl2_allocate_shadow_map_location(sgsdl2_light *light);
+
+//  Frees a reserved shadow map location
+void sgsdl2_deallocate_shadow_map_location(sgsdl2_light *light);
+
+// Reallocates the light texture
+__attribute__((deprecated))
+void sgsdl2_generate_shadow_map_texture(sgsdl2_light *light);
+
+// Contains the scene iteration logic
+void sgsdl2_perform_render_pass(sgsdl2_scene * const scene, sgsdl2_render_profile profile);
+
 // Renders a single element and all its children recursively
-void sgsdl2_render_element(sgsdl2_scene_element *element);
+void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile profile);
+
+// Passes the global matrices to the shader
+void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_camera * const camera, sgsdl2_geometry * const geometry);
+
+// Passes data about the camera to the shader
+void sgsdl2_pass_camera_data_to_shader(GLuint shader, sgsdl2_camera const * const scene);
 
 // Passes the light array to the given shader
-void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_scene * const scene);
+void sgsdl2_pass_light_data_to_shader(GLuint shader, vector<sgsdl2_light*> lights);
 
 // Passes the material data to the shader
 void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const geometry);
@@ -303,6 +353,7 @@ void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const 
 void sgsdl2_perform_render(sgsdl2_geometry const * const geometry);
 
 // Returns the handle of the default shaders that is best equipped to render the given geometry.
+__attribute__((deprecated))
 GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry);
 
 

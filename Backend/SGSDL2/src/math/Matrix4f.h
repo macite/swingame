@@ -37,9 +37,10 @@ static inline Matrix4f makeMatrix4f(float m00, float m01, float m02, float m03,
 static inline Matrix4f makeMatrix4fFromXRotation(float radians);
 static inline Matrix4f makeMatrix4fFromYRotation(float radians);
 static inline Matrix4f makeMatrix4fFromZRotation(float radians);
-static inline Matrix4f makeMatrix4fFromFrustrum(float left, float right, float top, float bottom, float near, float far);
-static inline Matrix4f makeMatrix4fFromSymFrustrum(float left, float top, float near, float far);
+static inline Matrix4f makeMatrix4fFromFrustum(float left, float right, float top, float bottom, float near, float far);
+static inline Matrix4f makeMatrix4fFromSymFrustum(float left, float top, float near, float far);
 static inline Matrix4f makeMatrix4fFromProjection(float fovy, float aspect, float nearZ, float farZ);
+static inline Matrix4f makeMatrix4fFromOrtho(float left, float right, float top, float bottom, float near, float far);
 static inline Matrix4f makeMatrix4fModelToWorld(float modX, float modY, float modZ, float forX, float forY, float forZ, float upX, float upY, float upZ);
 static inline Matrix4f makeMatrix4fWorldToCamera(float eyeX, float eyeY, float eyeZ, float centreX, float centreY, float centreZ, float upX, float upY, float upZ);
 static inline Matrix4f makeMatrix4fFromLookAt(float eyeX, float eyeY, float eyeZ,
@@ -124,27 +125,27 @@ Matrix4f makeMatrix4fFromZRotation(float radians)
 
 
 // Implementation from: http://www.songho.ca/opengl/gl_projectionmatrix.html
-Matrix4f makeMatrix4fFromFrustrum(float l, float r, float t, float b, float n, float f)
+Matrix4f makeMatrix4fFromFrustum(float l, float r, float t, float b, float n, float f)
 {
 	Matrix4f m = { {
-		2 * n / (r - l), 0, (r + l) / (r - l), 0,
-		0, 2 * n / (t - b), (t + b) / (t - b), 0,
-		0, 0, -(f + n) / (f - n), -(2 * f*n) / (f - n),
-		0, 0, -1, 0
+		2*n / (r-l), 	0, 				0, 					0,
+		0, 				2*n / (t-b), 	0, 					0,
+		(r+l) / (r-l), 	(t+b) / (t-b),	-(f+n) / (f-n),		-1,
+		0, 				0, 				-(2*f*n) / (f-n), 	0
 			} };
 	return m;
 }
 
 
 // Implementation from: http://www.songho.ca/opengl/gl_projectionmatrix.html
-Matrix4f makeMatrix4fFromSymFrustrum(float r, float t, float n, float f)
+Matrix4f makeMatrix4fFromSymFrustum(float r, float t, float n, float f)
 {
-	Matrix4f m = { {
+	Matrix4f m = {{
 		n / r, 0, 0, 0,
 		0, n / t, 0, 0,
-		0, 0, -(f + n) / (f - n), -(2 * f*n) / (f - n),
-		0, 0, -1, 0
-			} };
+		0, 0, -(f + n) / (f - n), -1,
+		0, 0, -(2 * f*n) / (f - n), 0
+	}};
 	return m;
 }
 
@@ -153,14 +154,34 @@ Matrix4f makeMatrix4fFromProjection(float fovy, float aspect, float nearZ, float
 {
     float cotan = 1.0f / tanf(fovy / 2.0f);
 
-	Matrix4f m = { {
+	Matrix4f m = {{
 		cotan / aspect, 0.0f, 0.0f, 0.0f,
 		0.0f, cotan, 0.0f, 0.0f,
 		0.0f, 0.0f, (farZ + nearZ) / (nearZ - farZ), -1.0f,
 		0.0f, 0.0f, (2.0f * farZ * nearZ) / (nearZ - farZ), 0.0f
-			} };
+	}};
 
     return m;
+}
+
+
+Matrix4f makeMatrix4fFromOrtho(float left, float right, float top, float bottom, float near, float far)
+{
+	float ral = right + left;
+	float rsl = right - left;
+	float tab = top + bottom;
+	float tsb = top - bottom;
+	float fan = far + near;
+	float fsn = far - near;
+	
+	Matrix4f m = {{
+		2.0f / rsl, 0.0f, 0.0f, 0.0f,
+		0.0f, 2.0f / tsb, 0.0f, 0.0f,
+		0.0f, 0.0f, -2.0f / fsn, 0.0f,
+		-ral / rsl, -tab / tsb, -fan / fsn, 1.0f
+	}};
+	
+	return m;
 }
 
 
@@ -233,6 +254,7 @@ Matrix4f makeMatrix4fFromReverseLookAt(float eyeX, float eyeY, float eyeZ,
 	// The model will face the z+ axis with y+ pointing upwards
 	// So find those axis in model space, then create a new matrix using those values
 	Matrix4f worldToModel = makeMatrix4fFromLookAtWithPositiveZ(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+//	Matrix4f worldToModel = makeMatrix4fFromLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
 	Vector4f orig = { { 0, 0, 0, 1 } },
 		posZ = { { 0, 0, 1, 1 } },
 		posY = { { 0, 1, 0, 0 } };
@@ -282,36 +304,64 @@ std::string makeStringFromMatrix4f(Matrix4f m)
 }
 
 
-Matrix4f multiplyMatrixByMatrix4f(Matrix4f m, Matrix4f n)
+Matrix4f multiplyMatrixByMatrix4f(Matrix4f matrixLeft, Matrix4f matrixRight)
 {
-	Matrix4f r{ {
-		m.m00 * n.m00 + m.m01 * n.m10 + m.m02 * n.m20 + m.m03 * n.m30,
-		m.m00 * n.m01 + m.m01 * n.m11 + m.m02 * n.m21 + m.m03 * n.m31,
-		m.m00 * n.m02 + m.m01 * n.m12 + m.m02 * n.m22 + m.m03 * n.m32,
-		m.m00 * n.m03 + m.m01 * n.m13 + m.m02 * n.m23 + m.m03 * n.m33,
-
-		m.m10 * n.m00 + m.m11 * n.m10 + m.m12 * n.m20 + m.m13 * n.m30,
-		m.m10 * n.m01 + m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31,
-		m.m10 * n.m02 + m.m11 * n.m12 + m.m12 * n.m22 + m.m13 * n.m32,
-		m.m10 * n.m03 + m.m11 * n.m13 + m.m12 * n.m23 + m.m13 * n.m33,
-
-		m.m20 * n.m00 + m.m21 * n.m10 + m.m22 * n.m20 + m.m23 * n.m30,
-		m.m20 * n.m01 + m.m21 * n.m11 + m.m22 * n.m21 + m.m23 * n.m31,
-		m.m20 * n.m02 + m.m21 * n.m12 + m.m22 * n.m22 + m.m23 * n.m32,
-		m.m20 * n.m03 + m.m21 * n.m13 + m.m22 * n.m23 + m.m23 * n.m33,
-
-		m.m30 * n.m00 + m.m31 * n.m10 + m.m32 * n.m20 + m.m33 * n.m30,
-		m.m30 * n.m01 + m.m31 * n.m11 + m.m32 * n.m21 + m.m33 * n.m31,
-		m.m30 * n.m02 + m.m31 * n.m12 + m.m32 * n.m22 + m.m33 * n.m32,
-		m.m30 * n.m03 + m.m31 * n.m13 + m.m32 * n.m23 + m.m33 * n.m33,
-			} };
-	return r;
+	Matrix4f m;
+	m.m[0]  = matrixLeft.m[0] * matrixRight.m[0]  + matrixLeft.m[4] * matrixRight.m[1]  + matrixLeft.m[8] * matrixRight.m[2]   + matrixLeft.m[12] * matrixRight.m[3];
+	m.m[4]  = matrixLeft.m[0] * matrixRight.m[4]  + matrixLeft.m[4] * matrixRight.m[5]  + matrixLeft.m[8] * matrixRight.m[6]   + matrixLeft.m[12] * matrixRight.m[7];
+	m.m[8]  = matrixLeft.m[0] * matrixRight.m[8]  + matrixLeft.m[4] * matrixRight.m[9]  + matrixLeft.m[8] * matrixRight.m[10]  + matrixLeft.m[12] * matrixRight.m[11];
+	m.m[12] = matrixLeft.m[0] * matrixRight.m[12] + matrixLeft.m[4] * matrixRight.m[13] + matrixLeft.m[8] * matrixRight.m[14]  + matrixLeft.m[12] * matrixRight.m[15];
+	
+	m.m[1]  = matrixLeft.m[1] * matrixRight.m[0]  + matrixLeft.m[5] * matrixRight.m[1]  + matrixLeft.m[9] * matrixRight.m[2]   + matrixLeft.m[13] * matrixRight.m[3];
+	m.m[5]  = matrixLeft.m[1] * matrixRight.m[4]  + matrixLeft.m[5] * matrixRight.m[5]  + matrixLeft.m[9] * matrixRight.m[6]   + matrixLeft.m[13] * matrixRight.m[7];
+	m.m[9]  = matrixLeft.m[1] * matrixRight.m[8]  + matrixLeft.m[5] * matrixRight.m[9]  + matrixLeft.m[9] * matrixRight.m[10]  + matrixLeft.m[13] * matrixRight.m[11];
+	m.m[13] = matrixLeft.m[1] * matrixRight.m[12] + matrixLeft.m[5] * matrixRight.m[13] + matrixLeft.m[9] * matrixRight.m[14]  + matrixLeft.m[13] * matrixRight.m[15];
+	
+	m.m[2]  = matrixLeft.m[2] * matrixRight.m[0]  + matrixLeft.m[6] * matrixRight.m[1]  + matrixLeft.m[10] * matrixRight.m[2]  + matrixLeft.m[14] * matrixRight.m[3];
+	m.m[6]  = matrixLeft.m[2] * matrixRight.m[4]  + matrixLeft.m[6] * matrixRight.m[5]  + matrixLeft.m[10] * matrixRight.m[6]  + matrixLeft.m[14] * matrixRight.m[7];
+	m.m[10] = matrixLeft.m[2] * matrixRight.m[8]  + matrixLeft.m[6] * matrixRight.m[9]  + matrixLeft.m[10] * matrixRight.m[10] + matrixLeft.m[14] * matrixRight.m[11];
+	m.m[14] = matrixLeft.m[2] * matrixRight.m[12] + matrixLeft.m[6] * matrixRight.m[13] + matrixLeft.m[10] * matrixRight.m[14] + matrixLeft.m[14] * matrixRight.m[15];
+	
+	m.m[3]  = matrixLeft.m[3] * matrixRight.m[0]  + matrixLeft.m[7] * matrixRight.m[1]  + matrixLeft.m[11] * matrixRight.m[2]  + matrixLeft.m[15] * matrixRight.m[3];
+	m.m[7]  = matrixLeft.m[3] * matrixRight.m[4]  + matrixLeft.m[7] * matrixRight.m[5]  + matrixLeft.m[11] * matrixRight.m[6]  + matrixLeft.m[15] * matrixRight.m[7];
+	m.m[11] = matrixLeft.m[3] * matrixRight.m[8]  + matrixLeft.m[7] * matrixRight.m[9]  + matrixLeft.m[11] * matrixRight.m[10] + matrixLeft.m[15] * matrixRight.m[11];
+	m.m[15] = matrixLeft.m[3] * matrixRight.m[12] + matrixLeft.m[7] * matrixRight.m[13] + matrixLeft.m[11] * matrixRight.m[14] + matrixLeft.m[15] * matrixRight.m[15];
+	return m;
+	
+	// Code is incorrect
+//	Matrix4f r{ {
+//		m.m00 * n.m00 + m.m01 * n.m10 + m.m02 * n.m20 + m.m03 * n.m30,
+//		m.m00 * n.m01 + m.m01 * n.m11 + m.m02 * n.m21 + m.m03 * n.m31,
+//		m.m00 * n.m02 + m.m01 * n.m12 + m.m02 * n.m22 + m.m03 * n.m32,
+//		m.m00 * n.m03 + m.m01 * n.m13 + m.m02 * n.m23 + m.m03 * n.m33,
+//
+//		m.m10 * n.m00 + m.m11 * n.m10 + m.m12 * n.m20 + m.m13 * n.m30,
+//		m.m10 * n.m01 + m.m11 * n.m11 + m.m12 * n.m21 + m.m13 * n.m31,
+//		m.m10 * n.m02 + m.m11 * n.m12 + m.m12 * n.m22 + m.m13 * n.m32,
+//		m.m10 * n.m03 + m.m11 * n.m13 + m.m12 * n.m23 + m.m13 * n.m33,
+//
+//		m.m20 * n.m00 + m.m21 * n.m10 + m.m22 * n.m20 + m.m23 * n.m30,
+//		m.m20 * n.m01 + m.m21 * n.m11 + m.m22 * n.m21 + m.m23 * n.m31,
+//		m.m20 * n.m02 + m.m21 * n.m12 + m.m22 * n.m22 + m.m23 * n.m32,
+//		m.m20 * n.m03 + m.m21 * n.m13 + m.m22 * n.m23 + m.m23 * n.m33,
+//
+//		m.m30 * n.m00 + m.m31 * n.m10 + m.m32 * n.m20 + m.m33 * n.m30,
+//		m.m30 * n.m01 + m.m31 * n.m11 + m.m32 * n.m21 + m.m33 * n.m31,
+//		m.m30 * n.m02 + m.m31 * n.m12 + m.m32 * n.m22 + m.m33 * n.m32,
+//		m.m30 * n.m03 + m.m31 * n.m13 + m.m32 * n.m23 + m.m33 * n.m33,
+//			} };
+//	return r;
 }
 
 
 Vector4f multiplyMatrixByVector4f(Matrix4f m, Vector4f v)
 {
-	Vector4f r = multiplyVectorByMatrix4f(v, m);
+	Vector4f r = {{
+		m.m00 * v.x + m.m10 * v.y + m.m20 * v.z + m.m30 * v.w,
+		m.m01 * v.x + m.m11 * v.y + m.m21 * v.z + m.m31 * v.w,
+		m.m02 * v.x + m.m12 * v.y + m.m22 * v.z + m.m32 * v.w,
+		m.m03 * v.x + m.m13 * v.y + m.m23 * v.z + m.m33 * v.w,
+	}};
 	return r;
 }
 
