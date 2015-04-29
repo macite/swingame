@@ -107,7 +107,7 @@ float texCoords[] = {
 	0, 1
 };
 
-
+__attribute__((deprecated))
 void compile_default_shaders(sgsdl2_scene *scene)
 {
 //	compiledShaders.shaders.resize(2, 0);
@@ -141,6 +141,7 @@ void compile_default_shaders(sgsdl2_scene *scene)
 //	scene->default_vertex_color_shader = compiledShaders.vertexColor;
 }
 
+__attribute__((deprecated))
 void clean_up_shaders()
 {
 //	sgsdl2_delete_shader_program(compiledShaders.solidColor);
@@ -157,35 +158,38 @@ void clean_up_shaders()
 
 sgsdl2_scene_element* build_scene(sgsdl2_scene *scene)
 {
-//	compile_default_shaders(scene);
+	int count = 0;
+	sgsdl2_geometry **objects;
+//	sgsdl2_create_geometry_objects_from_file("single-cube.obj", &objects, &count);
+	sgsdl2_create_geometry_objects_from_file("3-shape-scene-normals.obj", &objects, &count);
 	
-	sgsdl2_geometry *cube1 = sgsdl2_make_geometry({{0, 0, 25}},
-												  {{0, 0, -1}},
-												  {{0, 1, 0}});
-	sgsdl2_geometry *cube2 = sgsdl2_make_geometry({{0, 0, 0}},
-												  {{0, 0, -1}},
-												  {{0, 1, 0}});
+//	sgsdl2_geometry *cube1 = sgsdl2_make_geometry({{0, 0, 25}},
+//												  {{0, 0, -1}},
+//												  {{0, 1, 0}});
+//	sgsdl2_geometry *cube2 = sgsdl2_make_geometry({{0, 0, 0}},
+//												  {{0, 0, -1}},
+//												  {{0, 1, 0}});
 //	sgsdl2_geometry *cube3 = sgsdl2_make_geometry({{-5, 0, 0}},
 //												  {{0, 0, -1}},
 //												  {{0, 1, 0}});
-	sgsdl2_camera *camera = sgsdl2_make_camera({{0, 8, -15}},
-											   {{0, -8, 15}},
+	sgsdl2_camera *camera = sgsdl2_make_camera({{-13, 3, 0}},
+											   {{13, 0, 0}},
 											   {{0, 1, 0}});
-	sgsdl2_light *light = sgsdl2_make_light({{0, 0, -15}},
-											{{0, 0, 15}},
+	sgsdl2_light *light = sgsdl2_make_light({{-13, 3, 0}},
+											{{13, 0, 0}},
 											{{0, 1, 0}});
 
-	sgsdl2_texture *cat_texture = sgsdl2_make_texture();
-	sgsdl2_attach_texture_image(cat_texture, TEXTURE_PATH, GL_RGBA);
-	sgsdl2_generate_texture_mipmaps(cat_texture);
+//	sgsdl2_texture *cat_texture = sgsdl2_make_texture();
+//	sgsdl2_attach_texture_image(cat_texture, TEXTURE_PATH, GL_RGBA);
+//	sgsdl2_generate_texture_mipmaps(cat_texture);
 	
 	sgsdl2_material *material1 = new sgsdl2_material();
 	sgsdl2_material *material2 = new sgsdl2_material();
-//	sgsdl2_material *material3 = new sgsdl2_material();
+	sgsdl2_material *material3 = new sgsdl2_material();
 	
 	light->intensity = 1.2f;
 	light->attenuation = 0.001f;
-	light->ambient_coefficient = 0.1f;
+	light->ambient_coefficient = 0.1;
 	light->light_type = sgsdl2_light_type::SPOT;
 //	light->light_type = sgsdl2_light_type::DIRECTIONAL;
 	light->width = 30;
@@ -201,50 +205,58 @@ sgsdl2_scene_element* build_scene(sgsdl2_scene *scene)
 	material1->shader = (int) scene->default_shader;
 	
 	material2->diffuse_color = {0, 1, 0, 1};
-	material2->specular_color = {0.5, 0.5, 0.5, 1};
+	material2->specular_color = {1, 1, 1, 1};
 	material2->specular_exponent = 25;
-	material2->specular_intensity = 0.5;
+	material2->specular_intensity = 0.1;
 //	material2->shader = (int) program;
 	material2->shader = (int) scene->default_shader;
 	
-//	material3->diffuse_color = {1, 0, 0, 1};
-//	material3->specular_color = {1, 1, 1, 1};
-//	material3->specular_exponent = 30;
-//	material3->specular_intensity = 0.1f;
+	material3->diffuse_color = {0, 0, 1, 1};
+	material3->specular_color = {1, 1, 1, 1};
+	material3->specular_exponent = 30;
+	material3->specular_intensity = 0.1f;
 //	material3->texture = cat_texture->handle;
 //	material3->shader = (int) program;
-//	material3->shader = (int) scene->default_shader;
+	material3->shader = (int) scene->default_shader;
 	
-	sgsdl2_add_element_to_root(scene, cube1);
-	sgsdl2_add_element_to_root(scene, cube2);
+	objects[0]->material = material1;
+	objects[1]->material = material2;
+	objects[2]->material = material3;
+	
+	sgsdl2_add_element_to_root(scene, objects[0]);
+	sgsdl2_add_element_to_root(scene, objects[1]);
+	sgsdl2_add_element_to_root(scene, objects[2]);
+	
+//	sgsdl2_add_element_to_root(scene, cube1);
+//	sgsdl2_add_element_to_root(scene, cube2);
 //	sgsdl2_add_element_to_root(scene, cube3);
 	sgsdl2_add_element_to_root(scene, camera);
 	sgsdl2_add_element_to_root(scene, light);
 	scene->active_camera = camera;
 	
-	sgsdl2_attach_vertices(cube1, vertices_big, 24, 3);
-	sgsdl2_attach_vertices(cube2, vertices, 24, 3);
+//	sgsdl2_attach_vertices(cube1, vertices_big, 24, 3);
+//	sgsdl2_attach_vertices(cube2, vertices, 24, 3);
 //	sgsdl2_attach_vertices(cube3, vertices, 24, 3);
 	
-	sgsdl2_attach_indices(cube1, indices, 36);
-	sgsdl2_attach_indices(cube2, indices, 36);
+//	sgsdl2_attach_indices(cube1, indices, 36);
+//	sgsdl2_attach_indices(cube2, indices, 36);
 //	sgsdl2_attach_indices(cube3, indices, 36);
 	
-	sgsdl2_attach_normals(cube1, normals, 24, 3);
-	sgsdl2_attach_normals(cube2, normals, 24, 3);
+//	sgsdl2_attach_normals(cube1, normals, 24, 3);
+//	sgsdl2_attach_normals(cube2, normals, 24, 3);
 //	sgsdl2_attach_normals(cube3, normals, 24, 3);
 	
-	sgsdl2_attach_colors(cube2, colors, 24, 3);
+//	sgsdl2_attach_colors(cube2, colors, 24, 3);
 //	sgsdl2_attach_texcoords(cube3, texCoords, 24);
 	
-	cube1->material = material1;
-	cube2->material = material2;
+//	cube1->material = material1;
+//	cube2->material = material2;
 //	cube3->material = material3;
 	
 	camera->camera_type = sgsdl2_camera_type::PERSPECTIVE;
 	sgsdl2_set_camera_frustum(camera, (float) M_PI / 3, (float) M_PI / 3, 1, 100);
 	
-	return light;
+	return camera;
 }
 
 void test_graphics3d()
@@ -300,7 +312,7 @@ void test_graphics3d()
 	
 	while (radians < 20 * M_PI)
 	{
-		sgsdl2_clear_opengl_window(&surface, {1, 1, 1, 1});
+		sgsdl2_clear_opengl_window(&surface, {0, 0, 0, 1});
 		sgsdl2_render_scene(scene);
 		sgsdl2_check_opengl_error();
 		sgsdl2_update_opengl_render(&surface);
@@ -309,8 +321,8 @@ void test_graphics3d()
 //		Vector3f lookat = {{sinf(radians), 0, -cosf(radians)}};
 //		rotate_element->direction = lookat;
 //		((sgsdl2_light*)rotate_element)->cos_inner_cone = cosf(abs(M_PI_4 * sinf(radians)));
-		rotate_element->location = {{15 * sinf(radians), 0, -15 * cosf(radians)}};
-		rotate_element->direction = negateVector3f(rotate_element->location);
+//		rotate_element->location = {{15 * sinf(radians), 0, -15 * cosf(radians)}};
+//		rotate_element->direction = negateVector3f(rotate_element->location);
 		
 		_sg_functions->utils.delay(1000 / 60);
 	}

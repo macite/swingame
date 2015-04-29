@@ -12,6 +12,7 @@
 #include "SGSDL2Graphics.h"
 #include <iostream>
 #include <fstream>
+#include "WavefrontConverterCPP.h"
 
 using namespace std;
 
@@ -91,6 +92,48 @@ void sgsdl2_compile_default_shaders(sgsdl2_scene * const scene)
 void sgsdl2_set_active_camera(sgsdl2_scene * const scene, sgsdl2_camera * const new_active_cam)
 {
 	scene->active_camera = new_active_cam;
+}
+
+void sgsdl2_create_geometry_objects_from_file(const char *file_path, sgsdl2_geometry ***objects, int *count)
+{
+	int int_count;
+	obj_data *int_objects;
+	convert_file(file_path, &int_objects, &int_count);
+	
+	if (int_count > 0)
+	{
+		*objects = (sgsdl2_geometry**) malloc(sizeof(sgsdl2_geometry*) * (unsigned int) int_count);
+		*count = int_count;
+		
+		for (int i = 0; i < int_count; i++)
+		{
+			(*objects)[i] = sgsdl2_make_geometry();
+			sgsdl2_attach_vertices((*objects)[i], int_objects[i].vertices, int_objects[i].vertices_count, 3);
+			sgsdl2_attach_indices((*objects)[i], int_objects[i].indices, int_objects[i].indices_count);
+			if (int_objects[i].tex_coords_count > 0)
+			{
+				sgsdl2_attach_texcoords((*objects)[i], int_objects[i].tex_coords, int_objects[i].tex_coords_count);
+			}
+			if (int_objects[i].normals_count > 0)
+			{
+				sgsdl2_attach_normals((*objects)[i], int_objects[i].normals, int_objects[i].normals_count, 3);
+			}
+		}
+	}
+	delete[] int_objects;
+}
+
+void sgsdl2_add_geometry_from_file(sgsdl2_scene * const scene, const char *file_path)
+{
+	int count;
+	sgsdl2_geometry **objects;
+	sgsdl2_create_geometry_objects_from_file(file_path, &objects, &count);
+	
+	for (int i = 0; i < count; i++)
+	{
+		sgsdl2_add_element_to_root(scene, objects[i]);
+	}
+	// Don't need to delete objects as they now belong to the scene
 }
 
 void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element * const element)
@@ -177,6 +220,7 @@ void sgsdl2_remove_element(sgsdl2_scene_element * const element)
 					element->parent->children.erase(it);
 					element->parent = nullptr;
 					element->root = nullptr;
+					break;
 				}
 			}
 		}
@@ -423,6 +467,9 @@ void sgsdl2_set_camera_frustum(sgsdl2_camera *camera, float fovx, float fovy, fl
 sgsdl2_geometry* sgsdl2_make_geometry()
 {
 	sgsdl2_geometry *geometry = new sgsdl2_geometry();
+	geometry->location = {{0, 0, 0}};
+	geometry->direction = {{0, 0, -1}};
+	geometry->up = {{0, 1, 0}};
 	geometry->vertex_buffer = 0;
 	geometry->color_buffer = 0;
 	geometry->indices_buffer = 0;

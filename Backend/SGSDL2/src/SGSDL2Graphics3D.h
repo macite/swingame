@@ -58,6 +58,12 @@ void sgsdl2_compile_default_shaders(sgsdl2_scene * const scene);
 // Sets the active camera for a scene
 void sgsdl2_set_active_camera(sgsdl2_scene * const scene, sgsdl2_camera * const new_active_cam);
 
+// Creates an array of geometry pointers that are loaded with data from the file
+void sgsdl2_create_geometry_objects_from_file(const char *file_path, sgsdl2_geometry ***objects, int *count);
+
+// Creates and adds geometry elements from an obj file
+void sgsdl2_add_geometry_from_file(sgsdl2_scene * const scene, const char *file_path);
+
 // Adds an element to the root set of this scene
 void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element * const element);
 

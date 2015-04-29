@@ -7,10 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		823D26501AEF3AC200CAED9B /* 3-shape-scene-normals.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 823D264F1AEF3AB900CAED9B /* 3-shape-scene-normals.obj */; };
+		823D26561AEFADE300CAED9B /* libwfc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 823D26551AEFADE300CAED9B /* libwfc.a */; };
+		823D26581AF0773A00CAED9B /* single-cube.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 823D26571AF0772F00CAED9B /* single-cube.obj */; };
 		82C5AAE11AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */; };
-		82C5AAE21AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */; };
 		82C5AAE61AB04F640005429A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEE1183C211C00876830 /* OpenGL.framework */; };
-		82C5AAEA1AB14D7D0005429A /* test_graphics3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */; };
 		82C5AAEB1AB14D7D0005429A /* test_graphics3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */; };
 		82C5AAEC1AB14D7D0005429A /* test_graphics3d.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAE91AB14D7D0005429A /* test_graphics3d.h */; };
 		82C5AAF41AB4458D0005429A /* SGSDL2Graphics3D.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAE01AB027440005429A /* SGSDL2Graphics3D.h */; };
@@ -97,12 +98,17 @@
 				94390FE6188792FF0061DC61 /* BATTLEST.TTF in CopyFiles */,
 				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
 				94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */,
+				823D26501AEF3AC200CAED9B /* 3-shape-scene-normals.obj in CopyFiles */,
+				823D26581AF0773A00CAED9B /* single-cube.obj in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		823D264F1AEF3AB900CAED9B /* 3-shape-scene-normals.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "3-shape-scene-normals.obj"; path = "../../../Test/Resources/3-shape-scene-normals.obj"; sourceTree = "<group>"; };
+		823D26551AEFADE300CAED9B /* libwfc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwfc.a; path = ../../lib/mac/libwfc.a; sourceTree = "<group>"; };
+		823D26571AF0772F00CAED9B /* single-cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "single-cube.obj"; path = "../../../Test/Resources/single-cube.obj"; sourceTree = "<group>"; };
 		8276F05F1AD8DCDA00D51508 /* shadowmap.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.frag; path = ../../src/shaders/shadowmap.frag; sourceTree = "<group>"; };
 		8276F0601AD8DCDA00D51508 /* shadowmap.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.vert; path = ../../src/shaders/shadowmap.vert; sourceTree = "<group>"; };
 		82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Graphics3D.cpp; path = ../../src/SGSDL2Graphics3D.cpp; sourceTree = "<group>"; };
@@ -200,6 +206,7 @@
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
 				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
+				823D26561AEFADE300CAED9B /* libwfc.a in Frameworks */,
 				94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */,
 				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */,
@@ -386,6 +393,7 @@
 				9471BDB1183B732800BE3771 /* libSDL2_ttf.a */,
 				9471BDB2183B732800BE3771 /* libSDL2.a */,
 				9471BDB3183B732800BE3771 /* libwebp.a */,
+				823D26551AEFADE300CAED9B /* libwfc.a */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -393,6 +401,8 @@
 		94821584184C6FF000C89CBE /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				823D264F1AEF3AB900CAED9B /* 3-shape-scene-normals.obj */,
+				823D26571AF0772F00CAED9B /* single-cube.obj */,
 				94E752921890D08800A3176C /* ball_small.png */,
 				94E174F41891DB3E00544C58 /* whac-a-mole-background.png */,
 				94E752941890DA1C00A3176C /* Lines.png */,
@@ -502,7 +512,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82C5AAEA1AB14D7D0005429A /* test_graphics3d.cpp in Sources */,
 				942DBEFA183C563500876830 /* SGSDL2Utils.cpp in Sources */,
 				942DBEF4183C36C500876830 /* SGSDL2Graphics.cpp in Sources */,
 				942DBEF0183C2A6400876830 /* sgBackendUtils.cpp in Sources */,
@@ -524,7 +533,6 @@
 				945BB7A01857C5B000148796 /* test_input.cpp in Sources */,
 				94FEB51218582F8D00AFF9D7 /* test_text.cpp in Sources */,
 				82C5AAEB1AB14D7D0005429A /* test_graphics3d.cpp in Sources */,
-				82C5AAE21AB027440005429A /* SGSDL2Graphics3D.cpp in Sources */,
 				942DBED2183C1DBA00876830 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -634,12 +642,14 @@
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 					../../external/SDL_net,
+					../../external/wfc,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../../lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 					/Users/acain/Source/GitHub/SwinGame/Backend/SGSDL2/lib/mac,
+					/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/lib/mac,
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -681,12 +691,14 @@
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 					../../external/SDL_net,
+					../../external/wfc,
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					../../lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 					/Users/acain/Source/GitHub/SwinGame/Backend/SGSDL2/lib/mac,
+					/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -713,10 +725,12 @@
 					../../external/SDL_net,
 					../../external/SDL_mixer,
 					../../external/SDL_gfx,
+					../../external/wfc,
 				);
 				LD_RUNPATH_SEARCH_PATHS = .;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				ONLY_ACTIVE_ARCH = NO;
@@ -742,10 +756,12 @@
 					../../external/SDL_net,
 					../../external/SDL_mixer,
 					../../external/SDL_gfx,
+					../../external/wfc,
 				);
 				LD_RUNPATH_SEARCH_PATHS = .;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/lib/mac,
 					/Users/acain/working/SwinGame/Backend/SGSDL2/lib/mac,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

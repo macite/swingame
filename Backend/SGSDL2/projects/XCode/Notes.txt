@@ -4,3 +4,5 @@
 	There are no SDL file in the test program.
 - Each VBO can only be associated with one OpenGL context (not sure of the best way around this, probably have to allow the user to change the current rendering context)
 - Same for VAOs
+
+- Added the wfc library, and included it in library search path for both targets
