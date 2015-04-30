@@ -85,7 +85,7 @@ int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
     int sent = 0;
     if ((TCPsocket)con->_socket)
     {
-        printf("here -- %p\n", (TCPsocket)con->_socket);
+        //printf("here -- %p\n", (TCPsocket)con->_socket);
         sent = SDLNet_TCP_Send((TCPsocket)con->_socket, buffer, size);
     }
 //    printf("Sent %d\n", sent);

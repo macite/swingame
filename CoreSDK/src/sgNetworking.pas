@@ -304,10 +304,15 @@ uses sgTypes;
   function EncodeBase64(const aData : String) : String;
 
 
-  /// Performs a get request for the resourse at the specified host, path and port.
+  /// Perform a get request for the resourse at the specified host, path and port.
   ///
   /// @lib
   function HttpGet(const host: String; port: Word; const path: String) : HttpResponse;
+
+  /// Perform a post request to the specified host, with the supplied body.
+  ///
+  ///
+  function HttpPost(const host: String; port: Word; const path, body: String): HttpResponse;
 
 //----------------------------------------------------------------------------
 // Misc
@@ -2171,7 +2176,9 @@ var
     //   exit; 
     // end;
 
-    lMsg := HttpRequestToString(aReq) + #13#10#13#10;
+    lMsg := HttpRequestToString(aReq);
+    if aReq.requestType = HTTP_GET then lMsg += #13#10;
+
     SetLength(buffer, Length(lMsg));
 
     for i := 0 to Length(lMsg) - 1 do
@@ -2252,7 +2259,7 @@ var
       Http_DELETE: result += 'DELETE ';
     end;
     result += aHttpRequest.url;
-    result += ' Http/' + aHttpRequest.version;
+    result += ' HTTP/' + aHttpRequest.version;
     result += #13#10;
     for i := Low(aHttpRequest.headername) to High(aHttpRequest.headername) do
       result += aHttpRequest.headername[i] + ': ' + aHttpRequest.headervalue[i] + #13#10;
@@ -2457,6 +2464,36 @@ var
 
     HttpSetBody(request, '');
     
+    con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
+
+    // CreateHttpConnection(ip, port);
+    SendHttpRequest(request, con);
+    result := ReadHttpResponse(con);
+    // WriteLn('here - ', HttpResponseBodyAsString(result));
+    _sg_functions^.network.close_connection(@con);
+  end;
+
+  function HttpPost(const host: String; port: Word; const path, body: String): HttpResponse;
+  var
+    con : sg_network_connection;
+    request : HttpRequest;
+  begin
+    HttpAddHeader(request, 'Host', host + ':' + IntToStr(port));
+    HttpAddHeader(request, 'Connection', 'close');
+    HttpAddHeader(request, 'User-Agent', 'SwinGame/4.0' );
+    HttpAddHeader(request, 'Content-Type', 'application/json;charset=UTF8' );
+    HttpAddHeader(request, 'Content-Length', IntToStr(Length(body)));
+    HttpAddHeader(request, 'Accept', 'application/json, text/plain, */*');
+
+    // Create Http message
+    HttpSetMethod(request, HTTP_POST);
+    HttpSetURL(request, path);
+    HttpSetVersion(request, '1.1');
+
+    HttpSetBody(request, body);
+    
+    // WriteLn(HttpRequestToString(request));
+
     con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
 
     // CreateHttpConnection(ip, port);

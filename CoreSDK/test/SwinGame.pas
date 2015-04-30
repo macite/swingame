@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-03-09 15:30:33.478190
+// SwinGame.pas was generated on 2015-04-22 18:25:13.779334
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -7,7 +7,7 @@
 unit SwinGame;
 
 interface
-uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
+uses sgTypes, sgAnimations, sgAudio, sgCamera, sgCharacters, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino;
 
   type LongintArray = sgTypes.LongintArray;
 
@@ -73,11 +73,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type Bitmap = sgTypes.Bitmap;
 
-  type DrawingDest = sgTypes.DrawingDest;
-
-  type DrawingOptions = sgTypes.DrawingOptions;
-
   type BitmapArray = sgTypes.BitmapArray;
+
+  type BitmapCell = sgTypes.BitmapCell;
 
   type CollisionSide = sgTypes.CollisionSide;
 
@@ -117,6 +115,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type FreeNotifier = sgTypes.FreeNotifier;
 
+  type DirectionAngles = sgTypes.DirectionAngles;
+
+  type DirStateData = sgTypes.DirStateData;
+
+  type CharacterData = sgTypes.CharacterData;
+
+  type Character = sgTypes.Character;
+
   type GUIElementKind = sgTypes.GUIElementKind;
 
   type EventKind = sgTypes.EventKind;
@@ -155,25 +161,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type PanelData = sgTypes.PanelData;
 
-  type ConnectionType = sgTypes.ConnectionType;
+  type MessagePtr = sgTypes.MessagePtr;
 
-  type HttpMethod = sgTypes.HttpMethod;
-
-  type HttpHeader = sgTypes.HttpHeader;
-
-  type HttpRequest = sgTypes.HttpRequest;
-
-  type HttpResponse = sgTypes.HttpResponse;
-
-  type Connection = sgTypes.Connection;
-
-  type Message = sgTypes.Message;
+  type MessageLink = sgTypes.MessageLink;
 
   type ConnectionData = sgTypes.ConnectionData;
 
-  type ServerData = sgTypes.ServerData;
-
-  type ServerSocket = sgTypes.ServerSocket;
+  type Connection = sgTypes.Connection;
 
   type ArduinoData = sgTypes.ArduinoData;
 
@@ -198,7 +192,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function AnimationFrameTime(anim: Animation): Single; overload;
 
   // The index of the animation within the animation template that has the supplied name.
-  function AnimationIndex(temp: AnimationScript; const name: String): Longint; overload;
+  function AnimationIndex(temp: AnimationScript; name: String): Longint; overload;
 
   // The name of the animation currently being played.
   function AnimationName(temp: Animation): String; overload;
@@ -211,32 +205,32 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the `AnimationScript` that has been loaded with the specified ``name``,
   // see `LoadAnimationScriptNamed`.
-  function AnimationScriptNamed(const name: String): AnimationScript; overload;
+  function AnimationScriptNamed(name: String): AnimationScript; overload;
+
+  // Assign a new starting animation to the passed in animation from the `AnimationScript`.
+  // This may play a sound if the first frame of the animation is linked to a sound effect.
+  procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript); overload;
 
   // Assign a new starting animation to the passed in animation from the `AnimationScript`.
   // This may play a sound if the first frame of the animation is linked to a sound effect.
   procedure AssignAnimation(anim: Animation; idx: Longint; script: AnimationScript); overload;
 
   // Assign a new starting animation to the passed in animation from the `AnimationScript`.
-  // This may play a sound if the first frame of the animation is linked to a sound effect.
-  procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript); overload;
-
-  // Assign a new starting animation to the passed in animation from the `AnimationScript`.
   // This may play a sound if the first frame of the animation is linked to a sound effect, and withSound is true.
-  procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript; withSound: Boolean); overload;
+  procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript; withSound: Boolean); overload;
 
   // Assign a new starting animation to the passed in animation from the `AnimationScript`.
   // This may play a sound if the first frame of the animation is linked to a sound effect, and 
   // ``withSound`` is ``true``.
   procedure AssignAnimation(anim: Animation; idx: Longint; script: AnimationScript; withSound: Boolean); overload;
 
-  // Creates an animation from a `AnimationScript`. This may play a sound effect
-  // if the animation is set to play a sound effect on its first frame.
-  function CreateAnimation(const identifier: String; script: AnimationScript): Animation; overload;
-
   // Creates an animation from an `AnimationScript`. This may play a sound effect
   // if the animation is set to play a sound effect on its first frame.
   function CreateAnimation(identifier: Longint; script: AnimationScript): Animation; overload;
+
+  // Creates an animation from a `AnimationScript`. This may play a sound effect
+  // if the animation is set to play a sound effect on its first frame.
+  function CreateAnimation(identifier: String; script: AnimationScript): Animation; overload;
 
   // Creates an animation from an `AnimationScript`. If ``withSound`` is ``true``, this may
   // play a sound effect if the animation is set to play a sound effect on its first frame.
@@ -244,23 +238,31 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates an animation from a `AnimationScript`. If ``withSound`` is ``true``, this may
   // play a sound effect if the animation is set to play a sound effect on its first frame.
-  function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+  function CreateAnimation(identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
 
   // Uses the animation information to draw a bitmap at the specified
   // point.
   procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
 
-  // Uses the animation information to draw a bitmap at the specified
-  // point given the passed in options.
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts: DrawingOptions); overload;
-
   // Uses the `Animation` information to draw a `Bitmap` at the specified
   // ``x``,``y`` location.
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single); overload;
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
 
   // Uses the animation information to draw a bitmap at the specified
-  // x,y location given the passed in options.
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
+  // point on a destination bitmap.
+  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
+
+  // Uses the animation information to draw a bitmap at the specified
+  // x,y location on a destination bitmap.
+  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+
+  // Uses the animation information to draw a bitmap to the screen at the specified
+  // point.
+  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
+
+  // Uses the animation information to draw a bitmap to the screen at the specified
+  // x,y location.
+  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
 
   // Disposes of the resources used in the animation.
   procedure FreeAnimation(var ani: Animation); overload;
@@ -272,23 +274,23 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Determines if SwinGame has animation frames loaded for the supplied ``name``.
   // This checks against all loaded animation frames, those loaded without a name
   // are assigned the filename as a default.
-  function HasAnimationScript(const name: String): Boolean; overload;
+  function HasAnimationScript(name: String): Boolean; overload;
 
   // Load animation details from a animation frames file.
-  function LoadAnimationScript(const filename: String): AnimationScript; overload;
+  function LoadAnimationScript(filename: String): AnimationScript; overload;
 
   // Loads and returns a `AnimationScript`. The supplied ``filename`` is used to
   // locate the `AnimationScript` to load. The supplied ``name`` indicates the 
   // name to use to refer to this in SwinGame. The `AnimationScript` can then be
   // retrieved by passing this ``name`` to the `AnimationScriptNamed` function.
-  function LoadAnimationScriptNamed(const name: String; const filename: String): AnimationScript; overload;
+  function LoadAnimationScriptNamed(name: String; filename: String): AnimationScript; overload;
 
   // Releases all of the animation templates that have been loaded.
   procedure ReleaseAllAnimationScripts(); overload;
 
   // Releases the SwinGame resources associated with the animation template of the
   // specified ``name``.
-  procedure ReleaseAnimationScript(const name: String); overload;
+  procedure ReleaseAnimationScript(name: String); overload;
 
   // Restarts the animation. This may play a sound effect if the first frame
   // triggers a sound.
@@ -325,24 +327,24 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Fades the music in over a number of milliseconds, and then continues to
   // play the music repeatedly until the program ends or the music is stopped. 
   // The music fades from 0 volume up to the currently set music volume.
-  procedure FadeMusicIn(const name: String; ms: Longint); overload;
+  procedure FadeMusicIn(mus: Music; ms: Longint); overload;
 
   // Fades the music in over a number of milliseconds, and then continues to
   // play the music repeatedly until the program ends or the music is stopped. 
   // The music fades from 0 volume up to the currently set music volume.
-  procedure FadeMusicIn(mus: Music; ms: Longint); overload;
+  procedure FadeMusicIn(name: String; ms: Longint); overload;
+
+  // This version of FadeMusicIn fades the music in then plays the 'Music' 
+  // for a given number of loops.Setting loops to -1 repeats the music 
+  // infinitely, other values larger than 0 indicate the number of times that
+  // the music should be played.
+  procedure FadeMusicIn(name: String; loops: Longint; ms: Longint); overload;
 
   // This version of FadeMusicIn fades the music in then plays the 'Music' 
   // for a given number of loops.Setting loops to -1 repeats the music 
   // infinitely, other values larger than 0 indicate the number of times that
   // the music should be played.
   procedure FadeMusicIn(mus: Music; loops: Longint; ms: Longint); overload;
-
-  // This version of FadeMusicIn fades the music in then plays the 'Music' 
-  // for a given number of loops.Setting loops to -1 repeats the music 
-  // infinitely, other values larger than 0 indicate the number of times that
-  // the music should be played.
-  procedure FadeMusicIn(const name: String; loops: Longint; ms: Longint); overload;
 
   // Fades the currently playing music out over a number of milli seconds.
   procedure FadeMusicOut(ms: Longint); overload;
@@ -357,12 +359,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Determines if SwinGame has a music value loaded for the supplied name.
   // This checks against all music values loaded using `LoadMusicNamed`.
-  function HasMusic(const name: String): Boolean; overload;
+  function HasMusic(name: String): Boolean; overload;
 
   // Determines if SwinGame has a sound effect loaded for the supplied name.
   // This checks against all sounds loaded, those loaded without a name
   // are assigned the filename as a default
-  function HasSoundEffect(const name: String): Boolean; overload;
+  function HasSoundEffect(name: String): Boolean; overload;
 
   // Loads the `Music` from the supplied filename. The music will be loaded
   // from the Resources/sounds folder unless a full path to the file is passed
@@ -375,13 +377,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // `FreeMusic` should be called to free the resources used by the 
   // `Music` data once the resource is no longer needed.
-  function LoadMusic(const filename: String): Music; overload;
+  function LoadMusic(filename: String): Music; overload;
 
   // Loads and returns a music value. The supplied ``filename`` is used to
   // locate the music file to load. The supplied ``name`` indicates the 
   // name to use to refer to this Music value. The `Music` can then be
   // retrieved by passing this ``name`` to the `MusicNamed` function.
-  function LoadMusicNamed(const name: String; const filename: String): Music; overload;
+  function LoadMusicNamed(name: String; filename: String): Music; overload;
 
   // Loads the `SoundEffect` from the supplied filename. The sound will be loaded
   // from the Resources/sounds folder unless a full path to the file is passed
@@ -394,13 +396,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // `FreeSoundEffect` should be called to free the resources used by the 
   // `SoundEffect` data once the resource is no longer needed.
-  function LoadSoundEffect(const filename: String): SoundEffect; overload;
+  function LoadSoundEffect(filename: String): SoundEffect; overload;
 
   // Loads and returns a sound effect. The supplied ``filename`` is used to
   // locate the sound effect to load. The supplied ``name`` indicates the 
   // name to use to refer to this SoundEffect. The `SoundEffect` can then be
   // retrieved by passing this ``name`` to the `SoundEffectNamed` function.
-  function LoadSoundEffectNamed(const name: String; const filename: String): SoundEffect; overload;
+  function LoadSoundEffectNamed(name: String; filename: String): SoundEffect; overload;
 
   // Returns the filename that SwinGame uses to load to this music data.
   function MusicFilename(mus: Music): String; overload;
@@ -411,7 +413,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the `Music` that has been loaded with the specified name.
   // This works with music data loaded using `LoadMusicNamed`.
-  function MusicNamed(const name: String): Music; overload;
+  function MusicNamed(name: String): Music; overload;
 
   // This function indicates if music is currently playing. As only one music 
   // resource can be playing at a time this does not need to be told which
@@ -451,7 +453,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // looped infinitely. The currently playing music is stopped and the new 
   // music resource will start playing, and will repeat until `StopMusic` is 
   // called, or another resource is played.
-  procedure PlayMusic(const name: String); overload;
+  procedure PlayMusic(mus: Music); overload;
 
   // PlayMusic starts playing a `Music` resource. SwinGame only allows one 
   // music resource to be played at a time. Starting to play a new music 
@@ -469,7 +471,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // looped infinitely. The currently playing music is stopped and the new 
   // music resource will start playing, and will repeat until `StopMusic` is 
   // called, or another resource is played.
-  procedure PlayMusic(mus: Music); overload;
+  procedure PlayMusic(name: String); overload;
 
   // This version of PlayMusic allows you to control the number of times the 
   // `Music` resource is repeated. It starts playing the supplied `Music` 
@@ -485,7 +487,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // parameter. Setting loops to -1 repeats the music infinitely, other values
   // larger than 0 indicate the number of times that the music should be 
   // played.
-  procedure PlayMusic(const name: String; loops: Longint); overload;
+  procedure PlayMusic(name: String; loops: Longint); overload;
 
   // There are several versions of PlaySoundEffect that can be used to control
   // the way the sound effect plays, allowing you to control its volume and 
@@ -503,7 +505,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   //
   // With this version of PlaySoundEffect, the started sound effect will be 
   // played at full volume.
-  procedure PlaySoundEffect(const name: String); overload;
+  procedure PlaySoundEffect(name: String); overload;
+
+  // This version of PlaySoundEffect allows you to control the volume of the 
+  // sounds playback. The vol parameter will take a value between 0 and 1 
+  // indicating the percentage of full volume to play at.
+  // For example, 0.1 plays the sound effect at 10% of its original volume.
+  procedure PlaySoundEffect(name: String; vol: Single); overload;
 
   // This version of PlaySoundEffect allows you to control the volume of the 
   // sounds playback. The vol parameter will take a value between 0 and 1 
@@ -516,20 +524,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // the sound effect to be looped infinitely, setting it to a value larger than
   // 0 plays the sound effect the number of times indicated, calling with a 
   // value of 0 means the sound effect is not played.
-  procedure PlaySoundEffect(effect: SoundEffect; loops: Longint); overload;
-
-  // This version of PlaySoundEffect allows you to control the volume of the 
-  // sounds playback. The vol parameter will take a value between 0 and 1 
-  // indicating the percentage of full volume to play at.
-  // For example, 0.1 plays the sound effect at 10% of its original volume.
-  procedure PlaySoundEffect(const name: String; vol: Single); overload;
+  procedure PlaySoundEffect(name: String; loops: Longint); overload;
 
   // This version of PlaySoundEffect allows you to indicate the number of times
   // the sound effect is repeated. Setting the loops parameter to -1 will cause
   // the sound effect to be looped infinitely, setting it to a value larger than
   // 0 plays the sound effect the number of times indicated, calling with a 
   // value of 0 means the sound effect is not played.
-  procedure PlaySoundEffect(const name: String; loops: Longint); overload;
+  procedure PlaySoundEffect(effect: SoundEffect; loops: Longint); overload;
 
   // This version of PlaySoundEffect allows you to control both the number
   // of times the `SoundEffect` is repeated, and its playback volume.
@@ -537,7 +539,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // This version of PlaySoundEffect allows you to control both the number
   // of times the `SoundEffect` is repeated, and its playback volume.
-  procedure PlaySoundEffect(const name: String; loops: Longint; vol: Single); overload;
+  procedure PlaySoundEffect(name: String; loops: Longint; vol: Single); overload;
 
   // Releases all of the music data that have been loaded.
   procedure ReleaseAllMusic(); overload;
@@ -546,11 +548,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ReleaseAllSoundEffects(); overload;
 
   // Releases the music that have been loaded with the supplied name.
-  procedure ReleaseMusic(const name: String); overload;
+  procedure ReleaseMusic(name: String); overload;
 
   // Releases the SwinGame resources associated with the sound effect of the
   // specified ``name``.
-  procedure ReleaseSoundEffect(const name: String); overload;
+  procedure ReleaseSoundEffect(name: String); overload;
 
   // Resume currently paused music. See `PauseMusic`.
   procedure ResumeMusic(); overload;
@@ -569,15 +571,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the `SoundEffect` that has been loaded with the specified name,
   // see `LoadSoundEffectNamed`.
-  function SoundEffectNamed(const name: String): SoundEffect; overload;
-
-  // This function can be used to check if a sound effect is currently 
-  // playing.
-  function SoundEffectPlaying(const name: String): Boolean; overload;
+  function SoundEffectNamed(name: String): SoundEffect; overload;
 
   // This function can be used to check if a sound effect is currently 
   // playing.
   function SoundEffectPlaying(effect: SoundEffect): Boolean; overload;
+
+  // This function can be used to check if a sound effect is currently 
+  // playing.
+  function SoundEffectPlaying(name: String): Boolean; overload;
 
   // Stops playing the current music resource.
   procedure StopMusic(); overload;
@@ -586,7 +588,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure StopSoundEffect(effect: SoundEffect); overload;
 
   // Stops all occurances of the named `SoundEffect` that are currently playing.
-  procedure StopSoundEffect(const name: String); overload;
+  procedure StopSoundEffect(name: String); overload;
 
   // `TryOpenAudio` attempts to open the audio device for SwinGame to use.
   // If this fails `TryOpenAudio` returns false to indicate that the audio
@@ -611,6 +613,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // at `CameraY` + `ScreenHeight`.
   function CameraY(): Single; overload;
 
+  // Set the camera view to be centered over the specific Character. The offset
+  // vector allows you to move the sprite from the direct center of the screen.
+  procedure CenterCameraOn(c: Character; const offset: Vector); overload;
+
   // Set the camera view to be centered over the specific sprite. The offset
   // vector allows you to move the sprite from the direct center of the screen.
   procedure CenterCameraOn(s: Sprite; const offset: Vector); overload;
@@ -619,7 +625,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // offset from the center of the sprite if needed. The sprites size (width
   // and height) are taken into account. Use x and y offset of 0.0 if you want 
   // the camera to be exaclty over the center of the sprite.
-  procedure CenterCameraOn(s: Sprite; offsetX: Single; offsetY: Single); overload;
+  procedure CenterCameraOn(s: Sprite; offsetX: Longint; offsetY: Longint); overload;
 
   // Move the camera (offset its world x and y values) using the specified 
   // vector. For example, if you move the camera by the same speed vector of 
@@ -666,19 +672,153 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Translate a world x value to the current screen x value which is based on
   // the camera position.
-  function ToScreenX(worldX: Single): Single; overload;
+  function ToScreenX(worldX: Single): Longint; overload;
 
   // Translate a world y value to the current screen y value set by the camera.
-  function ToScreenY(worldY: Single): Single; overload;
+  function ToScreenY(worldY: Single): Longint; overload;
 
   // Translate a Point2D from screen coordinates to world coordinates.
   function ToWorld(const screenPoint: Point2D): Point2D; overload;
 
   // Translate a screen x value (based on the camera) to a world x value
-  function ToWorldX(screenX: Single): Single; overload;
+  function ToWorldX(screenX: Longint): Single; overload;
 
   // Translate a screen y value (based on the camera) to a world y value
-  function ToWorldY(screenY: Single): Single; overload;
+  function ToWorldY(screenY: Longint): Single; overload;
+
+  // Returns the DirectionAngles data at the selected index. The min and max
+  // of this record can be accessed by .min and .max
+  function CharacterAngleAt(c: Character; index: Longint): DirectionAngles; overload;
+
+  // Returns the maximum angle in the DirectionAngles record at the index
+  // specified
+  function CharacterAngleMaxAt(c: Character; index: Longint): Longint; overload;
+
+  // Returns the minimum angle in the DirectionAngles record at the index
+  // specified
+  function CharacterAngleMinAt(c: Character; index: Longint): Longint; overload;
+
+  // Returns the count of the Angles of the character
+  function CharacterAnglesLength(c: Character): Longint; overload;
+
+  // Returns the Character's name
+  function CharacterCharacterName(c: Character): String; overload;
+
+  // Returns the index of the current direction of the character
+  function CharacterCurrentDirection(c: Character): Longint; overload;
+
+  // Returns the index of the current state of the character
+  function CharacterCurrentState(c: Character): Longint; overload;
+
+  // Returns the count of the amount of directions that the character has
+  function CharacterDirectionCount(c: Character): Longint; overload;
+
+  // Returns all of the possible directions of the character
+  function CharacterDirections(c: Character): StringArray; overload;
+
+  // Returns the name of the file that was used to load the character's
+  // details.
+  function CharacterFilename(c: Character): String; overload;
+
+  // Returns the name of the character. This name can be used to
+  // retrieve this character using the `CharacterNamed` function.
+  function CharacterName(c: Character): String; overload;
+
+  // Returns the `Character` with the given name. You can specify
+  // the name to use in the resource bundle, or by calling the
+  // `LoadCharacterNamed` function.
+  function CharacterNamed(name: String): Character; overload;
+
+  // Sets the current direction of the character
+  procedure CharacterSetCurrentDirection(c: Character; direction: Longint); overload;
+
+  // Sets the current state of the character
+  procedure CharacterSetCurrentState(c: Character; state: Longint); overload;
+
+  // Sets the Character's name
+  procedure CharacterSetName(c: Character; name: String); overload;
+
+  // Sets the the name of the Type of Character(eg boss, grunt etc)
+  procedure CharacterSetType(c: Character; name: String); overload;
+
+  // Set the value of the character.
+  procedure CharacterSetValue(c: Character; idx: Longint; val: Single); overload;
+
+  // Set the value of the character.
+  procedure CharacterSetValue(c: Character; name: String; val: Single); overload;
+
+  // Returns whether or not the layer at the selected index is drawn
+  function CharacterShownLayersAt(c: Character; index: Longint): Boolean; overload;
+
+  // Returns the character's sprite
+  function CharacterSprite(c: Character): Sprite; overload;
+
+  // Returns all of the possible states of the character
+  function CharacterStateCount(c: Character): Longint; overload;
+
+  // Returns all of the possible directions of the character
+  function CharacterStates(c: Character): StringArray; overload;
+
+  // Returns the string value of the character's type
+  function CharacterType(c: Character): String; overload;
+
+  // Returns the character's value at the index specified
+  function CharacterValueAt(c: Character; index: Longint): Single; overload;
+
+  // Returns the count of character values
+  function CharacterValueCount(c: Character): Longint; overload;
+
+  // Returns the names of all of the values of the character
+  function CharacterValueNames(c: Character): StringArray; overload;
+
+  // Draw Character without a stationary state with default facing down when not moving
+  procedure DrawCharacter(c: Character); overload;
+
+  // Draws the character's sprite with no additional functionality
+  procedure DrawCharacterSprite(c: Character); overload;
+
+  // Draw Character that changes state when it's velocity is 0 to be the stationary
+  // state which is specified.
+  procedure DrawCharacterWithStationary(c: Character; stationaryState: Longint; state: Longint); overload;
+
+  // Free the resources associated with a Character. Please note
+  // that this also frees the `Sprite` that exists within the
+  // Character.
+  procedure FreeCharacter(var c: Character); overload;
+
+  // Returns ``true`` if SwinGame has loaded a character with the
+  // indicated name.
+  function HasCharacter(name: String): Boolean; overload;
+
+  // Loads the character from a text file
+  function LoadCharacter(filename: String): Character; overload;
+
+  // Loads the character from a text file, and assigns the character
+  // the indicated name. This name can then be used to refer to this
+  // character in the `CharacterNamed` function.
+  function LoadCharacterNamed(name: String; filename: String): Character; overload;
+
+  // Release all of the characters currently loaded into SwinGame.
+  procedure ReleaseAllCharacters(); overload;
+
+  // Free the resources associated with a Character with the
+  // given name.
+  procedure ReleaseCharacter(name: String); overload;
+
+  // Sets the active layers from the shown layers cache, using the current
+  // states and directions for the indexes of the array
+  procedure SetActiveLayer(c: Character); overload;
+
+  // Toggles whether or not the layer at the specified index is drawn or not
+  procedure ToggleLayerVisibility(c: Character; index: Longint); overload;
+
+  // Update the animation of the character depending on it's direction. Returns true
+  // if the direction was changed and false if it was no changed
+  function UpdateDirectionAnimation(c: Character): Boolean; overload;
+
+  // Update the animation of the character depending on it's direction, including updating
+  //When the character's state goes stationary
+  function UpdateDirectionAnimationWithStationary(c: Character; state: Longint; newState: Longint): Boolean; overload;
 
   // Adds the two parameter vectors (``v1`` and ``v2``) together and returns 
   // the result as a new `Vector`.
@@ -707,13 +847,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CenterPoint(const c: Circle): Point2D; overload;
 
   // Creates a circle at the given x,y location with the indicated radius.
-  function CircleAt(x: Single; y: Single; radius: Single): Circle; overload;
+  function CircleAt(x: Single; y: Single; radius: Longint): Circle; overload;
 
   // Creates a Circle at the point pt with the given radius.
-  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
 
   // Returns the radius of the passed in circle.
-  function CircleRadius(const c: Circle): Single; overload;
+  function CircleRadius(const c: Circle): Longint; overload;
 
   // Returns true if the circle is completely within the rectangle.
   function CircleWithinRect(const c: Circle; const rect: Rectangle): Boolean; overload;
@@ -746,10 +886,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function Cosine(angle: Single): Single; overload;
 
   // Creates a circle at the given x,y location with the indicated radius.
-  function CreateCircle(x: Single; y: Single; radius: Single): Circle; overload;
+  function CreateCircle(x: Single; y: Single; radius: Longint): Circle; overload;
 
   // Creates a Circle at the point pt with the given radius.
-  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
 
   // Returns a line segment from x1,y1 to x2,y2.
   function CreateLine(x1: Single; y1: Single; x2: Single; y2: Single): LineSegment; overload;
@@ -775,7 +915,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns a rectangle from a given x,y location with a given width
   // and height.
-  function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
+  function CreateRectangle(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
 
   // Returns a rectangle that encloses the lines in the lines array.
   function CreateRectangle(const lines: LinesArray): Rectangle; overload;
@@ -793,7 +933,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CreateRectangle(const pt1: Point2D; const pt2: Point2D): Rectangle; overload;
 
   // Returns a rectangle at a given point with a specified width and height.
-  function CreateRectangle(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
 
   // Returns a triangle from the points passed in.
   function CreateTriangle(ax: Single; ay: Single; bx: Single; by: Single; cx: Single; cy: Single): Triangle; overload;
@@ -812,7 +952,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CreateVectorFromPointToRect(x: Single; y: Single; const rect: Rectangle): Vector; overload;
 
   // Returns a vector from the specified point to the specified rectangle.
-  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
+  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
 
   // Returns a `Vector` created from the difference from the ``p1`` to 
   // the second ``p2`` points (`Point2D`).
@@ -842,14 +982,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure FixRectangle(var rect: Rectangle); overload;
 
   // Ensures that the passed in rectangle has a positive width and height.
-  procedure FixRectangle(var x: Single; var y: Single; var width: Single; var height: Single); overload;
+  procedure FixRectangle(var x: Single; var y: Single; var width: Longint; var height: Longint); overload;
 
   // Returns the identity matrix. When a Matrix2D or Vector is multiplied by
   // the identity matrix the result is the original matrix or vector.
   function IdentityMatrix(): Matrix2D; overload;
 
   // Returns a rectangle that is inset from rect the amount specified.
-  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle; overload;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle; overload;
 
   // Returns the intersection of two rectangles.
   function Intersection(const rect1: Rectangle; const rect2: Rectangle): Rectangle; overload;
@@ -1049,7 +1189,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns a rectangle from a given x,y location with a given width
   // and height.
-  function RectangleFrom(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
+  function RectangleFrom(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
 
   // Returns a rectangle that encloses th epoints in a triangle.
   function RectangleFrom(const tri: Triangle): Rectangle; overload;
@@ -1067,7 +1207,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function RectangleFrom(const pt1: Point2D; const pt2: Point2D): Rectangle; overload;
 
   // Returns a rectangle at a given point with a specified width and height.
-  function RectangleFrom(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
 
   // Returns the left (x) value of a rectangle.
   function RectangleLeft(const rect: Rectangle): Single; overload;
@@ -1164,7 +1304,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function VectorFromPointToRect(x: Single; y: Single; const rect: Rectangle): Vector; overload;
 
   // Returns a vector from the specified point to the specified rectangle.
-  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
+  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
 
   // Returns a `Vector` created from the difference from the ``p1`` to 
   // the second ``p2`` points (`Point2D`).
@@ -1240,9 +1380,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the two widest points on the circle that lie along the indicated vector.
   procedure WidestPoints(const c: Circle; const along: Vector; out pt1: Point2D; out pt2: Point2D); overload;
-
-  // Returns a list of the available resolutions.
-  function AvailableResolutions(): ResolutionArray; overload;
 
   // Get the blue value of ``color``.
   function BlueOf(c: Color): Byte; overload;
@@ -1711,70 +1848,192 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
 
   // Draw a circle in the game.
-  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
+  procedure DrawCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Draw circle in the game.
+  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
+
+  // Draw a circle in the game (filled or outline).
+  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
 
   // Draw a circle in the game.
   procedure DrawCircle(clr: Color; const c: Circle); overload;
 
-  // Draw a circle onto a destination bitmap.
-  procedure DrawCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
+  // Draw a circle onto a bitmap.
+  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
 
-  // Draw a circle onto a destination bitmap.
-  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
+  // Draw a circle in the game (filled or outline).
+  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
 
-  // Draw a ellipse in the game.
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
+  // Draw a circle onto a bitmap (filled or outline).
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
 
-  // Draw a ellipse in the game.
-  procedure DrawEllipse(clr: Color; const rec: Rectangle); overload;
+  // Draw a circle onto a bitmap.
+  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
 
-  // Draw a ellipse onto a destination bitmap.
-  procedure DrawEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
+  // Draw a circle onto a destination.
+  procedure DrawCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
 
-  // Draw a ellipse onto a destination bitmap.
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  // Draw a circle onto a destination (filled or outline).
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
+
+  // Draw a circle in the game (filled or outline).
+  procedure DrawCircle(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Draw a circle onto a destination (filled or outline).
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Draw the circel onto the screen.
+  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
+
+  // Draw a circle on the screen (filled or outline)
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
+
+  // Draw a circle onto the screen.
+  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
+
+  // Draw a circle on the screen.
+  procedure DrawCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Draw a circle onto the screen (filled or outline).
+  // 
+  // Draw a circle onto the screen
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
+
+  // Draw a circle on the screen (filled or outline).
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Draw an ellipse in the game.
+  procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
+
+  // Draw an ellipse in the game (filled or outline).
+  procedure DrawEllipse(clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw the ellipse onto the destination.
+  procedure DrawEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+
+  // Draw the ellipse onto the destination (filled or outline).
+  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw an ellipse on the screen.
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+
+  // Drawthe ellipse onto the destination.
+  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw an ellipse in the game (filled or outline).
+  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+
+  // Draw the ellipse onto the destination.
+  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw an ellipse on the screen.
+  procedure DrawEllipseOnScreen(clr: Color; const source: Rectangle); overload;
+
+  // Draw an ellpse on the screen (filled or outline).
+  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw an ellipse on screen.
+  procedure DrawEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw an ellipse on the screen (filled or outline).
+  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw a horizontal line.
+  procedure DrawHorizontalLine(clr: Color; y: Single; x1: Single; x2: Single); overload;
+
+  // Draw a horizontal line onto a destination.
+  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
+
+  // Draw a horizontal line on the screen between x1, x2
+  procedure DrawHorizontalLineOnScreen(clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
 
   // Draw a line in the game.
-  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D); overload;
+  procedure DrawLine(clr: Color; const line: LineSegment); overload;
 
   // Draw a line in the game.
-  procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
-
-  // Draw a line in the game.
-  procedure DrawLine(clr: Color; const l: LineSegment); overload;
+  procedure DrawLine(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
 
   // Draw a line onto a destination bitmap.
-  procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
+  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
 
-  // Draw a line in the game from one point to another point.
-  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D; const opts: DrawingOptions); overload;
+  // Draw a line onto a destination.
+  procedure DrawLine(dest: Bitmap; clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
 
-  // Draw a line with the provided DrawingOptions.
-  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
+  // Draw a line in the game.
+  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single); overload;
+
+  // Draw a line onto a destination bitmap.
+  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
+
+  // Draw a line on the screen.
+  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
+
+  // Draw a line on the screen.
+  procedure DrawLineOnScreen(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
+
+  // Draw a line on the screen.
+  procedure DrawLineOnScreen(clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
+
+  // Draw a collection of lines.
+  procedure DrawLines(clr: Color; const lines: LinesArray); overload;
 
   // Draw a pixel in the game.
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
 
-  // Draw a pixel with options.
-  procedure DrawPixel(clr: Color; const position: Point2D; const opts: DrawingOptions); overload;
-
   // Draw a pixel in the game.
   procedure DrawPixel(clr: Color; x: Single; y: Single); overload;
 
-  // Draw a pixel with options.
-  procedure DrawPixel(clr: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
+  // Draw a pixel onto a destination.
+  procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
+
+  // Draw a pixel onto a destination.
+  procedure DrawPixel(dest: Bitmap; clr: Color; x: Longint; y: Longint); overload;
+
+  // Draw a pixel on the screen.
+  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
+
+  // Draw a pixel on the screen.
+  procedure DrawPixelOnScreen(clr: Color; x: Longint; y: Longint); overload;
 
   // Draw a rectangle in the game.
-  procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
+  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
-  // Draw a rectangle in the game.
-  procedure DrawRectangle(clr: Color; const rect: Rectangle); overload;
+  // Draw rectangle in the game.
+  procedure DrawRectangle(clr: Color; const source: Rectangle); overload;
+
+  // Draw a rectangle in the game (filled or outline).
+  procedure DrawRectangle(clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw a rectangle onto a destination.
+  procedure DrawRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+
+  // Draw a rectangle onto a destination (filled or outline).
+  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw a rectangle in the game (filled or outline).
+  procedure DrawRectangle(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+
+  // Draw a rectangle onto a destination.
+  procedure DrawRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
   // Draw a rectangle onto a destination bitmap.
-  procedure DrawRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
-  // Draw a rectangle onto a destination bitmap.
-  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  // Draw a rectangle on the screen.
+  procedure DrawRectangleOnScreen(clr: Color; const source: Rectangle); overload;
+
+  // Draw a rectangle on the screen (fill or outline).
+  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
+
+  // Draw a rectangle on the screen.
+  procedure DrawRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw a rectangle on the screen (filled or outline).
+  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Draw a thick line in the game.
+  procedure DrawThickLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; width: Single); overload;
 
   // Draw a triangle in the game.
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -1782,47 +2041,98 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draw a triangle in the game.
   procedure DrawTriangle(clr: Color; const tri: Triangle); overload;
 
-  // Draw a triangle onto a destination bitmap.
-  procedure DrawTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
+  // Draw a triangle in the game.
+  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
 
-  // Draw a triangle onto a destination bitmap.
-  procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
+  // Draw the triangle onto the destination.
+  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
+
+  // Draw the triangle onto the destination (filled or outline).
+  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
+
+  // Draw the triangle onto the destination.
+  procedure DrawTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+
+  // Draw a triangle onto the screen.
+  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
+
+  // Draw a triangle (filled or outline) onto the screen.
+  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
+
+  // Draws the outline of a triangle on the screen.
+  procedure DrawTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+
+  // Draw a vertical line in the game.
+  procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
+
+  // Draw a vertical line onto a destination.
+  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
+
+  // Draw a vertical line on the screen between y1 and y2.
+  procedure DrawVerticalLineOnScreen(clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
 
   // Fill a circle in the game.
-  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
+  procedure FillCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Fill a circle in the game.
+  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
 
   // Fill a circle in the game.
   procedure FillCircle(clr: Color; const c: Circle); overload;
 
-  // Fill a circle onto a destination bitmap.
-  procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
+  // Fill a circle onto a destination.
+  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
 
   // Fill a circle onto a destination bitmap.
-  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
+  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
+
+  // Fill a circle onto a destination.
+  procedure FillCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+
+  // Fill the circle onto the screen.
+  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
+
+  // Fills a circle onto the screen.
+  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
+
+  // Fill a circle on the screen.
+  procedure FillCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
 
   // Fill a ellipse in the game.
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
+  procedure FillEllipse(clr: Color; const source: Rectangle); overload;
+
+  // Fill the ellipse onto the destination.
+  procedure FillEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
 
   // Fill a ellipse in the game.
-  procedure FillEllipse(clr: Color; const rec: Rectangle); overload;
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
-  // Fill a ellipse onto a destination bitmap.
-  procedure FillEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
+  // Fill the ellipse onto the destination.
+  procedure FillEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
-  // Fill a ellipse onto a destination bitmap.
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  // Fills the ellipse on screen.
+  procedure FillEllipseOnScreen(clr: Color; const source: Rectangle); overload;
+
+  // Fills an ellipse on the screen.
+  procedure FillEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+
+  // Fill rectangle.
+  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
 
   // Fill a rectangle in the game.
-  procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
+  procedure FillRectangle(clr: Color; const source: Rectangle); overload;
 
-  // Fill a rectangle in the game.
-  procedure FillRectangle(clr: Color; const rect: Rectangle); overload;
+  // Fill a rectangle onto a destination.
+  procedure FillRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
 
-  // Fill a rectangle onto a destination bitmap.
-  procedure FillRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
+  // Fill a rectangle onto a destination.
+  procedure FillRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
-  // Fill a rectangle onto a destination bitmap.
-  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  // Fill a rectangle on the screen.
+  procedure FillRectangleOnScreen(clr: Color; const source: Rectangle); overload;
+
+  // Fill a rectangle on the screen.
+  procedure FillRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
 
   // Fill a triangle in the game.
   procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -1830,18 +2140,24 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Fill a triangle in the game.
   procedure FillTriangle(clr: Color; const tri: Triangle); overload;
 
-  // Fill a triangle onto a destination bitmap.
-  procedure FillTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
+  // Fill the triangle onto the destination.
+  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
 
-  // Fill a triangle onto a destination bitmap.
-  procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
+  // Fill the triangle onto the destination.
+  procedure FillTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+
+  // Fills a triangle on the screen.
+  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
+
+  // Fills a triangle on the screen.
+  procedure FillTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
 
   // Returns the color of the pixel at the x,y location on
   // the supplied bitmap.
-  function GetPixel(bmp: Bitmap; x: Single; y: Single): Color; overload;
+  function GetPixel(bmp: Bitmap; x: Longint; y: Longint): Color; overload;
 
   // Returns the color of the pixel at the given x,y location.
-  function GetPixelFromScreen(x: Single; y: Single): Color; overload;
+  function GetPixelFromScreen(x: Longint; y: Longint): Color; overload;
 
   // Get the green value of ``color``.
   function GreenOf(c: Color): Byte; overload;
@@ -1856,19 +2172,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Get the hue of the ``color``.
   function HueOf(c: Color): Single; overload;
 
-  // Returns the number of resolutions in the list of available resolutions.
-  function NumberOfResolutions(): Longint; overload;
-
   // Opens the graphical window as an 800 x 600 window. See OpenGramhicsWinddow
   // for more options.
-  procedure OpenGraphicsWindow(const caption: String); overload;
+  procedure OpenGraphicsWindow(caption: String); overload;
 
   // Opens the graphical window so that it can be drawn onto. You can set the
   // icon for this window using `SetIcon`. The window itself is only drawn when
   // you call `RefreshScreen`. All windows are opened at 32 bits per pixel. You
   // can toggle fullscreen using `ToggleFullScreen`. The window is closed when
   // the application terminates.
-  procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
+  procedure OpenGraphicsWindow(caption: String; width: Longint; height: Longint); overload;
 
   // Pop the clip rectangle of the screen.
   procedure PopClip(); overload;
@@ -1884,6 +2197,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Push a clip rectangle to the screen. This can be undone using PopClip.
   procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Sets the color of the pixel to the specified value.
+  procedure PutPixel(bmp: Bitmap; value: Color; x: Longint; y: Longint); overload;
 
   // Gets a color given its RGBA components.
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -1917,7 +2233,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Refresh with a target FPS. This will delay a period of time that will 
   // approximately meet the targetted frames per second.
-  procedure RefreshScreen(TargetFPS: Longint); overload;
+  procedure RefreshScreen(TargetFPS: Longword); overload;
 
   // Reset the clipping rectangle of the screen.
   procedure ResetClip(); overload;
@@ -1949,7 +2265,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Sets the icon for the window. This must be called before openning the
   // graphics window. The icon is loaded as a bitmap, though this can be from
   // any kind of bitmap file.
-  procedure SetIcon(const filename: String); overload;
+  procedure SetIcon(filename: String); overload;
 
   // Shows the SwinGame intro splash screen.
   // It would be great if you could include this at the start of
@@ -1958,7 +2274,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Saves the current screen a bitmap file. The file will be saved into the
   // current directory.
-  procedure TakeScreenshot(const basename: String); overload;
+  procedure TakeScreenshot(basename: String); overload;
 
   // Switches the application to full screen or back from full screen to
   // windowed.
@@ -1980,7 +2296,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a circle from within a cell in a bitmap, uses the larger of the width and
   // height.
-  function BitmapCellCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
+  function BitmapCellCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
 
   // Returns the number of columns of cells in the specified bitmap.
   function BitmapCellColumns(bmp: Bitmap): Longint; overload;
@@ -1991,8 +2307,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the height of a cell within the bitmap.
   function BitmapCellHeight(bmp: Bitmap): Longint; overload;
 
+  // Returns a bitmap cell for the cell of the indicated bitmap.
+  function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell; overload;
+
   // Returns a bounding rectangle for a cell of the bitmap at the origin.
   function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
+
+  // Returns a rectangle for a cell of the bitmap at the indicated point.
+  function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
 
   // Returns a rectangle for a cell of the bitmap at the indicated point.
   function BitmapCellRectangle(x: Single; y: Single; bmp: Bitmap): Rectangle; overload;
@@ -2009,10 +2331,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a circle from within a bitmap, uses the larger of the width and
   // height.
-  function BitmapCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
+  function BitmapCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
 
   // Returns the Filename of the bitmap
   function BitmapFilename(bmp: Bitmap): String; overload;
+
+  // Returns the height of the bitmap cell.
+  function BitmapHeight(const bmp: BitmapCell): Longint; overload;
 
   // Returns the height of the entire bitmap.
   function BitmapHeight(bmp: Bitmap): Longint; overload;
@@ -2022,7 +2347,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the `Bitmap` that has been loaded with the specified name,
   // see `LoadBitmapNamed`.
-  function BitmapNamed(const name: String): Bitmap; overload;
+  function BitmapNamed(name: String): Bitmap; overload;
 
   // Returns a bounding rectangle for the bitmap, at the origin.
   function BitmapRectangle(bmp: Bitmap): Rectangle; overload;
@@ -2043,6 +2368,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the width of the entire bitmap.
   function BitmapWidth(bmp: Bitmap): Longint; overload;
+
+  // Returns the width of the bitmap cell.
+  function BitmapWidth(const bmp: BitmapCell): Longint; overload;
 
   // Are the two bitmaps of a similar format that they could be used in
   // place of each other. This returns true if they have the same cell
@@ -2072,25 +2400,94 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // The new bitmap is initially transparent and can be used as the target 
   // for various drawing operations. Once you have drawn the desired image onto
   // the bitmap you can call OptimiseBitmap to optimise the surface.
-  function CreateBitmap(const name: String; width: Longint; height: Longint): Bitmap; overload;
+  function CreateBitmap(name: String; width: Longint; height: Longint): Bitmap; overload;
 
   // Draw the passed in bitmap onto the game.
   procedure DrawBitmap(src: Bitmap; x: Single; y: Single); overload;
 
   // Draw the named bitmap onto the game.
-  procedure DrawBitmap(const name: String; x: Single; y: Single); overload;
+  procedure DrawBitmap(name: String; x: Single; y: Single); overload;
 
-  // Draw the bitmap using the passed in options
-  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
+  // Draw the passed in bitmap onto the game.
+  procedure DrawBitmap(name: String; const position: Point2D); overload;
 
-  // Draw the bitmap using the passed in options
-  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
+  // Draw the passed in bitmap onto the game.
+  procedure DrawBitmap(src: Bitmap; const position: Point2D); overload;
+
+  // Draws the source bitmap onto the destination
+  procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
+
+  // Draws the source bitmap onto the destination.
+  procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
+
+  // Draw the cell of the passed in bitmap onto the game.
+  procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
+
+  // Draw the cell of the passed in bitmap onto the game.
+  procedure DrawBitmapCell(const src: BitmapCell; x: Single; y: Single); overload;
+
+  // Draws the cell of the source bitmap onto the destination
+  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position: Point2D); overload;
+
+  // Draws the cell of the source bitmap onto the destination.
+  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x: Longint; y: Longint); overload;
+
+  // Draw the cell of the bitmap onto the screen.
+  procedure DrawBitmapCellOnScreen(const src: BitmapCell; const position: Point2D); overload;
+
+  // Draw the cell of the bitmap onto the screen.
+  procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
+
+  // Draw the bitmap onto the screen.
+  procedure DrawBitmapOnScreen(src: Bitmap; const position: Point2D); overload;
+
+  // Draw the bitmap onto the screen.
+  procedure DrawBitmapOnScreen(src: Bitmap; x: Longint; y: Longint); overload;
+
+  // Draw part of a bitmap onto the game.
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+
+  // Draw part of a bitmap onto the game
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single); overload;
+
+  // Draw part of the source bitmap onto the destination
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+
+  // Draw part of the source bitmap onto the destination.
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+
+  // Draw part of a bitmap onto the game
+  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single); overload;
+
+  // Draw part of the source onto the desitination.
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
+
+  // Draw part of the bitmap on the screen.
+  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+
+  // Draw part of the bitmap on the screen.
+  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+
+  // Draw part of the bitmap on the screen.
+  procedure DrawBitmapPartOnScreen(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
+
+  // Draw a cell from a bitmap onto the game.
+  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D); overload;
+
+  // Draw a cell from a bitmap onto the destination.
+  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; const position: Point2D); overload;
 
   // Draw a cell from a bitmap onto the game.
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
 
+  // Draw a cell from a bitmap onto the destination.
+  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; x: Single; y: Single); overload;
+
   // Draw a cell from a bitmap onto the game.
-  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; const position: Point2D); overload;
+
+  // Draw a cell from a bitmap onto the screen.
+  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
 
   // Frees a loaded bitmap. Use this when you will no longer be drawing the
   // bitmap (including within Sprites), and when the program exits.
@@ -2099,36 +2496,36 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Determines if SwinGame has a bitmap loaded for the supplied name.
   // This checks against all bitmaps loaded, those loaded without a name
   // are assigned the filename as a default.
-  function HasBitmap(const name: String): Boolean; overload;
+  function HasBitmap(name: String): Boolean; overload;
 
   // Loads a bitmap from file into a Bitmap variable. This can then be drawn to
   // the screen. Bitmaps can be of bmp, jpeg, gif, png, etc. Images may also
   // contain alpha values, which will be drawn correctly by the API. All
   // bitmaps must be freed using the FreeBitmap once you are finished with
   // them.
-  function LoadBitmap(const filename: String): Bitmap; overload;
+  function LoadBitmap(filename: String): Bitmap; overload;
 
   // Loads a bitmap from file using where the specified transparent color
   // is used as a color key for the transparent color.
-  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
+  function LoadBitmap(filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
 
   // Loads and returns a bitmap. The supplied ``filename`` is used to
   // locate the Bitmap to load. The supplied ``name`` indicates the 
   // name to use to refer to this Bitmap in SwinGame. The `Bitmap` can then be
   // retrieved by passing this ``name`` to the `BitmapNamed` function.
-  function LoadBitmapNamed(const name: String; const filename: String): Bitmap; overload;
+  function LoadBitmapNamed(name: String; filename: String): Bitmap; overload;
 
   // Loads a bitmap with a transparent color key. The transparent color is then
   // setup as the color key to ensure the image is drawn correctly. Alpha
   // values of Images loaded in this way will be ignored. All bitmaps must be
   // freed using the `FreeBitmap` once you are finished with them.
-  function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
+  function LoadTransparentBitmap(filename: String; transparentColor: Color): Bitmap; overload;
 
   // Loads and returns a bitmap with a given color code use for transparency.
   // The supplied ``filename`` is used to locate the Bitmap to load. The supplied
   // ``name`` indicates thename to use to refer to this Bitmap in SwinGame. The 
   // `Bitmap` can then be retrieved by passing this ``name`` to the `BitmapNamed` function.
-  function LoadTransparentBitmapNamed(const name: String; const filename: String; transparentColor: Color): Bitmap; overload;
+  function LoadTransparentBitmapNamed(name: String; filename: String; transparentColor: Color): Bitmap; overload;
 
   // Removes any surface level transparency from the supplied bitmap.
   procedure MakeOpaque(bmp: Bitmap); overload;
@@ -2144,20 +2541,27 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure OptimiseBitmap(surface: Bitmap); overload;
 
   // Checks if a pixel is drawn at the specified x,y location.
-  function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
+  function PixelDrawnAtPoint(bmp: Bitmap; x: Longint; y: Longint): Boolean; overload;
 
   // Releases all of the bitmaps that have been loaded.
   procedure ReleaseAllBitmaps(); overload;
 
   // Releases the SwinGame resources associated with the bitmap of the
   // specified ``name``.
-  procedure ReleaseBitmap(const name: String); overload;
+  procedure ReleaseBitmap(name: String); overload;
+
+  // Rotate and Scale the passed in bitmap.
+  function RotateScaleBitmap(src: Bitmap; degRot: Single; scale: Single): Bitmap; overload;
+
+  // Returns true of the two bitmap cells refer to the same cell
+  // in the one bitmap.
+  function SameBitmapCell(const bmp1: BitmapCell; const bmp2: BitmapCell): Boolean; overload;
 
   // Save Bitmap to specific directory.
-  procedure SaveBitmap(src: Bitmap; const filepath: String); overload;
+  procedure SaveBitmap(src: Bitmap; filepath: String); overload;
 
   // Saves the bitmap to a png file at the specified location.
-  procedure SaveToPNG(bmp: Bitmap; const filename: String); overload;
+  procedure SaveToPNG(bmp: Bitmap; filename: String); overload;
 
   // Turns on the surface level transparency for the supplied bitmap, 
   // and set the transparency value to the percentage supplied in pct.
@@ -2273,7 +2677,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure MoveMouse(const point: Point2D); overload;
 
   // Moves the mouse cursor to the specified screen location.
-  procedure MoveMouse(x: Longint; y: Longint); overload;
+  procedure MoveMouse(x: Byte; y: Byte); overload;
 
   // Returns the number of fingers that are currently
   // on the screen.
@@ -2324,19 +2728,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // The same as `StartReadingText` but with an additional ``text`` parameter
   // that is displayed as default text to the user.
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
 
   // The same as `StartReadingText` but with an additional ``text`` parameter
   // that is displayed as default text to the user.
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
-
-  // The same as `StartReadingText` but with an additional ``text`` parameter
-  // that is displayed as default text to the user.
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x: Longint; y: Longint); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
 
   // The same as `StartReadingTextWithText` but with ``text`` and ``bgColor`` parameter
   // that is displayed as default text to the user.
-  procedure StartReadingTextWithText(const text: String; textColor: Color; backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+
+  // The same as `StartReadingText` but with an additional ``text`` parameter
+  // that is displayed as default text to the user.
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; x: Longint; y: Longint); overload;
 
   // Returns true if the text entry started with `StartReadingText` was cancelled.
   function TextEntryCancelled(): Boolean; overload;
@@ -2354,287 +2758,149 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // is updated by the `ProcessEvents` routine.
   function WindowCloseRequested(): Boolean; overload;
 
-  // Broadcasts a message to all connections (all servers and opened connections).
-  procedure BroadcastMessage(const aMsg: String); overload;
+  // Accepts an incomming connection from another client.
+  // Returns the amount of new connections that have been
+  // accepted.
+  function AcceptTCPConnection(): Longint; overload;
 
-  // Broadcasts a message to all connections to a given server.
-  procedure BroadcastMessage(const aMsg: String; const name: String); overload;
+  // Broadcasts a message through all open connections.
+  procedure BroadcastTCPMessage(aMsg: String); overload;
 
-  // Broadcasts a message to all connections to a given server.
-  procedure BroadcastMessage(const aMsg: String; svr: ServerSocket); overload;
+  // Sends a UDP packet to All connections with the message.
+  procedure BroadcastUDPMessage(aMsg: String); overload;
 
-  // This procedure checks for any network activity.
-  // It first check all servers for incomming connections from clients,
-  // then it checks for any messages received over any of 
-  // the connections SwinGame is managing.
-  procedure CheckNetworkActivity(); overload;
-
-  // Clears all of the messages from a server.
-  procedure ClearMessages(svr: ServerSocket); overload;
-
-  // Clears all of the messages from a connection.
-  procedure ClearMessages(aConnection: Connection); overload;
-
-  // Clears the Messages from a connection or server.
-  procedure ClearMessages(const name: String); overload;
+  // Clears the Message Queue
+  procedure ClearMessageQueue(aConnection: Connection); overload;
 
   // Closes All TCP Receiver Sockets
   procedure CloseAllConnections(); overload;
 
   // Closes all sockets that have been created.
-  procedure CloseAllServers(); overload;
+  procedure CloseAllSockets(); overload;
+
+  // Closes All TCP Host Sockets
+  procedure CloseAllTCPHostSockets(); overload;
 
   // Closes All UDP Listener Sockets
   procedure CloseAllUDPSockets(); overload;
 
-  // Closes the specified connection.
+  // Closes the specified Socket, removed it from the Socket Array, and removes
+  // the identifier from the NamedIndexCollection.
+  // Refers to TCP Receiver Sockets
   function CloseConnection(var aConnection: Connection): Boolean; overload;
 
-  // Closes the specified connection.
-  function CloseConnection(const name: String): Boolean; overload;
-
-  // Closes the specified server socket. This will close all connections to
-  // the server, as will stop listening for new connections.
-  function CloseServer(var svr: ServerSocket): Boolean; overload;
-
-  // Closes the specified server socket. This will close all connections to
-  // the server, as will stop listening for new connections.
-  function CloseServer(const name: String): Boolean; overload;
+  // Closes the specified Socket, removed it from the Socket Array, and removes
+  // the identifier from the NamedIndexCollection.
+  // Refers to TCP Host Sockets
+  function CloseTCPHostSocket(aPort: Longint): Boolean; overload;
 
   // Closes the specified Socket, removed it from the Socket Array, and removes
   // the identifier from the NamedIndexCollection.
   // Refers to UDP Listener Sockets
-  function CloseUDPSocket(aPort: Word): Boolean; overload;
+  function CloseUDPSocket(aPort: Longint): Boolean; overload;
 
-  // Returns the number of connections to a Server socket.
-  function ConnectionCount(const name: String): Longint; overload;
+  // Returns the count of Active Connections
+  function ConnectionCount(): Longint; overload;
 
-  // Returns the number of connections to a Server socket.
-  function ConnectionCount(server: ServerSocket): Longint; overload;
-
-  // Gets the IP address (an number) of the destination for the connection (found by its name).
-  function ConnectionIP(const name: String): Longword; overload;
-
-  // Gets the IP address (an number) of the destination for the connection.
+  // Gets the Decimal IP of the destination for the connection
   function ConnectionIP(aConnection: Connection): Longword; overload;
 
-  // Returns the connection for the give name, or nil/null if there is no
-  // connection with that name.
-  function ConnectionNamed(const name: String): Connection; overload;
-
-  // You can use this to check if a connection is currently open.
-  // A connection may be closed by the remote machine.
-  function ConnectionOpen(con: Connection): Boolean; overload;
-
-  // You can use this to check if a connection is currently open.
-  // A connection may be closed by the remote machine.
-  function ConnectionOpen(const name: String): Boolean; overload;
-
   // Gets the Port of the destination for the connectiom
-  function ConnectionPort(aConnection: Connection): Word; overload;
+  function ConnectionPort(aConnection: Connection): Longint; overload;
 
-  // Gets the Port of the destination for the connectiom
-  function ConnectionPort(const name: String): Word; overload;
+  // Returns the size of the New Connection List
+  function ConnectionQueueSize(): Longint; overload;
 
-  // Creates a server socket that listens for TCP connections 
-  // on the port given. Returns the server if this succeeds, otherwise
-  // it returns nil/null.
-  function CreateServer(const name: String; port: Word): ServerSocket; overload;
+  // Opens a connection to a peer using the IP and port
+  // Creates a Socket for the purpose of two way messages. 
+  // Returns a new connection if successful or nil if failed.
+  function CreateTCPConnection(aIP: String; aPort: Longint): Connection; overload;
 
-  // Creates a server socket that listens for connections 
-  // on the port given. Returns the server if this succeeds, otherwise
-  // it returns nil/null.
-  function CreateServer(const name: String; port: Word; protocol: ConnectionType): ServerSocket; overload;
+  // Creates a socket that listens for connections based
+  // on the port given. Returns true if success or false
+  // if the binding failed. Uses TCP.
+  function CreateTCPHost(aPort: Longint): Boolean; overload;
+
+  // Creates the connection and sets the ip and port values. Creates a
+  // socket if there is no socket attached to the specified port. this
+  // socket can be used to send and receive messages. Returns the connection
+  // if this has been successful, or will return nil on failure.
+  function CreateUDPConnection(aDestIP: String; aDestPort: Longint; aInPort: Longint): Connection; overload;
+
+  // Creates a socket that listens for connections based
+  // on the port given. Returns the index of the Socket in the
+  // socket array.
+  function CreateUDPHost(aPort: Longint): Longint; overload;
 
   // Converts an Integer to a Hex value and returns it as a string.
   function DecToHex(aDec: Longword): String; overload;
 
-  // Encodes a string from username:password format to Base64
-  function EncodeBase64(const aData: String): String; overload;
+  // Queues a message to the end of the Message Queue
+  procedure EnqueueMessage(aMsg: String; aConnection: Connection); overload;
 
-  // Checks if any messages have been received for any open connections. 
-  // Messages received are added to the connection they were received from.
-  function HasMessages(): Boolean; overload;
+  // Adds a connection to the list of new connections. This is called by the 
+  // Accept connection in TCP and Receive message in UDP (if the message has
+  // been sent by a new connection). This is used in conjunction with Fetch
+  // connection, that will pop the new connection out of the list.
+  procedure EnqueueNewConnection(aConnection: Connection); overload;
 
-  // Returns true if a connection has messages that you can read.
-  // Use this to control a loop that reads all of the messages from
-  // a connection.
-  function HasMessages(con: Connection): Boolean; overload;
+  // Removes the top connection from the New connection queue and
+  // returns it.
+  function FetchConnection(): Connection; overload;
 
-  // Returns true if a server has messages that you can read.
-  // Use this to control a loop that reads all of the messages from
-  // a server.
-  function HasMessages(svr: ServerSocket): Boolean; overload;
-
-  // Returns true if a connection (found via its name) has messages that you can read.
-  // Use this to control a loop that reads all of the messages from
-  // a connection.
-  function HasMessages(const name: String): Boolean; overload;
-
-  // Indicates if there is a new connection to any of the servers
-  // that are currently listening for new clients.
-  function HasNewConnections(): Boolean; overload;
+  // An internal function used to close the specified Socket. 
+  // Call ``CloseConnection`` instead.
+  procedure FreeConnection(var aConnection: Connection); overload;
 
   // Converts a Hex String to an IPV4 Address (0.0.0.0)
-  function HexStrToIPv4(const aHex: String): String; overload;
+  function HexStrToIPv4(aHex: String): String; overload;
 
   // Converts a Hex String to a Decimal Value as a String.
-  function HexToDecString(const aHex: String): String; overload;
-
-  // Adds a header to the Http request with the name and value.
-  procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
-
-  // Performs a get request for the resourse at the specified host, path and port.
-  function HttpGet(const host: String; port: Word; const path: String): HttpResponse; overload;
-
-  // Returns a header of the Http Request at the specified index.
-  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
-
-  // Removes a header of the Http request at the specified index.
-  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
-
-  // Converts the Http Request to a string
-  function HttpRequestToString(const aHttpRequest: HttpRequest): String; overload;
-
-  // Converts the body of an HttpResponse to a string.
-  function HttpResponseBodyAsString(const httpData: HttpResponse): String; overload;
-
-  // Returns a header of the Http Request at the specified index.
-  procedure HttpSetBody(var aHttpRequest: HttpRequest; const aBody: String); overload;
-
-  // Sets the method of the Http Request
-  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
-
-  // Sets the URL of the Http Request
-  procedure HttpSetURL(var aHttpRequest: HttpRequest; const aURL: String); overload;
-
-  // Sets the version of the Http Request
-  procedure HttpSetVersion(var aHttpRequest: HttpRequest; const aVersion: String); overload;
+  function HexToDecString(aHex: String): String; overload;
 
   // Converts an IP to a decimal value
-  function IPv4ToDec(const aIP: String): Longword; overload;
+  function IPv4ToDec(aIP: String): Longword; overload;
 
-  // Converts an integer representation of a ip address to a string representation.
-  function IPv4ToStr(ip: Longword): String; overload;
-
-  // Returns the last connection made to a server socket. When a new client 
-  // has connected to the server, this function can be used to get their
-  // connection.
-  function LastConnection(const name: String): Connection; overload;
-
-  // Returns the last connection made to a server socket. When a new client 
-  // has connected to the server, this function can be used to get their
-  // connection.
-  function LastConnection(server: ServerSocket): Connection; overload;
-
-  // Gets the connection used to send the message (TCP only).
-  function MessageConnection(const msg: Message): Connection; overload;
-
-  // Gets the number of messages waiting to be read from the connection (found via its named)
-  function MessageCount(const name: String): Longint; overload;
-
-  // Gets the number of messages waiting to be read from this connection
-  function MessageCount(svr: ServerSocket): Longint; overload;
-
-  // Gets the number of messages waiting to be read from this connection
+  // Gets the Size of the Message Queue
   function MessageCount(aConnection: Connection): Longint; overload;
-
-  // Gets the data from a Message. This will be a string.
-  function MessageData(const msg: Message): String; overload;
-
-  // Gets the host that sent the message.
-  function MessageHost(const msg: Message): String; overload;
-
-  // Gets the port that the host sent the message from.
-  function MessagePort(const msg: Message): Word; overload;
-
-  // Gets the protocol that was used to send the Message.
-  function MessageProtocol(const msg: Message): ConnectionType; overload;
 
   // Returns the caller's IP.
   function MyIP(): String; overload;
 
-  // Opens a connection to a server using the IP and port.
-  // Creates a Connection for the purpose of two way messages. 
-  // Returns a new connection if successful or nil/null if it fails.
-  function OpenConnection(const host: String; port: Word): Connection; overload;
+  // Dequeues the Last (Newest) Message
+  function ReadLastMessage(aConnection: Connection): String; overload;
 
-  // Opens a connection to a server using the IP and port.
-  // Creates a Connection for the purpose of two way messages. 
-  // Returns a new connection if successful or nil/null if it fails.
-  // This version allows you to name the connection, so that you can
-  // access it via its name.
-  function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
-
-  // Opens a connection to a server using the IP and port.
-  // Creates a Connection for the purpose of two way messages. 
-  // Returns a new connection if successful or nil/null if it fails.
-  // This version allows you to name the connection, so that you can
-  // access it via its name.
-  function OpenConnection(const name: String; const host: String; port: Word; protocol: ConnectionType): Connection; overload;
-
-  // Reads the next message from any of the clients that have connected to the server.
-  function ReadMessage(svr: ServerSocket): Message; overload;
-
-  // Reads the next message that was sent to the connection. You use this
-  // to read the values that were sent to this connection.
-  function ReadMessage(aConnection: Connection): Message; overload;
-
-  // Reads the next message that was sent to the connection or server (found from its name).
-  // You use this to read the values that were sent to this connection or server.
-  function ReadMessage(const name: String): Message; overload;
-
-  // Reads the data of the next message that was sent to the connection. You use this
-  // to read the values that were sent to this connection.
-  function ReadMessageData(aConnection: Connection): String; overload;
-
-  // Reads the data of the next message from any of the clients that have connected to the server.
-  function ReadMessageData(svr: ServerSocket): String; overload;
-
-  // Reads the data of the next message that was sent to the connection or server (found from its name).
-  // You use this to read the values that were sent to this connection or server.
-  function ReadMessageData(const name: String): String; overload;
-
-  // Attempts to recconnect a connection that was closed using the IP and port
-  // stored in the connection. Finds the connection using its name.
-  procedure Reconnect(const name: String); overload;
-
-  // Attempts to recconnect a connection that was closed using the IP and port
-  // stored in the connection
-  procedure Reconnect(aConnection: Connection); overload;
+  // Dequeues the Top (Oldest) Message
+  function ReadMessage(aConnection: Connection): String; overload;
 
   // Releases All resources used by the Networking code.
   procedure ReleaseAllConnections(); overload;
 
   // Retrieves the connection at the specified index
-  function RetreiveConnection(const name: String; idx: Longint): Connection; overload;
+  function RetreiveConnection(aConnectionAt: Longint): Connection; overload;
 
-  // Retrieves the connection at the specified index
-  function RetreiveConnection(server: ServerSocket; idx: Longint): Connection; overload;
+  // Sends the message to the specified client, attached to the socket
+  // Retuns the connection if the message fails to
+  // send so that it may be closed. Returns nil if the message has been sent
+  // successfully.
+  function SendTCPMessage(aMsg: String; aConnection: Connection): Connection; overload;
 
-  // Sends the message over the provided network connection (found from its name).
-  // Returns true if this succeeds, or false if it fails.
-  function SendMessageTo(const aMsg: String; const name: String): Boolean; overload;
+  // Sends a UDP packet to the port and ip specified in the connection
+  // with the message.
+  function SendUDPMessage(aMsg: String; aConnection: Connection): Boolean; overload;
 
-  // Sends the message over the provided network connection.
-  // Returns true if this succeeds, or false if it fails.
-  function SendMessageTo(const aMsg: String; aConnection: Connection): Boolean; overload;
+  // Checks if a message has been received. If a message has been received,
+  // It will automatically add it to the message queue, with the message,
+  // source's IP and the port it received the message on. Returns true if
+  // a new message has been received.
+  function TCPMessageReceived(): Boolean; overload;
 
-  // Indicates if there is a new connection to a server.
-  function ServerHasNewConnection(const name: String): Boolean; overload;
-
-  // Indicates if there is a new connection to a server.
-  function ServerHasNewConnection(server: ServerSocket): Boolean; overload;
-
-  // Returns the Server socket for the give name, or nil/null if there is no
-  // server with that name.
-  function ServerNamed(const name: String): ServerSocket; overload;
-
-  // Allows you to change the maximum size for a UDP message (sending and receiving)
-  procedure SetUDPPacketSize(val: Longint); overload;
-
-  // Indicates the maximum size of a UDP message.
-  function UDPPacketSize(): Longint; overload;
+  // Checks all UDP listening sockets to see if a packet has been received.
+  // If a packet has been received, it will Enqueue the message into the message
+  // queue. This will set the message, sender's address and sender's port. it
+  // will return true if a message has been received or false if there has been
+  // no message.
+  function UDPMessageReceived(): Boolean; overload;
 
   // Returns True if two bitmaps have collided using per pixel testing if required. 
   // The ``pt1`` and ``pt2`` (`Point2D`) parameters specify the world location of the bitmaps (``bmp1`` and ``bmp2``).
@@ -2642,7 +2908,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns True if two bitmaps have collided using per pixel testing if required.
   // The ``x`` and ``y`` parameters specify the world location of the bitmaps (``bmp1`` and ``bmp2``).
-  function BitmapCollision(bmp1: Bitmap; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
+  function BitmapCollision(bmp1: Bitmap; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
 
   // Returns True if the specified parts (``part1`` and ``part2`` rectangles) of the two 
   // bitmaps (``bmp1`` and ``bmpt2``) have collided, using pixel level collision if required. 
@@ -2654,47 +2920,47 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // use the rectangle collision functions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The point ``pt`` needs to be provided in world coordinates.
-  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const pt: Point2D): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const pt: Point2D): Boolean; overload;
 
   // Returns True if a point (``ptX``,``ptY``) is located within the ``part`` (rectangle) of the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions. For bounding box collisions
   // use the rectangle collision functions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The ``ptX`` and ``ptY`` needs to be provided in world coordinates.
-  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
 
   // Returns True if a point (``pt``) is located within the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The point ``pt`` needs to be provided in world coordinates.
-  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; const pt: Point2D): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; const pt: Point2D): Boolean; overload;
 
   // Returns True if a point (``ptX``,``ptY``) is located within the bitmap
   // ``bmp`` when it is drawn at ``x``,``y``, using pixel level collisions.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The ``ptX`` and ``ptY`` needs to be provided in world coordinates.
-  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; ptX: Single; ptY: Single): Boolean; overload;
-
-  // Returns True if the bitmap ``bmp`` has collided with the rectangle
-  // specified using pixel level testing if required.
-  // The ``x`` and ``y`` values specify the world location of the bitmap.
-  // The rectangle ``rect`` needs to be provided in world coordinates.
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; ptX: Single; ptY: Single): Boolean; overload;
 
   // Returns True if the indicated part of the bitmap has collided with the specified
   // rectangle.
   function BitmapRectCollision(bmp: Bitmap; const pt: Point2D; const part: Rectangle; const rect: Rectangle): Boolean; overload;
 
+  // Returns True if the bitmap ``bmp`` has collided with the rectangle
+  // specified using pixel level testing if required.
+  // The ``x`` and ``y`` values specify the world location of the bitmap.
+  // The rectangle ``rect`` needs to be provided in world coordinates.
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
+
   // Returns True if the indicated part of the bitmap has collided with the specified
   // rectangle.
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const rect: Rectangle): Boolean; overload;
 
   // Returns True if the bitmap ``bmp`` has collided with the rectangle
   // specified using pixel level testing if required.
   // The ``x`` and ``y`` values specify the world location of the bitmap.
   // The rectangles world position (``rectX`` and ``rectY``) and size
   // (``rectWidth`` and ``rectHeight``) need to be provided.
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; rectX: Longint; rectY: Longint; rectWidth: Longint; rectHeight: Longint): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a bitmap.
   function CellBitmapCollision(bmp1: Bitmap; cell: Longint; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D): Boolean; overload;
@@ -2703,22 +2969,22 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function CellBitmapCollision(bmp1: Bitmap; cell: Longint; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D; const part: Rectangle): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a bitmap.
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
 
   // Returns true if the cell in the specified bitmap has collided with a part of a bitmap.
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single; const part: Rectangle): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint; const part: Rectangle): Boolean; overload;
 
   // Returns true if the cells within the two bitmaps have collided at the given points.
   function CellCollision(bmp1: Bitmap; cell1: Longint; const pt1: Point2D; bmp2: Bitmap; cell2: Longint; const pt2: Point2D): Boolean; overload;
 
   // Returns true if the cells within the two bitmaps have collided at their specified x,y locations.
-  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Single; y1: Single; bmp2: Bitmap; cell2: Longint; x2: Single; y2: Single): Boolean; overload;
+  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; cell2: Longint; x2: Longint; y2: Longint): Boolean; overload;
 
   // Returns true if the cell of the bitmap has collided with a given rectangle.
   function CellRectCollision(bmp: Bitmap; cell: Longint; const pt: Point2D; const rect: Rectangle): Boolean; overload;
 
   // Returns true if the cell of the bitmap has collided with a given rectangle.
-  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
+  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
 
   // Returns True if the circles have collided.
   function CircleCircleCollision(const c1: Circle; const c2: Circle): Boolean; overload;
@@ -2787,7 +3053,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Determined if a sprite has collided with a given rectangle. The rectangles
   // coordinates are expressed in "world" coordinates.
-  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Single; height: Single): Boolean; overload;
+  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Longint; height: Longint): Boolean; overload;
 
   // Returns true if the triangle and the line have collided.
   function TriangleLineCollision(const tri: Triangle; const ln: LineSegment): Boolean; overload;
@@ -2799,38 +3065,31 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the path to the file with the passed in name for a given resource
   // kind. This checks if the path exists, throwing an exception if the file
   // does not exist in the expected locations.
-  function FilenameToResource(const name: String; kind: ResourceKind): String; overload;
+  function FilenameToResource(name: String; kind: ResourceKind): String; overload;
 
   // Returns ``true`` if the resource bundle is loaded.
-  function HasResourceBundle(const name: String): Boolean; overload;
+  function HasResourceBundle(name: String): Boolean; overload;
 
   // Load a resource bundle showing load progress.
-  procedure LoadResourceBundle(const name: String); overload;
+  procedure LoadResourceBundle(name: String); overload;
 
   // Load a resource bundle showing load progress.
-  procedure LoadResourceBundle(const name: String; showProgress: Boolean); overload;
+  procedure LoadResourceBundle(name: String; showProgress: Boolean); overload;
 
   // Load a resource bundle mapping it to a given name, showing progress.
-  procedure LoadResourceBundleNamed(const name: String; const filename: String; showProgress: Boolean); overload;
+  procedure LoadResourceBundleNamed(name: String; filename: String; showProgress: Boolean); overload;
 
   // Returns the path to the filename within the game's resources folder.
-  function PathToResource(const filename: String): String; overload;
+  function PathToResource(filename: String): String; overload;
 
   // Returns the path to the filename for a given file resource.
-  function PathToResource(const filename: String; kind: ResourceKind): String; overload;
+  function PathToResource(filename: String; kind: ResourceKind): String; overload;
 
   // Returns the path to the filename that exists within the game's resources folder
   // in the indicated sub directory. For example, to get the "level1.txt" file from
   // the Resources/levels folder you call this passing in "level1.txt" as the filename
   // and "levels" as the subdir.
-  function PathToResource(const filename: String; const subdir: String): String; overload;
-
-  // Returns the path to the filename that exists within the game's resources folder
-  // in the indicated sub directory of the directory for the given resource kind .
-  // For example, to get the "background.png" file from "level1" folder in the images folder
-  // (i.e. Resources/images/level1/background.png) you call this passing in ``background.png`` as the filename
-  // ``ImageResource`` as the kind and ``level1`` as the subdir.
-  function PathToResource(const filename: String; kind: ResourceKind; const subdir: String): String; overload;
+  function PathToResource(filename: String; subdir: String): String; overload;
 
   // Returns the path to a resource given its filename, kind, and any subPaths. For example: to load
   // the image ``bullet01.png`` from the ``bullets`` subdirectory you pass in ``bullet01.png`` as the filename,
@@ -2838,13 +3097,20 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // to the resource according to the platform in question. 
   //
   // For example: ``.../Resources/images/bullets/bullet01.png``
-  function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
+  function PathToResource(filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
+
+  // Returns the path to the filename that exists within the game's resources folder
+  // in the indicated sub directory of the directory for the given resource kind .
+  // For example, to get the "background.png" file from "level1" folder in the images folder
+  // (i.e. Resources/images/level1/background.png) you call this passing in ``background.png`` as the filename
+  // ``ImageResource`` as the kind and ``level1`` as the subdir.
+  function PathToResource(filename: String; kind: ResourceKind; subdir: String): String; overload;
 
   // Returns the path to a resource based on a base path and a the resource kind.
-  function PathToResourceWithBase(const path: String; const filename: String): String; overload;
+  function PathToResourceWithBase(path: String; filename: String): String; overload;
 
   // Returns the path to a resource based on a base path and a the resource kind.
-  function PathToResourceWithBase(const path: String; const filename: String; kind: ResourceKind): String; overload;
+  function PathToResourceWithBase(path: String; filename: String; kind: ResourceKind): String; overload;
 
   // Using this procedure you can register a callback that is executed
   // each time a resource is freed. This is called by different versions of
@@ -2855,15 +3121,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ReleaseAllResources(); overload;
 
   // Release the resource bundle with the given name.
-  procedure ReleaseResourceBundle(const name: String); overload;
+  procedure ReleaseResourceBundle(name: String); overload;
 
   // Sets the path to the executable. This path is used for locating game
   // resources.
-  procedure SetAppPath(const path: String); overload;
+  procedure SetAppPath(path: String); overload;
 
   // Sets the path to the executable. This path is used for locating game
   // resources.
-  procedure SetAppPath(const path: String; withExe: Boolean); overload;
+  procedure SetAppPath(path: String; withExe: Boolean); overload;
 
   // Call the supplied function for all sprites.
   procedure CallForAllSprites(fn: SpriteFunction); overload;
@@ -2891,12 +3157,27 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer have name 'layer1'.
-  function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
+  // pixel level collisions, no animation, and the specified layer have name.
+  //
+  // This version of the constructor will assign a default name to the sprite for resource management purposes.
+  function CreateSprite(layer: Bitmap; layerName: String): Sprite; overload;
+
+  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
+  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
+  // pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
+  // given location.
+  //
+  // This version of the constructor will assign a default name to the sprite for resource management purposes.
+  function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
 
   // Creates a sprite. The bitmapName is used to indicate the bitmap the sprite will use, and the 
   // animationName is used to indicate which AnimationScript to use.
-  function CreateSprite(const bitmapName: String; const animationName: String): Sprite; overload;
+  function CreateSprite(bitmapName: String; animationName: String): Sprite; overload;
+
+  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
+  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
+  // pixel level collisions, no animation, the layer have name 'layer1'.
+  function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2912,25 +3193,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // This version of the constructor will assign a default name to the sprite for resource management purposes.
   function CreateSprite(layer: Bitmap; ani: AnimationScript): Sprite; overload;
 
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
-  // given location.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, and the specified layer have name.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2941,28 +3207,21 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
+  // pixel level collisions, the specified animation template, the layer have name 'layer1'.
+  function CreateSprite(name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
+
+  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
+  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, the specified animation template, the layer have name 'layer1', at the given
   // location.
   //
   // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, and layer name.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, the layer have name 'layer1'.
-  function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(layer: Bitmap; ani: AnimationScript; pt: Point2D): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, no animation, and the specified layer have name.
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
+  function CreateSprite(name: String; layer: Bitmap; layerName: String): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2971,15 +3230,22 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // This version of the constructor will assign a default name to the sprite for resource management purposes.
   function CreateSprite(const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
 
+  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
+  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
+  // pixel level collisions, the specified animation template, and layer name.
+  //
+  // This version of the constructor will assign a default name to the sprite for resource management purposes.
+  function CreateSprite(layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, no animation, and the specified layer names.
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, the specified animation template, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2992,7 +3258,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, the specified animation template, and layer name.
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -3005,12 +3271,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
 
   // Create a new SpritePack with a given name. This pack can then be 
   // selected and used to control which sprites are drawn/updated in
   // the calls to DrawAllSprites and UpdateAllSprites.
-  procedure CreateSpritePack(const name: String); overload;
+  procedure CreateSpritePack(name: String); overload;
 
   // Returns the name of the currently selected SpritePack.
   function CurrentSpritePack(): String; overload;
@@ -3044,10 +3310,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Determines if SwinGame has a sprite for the supplied name.
   // This checks against all sprites, those loaded without a name
   // are assigned a default.
-  function HasSprite(const name: String): Boolean; overload;
+  function HasSprite(name: String): Boolean; overload;
 
   // Indicates if a given SpritePack has already been created.
-  function HasSpritePack(const name: String): Boolean; overload;
+  function HasSpritePack(name: String): Boolean; overload;
 
   // Moves the sprite as indicated by its velocity. You can call this directly ot 
   // alternatively, this action is performed when the sprite is updated using
@@ -3079,15 +3345,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Releases the SwinGame resources associated with the sprite of the
   // specified ``name``.
-  procedure ReleaseSprite(const name: String); overload;
+  procedure ReleaseSprite(name: String); overload;
 
   // Selects the named SpritePack (if it has been created). The
   // selected SpritePack determines which sprites are drawn and updated
   // with the DrawAllSprites and UpdateAllSprites code.
-  procedure SelectSpritePack(const name: String); overload;
+  procedure SelectSpritePack(name: String); overload;
 
   // Adds a new layer to the sprite.
-  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; const layerName: String): Longint; overload;
+  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint; overload;
 
   // Alters the current velocity of the Sprite, adding the passed in vector to the current velocity.
   //
@@ -3096,11 +3362,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure SpriteAddToVelocity(s: Sprite; const value: Vector); overload;
 
   // Adds a new kind of value to the Sprite
-  procedure SpriteAddValue(s: Sprite; const name: String); overload;
+  procedure SpriteAddValue(s: Sprite; name: String); overload;
 
   // Adds a new kind of value to the Sprite, setting the initial value
   // to the value passed in.
-  procedure SpriteAddValue(s: Sprite; const name: String; initVal: Single); overload;
+  procedure SpriteAddValue(s: Sprite; name: String; initVal: Single); overload;
 
   // Indicates if the sprites animation has ended.
   function SpriteAnimationHasEnded(s: Sprite): Boolean; overload;
@@ -3155,40 +3421,40 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteHeight(s: Sprite): Longint; overload;
 
   // Hide the specified layer of the sprite.
-  procedure SpriteHideLayer(s: Sprite; const name: String); overload;
+  procedure SpriteHideLayer(s: Sprite; name: String); overload;
 
   // Hide the specified layer of the sprite.
   procedure SpriteHideLayer(s: Sprite; id: Longint); overload;
 
   // Returns the bitmap of the indicated layer of the sprite.
-  function SpriteLayer(s: Sprite; const name: String): Bitmap; overload;
+  function SpriteLayer(s: Sprite; idx: Longint): Bitmap; overload;
 
   // Returns the bitmap of the indicated layer of the sprite.
-  function SpriteLayer(s: Sprite; idx: Longint): Bitmap; overload;
+  function SpriteLayer(s: Sprite; name: String): Bitmap; overload;
 
   // Gets a circle in the bounds of the indicated layer.
   function SpriteLayerCircle(s: Sprite; idx: Longint): Circle; overload;
 
   // Gets a circle in the bounds of the indicated layer.
-  function SpriteLayerCircle(s: Sprite; const name: String): Circle; overload;
+  function SpriteLayerCircle(s: Sprite; name: String): Circle; overload;
 
   // Returns the number of layers within the Sprite.
   function SpriteLayerCount(s: Sprite): Longint; overload;
 
   // The height of a given layer of the Sprite (aligned to the Y axis).
-  function SpriteLayerHeight(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerHeight(s: Sprite; name: String): Longint; overload;
 
   // The height of a given layer of the Sprite (aligned to the Y axis).
   function SpriteLayerHeight(s: Sprite; idx: Longint): Longint; overload;
 
   // Returns the index of the specified layer.
-  function SpriteLayerIndex(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerIndex(s: Sprite; name: String): Longint; overload;
 
   // Returns the name of the specified layer.
   function SpriteLayerName(s: Sprite; idx: Longint): String; overload;
 
   // Gets the offset of the specified layer.
-  function SpriteLayerOffset(s: Sprite; const name: String): Point2D; overload;
+  function SpriteLayerOffset(s: Sprite; name: String): Point2D; overload;
 
   // Gets the offset of the specified layer.
   function SpriteLayerOffset(s: Sprite; idx: Longint): Point2D; overload;
@@ -3197,16 +3463,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteLayerOffsets(s: Sprite): Point2DArray; overload;
 
   // Gets a rectangle that surrounds the indicated layer.
-  function SpriteLayerRectangle(s: Sprite; idx: Longint): Rectangle; overload;
+  function SpriteLayerRectangle(s: Sprite; name: String): Rectangle; overload;
 
   // Gets a rectangle that surrounds the indicated layer.
-  function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
+  function SpriteLayerRectangle(s: Sprite; idx: Longint): Rectangle; overload;
+
+  // The width of a given layer of the Sprite (aligned to the X axis).
+  function SpriteLayerWidth(s: Sprite; name: String): Longint; overload;
 
   // The width of a given layer of the Sprite (aligned to the X axis).
   function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
-
-  // The width of a given layer of the Sprite (aligned to the X axis).
-  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
 
   // Returns the bitmaps of the layers in the Sprite.
   function SpriteLayers(s: Sprite): BitmapArray; overload;
@@ -3227,7 +3493,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the `Sprite` with the specified name,
   // see `CreateBasicSprite`.
-  function SpriteNamed(const name: String): Sprite; overload;
+  function SpriteNamed(name: String): Sprite; overload;
 
   // Returns True if the sprite is entirely off the screen.
   function SpriteOffscreen(s: Sprite): Boolean; overload;
@@ -3290,10 +3556,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure SpriteSetHeading(s: Sprite; value: Single); overload;
 
   // Sets the offset of the specified layer.
-  procedure SpriteSetLayerOffset(s: Sprite; idx: Longint; const value: Point2D); overload;
+  procedure SpriteSetLayerOffset(s: Sprite; name: String; const value: Point2D); overload;
 
   // Sets the offset of the specified layer.
-  procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D); overload;
+  procedure SpriteSetLayerOffset(s: Sprite; idx: Longint; const value: Point2D); overload;
 
   // Sets the layer offsets for the sprite.
   procedure SpriteSetLayerOffsets(s: Sprite; const values: Point2DArray); overload;
@@ -3314,7 +3580,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure SpriteSetSpeed(s: Sprite; value: Single); overload;
 
   // Assigns a value to the Sprite.
-  procedure SpriteSetValue(s: Sprite; const name: String; val: Single); overload;
+  procedure SpriteSetValue(s: Sprite; name: String; val: Single); overload;
 
   // Assigns a value to the Sprite.
   procedure SpriteSetValue(s: Sprite; idx: Longint; val: Single); overload;
@@ -3333,7 +3599,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteShowLayer(s: Sprite; id: Longint): Longint; overload;
 
   // Show the specified layer of the sprite.
-  function SpriteShowLayer(s: Sprite; const name: String): Longint; overload;
+  function SpriteShowLayer(s: Sprite; name: String): Longint; overload;
 
   // Returns the current speed (distance travelled per update) of the Sprite.
   function SpriteSpeed(s: Sprite): Single; overload;
@@ -3346,12 +3612,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Start playing an animation from the sprite's animation template.
   // This will play a sound effect if the first cell of the animation
   // has a sound.
-  procedure SpriteStartAnimation(s: Sprite; const named: String); overload;
+  procedure SpriteStartAnimation(s: Sprite; named: String); overload;
 
   // Start playing an animation from the sprite's animation template.
   // The withSound parameter determines whether to play a sound effect 
   // if the first cell of the animation has a sound.
-  procedure SpriteStartAnimation(s: Sprite; const named: String; withSound: Boolean); overload;
+  procedure SpriteStartAnimation(s: Sprite; named: String; withSound: Boolean); overload;
 
   // Start playing an animation from the sprite's animation template.
   // The withSound parameter determines whether to play a sound effect 
@@ -3366,13 +3632,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure SpriteToggleLayerVisible(s: Sprite; id: Longint); overload;
 
   // Toggle the visibility of the specified layer of the sprite.
-  procedure SpriteToggleLayerVisible(s: Sprite; const name: String); overload;
+  procedure SpriteToggleLayerVisible(s: Sprite; name: String); overload;
 
   // Returns the sprite's value at the index specified
   function SpriteValue(s: Sprite; index: Longint): Single; overload;
 
   // Returns the indicated value of the sprite
-  function SpriteValue(s: Sprite; const name: String): Single; overload;
+  function SpriteValue(s: Sprite; name: String): Single; overload;
 
   // Returns the count of sprite's values.
   function SpriteValueCount(s: Sprite): Longint; overload;
@@ -3388,7 +3654,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteVisibleIndexOfLayer(s: Sprite; id: Longint): Longint; overload;
 
   // Returns the index (z-order) of the sprite's layer.
-  function SpriteVisibleIndexOfLayer(s: Sprite; const name: String): Longint; overload;
+  function SpriteVisibleIndexOfLayer(s: Sprite; name: String): Longint; overload;
 
   // Returns the index of the n'th (idx parameter) visible layer.
   function SpriteVisibleLayer(s: Sprite; idx: Longint): Longint; overload;
@@ -3470,70 +3736,304 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // (``s1`` and ``s2``).
   function VectorFromTo(s1: Sprite; s2: Sprite): Vector; overload;
 
-  // 
-  procedure DrawFramerate(x: Single; y: Single); overload;
+  // Draws the framerate to the screen using a simple font built into SwinGame.
+  procedure DrawFramerate(x: Longint; y: Longint); overload;
+
+  // Draws the framerate to the screen using the supplied font.
+  procedure DrawFramerate(x: Longint; y: Longint; font: Font); overload;
+
+  // Draws the framerate to the screen using the supplied font.
+  procedure DrawFramerate(x: Longint; y: Longint; name: String); overload;
+
+  // Draws the framerate to the screen using the supplied font.
+  procedure DrawFramerate(x: Longint; y: Longint; name: String; size: Longint); overload;
 
   // Draws text using a simple bitmap font that is built into SwinGame.
-  procedure DrawText(const theText: String; textColor: Color; x: Single; y: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; const pt: Point2D); overload;
+
+  // Draws the text at the specified point using the color and font indicated.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
 
   // Draws text using a simple bitmap font that is built into SwinGame.
-  procedure DrawText(const theText: String; textColor: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawText(theText: String; textColor: Color; x: Single; y: Single); overload;
 
   // Draws the text at the specified point using the color and font indicated.
-  procedure DrawText(const theText: String; textColor: Color; const name: String; x: Single; y: Single); overload;
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
 
-  // Draws the text at the specified point using the color and font indicated.
-  procedure DrawText(const theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
-
-  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
-
-  // Draws the text at the specified x,y location using the color, font, and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
-
-  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; align: FontAlignment; const area: Rectangle); overload;
-
-  // Draws the text at the specified x,y location using the color, font, and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
-
-  // Draws theText at the specified point using the color and font indicated.
-  procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x: Single; y: Single); overload;
-
-  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
-
-  // Draws the text at the specified x,y location using the color, font, and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
-
-  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
-
-  // Draws theText in the specified rectangle using the fore and back colors, and the font indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
-
-  // Draws the text in the rectangle using the fore and back colors, font and options indicated.
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
-
-  // Draws the text onto the bitmap using the color and font indicated, then returns the bitmap created.
+  // Draws the text onto the bitmap at the specified point using the color and font indicated.
   // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
   // good idea if the text does not change frequently.
-  function DrawTextToBitmap(font: Font; const str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; const pt: Point2D); overload;
+
+  // Draws the text at the specified point using the color and font indicated.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
+
+  // Draws the text at the specified point using the color and font indicated.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
+
+  // Draws text using a simple bitmap font that is built into SwinGame.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; x: Single; y: Single); overload;
+
+  // Draws the text onto the bitmap at the specified point using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
+
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
+
+  // Draws the text onto the bitmap at the specified point using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
+
+  // Draws theText at the specified point using the color and font indicated.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+
+  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws the text onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws theText onto the bitmap at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text in the specified rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws theText in the specified rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the bitmap in the rectangle using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+
+  // Draws the text at the specified x,y location using the fore and back colors, and the font indicated.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawText` procedure.
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the screen in the specified rectangle using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the fore and back colors, and the font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version should be used to draw text that contains multiple lines, to draw a single line of text
+  // use the `DrawTextOnScreen` procedure.
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+
+  // Draws text using a simple bitmap font that is built into SwinGame.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; x: Single; y: Single); overload;
+
+  // Draws theText onto the screen at the specified point using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
+
+  // Draws theText onto the screen at the specified point using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+
+  // Draws theText onto the screen at the specified point using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
+
+  // Draws the text onto the screen at the specified x,y location using the color and font indicated.
+  // As the text is draw directly onto the screen the camera location does not effect its position.
+  // This is useful for drawing text on a HUD or similar actions.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLinesOnScreen` procedure.
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+
+  // Draws the text onto the bitmap at the specified point using the color and font indicated.
+  // Drawing text is a slow operation, and drawing it to a bitmap, then drawing the bitmap to screen is a
+  // good idea if the text does not change frequently.
+  //
+  // This version only draws a single line of text, to draw text that contains line breaks use the
+  // `DrawTextLines` procedure.
+  function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
 
   // Returns the style settings for the font.
   function FontFontStyle(font: Font): FontStyle; overload;
 
   // Determines the name that will be used for a font loaded with
   // the indicated fontName and size.
-  function FontNameFor(const fontName: String; size: Longint): String; overload;
+  function FontNameFor(fontName: String; size: Longint): String; overload;
 
   // Returns the `Font` that has been loaded with the specified name,
   // see `LoadFontNamed`.
-  function FontNamed(const name: String): Font; overload;
+  function FontNamed(name: String): Font; overload;
 
   // Returns the `Font` that has been loaded with the specified name,
   // and font size using `LoadFont`.
-  function FontNamed(const name: String; size: Longint): Font; overload;
+  function FontNamed(name: String; size: Longint): Font; overload;
 
   // Alters the style of the font. This is time consuming, so load
   // fonts multiple times and set the style for each if needed.
@@ -3545,35 +4045,35 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Determines if SwinGame has a font loaded for the supplied name.
   // This checks against all fonts loaded, those loaded without a name
   // are assigned the filename as a default.
-  function HasFont(const name: String): Boolean; overload;
+  function HasFont(name: String): Boolean; overload;
 
   // Loads a font from file with the specified side. Fonts must be freed using
   // the FreeFont routine once finished with. Once the font is loaded you
   // can set its style using SetFontStyle. Fonts are then used to draw and
   // measure text in your programs.
-  function LoadFont(const fontName: String; size: Longint): Font; overload;
+  function LoadFont(fontName: String; size: Longint): Font; overload;
 
   // Loads and returns a font that can be used to draw text. The supplied
   // ``filename`` is used to locate the font to load. The supplied ``name`` indicates the 
   // name to use to refer to this Font in SwinGame. The `Font` can then be
   // retrieved by passing this ``name`` to the `FontNamed` function.
-  function LoadFontNamed(const name: String; const filename: String; size: Longint): Font; overload;
+  function LoadFontNamed(name: String; filename: String; size: Longint): Font; overload;
 
   // Releases all of the fonts that have been loaded.
   procedure ReleaseAllFonts(); overload;
 
   // Releases the SwinGame resources associated with the font of the
   // specified ``name``.
-  procedure ReleaseFont(const name: String); overload;
+  procedure ReleaseFont(name: String); overload;
 
   // Returns the font alignment for the passed in character (l = left. r = right, c = center).
-  function TextAlignmentFrom(const str: String): FontAlignment; overload;
+  function TextAlignmentFrom(str: String): FontAlignment; overload;
 
   // Returns the height (in pixels) of the passed in text and the font it will be drawn with.
-  function TextHeight(theFont: Font; const theText: String): Longint; overload;
+  function TextHeight(theFont: Font; theText: String): Longint; overload;
 
   // Returns the width (in pixels) of the passed in text and the font it will be drawn with.
-  function TextWidth(theFont: Font; const theText: String): Longint; overload;
+  function TextWidth(theFont: Font; theText: String): Longint; overload;
 
   // Create and return a new Timer. The timer will not be started, and will have
   // an initial 'ticks' of 0.
@@ -3581,43 +4081,43 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Create and return a new Timer. The timer will not be started, and will have
   // an initial 'ticks' of 0.
-  function CreateTimer(const name: String): Timer; overload;
+  function CreateTimer(name: String): Timer; overload;
 
   // Free a created timer.
   procedure FreeTimer(var toFree: Timer); overload;
 
   // Pause the timer, getting ticks from a paused timer
   // will continue to return the same time.
-  procedure PauseTimer(const name: String); overload;
+  procedure PauseTimer(toPause: Timer); overload;
 
   // Pause the timer, getting ticks from a paused timer
   // will continue to return the same time.
-  procedure PauseTimer(toPause: Timer); overload;
+  procedure PauseTimer(name: String); overload;
 
   // Releases all of the timers that have been loaded.
   procedure ReleaseAllTimers(); overload;
 
   // Release the resources used by the timer with
   // the indicated name.
-  procedure ReleaseTimer(const name: String); overload;
+  procedure ReleaseTimer(name: String); overload;
 
   // Resets the time of a given timer
-  procedure ResetTimer(const name: String); overload;
+  procedure ResetTimer(name: String); overload;
 
   // Resets the time of a given timer
   procedure ResetTimer(tmr: Timer); overload;
 
   // Resumes a paused timer.
-  procedure ResumeTimer(const name: String); overload;
+  procedure ResumeTimer(name: String); overload;
 
   // Resumes a paused timer.
   procedure ResumeTimer(toUnpause: Timer); overload;
 
   // Start a timer recording the time that has passed.
-  procedure StartTimer(toStart: Timer); overload;
+  procedure StartTimer(name: String); overload;
 
   // Start a timer recording the time that has passed.
-  procedure StartTimer(const name: String); overload;
+  procedure StartTimer(toStart: Timer); overload;
 
   // Stop the timer. The time is reset to 0 and you must
   // recall start to begin the timer ticking again.
@@ -3625,15 +4125,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Stop the timer. The time is reset to 0 and you must
   // recall start to begin the timer ticking again.
-  procedure StopTimer(const name: String); overload;
+  procedure StopTimer(name: String); overload;
 
   // Get the timer created with the indicated named.
-  function TimerNamed(const name: String): Timer; overload;
+  function TimerNamed(name: String): Timer; overload;
 
   // Gets the number of ticks (milliseconds) that have passed since the timer
   // was started/reset. When paused the timer's ticks will not advance until
   // the timer is once again resumed.
-  function TimerTicks(const name: String): Longword; overload;
+  function TimerTicks(name: String): Longword; overload;
 
   // Gets the number of ticks (milliseconds) that have passed since the timer
   // was started/reset. When paused the timer's ticks will not advance until
@@ -3683,19 +4183,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ActiveRadioButton(grp: GUIRadioGroup): Region; overload;
 
   // Takes an ID and returns the active button
-  function ActiveRadioButton(const id: String): Region; overload;
+  function ActiveRadioButton(id: String): Region; overload;
 
   // Takes a panel and an ID and returns the active button
-  function ActiveRadioButton(pnl: Panel; const id: String): Region; overload;
-
-  // Takes a radiogroup and returns the active button's index.
-  function ActiveRadioButtonIndex(const id: String): Longint; overload;
+  function ActiveRadioButton(pnl: Panel; id: String): Region; overload;
 
   // Takes a radiogroup and returns the active button's index.
   function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): Longint; overload;
 
   // Takes a radiogroup and returns the active button's index.
-  function ActiveRadioButtonIndex(pnl: Panel; const id: String): Longint; overload;
+  function ActiveRadioButtonIndex(id: String): Longint; overload;
+
+  // Takes a radiogroup and returns the active button's index.
+  function ActiveRadioButtonIndex(pnl: Panel; id: String): Longint; overload;
 
   // Returns the parent panel of the active textbox
   function ActiveTextBoxParent(): Panel; overload;
@@ -3704,7 +4204,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ActiveTextIndex(): Longint; overload;
 
   // Returns true when the region has been clicked.
-  function ButtonClicked(const name: String): Boolean; overload;
+  function ButtonClicked(name: String): Boolean; overload;
 
   // Returns true when the region has been clicked.
   function ButtonClicked(r: Region): Boolean; overload;
@@ -3712,29 +4212,29 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Takes a region and returns the checkbox of that region
   function CheckboxFromRegion(r: Region): GUICheckbox; overload;
 
-  // Sets the checkbox state to val given the ID.
-  procedure CheckboxSetState(const id: String; val: Boolean); overload;
-
   // Sets the checkbox state to val.
   procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
+
+  // Sets the checkbox state to val given the ID.
+  procedure CheckboxSetState(id: String; val: Boolean); overload;
 
   // Sets the checkbox state to val.
   procedure CheckboxSetState(r: Region; val: Boolean); overload;
 
   // Sets the checkbox state to val.
-  procedure CheckboxSetState(pnl: Panel; const id: String; val: Boolean); overload;
+  procedure CheckboxSetState(pnl: Panel; id: String; val: Boolean); overload;
 
   // Returns checkbox state of the checkbox with ID from string
   function CheckboxState(r: Region): Boolean; overload;
 
   // Returns checkbox state of the checkbox with ID from string
-  function CheckboxState(const s: String): Boolean; overload;
+  function CheckboxState(s: String): Boolean; overload;
 
   // Returns checkbox state of the given checkbox
   function CheckboxState(chk: GUICheckbox): Boolean; overload;
 
   // Returns checkbox state of the checkbox with ID in a given Panel
-  function CheckboxState(p: Panel; const s: String): Boolean; overload;
+  function CheckboxState(p: Panel; s: String): Boolean; overload;
 
   // Deactivate the panel. The panel will become unclickable, it will remain visible if it was already.
   procedure DeactivatePanel(p: Panel); overload;
@@ -3752,7 +4252,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function DialogPath(): String; overload;
 
   // Sets the path of the dialog
-  procedure DialogSetPath(const fullname: String); overload;
+  procedure DialogSetPath(fullname: String); overload;
 
   // Sets the GUI whether or not to use Vector Drawing
   procedure DrawGUIAsVectors(b: Boolean); overload;
@@ -3769,15 +4269,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns true if any of the panels in the user interface have been clicked.
   function GUIClicked(): Boolean; overload;
 
+  // Sets the active textbox from region
+  procedure GUISetActiveTextbox(r: Region); overload;
+
   // Sets the active textbox to the one with the
   // indicated name.
-  procedure GUISetActiveTextbox(const name: String); overload;
+  procedure GUISetActiveTextbox(name: String); overload;
 
   // Sets the active textbox
   procedure GUISetActiveTextbox(t: GUITextbox); overload;
-
-  // Sets the active textbox from region
-  procedure GUISetActiveTextbox(r: Region); overload;
 
   // Sets the Background color of the GUI
   procedure GUISetBackgroundColor(c: Color); overload;
@@ -3798,13 +4298,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function GUITextEntryComplete(): Boolean; overload;
 
   // Returns if panel is in Index Collection
-  function HasPanel(const name: String): Boolean; overload;
+  function HasPanel(name: String): Boolean; overload;
+
+  // Hide the panel, stop drawing it. Panels which are not being draw can not be interacted with by the user.
+  procedure HidePanel(name: String); overload;
 
   // Hide the panel, stop drawing it. Panels which are not being draw can not be interacted with by the user.
   procedure HidePanel(p: Panel); overload;
-
-  // Hide the panel, stop drawing it. Panels which are not being draw can not be interacted with by the user.
-  procedure HidePanel(const name: String); overload;
 
   // Returns the index of the region of the textbox in which text was changed/added into most recently.
   function IndexOfLastUpdatedTextBox(): Longint; overload;
@@ -3831,25 +4331,25 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function LabelFromRegion(r: Region): GUILabel; overload;
 
   // Sets FontAlignment for label given region
-  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
-
-  // Sets FontAlignment for label given region
   procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
 
+  // Sets FontAlignment for label given region
+  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
+
   // Set Font For Label
-  procedure LabelSetFont(l: GUILabel; const s: String); overload;
+  procedure LabelSetFont(l: GUILabel; s: String); overload;
 
   // Set text for Label
-  procedure LabelSetText(lb: GUILabel; const newString: String); overload;
+  procedure LabelSetText(lb: GUILabel; newString: String); overload;
 
   // Set text for Label
-  procedure LabelSetText(const id: String; const newString: String); overload;
+  procedure LabelSetText(r: Region; newString: String); overload;
 
   // Set text for Label
-  procedure LabelSetText(r: Region; const newString: String); overload;
+  procedure LabelSetText(id: String; newString: String); overload;
 
   // Set text for Label
-  procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
+  procedure LabelSetText(pnl: Panel; id: String; newString: String); overload;
 
   // Get text From Label
   function LabelText(r: Region): String; overload;
@@ -3858,120 +4358,120 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function LabelText(lb: GUILabel): String; overload;
 
   // Get text From Label
-  function LabelText(const id: String): String; overload;
+  function LabelText(id: String): String; overload;
 
   // Get text From Label
-  function LabelText(pnl: Panel; const id: String): String; overload;
+  function LabelText(pnl: Panel; id: String): String; overload;
 
   // Returns active item's index from the list
   function ListActiveItemIndex(lst: GUIList): Longint; overload;
 
   // Returns active item's index from the list
-  function ListActiveItemIndex(const id: String): Longint; overload;
+  function ListActiveItemIndex(id: String): Longint; overload;
 
   // Returns active item's index from the list of the region
   function ListActiveItemIndex(r: Region): Longint; overload;
 
   // Returns active item's index from the list
-  function ListActiveItemIndex(pnl: Panel; const id: String): Longint; overload;
-
-  // Returns the text of the active item in the list of the region
-  function ListActiveItemText(r: Region): String; overload;
+  function ListActiveItemIndex(pnl: Panel; id: String): Longint; overload;
 
   // Returns the text of the active item in the list of the region
   function ListActiveItemText(list: GUIList): String; overload;
 
+  // Returns the text of the active item in the list of the region
+  function ListActiveItemText(r: Region): String; overload;
+
   // Returns the active item text of the List in with ID
-  function ListActiveItemText(const ID: String): String; overload;
+  function ListActiveItemText(ID: String): String; overload;
 
   // Returns the active item text of the List in panel, pnl- with ID, ID
-  function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
+  function ListActiveItemText(pnl: Panel; ID: String): String; overload;
 
   // Adds an item to the list by bitmap
   procedure ListAddItem(lst: GUIList; img: Bitmap); overload;
 
-  // Adds an item to the list by text
-  procedure ListAddItem(r: Region; const text: String); overload;
-
-  // Adds an item to the list by text
-  procedure ListAddItem(const id: String; const text: String); overload;
-
   // Adds an item to the list by bitmap
-  procedure ListAddItem(const id: String; img: Bitmap); overload;
+  procedure ListAddItem(id: String; img: Bitmap); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
+
+  // Adds an item to the list by text
+  procedure ListAddItem(lst: GUIList; text: String); overload;
+
+  // Adds an item to the list by text
+  procedure ListAddItem(id: String; text: String); overload;
 
   // Adds an item to the list by bitmap
   procedure ListAddItem(r: Region; img: Bitmap); overload;
 
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(r: Region; const img: BitmapCell); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(id: String; const img: BitmapCell); overload;
+
   // Adds an item to the list by text
-  procedure ListAddItem(lst: GUIList; const text: String); overload;
-
-  // Adds an item to the list by text and Bitmap
-  procedure ListAddItem(const id: String; img: Bitmap; const text: String); overload;
-
-  // Adds an item to the list by text
-  procedure ListAddItem(pnl: Panel; const id: String; const text: String); overload;
-
-  // Adds an item to the list by text and Bitmap
-  procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list
-  procedure ListAddItem(r: Region; img: Bitmap; const text: String); overload;
+  procedure ListAddItem(r: Region; text: String); overload;
 
   // Adds an item to the list by bitmap
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap); overload;
+  procedure ListAddItem(pnl: Panel; id: String; img: Bitmap); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap and some text.
+  procedure ListAddItem(r: Region; const img: BitmapCell; text: String); overload;
+
+  // Adds an item to the list by text and Bitmap
+  procedure ListAddItem(lst: GUIList; img: Bitmap; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap.
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap and some text.
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell); overload;
 
   // Adds an item to the list by text and Bitmap
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
+  procedure ListAddItem(id: String; img: Bitmap; text: String); overload;
+
+  // Adds an item to the list
+  procedure ListAddItem(r: Region; img: Bitmap; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(lst: GUIList; const img: BitmapCell; text: String); overload;
+
+  // Adds an item to the list by text
+  procedure ListAddItem(pnl: Panel; id: String; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(id: String; const img: BitmapCell; text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell; text: String); overload;
+
+  // Adds an item to the list by text and Bitmap
+  procedure ListAddItem(pnl: Panel; id: String; img: Bitmap; text: String); overload;
 
   // Returns the index of the item with the bitmap, img
   function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 
   // Returns the index of the item with the bitmap and cell.
-  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
+
+  // Removes all items from the list.
+  procedure ListClearItems(id: String); overload;
+
+  // Removes all items from the list.
+  procedure ListClearItems(lst: GUIList); overload;
 
   // Removes all items from the list of the region
   procedure ListClearItems(r: Region); overload;
 
   // Removes all items from the list.
-  procedure ListClearItems(const id: String); overload;
-
-  // Removes all items from the list.
-  procedure ListClearItems(lst: GUIList); overload;
-
-  // Removes all items from the list.
-  procedure ListClearItems(pnl: Panel; const id: String); overload;
+  procedure ListClearItems(pnl: Panel; id: String); overload;
 
   // Returns the font of the list
   function ListFont(lst: GUIList): Font; overload;
@@ -3989,16 +4489,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ListFromRegion(r: Region): GUIList; overload;
 
   // Returns the number of items in the list
-  function ListItemCount(const id: String): Longint; overload;
-
-  // Returns the number of items in the list
   function ListItemCount(lst: GUIList): Longint; overload;
 
   // Returns the number of items in the list of the region
   function ListItemCount(r: Region): Longint; overload;
 
   // Returns the number of items in the list
-  function ListItemCount(pnl: Panel; const id: String): Longint; overload;
+  function ListItemCount(id: String): Longint; overload;
+
+  // Returns the number of items in the list
+  function ListItemCount(pnl: Panel; id: String): Longint; overload;
+
+  // Returns the text of the item at index idx
+  function ListItemText(id: String; idx: Longint): String; overload;
 
   // Returns the text of the item at index idx
   function ListItemText(lst: GUIList; idx: Longint): String; overload;
@@ -4007,52 +4510,49 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ListItemText(r: Region; idx: Longint): String; overload;
 
   // Returns the text of the item at index idx
-  function ListItemText(const id: String; idx: Longint): String; overload;
-
-  // Returns the text of the item at index idx
-  function ListItemText(pnl: Panel; const id: String; idx: Longint): String; overload;
+  function ListItemText(pnl: Panel; id: String; idx: Longint): String; overload;
 
   // Returns the largest index that startingAt should be set to.
   function ListLargestStartIndex(lst: GUIList): Longint; overload;
 
   // Removes the active item from a list
-  procedure ListRemoveActiveItem(const id: String); overload;
-
-  // Removes the active item from a list
   procedure ListRemoveActiveItem(r: Region); overload;
 
   // Removes the active item from a list
-  procedure ListRemoveActiveItem(pnl: Panel; const id: String); overload;
+  procedure ListRemoveActiveItem(id: String); overload;
+
+  // Removes the active item from a list
+  procedure ListRemoveActiveItem(pnl: Panel; id: String); overload;
+
+  // Removes item at index idx from the list
+  procedure ListRemoveItem(id: String; idx: Longint); overload;
 
   // Removes item at index idx from the list
   procedure ListRemoveItem(lst: GUIList; idx: Longint); overload;
 
   // Removes item at index idx from the list
-  procedure ListRemoveItem(const id: String; idx: Longint); overload;
-
-  // Removes item at index idx from the list
-  procedure ListRemoveItem(pnl: Panel; const id: String; idx: Longint); overload;
+  procedure ListRemoveItem(pnl: Panel; id: String; idx: Longint); overload;
 
   // Returns the largest index that startingAt should be set to.
   function ListScrollIncrement(lst: GUIList): Longint; overload;
 
   // Set the active item in the list to the item at index idx
-  procedure ListSetActiveItemIndex(const id: String; idx: Longint); overload;
+  procedure ListSetActiveItemIndex(id: String; idx: Longint); overload;
 
   // Set the active item in the list to the item at index idx
   procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint); overload;
 
   // Set the active item in the list to the item at index idx
-  procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
+  procedure ListSetActiveItemIndex(pnl: Panel; id: String; idx: Longint); overload;
 
   // Sets the font of the list to font f
   procedure ListSetFont(lst: GUIList; f: Font); overload;
 
-  // Returns the font alignment of a list
-  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
-
   // Returns the font alignment of a list from region
   procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
+
+  // Returns the font alignment of a list
+  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
 
   // Sets the starting point for the list from region
   procedure ListSetStartAt(r: Region; idx: Longint); overload;
@@ -4067,19 +4567,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ListStartAt(r: Region): Longint; overload;
 
   // returns the id of a value in the list.
-  function ListTextIndex(lst: GUIList; const value: String): Longint; overload;
+  function ListTextIndex(lst: GUIList; value: String): Longint; overload;
 
   // Loads panel from panel directory with filename
-  function LoadPanel(const filename: String): Panel; overload;
+  function LoadPanel(filename: String): Panel; overload;
 
   // maps panel to name in Hash Table.
-  function LoadPanelNamed(const name: String; const filename: String): Panel; overload;
+  function LoadPanelNamed(name: String; filename: String): Panel; overload;
 
   // Move panel along vector
   procedure MovePanel(p: Panel; const mvmt: Vector); overload;
 
   // Creates a new panel
-  function NewPanel(const pnlName: String): Panel; overload;
+  function NewPanel(pnlName: String): Panel; overload;
 
   // Returns whether panel is active
   function PanelActive(pnl: Panel): Boolean; overload;
@@ -4103,13 +4603,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function PanelHeight(p: Panel): Longint; overload;
 
   // Returns height of the panel
-  function PanelHeight(const name: String): Longint; overload;
+  function PanelHeight(name: String): Longint; overload;
 
   // Returns the name of the panel
   function PanelName(pnl: Panel): String; overload;
 
   // Returns panel with the name name
-  function PanelNamed(const name: String): Panel; overload;
+  function PanelNamed(name: String): Panel; overload;
 
   // Sets panel's draggability to the passed Boolean
   procedure PanelSetDraggable(p: Panel; b: Boolean); overload;
@@ -4118,7 +4618,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function PanelVisible(p: Panel): Boolean; overload;
 
   // Returns the panel's width
-  function PanelWidth(const name: String): Longint; overload;
+  function PanelWidth(name: String): Longint; overload;
 
   // Returns the panel's width
   function PanelWidth(p: Panel): Longint; overload;
@@ -4136,10 +4636,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function PointInRegion(const pt: Point2D; p: Panel; kind: GUIElementKind): Boolean; overload;
 
   // Takes an ID and returns the RadioGroup.
-  function RadioGroupFromId(const id: String): GUIRadioGroup; overload;
+  function RadioGroupFromId(id: String): GUIRadioGroup; overload;
 
   // Takes panel and ID and returns the RadioGroup.
-  function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup; overload;
+  function RadioGroupFromId(pnl: Panel; id: String): GUIRadioGroup; overload;
 
   // Takes region and returns the RadioGroup.
   function RadioGroupFromRegion(r: Region): GUIRadioGroup; overload;
@@ -4172,10 +4672,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function RegionWidth(r: Region): Longint; overload;
 
   // Returns the Region with the ID passed
-  function RegionWithID(const ID: String): Region; overload;
+  function RegionWithID(ID: String): Region; overload;
 
   // Returns the Region with the ID passed from the panel passed
-  function RegionWithID(pnl: Panel; const ID: String): Region; overload;
+  function RegionWithID(pnl: Panel; ID: String): Region; overload;
 
   // Returns the Region X value
   function RegionX(r: Region): Single; overload;
@@ -4191,19 +4691,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ReleaseAllPanels(); overload;
 
   // Disposes of the panel by name, removing it from the index collection, setting its dragging to nil, and hiding it first to avoid crashes.
-  procedure ReleasePanel(const name: String); overload;
+  procedure ReleasePanel(name: String); overload;
 
   // Takes a region and an ID and selects the button
   procedure SelectRadioButton(r: Region); overload;
 
   // Takes an ID and returns the active button
-  procedure SelectRadioButton(const id: String); overload;
+  procedure SelectRadioButton(id: String); overload;
 
   // Takes a RadioGroup and Region and selects the button
   procedure SelectRadioButton(rGroup: GUIRadioGroup; r: Region); overload;
 
   // Takes a panel and an ID and selects the button
-  procedure SelectRadioButton(pnl: Panel; const id: String); overload;
+  procedure SelectRadioButton(pnl: Panel; id: String); overload;
 
   // Takes a RadioGroup and index and selects the button
   procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: Longint); overload;
@@ -4218,10 +4718,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ShowOpenDialog(select: FileDialogSelectType); overload;
 
   // Display the panel on screen at panel's co-ordinates.
-  procedure ShowPanel(const name: String); overload;
+  procedure ShowPanel(p: Panel); overload;
 
   // Display the panel on screen at panel's co-ordinates.
-  procedure ShowPanel(p: Panel); overload;
+  procedure ShowPanel(name: String); overload;
 
   // shows dialog panel
   procedure ShowPanelDialog(p: Panel); overload;
@@ -4239,7 +4739,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function TextBoxFont(r: Region): Font; overload;
 
   // The the TextBox from an ID
-  function TextBoxFromID(const id: String): GUITextbox; overload;
+  function TextBoxFromID(id: String): GUITextbox; overload;
 
   // Sets the textbox text from region
   function TextBoxFromRegion(r: Region): GUITextbox; overload;
@@ -4248,13 +4748,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function TextBoxText(tb: GUITextbox): String; overload;
 
   // Gets the textbox text from region
-  function TextBoxText(const id: String): String; overload;
+  function TextBoxText(id: String): String; overload;
 
   // Gets the textbox text from region
   function TextBoxText(r: Region): String; overload;
 
   // Gets the textbox text from region
-  function TextBoxText(pnl: Panel; const id: String): String; overload;
+  function TextBoxText(pnl: Panel; id: String): String; overload;
 
   // Returns the alignment of the text in textbox passed in as region
   function TextboxAlignment(r: Region): FontAlignment; overload;
@@ -4272,16 +4772,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure TextboxSetFont(Tb: GUITextbox; f: Font); overload;
 
   // Sets the textbox text from Id
-  procedure TextboxSetText(const id: String; const s: String); overload;
+  procedure TextboxSetText(id: String; i: Longint); overload;
 
   // Sets the textbox text from region
-  procedure TextboxSetText(r: Region; single: Single); overload;
+  procedure TextboxSetText(id: String; single: Single); overload;
 
   // Sets the textbox text from region
-  procedure TextboxSetText(r: Region; const s: String); overload;
+  procedure TextboxSetText(r: Region; s: String); overload;
 
   // Sets the textbox text from region
-  procedure TextboxSetText(const id: String; single: Single); overload;
+  procedure TextboxSetText(tb: GUITextbox; s: String); overload;
+
+  // Sets the textbox text from Id
+  procedure TextboxSetText(id: String; s: String); overload;
 
   // Sets the textbox text from region
   procedure TextboxSetText(r: Region; i: Longint); overload;
@@ -4289,35 +4792,32 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Sets the textbox text from region
   procedure TextboxSetText(tb: GUITextbox; i: Longint); overload;
 
-  // Sets the textbox text from Id
-  procedure TextboxSetText(const id: String; i: Longint); overload;
-
   // Sets the textbox text from Textbox
   procedure TextboxSetText(tb: GUITextbox; single: Single); overload;
 
   // Sets the textbox text from region
-  procedure TextboxSetText(tb: GUITextbox; const s: String); overload;
+  procedure TextboxSetText(r: Region; single: Single); overload;
+
+  // Sets the textbox text from Panel and Id
+  procedure TextboxSetText(pnl: Panel; id: String; s: String); overload;
 
   // Sets the textbox text from panel and Id
-  procedure TextboxSetText(pnl: Panel; const id: String; i: Longint); overload;
+  procedure TextboxSetText(pnl: Panel; id: String; i: Longint); overload;
 
   // Sets the textbox text from Panel and Id
-  procedure TextboxSetText(pnl: Panel; const id: String; single: Single); overload;
-
-  // Sets the textbox text from Panel and Id
-  procedure TextboxSetText(pnl: Panel; const id: String; const s: String); overload;
+  procedure TextboxSetText(pnl: Panel; id: String; single: Single); overload;
 
   // Activates the panel if deactivated, and deactivates if activated.
   procedure ToggleActivatePanel(p: Panel); overload;
 
   // Toggles the state of a checkbox (ticked/unticked)
-  procedure ToggleCheckboxState(const id: String); overload;
+  procedure ToggleCheckboxState(id: String); overload;
 
   // Toggles the state of a checkbox (ticked/unticked)
   procedure ToggleCheckboxState(c: GUICheckbox); overload;
 
   // Toggles the state of a checkbox (ticked/unticked)
-  procedure ToggleCheckboxState(pnl: Panel; const id: String); overload;
+  procedure ToggleCheckboxState(pnl: Panel; id: String); overload;
 
   // Toggles the region active state
   procedure ToggleRegionActive(forRegion: Region); overload;
@@ -4329,7 +4829,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure UpdateInterface(); overload;
 
   // Returns the ArduinoDevice with the indicated name.
-  function ArduinoDeviceNamed(const name: String): ArduinoDevice; overload;
+  function ArduinoDeviceNamed(name: String): ArduinoDevice; overload;
 
   // Returns true if there is data waiting to be read from the device.
   function ArduinoHasData(dev: ArduinoDevice): Boolean; overload;
@@ -4355,120 +4855,32 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ArduinoSendByte(dev: ArduinoDevice; value: Byte); overload;
 
   // Send a string value to the arduino device.
-  procedure ArduinoSendString(dev: ArduinoDevice; const value: String); overload;
+  procedure ArduinoSendString(dev: ArduinoDevice; value: String); overload;
 
   // Send a string value to the arduino device, along with a newline
   // so the arduino can identify the end of the sent data.
-  procedure ArduinoSendStringLine(dev: ArduinoDevice; const value: String); overload;
+  procedure ArduinoSendStringLine(dev: ArduinoDevice; value: String); overload;
 
   // Creates an Arduino device at the specified port, with
   // the indicated baud. The name of the device matches its port.
-  function CreateArduinoDevice(const port: String; baud: Longint): ArduinoDevice; overload;
+  function CreateArduinoDevice(port: String; baud: Longint): ArduinoDevice; overload;
 
   // Creates an Arduino device with the given name, 
   // at the specified port, with the indicated baud.
-  function CreateArduinoDevice(const name: String; const port: String; baud: Longint): ArduinoDevice; overload;
+  function CreateArduinoDevice(name: String; port: String; baud: Longint): ArduinoDevice; overload;
 
   // Close the connection to the Arduino Device and dispose
   // of the resources associated with the Device.
   procedure FreeArduinoDevice(var dev: ArduinoDevice); overload;
 
   // Does an ArduinoDevice exist with the indicated name?
-  function HasArduinoDevice(const name: String): Boolean; overload;
+  function HasArduinoDevice(name: String): Boolean; overload;
 
   // Release all of the ArduinoDevices
   procedure ReleaseAllArduinoDevices(); overload;
 
   // Release the ArduinoDevice with the indicated name.
-  procedure ReleaseArduinoDevice(const name: String); overload;
-
-  // Returns a DrawingOptions with default values.
-  function OptionDefaults(): DrawingOptions; overload;
-
-  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
-  function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
-
-  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
-  // Pass opts the other options you want use.
-  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to flip an image along its X axis.
-  function OptionFlipX(): DrawingOptions; overload;
-
-  // Use this option to flip an image along its X axis.
-  // Pass opts the other options you want use.
-  function OptionFlipX(const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to flow the drawing of an image along both X and Y axis.
-  function OptionFlipXY(): DrawingOptions; overload;
-
-  // Use this option to flow the drawing of an image along both X and Y axis.
-  // Pass opts the other options you want use.
-  function OptionFlipXY(const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to flip the drawing of an image along its Y axis.
-  function OptionFlipY(): DrawingOptions; overload;
-
-  // Use this option to flip the drawing of an image along its Y axis.
-  // Pass opts the other options you want use.
-  function OptionFlipY(const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to change the width of line drawings.
-  function OptionLineWidth(width: Longint): DrawingOptions; overload;
-
-  // Use this option to change the width of line drawings.
-  function OptionLineWidth(width: Longint; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to draw only part of a bitmap.
-  function OptionPartBmp(const part: Rectangle): DrawingOptions; overload;
-
-  // Use this option to draw only part of a bitmap.
-  // Pass opts the other options you want use.
-  function OptionPartBmp(const part: Rectangle; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to draw only a part of a bitmap.
-  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single): DrawingOptions; overload;
-
-  // Use this option to draw only a part of a bitmap.
-  // Pass opts the other options you want use.
-  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to rotate a bitmap around its centre point.
-  // Pass opts the other options you want use.
-  function OptionRotateBmp(angle: Single): DrawingOptions; overload;
-
-  // Use this option to rotate a bitmap around its centre point.
-  function OptionRotateBmp(angle: Single; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to rotate the drawing of a bitmap. This allows you to set the
-  // anchor point and rotate around that by a number of degrees.
-  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single): DrawingOptions; overload;
-
-  // Use this option to rotate the drawing of a bitmap. This allows you to set the
-  // anchor point and rotate around that by a number of degrees.
-  // Pass opts the other options you want use.
-  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to scale the drawing of bitmaps. You can scale x and y separately.
-  function OptionScaleBmp(scaleX: Single; scaleY: Single): DrawingOptions; overload;
-
-  // Use this option to scale the drawing of bitmaps. You can scale x and y separately.
-  // Pass opts the other options you want use.
-  function OptionScaleBmp(scaleX: Single; scaleY: Single; const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to draw to the screen, ignoring the positon of the camera.
-  function OptionToScreen(): DrawingOptions; overload;
-
-  // Use this option to draw to the screen, ignoring the positon of the camera.
-  // Pass opts the other options you want use.
-  function OptionToScreen(const opts: DrawingOptions): DrawingOptions; overload;
-
-  // Use this option to draw in World coordinates -- these are affected by the movement of the camera.
-  function OptionToWorld(): DrawingOptions; overload;
-
-  // Use this option to draw in World coordinates -- these are affected by the movement of the camera.
-  // Pass opts the other options you want use.
-  function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
+  procedure ReleaseArduinoDevice(name: String); overload;
 
 
 	procedure LoadDefaultColors();
@@ -4504,7 +4916,7 @@ implementation
     result := sgAnimations.AnimationFrameTime(anim);
   end;
 
-  function AnimationIndex(temp: AnimationScript; const name: String): Longint; overload;
+  function AnimationIndex(temp: AnimationScript; name: String): Longint; overload;
   begin
     result := sgAnimations.AnimationIndex(temp,name);
   end;
@@ -4524,9 +4936,14 @@ implementation
     result := sgAnimations.AnimationScriptName(script);
   end;
 
-  function AnimationScriptNamed(const name: String): AnimationScript; overload;
+  function AnimationScriptNamed(name: String): AnimationScript; overload;
   begin
     result := sgAnimations.AnimationScriptNamed(name);
+  end;
+
+  procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript); overload;
+  begin
+    sgAnimations.AssignAnimation(anim,name,script);
   end;
 
   procedure AssignAnimation(anim: Animation; idx: Longint; script: AnimationScript); overload;
@@ -4534,12 +4951,7 @@ implementation
     sgAnimations.AssignAnimation(anim,idx,script);
   end;
 
-  procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript); overload;
-  begin
-    sgAnimations.AssignAnimation(anim,name,script);
-  end;
-
-  procedure AssignAnimation(anim: Animation; const name: String; script: AnimationScript; withSound: Boolean); overload;
+  procedure AssignAnimation(anim: Animation; name: String; script: AnimationScript; withSound: Boolean); overload;
   begin
     sgAnimations.AssignAnimation(anim,name,script,withSound);
   end;
@@ -4549,12 +4961,12 @@ implementation
     sgAnimations.AssignAnimation(anim,idx,script,withSound);
   end;
 
-  function CreateAnimation(const identifier: String; script: AnimationScript): Animation; overload;
+  function CreateAnimation(identifier: Longint; script: AnimationScript): Animation; overload;
   begin
     result := sgAnimations.CreateAnimation(identifier,script);
   end;
 
-  function CreateAnimation(identifier: Longint; script: AnimationScript): Animation; overload;
+  function CreateAnimation(identifier: String; script: AnimationScript): Animation; overload;
   begin
     result := sgAnimations.CreateAnimation(identifier,script);
   end;
@@ -4564,7 +4976,7 @@ implementation
     result := sgAnimations.CreateAnimation(identifier,script,withSound);
   end;
 
-  function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+  function CreateAnimation(identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
   begin
     result := sgAnimations.CreateAnimation(identifier,script,withSound);
   end;
@@ -4574,19 +4986,29 @@ implementation
     sgAnimations.DrawAnimation(ani,bmp,pt);
   end;
 
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; const pt: Point2D; const opts: DrawingOptions); overload;
-  begin
-    sgAnimations.DrawAnimation(ani,bmp,pt,opts);
-  end;
-
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single); overload;
+  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
   begin
     sgAnimations.DrawAnimation(ani,bmp,x,y);
   end;
 
-  procedure DrawAnimation(ani: Animation; bmp: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
   begin
-    sgAnimations.DrawAnimation(ani,bmp,x,y,opts);
+    sgAnimations.DrawAnimation(dest,ani,bmp,pt);
+  end;
+
+  procedure DrawAnimation(dest: Bitmap; ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+  begin
+    sgAnimations.DrawAnimation(dest,ani,bmp,x,y);
+  end;
+
+  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; const pt: Point2D); overload;
+  begin
+    sgAnimations.DrawAnimationOnScreen(ani,bmp,pt);
+  end;
+
+  procedure DrawAnimationOnScreen(ani: Animation; bmp: Bitmap; x: Longint; y: Longint); overload;
+  begin
+    sgAnimations.DrawAnimationOnScreen(ani,bmp,x,y);
   end;
 
   procedure FreeAnimation(var ani: Animation); overload;
@@ -4599,17 +5021,17 @@ implementation
     sgAnimations.FreeAnimationScript(scriptToFree);
   end;
 
-  function HasAnimationScript(const name: String): Boolean; overload;
+  function HasAnimationScript(name: String): Boolean; overload;
   begin
     result := sgAnimations.HasAnimationScript(name);
   end;
 
-  function LoadAnimationScript(const filename: String): AnimationScript; overload;
+  function LoadAnimationScript(filename: String): AnimationScript; overload;
   begin
     result := sgAnimations.LoadAnimationScript(filename);
   end;
 
-  function LoadAnimationScriptNamed(const name: String; const filename: String): AnimationScript; overload;
+  function LoadAnimationScriptNamed(name: String; filename: String): AnimationScript; overload;
   begin
     result := sgAnimations.LoadAnimationScriptNamed(name,filename);
   end;
@@ -4619,7 +5041,7 @@ implementation
     sgAnimations.ReleaseAllAnimationScripts();
   end;
 
-  procedure ReleaseAnimationScript(const name: String); overload;
+  procedure ReleaseAnimationScript(name: String); overload;
   begin
     sgAnimations.ReleaseAnimationScript(name);
   end;
@@ -4659,24 +5081,24 @@ implementation
     sgAudio.CloseAudio();
   end;
 
-  procedure FadeMusicIn(const name: String; ms: Longint); overload;
-  begin
-    sgAudio.FadeMusicIn(name,ms);
-  end;
-
   procedure FadeMusicIn(mus: Music; ms: Longint); overload;
   begin
     sgAudio.FadeMusicIn(mus,ms);
   end;
 
+  procedure FadeMusicIn(name: String; ms: Longint); overload;
+  begin
+    sgAudio.FadeMusicIn(name,ms);
+  end;
+
+  procedure FadeMusicIn(name: String; loops: Longint; ms: Longint); overload;
+  begin
+    sgAudio.FadeMusicIn(name,loops,ms);
+  end;
+
   procedure FadeMusicIn(mus: Music; loops: Longint; ms: Longint); overload;
   begin
     sgAudio.FadeMusicIn(mus,loops,ms);
-  end;
-
-  procedure FadeMusicIn(const name: String; loops: Longint; ms: Longint); overload;
-  begin
-    sgAudio.FadeMusicIn(name,loops,ms);
   end;
 
   procedure FadeMusicOut(ms: Longint); overload;
@@ -4694,32 +5116,32 @@ implementation
     sgAudio.FreeSoundEffect(effect);
   end;
 
-  function HasMusic(const name: String): Boolean; overload;
+  function HasMusic(name: String): Boolean; overload;
   begin
     result := sgAudio.HasMusic(name);
   end;
 
-  function HasSoundEffect(const name: String): Boolean; overload;
+  function HasSoundEffect(name: String): Boolean; overload;
   begin
     result := sgAudio.HasSoundEffect(name);
   end;
 
-  function LoadMusic(const filename: String): Music; overload;
+  function LoadMusic(filename: String): Music; overload;
   begin
     result := sgAudio.LoadMusic(filename);
   end;
 
-  function LoadMusicNamed(const name: String; const filename: String): Music; overload;
+  function LoadMusicNamed(name: String; filename: String): Music; overload;
   begin
     result := sgAudio.LoadMusicNamed(name,filename);
   end;
 
-  function LoadSoundEffect(const filename: String): SoundEffect; overload;
+  function LoadSoundEffect(filename: String): SoundEffect; overload;
   begin
     result := sgAudio.LoadSoundEffect(filename);
   end;
 
-  function LoadSoundEffectNamed(const name: String; const filename: String): SoundEffect; overload;
+  function LoadSoundEffectNamed(name: String; filename: String): SoundEffect; overload;
   begin
     result := sgAudio.LoadSoundEffectNamed(name,filename);
   end;
@@ -4734,7 +5156,7 @@ implementation
     result := sgAudio.MusicName(mus);
   end;
 
-  function MusicNamed(const name: String): Music; overload;
+  function MusicNamed(name: String): Music; overload;
   begin
     result := sgAudio.MusicNamed(name);
   end;
@@ -4759,14 +5181,14 @@ implementation
     sgAudio.PauseMusic();
   end;
 
-  procedure PlayMusic(const name: String); overload;
-  begin
-    sgAudio.PlayMusic(name);
-  end;
-
   procedure PlayMusic(mus: Music); overload;
   begin
     sgAudio.PlayMusic(mus);
+  end;
+
+  procedure PlayMusic(name: String); overload;
+  begin
+    sgAudio.PlayMusic(name);
   end;
 
   procedure PlayMusic(mus: Music; loops: Longint); overload;
@@ -4774,7 +5196,7 @@ implementation
     sgAudio.PlayMusic(mus,loops);
   end;
 
-  procedure PlayMusic(const name: String; loops: Longint); overload;
+  procedure PlayMusic(name: String; loops: Longint); overload;
   begin
     sgAudio.PlayMusic(name,loops);
   end;
@@ -4784,9 +5206,14 @@ implementation
     sgAudio.PlaySoundEffect(effect);
   end;
 
-  procedure PlaySoundEffect(const name: String); overload;
+  procedure PlaySoundEffect(name: String); overload;
   begin
     sgAudio.PlaySoundEffect(name);
+  end;
+
+  procedure PlaySoundEffect(name: String; vol: Single); overload;
+  begin
+    sgAudio.PlaySoundEffect(name,vol);
   end;
 
   procedure PlaySoundEffect(effect: SoundEffect; vol: Single); overload;
@@ -4794,19 +5221,14 @@ implementation
     sgAudio.PlaySoundEffect(effect,vol);
   end;
 
+  procedure PlaySoundEffect(name: String; loops: Longint); overload;
+  begin
+    sgAudio.PlaySoundEffect(name,loops);
+  end;
+
   procedure PlaySoundEffect(effect: SoundEffect; loops: Longint); overload;
   begin
     sgAudio.PlaySoundEffect(effect,loops);
-  end;
-
-  procedure PlaySoundEffect(const name: String; vol: Single); overload;
-  begin
-    sgAudio.PlaySoundEffect(name,vol);
-  end;
-
-  procedure PlaySoundEffect(const name: String; loops: Longint); overload;
-  begin
-    sgAudio.PlaySoundEffect(name,loops);
   end;
 
   procedure PlaySoundEffect(effect: SoundEffect; loops: Longint; vol: Single); overload;
@@ -4814,7 +5236,7 @@ implementation
     sgAudio.PlaySoundEffect(effect,loops,vol);
   end;
 
-  procedure PlaySoundEffect(const name: String; loops: Longint; vol: Single); overload;
+  procedure PlaySoundEffect(name: String; loops: Longint; vol: Single); overload;
   begin
     sgAudio.PlaySoundEffect(name,loops,vol);
   end;
@@ -4829,12 +5251,12 @@ implementation
     sgAudio.ReleaseAllSoundEffects();
   end;
 
-  procedure ReleaseMusic(const name: String); overload;
+  procedure ReleaseMusic(name: String); overload;
   begin
     sgAudio.ReleaseMusic(name);
   end;
 
-  procedure ReleaseSoundEffect(const name: String); overload;
+  procedure ReleaseSoundEffect(name: String); overload;
   begin
     sgAudio.ReleaseSoundEffect(name);
   end;
@@ -4859,19 +5281,19 @@ implementation
     result := sgAudio.SoundEffectName(effect);
   end;
 
-  function SoundEffectNamed(const name: String): SoundEffect; overload;
+  function SoundEffectNamed(name: String): SoundEffect; overload;
   begin
     result := sgAudio.SoundEffectNamed(name);
-  end;
-
-  function SoundEffectPlaying(const name: String): Boolean; overload;
-  begin
-    result := sgAudio.SoundEffectPlaying(name);
   end;
 
   function SoundEffectPlaying(effect: SoundEffect): Boolean; overload;
   begin
     result := sgAudio.SoundEffectPlaying(effect);
+  end;
+
+  function SoundEffectPlaying(name: String): Boolean; overload;
+  begin
+    result := sgAudio.SoundEffectPlaying(name);
   end;
 
   procedure StopMusic(); overload;
@@ -4884,7 +5306,7 @@ implementation
     sgAudio.StopSoundEffect(effect);
   end;
 
-  procedure StopSoundEffect(const name: String); overload;
+  procedure StopSoundEffect(name: String); overload;
   begin
     sgAudio.StopSoundEffect(name);
   end;
@@ -4914,12 +5336,17 @@ implementation
     result := sgCamera.CameraY();
   end;
 
+  procedure CenterCameraOn(c: Character; const offset: Vector); overload;
+  begin
+    sgCamera.CenterCameraOn(c,offset);
+  end;
+
   procedure CenterCameraOn(s: Sprite; const offset: Vector); overload;
   begin
     sgCamera.CenterCameraOn(s,offset);
   end;
 
-  procedure CenterCameraOn(s: Sprite; offsetX: Single; offsetY: Single); overload;
+  procedure CenterCameraOn(s: Sprite; offsetX: Longint; offsetY: Longint); overload;
   begin
     sgCamera.CenterCameraOn(s,offsetX,offsetY);
   end;
@@ -4979,12 +5406,12 @@ implementation
     result := sgCamera.ToScreen(rect);
   end;
 
-  function ToScreenX(worldX: Single): Single; overload;
+  function ToScreenX(worldX: Single): Longint; overload;
   begin
     result := sgCamera.ToScreenX(worldX);
   end;
 
-  function ToScreenY(worldY: Single): Single; overload;
+  function ToScreenY(worldY: Single): Longint; overload;
   begin
     result := sgCamera.ToScreenY(worldY);
   end;
@@ -4994,14 +5421,209 @@ implementation
     result := sgCamera.ToWorld(screenPoint);
   end;
 
-  function ToWorldX(screenX: Single): Single; overload;
+  function ToWorldX(screenX: Longint): Single; overload;
   begin
     result := sgCamera.ToWorldX(screenX);
   end;
 
-  function ToWorldY(screenY: Single): Single; overload;
+  function ToWorldY(screenY: Longint): Single; overload;
   begin
     result := sgCamera.ToWorldY(screenY);
+  end;
+
+  function CharacterAngleAt(c: Character; index: Longint): DirectionAngles; overload;
+  begin
+    result := sgCharacters.CharacterAngleAt(c,index);
+  end;
+
+  function CharacterAngleMaxAt(c: Character; index: Longint): Longint; overload;
+  begin
+    result := sgCharacters.CharacterAngleMaxAt(c,index);
+  end;
+
+  function CharacterAngleMinAt(c: Character; index: Longint): Longint; overload;
+  begin
+    result := sgCharacters.CharacterAngleMinAt(c,index);
+  end;
+
+  function CharacterAnglesLength(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterAnglesLength(c);
+  end;
+
+  function CharacterCharacterName(c: Character): String; overload;
+  begin
+    result := sgCharacters.CharacterCharacterName(c);
+  end;
+
+  function CharacterCurrentDirection(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterCurrentDirection(c);
+  end;
+
+  function CharacterCurrentState(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterCurrentState(c);
+  end;
+
+  function CharacterDirectionCount(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterDirectionCount(c);
+  end;
+
+  function CharacterDirections(c: Character): StringArray; overload;
+  begin
+    result := sgCharacters.CharacterDirections(c);
+  end;
+
+  function CharacterFilename(c: Character): String; overload;
+  begin
+    result := sgCharacters.CharacterFilename(c);
+  end;
+
+  function CharacterName(c: Character): String; overload;
+  begin
+    result := sgCharacters.CharacterName(c);
+  end;
+
+  function CharacterNamed(name: String): Character; overload;
+  begin
+    result := sgCharacters.CharacterNamed(name);
+  end;
+
+  procedure CharacterSetCurrentDirection(c: Character; direction: Longint); overload;
+  begin
+    sgCharacters.CharacterSetCurrentDirection(c,direction);
+  end;
+
+  procedure CharacterSetCurrentState(c: Character; state: Longint); overload;
+  begin
+    sgCharacters.CharacterSetCurrentState(c,state);
+  end;
+
+  procedure CharacterSetName(c: Character; name: String); overload;
+  begin
+    sgCharacters.CharacterSetName(c,name);
+  end;
+
+  procedure CharacterSetType(c: Character; name: String); overload;
+  begin
+    sgCharacters.CharacterSetType(c,name);
+  end;
+
+  procedure CharacterSetValue(c: Character; idx: Longint; val: Single); overload;
+  begin
+    sgCharacters.CharacterSetValue(c,idx,val);
+  end;
+
+  procedure CharacterSetValue(c: Character; name: String; val: Single); overload;
+  begin
+    sgCharacters.CharacterSetValue(c,name,val);
+  end;
+
+  function CharacterShownLayersAt(c: Character; index: Longint): Boolean; overload;
+  begin
+    result := sgCharacters.CharacterShownLayersAt(c,index);
+  end;
+
+  function CharacterSprite(c: Character): Sprite; overload;
+  begin
+    result := sgCharacters.CharacterSprite(c);
+  end;
+
+  function CharacterStateCount(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterStateCount(c);
+  end;
+
+  function CharacterStates(c: Character): StringArray; overload;
+  begin
+    result := sgCharacters.CharacterStates(c);
+  end;
+
+  function CharacterType(c: Character): String; overload;
+  begin
+    result := sgCharacters.CharacterType(c);
+  end;
+
+  function CharacterValueAt(c: Character; index: Longint): Single; overload;
+  begin
+    result := sgCharacters.CharacterValueAt(c,index);
+  end;
+
+  function CharacterValueCount(c: Character): Longint; overload;
+  begin
+    result := sgCharacters.CharacterValueCount(c);
+  end;
+
+  function CharacterValueNames(c: Character): StringArray; overload;
+  begin
+    result := sgCharacters.CharacterValueNames(c);
+  end;
+
+  procedure DrawCharacter(c: Character); overload;
+  begin
+    sgCharacters.DrawCharacter(c);
+  end;
+
+  procedure DrawCharacterSprite(c: Character); overload;
+  begin
+    sgCharacters.DrawCharacterSprite(c);
+  end;
+
+  procedure DrawCharacterWithStationary(c: Character; stationaryState: Longint; state: Longint); overload;
+  begin
+    sgCharacters.DrawCharacterWithStationary(c,stationaryState,state);
+  end;
+
+  procedure FreeCharacter(var c: Character); overload;
+  begin
+    sgCharacters.FreeCharacter(c);
+  end;
+
+  function HasCharacter(name: String): Boolean; overload;
+  begin
+    result := sgCharacters.HasCharacter(name);
+  end;
+
+  function LoadCharacter(filename: String): Character; overload;
+  begin
+    result := sgCharacters.LoadCharacter(filename);
+  end;
+
+  function LoadCharacterNamed(name: String; filename: String): Character; overload;
+  begin
+    result := sgCharacters.LoadCharacterNamed(name,filename);
+  end;
+
+  procedure ReleaseAllCharacters(); overload;
+  begin
+    sgCharacters.ReleaseAllCharacters();
+  end;
+
+  procedure ReleaseCharacter(name: String); overload;
+  begin
+    sgCharacters.ReleaseCharacter(name);
+  end;
+
+  procedure SetActiveLayer(c: Character); overload;
+  begin
+    sgCharacters.SetActiveLayer(c);
+  end;
+
+  procedure ToggleLayerVisibility(c: Character; index: Longint); overload;
+  begin
+    sgCharacters.ToggleLayerVisibility(c,index);
+  end;
+
+  function UpdateDirectionAnimation(c: Character): Boolean; overload;
+  begin
+    result := sgCharacters.UpdateDirectionAnimation(c);
+  end;
+
+  function UpdateDirectionAnimationWithStationary(c: Character; state: Longint; newState: Longint): Boolean; overload;
+  begin
+    result := sgCharacters.UpdateDirectionAnimationWithStationary(c,state,newState);
   end;
 
   function AddVectors(const v1: Vector; const v2: Vector): Vector; overload;
@@ -5044,17 +5666,17 @@ implementation
     result := sgGeometry.CenterPoint(c);
   end;
 
-  function CircleAt(x: Single; y: Single; radius: Single): Circle; overload;
+  function CircleAt(x: Single; y: Single; radius: Longint): Circle; overload;
   begin
     result := sgGeometry.CircleAt(x,y,radius);
   end;
 
-  function CircleAt(const pt: Point2D; radius: Single): Circle; overload;
+  function CircleAt(const pt: Point2D; radius: Longint): Circle; overload;
   begin
     result := sgGeometry.CircleAt(pt,radius);
   end;
 
-  function CircleRadius(const c: Circle): Single; overload;
+  function CircleRadius(const c: Circle): Longint; overload;
   begin
     result := sgGeometry.CircleRadius(c);
   end;
@@ -5109,12 +5731,12 @@ implementation
     result := sgGeometry.Cosine(angle);
   end;
 
-  function CreateCircle(x: Single; y: Single; radius: Single): Circle; overload;
+  function CreateCircle(x: Single; y: Single; radius: Longint): Circle; overload;
   begin
     result := sgGeometry.CreateCircle(x,y,radius);
   end;
 
-  function CreateCircle(const pt: Point2D; radius: Single): Circle; overload;
+  function CreateCircle(const pt: Point2D; radius: Longint): Circle; overload;
   begin
     result := sgGeometry.CreateCircle(pt,radius);
   end;
@@ -5149,7 +5771,7 @@ implementation
     result := sgGeometry.CreateLineFromVector(x,y,mv);
   end;
 
-  function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
+  function CreateRectangle(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
   begin
     result := sgGeometry.CreateRectangle(x,y,w,h);
   end;
@@ -5179,7 +5801,7 @@ implementation
     result := sgGeometry.CreateRectangle(pt1,pt2);
   end;
 
-  function CreateRectangle(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
+  function CreateRectangle(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
   begin
     result := sgGeometry.CreateRectangle(pt,width,height);
   end;
@@ -5209,7 +5831,7 @@ implementation
     result := sgGeometry.CreateVectorFromPointToRect(x,y,rect);
   end;
 
-  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
+  function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
   begin
     result := sgGeometry.CreateVectorFromPointToRect(x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -5244,7 +5866,7 @@ implementation
     sgGeometry.FixRectangle(rect);
   end;
 
-  procedure FixRectangle(var x: Single; var y: Single; var width: Single; var height: Single); overload;
+  procedure FixRectangle(var x: Single; var y: Single; var width: Longint; var height: Longint); overload;
   begin
     sgGeometry.FixRectangle(x,y,width,height);
   end;
@@ -5254,7 +5876,7 @@ implementation
     result := sgGeometry.IdentityMatrix();
   end;
 
-  function InsetRectangle(const rect: Rectangle; insetAmount: Single): Rectangle; overload;
+  function InsetRectangle(const rect: Rectangle; insetAmount: Longint): Rectangle; overload;
   begin
     result := sgGeometry.InsetRectangle(rect,insetAmount);
   end;
@@ -5549,7 +6171,7 @@ implementation
     result := sgGeometry.RectangleCenterTop(rect);
   end;
 
-  function RectangleFrom(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
+  function RectangleFrom(x: Single; y: Single; w: Longint; h: Longint): Rectangle; overload;
   begin
     result := sgGeometry.RectangleFrom(x,y,w,h);
   end;
@@ -5579,7 +6201,7 @@ implementation
     result := sgGeometry.RectangleFrom(pt1,pt2);
   end;
 
-  function RectangleFrom(const pt: Point2D; width: Single; height: Single): Rectangle; overload;
+  function RectangleFrom(const pt: Point2D; width: Longint; height: Longint): Rectangle; overload;
   begin
     result := sgGeometry.RectangleFrom(pt,width,height);
   end;
@@ -5729,7 +6351,7 @@ implementation
     result := sgGeometry.VectorFromPointToRect(x,y,rect);
   end;
 
-  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
+  function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Longint; rectHeight: Longint): Vector; overload;
   begin
     result := sgGeometry.VectorFromPointToRect(x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -5837,11 +6459,6 @@ implementation
   procedure WidestPoints(const c: Circle; const along: Vector; out pt1: Point2D; out pt2: Point2D); overload;
   begin
     sgGeometry.WidestPoints(c,along,pt1,pt2);
-  end;
-
-  function AvailableResolutions(): ResolutionArray; overload;
-  begin
-    result := sgGraphics.AvailableResolutions();
   end;
 
   function BlueOf(c: Color): Byte; overload;
@@ -6619,9 +7236,19 @@ implementation
     result := sgGraphics.CurrentClip(bmp);
   end;
 
-  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
+  procedure DrawCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
   begin
-    sgGraphics.DrawCircle(clr,x,y,radius);
+    sgGraphics.DrawCircle(clr,xc,yc,radius);
+  end;
+
+  procedure DrawCircle(clr: Color; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(clr,position,radius);
+  end;
+
+  procedure DrawCircle(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(clr,filled,position,radius);
   end;
 
   procedure DrawCircle(clr: Color; const c: Circle); overload;
@@ -6629,64 +7256,199 @@ implementation
     sgGraphics.DrawCircle(clr,c);
   end;
 
-  procedure DrawCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
+  procedure DrawCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
   begin
-    sgGraphics.DrawCircle(clr,c,opts);
+    sgGraphics.DrawCircle(dest,clr,c);
   end;
 
-  procedure DrawCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
+  procedure DrawCircle(clr: Color; filled: Boolean; const c: Circle); overload;
   begin
-    sgGraphics.DrawCircle(clr,x,y,radius,opts);
+    sgGraphics.DrawCircle(clr,filled,c);
   end;
 
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const c: Circle); overload;
+  begin
+    sgGraphics.DrawCircle(dest,clr,filled,c);
+  end;
+
+  procedure DrawCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(dest,clr,point,radius);
+  end;
+
+  procedure DrawCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(dest,clr,xc,yc,radius);
+  end;
+
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; const point: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(dest,clr,filled,point,radius);
+  end;
+
+  procedure DrawCircle(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(clr,filled,xc,yc,radius);
+  end;
+
+  procedure DrawCircle(dest: Bitmap; clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircle(dest,clr,filled,xc,yc,radius);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; const c: Circle); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,c);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const c: Circle); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,filled,c);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,position,radius);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,xc,yc,radius);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,filled,position,radius);
+  end;
+
+  procedure DrawCircleOnScreen(clr: Color; filled: Boolean; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.DrawCircleOnScreen(clr,filled,xc,yc,radius);
+  end;
+
+  procedure DrawEllipse(clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawEllipse(clr,source);
+  end;
+
+  procedure DrawEllipse(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawEllipse(clr,filled,source);
+  end;
+
+  procedure DrawEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawEllipse(dest,clr,source);
+  end;
+
+  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawEllipse(dest,clr,filled,source);
+  end;
+
+  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
     sgGraphics.DrawEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(clr: Color; const rec: Rectangle); overload;
+  procedure DrawEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawEllipse(clr,rec);
+    sgGraphics.DrawEllipse(dest,clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawEllipse(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawEllipse(clr,rec,opts);
+    sgGraphics.DrawEllipse(clr,filled,xPos,yPos,width,height);
   end;
 
-  procedure DrawEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  procedure DrawEllipse(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawEllipse(clr,xPos,yPos,width,height,opts);
+    sgGraphics.DrawEllipse(dest,clr,filled,xPos,yPos,width,height);
   end;
 
-  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D); overload;
+  procedure DrawEllipseOnScreen(clr: Color; const source: Rectangle); overload;
   begin
-    sgGraphics.DrawLine(clr,fromPt,toPt);
+    sgGraphics.DrawEllipseOnScreen(clr,source);
   end;
 
-  procedure DrawLine(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single); overload;
+  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
   begin
-    sgGraphics.DrawLine(clr,x1,y1,x2,y2);
+    sgGraphics.DrawEllipseOnScreen(clr,filled,source);
   end;
 
-  procedure DrawLine(clr: Color; const l: LineSegment); overload;
+  procedure DrawEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawLine(clr,l);
+    sgGraphics.DrawEllipseOnScreen(clr,xPos,yPos,width,height);
   end;
 
-  procedure DrawLine(clr: Color; const l: LineSegment; const opts: DrawingOptions); overload;
+  procedure DrawEllipseOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawLine(clr,l,opts);
+    sgGraphics.DrawEllipseOnScreen(clr,filled,xPos,yPos,width,height);
   end;
 
-  procedure DrawLine(clr: Color; const fromPt: Point2D; const toPt: Point2D; const opts: DrawingOptions); overload;
+  procedure DrawHorizontalLine(clr: Color; y: Single; x1: Single; x2: Single); overload;
   begin
-    sgGraphics.DrawLine(clr,fromPt,toPt,opts);
+    sgGraphics.DrawHorizontalLine(clr,y,x1,x2);
   end;
 
-  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; const opts: DrawingOptions); overload;
+  procedure DrawHorizontalLine(dest: Bitmap; clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
   begin
-    sgGraphics.DrawLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd,opts);
+    sgGraphics.DrawHorizontalLine(dest,clr,y,x1,x2);
+  end;
+
+  procedure DrawHorizontalLineOnScreen(clr: Color; y: Longint; x1: Longint; x2: Longint); overload;
+  begin
+    sgGraphics.DrawHorizontalLineOnScreen(clr,y,x1,x2);
+  end;
+
+  procedure DrawLine(clr: Color; const line: LineSegment); overload;
+  begin
+    sgGraphics.DrawLine(clr,line);
+  end;
+
+  procedure DrawLine(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
+  begin
+    sgGraphics.DrawLine(clr,startPt,endPt);
+  end;
+
+  procedure DrawLine(dest: Bitmap; clr: Color; const line: LineSegment); overload;
+  begin
+    sgGraphics.DrawLine(dest,clr,line);
+  end;
+
+  procedure DrawLine(dest: Bitmap; clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
+  begin
+    sgGraphics.DrawLine(dest,clr,startPt,endPt);
+  end;
+
+  procedure DrawLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single); overload;
+  begin
+    sgGraphics.DrawLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
+  end;
+
+  procedure DrawLine(dest: Bitmap; clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
+  begin
+    sgGraphics.DrawLine(dest,clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
+  end;
+
+  procedure DrawLineOnScreen(clr: Color; const line: LineSegment); overload;
+  begin
+    sgGraphics.DrawLineOnScreen(clr,line);
+  end;
+
+  procedure DrawLineOnScreen(clr: Color; const startPt: Point2D; const endPt: Point2D); overload;
+  begin
+    sgGraphics.DrawLineOnScreen(clr,startPt,endPt);
+  end;
+
+  procedure DrawLineOnScreen(clr: Color; xPosStart: Longint; yPosStart: Longint; xPosEnd: Longint; yPosEnd: Longint); overload;
+  begin
+    sgGraphics.DrawLineOnScreen(clr,xPosStart,yPosStart,xPosEnd,yPosEnd);
+  end;
+
+  procedure DrawLines(clr: Color; const lines: LinesArray); overload;
+  begin
+    sgGraphics.DrawLines(clr,lines);
   end;
 
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
@@ -6694,39 +7456,94 @@ implementation
     sgGraphics.DrawPixel(clr,position);
   end;
 
-  procedure DrawPixel(clr: Color; const position: Point2D; const opts: DrawingOptions); overload;
-  begin
-    sgGraphics.DrawPixel(clr,position,opts);
-  end;
-
   procedure DrawPixel(clr: Color; x: Single; y: Single); overload;
   begin
     sgGraphics.DrawPixel(clr,x,y);
   end;
 
-  procedure DrawPixel(clr: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; const position: Point2D); overload;
   begin
-    sgGraphics.DrawPixel(clr,x,y,opts);
+    sgGraphics.DrawPixel(dest,clr,position);
   end;
 
-  procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
+  procedure DrawPixel(dest: Bitmap; clr: Color; x: Longint; y: Longint); overload;
   begin
-    sgGraphics.DrawRectangle(clr,x,y,width,height);
+    sgGraphics.DrawPixel(dest,clr,x,y);
   end;
 
-  procedure DrawRectangle(clr: Color; const rect: Rectangle); overload;
+  procedure DrawPixelOnScreen(clr: Color; const position: Point2D); overload;
   begin
-    sgGraphics.DrawRectangle(clr,rect);
+    sgGraphics.DrawPixelOnScreen(clr,position);
   end;
 
-  procedure DrawRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawPixelOnScreen(clr: Color; x: Longint; y: Longint); overload;
   begin
-    sgGraphics.DrawRectangle(clr,rect,opts);
+    sgGraphics.DrawPixelOnScreen(clr,x,y);
   end;
 
-  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  procedure DrawRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.DrawRectangle(clr,xPos,yPos,width,height,opts);
+    sgGraphics.DrawRectangle(clr,xPos,yPos,width,height);
+  end;
+
+  procedure DrawRectangle(clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangle(clr,source);
+  end;
+
+  procedure DrawRectangle(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangle(clr,filled,source);
+  end;
+
+  procedure DrawRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangle(dest,clr,source);
+  end;
+
+  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangle(dest,clr,filled,source);
+  end;
+
+  procedure DrawRectangle(clr: Color; filled: Boolean; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawRectangle(clr,filled,xPos,yPos,width,height);
+  end;
+
+  procedure DrawRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawRectangle(dest,clr,xPos,yPos,width,height);
+  end;
+
+  procedure DrawRectangle(dest: Bitmap; clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawRectangle(dest,clr,filled,xPos,yPos,width,height);
+  end;
+
+  procedure DrawRectangleOnScreen(clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangleOnScreen(clr,source);
+  end;
+
+  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; const source: Rectangle); overload;
+  begin
+    sgGraphics.DrawRectangleOnScreen(clr,filled,source);
+  end;
+
+  procedure DrawRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawRectangleOnScreen(clr,xPos,yPos,width,height);
+  end;
+
+  procedure DrawRectangleOnScreen(clr: Color; filled: Boolean; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.DrawRectangleOnScreen(clr,filled,xPos,yPos,width,height);
+  end;
+
+  procedure DrawThickLine(clr: Color; xPosStart: Single; yPosStart: Single; xPosEnd: Single; yPosEnd: Single; width: Single); overload;
+  begin
+    sgGraphics.DrawThickLine(clr,xPosStart,yPosStart,xPosEnd,yPosEnd,width);
   end;
 
   procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -6739,19 +7556,64 @@ implementation
     sgGraphics.DrawTriangle(clr,tri);
   end;
 
-  procedure DrawTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
+  procedure DrawTriangle(clr: Color; filled: Boolean; const tri: Triangle); overload;
   begin
-    sgGraphics.DrawTriangle(clr,tri,opts);
+    sgGraphics.DrawTriangle(clr,filled,tri);
   end;
 
-  procedure DrawTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
+  procedure DrawTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
   begin
-    sgGraphics.DrawTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
+    sgGraphics.DrawTriangle(dest,clr,tri);
   end;
 
-  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single); overload;
+  procedure DrawTriangle(dest: Bitmap; clr: Color; filled: Boolean; const tri: Triangle); overload;
   begin
-    sgGraphics.FillCircle(clr,x,y,radius);
+    sgGraphics.DrawTriangle(dest,clr,filled,tri);
+  end;
+
+  procedure DrawTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  begin
+    sgGraphics.DrawTriangle(dest,clr,x1,y1,x2,y2,x3,y3);
+  end;
+
+  procedure DrawTriangleOnScreen(clr: Color; const tri: Triangle); overload;
+  begin
+    sgGraphics.DrawTriangleOnScreen(clr,tri);
+  end;
+
+  procedure DrawTriangleOnScreen(clr: Color; filled: Boolean; const tri: Triangle); overload;
+  begin
+    sgGraphics.DrawTriangleOnScreen(clr,filled,tri);
+  end;
+
+  procedure DrawTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  begin
+    sgGraphics.DrawTriangleOnScreen(clr,x1,y1,x2,y2,x3,y3);
+  end;
+
+  procedure DrawVerticalLine(clr: Color; x: Single; y1: Single; y2: Single); overload;
+  begin
+    sgGraphics.DrawVerticalLine(clr,x,y1,y2);
+  end;
+
+  procedure DrawVerticalLine(dest: Bitmap; clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
+  begin
+    sgGraphics.DrawVerticalLine(dest,clr,x,y1,y2);
+  end;
+
+  procedure DrawVerticalLineOnScreen(clr: Color; x: Longint; y1: Longint; y2: Longint); overload;
+  begin
+    sgGraphics.DrawVerticalLineOnScreen(clr,x,y1,y2);
+  end;
+
+  procedure FillCircle(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircle(clr,xc,yc,radius);
+  end;
+
+  procedure FillCircle(clr: Color; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircle(clr,position,radius);
   end;
 
   procedure FillCircle(clr: Color; const c: Circle); overload;
@@ -6759,54 +7621,94 @@ implementation
     sgGraphics.FillCircle(clr,c);
   end;
 
-  procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
+  procedure FillCircle(dest: Bitmap; clr: Color; const c: Circle); overload;
   begin
-    sgGraphics.FillCircle(clr,c,opts);
+    sgGraphics.FillCircle(dest,clr,c);
   end;
 
-  procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
+  procedure FillCircle(dest: Bitmap; clr: Color; const point: Point2D; radius: Longint); overload;
   begin
-    sgGraphics.FillCircle(clr,x,y,radius,opts);
+    sgGraphics.FillCircle(dest,clr,point,radius);
   end;
 
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single); overload;
+  procedure FillCircle(dest: Bitmap; clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircle(dest,clr,xc,yc,radius);
+  end;
+
+  procedure FillCircleOnScreen(clr: Color; const c: Circle); overload;
+  begin
+    sgGraphics.FillCircleOnScreen(clr,c);
+  end;
+
+  procedure FillCircleOnScreen(clr: Color; const position: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircleOnScreen(clr,position,radius);
+  end;
+
+  procedure FillCircleOnScreen(clr: Color; xc: Single; yc: Single; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircleOnScreen(clr,xc,yc,radius);
+  end;
+
+  procedure FillEllipse(clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.FillEllipse(clr,source);
+  end;
+
+  procedure FillEllipse(dest: Bitmap; clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.FillEllipse(dest,clr,source);
+  end;
+
+  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
     sgGraphics.FillEllipse(clr,xPos,yPos,width,height);
   end;
 
-  procedure FillEllipse(clr: Color; const rec: Rectangle); overload;
+  procedure FillEllipse(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.FillEllipse(clr,rec);
+    sgGraphics.FillEllipse(dest,clr,xPos,yPos,width,height);
   end;
 
-  procedure FillEllipse(clr: Color; const rec: Rectangle; const opts: DrawingOptions); overload;
+  procedure FillEllipseOnScreen(clr: Color; const source: Rectangle); overload;
   begin
-    sgGraphics.FillEllipse(clr,rec,opts);
+    sgGraphics.FillEllipseOnScreen(clr,source);
   end;
 
-  procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  procedure FillEllipseOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.FillEllipse(clr,xPos,yPos,width,height,opts);
+    sgGraphics.FillEllipseOnScreen(clr,xPos,yPos,width,height);
   end;
 
-  procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
+  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.FillRectangle(clr,x,y,width,height);
+    sgGraphics.FillRectangle(clr,xPos,yPos,width,height);
   end;
 
-  procedure FillRectangle(clr: Color; const rect: Rectangle); overload;
+  procedure FillRectangle(clr: Color; const source: Rectangle); overload;
   begin
-    sgGraphics.FillRectangle(clr,rect);
+    sgGraphics.FillRectangle(clr,source);
   end;
 
-  procedure FillRectangle(clr: Color; const rect: Rectangle; const opts: DrawingOptions); overload;
+  procedure FillRectangle(dest: Bitmap; clr: Color; const source: Rectangle); overload;
   begin
-    sgGraphics.FillRectangle(clr,rect,opts);
+    sgGraphics.FillRectangle(dest,clr,source);
   end;
 
-  procedure FillRectangle(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+  procedure FillRectangle(dest: Bitmap; clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
   begin
-    sgGraphics.FillRectangle(clr,xPos,yPos,width,height,opts);
+    sgGraphics.FillRectangle(dest,clr,xPos,yPos,width,height);
+  end;
+
+  procedure FillRectangleOnScreen(clr: Color; const source: Rectangle); overload;
+  begin
+    sgGraphics.FillRectangleOnScreen(clr,source);
+  end;
+
+  procedure FillRectangleOnScreen(clr: Color; xPos: Longint; yPos: Longint; width: Longint; height: Longint); overload;
+  begin
+    sgGraphics.FillRectangleOnScreen(clr,xPos,yPos,width,height);
   end;
 
   procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
@@ -6819,22 +7721,32 @@ implementation
     sgGraphics.FillTriangle(clr,tri);
   end;
 
-  procedure FillTriangle(clr: Color; const tri: Triangle; const opts: DrawingOptions); overload;
+  procedure FillTriangle(dest: Bitmap; clr: Color; const tri: Triangle); overload;
   begin
-    sgGraphics.FillTriangle(clr,tri,opts);
+    sgGraphics.FillTriangle(dest,clr,tri);
   end;
 
-  procedure FillTriangle(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single; const opts: DrawingOptions); overload;
+  procedure FillTriangle(dest: Bitmap; clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
   begin
-    sgGraphics.FillTriangle(clr,x1,y1,x2,y2,x3,y3,opts);
+    sgGraphics.FillTriangle(dest,clr,x1,y1,x2,y2,x3,y3);
   end;
 
-  function GetPixel(bmp: Bitmap; x: Single; y: Single): Color; overload;
+  procedure FillTriangleOnScreen(clr: Color; const tri: Triangle); overload;
+  begin
+    sgGraphics.FillTriangleOnScreen(clr,tri);
+  end;
+
+  procedure FillTriangleOnScreen(clr: Color; x1: Single; y1: Single; x2: Single; y2: Single; x3: Single; y3: Single); overload;
+  begin
+    sgGraphics.FillTriangleOnScreen(clr,x1,y1,x2,y2,x3,y3);
+  end;
+
+  function GetPixel(bmp: Bitmap; x: Longint; y: Longint): Color; overload;
   begin
     result := sgGraphics.GetPixel(bmp,x,y);
   end;
 
-  function GetPixelFromScreen(x: Single; y: Single): Color; overload;
+  function GetPixelFromScreen(x: Longint; y: Longint): Color; overload;
   begin
     result := sgGraphics.GetPixelFromScreen(x,y);
   end;
@@ -6859,17 +7771,12 @@ implementation
     result := sgGraphics.HueOf(c);
   end;
 
-  function NumberOfResolutions(): Longint; overload;
-  begin
-    result := sgGraphics.NumberOfResolutions();
-  end;
-
-  procedure OpenGraphicsWindow(const caption: String); overload;
+  procedure OpenGraphicsWindow(caption: String); overload;
   begin
     sgGraphics.OpenGraphicsWindow(caption);
   end;
 
-  procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
+  procedure OpenGraphicsWindow(caption: String; width: Longint; height: Longint); overload;
   begin
     sgGraphics.OpenGraphicsWindow(caption,width,height);
   end;
@@ -6897,6 +7804,11 @@ implementation
   procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
   begin
     sgGraphics.PushClip(x,y,w,h);
+  end;
+
+  procedure PutPixel(bmp: Bitmap; value: Color; x: Longint; y: Longint); overload;
+  begin
+    sgGraphics.PutPixel(bmp,value,x,y);
   end;
 
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -6939,7 +7851,7 @@ implementation
     sgGraphics.RefreshScreen();
   end;
 
-  procedure RefreshScreen(TargetFPS: Longint); overload;
+  procedure RefreshScreen(TargetFPS: Longword); overload;
   begin
     sgGraphics.RefreshScreen(TargetFPS);
   end;
@@ -6989,7 +7901,7 @@ implementation
     sgGraphics.SetClip(bmp,x,y,w,h);
   end;
 
-  procedure SetIcon(const filename: String); overload;
+  procedure SetIcon(filename: String); overload;
   begin
     sgGraphics.SetIcon(filename);
   end;
@@ -6999,7 +7911,7 @@ implementation
     sgGraphics.ShowSwinGameSplashScreen();
   end;
 
-  procedure TakeScreenshot(const basename: String); overload;
+  procedure TakeScreenshot(basename: String); overload;
   begin
     sgGraphics.TakeScreenshot(basename);
   end;
@@ -7024,7 +7936,7 @@ implementation
     result := sgImages.BitmapCellCircle(bmp,pt);
   end;
 
-  function BitmapCellCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
+  function BitmapCellCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
   begin
     result := sgImages.BitmapCellCircle(bmp,x,y);
   end;
@@ -7044,9 +7956,19 @@ implementation
     result := sgImages.BitmapCellHeight(bmp);
   end;
 
+  function BitmapCellOf(bmp: Bitmap; cell: Longint): BitmapCell; overload;
+  begin
+    result := sgImages.BitmapCellOf(bmp,cell);
+  end;
+
   function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
   begin
     result := sgImages.BitmapCellRectangle(bmp);
+  end;
+
+  function BitmapCellRectangle(const pt: Point2D; bmp: Bitmap): Rectangle; overload;
+  begin
+    result := sgImages.BitmapCellRectangle(pt,bmp);
   end;
 
   function BitmapCellRectangle(x: Single; y: Single; bmp: Bitmap): Rectangle; overload;
@@ -7069,7 +7991,7 @@ implementation
     result := sgImages.BitmapCircle(bmp,pt);
   end;
 
-  function BitmapCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
+  function BitmapCircle(bmp: Bitmap; x: Longint; y: Longint): Circle; overload;
   begin
     result := sgImages.BitmapCircle(bmp,x,y);
   end;
@@ -7077,6 +7999,11 @@ implementation
   function BitmapFilename(bmp: Bitmap): String; overload;
   begin
     result := sgImages.BitmapFilename(bmp);
+  end;
+
+  function BitmapHeight(const bmp: BitmapCell): Longint; overload;
+  begin
+    result := sgImages.BitmapHeight(bmp);
   end;
 
   function BitmapHeight(bmp: Bitmap): Longint; overload;
@@ -7089,7 +8016,7 @@ implementation
     result := sgImages.BitmapName(bmp);
   end;
 
-  function BitmapNamed(const name: String): Bitmap; overload;
+  function BitmapNamed(name: String): Bitmap; overload;
   begin
     result := sgImages.BitmapNamed(name);
   end;
@@ -7119,6 +8046,11 @@ implementation
     result := sgImages.BitmapWidth(bmp);
   end;
 
+  function BitmapWidth(const bmp: BitmapCell): Longint; overload;
+  begin
+    result := sgImages.BitmapWidth(bmp);
+  end;
+
   function BitmapsInterchangable(bmp1: Bitmap; bmp2: Bitmap): Boolean; overload;
   begin
     result := sgImages.BitmapsInterchangable(bmp1,bmp2);
@@ -7144,7 +8076,7 @@ implementation
     result := sgImages.CreateBitmap(width,height);
   end;
 
-  function CreateBitmap(const name: String; width: Longint; height: Longint): Bitmap; overload;
+  function CreateBitmap(name: String; width: Longint; height: Longint): Bitmap; overload;
   begin
     result := sgImages.CreateBitmap(name,width,height);
   end;
@@ -7154,19 +8086,124 @@ implementation
     sgImages.DrawBitmap(src,x,y);
   end;
 
-  procedure DrawBitmap(const name: String; x: Single; y: Single); overload;
+  procedure DrawBitmap(name: String; x: Single; y: Single); overload;
   begin
     sgImages.DrawBitmap(name,x,y);
   end;
 
-  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(name: String; const position: Point2D); overload;
   begin
-    sgImages.DrawBitmap(name,x,y,opts);
+    sgImages.DrawBitmap(name,position);
   end;
 
-  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(src: Bitmap; const position: Point2D); overload;
   begin
-    sgImages.DrawBitmap(src,x,y,opts);
+    sgImages.DrawBitmap(src,position);
+  end;
+
+  procedure DrawBitmap(dest: Bitmap; src: Bitmap; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmap(dest,src,position);
+  end;
+
+  procedure DrawBitmap(dest: Bitmap; src: Bitmap; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmap(dest,src,x,y);
+  end;
+
+  procedure DrawBitmapCell(const src: BitmapCell; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapCell(src,position);
+  end;
+
+  procedure DrawBitmapCell(const src: BitmapCell; x: Single; y: Single); overload;
+  begin
+    sgImages.DrawBitmapCell(src,x,y);
+  end;
+
+  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapCell(dest,src,position);
+  end;
+
+  procedure DrawBitmapCell(dest: Bitmap; const src: BitmapCell; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapCell(dest,src,x,y);
+  end;
+
+  procedure DrawBitmapCellOnScreen(const src: BitmapCell; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapCellOnScreen(src,position);
+  end;
+
+  procedure DrawBitmapCellOnScreen(const src: BitmapCell; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapCellOnScreen(src,x,y);
+  end;
+
+  procedure DrawBitmapOnScreen(src: Bitmap; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapOnScreen(src,position);
+  end;
+
+  procedure DrawBitmapOnScreen(src: Bitmap; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapOnScreen(src,x,y);
+  end;
+
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapPart(src,source,position);
+  end;
+
+  procedure DrawBitmapPart(src: Bitmap; const source: Rectangle; x: Single; y: Single); overload;
+  begin
+    sgImages.DrawBitmapPart(src,source,x,y);
+  end;
+
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapPart(dest,src,source,position);
+  end;
+
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapPart(dest,src,source,x,y);
+  end;
+
+  procedure DrawBitmapPart(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Single; y: Single); overload;
+  begin
+    sgImages.DrawBitmapPart(src,srcX,srcY,srcW,srcH,x,y);
+  end;
+
+  procedure DrawBitmapPart(dest: Bitmap; src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapPart(dest,src,srcX,srcY,srcW,srcH,x,y);
+  end;
+
+  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; const position: Point2D); overload;
+  begin
+    sgImages.DrawBitmapPartOnScreen(src,source,position);
+  end;
+
+  procedure DrawBitmapPartOnScreen(src: Bitmap; const source: Rectangle; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapPartOnScreen(src,source,x,y);
+  end;
+
+  procedure DrawBitmapPartOnScreen(src: Bitmap; srcX: Longint; srcY: Longint; srcW: Longint; srcH: Longint; x: Longint; y: Longint); overload;
+  begin
+    sgImages.DrawBitmapPartOnScreen(src,srcX,srcY,srcW,srcH,x,y);
+  end;
+
+  procedure DrawCell(src: Bitmap; cell: Longint; const position: Point2D); overload;
+  begin
+    sgImages.DrawCell(src,cell,position);
+  end;
+
+  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; const position: Point2D); overload;
+  begin
+    sgImages.DrawCell(dest,src,cell,position);
   end;
 
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
@@ -7174,9 +8211,19 @@ implementation
     sgImages.DrawCell(src,cell,x,y);
   end;
 
-  procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawCell(dest: Bitmap; src: Bitmap; cell: Longint; x: Single; y: Single); overload;
   begin
-    sgImages.DrawCell(src,cell,x,y,opts);
+    sgImages.DrawCell(dest,src,cell,x,y);
+  end;
+
+  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; const position: Point2D); overload;
+  begin
+    sgImages.DrawCellOnScreen(src,cell,position);
+  end;
+
+  procedure DrawCellOnScreen(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
+  begin
+    sgImages.DrawCellOnScreen(src,cell,x,y);
   end;
 
   procedure FreeBitmap(var bitmapToFree: Bitmap); overload;
@@ -7184,32 +8231,32 @@ implementation
     sgImages.FreeBitmap(bitmapToFree);
   end;
 
-  function HasBitmap(const name: String): Boolean; overload;
+  function HasBitmap(name: String): Boolean; overload;
   begin
     result := sgImages.HasBitmap(name);
   end;
 
-  function LoadBitmap(const filename: String): Bitmap; overload;
+  function LoadBitmap(filename: String): Bitmap; overload;
   begin
     result := sgImages.LoadBitmap(filename);
   end;
 
-  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
+  function LoadBitmap(filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
   begin
     result := sgImages.LoadBitmap(filename,transparent,transparentColor);
   end;
 
-  function LoadBitmapNamed(const name: String; const filename: String): Bitmap; overload;
+  function LoadBitmapNamed(name: String; filename: String): Bitmap; overload;
   begin
     result := sgImages.LoadBitmapNamed(name,filename);
   end;
 
-  function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
+  function LoadTransparentBitmap(filename: String; transparentColor: Color): Bitmap; overload;
   begin
     result := sgImages.LoadTransparentBitmap(filename,transparentColor);
   end;
 
-  function LoadTransparentBitmapNamed(const name: String; const filename: String; transparentColor: Color): Bitmap; overload;
+  function LoadTransparentBitmapNamed(name: String; filename: String; transparentColor: Color): Bitmap; overload;
   begin
     result := sgImages.LoadTransparentBitmapNamed(name,filename,transparentColor);
   end;
@@ -7229,7 +8276,7 @@ implementation
     sgImages.OptimiseBitmap(surface);
   end;
 
-  function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
+  function PixelDrawnAtPoint(bmp: Bitmap; x: Longint; y: Longint): Boolean; overload;
   begin
     result := sgImages.PixelDrawnAtPoint(bmp,x,y);
   end;
@@ -7239,17 +8286,27 @@ implementation
     sgImages.ReleaseAllBitmaps();
   end;
 
-  procedure ReleaseBitmap(const name: String); overload;
+  procedure ReleaseBitmap(name: String); overload;
   begin
     sgImages.ReleaseBitmap(name);
   end;
 
-  procedure SaveBitmap(src: Bitmap; const filepath: String); overload;
+  function RotateScaleBitmap(src: Bitmap; degRot: Single; scale: Single): Bitmap; overload;
+  begin
+    result := sgImages.RotateScaleBitmap(src,degRot,scale);
+  end;
+
+  function SameBitmapCell(const bmp1: BitmapCell; const bmp2: BitmapCell): Boolean; overload;
+  begin
+    result := sgImages.SameBitmapCell(bmp1,bmp2);
+  end;
+
+  procedure SaveBitmap(src: Bitmap; filepath: String); overload;
   begin
     sgImages.SaveBitmap(src,filepath);
   end;
 
-  procedure SaveToPNG(bmp: Bitmap; const filename: String); overload;
+  procedure SaveToPNG(bmp: Bitmap; filename: String); overload;
   begin
     sgImages.SaveToPNG(bmp,filename);
   end;
@@ -7399,7 +8456,7 @@ implementation
     sgInput.MoveMouse(point);
   end;
 
-  procedure MoveMouse(x: Longint; y: Longint); overload;
+  procedure MoveMouse(x: Byte; y: Byte); overload;
   begin
     sgInput.MoveMouse(x,y);
   end;
@@ -7449,24 +8506,24 @@ implementation
     sgInput.StartReadingText(textColor,maxLength,theFont,x,y);
   end;
 
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
   begin
     sgInput.StartReadingTextWithText(text,textColor,maxLength,theFont,pt);
   end;
 
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     sgInput.StartReadingTextWithText(text,textColor,maxLength,theFont,area);
   end;
 
-  procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x: Longint; y: Longint); overload;
-  begin
-    sgInput.StartReadingTextWithText(text,textColor,maxLength,theFont,x,y);
-  end;
-
-  procedure StartReadingTextWithText(const text: String; textColor: Color; backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
+  procedure StartReadingTextWithText(text: String; textColor: Color; backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     sgInput.StartReadingTextWithText(text,textColor,backGroundColor,maxLength,theFont,area);
+  end;
+
+  procedure StartReadingTextWithText(text: String; textColor: Color; maxLength: Longint; theFont: Font; x: Longint; y: Longint); overload;
+  begin
+    sgInput.StartReadingTextWithText(text,textColor,maxLength,theFont,x,y);
   end;
 
   function TextEntryCancelled(): Boolean; overload;
@@ -7489,39 +8546,24 @@ implementation
     result := sgInput.WindowCloseRequested();
   end;
 
-  procedure BroadcastMessage(const aMsg: String); overload;
+  function AcceptTCPConnection(): Longint; overload;
   begin
-    sgNetworking.BroadcastMessage(aMsg);
+    result := sgNetworking.AcceptTCPConnection();
   end;
 
-  procedure BroadcastMessage(const aMsg: String; const name: String); overload;
+  procedure BroadcastTCPMessage(aMsg: String); overload;
   begin
-    sgNetworking.BroadcastMessage(aMsg,name);
+    sgNetworking.BroadcastTCPMessage(aMsg);
   end;
 
-  procedure BroadcastMessage(const aMsg: String; svr: ServerSocket); overload;
+  procedure BroadcastUDPMessage(aMsg: String); overload;
   begin
-    sgNetworking.BroadcastMessage(aMsg,svr);
+    sgNetworking.BroadcastUDPMessage(aMsg);
   end;
 
-  procedure CheckNetworkActivity(); overload;
+  procedure ClearMessageQueue(aConnection: Connection); overload;
   begin
-    sgNetworking.CheckNetworkActivity();
-  end;
-
-  procedure ClearMessages(svr: ServerSocket); overload;
-  begin
-    sgNetworking.ClearMessages(svr);
-  end;
-
-  procedure ClearMessages(aConnection: Connection); overload;
-  begin
-    sgNetworking.ClearMessages(aConnection);
-  end;
-
-  procedure ClearMessages(const name: String); overload;
-  begin
-    sgNetworking.ClearMessages(name);
+    sgNetworking.ClearMessageQueue(aConnection);
   end;
 
   procedure CloseAllConnections(); overload;
@@ -7529,9 +8571,14 @@ implementation
     sgNetworking.CloseAllConnections();
   end;
 
-  procedure CloseAllServers(); overload;
+  procedure CloseAllSockets(); overload;
   begin
-    sgNetworking.CloseAllServers();
+    sgNetworking.CloseAllSockets();
+  end;
+
+  procedure CloseAllTCPHostSockets(); overload;
+  begin
+    sgNetworking.CloseAllTCPHostSockets();
   end;
 
   procedure CloseAllUDPSockets(); overload;
@@ -7544,39 +8591,19 @@ implementation
     result := sgNetworking.CloseConnection(aConnection);
   end;
 
-  function CloseConnection(const name: String): Boolean; overload;
+  function CloseTCPHostSocket(aPort: Longint): Boolean; overload;
   begin
-    result := sgNetworking.CloseConnection(name);
+    result := sgNetworking.CloseTCPHostSocket(aPort);
   end;
 
-  function CloseServer(var svr: ServerSocket): Boolean; overload;
-  begin
-    result := sgNetworking.CloseServer(svr);
-  end;
-
-  function CloseServer(const name: String): Boolean; overload;
-  begin
-    result := sgNetworking.CloseServer(name);
-  end;
-
-  function CloseUDPSocket(aPort: Word): Boolean; overload;
+  function CloseUDPSocket(aPort: Longint): Boolean; overload;
   begin
     result := sgNetworking.CloseUDPSocket(aPort);
   end;
 
-  function ConnectionCount(const name: String): Longint; overload;
+  function ConnectionCount(): Longint; overload;
   begin
-    result := sgNetworking.ConnectionCount(name);
-  end;
-
-  function ConnectionCount(server: ServerSocket): Longint; overload;
-  begin
-    result := sgNetworking.ConnectionCount(server);
-  end;
-
-  function ConnectionIP(const name: String): Longword; overload;
-  begin
-    result := sgNetworking.ConnectionIP(name);
+    result := sgNetworking.ConnectionCount();
   end;
 
   function ConnectionIP(aConnection: Connection): Longword; overload;
@@ -7584,39 +8611,34 @@ implementation
     result := sgNetworking.ConnectionIP(aConnection);
   end;
 
-  function ConnectionNamed(const name: String): Connection; overload;
-  begin
-    result := sgNetworking.ConnectionNamed(name);
-  end;
-
-  function ConnectionOpen(con: Connection): Boolean; overload;
-  begin
-    result := sgNetworking.ConnectionOpen(con);
-  end;
-
-  function ConnectionOpen(const name: String): Boolean; overload;
-  begin
-    result := sgNetworking.ConnectionOpen(name);
-  end;
-
-  function ConnectionPort(aConnection: Connection): Word; overload;
+  function ConnectionPort(aConnection: Connection): Longint; overload;
   begin
     result := sgNetworking.ConnectionPort(aConnection);
   end;
 
-  function ConnectionPort(const name: String): Word; overload;
+  function ConnectionQueueSize(): Longint; overload;
   begin
-    result := sgNetworking.ConnectionPort(name);
+    result := sgNetworking.ConnectionQueueSize();
   end;
 
-  function CreateServer(const name: String; port: Word): ServerSocket; overload;
+  function CreateTCPConnection(aIP: String; aPort: Longint): Connection; overload;
   begin
-    result := sgNetworking.CreateServer(name,port);
+    result := sgNetworking.CreateTCPConnection(aIP,aPort);
   end;
 
-  function CreateServer(const name: String; port: Word; protocol: ConnectionType): ServerSocket; overload;
+  function CreateTCPHost(aPort: Longint): Boolean; overload;
   begin
-    result := sgNetworking.CreateServer(name,port,protocol);
+    result := sgNetworking.CreateTCPHost(aPort);
+  end;
+
+  function CreateUDPConnection(aDestIP: String; aDestPort: Longint; aInPort: Longint): Connection; overload;
+  begin
+    result := sgNetworking.CreateUDPConnection(aDestIP,aDestPort,aInPort);
+  end;
+
+  function CreateUDPHost(aPort: Longint): Longint; overload;
+  begin
+    result := sgNetworking.CreateUDPHost(aPort);
   end;
 
   function DecToHex(aDec: Longword): String; overload;
@@ -7624,129 +8646,39 @@ implementation
     result := sgNetworking.DecToHex(aDec);
   end;
 
-  function EncodeBase64(const aData: String): String; overload;
+  procedure EnqueueMessage(aMsg: String; aConnection: Connection); overload;
   begin
-    result := sgNetworking.EncodeBase64(aData);
+    sgNetworking.EnqueueMessage(aMsg,aConnection);
   end;
 
-  function HasMessages(): Boolean; overload;
+  procedure EnqueueNewConnection(aConnection: Connection); overload;
   begin
-    result := sgNetworking.HasMessages();
+    sgNetworking.EnqueueNewConnection(aConnection);
   end;
 
-  function HasMessages(con: Connection): Boolean; overload;
+  function FetchConnection(): Connection; overload;
   begin
-    result := sgNetworking.HasMessages(con);
+    result := sgNetworking.FetchConnection();
   end;
 
-  function HasMessages(svr: ServerSocket): Boolean; overload;
+  procedure FreeConnection(var aConnection: Connection); overload;
   begin
-    result := sgNetworking.HasMessages(svr);
+    sgNetworking.FreeConnection(aConnection);
   end;
 
-  function HasMessages(const name: String): Boolean; overload;
-  begin
-    result := sgNetworking.HasMessages(name);
-  end;
-
-  function HasNewConnections(): Boolean; overload;
-  begin
-    result := sgNetworking.HasNewConnections();
-  end;
-
-  function HexStrToIPv4(const aHex: String): String; overload;
+  function HexStrToIPv4(aHex: String): String; overload;
   begin
     result := sgNetworking.HexStrToIPv4(aHex);
   end;
 
-  function HexToDecString(const aHex: String): String; overload;
+  function HexToDecString(aHex: String): String; overload;
   begin
     result := sgNetworking.HexToDecString(aHex);
   end;
 
-  procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
-  begin
-    sgNetworking.HttpAddHeader(aHttpRequest,name,value);
-  end;
-
-  function HttpGet(const host: String; port: Word; const path: String): HttpResponse; overload;
-  begin
-    result := sgNetworking.HttpGet(host,port,path);
-  end;
-
-  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
-  begin
-    result := sgNetworking.HttpHeaderAt(aHttpRequest,aIdx);
-  end;
-
-  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
-  begin
-    sgNetworking.HttpRemoveHeaderAt(aHttpRequest,aIdx);
-  end;
-
-  function HttpRequestToString(const aHttpRequest: HttpRequest): String; overload;
-  begin
-    result := sgNetworking.HttpRequestToString(aHttpRequest);
-  end;
-
-  function HttpResponseBodyAsString(const httpData: HttpResponse): String; overload;
-  begin
-    result := sgNetworking.HttpResponseBodyAsString(httpData);
-  end;
-
-  procedure HttpSetBody(var aHttpRequest: HttpRequest; const aBody: String); overload;
-  begin
-    sgNetworking.HttpSetBody(aHttpRequest,aBody);
-  end;
-
-  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
-  begin
-    sgNetworking.HttpSetMethod(aHttpRequest,aMethod);
-  end;
-
-  procedure HttpSetURL(var aHttpRequest: HttpRequest; const aURL: String); overload;
-  begin
-    sgNetworking.HttpSetURL(aHttpRequest,aURL);
-  end;
-
-  procedure HttpSetVersion(var aHttpRequest: HttpRequest; const aVersion: String); overload;
-  begin
-    sgNetworking.HttpSetVersion(aHttpRequest,aVersion);
-  end;
-
-  function IPv4ToDec(const aIP: String): Longword; overload;
+  function IPv4ToDec(aIP: String): Longword; overload;
   begin
     result := sgNetworking.IPv4ToDec(aIP);
-  end;
-
-  function IPv4ToStr(ip: Longword): String; overload;
-  begin
-    result := sgNetworking.IPv4ToStr(ip);
-  end;
-
-  function LastConnection(const name: String): Connection; overload;
-  begin
-    result := sgNetworking.LastConnection(name);
-  end;
-
-  function LastConnection(server: ServerSocket): Connection; overload;
-  begin
-    result := sgNetworking.LastConnection(server);
-  end;
-
-  function MessageConnection(const msg: Message): Connection; overload;
-  begin
-    result := sgNetworking.MessageConnection(msg);
-  end;
-
-  function MessageCount(const name: String): Longint; overload;
-  begin
-    result := sgNetworking.MessageCount(name);
-  end;
-
-  function MessageCount(svr: ServerSocket): Longint; overload;
-  begin
-    result := sgNetworking.MessageCount(svr);
   end;
 
   function MessageCount(aConnection: Connection): Longint; overload;
@@ -7754,84 +8686,19 @@ implementation
     result := sgNetworking.MessageCount(aConnection);
   end;
 
-  function MessageData(const msg: Message): String; overload;
-  begin
-    result := sgNetworking.MessageData(msg);
-  end;
-
-  function MessageHost(const msg: Message): String; overload;
-  begin
-    result := sgNetworking.MessageHost(msg);
-  end;
-
-  function MessagePort(const msg: Message): Word; overload;
-  begin
-    result := sgNetworking.MessagePort(msg);
-  end;
-
-  function MessageProtocol(const msg: Message): ConnectionType; overload;
-  begin
-    result := sgNetworking.MessageProtocol(msg);
-  end;
-
   function MyIP(): String; overload;
   begin
     result := sgNetworking.MyIP();
   end;
 
-  function OpenConnection(const host: String; port: Word): Connection; overload;
+  function ReadLastMessage(aConnection: Connection): String; overload;
   begin
-    result := sgNetworking.OpenConnection(host,port);
+    result := sgNetworking.ReadLastMessage(aConnection);
   end;
 
-  function OpenConnection(const name: String; const host: String; port: Word): Connection; overload;
-  begin
-    result := sgNetworking.OpenConnection(name,host,port);
-  end;
-
-  function OpenConnection(const name: String; const host: String; port: Word; protocol: ConnectionType): Connection; overload;
-  begin
-    result := sgNetworking.OpenConnection(name,host,port,protocol);
-  end;
-
-  function ReadMessage(svr: ServerSocket): Message; overload;
-  begin
-    result := sgNetworking.ReadMessage(svr);
-  end;
-
-  function ReadMessage(aConnection: Connection): Message; overload;
+  function ReadMessage(aConnection: Connection): String; overload;
   begin
     result := sgNetworking.ReadMessage(aConnection);
-  end;
-
-  function ReadMessage(const name: String): Message; overload;
-  begin
-    result := sgNetworking.ReadMessage(name);
-  end;
-
-  function ReadMessageData(aConnection: Connection): String; overload;
-  begin
-    result := sgNetworking.ReadMessageData(aConnection);
-  end;
-
-  function ReadMessageData(svr: ServerSocket): String; overload;
-  begin
-    result := sgNetworking.ReadMessageData(svr);
-  end;
-
-  function ReadMessageData(const name: String): String; overload;
-  begin
-    result := sgNetworking.ReadMessageData(name);
-  end;
-
-  procedure Reconnect(const name: String); overload;
-  begin
-    sgNetworking.Reconnect(name);
-  end;
-
-  procedure Reconnect(aConnection: Connection); overload;
-  begin
-    sgNetworking.Reconnect(aConnection);
   end;
 
   procedure ReleaseAllConnections(); overload;
@@ -7839,49 +8706,29 @@ implementation
     sgNetworking.ReleaseAllConnections();
   end;
 
-  function RetreiveConnection(const name: String; idx: Longint): Connection; overload;
+  function RetreiveConnection(aConnectionAt: Longint): Connection; overload;
   begin
-    result := sgNetworking.RetreiveConnection(name,idx);
+    result := sgNetworking.RetreiveConnection(aConnectionAt);
   end;
 
-  function RetreiveConnection(server: ServerSocket; idx: Longint): Connection; overload;
+  function SendTCPMessage(aMsg: String; aConnection: Connection): Connection; overload;
   begin
-    result := sgNetworking.RetreiveConnection(server,idx);
+    result := sgNetworking.SendTCPMessage(aMsg,aConnection);
   end;
 
-  function SendMessageTo(const aMsg: String; const name: String): Boolean; overload;
+  function SendUDPMessage(aMsg: String; aConnection: Connection): Boolean; overload;
   begin
-    result := sgNetworking.SendMessageTo(aMsg,name);
+    result := sgNetworking.SendUDPMessage(aMsg,aConnection);
   end;
 
-  function SendMessageTo(const aMsg: String; aConnection: Connection): Boolean; overload;
+  function TCPMessageReceived(): Boolean; overload;
   begin
-    result := sgNetworking.SendMessageTo(aMsg,aConnection);
+    result := sgNetworking.TCPMessageReceived();
   end;
 
-  function ServerHasNewConnection(const name: String): Boolean; overload;
+  function UDPMessageReceived(): Boolean; overload;
   begin
-    result := sgNetworking.ServerHasNewConnection(name);
-  end;
-
-  function ServerHasNewConnection(server: ServerSocket): Boolean; overload;
-  begin
-    result := sgNetworking.ServerHasNewConnection(server);
-  end;
-
-  function ServerNamed(const name: String): ServerSocket; overload;
-  begin
-    result := sgNetworking.ServerNamed(name);
-  end;
-
-  procedure SetUDPPacketSize(val: Longint); overload;
-  begin
-    sgNetworking.SetUDPPacketSize(val);
-  end;
-
-  function UDPPacketSize(): Longint; overload;
-  begin
-    result := sgNetworking.UDPPacketSize();
+    result := sgNetworking.UDPMessageReceived();
   end;
 
   function BitmapCollision(bmp1: Bitmap; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D): Boolean; overload;
@@ -7889,7 +8736,7 @@ implementation
     result := sgPhysics.BitmapCollision(bmp1,pt1,bmp2,pt2);
   end;
 
-  function BitmapCollision(bmp1: Bitmap; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
+  function BitmapCollision(bmp1: Bitmap; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
   begin
     result := sgPhysics.BitmapCollision(bmp1,x1,y1,bmp2,x2,y2);
   end;
@@ -7899,29 +8746,24 @@ implementation
     result := sgPhysics.BitmapCollision(bmp1,pt1,part1,bmp2,pt2,part2);
   end;
 
-  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const pt: Point2D): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const pt: Point2D): Boolean; overload;
   begin
     result := sgPhysics.BitmapPartPointCollision(bmp,x,y,part,pt);
   end;
 
-  function BitmapPartPointCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPartPointCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; ptX: Single; ptY: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapPartPointCollision(bmp,x,y,part,ptX,ptY);
   end;
 
-  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; const pt: Point2D): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; const pt: Point2D): Boolean; overload;
   begin
     result := sgPhysics.BitmapPointCollision(bmp,x,y,pt);
   end;
 
-  function BitmapPointCollision(bmp: Bitmap; x: Single; y: Single; ptX: Single; ptY: Single): Boolean; overload;
+  function BitmapPointCollision(bmp: Bitmap; x: Longint; y: Longint; ptX: Single; ptY: Single): Boolean; overload;
   begin
     result := sgPhysics.BitmapPointCollision(bmp,x,y,ptX,ptY);
-  end;
-
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
-  begin
-    result := sgPhysics.BitmapRectCollision(bmp,x,y,rect);
   end;
 
   function BitmapRectCollision(bmp: Bitmap; const pt: Point2D; const part: Rectangle; const rect: Rectangle): Boolean; overload;
@@ -7929,12 +8771,17 @@ implementation
     result := sgPhysics.BitmapRectCollision(bmp,pt,part,rect);
   end;
 
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; const part: Rectangle; const rect: Rectangle): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
+  begin
+    result := sgPhysics.BitmapRectCollision(bmp,x,y,rect);
+  end;
+
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; const part: Rectangle; const rect: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.BitmapRectCollision(bmp,x,y,part,rect);
   end;
 
-  function BitmapRectCollision(bmp: Bitmap; x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Boolean; overload;
+  function BitmapRectCollision(bmp: Bitmap; x: Longint; y: Longint; rectX: Longint; rectY: Longint; rectWidth: Longint; rectHeight: Longint): Boolean; overload;
   begin
     result := sgPhysics.BitmapRectCollision(bmp,x,y,rectX,rectY,rectWidth,rectHeight);
   end;
@@ -7949,12 +8796,12 @@ implementation
     result := sgPhysics.CellBitmapCollision(bmp1,cell,pt1,bmp2,pt2,part);
   end;
 
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint): Boolean; overload;
   begin
     result := sgPhysics.CellBitmapCollision(bmp1,cell,x1,y1,bmp2,x2,y2);
   end;
 
-  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Single; y1: Single; bmp2: Bitmap; x2: Single; y2: Single; const part: Rectangle): Boolean; overload;
+  function CellBitmapCollision(bmp1: Bitmap; cell: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; x2: Longint; y2: Longint; const part: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.CellBitmapCollision(bmp1,cell,x1,y1,bmp2,x2,y2,part);
   end;
@@ -7964,7 +8811,7 @@ implementation
     result := sgPhysics.CellCollision(bmp1,cell1,pt1,bmp2,cell2,pt2);
   end;
 
-  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Single; y1: Single; bmp2: Bitmap; cell2: Longint; x2: Single; y2: Single): Boolean; overload;
+  function CellCollision(bmp1: Bitmap; cell1: Longint; x1: Longint; y1: Longint; bmp2: Bitmap; cell2: Longint; x2: Longint; y2: Longint): Boolean; overload;
   begin
     result := sgPhysics.CellCollision(bmp1,cell1,x1,y1,bmp2,cell2,x2,y2);
   end;
@@ -7974,7 +8821,7 @@ implementation
     result := sgPhysics.CellRectCollision(bmp,cell,pt,rect);
   end;
 
-  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Single; y: Single; const rect: Rectangle): Boolean; overload;
+  function CellRectCollision(bmp: Bitmap; cell: Longint; x: Longint; y: Longint; const rect: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.CellRectCollision(bmp,cell,x,y,rect);
   end;
@@ -8064,7 +8911,7 @@ implementation
     result := sgPhysics.SpriteRectCollision(s,r);
   end;
 
-  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Single; height: Single): Boolean; overload;
+  function SpriteRectCollision(s: Sprite; x: Single; y: Single; width: Longint; height: Longint): Boolean; overload;
   begin
     result := sgPhysics.SpriteRectCollision(s,x,y,width,height);
   end;
@@ -8079,62 +8926,62 @@ implementation
     result := sgResources.AppPath();
   end;
 
-  function FilenameToResource(const name: String; kind: ResourceKind): String; overload;
+  function FilenameToResource(name: String; kind: ResourceKind): String; overload;
   begin
     result := sgResources.FilenameToResource(name,kind);
   end;
 
-  function HasResourceBundle(const name: String): Boolean; overload;
+  function HasResourceBundle(name: String): Boolean; overload;
   begin
     result := sgResources.HasResourceBundle(name);
   end;
 
-  procedure LoadResourceBundle(const name: String); overload;
+  procedure LoadResourceBundle(name: String); overload;
   begin
     sgResources.LoadResourceBundle(name);
   end;
 
-  procedure LoadResourceBundle(const name: String; showProgress: Boolean); overload;
+  procedure LoadResourceBundle(name: String; showProgress: Boolean); overload;
   begin
     sgResources.LoadResourceBundle(name,showProgress);
   end;
 
-  procedure LoadResourceBundleNamed(const name: String; const filename: String; showProgress: Boolean); overload;
+  procedure LoadResourceBundleNamed(name: String; filename: String; showProgress: Boolean); overload;
   begin
     sgResources.LoadResourceBundleNamed(name,filename,showProgress);
   end;
 
-  function PathToResource(const filename: String): String; overload;
+  function PathToResource(filename: String): String; overload;
   begin
     result := sgResources.PathToResource(filename);
   end;
 
-  function PathToResource(const filename: String; kind: ResourceKind): String; overload;
+  function PathToResource(filename: String; kind: ResourceKind): String; overload;
   begin
     result := sgResources.PathToResource(filename,kind);
   end;
 
-  function PathToResource(const filename: String; const subdir: String): String; overload;
+  function PathToResource(filename: String; subdir: String): String; overload;
   begin
     result := sgResources.PathToResource(filename,subdir);
   end;
 
-  function PathToResource(const filename: String; kind: ResourceKind; const subdir: String): String; overload;
-  begin
-    result := sgResources.PathToResource(filename,kind,subdir);
-  end;
-
-  function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
+  function PathToResource(filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
   begin
     result := sgResources.PathToResource(filename,kind,subPaths);
   end;
 
-  function PathToResourceWithBase(const path: String; const filename: String): String; overload;
+  function PathToResource(filename: String; kind: ResourceKind; subdir: String): String; overload;
+  begin
+    result := sgResources.PathToResource(filename,kind,subdir);
+  end;
+
+  function PathToResourceWithBase(path: String; filename: String): String; overload;
   begin
     result := sgResources.PathToResourceWithBase(path,filename);
   end;
 
-  function PathToResourceWithBase(const path: String; const filename: String; kind: ResourceKind): String; overload;
+  function PathToResourceWithBase(path: String; filename: String; kind: ResourceKind): String; overload;
   begin
     result := sgResources.PathToResourceWithBase(path,filename,kind);
   end;
@@ -8149,17 +8996,17 @@ implementation
     sgResources.ReleaseAllResources();
   end;
 
-  procedure ReleaseResourceBundle(const name: String); overload;
+  procedure ReleaseResourceBundle(name: String); overload;
   begin
     sgResources.ReleaseResourceBundle(name);
   end;
 
-  procedure SetAppPath(const path: String); overload;
+  procedure SetAppPath(path: String); overload;
   begin
     sgResources.SetAppPath(path);
   end;
 
-  procedure SetAppPath(const path: String; withExe: Boolean); overload;
+  procedure SetAppPath(path: String; withExe: Boolean); overload;
   begin
     sgResources.SetAppPath(path,withExe);
   end;
@@ -8189,14 +9036,24 @@ implementation
     result := sgSprites.CreateSprite(layers);
   end;
 
-  function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
+  function CreateSprite(layer: Bitmap; layerName: String): Sprite; overload;
   begin
-    result := sgSprites.CreateSprite(name,layer);
+    result := sgSprites.CreateSprite(layer,layerName);
   end;
 
-  function CreateSprite(const bitmapName: String; const animationName: String): Sprite; overload;
+  function CreateSprite(layer: Bitmap; pt: Point2D): Sprite; overload;
+  begin
+    result := sgSprites.CreateSprite(layer,pt);
+  end;
+
+  function CreateSprite(bitmapName: String; animationName: String): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(bitmapName,animationName);
+  end;
+
+  function CreateSprite(name: String; layer: Bitmap): Sprite; overload;
+  begin
+    result := sgSprites.CreateSprite(name,layer);
   end;
 
   function CreateSprite(const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
@@ -8209,17 +9066,7 @@ implementation
     result := sgSprites.CreateSprite(layer,ani);
   end;
 
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,pt);
-  end;
-
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,layerName);
-  end;
-
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layers);
   end;
@@ -8229,22 +9076,17 @@ implementation
     result := sgSprites.CreateSprite(layers,ani);
   end;
 
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,ani,pt);
-  end;
-
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,layerName,ani);
-  end;
-
-  function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layer,ani);
   end;
 
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
+  function CreateSprite(layer: Bitmap; ani: AnimationScript; pt: Point2D): Sprite; overload;
+  begin
+    result := sgSprites.CreateSprite(layer,ani,pt);
+  end;
+
+  function CreateSprite(name: String; layer: Bitmap; layerName: String): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layer,layerName);
   end;
@@ -8254,12 +9096,17 @@ implementation
     result := sgSprites.CreateSprite(layers,layerNames,ani);
   end;
 
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
+  function CreateSprite(layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
+  begin
+    result := sgSprites.CreateSprite(layer,layerName,ani);
+  end;
+
+  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layers,layerNames);
   end;
 
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layers,ani);
   end;
@@ -8269,7 +9116,7 @@ implementation
     result := sgSprites.CreateSprite(layer,x,y);
   end;
 
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; layer: Bitmap; layerName: String; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layer,layerName,ani);
   end;
@@ -8279,12 +9126,12 @@ implementation
     result := sgSprites.CreateSprite(layer,ani,x,y);
   end;
 
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
+  function CreateSprite(name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layers,layerNames,ani);
   end;
 
-  procedure CreateSpritePack(const name: String); overload;
+  procedure CreateSpritePack(name: String); overload;
   begin
     sgSprites.CreateSpritePack(name);
   end;
@@ -8319,12 +9166,12 @@ implementation
     sgSprites.FreeSprite(s);
   end;
 
-  function HasSprite(const name: String): Boolean; overload;
+  function HasSprite(name: String): Boolean; overload;
   begin
     result := sgSprites.HasSprite(name);
   end;
 
-  function HasSpritePack(const name: String): Boolean; overload;
+  function HasSpritePack(name: String): Boolean; overload;
   begin
     result := sgSprites.HasSpritePack(name);
   end;
@@ -8359,17 +9206,17 @@ implementation
     sgSprites.ReleaseAllSprites();
   end;
 
-  procedure ReleaseSprite(const name: String); overload;
+  procedure ReleaseSprite(name: String); overload;
   begin
     sgSprites.ReleaseSprite(name);
   end;
 
-  procedure SelectSpritePack(const name: String); overload;
+  procedure SelectSpritePack(name: String); overload;
   begin
     sgSprites.SelectSpritePack(name);
   end;
 
-  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; const layerName: String): Longint; overload;
+  function SpriteAddLayer(s: Sprite; newLayer: Bitmap; layerName: String): Longint; overload;
   begin
     result := sgSprites.SpriteAddLayer(s,newLayer,layerName);
   end;
@@ -8379,12 +9226,12 @@ implementation
     sgSprites.SpriteAddToVelocity(s,value);
   end;
 
-  procedure SpriteAddValue(s: Sprite; const name: String); overload;
+  procedure SpriteAddValue(s: Sprite; name: String); overload;
   begin
     sgSprites.SpriteAddValue(s,name);
   end;
 
-  procedure SpriteAddValue(s: Sprite; const name: String; initVal: Single); overload;
+  procedure SpriteAddValue(s: Sprite; name: String; initVal: Single); overload;
   begin
     sgSprites.SpriteAddValue(s,name,initVal);
   end;
@@ -8469,7 +9316,7 @@ implementation
     result := sgSprites.SpriteHeight(s);
   end;
 
-  procedure SpriteHideLayer(s: Sprite; const name: String); overload;
+  procedure SpriteHideLayer(s: Sprite; name: String); overload;
   begin
     sgSprites.SpriteHideLayer(s,name);
   end;
@@ -8479,14 +9326,14 @@ implementation
     sgSprites.SpriteHideLayer(s,id);
   end;
 
-  function SpriteLayer(s: Sprite; const name: String): Bitmap; overload;
-  begin
-    result := sgSprites.SpriteLayer(s,name);
-  end;
-
   function SpriteLayer(s: Sprite; idx: Longint): Bitmap; overload;
   begin
     result := sgSprites.SpriteLayer(s,idx);
+  end;
+
+  function SpriteLayer(s: Sprite; name: String): Bitmap; overload;
+  begin
+    result := sgSprites.SpriteLayer(s,name);
   end;
 
   function SpriteLayerCircle(s: Sprite; idx: Longint): Circle; overload;
@@ -8494,7 +9341,7 @@ implementation
     result := sgSprites.SpriteLayerCircle(s,idx);
   end;
 
-  function SpriteLayerCircle(s: Sprite; const name: String): Circle; overload;
+  function SpriteLayerCircle(s: Sprite; name: String): Circle; overload;
   begin
     result := sgSprites.SpriteLayerCircle(s,name);
   end;
@@ -8504,7 +9351,7 @@ implementation
     result := sgSprites.SpriteLayerCount(s);
   end;
 
-  function SpriteLayerHeight(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerHeight(s: Sprite; name: String): Longint; overload;
   begin
     result := sgSprites.SpriteLayerHeight(s,name);
   end;
@@ -8514,7 +9361,7 @@ implementation
     result := sgSprites.SpriteLayerHeight(s,idx);
   end;
 
-  function SpriteLayerIndex(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerIndex(s: Sprite; name: String): Longint; overload;
   begin
     result := sgSprites.SpriteLayerIndex(s,name);
   end;
@@ -8524,7 +9371,7 @@ implementation
     result := sgSprites.SpriteLayerName(s,idx);
   end;
 
-  function SpriteLayerOffset(s: Sprite; const name: String): Point2D; overload;
+  function SpriteLayerOffset(s: Sprite; name: String): Point2D; overload;
   begin
     result := sgSprites.SpriteLayerOffset(s,name);
   end;
@@ -8539,24 +9386,24 @@ implementation
     result := sgSprites.SpriteLayerOffsets(s);
   end;
 
+  function SpriteLayerRectangle(s: Sprite; name: String): Rectangle; overload;
+  begin
+    result := sgSprites.SpriteLayerRectangle(s,name);
+  end;
+
   function SpriteLayerRectangle(s: Sprite; idx: Longint): Rectangle; overload;
   begin
     result := sgSprites.SpriteLayerRectangle(s,idx);
   end;
 
-  function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
+  function SpriteLayerWidth(s: Sprite; name: String): Longint; overload;
   begin
-    result := sgSprites.SpriteLayerRectangle(s,name);
+    result := sgSprites.SpriteLayerWidth(s,name);
   end;
 
   function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
   begin
     result := sgSprites.SpriteLayerWidth(s,idx);
-  end;
-
-  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
-  begin
-    result := sgSprites.SpriteLayerWidth(s,name);
   end;
 
   function SpriteLayers(s: Sprite): BitmapArray; overload;
@@ -8579,7 +9426,7 @@ implementation
     result := sgSprites.SpriteName(sprt);
   end;
 
-  function SpriteNamed(const name: String): Sprite; overload;
+  function SpriteNamed(name: String): Sprite; overload;
   begin
     result := sgSprites.SpriteNamed(name);
   end;
@@ -8664,14 +9511,14 @@ implementation
     sgSprites.SpriteSetHeading(s,value);
   end;
 
+  procedure SpriteSetLayerOffset(s: Sprite; name: String; const value: Point2D); overload;
+  begin
+    sgSprites.SpriteSetLayerOffset(s,name,value);
+  end;
+
   procedure SpriteSetLayerOffset(s: Sprite; idx: Longint; const value: Point2D); overload;
   begin
     sgSprites.SpriteSetLayerOffset(s,idx,value);
-  end;
-
-  procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D); overload;
-  begin
-    sgSprites.SpriteSetLayerOffset(s,name,value);
   end;
 
   procedure SpriteSetLayerOffsets(s: Sprite; const values: Point2DArray); overload;
@@ -8704,7 +9551,7 @@ implementation
     sgSprites.SpriteSetSpeed(s,value);
   end;
 
-  procedure SpriteSetValue(s: Sprite; const name: String; val: Single); overload;
+  procedure SpriteSetValue(s: Sprite; name: String; val: Single); overload;
   begin
     sgSprites.SpriteSetValue(s,name,val);
   end;
@@ -8734,7 +9581,7 @@ implementation
     result := sgSprites.SpriteShowLayer(s,id);
   end;
 
-  function SpriteShowLayer(s: Sprite; const name: String): Longint; overload;
+  function SpriteShowLayer(s: Sprite; name: String): Longint; overload;
   begin
     result := sgSprites.SpriteShowLayer(s,name);
   end;
@@ -8749,12 +9596,12 @@ implementation
     sgSprites.SpriteStartAnimation(s,idx);
   end;
 
-  procedure SpriteStartAnimation(s: Sprite; const named: String); overload;
+  procedure SpriteStartAnimation(s: Sprite; named: String); overload;
   begin
     sgSprites.SpriteStartAnimation(s,named);
   end;
 
-  procedure SpriteStartAnimation(s: Sprite; const named: String; withSound: Boolean); overload;
+  procedure SpriteStartAnimation(s: Sprite; named: String; withSound: Boolean); overload;
   begin
     sgSprites.SpriteStartAnimation(s,named,withSound);
   end;
@@ -8774,7 +9621,7 @@ implementation
     sgSprites.SpriteToggleLayerVisible(s,id);
   end;
 
-  procedure SpriteToggleLayerVisible(s: Sprite; const name: String); overload;
+  procedure SpriteToggleLayerVisible(s: Sprite; name: String); overload;
   begin
     sgSprites.SpriteToggleLayerVisible(s,name);
   end;
@@ -8784,7 +9631,7 @@ implementation
     result := sgSprites.SpriteValue(s,index);
   end;
 
-  function SpriteValue(s: Sprite; const name: String): Single; overload;
+  function SpriteValue(s: Sprite; name: String): Single; overload;
   begin
     result := sgSprites.SpriteValue(s,name);
   end;
@@ -8809,7 +9656,7 @@ implementation
     result := sgSprites.SpriteVisibleIndexOfLayer(s,id);
   end;
 
-  function SpriteVisibleIndexOfLayer(s: Sprite; const name: String): Longint; overload;
+  function SpriteVisibleIndexOfLayer(s: Sprite; name: String): Longint; overload;
   begin
     result := sgSprites.SpriteVisibleIndexOfLayer(s,name);
   end;
@@ -8909,84 +9756,229 @@ implementation
     result := sgSprites.VectorFromTo(s1,s2);
   end;
 
-  procedure DrawFramerate(x: Single; y: Single); overload;
+  procedure DrawFramerate(x: Longint; y: Longint); overload;
   begin
     sgText.DrawFramerate(x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; x: Single; y: Single); overload;
+  procedure DrawFramerate(x: Longint; y: Longint; font: Font); overload;
+  begin
+    sgText.DrawFramerate(x,y,font);
+  end;
+
+  procedure DrawFramerate(x: Longint; y: Longint; name: String); overload;
+  begin
+    sgText.DrawFramerate(x,y,name);
+  end;
+
+  procedure DrawFramerate(x: Longint; y: Longint; name: String; size: Longint); overload;
+  begin
+    sgText.DrawFramerate(x,y,name,size);
+  end;
+
+  procedure DrawText(theText: String; textColor: Color; const pt: Point2D); overload;
+  begin
+    sgText.DrawText(theText,textColor,pt);
+  end;
+
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
+  begin
+    sgText.DrawText(theText,textColor,theFont,pt);
+  end;
+
+  procedure DrawText(theText: String; textColor: Color; x: Single; y: Single); overload;
   begin
     sgText.DrawText(theText,textColor,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawText(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
   begin
-    sgText.DrawText(theText,textColor,x,y,opts);
+    sgText.DrawText(theText,textColor,name,pt);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; const name: String; x: Single; y: Single); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; const pt: Point2D); overload;
   begin
-    sgText.DrawText(theText,textColor,name,x,y);
+    sgText.DrawText(dest,theText,textColor,name,pt);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
+  procedure DrawText(theText: String; textColor: Color; theFont: Font; x: Single; y: Single); overload;
   begin
     sgText.DrawText(theText,textColor,theFont,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle); overload;
+  procedure DrawText(theText: String; textColor: Color; name: String; x: Single; y: Single); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,theFont,align,area);
+    sgText.DrawText(theText,textColor,name,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; x: Single; y: Single); overload;
   begin
-    sgText.DrawText(theText,textColor,name,x,y,opts);
+    sgText.DrawText(dest,theText,textColor,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; align: FontAlignment; const area: Rectangle); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,name,align,area);
+    sgText.DrawText(dest,theText,textColor,theFont,pt);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; theFont: Font; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
   begin
-    sgText.DrawText(theText,textColor,theFont,x,y,opts);
+    sgText.DrawText(theText,textColor,name,size,pt);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x: Single; y: Single); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
+  begin
+    sgText.DrawText(dest,theText,textColor,name,size,pt);
+  end;
+
+  procedure DrawText(theText: String; textColor: Color; name: String; size: Longint; x: Single; y: Single); overload;
   begin
     sgText.DrawText(theText,textColor,name,size,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,theFont,align,area,opts);
+    sgText.DrawText(dest,theText,textColor,theFont,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; const name: String; size: Longint; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
   begin
-    sgText.DrawText(theText,textColor,name,size,x,y,opts);
+    sgText.DrawText(dest,theText,textColor,name,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawText(dest: Bitmap; theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,name,align,area,opts);
+    sgText.DrawText(dest,theText,textColor,name,size,x,y);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle); overload;
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,name,size,align,area);
+    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,x,y,w,h);
   end;
 
-  procedure DrawText(const theText: String; textColor: Color; backColor: Color; const name: String; size: Longint; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
   begin
-    sgText.DrawText(theText,textColor,backColor,name,size,align,area,opts);
+    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,x,y,w,h);
   end;
 
-  function DrawTextToBitmap(font: Font; const str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
   begin
-    result := sgText.DrawTextToBitmap(font,str,clrFg,backgroundColor);
+    sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,name,align,withinRect);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,withinRect);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(dest,theText,textColor,backColor,theFont,align,withinRect);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(dest,theText,textColor,backColor,name,align,withinRect);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,name,size,align,withinRect);
+  end;
+
+  procedure DrawTextLines(dest: Bitmap; theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLines(dest,theText,textColor,backColor,name,size,align,withinRect);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,theFont,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLines(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Single; y: Single; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLines(theText,textColor,backColor,name,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,theFont,align,withinRect);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,withinRect);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; size: Longint; align: FontAlignment; const withinRect: Rectangle); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,size,align,withinRect);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; theFont: Font; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,theFont,align,x,y,w,h);
+  end;
+
+  procedure DrawTextLinesOnScreen(theText: String; textColor: Color; backColor: Color; name: String; align: FontAlignment; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  begin
+    sgText.DrawTextLinesOnScreen(theText,textColor,backColor,name,align,x,y,w,h);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; x: Single; y: Single); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,x,y);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; const pt: Point2D); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,name,pt);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; const pt: Point2D); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,theFont,pt);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; theFont: Font; x: Longint; y: Longint); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,theFont,x,y);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; x: Longint; y: Longint); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,name,x,y);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; const pt: Point2D); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,name,size,pt);
+  end;
+
+  procedure DrawTextOnScreen(theText: String; textColor: Color; name: String; size: Longint; x: Longint; y: Longint); overload;
+  begin
+    sgText.DrawTextOnScreen(theText,textColor,name,size,x,y);
+  end;
+
+  function DrawTextTo(font: Font; str: String; clrFg: Color; backgroundColor: Color): Bitmap; overload;
+  begin
+    result := sgText.DrawTextTo(font,str,clrFg,backgroundColor);
   end;
 
   function FontFontStyle(font: Font): FontStyle; overload;
@@ -8994,17 +9986,17 @@ implementation
     result := sgText.FontFontStyle(font);
   end;
 
-  function FontNameFor(const fontName: String; size: Longint): String; overload;
+  function FontNameFor(fontName: String; size: Longint): String; overload;
   begin
     result := sgText.FontNameFor(fontName,size);
   end;
 
-  function FontNamed(const name: String): Font; overload;
+  function FontNamed(name: String): Font; overload;
   begin
     result := sgText.FontNamed(name);
   end;
 
-  function FontNamed(const name: String; size: Longint): Font; overload;
+  function FontNamed(name: String; size: Longint): Font; overload;
   begin
     result := sgText.FontNamed(name,size);
   end;
@@ -9019,17 +10011,17 @@ implementation
     sgText.FreeFont(fontToFree);
   end;
 
-  function HasFont(const name: String): Boolean; overload;
+  function HasFont(name: String): Boolean; overload;
   begin
     result := sgText.HasFont(name);
   end;
 
-  function LoadFont(const fontName: String; size: Longint): Font; overload;
+  function LoadFont(fontName: String; size: Longint): Font; overload;
   begin
     result := sgText.LoadFont(fontName,size);
   end;
 
-  function LoadFontNamed(const name: String; const filename: String; size: Longint): Font; overload;
+  function LoadFontNamed(name: String; filename: String; size: Longint): Font; overload;
   begin
     result := sgText.LoadFontNamed(name,filename,size);
   end;
@@ -9039,22 +10031,22 @@ implementation
     sgText.ReleaseAllFonts();
   end;
 
-  procedure ReleaseFont(const name: String); overload;
+  procedure ReleaseFont(name: String); overload;
   begin
     sgText.ReleaseFont(name);
   end;
 
-  function TextAlignmentFrom(const str: String): FontAlignment; overload;
+  function TextAlignmentFrom(str: String): FontAlignment; overload;
   begin
     result := sgText.TextAlignmentFrom(str);
   end;
 
-  function TextHeight(theFont: Font; const theText: String): Longint; overload;
+  function TextHeight(theFont: Font; theText: String): Longint; overload;
   begin
     result := sgText.TextHeight(theFont,theText);
   end;
 
-  function TextWidth(theFont: Font; const theText: String): Longint; overload;
+  function TextWidth(theFont: Font; theText: String): Longint; overload;
   begin
     result := sgText.TextWidth(theFont,theText);
   end;
@@ -9064,7 +10056,7 @@ implementation
     result := sgTimers.CreateTimer();
   end;
 
-  function CreateTimer(const name: String): Timer; overload;
+  function CreateTimer(name: String): Timer; overload;
   begin
     result := sgTimers.CreateTimer(name);
   end;
@@ -9074,14 +10066,14 @@ implementation
     sgTimers.FreeTimer(toFree);
   end;
 
-  procedure PauseTimer(const name: String); overload;
-  begin
-    sgTimers.PauseTimer(name);
-  end;
-
   procedure PauseTimer(toPause: Timer); overload;
   begin
     sgTimers.PauseTimer(toPause);
+  end;
+
+  procedure PauseTimer(name: String); overload;
+  begin
+    sgTimers.PauseTimer(name);
   end;
 
   procedure ReleaseAllTimers(); overload;
@@ -9089,12 +10081,12 @@ implementation
     sgTimers.ReleaseAllTimers();
   end;
 
-  procedure ReleaseTimer(const name: String); overload;
+  procedure ReleaseTimer(name: String); overload;
   begin
     sgTimers.ReleaseTimer(name);
   end;
 
-  procedure ResetTimer(const name: String); overload;
+  procedure ResetTimer(name: String); overload;
   begin
     sgTimers.ResetTimer(name);
   end;
@@ -9104,7 +10096,7 @@ implementation
     sgTimers.ResetTimer(tmr);
   end;
 
-  procedure ResumeTimer(const name: String); overload;
+  procedure ResumeTimer(name: String); overload;
   begin
     sgTimers.ResumeTimer(name);
   end;
@@ -9114,14 +10106,14 @@ implementation
     sgTimers.ResumeTimer(toUnpause);
   end;
 
+  procedure StartTimer(name: String); overload;
+  begin
+    sgTimers.StartTimer(name);
+  end;
+
   procedure StartTimer(toStart: Timer); overload;
   begin
     sgTimers.StartTimer(toStart);
-  end;
-
-  procedure StartTimer(const name: String); overload;
-  begin
-    sgTimers.StartTimer(name);
   end;
 
   procedure StopTimer(toStop: Timer); overload;
@@ -9129,17 +10121,17 @@ implementation
     sgTimers.StopTimer(toStop);
   end;
 
-  procedure StopTimer(const name: String); overload;
+  procedure StopTimer(name: String); overload;
   begin
     sgTimers.StopTimer(name);
   end;
 
-  function TimerNamed(const name: String): Timer; overload;
+  function TimerNamed(name: String): Timer; overload;
   begin
     result := sgTimers.TimerNamed(name);
   end;
 
-  function TimerTicks(const name: String): Longword; overload;
+  function TimerTicks(name: String): Longword; overload;
   begin
     result := sgTimers.TimerTicks(name);
   end;
@@ -9204,19 +10196,14 @@ implementation
     result := sgUserInterface.ActiveRadioButton(grp);
   end;
 
-  function ActiveRadioButton(const id: String): Region; overload;
+  function ActiveRadioButton(id: String): Region; overload;
   begin
     result := sgUserInterface.ActiveRadioButton(id);
   end;
 
-  function ActiveRadioButton(pnl: Panel; const id: String): Region; overload;
+  function ActiveRadioButton(pnl: Panel; id: String): Region; overload;
   begin
     result := sgUserInterface.ActiveRadioButton(pnl,id);
-  end;
-
-  function ActiveRadioButtonIndex(const id: String): Longint; overload;
-  begin
-    result := sgUserInterface.ActiveRadioButtonIndex(id);
   end;
 
   function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): Longint; overload;
@@ -9224,7 +10211,12 @@ implementation
     result := sgUserInterface.ActiveRadioButtonIndex(RadioGroup);
   end;
 
-  function ActiveRadioButtonIndex(pnl: Panel; const id: String): Longint; overload;
+  function ActiveRadioButtonIndex(id: String): Longint; overload;
+  begin
+    result := sgUserInterface.ActiveRadioButtonIndex(id);
+  end;
+
+  function ActiveRadioButtonIndex(pnl: Panel; id: String): Longint; overload;
   begin
     result := sgUserInterface.ActiveRadioButtonIndex(pnl,id);
   end;
@@ -9239,7 +10231,7 @@ implementation
     result := sgUserInterface.ActiveTextIndex();
   end;
 
-  function ButtonClicked(const name: String): Boolean; overload;
+  function ButtonClicked(name: String): Boolean; overload;
   begin
     result := sgUserInterface.ButtonClicked(name);
   end;
@@ -9254,14 +10246,14 @@ implementation
     result := sgUserInterface.CheckboxFromRegion(r);
   end;
 
-  procedure CheckboxSetState(const id: String; val: Boolean); overload;
-  begin
-    sgUserInterface.CheckboxSetState(id,val);
-  end;
-
   procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
   begin
     sgUserInterface.CheckboxSetState(chk,val);
+  end;
+
+  procedure CheckboxSetState(id: String; val: Boolean); overload;
+  begin
+    sgUserInterface.CheckboxSetState(id,val);
   end;
 
   procedure CheckboxSetState(r: Region; val: Boolean); overload;
@@ -9269,7 +10261,7 @@ implementation
     sgUserInterface.CheckboxSetState(r,val);
   end;
 
-  procedure CheckboxSetState(pnl: Panel; const id: String; val: Boolean); overload;
+  procedure CheckboxSetState(pnl: Panel; id: String; val: Boolean); overload;
   begin
     sgUserInterface.CheckboxSetState(pnl,id,val);
   end;
@@ -9279,7 +10271,7 @@ implementation
     result := sgUserInterface.CheckboxState(r);
   end;
 
-  function CheckboxState(const s: String): Boolean; overload;
+  function CheckboxState(s: String): Boolean; overload;
   begin
     result := sgUserInterface.CheckboxState(s);
   end;
@@ -9289,7 +10281,7 @@ implementation
     result := sgUserInterface.CheckboxState(chk);
   end;
 
-  function CheckboxState(p: Panel; const s: String): Boolean; overload;
+  function CheckboxState(p: Panel; s: String): Boolean; overload;
   begin
     result := sgUserInterface.CheckboxState(p,s);
   end;
@@ -9319,7 +10311,7 @@ implementation
     result := sgUserInterface.DialogPath();
   end;
 
-  procedure DialogSetPath(const fullname: String); overload;
+  procedure DialogSetPath(fullname: String); overload;
   begin
     sgUserInterface.DialogSetPath(fullname);
   end;
@@ -9349,7 +10341,12 @@ implementation
     result := sgUserInterface.GUIClicked();
   end;
 
-  procedure GUISetActiveTextbox(const name: String); overload;
+  procedure GUISetActiveTextbox(r: Region); overload;
+  begin
+    sgUserInterface.GUISetActiveTextbox(r);
+  end;
+
+  procedure GUISetActiveTextbox(name: String); overload;
   begin
     sgUserInterface.GUISetActiveTextbox(name);
   end;
@@ -9357,11 +10354,6 @@ implementation
   procedure GUISetActiveTextbox(t: GUITextbox); overload;
   begin
     sgUserInterface.GUISetActiveTextbox(t);
-  end;
-
-  procedure GUISetActiveTextbox(r: Region); overload;
-  begin
-    sgUserInterface.GUISetActiveTextbox(r);
   end;
 
   procedure GUISetBackgroundColor(c: Color); overload;
@@ -9394,19 +10386,19 @@ implementation
     result := sgUserInterface.GUITextEntryComplete();
   end;
 
-  function HasPanel(const name: String): Boolean; overload;
+  function HasPanel(name: String): Boolean; overload;
   begin
     result := sgUserInterface.HasPanel(name);
+  end;
+
+  procedure HidePanel(name: String); overload;
+  begin
+    sgUserInterface.HidePanel(name);
   end;
 
   procedure HidePanel(p: Panel); overload;
   begin
     sgUserInterface.HidePanel(p);
-  end;
-
-  procedure HidePanel(const name: String); overload;
-  begin
-    sgUserInterface.HidePanel(name);
   end;
 
   function IndexOfLastUpdatedTextBox(): Longint; overload;
@@ -9449,37 +10441,37 @@ implementation
     result := sgUserInterface.LabelFromRegion(r);
   end;
 
-  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
-  begin
-    sgUserInterface.LabelSetAlignment(tb,align);
-  end;
-
   procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
   begin
     sgUserInterface.LabelSetAlignment(r,align);
   end;
 
-  procedure LabelSetFont(l: GUILabel; const s: String); overload;
+  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
+  begin
+    sgUserInterface.LabelSetAlignment(tb,align);
+  end;
+
+  procedure LabelSetFont(l: GUILabel; s: String); overload;
   begin
     sgUserInterface.LabelSetFont(l,s);
   end;
 
-  procedure LabelSetText(lb: GUILabel; const newString: String); overload;
+  procedure LabelSetText(lb: GUILabel; newString: String); overload;
   begin
     sgUserInterface.LabelSetText(lb,newString);
   end;
 
-  procedure LabelSetText(const id: String; const newString: String); overload;
-  begin
-    sgUserInterface.LabelSetText(id,newString);
-  end;
-
-  procedure LabelSetText(r: Region; const newString: String); overload;
+  procedure LabelSetText(r: Region; newString: String); overload;
   begin
     sgUserInterface.LabelSetText(r,newString);
   end;
 
-  procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
+  procedure LabelSetText(id: String; newString: String); overload;
+  begin
+    sgUserInterface.LabelSetText(id,newString);
+  end;
+
+  procedure LabelSetText(pnl: Panel; id: String; newString: String); overload;
   begin
     sgUserInterface.LabelSetText(pnl,id,newString);
   end;
@@ -9494,12 +10486,12 @@ implementation
     result := sgUserInterface.LabelText(lb);
   end;
 
-  function LabelText(const id: String): String; overload;
+  function LabelText(id: String): String; overload;
   begin
     result := sgUserInterface.LabelText(id);
   end;
 
-  function LabelText(pnl: Panel; const id: String): String; overload;
+  function LabelText(pnl: Panel; id: String): String; overload;
   begin
     result := sgUserInterface.LabelText(pnl,id);
   end;
@@ -9509,7 +10501,7 @@ implementation
     result := sgUserInterface.ListActiveItemIndex(lst);
   end;
 
-  function ListActiveItemIndex(const id: String): Longint; overload;
+  function ListActiveItemIndex(id: String): Longint; overload;
   begin
     result := sgUserInterface.ListActiveItemIndex(id);
   end;
@@ -9519,14 +10511,9 @@ implementation
     result := sgUserInterface.ListActiveItemIndex(r);
   end;
 
-  function ListActiveItemIndex(pnl: Panel; const id: String): Longint; overload;
+  function ListActiveItemIndex(pnl: Panel; id: String): Longint; overload;
   begin
     result := sgUserInterface.ListActiveItemIndex(pnl,id);
-  end;
-
-  function ListActiveItemText(r: Region): String; overload;
-  begin
-    result := sgUserInterface.ListActiveItemText(r);
   end;
 
   function ListActiveItemText(list: GUIList): String; overload;
@@ -9534,12 +10521,17 @@ implementation
     result := sgUserInterface.ListActiveItemText(list);
   end;
 
-  function ListActiveItemText(const ID: String): String; overload;
+  function ListActiveItemText(r: Region): String; overload;
+  begin
+    result := sgUserInterface.ListActiveItemText(r);
+  end;
+
+  function ListActiveItemText(ID: String): String; overload;
   begin
     result := sgUserInterface.ListActiveItemText(ID);
   end;
 
-  function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
+  function ListActiveItemText(pnl: Panel; ID: String): String; overload;
   begin
     result := sgUserInterface.ListActiveItemText(pnl,ID);
   end;
@@ -9549,19 +10541,24 @@ implementation
     sgUserInterface.ListAddItem(lst,img);
   end;
 
-  procedure ListAddItem(r: Region; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(r,text);
-  end;
-
-  procedure ListAddItem(const id: String; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(id,text);
-  end;
-
-  procedure ListAddItem(const id: String; img: Bitmap); overload;
+  procedure ListAddItem(id: String; img: Bitmap); overload;
   begin
     sgUserInterface.ListAddItem(id,img);
+  end;
+
+  procedure ListAddItem(lst: GUIList; const img: BitmapCell); overload;
+  begin
+    sgUserInterface.ListAddItem(lst,img);
+  end;
+
+  procedure ListAddItem(lst: GUIList; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(lst,text);
+  end;
+
+  procedure ListAddItem(id: String; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(id,text);
   end;
 
   procedure ListAddItem(r: Region; img: Bitmap); overload;
@@ -9569,79 +10566,74 @@ implementation
     sgUserInterface.ListAddItem(r,img);
   end;
 
-  procedure ListAddItem(lst: GUIList; const text: String); overload;
+  procedure ListAddItem(r: Region; const img: BitmapCell); overload;
   begin
-    sgUserInterface.ListAddItem(lst,text);
+    sgUserInterface.ListAddItem(r,img);
   end;
 
-  procedure ListAddItem(const id: String; img: Bitmap; const text: String); overload;
+  procedure ListAddItem(id: String; const img: BitmapCell); overload;
   begin
-    sgUserInterface.ListAddItem(id,img,text);
+    sgUserInterface.ListAddItem(id,img);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; const text: String); overload;
+  procedure ListAddItem(r: Region; text: String); overload;
   begin
-    sgUserInterface.ListAddItem(pnl,id,text);
+    sgUserInterface.ListAddItem(r,text);
   end;
 
-  procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,text);
-  end;
-
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(r,img,cell);
-  end;
-
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(id,img,cell);
-  end;
-
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,cell);
-  end;
-
-  procedure ListAddItem(r: Region; img: Bitmap; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(r,img,text);
-  end;
-
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap); overload;
+  procedure ListAddItem(pnl: Panel; id: String; img: Bitmap); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,img);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint); overload;
+  procedure ListAddItem(r: Region; const img: BitmapCell; text: String); overload;
   begin
-    sgUserInterface.ListAddItem(pnl,id,img,cell);
+    sgUserInterface.ListAddItem(r,img,text);
   end;
 
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(lst: GUIList; img: Bitmap; text: String); overload;
   begin
-    sgUserInterface.ListAddItem(r,img,cell,text);
+    sgUserInterface.ListAddItem(lst,img,text);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell); overload;
+  begin
+    sgUserInterface.ListAddItem(pnl,id,img);
+  end;
+
+  procedure ListAddItem(id: String; img: Bitmap; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(id,img,text);
+  end;
+
+  procedure ListAddItem(r: Region; img: Bitmap; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(r,img,text);
+  end;
+
+  procedure ListAddItem(lst: GUIList; const img: BitmapCell; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(lst,img,text);
+  end;
+
+  procedure ListAddItem(pnl: Panel; id: String; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(pnl,id,text);
+  end;
+
+  procedure ListAddItem(id: String; const img: BitmapCell; text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(id,img,text);
+  end;
+
+  procedure ListAddItem(pnl: Panel; id: String; const img: BitmapCell; text: String); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,img,text);
   end;
 
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; id: String; img: Bitmap; text: String); overload;
   begin
-    sgUserInterface.ListAddItem(id,img,cell,text);
-  end;
-
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,cell,text);
-  end;
-
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(pnl,id,img,cell,text);
+    sgUserInterface.ListAddItem(pnl,id,img,text);
   end;
 
   function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
@@ -9649,17 +10641,12 @@ implementation
     result := sgUserInterface.ListBitmapIndex(lst,img);
   end;
 
-  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; const img: BitmapCell): Longint; overload;
   begin
-    result := sgUserInterface.ListBitmapIndex(lst,img,cell);
+    result := sgUserInterface.ListBitmapIndex(lst,img);
   end;
 
-  procedure ListClearItems(r: Region); overload;
-  begin
-    sgUserInterface.ListClearItems(r);
-  end;
-
-  procedure ListClearItems(const id: String); overload;
+  procedure ListClearItems(id: String); overload;
   begin
     sgUserInterface.ListClearItems(id);
   end;
@@ -9669,7 +10656,12 @@ implementation
     sgUserInterface.ListClearItems(lst);
   end;
 
-  procedure ListClearItems(pnl: Panel; const id: String); overload;
+  procedure ListClearItems(r: Region); overload;
+  begin
+    sgUserInterface.ListClearItems(r);
+  end;
+
+  procedure ListClearItems(pnl: Panel; id: String); overload;
   begin
     sgUserInterface.ListClearItems(pnl,id);
   end;
@@ -9699,11 +10691,6 @@ implementation
     result := sgUserInterface.ListFromRegion(r);
   end;
 
-  function ListItemCount(const id: String): Longint; overload;
-  begin
-    result := sgUserInterface.ListItemCount(id);
-  end;
-
   function ListItemCount(lst: GUIList): Longint; overload;
   begin
     result := sgUserInterface.ListItemCount(lst);
@@ -9714,9 +10701,19 @@ implementation
     result := sgUserInterface.ListItemCount(r);
   end;
 
-  function ListItemCount(pnl: Panel; const id: String): Longint; overload;
+  function ListItemCount(id: String): Longint; overload;
+  begin
+    result := sgUserInterface.ListItemCount(id);
+  end;
+
+  function ListItemCount(pnl: Panel; id: String): Longint; overload;
   begin
     result := sgUserInterface.ListItemCount(pnl,id);
+  end;
+
+  function ListItemText(id: String; idx: Longint): String; overload;
+  begin
+    result := sgUserInterface.ListItemText(id,idx);
   end;
 
   function ListItemText(lst: GUIList; idx: Longint): String; overload;
@@ -9729,12 +10726,7 @@ implementation
     result := sgUserInterface.ListItemText(r,idx);
   end;
 
-  function ListItemText(const id: String; idx: Longint): String; overload;
-  begin
-    result := sgUserInterface.ListItemText(id,idx);
-  end;
-
-  function ListItemText(pnl: Panel; const id: String; idx: Longint): String; overload;
+  function ListItemText(pnl: Panel; id: String; idx: Longint): String; overload;
   begin
     result := sgUserInterface.ListItemText(pnl,id,idx);
   end;
@@ -9744,19 +10736,24 @@ implementation
     result := sgUserInterface.ListLargestStartIndex(lst);
   end;
 
-  procedure ListRemoveActiveItem(const id: String); overload;
-  begin
-    sgUserInterface.ListRemoveActiveItem(id);
-  end;
-
   procedure ListRemoveActiveItem(r: Region); overload;
   begin
     sgUserInterface.ListRemoveActiveItem(r);
   end;
 
-  procedure ListRemoveActiveItem(pnl: Panel; const id: String); overload;
+  procedure ListRemoveActiveItem(id: String); overload;
+  begin
+    sgUserInterface.ListRemoveActiveItem(id);
+  end;
+
+  procedure ListRemoveActiveItem(pnl: Panel; id: String); overload;
   begin
     sgUserInterface.ListRemoveActiveItem(pnl,id);
+  end;
+
+  procedure ListRemoveItem(id: String; idx: Longint); overload;
+  begin
+    sgUserInterface.ListRemoveItem(id,idx);
   end;
 
   procedure ListRemoveItem(lst: GUIList; idx: Longint); overload;
@@ -9764,12 +10761,7 @@ implementation
     sgUserInterface.ListRemoveItem(lst,idx);
   end;
 
-  procedure ListRemoveItem(const id: String; idx: Longint); overload;
-  begin
-    sgUserInterface.ListRemoveItem(id,idx);
-  end;
-
-  procedure ListRemoveItem(pnl: Panel; const id: String; idx: Longint); overload;
+  procedure ListRemoveItem(pnl: Panel; id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListRemoveItem(pnl,id,idx);
   end;
@@ -9779,7 +10771,7 @@ implementation
     result := sgUserInterface.ListScrollIncrement(lst);
   end;
 
-  procedure ListSetActiveItemIndex(const id: String; idx: Longint); overload;
+  procedure ListSetActiveItemIndex(id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListSetActiveItemIndex(id,idx);
   end;
@@ -9789,7 +10781,7 @@ implementation
     sgUserInterface.ListSetActiveItemIndex(lst,idx);
   end;
 
-  procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
+  procedure ListSetActiveItemIndex(pnl: Panel; id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListSetActiveItemIndex(pnl,id,idx);
   end;
@@ -9799,14 +10791,14 @@ implementation
     sgUserInterface.ListSetFont(lst,f);
   end;
 
-  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
-  begin
-    sgUserInterface.ListSetFontAlignment(lst,align);
-  end;
-
   procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
   begin
     sgUserInterface.ListSetFontAlignment(r,align);
+  end;
+
+  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
+  begin
+    sgUserInterface.ListSetFontAlignment(lst,align);
   end;
 
   procedure ListSetStartAt(r: Region; idx: Longint); overload;
@@ -9829,17 +10821,17 @@ implementation
     result := sgUserInterface.ListStartAt(r);
   end;
 
-  function ListTextIndex(lst: GUIList; const value: String): Longint; overload;
+  function ListTextIndex(lst: GUIList; value: String): Longint; overload;
   begin
     result := sgUserInterface.ListTextIndex(lst,value);
   end;
 
-  function LoadPanel(const filename: String): Panel; overload;
+  function LoadPanel(filename: String): Panel; overload;
   begin
     result := sgUserInterface.LoadPanel(filename);
   end;
 
-  function LoadPanelNamed(const name: String; const filename: String): Panel; overload;
+  function LoadPanelNamed(name: String; filename: String): Panel; overload;
   begin
     result := sgUserInterface.LoadPanelNamed(name,filename);
   end;
@@ -9849,7 +10841,7 @@ implementation
     sgUserInterface.MovePanel(p,mvmt);
   end;
 
-  function NewPanel(const pnlName: String): Panel; overload;
+  function NewPanel(pnlName: String): Panel; overload;
   begin
     result := sgUserInterface.NewPanel(pnlName);
   end;
@@ -9889,7 +10881,7 @@ implementation
     result := sgUserInterface.PanelHeight(p);
   end;
 
-  function PanelHeight(const name: String): Longint; overload;
+  function PanelHeight(name: String): Longint; overload;
   begin
     result := sgUserInterface.PanelHeight(name);
   end;
@@ -9899,7 +10891,7 @@ implementation
     result := sgUserInterface.PanelName(pnl);
   end;
 
-  function PanelNamed(const name: String): Panel; overload;
+  function PanelNamed(name: String): Panel; overload;
   begin
     result := sgUserInterface.PanelNamed(name);
   end;
@@ -9914,7 +10906,7 @@ implementation
     result := sgUserInterface.PanelVisible(p);
   end;
 
-  function PanelWidth(const name: String): Longint; overload;
+  function PanelWidth(name: String): Longint; overload;
   begin
     result := sgUserInterface.PanelWidth(name);
   end;
@@ -9944,12 +10936,12 @@ implementation
     result := sgUserInterface.PointInRegion(pt,p,kind);
   end;
 
-  function RadioGroupFromId(const id: String): GUIRadioGroup; overload;
+  function RadioGroupFromId(id: String): GUIRadioGroup; overload;
   begin
     result := sgUserInterface.RadioGroupFromId(id);
   end;
 
-  function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup; overload;
+  function RadioGroupFromId(pnl: Panel; id: String): GUIRadioGroup; overload;
   begin
     result := sgUserInterface.RadioGroupFromId(pnl,id);
   end;
@@ -10004,12 +10996,12 @@ implementation
     result := sgUserInterface.RegionWidth(r);
   end;
 
-  function RegionWithID(const ID: String): Region; overload;
+  function RegionWithID(ID: String): Region; overload;
   begin
     result := sgUserInterface.RegionWithID(ID);
   end;
 
-  function RegionWithID(pnl: Panel; const ID: String): Region; overload;
+  function RegionWithID(pnl: Panel; ID: String): Region; overload;
   begin
     result := sgUserInterface.RegionWithID(pnl,ID);
   end;
@@ -10034,7 +11026,7 @@ implementation
     sgUserInterface.ReleaseAllPanels();
   end;
 
-  procedure ReleasePanel(const name: String); overload;
+  procedure ReleasePanel(name: String); overload;
   begin
     sgUserInterface.ReleasePanel(name);
   end;
@@ -10044,7 +11036,7 @@ implementation
     sgUserInterface.SelectRadioButton(r);
   end;
 
-  procedure SelectRadioButton(const id: String); overload;
+  procedure SelectRadioButton(id: String); overload;
   begin
     sgUserInterface.SelectRadioButton(id);
   end;
@@ -10054,7 +11046,7 @@ implementation
     sgUserInterface.SelectRadioButton(rGroup,r);
   end;
 
-  procedure SelectRadioButton(pnl: Panel; const id: String); overload;
+  procedure SelectRadioButton(pnl: Panel; id: String); overload;
   begin
     sgUserInterface.SelectRadioButton(pnl,id);
   end;
@@ -10079,14 +11071,14 @@ implementation
     sgUserInterface.ShowOpenDialog(select);
   end;
 
-  procedure ShowPanel(const name: String); overload;
-  begin
-    sgUserInterface.ShowPanel(name);
-  end;
-
   procedure ShowPanel(p: Panel); overload;
   begin
     sgUserInterface.ShowPanel(p);
+  end;
+
+  procedure ShowPanel(name: String); overload;
+  begin
+    sgUserInterface.ShowPanel(name);
   end;
 
   procedure ShowPanelDialog(p: Panel); overload;
@@ -10114,7 +11106,7 @@ implementation
     result := sgUserInterface.TextBoxFont(r);
   end;
 
-  function TextBoxFromID(const id: String): GUITextbox; overload;
+  function TextBoxFromID(id: String): GUITextbox; overload;
   begin
     result := sgUserInterface.TextBoxFromID(id);
   end;
@@ -10129,7 +11121,7 @@ implementation
     result := sgUserInterface.TextBoxText(tb);
   end;
 
-  function TextBoxText(const id: String): String; overload;
+  function TextBoxText(id: String): String; overload;
   begin
     result := sgUserInterface.TextBoxText(id);
   end;
@@ -10139,7 +11131,7 @@ implementation
     result := sgUserInterface.TextBoxText(r);
   end;
 
-  function TextBoxText(pnl: Panel; const id: String): String; overload;
+  function TextBoxText(pnl: Panel; id: String): String; overload;
   begin
     result := sgUserInterface.TextBoxText(pnl,id);
   end;
@@ -10169,24 +11161,29 @@ implementation
     sgUserInterface.TextboxSetFont(Tb,f);
   end;
 
-  procedure TextboxSetText(const id: String; const s: String); overload;
+  procedure TextboxSetText(id: String; i: Longint); overload;
   begin
-    sgUserInterface.TextboxSetText(id,s);
+    sgUserInterface.TextboxSetText(id,i);
   end;
 
-  procedure TextboxSetText(r: Region; single: Single); overload;
+  procedure TextboxSetText(id: String; single: Single); overload;
   begin
-    sgUserInterface.TextboxSetText(r,single);
+    sgUserInterface.TextboxSetText(id,single);
   end;
 
-  procedure TextboxSetText(r: Region; const s: String); overload;
+  procedure TextboxSetText(r: Region; s: String); overload;
   begin
     sgUserInterface.TextboxSetText(r,s);
   end;
 
-  procedure TextboxSetText(const id: String; single: Single); overload;
+  procedure TextboxSetText(tb: GUITextbox; s: String); overload;
   begin
-    sgUserInterface.TextboxSetText(id,single);
+    sgUserInterface.TextboxSetText(tb,s);
+  end;
+
+  procedure TextboxSetText(id: String; s: String); overload;
+  begin
+    sgUserInterface.TextboxSetText(id,s);
   end;
 
   procedure TextboxSetText(r: Region; i: Longint); overload;
@@ -10199,34 +11196,29 @@ implementation
     sgUserInterface.TextboxSetText(tb,i);
   end;
 
-  procedure TextboxSetText(const id: String; i: Longint); overload;
-  begin
-    sgUserInterface.TextboxSetText(id,i);
-  end;
-
   procedure TextboxSetText(tb: GUITextbox; single: Single); overload;
   begin
     sgUserInterface.TextboxSetText(tb,single);
   end;
 
-  procedure TextboxSetText(tb: GUITextbox; const s: String); overload;
+  procedure TextboxSetText(r: Region; single: Single); overload;
   begin
-    sgUserInterface.TextboxSetText(tb,s);
+    sgUserInterface.TextboxSetText(r,single);
   end;
 
-  procedure TextboxSetText(pnl: Panel; const id: String; i: Longint); overload;
+  procedure TextboxSetText(pnl: Panel; id: String; s: String); overload;
+  begin
+    sgUserInterface.TextboxSetText(pnl,id,s);
+  end;
+
+  procedure TextboxSetText(pnl: Panel; id: String; i: Longint); overload;
   begin
     sgUserInterface.TextboxSetText(pnl,id,i);
   end;
 
-  procedure TextboxSetText(pnl: Panel; const id: String; single: Single); overload;
+  procedure TextboxSetText(pnl: Panel; id: String; single: Single); overload;
   begin
     sgUserInterface.TextboxSetText(pnl,id,single);
-  end;
-
-  procedure TextboxSetText(pnl: Panel; const id: String; const s: String); overload;
-  begin
-    sgUserInterface.TextboxSetText(pnl,id,s);
   end;
 
   procedure ToggleActivatePanel(p: Panel); overload;
@@ -10234,7 +11226,7 @@ implementation
     sgUserInterface.ToggleActivatePanel(p);
   end;
 
-  procedure ToggleCheckboxState(const id: String); overload;
+  procedure ToggleCheckboxState(id: String); overload;
   begin
     sgUserInterface.ToggleCheckboxState(id);
   end;
@@ -10244,7 +11236,7 @@ implementation
     sgUserInterface.ToggleCheckboxState(c);
   end;
 
-  procedure ToggleCheckboxState(pnl: Panel; const id: String); overload;
+  procedure ToggleCheckboxState(pnl: Panel; id: String); overload;
   begin
     sgUserInterface.ToggleCheckboxState(pnl,id);
   end;
@@ -10264,7 +11256,7 @@ implementation
     sgUserInterface.UpdateInterface();
   end;
 
-  function ArduinoDeviceNamed(const name: String): ArduinoDevice; overload;
+  function ArduinoDeviceNamed(name: String): ArduinoDevice; overload;
   begin
     result := sgArduino.ArduinoDeviceNamed(name);
   end;
@@ -10299,22 +11291,22 @@ implementation
     sgArduino.ArduinoSendByte(dev,value);
   end;
 
-  procedure ArduinoSendString(dev: ArduinoDevice; const value: String); overload;
+  procedure ArduinoSendString(dev: ArduinoDevice; value: String); overload;
   begin
     sgArduino.ArduinoSendString(dev,value);
   end;
 
-  procedure ArduinoSendStringLine(dev: ArduinoDevice; const value: String); overload;
+  procedure ArduinoSendStringLine(dev: ArduinoDevice; value: String); overload;
   begin
     sgArduino.ArduinoSendStringLine(dev,value);
   end;
 
-  function CreateArduinoDevice(const port: String; baud: Longint): ArduinoDevice; overload;
+  function CreateArduinoDevice(port: String; baud: Longint): ArduinoDevice; overload;
   begin
     result := sgArduino.CreateArduinoDevice(port,baud);
   end;
 
-  function CreateArduinoDevice(const name: String; const port: String; baud: Longint): ArduinoDevice; overload;
+  function CreateArduinoDevice(name: String; port: String; baud: Longint): ArduinoDevice; overload;
   begin
     result := sgArduino.CreateArduinoDevice(name,port,baud);
   end;
@@ -10324,7 +11316,7 @@ implementation
     sgArduino.FreeArduinoDevice(dev);
   end;
 
-  function HasArduinoDevice(const name: String): Boolean; overload;
+  function HasArduinoDevice(name: String): Boolean; overload;
   begin
     result := sgArduino.HasArduinoDevice(name);
   end;
@@ -10334,134 +11326,9 @@ implementation
     sgArduino.ReleaseAllArduinoDevices();
   end;
 
-  procedure ReleaseArduinoDevice(const name: String); overload;
+  procedure ReleaseArduinoDevice(name: String); overload;
   begin
     sgArduino.ReleaseArduinoDevice(name);
-  end;
-
-  function OptionDefaults(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionDefaults();
-  end;
-
-  function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionDrawTo(dest);
-  end;
-
-  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionDrawTo(dest,opts);
-  end;
-
-  function OptionFlipX(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipX();
-  end;
-
-  function OptionFlipX(const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipX(opts);
-  end;
-
-  function OptionFlipXY(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipXY();
-  end;
-
-  function OptionFlipXY(const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipXY(opts);
-  end;
-
-  function OptionFlipY(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipY();
-  end;
-
-  function OptionFlipY(const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionFlipY(opts);
-  end;
-
-  function OptionLineWidth(width: Longint): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionLineWidth(width);
-  end;
-
-  function OptionLineWidth(width: Longint; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionLineWidth(width,opts);
-  end;
-
-  function OptionPartBmp(const part: Rectangle): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionPartBmp(part);
-  end;
-
-  function OptionPartBmp(const part: Rectangle; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionPartBmp(part,opts);
-  end;
-
-  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionPartBmp(x,y,w,h);
-  end;
-
-  function OptionPartBmp(x: Single; y: Single; w: Single; h: Single; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionPartBmp(x,y,w,h,opts);
-  end;
-
-  function OptionRotateBmp(angle: Single): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionRotateBmp(angle);
-  end;
-
-  function OptionRotateBmp(angle: Single; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionRotateBmp(angle,opts);
-  end;
-
-  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionRotateBmp(angle,anchorX,anchorY);
-  end;
-
-  function OptionRotateBmp(angle: Single; anchorX: Single; anchorY: Single; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionRotateBmp(angle,anchorX,anchorY,opts);
-  end;
-
-  function OptionScaleBmp(scaleX: Single; scaleY: Single): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionScaleBmp(scaleX,scaleY);
-  end;
-
-  function OptionScaleBmp(scaleX: Single; scaleY: Single; const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionScaleBmp(scaleX,scaleY,opts);
-  end;
-
-  function OptionToScreen(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionToScreen();
-  end;
-
-  function OptionToScreen(const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionToScreen(opts);
-  end;
-
-  function OptionToWorld(): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionToWorld();
-  end;
-
-  function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
-  begin
-    result := sgDrawingOptions.OptionToWorld(opts);
   end;
 
 end.

@@ -3,7 +3,7 @@ uses sgNetworking, fpjson, jsonparser;
 
 procedure Main();
 var
-	json: String;
+	json, token: String;
 	j: TJSONData;
 begin
 	// OpenGraphicsWindow('Testing HTTP', 800, 600);
@@ -13,17 +13,16 @@ begin
 
 	// WriteLn( HttpResponseBodyAsString( HttpGet('wiki.freepascal.org', 80, '/cardinal') ) );
 
-	json := HttpResponseBodyAsString( HttpGet('doubtfire.ict.swin.edu.au', 80, '/api/units.json'));
+	json := HttpResponseBodyAsString( HttpPost('localhost', 3000, '/api/auth', '{"username":"acain","password":"password","remember":true}'));
+	WriteLn(json);
+	j := GetJSON(json);
+	token := j.FindPath('auth_token').AsString;
+	WriteLn(token);
+	j.destroy();
+
+	json := HttpResponseBodyAsString( HttpGet('localhost', 3000, '/api/units.json?auth_token=' + token));
 
 	WriteLn(json);
-
-	j := GetJSON(json);
-
-	WriteLn('here');
-
-	WriteLn(j.FindPath('error').AsString);
-
-	j.destroy();
 
 	// WriteLn( HttpResponseBodyAsString( HttpGet('www.swinburne.edu.au', 80, '/fred') ) );
 end;
