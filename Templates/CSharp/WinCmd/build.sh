@@ -26,7 +26,7 @@ OUT_DIR="${APP_PATH}/bin"
 FULL_OUT_DIR="${FULL_APP_PATH}/bin"
 BIN_DIR="${APP_PATH}/bin"
 SRC_DIR="${APP_PATH}/src"
-LIB_DIR="${FULL_APP_PATH}/lib"
+LIB_DIR="../lib"
 LOG_FILE="${FULL_APP_PATH}/out.log"
 
 GMCS_FLAGS="-target:exe -r:${LIB_DIR}/SwinGame.dll" #" -r:Microsoft.VisualBasic"
@@ -246,7 +246,7 @@ doCompile()
     cd "${SRC_DIR}"
 
     "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${FULL_OUT_DIR}/${GAME_NAME}.exe" `find . | grep [.]cs$` >> ${LOG_FILE}
-    if [ $? != 0 ]; then echo "Error compiling."; cat ${LOG_FILE}; exit 1; fi
+    if [ $? != 0 ]; then echo "Error compiling."; cat "${LOG_FILE}"; exit 1; fi
 
     cd "${FULL_APP_PATH}"
 }
