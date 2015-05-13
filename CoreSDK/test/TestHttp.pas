@@ -24,6 +24,9 @@ begin
 
 	WriteLn(json);
 
+	json := HttpResponseBodyAsString( HttpGet('api.twitter.com', 80, '/1.1/statuses/user_timeline.json'));
+	WriteLn(json);
+
 	// WriteLn( HttpResponseBodyAsString( HttpGet('www.swinburne.edu.au', 80, '/fred') ) );
 end;
 

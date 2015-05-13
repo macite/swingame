@@ -23,7 +23,7 @@
 #include "SGSDL2Input.h"
 #include "SGSDL2Text.h"
 #include "SGSDL2Network.h"
-
+#include "SGSDL2Web.h"
 
 #include <stdlib.h>
 
@@ -74,6 +74,8 @@ void init_sgsdl2()
     
     sgsdk_setup_displays();
 //    printf("Network port C a-4: %p\n", _functions.network.network_port);
+    
+    sgsdk2_init_web();
 }
 
 void sgsdk2_setup_display(int idx, sg_display &disp)
@@ -182,6 +184,8 @@ void sgsdl2_finalise()
     
     sgsdl2_finalize_text();
 
+    sgsdl2_finalise_web();
+    
     SDL_Quit();
 }
 
@@ -207,6 +211,7 @@ sg_interface * sg_load(sg_input_callbacks callbacks)
     sgsdl2_load_text_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);
     sgsdl2_load_network_fns(&_functions);
+    sgsdl2_load_web_fns(&_functions);
     
 //    cout << "function size C: " << sizeof(sg_interface) << endl;
 //    printf("Network port C (post load): %p\n", _functions.network.network_port);

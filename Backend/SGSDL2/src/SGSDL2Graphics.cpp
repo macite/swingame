@@ -1366,7 +1366,8 @@ void sgsdl2_show_fullscreen(sg_drawing_surface *surface, int fullscreen)
     {
         case SGDS_Window:
         {
-            SDL_SetWindowFullscreen(window_be->window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+            printf("fullscreen: %d\n", fullscreen);
+            SDL_SetWindowFullscreen(window_be->window, fullscreen != 0 ? SDL_WINDOW_FULLSCREEN : 0);
             break;
         }
 

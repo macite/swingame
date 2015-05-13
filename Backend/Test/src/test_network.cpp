@@ -16,8 +16,18 @@ using namespace std;
 
 extern sg_interface * _sg_functions;
 
+void test_web()
+{
+    cout << "Testing SwinGame web functions" << endl;
+    
+    _sg_functions->web.http_get("http://swinburne.edu.au", 80);
+    _sg_functions->web.http_post("http://127.0.0.1:3000/api/auth", 3000, "{\"username\":\"acain\",\"password\":\"password\",\"remember\":true}");
+}
+
 void test_network()
 {
+    test_web();
+    
     cout << "Opening socket at localhost:49000" << endl;
 
     sg_network_connection svr, client_to_svr, svr_to_client;
