@@ -39,10 +39,10 @@ if [ "$OS" = "$WIN" ]; then
 fi
 
 #Locate the compiler...
-GMCS_BIN=`which csc 2>> /dev/null`
+GMCS_BIN=`which mcs 2>> /dev/null`
 if [ -z "$GMCS_BIN" ]; then
     #try locating mcs
-    GMCS_BIN=`which mcs 2>> /dev/null`
+    GMCS_BIN=`which csc 2>> /dev/null`
     if [ -z "$GMCS_BIN" ]; then
         #try locating gmcs
         GMCS_BIN=`which gmcs 2>> /dev/null`
@@ -157,10 +157,12 @@ if [ -n "${RELEASE}" ]; then
     CS_FLAGS="-optimize+"
     OUT_DIR="${OUT_DIR}/Release"
     FULL_OUT_DIR="${FULL_OUT_DIR}/Release"
+    REL_OUT_PATH="../bin/Release"
 else
     CS_FLAGS="-debug -define:DEBUG"
     OUT_DIR="${OUT_DIR}/Debug"
     FULL_OUT_DIR="${FULL_OUT_DIR}/Debug"
+    REL_OUT_PATH="../bin/Debug"
 fi
 
 if [ -f "${LOG_FILE}" ]
@@ -245,7 +247,7 @@ doCompile()
     
     cd "${SRC_DIR}"
 
-    "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${FULL_OUT_DIR}/${GAME_NAME}.exe" `find . | grep [.]cs$` >> ${LOG_FILE}
+    "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${REL_OUT_PATH}/${GAME_NAME}.exe" `find . | grep [.]cs$` >> ${LOG_FILE}
     if [ $? != 0 ]; then echo "Error compiling."; cat "${LOG_FILE}"; exit 1; fi
 
     cd "${FULL_APP_PATH}"

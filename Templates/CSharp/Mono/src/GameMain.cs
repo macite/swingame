@@ -1,6 +1,6 @@
 using System;
 using SwinGameSDK;
-using SwinGameSDK.SwinGame;
+using static SwinGameSDK.SwinGame; // requires mcs version 4+, 
 
 namespace MyGame
 {
