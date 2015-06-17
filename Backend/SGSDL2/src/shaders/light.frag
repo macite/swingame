@@ -33,14 +33,14 @@ struct MaterialData
 };
 
 
-uniform mat4 model;
-in		mat4 normalModel;
-uniform vec3 cameraPosition;
-
 uniform MaterialData material;
 uniform LightData lights[MAX_NUMBER_OF_LIGHTS];
 uniform int numberOfLights;
 uniform sampler2DArrayShadow shadowMap;
+
+uniform mat4 model;
+in		mat4 normalModel;
+uniform vec3 cameraPosition;
 
 
 in vec3 fragCoord;
@@ -127,18 +127,32 @@ void main() {
 		}
 		
 		// Determine if the fragment is in the light
-//		vec4 shadowCoord = lights[i].transform * model * vec4(fragCoord, 1.0);
 		vec4 shadowCoord = fragShadowCoords[i];
 		
 		// Divide by w coord if it is projected
 		if (lights[i].lightType != LIGHT_TYPE_DIRECTIONAL)
 		{
-			shadowCoord = vec4(shadowCoord.xyz / shadowCoord.w, shadowCoord.w);
+			shadowCoord = vec4(shadowCoord.x / shadowCoord.w,
+							   shadowCoord.y / shadowCoord.w,
+							   shadowCoord.z / shadowCoord.w,
+							   shadowCoord.w);
 		}
 		
-		float shadowMapValue = texture(shadowMap, vec4(shadowCoord.xy, lights[i].shadowMapLevel, shadowCoord.z));
+		shadowCoord = vec4(shadowCoord.x * 0.5 + 0.5,
+						   shadowCoord.y * 0.5 + 0.5,
+						   shadowCoord.z * 0.5 + 0.5,
+						   shadowCoord.w);
+		
+		vec4 col = vec4(1, 0, 0, 1);
+		if (shadowCoord.x < 0 || shadowCoord.y < 0
+			|| shadowCoord.x > 1 || shadowCoord.y > 1)
+		{
+			col = vec4(0, 1, 0, 1);
+		}
+		
+		float shadowBias = 0.005;
+		float shadowMapValue = texture(shadowMap, vec4(shadowCoord.xy, lights[i].shadowMapLevel, shadowCoord.z - shadowBias));
 		bool inLight = shadowMapValue > 0;
-//		bool inLight = true;
 		
 		// Ambient
 		vec3 ambient = lights[i].ambientCoefficient * lights[i].intensities * surfaceColor.rgb;
@@ -147,7 +161,6 @@ void main() {
 		if (inLight)
 		{
 			// The intensity of the light based on its direction (used only for spot lights)
-			// angle = acos(
 			float spotIntensity = calculateSpotIntensityModifier(lights[i], surfaceToLight);
 			
 			// Diffuse
@@ -172,10 +185,7 @@ void main() {
 			
 			finalColor += vec4(attenuation * (diffuse + specular), surfaceColor.a);
 		}
-//		finalColor = vec4(shadowMapValue, 0, 0, 1);
-//		finalColor = vec4(shadowCoord.z, 0, 0, 1);
 	}
-//	finalColor = vec4(0, 0, 0, 1);
 }
 
 

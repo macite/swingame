@@ -12,9 +12,17 @@
 #include "SGSDL2Graphics.h"
 #include <iostream>
 #include <fstream>
+#include <assert.h>
 #include "WavefrontConverterCPP.h"
 
 using namespace std;
+
+// For reference:
+//#define GL_NO_ERROR                       0
+//#define GL_INVALID_ENUM                   0x0500 = 1280
+//#define GL_INVALID_VALUE                  0x0501 = 1281
+//#define GL_INVALID_OPERATION              0x0502 = 1282
+//#define GL_OUT_OF_MEMORY                  0x0505 = 1283
 
 
 // Uniform names
@@ -22,10 +30,10 @@ using namespace std;
 #define SHAD_PROJ_MATRIX 			"proj"
 #define SHAD_VIEW_MATRIX 			"view"
 #define SHAD_MODEL_MATRIX 			"model"
-#define SHAD_NORM_MODEL_MATRIX 		"normModel"
+#define SHAD_NORM_MODEL_MATRIX 		"normalModel"
 #define SHAD_LIGHTS_ARRAY			"lights"
 #define SHAD_SHADOW_MAP				"shadowMap"
-#define SHAD_CAMERA_POS				"cameraPos"
+#define SHAD_CAMERA_POS				"cameraPosition"
 
 #define SHAD_MAT_DIFFUSE_COLOR		"material.diffuseColor"
 #define SHAD_MAT_SPECULAR_COLOR		"material.specularColor"
@@ -49,6 +57,11 @@ using namespace std;
 #define SHAD_SHADOW_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/shadowmap.vert"
 #define SHAD_SHADOW_FRAG_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/shadowmap.frag"
 
+// GL_TEXTURE0 is reserved for unused textures
+#define SHADOW_TEX GL_TEXTURE1
+#define SHADOW_TEX_VAL 1
+#define MATERIAL_TEX GL_TEXTURE2
+#define MATERIAL_TEX_VAL 2
 
 
 //
@@ -61,9 +74,9 @@ sgsdl2_scene* sgsdl2_make_scene()
 	sgsdl2_scene *scene = new sgsdl2_scene();
 	scene->active_camera = nullptr;
 	scene->elements = vector<sgsdl2_scene_element*>();
-	scene->shadow_map_width = 1024;
-	scene->shadow_map_height = 1024;
-	scene->shadow_map_array = sgsdl2_make_array_texture(48,
+	scene->shadow_map_width = 4096;
+	scene->shadow_map_height = 4096;
+	scene->shadow_map_array = sgsdl2_make_array_texture(16,
 														scene->shadow_map_width,
 														scene->shadow_map_height,
 														GL_DEPTH_COMPONENT16,
@@ -125,7 +138,7 @@ void sgsdl2_create_geometry_objects_from_file(const char *file_path, sgsdl2_geom
 
 void sgsdl2_add_geometry_from_file(sgsdl2_scene * const scene, const char *file_path)
 {
-	int count;
+	int count = 0;
 	sgsdl2_geometry **objects;
 	sgsdl2_create_geometry_objects_from_file(file_path, &objects, &count);
 	
@@ -344,20 +357,20 @@ Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element)
 	return trans;
 }
 
-Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect)
-{
-	Matrix4f trans;
-	if (camera->camera_type == sgsdl2_camera_type::PERSPECTIVE)
-	{
-//		trans = makeMatrix4fFromProjection(camera->field_of_view, aspect, camera->near, camera->far);
-		trans = makeMatrix4fFromFrustum(camera->left, camera->right, camera->top, camera->bottom, camera->near, camera->far);
-	}
-	else
-	{
-		trans = makeMatrix4fFromOrtho(camera->left, camera->right, camera->top, camera->bottom, camera->near, camera->far);
-	}
-	return trans;
-}
+//Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect)
+//{
+//	Matrix4f trans;
+//	if (camera->camera_type == sgsdl2_camera_type::PERSPECTIVE)
+//	{
+////		trans = makeMatrix4fFromProjection(camera->field_of_view, aspect, camera->near, camera->far);
+//		trans = makeMatrix4fFromFrustum(camera->left, camera->right, camera->top, camera->bottom, camera->near, camera->far);
+//	}
+//	else
+//	{
+//		trans = makeMatrix4fFromOrtho(camera->left, camera->right, camera->top, camera->bottom, camera->near, camera->far);
+//	}
+//	return trans;
+//}
 
 Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera)
 {
@@ -374,46 +387,58 @@ Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera)
 	return trans;
 }
 
-Matrix4f sgsdl2_calculate_shadow_transform(sgsdl2_light const * const light)
+Matrix4f sgsdl2_calculate_shadow_projection(sgsdl2_light const * const light, bool normalize)
 {
-	Matrix4f trans = makeMatrix4fFromLookAt(light->location, normalize3f(addVector3f(light->direction, light->location)), light->up);
-	
+	Matrix4f trans;
 	if (light->light_type == sgsdl2_light_type::DIRECTIONAL)
 	{
-		float f = light->radius / light->cutoff;
-		trans = multiplyMatrixByMatrix4f(makeMatrix4fFromOrtho(-light->width / 2 ,
-										 light->width / 2,
-										 light->height / 2,
-										 -light->height / 2,
-										 light->radius,
-										 light->cutoff), trans);
+		trans = makeMatrix4fFromOrtho(-light->width / 2 ,
+									  light->width / 2,
+									  light->height / 2,
+									  -light->height / 2,
+									  light->radius,
+									  light->cutoff);
 	}
 	else
 	{
-//		trans = multiplyMatrixByMatrix4f(makeMatrix4fFromSymFrustum(light->width/2, light->height/2, light->radius, light->cutoff), trans);
-//		trans = multiplyMatrixByMatrix4f(makeMatrix4fFromProjection(acosf(light->cos_outer_cone), 1, light->radius, light->cutoff), trans);
-		
 		float dist = light->radius * tanf(acosf(light->cos_outer_cone));
-		trans = multiplyMatrixByMatrix4f(makeMatrix4fFromFrustum(-dist, dist, dist, -dist, light->radius, light->cutoff), trans);
+		trans = makeMatrix4fFromFrustum(-dist, dist, dist, -dist, light->radius, light->cutoff);
 	}
 	
-	// Matrix will transform depth coords into [0,1]
-	trans = multiplyMatrixByMatrix4f({{
-		0.5f, 0.0f, 0.0f, 0.0f,
-		0.0f, 0.5f, 0.0f, 0.0f,
-		0.0f, 0.0f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.5f, 1.0f
-	}}, trans);
+	// Matrix will transform depth coords from [-1,1] to [0, 1]
+	if (normalize)
+	{
+//		trans = multiplyMatrixByMatrix4f({{
+//			0.5f, 0.0f, 0.0f, 0.0f,
+//			0.0f, 0.5f, 0.0f, 0.0f,
+//			0.0f, 0.0f, 0.5f, 0.0f,
+//			0.5f, 0.5f, 0.5f, 1.0f
+//		}}, trans);
+	}
+	
+//	trans = multiplyMatrixByMatrix4f({{
+//		0.5f, 0.0f, 0.0f, 0.0f,
+//		0.0f, 0.5f, 0.0f, 0.0f,
+//		0.0f, 0.0f, 0.5f, 0.0f,
+//		0.5f, 0.5f, 0.5f, 1.0f
+//	}}, trans);
 	
 	return trans;
 }
 
-//void sgsdl2_recalculate_camera_matrices(sgsdl2_camera * const camera)
-//{
-//	float window_aspect = camera->root->surface->width / camera->root->surface->height;
-//	camera->view_trans = sgsdl2_calculate_view_transform(camera);
-//	camera->proj_trans = sgsdl2_calculate_proj_transform(camera, window_aspect);
-//}
+Matrix4f sgsdl2_calculate_shadow_transform(sgsdl2_light * const light, bool normalize)
+{
+	Matrix4f trans = sgsdl2_calculate_view_transform(light);
+	trans = multiplyMatrixByMatrix4f(sgsdl2_calculate_shadow_projection(light, normalize), trans);
+	return trans;
+}
+
+Vector3f sgsdl2_calculate_world_location(sgsdl2_scene_element * const element)
+{
+	Vector4f loc = multiplyVectorByMatrix4f({{0, 0, 0, 1}}, sgsdl2_calculate_model_transform(element));
+	Vector3f loc3f = {{loc.x, loc.y, loc.z}};
+	return loc3f;
+}
 
 
 
@@ -431,8 +456,6 @@ sgsdl2_camera* sgsdl2_make_camera(Vector3f const location, Vector3f const direct
 {
 	// TODO this should call the next function down
 	sgsdl2_camera *camera = new sgsdl2_camera();
-//	camera->field_of_view = (float) M_PI_4;
-//	camera->aspect_ratio = 1;
 	camera->near = 1;
 	camera->far = 100;
 	camera->left = -1;
@@ -518,7 +541,7 @@ void sgsdl2_attach_vertices(sgsdl2_geometry *geometry, GLfloat const * const ver
 void sgsdl2_attach_normals(sgsdl2_geometry *geometry, GLfloat const * const normals, GLuint const count, GLint const dimensions)
 {
 	// Delete the previous buffer if needed
-	if (geometry->vertex_buffer != 0)
+	if (geometry->normal_buffer != 0)
 	{
 		glDeleteBuffers(1, &geometry->normal_buffer);
 	}
@@ -633,7 +656,7 @@ void sgsdl2_delete_geometry(sgsdl2_geometry *geometry)
 sgsdl2_light* sgsdl2_make_light()
 {
 	sgsdl2_light *light = new sgsdl2_light();
-	light->light_type = sgsdl2_light_type::POINT;
+	light->light_type = sgsdl2_light_type::SPOT;
 	light->cos_inner_cone = cosf((float)(10.0 * M_PI / 180.0));
 	light->cos_outer_cone = cosf((float)(M_PI_4));
 	light->color = {{1, 1, 1}};
@@ -644,6 +667,7 @@ sgsdl2_light* sgsdl2_make_light()
 	light->type = sgsdl2_scene_element_type::LIGHT;
 	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
 	light->active = true;
+	light->shadow_map_level = -1;
 	return light;
 }
 
@@ -848,127 +872,6 @@ sgsdl2_array_texture sgsdl2_make_array_texture(int num_of_levels, int width, int
 //
 #pragma mark Rendering
 
-//void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform)
-//{
-//	// Check if the geometry can be rendered
-//	if (!sgsdl2_can_geometry_be_rendered(geometry))
-//	{
-//		cout << "geometry does not have the required data to be rendered" << endl;
-//		return;
-//	}
-//	
-//	// Select the shader
-//	GLuint shader_program = sgsdl2_select_shader(geometry);
-//	glUseProgram(shader_program);
-//	
-//	// Pass it the matricies
-//	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_MODEL_MATRIX), 1, false, transform);
-////	glUniformMatrix4fv(glGetUniformLocation(shader_program, "view"), 1, false, view);
-////	glUniformMatrix4fv(glGetUniformLocation(shader_program, "proj"), 1, false, proj);
-//	sgsdl2_check_opengl_error("quick_render_geometry.uniforms: ");
-//	
-//	// Start the rendering process
-//	glBindVertexArray(geometry.vao);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry.indices_buffer);
-//	glDrawElements(GL_TRIANGLES, geometry.num_of_indices, GL_FLOAT, 0);
-//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-//	glBindVertexArray(0);
-//	sgsdl2_check_opengl_error("quick_render_geometry.render: ");
-//	
-//	glUseProgram(0);
-//}
-
-void sgsdl2_solid_render_geometry(sgsdl2_geometry const * const geometry, sg_color const color, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform)
-{
-	// Check if the geometry can be rendered
-	if (!sgsdl2_can_geometry_be_rendered(geometry))
-	{
-		cout << "geometry does not have the required data to be rendered" << endl;
-		return;
-	}
-	
-	// Select the shader
-	glUseProgram(shader_program);
-	
-	// Pass it the matricies
-//	cout << "-- " << glGetUniformLocation(shader_program, SHAD_MODEL_MATRIX) << "," << glGetUniformLocation(shader_program, SHAD_VIEW_MATRIX) << "," << glGetUniformLocation(shader_program, SHAD_PROJ_MATRIX) << endl;
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_MODEL_MATRIX), 1, false, model_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_VIEW_MATRIX), 1, false, view_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_PROJ_MATRIX), 1, false, proj_transform);
-	glUniform3f(glGetUniformLocation(shader_program, SHAD_SOLID_COLOR), color.r, color.g, color.b);
-	sgsdl2_check_opengl_error("solid_render_geometry.uniforms: ");
-	
-	// Start the rendering process
-	glBindVertexArray(geometry->vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
-	glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	sgsdl2_check_opengl_error("solid_render_geometry.render: ");
-	
-	glUseProgram(0);
-}
-
-void sgsdl2_render_geometry(sgsdl2_geometry const * const geometry, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform)
-{
-	// Check if the geometry can be rendered
-	if (!sgsdl2_can_geometry_be_rendered(geometry))
-	{
-		cout << "geometry does not have the required data to be rendered" << endl;
-		return;
-	}
-	
-	// Select the shader
-	glUseProgram(shader_program);
-	
-	// Pass it the matricies
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_MODEL_MATRIX), 1, false, model_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_VIEW_MATRIX), 1, false, view_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_PROJ_MATRIX), 1, false, proj_transform);
-	sgsdl2_check_opengl_error("render_geometry.uniforms: ");
-	
-	// Start the rendering process
-	glBindVertexArray(geometry->vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
-	glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	sgsdl2_check_opengl_error("render_geometry.render: ");
-	
-	glUseProgram(0);
-}
-
-void sgsdl2_texture_render_geometry(sgsdl2_geometry const * const geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform)
-{
-	// Check if the geometry can be rendered
-	if (!sgsdl2_can_geometry_be_rendered(geometry))
-	{
-		cout << "geometry does not have the required data to be rendered" << endl;
-		return;
-	}
-	
-	// Select the shader
-	glUseProgram(shader_program);
-	
-	// Pass it the matricies
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_MODEL_MATRIX), 1, false, model_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_VIEW_MATRIX), 1, false, view_transform);
-	glUniformMatrix4fv(glGetUniformLocation(shader_program, SHAD_PROJ_MATRIX), 1, false, proj_transform);
-	sgsdl2_check_opengl_error("texture_render_geometry.uniforms: ");
-	
-	// Start the rendering process
-	glBindVertexArray(geometry->vao);
-	glBindTexture(GL_TEXTURE_2D, texture.handle);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
-	glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-	sgsdl2_check_opengl_error("texture_render_geometry.render: ");
-	
-	glUseProgram(0);
-}
-
 void sgsdl2_render_scene(sgsdl2_scene *scene)
 {
 	if (scene->active_camera == nullptr)
@@ -980,14 +883,21 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 	// Recalculates shadowmaps if needed
 	sgsdl2_prepare_lighting(scene);
 	
+	
+	
 	// Perform the main render pass
 	sgsdl2_render_profile profile;
 	profile.use_lights = true;
 	profile.use_material = true;
 	profile.shader_override = 0;
-	profile.camera = scene->active_camera;
-//	profile.aspect_ratio = scene->surface->width / scene->surface->height;
+	profile.override_camera = false;
+	
 	sgsdl2_perform_render_pass(scene, profile);
+}
+
+void sgsdl2_render_shadowmap(sgsdl2_scene *scene, sgsdl2_light *light)
+{
+	
 }
 
 void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
@@ -1006,14 +916,8 @@ void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
 	{
 		if ((*it)->shadow_type != sgsdl2_shadowing_type::NONE)
 		{
-			// Check if the light needs to be reallocated
-//			if ((*it)->shadow_map_needs_reallocation || !glIsTexture((*it)->shadow_map))
-//			{
-//				sgsdl2_generate_shadow_map_texture(*it);
-//			}
-			
 			// Light does not have an allocated shadow map level
-			if ((*it)->shadow_map_level == 0)
+			if ((*it)->shadow_map_level == -1)
 			{
 				sgsdl2_allocate_shadow_map_location(*it);
 			}
@@ -1038,23 +942,23 @@ void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
 void sgsdl2_recalculate_light(sgsdl2_light *light)
 {
 	// Assumes there is a valid texture
-//	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, light->shadow_map, 0);
 	glFramebufferTextureLayer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, light->root->shadow_map_array.handle, 0, light->shadow_map_level);
 	sgsdl2_check_opengl_error();
 	
 	GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	if (status == GL_FRAMEBUFFER_COMPLETE)
 	{
-		sgsdl2_camera *light_camera = sgsdl2_generate_camera_at(light);
-		
 		// Render all the geometry again
 		sgsdl2_render_profile profile;
 		profile.use_material = false;
 		profile.use_lights = false;
 		profile.shader_override = light->root->default_shadow_shader;
-		profile.camera = light_camera;
-		// TODO profile.aspect_ratio should not be used.
-		profile.aspect_ratio = light->root->shadow_map_width / light->root->shadow_map_height;
+		profile.override_camera = true;
+		profile.view_transform = sgsdl2_calculate_view_transform(light);
+		profile.proj_transform = sgsdl2_calculate_shadow_projection(light);
+		profile.camera_location = light->location;
+		
+//		glClearDepth(0);
 		glClear(GL_DEPTH_BUFFER_BIT);
 		sgsdl2_perform_render_pass(light->root, profile);
 	}
@@ -1081,46 +985,87 @@ void sgsdl2_allocate_shadow_map_location(sgsdl2_light *light)
 void sgsdl2_deallocate_shadow_map_location(sgsdl2_light *light)
 {
 	light->root->shadow_map_array.occupied_levels[light->shadow_map_level] = false;
-	light->shadow_map_level = 0;
-}
-
-void sgsdl2_generate_shadow_map_texture(sgsdl2_light *light)
-{
-	// Delete the old texture if needed
-	if (glIsTexture(light->shadow_map))
-	{
-		glDeleteTextures(1, &light->shadow_map);
-	}
-	
-	glGenTextures(1, &light->shadow_map);
-	glBindTexture(GL_TEXTURE_2D, light->shadow_map);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT16, light->shadow_map_width, light->shadow_map_height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
-	// Tell the light that it's texture is blank
-	light->shadow_map_needs_reallocation = false;
-	light->shadow_map_needs_rerender = true;
+	light->shadow_map_level = -1;
 }
 
 void sgsdl2_perform_render_pass(sgsdl2_scene * const scene, sgsdl2_render_profile profile)
 {
+	// Start calculating global data
+	sgsdl2_render_data data;
+	
+	// Camera data
+	if (profile.override_camera)
+	{
+		memcpy(data.view, profile.view_transform.m, sizeof(float) * 16);
+		memcpy(data.proj, profile.proj_transform.m, sizeof(float) * 16);
+		memcpy(data.camera_pos, profile.camera_location.v, sizeof(float) * 3);
+	}
+	else
+	{
+		Matrix4f view = sgsdl2_calculate_view_transform(scene->active_camera);
+		memcpy(data.view, view.m, sizeof(float) * 16);
+		Matrix4f proj = sgsdl2_calculate_proj_transform(scene->active_camera);
+		memcpy(data.proj, proj.m, sizeof(float) * 16);
+		Vector3f pos = sgsdl2_calculate_world_location(scene->active_camera);
+		memcpy(data.camera_pos, pos.v, sizeof(float) * 3);
+	}
+	
+	// Lighting data
+	if (profile.use_lights)
+	{
+		data.shadow_map = scene->shadow_map_array.handle;
+		
+		int count = 0;
+		for (unsigned int i = 0; i < scene->lights.size(); i++)
+		{
+			if (scene->lights[i]->active)
+			{
+				sgsdl2_light_data light;
+				
+				Vector3f light_pos = sgsdl2_calculate_world_location(scene->lights[i]);
+				memcpy(light.position, light_pos.v, sizeof(float) * 3);
+				
+				Matrix4f light_model_trans = sgsdl2_calculate_model_transform(scene->lights[i]);
+				// With the current layout, the fowards direction is positive z
+				Vector4f light_dir = multiplyVectorByMatrix4f({{0, 0, 1, 0}}, light_model_trans);
+				memcpy(light.direction, light_dir.v, sizeof(float) * 3);
+				
+				Matrix4f shadow_trans = sgsdl2_calculate_shadow_transform(scene->lights[i], true);
+				memcpy(light.shadow_transform, shadow_trans.m, sizeof(float) * 16);
+				
+				light.intensities[0] = scene->lights[i]->color.x * scene->lights[i]->intensity;
+				light.intensities[1] = scene->lights[i]->color.y * scene->lights[i]->intensity;
+				light.intensities[2] = scene->lights[i]->color.z * scene->lights[i]->intensity;
+				
+				light.attenuation = scene->lights[i]->attenuation;
+				light.ambient_coefficient = scene->lights[i]->ambient_coefficient;
+				light.cos_outer_cone = scene->lights[i]->cos_outer_cone;
+				light.cos_inner_cone = scene->lights[i]->cos_inner_cone;
+				light.type = (int) scene->lights[i]->light_type;
+				light.shadow_map_level = scene->lights[i]->shadow_map_level;
+				light.casts_shadows = (scene->lights[i]->shadow_type == sgsdl2_shadowing_type::NONE)? false : true;
+				
+				data.lights[count] = light;
+				count++;
+			}
+		}
+		data.num_of_lights = count;
+	}
+	else
+	{
+		data.num_of_lights = 0;
+	}
+	
 	// Iterate through the scene
 	for (vector<sgsdl2_scene_element*>::iterator it = scene->elements.begin();
 		 it != scene->elements.end();
 		 ++it)
 	{
-		sgsdl2_render_element(*it, profile);
+		sgsdl2_render_element(*it, profile, data);
 	}
 }
 
-void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile profile)
+void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile profile, sgsdl2_render_data data)
 {
 	if (element->type == sgsdl2_scene_element_type::GEOMETRY)
 	{
@@ -1134,29 +1079,34 @@ void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile 
 			return;
 		}
 		
+		// Finish filling in the data (have to clone it so we don't modifiy data when we enter recursion at the end of this function)
+		sgsdl2_render_data current_data = data;
+		
+		Matrix4f model = sgsdl2_calculate_model_transform(geometry);
+		memcpy(current_data.model, model.m, sizeof(float) * 16);
+		
+		Matrix4f view, proj;
+		memcpy(view.m, current_data.view, sizeof(float) * 16);
+		memcpy(proj.m, current_data.proj, sizeof(float) * 16);
+		Matrix4f mvc = multiplyMatrixByMatrix4f(proj, multiplyMatrixByMatrix4f(view, model));
+		memcpy(current_data.mvc, model.m, sizeof(float) * 16);
+		
+		current_data.material = *geometry->material;
+		
 		// Determine the right shader if not specified
-		GLuint shader;
-		if (profile.shader_override > 0)
-		{
-			shader = profile.shader_override;
-		}
-		else
-		{
-			shader = sgsdl2_select_shader(geometry);
-		}
+		GLuint shader = sgsdl2_select_shader(geometry, profile);
 		glUseProgram(shader);
-	
 		
 		if (profile.use_material)
 		{
 			// Assigns the material data and model matrices
-			sgsdl2_pass_material_data_to_shader(shader, geometry);
+			sgsdl2_pass_material_data_to_shader(shader, current_data);
 		}
 		
 		if (profile.use_lights)
 		{
 			// Assigns light uniforms and shadow map array
-			sgsdl2_pass_light_data_to_shader(shader, geometry->root->lights);
+			sgsdl2_pass_light_data_to_shader(shader, current_data);
 		}
 		else
 		{
@@ -1164,7 +1114,7 @@ void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile 
 			glUniform1i(glGetUniformLocation(shader, "numberOfLights"), 0);
 		}
 		
-		sgsdl2_pass_scene_data_to_shader(shader, profile.camera, geometry);
+		sgsdl2_pass_scene_data_to_shader(shader, current_data);
 		sgsdl2_perform_render(geometry);
 		
 		glUseProgram(0);
@@ -1175,108 +1125,97 @@ void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile 
 		 it != element->children.end();
 		 ++it)
 	{
-		sgsdl2_render_element(*it, profile);
+		sgsdl2_render_element(*it, profile, data);
 	}
 }
 
-void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_camera * const camera, sgsdl2_geometry * const geometry)
+void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_render_data data)
 {
 	// View
-	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_VIEW_MATRIX), 1, false, sgsdl2_calculate_view_transform(camera).m);
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_VIEW_MATRIX), 1, false, data.view);
 	
 	// Proj
-	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_PROJ_MATRIX), 1, false, sgsdl2_calculate_proj_transform(camera).m);
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_PROJ_MATRIX), 1, false, data.proj);
 	
 	// Model
-	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_MODEL_MATRIX), 1, false, sgsdl2_calculate_model_transform(geometry).m);
+	glUniformMatrix4fv(glGetUniformLocation(shader, SHAD_MODEL_MATRIX), 1, false, data.model);
+	
+	// MVC
+	// TODO
 	
 	// Normal model
 	// TODO
 	
 	// Camera location
-	glUniform3f(glGetUniformLocation(shader, SHAD_CAMERA_POS), camera->location.x, camera->location.y, camera->location.z);
+	glUniform3fv(glGetUniformLocation(shader, SHAD_CAMERA_POS), 1, data.camera_pos);
 	
 	sgsdl2_check_opengl_error("pass_scene_data_to_shaders: ");
 }
 
-void sgsdl2_pass_light_data_to_shader(GLuint shader, vector<sgsdl2_light*> lights)
+void sgsdl2_pass_light_data_to_shader(GLuint shader, sgsdl2_render_data data)
 {
-	int num_of_lights = 0;
-	for (vector<sgsdl2_light*>::iterator it = lights.begin();
-		 it != lights.end();
-		 ++it)
+	for (int i = 0; i < data.num_of_lights; i++)
 	{
-		if ((*it)->active)
-		{
-			sgsdl2_light *light = *it;
-			string uniform_name = SHAD_LIGHTS_ARRAY;
-			uniform_name += "[" + to_string(num_of_lights) + "]";
-			
-			int pos_loc = glGetUniformLocation(shader, (uniform_name + ".position").c_str());
-			int dir_loc = glGetUniformLocation(shader, (uniform_name + ".direction").c_str());
-			int trans_loc = glGetUniformLocation(shader, (uniform_name + ".transform").c_str());
-			int intesity_loc = glGetUniformLocation(shader, (uniform_name + ".intensities").c_str());
-			int atten_loc = glGetUniformLocation(shader, (uniform_name + ".attenuation").c_str());
-			int amb_loc = glGetUniformLocation(shader, (uniform_name + ".ambientCoefficient").c_str());
-			int inner_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosInnerCone").c_str());
-			int outer_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosOuterCone").c_str());
-			int type_loc = glGetUniformLocation(shader, (uniform_name + ".lightType").c_str());
-			int casts_loc = glGetUniformLocation(shader, (uniform_name + ".castsShadows").c_str());
-			int map_loc = glGetUniformLocation(shader, (uniform_name + ".shadowMapLevel").c_str());
-			
-			// Location needs to be transformed
-			glUniform3f(pos_loc, light->location.x, light->location.y, light->location.z);
-			glUniform3f(dir_loc, light->direction.x, light->direction.y, light->direction.z);
-			glUniform3f(intesity_loc, light->color.x * light->intensity, light->color.y * light->intensity, light->color.z * light->intensity);
-			glUniform1f(atten_loc, light->attenuation);
-			glUniform1f(amb_loc, light->ambient_coefficient);
-			glUniform1f(inner_angle_loc, light->cos_inner_cone);
-			glUniform1f(outer_angle_loc, light->cos_outer_cone);
-			glUniform1i(type_loc, int(light->light_type));
-			glUniform1i(casts_loc, (light->shadow_type == sgsdl2_shadowing_type::NONE)? 0 : 1);
-
-			// Shadow map (texture 0 is reserved for the material)
-//			glActiveTexture(GLenum (GL_TEXTURE1 + num_of_lights));
-//			glBindTexture(GL_TEXTURE_2D, light->shadow_map);
-//			glUniform1i(map_loc, num_of_lights + 1);
-			glUniform1i(map_loc, light->shadow_map_level);
-			
-			// Light transform
-			glUniformMatrix4fv(trans_loc, 1, false, sgsdl2_calculate_shadow_transform(light).m);
-			
-			num_of_lights++;
-		}
+		sgsdl2_light_data light = data.lights[i];
+		
+		string uniform_name = SHAD_LIGHTS_ARRAY;
+		uniform_name += "[" + to_string(i) + "]";
+		
+		int pos_loc = glGetUniformLocation(shader, (uniform_name + ".position").c_str());
+		int dir_loc = glGetUniformLocation(shader, (uniform_name + ".direction").c_str());
+		int trans_loc = glGetUniformLocation(shader, (uniform_name + ".transform").c_str());
+		int intesity_loc = glGetUniformLocation(shader, (uniform_name + ".intensities").c_str());
+		int atten_loc = glGetUniformLocation(shader, (uniform_name + ".attenuation").c_str());
+		int amb_loc = glGetUniformLocation(shader, (uniform_name + ".ambientCoefficient").c_str());
+		int inner_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosInnerCone").c_str());
+		int outer_angle_loc = glGetUniformLocation(shader, (uniform_name + ".cosOuterCone").c_str());
+		int type_loc = glGetUniformLocation(shader, (uniform_name + ".lightType").c_str());
+		int casts_loc = glGetUniformLocation(shader, (uniform_name + ".castsShadows").c_str());
+		int map_loc = glGetUniformLocation(shader, (uniform_name + ".shadowMapLevel").c_str());
+		
+		// Location needs to be transformed
+		glUniform3fv(pos_loc, 1, light.position);
+		glUniform3fv(dir_loc, 1, light.direction);
+		glUniform3fv(intesity_loc, 1, light.intensities);
+		glUniform1f(atten_loc, light.attenuation);
+		glUniform1f(amb_loc, light.ambient_coefficient);
+		glUniform1f(inner_angle_loc, light.cos_inner_cone);
+		glUniform1f(outer_angle_loc, light.cos_outer_cone);
+		glUniform1i(type_loc, light.type);
+		glUniform1i(casts_loc, light.casts_shadows);
+		glUniform1i(map_loc, light.shadow_map_level);
+		glUniformMatrix4fv(trans_loc, 1, false, light.shadow_transform);
 	}
-	glUniform1i(glGetUniformLocation(shader, "numberOfLights"), num_of_lights);
+	glUniform1i(glGetUniformLocation(shader, "numberOfLights"), data.num_of_lights);
 	
 	// Shadow map
-	if (num_of_lights > 0)
+	if (data.num_of_lights > 0)
 	{
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D_ARRAY, lights[0]->root->shadow_map_array.handle);
+		glActiveTexture(SHADOW_TEX);
+		glBindTexture(GL_TEXTURE_2D_ARRAY, data.shadow_map);
 		int shad_map_loc = glGetUniformLocation(shader, SHAD_SHADOW_MAP);
-		glUniform1i(shad_map_loc, 1);
+		glUniform1i(shad_map_loc, SHADOW_TEX_VAL);
 	}
 	
 	sgsdl2_check_opengl_error("pass_light_data_to_shaders: ");
 }
 
-void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const geometry)
+void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_render_data data)
 {
 	// Pass material data
-	sgsdl2_material *mat = geometry->material;
-	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_DIFFUSE_COLOR), mat->diffuse_color.r, mat->diffuse_color.g, mat->diffuse_color.b);
-	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_COLOR), mat->specular_color.r, mat->specular_color.g, mat->specular_color.b);
-	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_EXPONENT), mat->specular_exponent);
-	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_INTENSITY), mat->specular_intensity);
+	sgsdl2_material mat = data.material;
+	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_DIFFUSE_COLOR), mat.diffuse_color.r, mat.diffuse_color.g, mat.diffuse_color.b);
+	glUniform3f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_COLOR), mat.specular_color.r, mat.specular_color.g, mat.specular_color.b);
+	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_EXPONENT), mat.specular_exponent);
+	glUniform1f(glGetUniformLocation(shader, SHAD_MAT_SPECULAR_INTENSITY), mat.specular_intensity);
 	
 	// Texture
-	if (glIsTexture(mat->texture))
+	if (glIsTexture(mat.texture))
 	{
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, geometry->material->texture);
+		glActiveTexture(MATERIAL_TEX);
+		glBindTexture(GL_TEXTURE_2D, mat.texture);
 		int matLoc = glGetUniformLocation(shader, SHAD_MAT_TEXTURE);
-		glUniform1i(matLoc, 0);
+		glUniform1i(matLoc, MATERIAL_TEX_VAL);
 		glUniform1i(glGetUniformLocation(shader, SHAD_MAT_USE_TEXTURE), 1);
 	}
 	else
@@ -1285,66 +1224,37 @@ void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const 
 	}
 	
 	sgsdl2_check_opengl_error("pass_material_data_to_shaders: ");
-		
 }
 
 void sgsdl2_perform_render(sgsdl2_geometry const * const geometry)
 {
+//	assert(geometry->vao && geometry->num_of_indices >= 0 && geometry->num_of_indices % 3 == 0);
+	
 	// Start the rendering process (same no matter what other data is present)
 	glBindVertexArray(geometry->vao);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, geometry->indices_buffer);
+	
+	int shader = 0;
+	glGetIntegerv(GL_CURRENT_PROGRAM, &shader);
+	sgsdl2_validate_program((unsigned int) shader);
+	
 	glDrawElements(GL_TRIANGLES, geometry->num_of_indices, GL_UNSIGNED_SHORT, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	sgsdl2_check_opengl_error("perform_render: ");
 }
 
-GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry)
+GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry, sgsdl2_render_profile profile)
 {
-//	// Check for color override
-//	if (geometry->render_solid_color)
-//	{
-//		return geometry->root->default_solid_shader;
-//	}
-//	
-//	// Determine the shader
-//	switch (geometry->material->shader)
-//	{
-//		case SHADER_DEFAULT_SOLID:
-//			return geometry->root->default_solid_shader;
-//			break;
-//		case SHADER_DEFAULT_VERTEX_COLOR:
-//			return geometry->root->default_vertex_color_shader;
-//			break;
-//		case SHADER_DEFAULT_TEXTURE:
-//			return geometry->root->default_texture_shader;
-//			break;
-//		case SHADER_UNSELECTED:
-//		{
-//			// Tex coords and texture are present
-//			if (geometry->texcoords_buffer > 0 && glIsTexture(geometry->material->texture))
-//			{
-//				return geometry->root->default_texture_shader;
-//			}
-//			// Vertex colors are present
-//			else if (geometry->color_buffer > 0)
-//			{
-//				return geometry->root->default_vertex_color_shader;
-//			}
-//			// Fallback
-//			else
-//			{
-//				return geometry->root->default_solid_shader;
-//			}
-//		}
-//			break;
-//			
-//			// Geometry knows what shader it wants to use
-//		default:
-//			return (GLuint) geometry->material->shader;
-//			break;
-//	}
-	return (GLuint) geometry->material->shader;
+	if (profile.shader_override > 0)
+	{
+		return profile.shader_override;
+	}
+	if (geometry->material->shader > 0)
+	{
+		return (GLuint) geometry->material->shader;
+	}
+	return geometry->root->default_shader;
 }
 
 
@@ -1382,9 +1292,9 @@ bool sgsdl2_make_shader(string const source_path, GLenum const shader_type, GLui
 		GLint log_size = 0;
 		glGetShaderiv(handle, GL_INFO_LOG_LENGTH, &log_size);
 		
-		char buffer[log_size];
-		glGetShaderInfoLog(handle, log_size, NULL, buffer);
-		std::cout << "Shader Compile Error:" << endl << buffer << endl;
+		char infoLog[log_size];
+		glGetShaderInfoLog(handle, log_size, NULL, infoLog);
+		std::cout << "Shader compile error:" << endl << infoLog << endl;
 		
 		// Don't need the shader anymore
 		glDeleteShader(handle);
@@ -1408,6 +1318,7 @@ bool sgsdl2_make_shader_program(GLuint const * const shaders, int const count, G
 	glBindAttribLocation(program, SHAD_LOC_NORMALS, SHAD_NORMALS);
 	glBindAttribLocation(program, SHAD_LOC_COLORS, SHAD_COLORS);
 	glBindAttribLocation(program, SHAD_LOC_TEX_COORDS, SHAD_TEX_COORDS);
+	glBindFragDataLocation(program, 0, "finalColor");
 	
 	glLinkProgram(program);
 	GLint isLinked = 0;
@@ -1419,6 +1330,7 @@ bool sgsdl2_make_shader_program(GLuint const * const shaders, int const count, G
 		
 		char infoLog[maxLength];
 		glGetProgramInfoLog(program, maxLength, NULL, &infoLog[0]);
+		std::cout << "Shader program link error:" << endl << infoLog << endl;
 		
 		//We don't need the program anymore.
 		glDeleteProgram(program);
@@ -1438,6 +1350,24 @@ bool sgsdl2_make_shader_program(GLuint const * const shaders, int const count, G
 	}
 	
 	sgsdl2_check_opengl_error("make_shader_program: ");
+	return true;
+}
+
+bool sgsdl2_validate_program(GLuint program)
+{
+	glValidateProgram(program);
+	GLint validateStatus = 0;
+	glGetProgramiv(program, GL_VALIDATE_STATUS, &validateStatus);
+	if (validateStatus == GL_FALSE)
+	{
+		GLint maxLength = 0;
+		glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		char infoLog[maxLength];
+		glGetProgramInfoLog(program, maxLength, NULL, &infoLog[0]);
+		std::cout << "Shader program validate error:" << endl << infoLog << endl;
+		return false;
+	}
 	return true;
 }
 

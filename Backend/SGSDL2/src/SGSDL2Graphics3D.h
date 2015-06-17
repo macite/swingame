@@ -127,11 +127,17 @@ Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element);
 __attribute__((deprecated))
 Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect);
 
-// Calculates a proj transform for a camera using the scenes viewport for aspect calculations
+// Calculates a proj transform for a camera
 Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera);
 
+// Calculates just the projection part of the shadow transform
+Matrix4f sgsdl2_calculate_shadow_projection(sgsdl2_light const * const light, bool normalize=false);
+
 // Returns the shadow transform matrix
-Matrix4f sgsdl2_calculate_shadow_transform(sgsdl2_light const * const light);
+Matrix4f sgsdl2_calculate_shadow_transform(sgsdl2_light * const light, bool normalize=false);
+
+// Returns the location of an element in world space
+Vector3f sgsdl2_calculate_world_location(sgsdl2_scene_element * const element);
 
 
 // Recalculates the matrices for a camera
@@ -302,25 +308,11 @@ sgsdl2_array_texture sgsdl2_make_array_texture(int num_of_levels, int width, int
 //
 #pragma mark Rendering
 
-// Renders a geometry using the default shaders.
-// transform is a 4x4 matrix representing the geometry location, direction and up vectors.
-// SHOULD NOT BE USED
-//void sgsdl2_quick_render_geometry(sgsdl2_geometry const geometry, float const * const transform);
-
-// Renders a single piece of geometry in a solid color
-__attribute__((deprecated))
-void sgsdl2_solid_render_geometry(sgsdl2_geometry const * const geometry, sg_color const color, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
-
-__attribute__((deprecated))
-// Renders a single piece of geometry using vertex colors
-void sgsdl2_render_geometry(sgsdl2_geometry const * const geometry, GLuint const shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
-
-__attribute__((deprecated))
-// Renders a single piece of geometry with a texture
-void sgsdl2_texture_render_geometry(sgsdl2_geometry const * const geometry, sgsdl2_texture texture, GLuint shader_program, float const * const model_transform, float const * const view_transform, float const * const proj_transform);
-
 // Performs a full render of the scene
 void sgsdl2_render_scene(sgsdl2_scene *scene);
+
+// Performs a single pass depth only render from the perspective of the light
+void sgsdl2_render_shadowmap(sgsdl2_scene *scene, sgsdl2_light *light);
 
 // Prepares all the lighting data
 void sgsdl2_prepare_lighting(sgsdl2_scene *scene);
@@ -334,33 +326,28 @@ void sgsdl2_allocate_shadow_map_location(sgsdl2_light *light);
 //  Frees a reserved shadow map location
 void sgsdl2_deallocate_shadow_map_location(sgsdl2_light *light);
 
-// Reallocates the light texture
-__attribute__((deprecated))
-void sgsdl2_generate_shadow_map_texture(sgsdl2_light *light);
-
 // Contains the scene iteration logic
 void sgsdl2_perform_render_pass(sgsdl2_scene * const scene, sgsdl2_render_profile profile);
 
 // Renders a single element and all its children recursively
-void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile profile);
+void sgsdl2_render_element(sgsdl2_scene_element *element, sgsdl2_render_profile profile, sgsdl2_render_data data);
 
 // Passes the global matrices to the shader
-void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_camera * const camera, sgsdl2_geometry * const geometry);
+void sgsdl2_pass_scene_data_to_shader(GLuint shader, sgsdl2_render_data data);
 
 // Passes data about the camera to the shader
-void sgsdl2_pass_camera_data_to_shader(GLuint shader, sgsdl2_camera const * const scene);
+//void sgsdl2_pass_camera_data_to_shader(GLuint shader, sgsdl2_camera const * const scene);
 
 // Passes the light array to the given shader
-void sgsdl2_pass_light_data_to_shader(GLuint shader, vector<sgsdl2_light*> lights);
+void sgsdl2_pass_light_data_to_shader(GLuint shader, sgsdl2_render_data data);
 
 // Passes the material data to the shader
-void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_geometry * const geometry);
+void sgsdl2_pass_material_data_to_shader(GLuint shader, sgsdl2_render_data data);
 
 void sgsdl2_perform_render(sgsdl2_geometry const * const geometry);
 
 // Returns the handle of the default shaders that is best equipped to render the given geometry.
-__attribute__((deprecated))
-GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry);
+GLuint sgsdl2_select_shader(sgsdl2_geometry * const geometry, sgsdl2_render_profile profile);
 
 
 
@@ -377,6 +364,8 @@ bool sgsdl2_make_shader(string const source_path, GLenum const shader_type, GLui
 // Shaders are attached in the order they are passed in.
 // Returns true if sucessful
 bool sgsdl2_make_shader_program(GLuint const * const shaders, int const count, GLuint &program);
+
+bool sgsdl2_validate_program(GLuint program);
 
 void sgsdl2_delete_shader(GLuint &handle);
 

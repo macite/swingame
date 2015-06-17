@@ -6,3 +6,11 @@
 - Same for VAOs
 
 - Added the wfc library, and included it in library search path for both targets
+
+
+
+- SHOULD USE WORLD LOCATION WHEN CALCULATING VIEW TRANSFORM, OTHERWISE ANY ELEMENT ATTACHED TO A PARENT WILL BE RENDERED WRONG.
+- UNLESS THIS IS TAKEN CARE OF WHEN MULTIPLYING THE PARENT VIEWS TOGETHER
+
+
+- Shadows are probably a transform error. Shadow transform seems correct, maybe model transform.

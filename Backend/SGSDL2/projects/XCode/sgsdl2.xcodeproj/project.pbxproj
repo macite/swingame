@@ -19,6 +19,7 @@
 		82C5AAFC1AB7B0450005429A /* Matrix4f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFB1AB7B0450005429A /* Matrix4f.h */; };
 		82C5AB001AB7B1F30005429A /* Vector3f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFE1AB7B1F30005429A /* Vector3f.h */; };
 		82C5AB011AB7B1F30005429A /* Vector4f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFF1AB7B1F30005429A /* Vector4f.h */; };
+		82CCB6B01B25C7BC00429B19 /* 3-shape-scene-normals-with-backing.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82CCB6AF1B25C4EA00429B19 /* 3-shape-scene-normals-with-backing.obj */; };
 		942DBED2183C1DBA00876830 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBED1183C1DBA00876830 /* main.cpp */; };
 		942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED3183C202F00876830 /* Cocoa.framework */; };
 		942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED5183C203900876830 /* ForceFeedback.framework */; };
@@ -99,6 +100,7 @@
 				9482162B184D956600C89CBE /* 30248__streety__sword7.flac in CopyFiles */,
 				94821646184DE3CB00C89CBE /* 280.mp3 in CopyFiles */,
 				823D26501AEF3AC200CAED9B /* 3-shape-scene-normals.obj in CopyFiles */,
+				82CCB6B01B25C7BC00429B19 /* 3-shape-scene-normals-with-backing.obj in CopyFiles */,
 				823D26581AF0773A00CAED9B /* single-cube.obj in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -109,6 +111,7 @@
 		823D264F1AEF3AB900CAED9B /* 3-shape-scene-normals.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "3-shape-scene-normals.obj"; path = "../../../Test/Resources/3-shape-scene-normals.obj"; sourceTree = "<group>"; };
 		823D26551AEFADE300CAED9B /* libwfc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwfc.a; path = ../../lib/mac/libwfc.a; sourceTree = "<group>"; };
 		823D26571AF0772F00CAED9B /* single-cube.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "single-cube.obj"; path = "../../../Test/Resources/single-cube.obj"; sourceTree = "<group>"; };
+		823D265F1AF1FE5100CAED9B /* RE_CVX_hall.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RE_CVX_hall.h; path = ../../../Test/Resources/RE_CVX_hall.h; sourceTree = "<group>"; };
 		8276F05F1AD8DCDA00D51508 /* shadowmap.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.frag; path = ../../src/shaders/shadowmap.frag; sourceTree = "<group>"; };
 		8276F0601AD8DCDA00D51508 /* shadowmap.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = shadowmap.vert; path = ../../src/shaders/shadowmap.vert; sourceTree = "<group>"; };
 		82C5AADF1AB027440005429A /* SGSDL2Graphics3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Graphics3D.cpp; path = ../../src/SGSDL2Graphics3D.cpp; sourceTree = "<group>"; };
@@ -127,6 +130,7 @@
 		82C5AB031AB8098D0005429A /* vertexColor.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = vertexColor.vert; path = ../../src/shaders/vertexColor.vert; sourceTree = "<group>"; };
 		82C5AB041AB8F01E0005429A /* texture.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.frag; path = ../../src/shaders/texture.frag; sourceTree = "<group>"; };
 		82C5AB051AB8F01E0005429A /* texture.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.vert; path = ../../src/shaders/texture.vert; sourceTree = "<group>"; };
+		82CCB6AF1B25C4EA00429B19 /* 3-shape-scene-normals-with-backing.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "3-shape-scene-normals-with-backing.obj"; path = "../../../Test/Resources/3-shape-scene-normals-with-backing.obj"; sourceTree = "<group>"; };
 		82E0262B1AC6AF1B001758B3 /* light.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.frag; path = ../../src/shaders/light.frag; sourceTree = "<group>"; };
 		82E0262C1AC6AF1B001758B3 /* light.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.vert; path = ../../src/shaders/light.vert; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -402,7 +406,9 @@
 			isa = PBXGroup;
 			children = (
 				823D264F1AEF3AB900CAED9B /* 3-shape-scene-normals.obj */,
+				82CCB6AF1B25C4EA00429B19 /* 3-shape-scene-normals-with-backing.obj */,
 				823D26571AF0772F00CAED9B /* single-cube.obj */,
+				823D265F1AF1FE5100CAED9B /* RE_CVX_hall.h */,
 				94E752921890D08800A3176C /* ball_small.png */,
 				94E174F41891DB3E00544C58 /* whac-a-mole-background.png */,
 				94E752941890DA1C00A3176C /* Lines.png */,
