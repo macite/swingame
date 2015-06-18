@@ -31,18 +31,6 @@ using namespace std;
 
 void sgsdl2_load_graphics3d_fns(sg_interface *functions);
 
-//
-// To be moved to the interface
-//
-
-// Renders a wireframe with the given color.
-// data is an array of 3 coordinate points.
-void sgsdl2_draw_mesh(sg_drawing_surface *surface, sg_color clr, float *data, int data_sz);
-
-// Used for testing 3d
-void sgsdl2_draw_test(sg_drawing_surface *surface);
-
-
 
 //
 // Scenes
@@ -69,6 +57,7 @@ void sgsdl2_add_element_to_root(sgsdl2_scene * const scene, sgsdl2_scene_element
 
 // Removes an element from the root set of this scene
 // Assumes the element has no parent
+DEPRECATED_ATTRIBUTE
 void sgsdl2_remove_element_from_root(sgsdl2_scene_element * const element);
 
 // Removes an element from the light cache
@@ -88,6 +77,7 @@ void sgsdl2_add_element(sgsdl2_scene * const scene, sgsdl2_scene_element * const
 
 // Depending on where the element is in the tree, removes it from the root set,
 // or dettaches it from its parent
+// Will also recursively remove all children before removing itself
 void sgsdl2_remove_element(sgsdl2_scene_element * const element);
 
 // Attaches an element to a parent (automatically detaches it from its previous
@@ -102,6 +92,9 @@ void sgsdl2_add_shader(sgsdl2_scene * const scene, GLuint const shader);
 
 // shader will no longer be updated by the scene
 void sgsdl2_remove_shader(sgsdl2_scene * const scene, GLuint const shader);
+
+// Simply calls remove_element() on all elements in the root set.
+void sgsdl2_clear_scene(sgsdl2_scene *scene);
 
 // Cleans up all the resources used by a scene and then deletes the pointer
 void sgsdl2_delete_scene(sgsdl2_scene *scene);
@@ -124,7 +117,7 @@ Matrix4f sgsdl2_calculate_model_transform(sgsdl2_scene_element * const element);
 Matrix4f sgsdl2_calculate_view_transform(sgsdl2_scene_element * const element);
 
 // Calculates a proj transform for a camera
-__attribute__((deprecated))
+DEPRECATED_ATTRIBUTE
 Matrix4f sgsdl2_calculate_proj_transform(sgsdl2_camera const * const camera, float aspect);
 
 // Calculates a proj transform for a camera
