@@ -52,10 +52,10 @@ using namespace std;
 #define SHAD_LOC_COLORS 			3
 #define SHAD_LOC_TEX_COORDS			4
 
-#define SHAD_LIGHT_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/light.vert"
-#define SHAD_LIGHT_FRAG_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/light.frag"
-#define SHAD_SHADOW_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/shadowmap.vert"
-#define SHAD_SHADOW_FRAG_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/shadowmap.frag"
+#define SHAD_LIGHT_VERT_PATH "shaders/light.vert"
+#define SHAD_LIGHT_FRAG_PATH "shaders/light.frag"
+#define SHAD_SHADOW_VERT_PATH "shaders/shadowmap.vert"
+#define SHAD_SHADOW_FRAG_PATH "shaders/shadowmap.frag"
 
 // GL_TEXTURE0 is reserved for unused textures
 #define SHADOW_TEX GL_TEXTURE1
@@ -209,35 +209,60 @@ void sgsdl2_add_element(sgsdl2_scene * const scene, sgsdl2_scene_element * const
 void sgsdl2_remove_element(sgsdl2_scene_element * const element)
 {
 	// The element must belong to a scene
-	if (element->root != nullptr)
+	if (element->root == nullptr)
 	{
-		// The element is not attached to a parent element (belongs to the root set)
-		if (element->parent == nullptr) {
-			sgsdl2_remove_element_from_root(element);
-		}
-		// Element actually has a parent
-		else
+		cout << "Warning: attempted to remove an element that did not belong to a scene." << endl;
+		return;
+	}
+	
+	// Check if the element has children
+	if (element->children.size() > 0)
+	{
+		// To improve efficiency, the elements are removed last first.
+		for (unsigned long i = element->children.size(); i > 0; i--)
 		{
-			// Remove it from the cache if it is a light
-			if (element->type == sgsdl2_scene_element_type::LIGHT)
+			sgsdl2_remove_element(element->children[i]);
+		}
+	}
+	
+	// Remove it from the scene cache if it is a light
+	if (element->type == sgsdl2_scene_element_type::LIGHT)
+	{
+		sgsdl2_remove_light_from_cache(static_cast<sgsdl2_light*>(element));
+	}
+	
+	// If the element belonged to a parent
+	if (element->parent != nullptr)
+	{
+		// Remove this element from the parent's list of its children
+		for (vector<sgsdl2_scene_element*>::iterator it = element->parent->children.begin();
+			 it != element->parent->children.end();
+			 ++it)
+		{
+			if (*it == element)
 			{
-				sgsdl2_remove_light_from_cache(static_cast<sgsdl2_light*>(element));
-			}
-			
-			for (vector<sgsdl2_scene_element*>::iterator it = element->parent->children.begin();
-				 it != element->parent->children.end();
-				 ++it)
-			{
-				if (*it == element)
-				{
-					element->parent->children.erase(it);
-					element->parent = nullptr;
-					element->root = nullptr;
-					break;
-				}
+				element->parent->children.erase(it);
+				element->parent = nullptr;
+				break;
 			}
 		}
 	}
+	
+	else
+	{
+		// Remove the element from the root set
+		for (vector<sgsdl2_scene_element*>::iterator it = element->root->elements.begin();
+			 it != element->root->elements.end(); ++it)
+		{
+			if (*it == element)
+			{
+				element->root->elements.erase(it);
+				break;
+			}
+		}
+	}
+	
+	element->root = nullptr;
 }
 
 void sgsdl2_attach_element(sgsdl2_scene_element * const parent, sgsdl2_scene_element * const child)
@@ -303,6 +328,15 @@ void sgsdl2_remove_shader(sgsdl2_scene * const scene, GLuint const shader)
 		{
 			scene->shaders.erase(it);
 		}
+	}
+}
+
+void sgsdl2_clear_scene(sgsdl2_scene *scene)
+{
+	// To improve efficiency, the elements are removed last first.
+	for (unsigned long i = scene->elements.size(); i > 0; i--)
+	{
+		sgsdl2_remove_element(scene->elements[i - 1]);
 	}
 }
 
@@ -1456,8 +1490,8 @@ void sgsdl2_print_opengl_version()
 	glGetIntegerv(GL_MAJOR_VERSION, &major);
 	glGetIntegerv(GL_MINOR_VERSION, &minor);
 //	cout << "OpenGL Version: " << major << "." << minor << endl;
-	cout << "OpenGL Version: " << glGetString(GL_VERSION) << endl;
-	cout << "GLSL Version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
+	cout << "*** OpenGL Version: " << glGetString(GL_VERSION) << " ***" << endl;
+	cout << "*** GLSL Version:   " << glGetString(GL_SHADING_LANGUAGE_VERSION) << " ***" << endl;
 	sgsdl2_check_opengl_error("print_opengl_version :");
 }
 
