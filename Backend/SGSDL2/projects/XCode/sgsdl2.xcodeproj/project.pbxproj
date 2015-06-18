@@ -20,6 +20,11 @@
 		82C5AB001AB7B1F30005429A /* Vector3f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFE1AB7B1F30005429A /* Vector3f.h */; };
 		82C5AB011AB7B1F30005429A /* Vector4f.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAFF1AB7B1F30005429A /* Vector4f.h */; };
 		82CCB6B01B25C7BC00429B19 /* 3-shape-scene-normals-with-backing.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82CCB6AF1B25C4EA00429B19 /* 3-shape-scene-normals-with-backing.obj */; };
+		82CCB6B21B32660800429B19 /* sample.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82CCB6B11B3265F900429B19 /* sample.png */; };
+		82CCB6B41B3266E700429B19 /* light.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82E0262B1AC6AF1B001758B3 /* light.frag */; };
+		82CCB6B51B3266E900429B19 /* light.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82E0262C1AC6AF1B001758B3 /* light.vert */; };
+		82CCB6B61B3266EB00429B19 /* shadowmap.frag in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8276F05F1AD8DCDA00D51508 /* shadowmap.frag */; };
+		82CCB6B71B3266ED00429B19 /* shadowmap.vert in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8276F0601AD8DCDA00D51508 /* shadowmap.vert */; };
 		942DBED2183C1DBA00876830 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBED1183C1DBA00876830 /* main.cpp */; };
 		942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED3183C202F00876830 /* Cocoa.framework */; };
 		942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED5183C203900876830 /* ForceFeedback.framework */; };
@@ -82,6 +87,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		82CCB6B31B3266CF00429B19 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = shaders;
+			dstSubfolderSpec = 6;
+			files = (
+				82CCB6B41B3266E700429B19 /* light.frag in CopyFiles */,
+				82CCB6B51B3266E900429B19 /* light.vert in CopyFiles */,
+				82CCB6B61B3266EB00429B19 /* shadowmap.frag in CopyFiles */,
+				82CCB6B71B3266ED00429B19 /* shadowmap.vert in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		9471BDC2183B737000BE3771 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 12;
@@ -102,6 +120,7 @@
 				823D26501AEF3AC200CAED9B /* 3-shape-scene-normals.obj in CopyFiles */,
 				82CCB6B01B25C7BC00429B19 /* 3-shape-scene-normals-with-backing.obj in CopyFiles */,
 				823D26581AF0773A00CAED9B /* single-cube.obj in CopyFiles */,
+				82CCB6B21B32660800429B19 /* sample.png in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +150,7 @@
 		82C5AB041AB8F01E0005429A /* texture.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.frag; path = ../../src/shaders/texture.frag; sourceTree = "<group>"; };
 		82C5AB051AB8F01E0005429A /* texture.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.vert; path = ../../src/shaders/texture.vert; sourceTree = "<group>"; };
 		82CCB6AF1B25C4EA00429B19 /* 3-shape-scene-normals-with-backing.obj */ = {isa = PBXFileReference; lastKnownFileType = text; name = "3-shape-scene-normals-with-backing.obj"; path = "../../../Test/Resources/3-shape-scene-normals-with-backing.obj"; sourceTree = "<group>"; };
+		82CCB6B11B3265F900429B19 /* sample.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = sample.png; path = ../../../Test/Resources/sample.png; sourceTree = "<group>"; };
 		82E0262B1AC6AF1B001758B3 /* light.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.frag; path = ../../src/shaders/light.frag; sourceTree = "<group>"; };
 		82E0262C1AC6AF1B001758B3 /* light.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = light.vert; path = ../../src/shaders/light.vert; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
@@ -420,6 +440,7 @@
 				9482162A184D955800C89CBE /* 30248__streety__sword7.flac */,
 				94821583184C6FE800C89CBE /* error.wav */,
 				9499C6A0184C630E00B71B41 /* test.ogg */,
+				82CCB6B11B3265F900429B19 /* sample.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -476,6 +497,7 @@
 				9471BDC0183B737000BE3771 /* Sources */,
 				9471BDC1183B737000BE3771 /* Frameworks */,
 				9471BDC2183B737000BE3771 /* CopyFiles */,
+				82CCB6B31B3266CF00429B19 /* CopyFiles */,
 			);
 			buildRules = (
 			);
