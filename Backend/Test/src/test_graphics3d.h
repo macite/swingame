@@ -11,6 +11,4 @@
 
 void test_graphics3d();
 
-void compile_default_shaders();
-
 #endif /* defined(__sgsdl2__test_graphics3d__) */
