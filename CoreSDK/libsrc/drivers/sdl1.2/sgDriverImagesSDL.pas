@@ -40,15 +40,25 @@ implementation
 	end;
   
 
-	procedure CreateBitmapProcedure(bmp : Bitmap; width, height : LongInt);
-	begin
- 	  if not CheckAssigned('SDL1.2 ImagesDriver - CreateBitmapProcedure recieved unassigned Bitmap', bmp) then exit;
+  procedure CreateBitmapProcedure(bmp : Bitmap; width, height : LongInt);
+  var
+    pScreen: PSDL_Surface;
+  begin
+    if not CheckAssigned('SDL1.2 ImagesDriver - CreateBitmapProcedure recieved unassigned Bitmap', bmp) then exit;
     // if not CheckAssigned('SDL1.2 ImagesDriver - Screen must be loaded to create bitmap', screen) then exit;
     // if not CheckAssigned('SDL1.2 ImagesDriver - Screen must be loaded to create bitmap', screen^.surface) then exit;
 
       // Always create RGBA surfaces...
-      bmp^.surface := SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, $00FF0000, $0000FF00, $000000FF, $FF000000);
-	end;
+    
+    pScreen := PSDL_Surface(_screen);
+    bmp^.surface := SDL_CreateRGBSurface(SDL_SRCALPHA, width, height, 32, 
+                                          pScreen^.format^.RMask, 
+                                          pScreen^.format^.GMask, 
+                                          pScreen^.format^.BMask, 
+                                          $FFFFFFFF and not pScreen^.format^.RMask
+                                                and not pScreen^.format^.GMask
+                                                and not pScreen^.format^.BMask);
+  end;
 
   // Sets the non-transparent pixels in a Bitmap. This is then used for
   // collision detection, allowing the original surface to be optimised.
