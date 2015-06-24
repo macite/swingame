@@ -28,7 +28,7 @@ interface
 	      procedure EndLoop();
 
 	    public
-	      constructor Create(name: String);
+	      constructor Create(const name: String);
 	      destructor Destroy; override;
 
 	      property Name: String read _name;
@@ -45,7 +45,7 @@ interface
 implementation
 	uses sgSprites, sgShared;
 	
-	constructor TSpritePack.Create(name: String);
+	constructor TSpritePack.Create(const name: String);
 	begin
 		inherited Create();
 

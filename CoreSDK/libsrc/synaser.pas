@@ -325,7 +325,7 @@ type
     function GetCarrier: Boolean; virtual;
     function GetRing: Boolean; virtual;
     procedure DoStatus(Reason: THookSerialReason; const Value: string); virtual;
-    procedure GetComNr(Value: string); virtual;
+    procedure GetComNr(const Value: string); virtual;
     function PreTestFailing: boolean; virtual;{HGJ}
     function TestCtrlLine: Boolean; virtual;
 {$IFDEF UNIX}    
@@ -392,7 +392,7 @@ type
 
       - when you connect to a modem device, then is best to test it by an empty
        AT command. (call ATCommand('AT'))}
-    procedure Connect(comport: string); virtual;
+    procedure Connect(const comport: string); virtual;
 
     {:Set communication parameters from the DCB structure (the DCB structure is
      simulated under Linux).}
@@ -837,7 +837,7 @@ begin
 end;
 {$ENDIF}
 
-procedure TBlockSerial.GetComNr(Value: string);
+procedure TBlockSerial.GetComNr(const Value: string);
 begin
   FComNr := PortIsClosed;
   if pos('COM', uppercase(Value)) = 1 then
@@ -906,7 +906,7 @@ begin
   SetCommState;
 end;
 
-procedure TBlockSerial.Connect(comport: string);
+procedure TBlockSerial.Connect(const comport: string);
 {$IFDEF MSWINDOWS}
 var
   CommTimeouts: TCommTimeouts;

@@ -60,7 +60,7 @@ implementation
 		SetLength(pixels, 0);
 	end;
 
-	function DoLoadBitmapProcedure (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	function DoLoadBitmapProcedure (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	var
 		surface: ^sg_drawing_surface;
 	begin
@@ -168,7 +168,7 @@ implementation
 	begin   
 	end;
 
-	procedure SaveBitmapProcedure(bmpToSave: Bitmap; path : String);
+	procedure SaveBitmapProcedure(bmpToSave: Bitmap;const path : String);
 	var
 		pixels: array of LongInt;
 		sz: Longint;

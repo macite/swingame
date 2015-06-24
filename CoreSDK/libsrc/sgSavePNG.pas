@@ -4,9 +4,9 @@ interface
 uses {$IFDEF SWINGAME_SDL2}SysUtils{$ELSE}{$IFDEF SWINGAME_SDL13}SDL2{$ELSE}SDL{$ENDIF}{$ENDIF};
 
 {$IFDEF SWINGAME_SDL2}
-function png_save_pixels(filename: String; pixels: PLongint; width, height: Longint): Boolean;
+function png_save_pixels(const filename: String; pixels: PLongint; width, height: Longint): Boolean;
 {$ELSE}
-function png_save_surface(filename: String; surf: PSDL_Surface): Boolean;
+function png_save_surface(const filename: String; surf: PSDL_Surface): Boolean;
 {$ENDIF}
 
 implementation
@@ -79,7 +79,7 @@ end;
 
 
 {$IFDEF SWINGAME_SDL2}
-function png_save_pixels(filename: String; pixels: PLongint; width, height: Longint): Boolean;
+function png_save_pixels(const filename: String; pixels: PLongint; width, height: Longint): Boolean;
 var
   fp:           Pointer;
   png_ptr:      png_structp;
@@ -221,7 +221,7 @@ end;
 
 
 
-function png_save_surface(filename: String; surf: PSDL_Surface): Boolean;
+function png_save_surface(const filename: String; surf: PSDL_Surface): Boolean;
 var
   fp:           Pointer;
   png_ptr:      png_structp;

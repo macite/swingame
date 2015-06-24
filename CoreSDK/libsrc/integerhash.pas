@@ -56,7 +56,7 @@ implementation
   // tSHIterator - iterator for integer hash table
   // basically an adapter shell for tMapIterator
 
-  procedure throwTypeException(className: string);
+  procedure throwTypeException(const className: string);
   begin
     raise exception.create('Wrong type. Expecting tInteger, got ' + className);
   end;

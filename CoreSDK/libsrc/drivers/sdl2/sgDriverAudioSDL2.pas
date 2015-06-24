@@ -29,7 +29,7 @@ implementation
 //              Sound Effects
 //=============================================================================
 
-	function _LoadSoundData(filename, name: String; kind: sg_sound_kind) : Pointer;
+	function _LoadSoundData(const filename, name: String; kind: sg_sound_kind) : Pointer;
 	var
 		sndData: ^sg_sound_data;
 	begin
@@ -47,7 +47,7 @@ implementation
 	end;
 
 	//TODO: most of this can be moved to sgAudio
-	function LoadSoundEffectProcedure(filename, name: String) : SoundEffect;
+	function LoadSoundEffectProcedure(const filename, name: String) : SoundEffect;
 	begin
 		//TODO: Move some of this to Audio unit
 		New(result); 
@@ -130,7 +130,7 @@ implementation
 	end;
 	
 	//TODO: Move this to Audio unit
-	function LoadMusicProcedure(filename, name: String) : Music;
+	function LoadMusicProcedure(const filename, name: String) : Music;
 	begin
 		New(result); 
 

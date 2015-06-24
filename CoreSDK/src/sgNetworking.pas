@@ -229,7 +229,7 @@ uses sgTypes;
   /// @class Connection
   /// @method httpRemoveHeaderAt
   /// @sn httpRemoveHeaderAt:%s
-  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; aIdx : LongInt);
 
   /// Returns a header of the Http Request at the specified index.
   ///
@@ -240,7 +240,7 @@ uses sgTypes;
   /// @class Connection
   /// @method HttpHeaderAt
   /// @sn httpHeaderAt:%s
-  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; aIdx : LongInt) : String;
 
   /// Returns a header of the Http Request at the specified index.
   ///
@@ -262,7 +262,7 @@ uses sgTypes;
   /// @class Connection
   /// @method httpSetMethod
   /// @sn httpSetMethod:%s
-  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; aMethod : HttpMethod);
 
   /// Sets the version of the Http Request
   ///
@@ -311,7 +311,7 @@ uses sgTypes;
 
   /// Perform a post request to the specified host, with the supplied body.
   ///
-  ///
+  /// @lib
   function HttpPost(const host: String; port: Word; const path, body: String): HttpResponse;
 
 //----------------------------------------------------------------------------
@@ -2203,7 +2203,7 @@ var
     aHttpRequest.headervalue[High(aHttpRequest.headervalue)] := value;
   end;
 
-  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; aIdx : LongInt);
   var
     i : Integer;
   begin
@@ -2219,7 +2219,7 @@ var
     SetLength(aHttpRequest.headervalue, Length(aHttpRequest.headervalue) - 1);
   end;
 
-  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; aIdx : LongInt) : String;
   begin
     result := '';
     if (aIdx < 0) or (aIdx > High(aHttpRequest.headername)) then exit;
@@ -2232,7 +2232,7 @@ var
     aHttpRequest.body := aBody;
   end;
 
-  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; aMethod : HttpMethod);
   begin
     aHttpRequest.requestType := aMethod;
   end;

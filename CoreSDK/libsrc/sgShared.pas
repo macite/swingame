@@ -83,8 +83,8 @@ interface
   // All SwinGame initialisation code must call this before performing any processing...
   procedure InitialiseSwinGame();
   
-  procedure RaiseException(message: String);
-  procedure RaiseWarning(message: String);
+  procedure RaiseException(const message: String);
+  procedure RaiseWarning(const message: String);
   
   {$IFDEF DARWIN}
       {$IFDEF NO_ARC}
@@ -98,8 +98,8 @@ interface
   function RoundInt(val: Double): LongInt;
   function RoundUShort(val: Double): Word;
   function RoundShort(val: Double): Smallint;
-  function StrToSingle(val: String): Single;
-  function StrToUByte(val: String): Byte;
+  function StrToSingle(const val: String): Single;
+  function StrToUByte(const val: String): Byte;
   
   /// Called when ANY resource is freed to inform other languages to remove from
   /// their caches.
@@ -296,7 +296,7 @@ implementation
   
 
   
-  procedure RaiseException(message: String);
+  procedure RaiseException(const message: String);
   begin
     HasException := True;
     ErrorMessage := message;
@@ -318,7 +318,7 @@ implementation
     end; 
   end;
 
-  procedure RaiseWarning(message: String);
+  procedure RaiseWarning(const message: String);
   begin
     // Watch for exceptions with this on Windows
     try
@@ -405,12 +405,12 @@ begin
   result := SmallInt(Round(val));
 end;
 
-function StrToSingle(val: String): Single;
+function StrToSingle(const val: String): Single;
 begin
   result := Single(StrToFloat(val));
 end;
 
-function StrToUByte(val: String): Byte;
+function StrToUByte(const val: String): Byte;
 begin
   result := Byte(StrToInt(val));
 end;

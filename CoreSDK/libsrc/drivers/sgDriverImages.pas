@@ -24,7 +24,7 @@ interface
 	  InitBitmapColorsProcedure            = procedure (bmp : Bitmap);
 	  CreateBitmapProcedure                = procedure (bmp : Bitmap; width, height : LongInt);
 	  SurfaceExistsProcedure               = function  (bmp : Bitmap) : Boolean;
-	  DoLoadBitmapProcedure                = function  (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	  DoLoadBitmapProcedure                = function  (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
     FreeSurfaceProcedure                 = procedure (bmp : Bitmap);
     MakeOpaqueProcedure                  = procedure (bmp : Bitmap);
     SetOpacityProcedure                  = procedure (bmp : Bitmap; pct : Single);
@@ -34,7 +34,7 @@ interface
     BlitSurfaceProcedure                 = procedure (srcBmp: Bitmap; x, y: Single; const opts : DrawingOptions);
     ClearSurfaceProcedure                = procedure (dest : Bitmap; toColor : Color);
     OptimiseBitmapProcedure              = procedure (surface : Bitmap);
-    SaveBitmapProcedure                  = procedure (src : Bitmap; filepath : String);
+    SaveBitmapProcedure                  = procedure (src : Bitmap;const filepath : String);
     SetNonAlphaPixelsProcedure           = procedure (bmp: Bitmap);
     
 	ImagesDriverRecord = record
@@ -116,7 +116,7 @@ implementation
 		ImagesDriver.CreateBitmap(bmp, width, height);
 	end;  
 	
-	function DefaultDoLoadBitmapProcedure (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	function DefaultDoLoadBitmapProcedure (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	begin
 		LoadDefaultImagesDriver();
 		result := ImagesDriver.DoLoadBitmap(filename, transparent, transparentColor);
@@ -176,7 +176,7 @@ implementation
     ImagesDriver.OptimiseBitmap(surface);
   end;
 
-  procedure DefaultSaveBitmapProcedure(src : Bitmap; filepath : String);
+  procedure DefaultSaveBitmapProcedure(src : Bitmap;const filepath : String);
   begin	  
     LoadDefaultImagesDriver();
     ImagesDriver.SaveBitmap(src, filepath);

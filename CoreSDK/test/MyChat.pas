@@ -7,7 +7,7 @@ begin
 	LoadFontNamed('DialogFont', 'arial.ttf', 14);
 end;
 
-procedure DisplayDialog(msg: String; x,y: Integer); 
+procedure DisplayDialog(const msg: String; x,y: Integer); 
 var
 	msgWidth, promptWidth, msgHeight: Integer;
 	width, height: Integer;
@@ -38,7 +38,7 @@ begin
 	until KeyTyped(VK_RETURN) or WindowCloseRequested();
 end;
 
-function ReadString(prompt: String; x, y: Integer): String;
+function ReadString(const prompt: String; x, y: Integer): String;
 var
 	promptHeight: Integer;
 	inputAreaWidth, inputAreaHeight: Integer;
@@ -67,7 +67,7 @@ begin
 	result := TextReadAsASCII();
 end;
 
-function ReadInteger(prompt: String; x, y: Integer): Integer;
+function ReadInteger(const prompt: String; x, y: Integer): Integer;
 var
 	line: String;
 	num: Integer;
@@ -81,7 +81,7 @@ begin
 	result := num;
 end;
 
-function ReadIntegerRange(prompt: String; min, max, x, y: Integer): Integer;
+function ReadIntegerRange(const prompt: String; min, max, x, y: Integer): Integer;
 var
 	errorMsg: String;
 begin

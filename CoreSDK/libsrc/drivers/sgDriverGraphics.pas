@@ -36,8 +36,8 @@ interface
     ResetClipProcedure                    = procedure (bmp: Bitmap);  
     SetVideoModeFullScreenProcedure       = procedure ();
     SetVideoModeNoFrameProcedure          = procedure ();      
-    InitializeGraphicsWindowProcedure     = procedure (caption : String; screenWidth, screenHeight : LongInt);
-    InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);      
+    InitializeGraphicsWindowProcedure     = procedure (const caption : String; screenWidth, screenHeight : LongInt);
+    InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);      
     ResizeGraphicsWindowProcedure         = procedure (newWidth, newHeight : LongInt);
     RefreshScreenProcedure                = procedure (screen : Bitmap);
     ColorComponentsProcedure              = procedure (c : Color; var r, g, b, a : Byte); 
@@ -214,13 +214,13 @@ uses
     GraphicsDriver.SetVideoModeNoFrame();
   end;
 	
-  procedure DefaultInitializeGraphicsWindowProcedure(caption : String; screenWidth, screenHeight : LongInt);
+  procedure DefaultInitializeGraphicsWindowProcedure(const caption : String; screenWidth, screenHeight : LongInt);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.InitializeGraphicsWindow(caption, screenWidth, screenHeight);
   end;
 
-  procedure DefaultInitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);
+  procedure DefaultInitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.InitializeScreen( screen, width, height, bgColor, stringColor, msg);

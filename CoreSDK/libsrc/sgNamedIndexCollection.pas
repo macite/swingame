@@ -20,7 +20,7 @@ interface
   
   /// Get the index of the specified name.
   ///
-  function IndexOf(const col: NamedIndexCollection; name: String): Integer;
+  function IndexOf(const col: NamedIndexCollection;const name: String): Integer;
   
   /// The number of names in the collection
   ///
@@ -28,23 +28,23 @@ interface
 
   function NamesOf(const col: NamedIndexCollection): StringArray;
   
-  function HasName(const col: NamedIndexCollection; name: String): Boolean;
+  function HasName(const col: NamedIndexCollection;const name: String): Boolean;
   
   /// Add a new name to the index. Returns the index of the added element or
   /// -1 if the add fails.
   ///
-  function AddName(var col: NamedIndexCollection; name: String): Integer;
+  function AddName(var col: NamedIndexCollection;const name: String): Integer;
 
   //adds more than one name delimited by ',' i.e. name1,name2..
-  Procedure AddNamesToCollection(var col: NamedIndexCollection; names: String);
+  Procedure AddNamesToCollection(var col: NamedIndexCollection;const names: String);
 
   /// returns names in an index collection in the following manner: name1,name2...
   function NamedIndexCollectionNameList(const list:NamedIndexCollection):String;
   
-  procedure InitNamedIndexCollection(var col: NamedIndexCollection; names: StringArray); overload;
+  procedure InitNamedIndexCollection(var col: NamedIndexCollection;const names: StringArray); overload;
   procedure InitNamedIndexCollection(var col: NamedIndexCollection); overload;
   procedure RemoveName(var col: NamedIndexCollection; idx: Longint); overload;
-  function RemoveName(var col: NamedIndexCollection; name: String): Longint; overload;
+  function RemoveName(var col: NamedIndexCollection;const name: String): Longint; overload;
   procedure FreeNamedIndexCollection(var col: NamedIndexCollection);
   
   procedure RemoveAllNamesInCollection(var col: NamedIndexCollection);
@@ -72,7 +72,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
   end;
 
 
-  function IndexOf(const col: NamedIndexCollection; name: String): Integer;
+  function IndexOf(const col: NamedIndexCollection;const name: String): Integer;
   var
     hash: TStringHash;
   begin
@@ -93,7 +93,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
     result := col.names;
   end;
   
-  function HasName(const col: NamedIndexCollection; name: String): Boolean;
+  function HasName(const col: NamedIndexCollection;const name: String): Boolean;
   var
     hash: TStringHash;
   begin
@@ -106,7 +106,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
   end;
   
   
-  function AddName(var col: NamedIndexCollection; name: String): Integer;
+  function AddName(var col: NamedIndexCollection;const name: String): Integer;
   var
     hash: TStringHash;
   begin
@@ -125,7 +125,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
       result := -1;                                           // Failed to add return -1 idx
   end;
 
-  procedure AddNamesToCollection(var col: NamedIndexCollection; names: String);
+  procedure AddNamesToCollection(var col: NamedIndexCollection;const names: String);
   var
     i, namesLength:Longint;    
   begin
@@ -141,7 +141,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
     end;
   end;
 
-  function RemoveName(var col: NamedIndexCollection; name: String): Longint; overload;
+  function RemoveName(var col: NamedIndexCollection;const name: String): Longint; overload;
   begin
     result := IndexOf(col, name);
     RemoveName(col, result);
@@ -172,7 +172,7 @@ uses sgShared, stringhash, sgSharedUtils, StrUtils;
   end;
   
   
-  procedure InitNamedIndexCollection(var col: NamedIndexCollection; names: StringArray); overload;
+  procedure InitNamedIndexCollection(var col: NamedIndexCollection;const names: StringArray); overload;
   var
     hash: TStringHash;
     i: Integer;
