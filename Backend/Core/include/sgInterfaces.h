@@ -61,10 +61,10 @@ extern "C" {
 	//
 	// 3d struct (no need to use typedef as it is pointless in c++)
 	//
-	struct sg_graphics3d_interface
-	{
+//	struct sg_graphics3d_interface
+//	{
 		// TODO
-	};
+//	};
 	
 
     //
