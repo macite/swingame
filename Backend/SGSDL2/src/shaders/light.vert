@@ -48,7 +48,6 @@ void main() {
 	for (int i = 0; i < numberOfLights; i++)
 	{
 		fragShadowCoords[i] = lights[i].transform * model * vec4(position, 1);
-//		fragShadowCoords[i] = vec4(fragShadowCoords[i].xyz * 0.5 + 0.5, fragShadowCoords[i].w);
 	}
 }
 
