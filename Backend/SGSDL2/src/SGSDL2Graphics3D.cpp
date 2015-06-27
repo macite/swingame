@@ -929,9 +929,11 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 	sgsdl2_perform_render_pass(scene, profile);
 }
 
+
 void sgsdl2_render_shadowmap(sgsdl2_scene *scene, sgsdl2_light *light)
 {
-	
+#pragma unused(scene)
+#pragma unused(light)
 }
 
 void sgsdl2_prepare_lighting(sgsdl2_scene *scene)
