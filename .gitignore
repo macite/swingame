@@ -18,6 +18,5 @@ CoreSDK/trace.gdb
 *.swo
 tags
 
-/.hg/*
-*/.hg/*
-.hgignore
+.hg*
+.hg/**
