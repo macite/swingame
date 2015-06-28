@@ -638,6 +638,7 @@
 					../../external/SDL_mixer,
 					../../external/SDL_net,
 					../../external/wfc,
+					../../external/eigen,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = YES;
@@ -681,6 +682,7 @@
 					../../external/SDL_mixer,
 					../../external/SDL_net,
 					../../external/wfc,
+					../../external/eigen,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				SDKROOT = macosx;
