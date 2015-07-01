@@ -144,6 +144,8 @@ interface
 
 		sg_system_data_fn = function(): psg_system_data; cdecl;
 
+		sg_drawing_surface_string_bool_fn = function(surface: psg_drawing_surface; filename: pchar): int; cdecl; // (surface, string) -> bool
+
 		//
 		// Text-related function pointers
 		//
@@ -265,6 +267,7 @@ interface
 				show_border : sg_surface_bool_proc;
 				show_fullscreen : sg_surface_bool_proc;
 				resize : sg_surface_size_proc;
+				save_png: sg_drawing_surface_string_bool_fn;
 			end;
 
 		sg_input_callbacks = record

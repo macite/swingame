@@ -1524,7 +1524,6 @@ implementation
 //=============================================================================
 
   uses Math, Classes, SysUtils, // system
-       sgSavePNG, 
        sgTrace, 
        sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
        sgInputBackend;

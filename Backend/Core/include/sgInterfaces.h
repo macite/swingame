@@ -49,6 +49,8 @@ extern "C" {
     
     typedef sg_system_data * psg_system_data;
     typedef psg_system_data (sg_system_data_fn)();
+    
+    typedef int  (sg_drawing_surface_string_bool_fn)(sg_drawing_surface *, const char *); // (surface, string) -> bool
 
     //
     // Text related function pointers
@@ -150,7 +152,6 @@ extern "C" {
         sg_load_surface_fn * load_bitmap;
         
         sg_drawing_surface_surface_proc * draw_bitmap;
-        
     } sg_image_interface;
     
     //
@@ -242,6 +243,8 @@ extern "C" {
         sg_surface_bool_proc * show_fullscreen;
         
         sg_surface_size_proc * resize;
+        
+        sg_drawing_surface_string_bool_fn * save_png;
 
     } sg_graphics_interface;
     

@@ -583,7 +583,7 @@ uses sgResources, sgCamera, sgGeometry, sgGraphics,
      sgDriverImages, sgDriver, sgDrawingOptions,
      stringhash,         // libsrc
      SysUtils, 
-     sgSavePNG, sgShared, sgTrace;
+     sgShared, sgTrace;
 //=============================================================================
 
 var

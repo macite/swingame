@@ -766,13 +766,13 @@ void test_bitmaps(sg_drawing_surface * window_arr, int sz)
     }
 	
 	//Test pretty
-	double scale;
-	for (int u = 0; u <= 720; u += 4) 
+//	double scale;
+	for (int u = 0; u <= 720; u += 4)
 	{
 		for (int i = 0; i < sz; i++)
 		{
-			scale = sin(u/90.0) + 0.5;
-			scale = scale > 0.2 ? scale : 0.2;
+//			scale = sin(u/90.0) + 0.5;
+//			scale = scale > 0.2 ? scale : 0.2;
 			         
             dst_data[2] = u;
             dst_data[3] = 100 + sin(u/60.0)*100;
@@ -991,6 +991,9 @@ void test_bitmap_loading_saving()
             cout << endl;
         }
     }
+    
+    _sg_functions->graphics.save_png(&lines, "/Users/acain/Desktop/test.png");
+    
     _sg_functions->graphics.close_drawing_surface(&lines);
 }
 

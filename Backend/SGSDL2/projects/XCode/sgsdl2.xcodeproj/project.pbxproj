@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9425EC751B43A52600773347 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9425EC741B43A52600773347 /* libpng16.a */; };
 		942DBED2183C1DBA00876830 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 942DBED1183C1DBA00876830 /* main.cpp */; };
 		942DBED4183C202F00876830 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED3183C202F00876830 /* Cocoa.framework */; };
 		942DBED6183C203900876830 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBED5183C203900876830 /* ForceFeedback.framework */; };
@@ -28,7 +29,6 @@
 		9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA8183B732800BE3771 /* libFLAC.a */; };
 		9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDA9183B732800BE3771 /* libfreetype.a */; };
 		9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAA183B732800BE3771 /* libmikmod.a */; };
-		9471BDB8183B732800BE3771 /* libpng.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAC183B732800BE3771 /* libpng.a */; };
 		9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAD183B732800BE3771 /* libSDL2_gfx.a */; };
 		9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAE183B732800BE3771 /* libSDL2_image.a */; };
 		9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9471BDAF183B732800BE3771 /* libSDL2_mixer.a */; };
@@ -92,6 +92,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9425EC741B43A52600773347 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = ../../lib/mac/libpng16.a; sourceTree = "<group>"; };
 		942DBED1183C1DBA00876830 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../Test/src/main.cpp; sourceTree = SOURCE_ROOT; };
 		942DBED3183C202F00876830 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		942DBED5183C203900876830 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -119,7 +120,6 @@
 		9471BDA8183B732800BE3771 /* libFLAC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libFLAC.a; path = ../../lib/mac/libFLAC.a; sourceTree = "<group>"; };
 		9471BDA9183B732800BE3771 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = ../../lib/mac/libfreetype.a; sourceTree = "<group>"; };
 		9471BDAA183B732800BE3771 /* libmikmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmikmod.a; path = ../../lib/mac/libmikmod.a; sourceTree = "<group>"; };
-		9471BDAC183B732800BE3771 /* libpng.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng.a; path = ../../lib/mac/libpng.a; sourceTree = "<group>"; };
 		9471BDAD183B732800BE3771 /* libSDL2_gfx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_gfx.a; path = ../../lib/mac/libSDL2_gfx.a; sourceTree = "<group>"; };
 		9471BDAE183B732800BE3771 /* libSDL2_image.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_image.a; path = ../../lib/mac/libSDL2_image.a; sourceTree = "<group>"; };
 		9471BDAF183B732800BE3771 /* libSDL2_mixer.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL2_mixer.a; path = ../../lib/mac/libSDL2_mixer.a; sourceTree = "<group>"; };
@@ -172,11 +172,11 @@
 				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */,
 				9471BDB6183B732800BE3771 /* libmikmod.a in Frameworks */,
-				9471BDB8183B732800BE3771 /* libpng.a in Frameworks */,
 				9471BDB9183B732800BE3771 /* libSDL2_gfx.a in Frameworks */,
 				9471BDBA183B732800BE3771 /* libSDL2_image.a in Frameworks */,
 				9471BDBB183B732800BE3771 /* libSDL2_mixer.a in Frameworks */,
 				9471BDBC183B732800BE3771 /* libSDL2_net.a in Frameworks */,
+				9425EC751B43A52600773347 /* libpng16.a in Frameworks */,
 				9471BDBD183B732800BE3771 /* libSDL2_ttf.a in Frameworks */,
 				9471BDBE183B732800BE3771 /* libSDL2.a in Frameworks */,
 				9471BDBF183B732800BE3771 /* libwebp.a in Frameworks */,
@@ -305,12 +305,12 @@
 				942DBED3183C202F00876830 /* Cocoa.framework */,
 				9471BDA8183B732800BE3771 /* libFLAC.a */,
 				94821624184CA04200C89CBE /* libogg.a */,
+				9425EC741B43A52600773347 /* libpng16.a */,
 				94821625184CA04200C89CBE /* libvorbis.a */,
 				94821643184DE39200C89CBE /* libsmpeg2.a */,
 				94821626184CA04300C89CBE /* libvorbisfile.a */,
 				9471BDA9183B732800BE3771 /* libfreetype.a */,
 				9471BDAA183B732800BE3771 /* libmikmod.a */,
-				9471BDAC183B732800BE3771 /* libpng.a */,
 				9471BDAD183B732800BE3771 /* libSDL2_gfx.a */,
 				9471BDAE183B732800BE3771 /* libSDL2_image.a */,
 				9471BDAF183B732800BE3771 /* libSDL2_mixer.a */,
@@ -402,7 +402,7 @@
 		9471BD84183B6E5700BE3771 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = "Andrew Cain";
 			};
 			buildConfigurationList = 9471BD87183B6E5700BE3771 /* Build configuration list for PBXProject "sgsdl2" */;
@@ -556,6 +556,7 @@
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 					../../external/SDL_net,
+					"../../external/SDL_image/external/libpng-1.6.2",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -603,6 +604,7 @@
 					../../external/SDL_ttf,
 					../../external/SDL_mixer,
 					../../external/SDL_net,
+					"../../external/SDL_image/external/libpng-1.6.2",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
