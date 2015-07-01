@@ -1356,7 +1356,7 @@ function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 /// Returns the index of the item with the bitmap and cell.
 ///
 /// @lib ListBitmapCellIndex
-/// @sn list:%s indexOfCell:%s
+/// @sn list:%s bitmapIndex:%s withCell:%s
 ///
 /// @class GUIList
 /// @method CellItemIndex

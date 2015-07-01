@@ -59,37 +59,11 @@ interface
 		ImagesDriver : ImagesDriverRecord;
 		
 implementation
-  uses
-  	{$IFDEF SWINGAME_SDL2}
-  		sgDriverImagesSDL2
-  	{$ELSE}
-	    {$IFDEF SWINGAME_OPENGL}
-	      sgDriverImagesOpenGL
-	    {$ELSE}
-	      {$IFDEF SWINGAME_SDL13}
-	        sgDriverImagesSDL13
-	      {$ELSE}
-	        sgDriverImagesSDL
-	      {$ENDIF}
-	    {$ENDIF}
-    {$ENDIF};
+  uses sgDriverImagesSDL2;
     
 	procedure LoadDefaultImagesDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL2}
 	  	LoadSDL2ImagesDriver();
-	  {$ELSE}
-		  {$IFDEF SWINGAME_OPENGL }
-			  LoadOpenGLImagesDriver();
-	    {$ELSE}
-	      {$IFDEF SWINGAME_SDL13}
-	        LoadSDL13ImagesDriver();
-	      {$ELSE}
-	        // WriteLn('SDL 1.3 Not Defined');
-	        LoadSDLImagesDriver();
-	      {$ENDIF}
-			{$ENDIF}
-		{$ENDIF}
 	end;
 	
 	procedure DefaultSetNonAlphaPixelsProcedure(bmp : Bitmap);

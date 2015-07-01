@@ -123,7 +123,7 @@ _type_dictionary_creation_data = [
             'return':   '#2#',
         },
         '_adapter_type_switcher': {
-            None:           '#2#_data *',
+            None:           'struct _#2#_data *',
             'ptr-decl':     'struct _#2#_data *',
             'var':          '#2# *',
             'var-cpp':      '#2# &',
@@ -168,8 +168,8 @@ _type_dictionary_creation_data = [
           None:         '#2# ',
           'var':        '#2# *',
           'var-cpp':    '#2# &',
-          'const':      '#2# *',
-          'const-cpp':  '#2# &',
+          'const':      'const #2# *',
+          'const-cpp':  'const #2# &',
           'return':     '#2#',
       },
       '_adapter_type_switcher': {
@@ -177,8 +177,8 @@ _type_dictionary_creation_data = [
           'ptr-decl':   'struct _#2#_data *',
           'var':        '#2# *',
           'var-cpp':    '#2# &',
-          'const':      '#2# *',
-          'const-cpp':  '#2# &',
+          'const':      'const #2# *',
+          'const-cpp':  'const #2# &',
           'return':     '#2#',
       }
     },
@@ -225,7 +225,7 @@ _type_dictionary_creation_data = [
             ('string',          'char *'),
         ],
         '_type_switcher': {
-            None:       'const #2#',
+            None:           '#2#',
             'const':        'const #2#',
             'const-cpp':    'const #2#',
             'var':          '#2#',
@@ -235,7 +235,7 @@ _type_dictionary_creation_data = [
             'return':       '#2#',
         },
         '_adapter_type_switcher': {
-            None:       'const #2#',
+            None:           '#2#',
             'const':        'const #2#',
             'const-cpp':    'const #2#',
             'return':       '#2#',
@@ -334,7 +334,7 @@ _type_dictionary_creation_data = [
             ('filedialogselecttype','file_dialog_select_type'),
             ('drawingdest',         'drawing_dest'),
             ('httpmethod',          'http_method'),
-            ('connectiontype',      'connection type'),
+            ('connectiontype',      'connection_type'),
         ],
         '_type_switcher': {
             None:       '#2# ',

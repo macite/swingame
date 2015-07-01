@@ -18,14 +18,7 @@ unit sgDriverAudio;
 //=============================================================================
 
 interface
-	uses sgTypes, 
-	{$IFDEF SWINGAME_SDL2}
-		sgDriverAudioSDL2
-	{$ELSE}
-		{$IFDEF SWINGAME_SDL13}sgDriverAudioSDL13Mixer
-		{$ELSE}sgDriverAudioSDLMixer
-		{$ENDIF}
-	{$ENDIF};
+	uses sgTypes, sgDriverAudioSDL2;
 	
 	type
 		// These function and procedure pointers are required by the AudioDriverRecord
@@ -99,15 +92,7 @@ implementation
 //=============================================================================
 	procedure LoadDefaultAudioDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL2}
 	  	LoadSDL2MixerAudioDriver();
-	  {$ELSE}
-		  {$IFDEF SWINGAME_SDL13}
-		    LoadSDL13MixerAudioDriver();
-		  {$ELSE}
-		    LoadSDLMixerAudioDriver();
-		  {$ENDIF}
-	  {$ENDIF};
 	end;
 
 //=============================================================================

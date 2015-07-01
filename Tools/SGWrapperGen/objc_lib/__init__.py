@@ -20,7 +20,6 @@ _type_switcher = {
         #Pascal type: what it maps to
         'single':   'float',
         'longint':  'int',
-        'string':   'NSString *',
         'boolean':  'BOOL',
         'byte':     'unsigned char',
         'longword': 'uint',
@@ -114,7 +113,6 @@ _type_switcher = {
         'point2darray':     'NSArray *',
     },
     'out' : {
-        'string':       'NSString **',
         'byte':         'unsigned char *',
         'color':        'color *',
         
@@ -156,10 +154,7 @@ _type_switcher = {
         'longword':     'uint',
         'word':         'unsigned short int',
         'int64':        'long long',
-        
-        'string':       'NSString *',
-        
-        
+                
         #enums
         'collisionside':        'collision_side',
         'fontstyle':            'font_style',
@@ -293,7 +288,6 @@ local_variable_switcher = {
         'music':            'SGMusic *%(var)s;\n    ',
         'bitmap':           'SGBitmap *%(var)s;\n    ',
         
-        'string':           'char %(var)s[%(size)s];\n    ',
         # 'matrix2d':         'matrix2d %(var)s;\n    ',
         # 'triangle':         'triangle %(var)s;\n    ',
         
@@ -314,8 +308,6 @@ local_variable_switcher = {
     
     'length-of': #used to calculate %(size)s - is an expression
     {
-        #String type
-        'string':           '[%(param)s length] + 1',
         #NSArray types
         # 'bitmaparray':      '[%(param)s count]',
         'longintarray':     '[%(param)s count]',
@@ -334,8 +326,6 @@ local_variable_switcher = {
         #Direct mappings for C based language
         # 'matrix2d':         '%(var)s = &%(param)s[0][0];\n    ',
         # 'triangle':         '%(var)s = &%(param)s[0];\n    ',
-        #String type
-        'string':           '[%(param)s getCString:%(var)s maxLength:[%(param)s length] + 1 encoding:NSASCIIStringEncoding];\n    ',
         #NSArray types
         # 'bitmaparray':      '[SGBitmap getBitmaps:%(var)s fromArray:%(param)s maxSize:%(size)s];\n    ',
         'longintarray':     '[SGObjcUtils getIntegers:%(var)s fromArray:%(param)s maxSize:%(size)s];\n    ',
@@ -363,8 +353,6 @@ local_variable_switcher = {
     # (and updated there due to out parameter) back to the parameter in this language.
     'process-out-param': 
     {
-        'string':           '\n    *%(param)s = [[[NSString alloc] initWithCString:%(var)s encoding:NSASCIIStringEncoding] autorelease];',
-        
         #Passed through arrays
         # 'triangle':         '\n    *%(param)s = [[[SGTriangle alloc] initWithTriangle:%(var)s size:3] autorelease];',
         # 'matrix2d':         '\n    *%(param)s = [[[SGMatrix2D alloc] initWithMatrix2D:%(var)s size:9] autorelease];',
@@ -383,8 +371,6 @@ local_variable_switcher = {
         'boolean':          '\n    return %(var)s;',
         'color':            '\n    return %(var)s;',
         'longint':          '\n    return %(var)s;',
-        
-        'string':           '\n    return [[[NSString alloc] initWithCString:%(var)s encoding:NSASCIIStringEncoding] autorelease];',
         
         'soundeffect':      '\n    return %(var)s;',
         'music':            '\n    return %(var)s;',
@@ -438,6 +424,7 @@ _type_dictionary_creation_data = [
                 ('guicheckbox',     'SGGUICheckbox'     ),
                 ('connection',      'SGConnection'      ),
                 ('arduinodevice',   'SGArduinoDevice'   ),
+                ('serversocket',    'SGServerSocket'),
             ],
         '_type_switcher': {
                 None:       '#2# *',
@@ -460,6 +447,33 @@ _type_dictionary_creation_data = [
                 'process-result': '\n    return %(var)s;',
             },
     },
+    # String
+    {
+        # List of Types, 
+        'identifiers':  [   
+                ('string', 'NSString *', 'char %(var)s[%(size)s];\n    ' ),
+            ],
+        '_type_switcher': {
+                None:       '#2#',
+                'const':    '#2#',
+                # 'var':      '#2#*',
+                'out':      '#2#*',
+                'return':   '#2#',
+            },
+        '_data_switcher': {
+                # 'return_val': '[#2# createWithId:%s]',
+                # 'arg_val':  '',
+                # 'arg_lit_val': '',
+            },
+        'local_variable_switcher': {
+                'declare': '#3#',
+                'length-of': '[%(param)s length] + 1',
+                'initialise-param': '[%(param)s getCString:%(var)s maxLength:[%(param)s length] + 1 encoding:NSASCIIStringEncoding];\n    ',
+                # 'process-param': '',
+                'process-out-param': '\n    *%(param)s = [[[NSString alloc] initWithCString:%(var)s encoding:NSASCIIStringEncoding] autorelease];',
+                'process-result': '\n    return [[[NSString alloc] initWithCString:%(var)s encoding:NSASCIIStringEncoding] autorelease];',
+            },
+    },
     # structure types
     {
         'identifiers': [
@@ -469,10 +483,14 @@ _type_dictionary_creation_data = [
                 ('triangle', 'SGTriangle', 'triangle', 'triangle', 'Triangle'),
                 ('matrix2d', 'SGMatrix2D', 'matrix2D', 'matrix2d', 'Matrix2D'),
                 ('directionangles', 'SGDirectionAngles', 'directionAngles', 'direction_angles', 'DirectionAngles'),
+                ('drawingoptions', 'SGDrawingOptions', 'drawingOptions', 'drawing_options', 'DrawingOptions'),
+                ('httprequest', 'SGHttpRequest', 'httpRequest', 'http_request', 'HttpRequest'),
+                ('httpresponse', 'SGHttpResponse', 'httpResponse', 'http_response', 'HttpResponse'),
+                ('message', 'SGMessage', 'message', 'message', 'Message'),
             ],
             '_type_switcher': {
-                    # None:       '#2# *',
-                    'const':    '#2# *',
+                    None:       '#2#',
+                    'const':    'const #2# *',
                     'var':      '#2# *',
                     'out':      '#2# *',
                     'return':   '#2# *',
@@ -499,6 +517,9 @@ _type_dictionary_creation_data = [
             ('fontalignment',           'font_alignment'),
             ('guielementkind',          'guielement_kind'),
             ('filedialogselecttype',    'file_dialog_select_type'),
+            ('drawingdest',             'drawing_dest'),
+            ('httpmethod',              'http_method'),
+            ('connectiontype',          'connection_type'),
             
         ],
         '_type_switcher': {

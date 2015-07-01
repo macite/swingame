@@ -217,7 +217,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method HttpAddHeader
-  /// @sn httpAddHeader:%s
+  /// @sn httpRequest:%s addHeader:%s value:%s
   procedure HttpAddHeader(var aHttpRequest : HttpRequest; const name, value : String);
 
   /// Removes a header of the Http request at the specified index.
@@ -228,7 +228,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpRemoveHeaderAt
-  /// @sn httpRemoveHeaderAt:%s
+  /// @sn httpRequest:%s RemoveHeaderAt:%s
   procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; aIdx : LongInt);
 
   /// Returns a header of the Http Request at the specified index.
@@ -239,7 +239,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method HttpHeaderAt
-  /// @sn httpHeaderAt:%s
+  /// @sn httpRequest:%s headerAt:%s
   function HttpHeaderAt(const aHttpRequest : HttpRequest; aIdx : LongInt) : String;
 
   /// Returns a header of the Http Request at the specified index.
@@ -250,7 +250,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetBody
-  /// @sn httpSetBody:%s
+  /// @sn httpRequest:%s setBody:%s
   procedure HttpSetBody(var aHttpRequest : HttpRequest; const aBody : String);
 
   /// Sets the method of the Http Request
@@ -261,7 +261,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetMethod
-  /// @sn httpSetMethod:%s
+  /// @sn httpRequest:%s setMethod:%s
   procedure HttpSetMethod(var aHttpRequest : HttpRequest; aMethod : HttpMethod);
 
   /// Sets the version of the Http Request
@@ -272,7 +272,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetVersion
-  /// @sn httpSetVersion:%s
+  /// @sn httpRequest:%s setVersion:%s
   procedure HttpSetVersion(var aHttpRequest : HttpRequest; const aVersion : String);
 
   /// Sets the URL of the Http Request
@@ -283,7 +283,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetURL
-  /// @sn httpSetURL:%s
+  /// @sn httpRequest:%s setURL:%s
   procedure HttpSetURL(var aHttpRequest : HttpRequest; const aURL : String);
 
   /// Converts the Http Request to a string

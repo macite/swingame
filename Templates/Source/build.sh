@@ -38,28 +38,23 @@ PAS_FLAGS=""
 #
 # Library versions
 #
-OPENGL=false
-SDL_13=false
 STATIC=false
 FRAMEWORK=false
 IOS=false
-STATIC_NAME="sgsdk-sdl12.a"
-NAME_SUFFIX="-sdl12"
+STATIC_NAME="sgsdk-sdl2.a"
 
 #
 # Step 4: Usage message and process command line arguments
 #
 Usage()
 {
-    echo "Usage: ./build.sh [-c] [-d] [-i] [-h] [-badass] [-godly] [-IOS] [-framework] [-static] [version]"
+    echo "Usage: ./build.sh [-c] [-d] [-i] [-h] [-IOS] [-framework] [-static] [version]"
     echo 
     echo "Creates and Compiles the native SGSDK library."
     echo
     echo "Options:"
     echo " -c       Perform a clean rather than a build"
     echo " -d       Compile with debug symbols"
-    echo " -basass  Compile with SDL2 backend"
-    echo " -godly   Compile with SDL2/OpenGL backend"
     echo " -static  Compile as a static library"
     echo " -h       Show this help message"
     echo " -i       Install after compiling"
@@ -155,21 +150,9 @@ while getopts chdif:I:b:g:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-            STATIC_NAME="sgsdk-sdl13.a"
-            NAME_SUFFIX="-sdl13"
-        fi 
-        ;;
     h)  Usage ;;
     f)  if [ "${OPTARG}" = "ramework" ]; then
             FRAMEWORK=true
-        fi 
-        ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            OPENGL=true
-            STATIC_NAME="sgsdk-godly.a"
-            NAME_SUFFIX="-godly"
         fi 
         ;;
     s)  if [ "${OPTARG}" = "tatic" ]; then
@@ -197,7 +180,7 @@ fi
 # Step 5: Set the paths to local variables
 #
 
-TMP_DIR="${APP_PATH}/tmp/sdl12"
+TMP_DIR="${APP_PATH}/tmp/"
 SDK_SRC_DIR="${APP_PATH}/src"
 LOG_FILE="${APP_PATH}/tmp/out.log"
 
@@ -216,18 +199,6 @@ FPC_VER=`${FPC_BIN} -iV`
 FPC_MAJOR_VER=`echo ${FPC_VER} | awk -F'.' '{print $1}'`
 FPC_MINOR_VER=`echo ${FPC_VER} | awk -F'.' '{print $2}'`
 FPC_LESSR_VER=`echo ${FPC_VER} | awk -F'.' '{print $3}'`
-
-if [ ${SDL_13} = true ]; then
-  TMP_DIR="${APP_PATH}/tmp/sdl13"
-  EXTRA_OPTS="${EXTRA_OPTS} -dSWINGAME_SDL13"
-  VERSION="${VERSION}badass"
-fi
-
-if [ ${OPENGL} = true ]; then
-  TMP_DIR="${APP_PATH}/tmp/godly"
-  EXTRA_OPTS="${EXTRA_OPTS} -dSWINGAME_OPENGL -dSWINGAME_SDL13"
-  VERSION="${VERSION}godly"
-fi
 
 if [ ${IOS} = true ]; then
 
@@ -285,14 +256,10 @@ elif [ "$OS" = "$MAC" ]; then
     CURRENT_DIR="${OUT_DIR}/SGSDK.framework/Versions/Current"
     
     # Set lib dir
-    if [ ${SDL_13} = true ]; then
-      LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-      LIB_DIR="${APP_PATH}/staticlib/godly/mac"
-    else
-      LIB_DIR="${APP_PATH}/staticlib/sdl12/mac"
-    fi
+    LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
     
+    PAS_FLAGS="${PAS_FLAGS} -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+
     #
     # Setup framework/dylib details
     #

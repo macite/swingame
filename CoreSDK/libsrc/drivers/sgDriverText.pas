@@ -16,20 +16,7 @@ unit sgDriverText;
 //=============================================================================
 
 interface
-	uses sgTypes,
-		{$IFDEF SWINGAME_SDL2}
-			sgDriverTextSDL2
-		{$ELSE}
-			{$IFDEF SWINGAME_OPENGL}
-				sgDriverTextOpenGL
-			{$ELSE}
-				{$IFDEF SWINGAME_SDL13}
-					sgDriverTextSDL13
-				{$ELSE}
-					sgDriverTextSDL
-			{$ENDIF}
-		{$ENDIF}
-   {$ENDIF};
+	uses sgTypes, sgDriverTextSDL2;
 	
 	type
 		// These function and procedure pointers are required by the TextDriverRecord
@@ -93,19 +80,7 @@ interface
 implementation
 	procedure LoadDefaultTextDriver();
 	begin
-	{$IFDEF SWINGAME_SDL2}
-		LoadSDL2TextDriver()
-	{$ELSE}
-		{$IFDEF SWINGAME_OPENGL}
-			LoadOpenGLTextDriver()
-		{$ELSE}
-			{$IFDEF SWINGAME_SDL13}
-				LoadSDL13TextDriver()
-			{$ELSE}
-		 		LoadSDLTextDriver()
-			{$ENDIF}
-		{$ENDIF}
-  {$ENDIF};
+		LoadSDL2TextDriver();
 	end;
 	
 	function DefaultLoadFontProcedure(const fontName, fileName : String; size : Longint) : font;

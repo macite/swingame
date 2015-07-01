@@ -83,39 +83,11 @@ interface
 		GraphicsDriver : GraphicsDriverRecord;
 		
 implementation
-uses 
-  {$IFDEF SWINGAME_SDL2}
-    sgDriverGraphicsSDL2;
-  {$ELSE}
-    {$IFDEF SWINGAME_OPENGL}
-      sgDriverGraphicsOpenGL;
-    {$ELSE}
-        {$IFDEF SWINGAME_SDL13}
-          sgDriverGraphicsSDL13;
-        {$ELSE}
-          sgDriverGraphicsSDL;
-        {$ENDIF}
-    {$ENDIF}
-  {$ENDIF}
+uses sgDriverGraphicsSDL2;
     
 	procedure LoadDefaultGraphicsDriver();
 	begin
-    {$IFDEF SWINGAME_SDL2}
       LoadSDL2GraphicsDriver();
-    {$ELSE}
-      {$IFDEF SWINGAME_OPENGL}
-        {$INFO Using OpenGL Driver}
-        LoadOpenGLGraphicsDriver();
-      {$ELSE}
-        {$IFDEF SWINGAME_SDL13}
-          {$INFO Using SDL 2 Driver}
-          LoadSDL13GraphicsDriver();  
-        {$ELSE}
-          {$INFO Using SDL 1.2 Driver}
-          LoadSDLGraphicsDriver();
-        {$ENDIF}
-      {$ENDIF}
-    {$ENDIF}
 	end;
 	
 	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
