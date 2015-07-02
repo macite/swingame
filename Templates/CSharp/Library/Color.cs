@@ -1,5 +1,5 @@
 using System;
-using SwinGameSDK.SwinGame;
+using static SwinGameSDK.SwinGame;
 
 namespace SwinGameSDK
 {

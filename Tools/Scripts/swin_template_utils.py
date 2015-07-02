@@ -151,9 +151,9 @@ def build_csharp_lib():
     }
     
     if get_os_name() == "Windows":
-        csc = ['csc', '-t:library', '-r:System.dll', '-unsafe', '-r:System.Drawing.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s\\SwinGame.dll' % dirs, '%(cs_lib_dir)s\\*.cs' % dirs, '%(cs_generated_code_dir)s\\*.cs' % dirs]
+        csc = ['csc', '-t:library', '-r:System.dll', '-unsafe', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s\\SwinGame.dll' % dirs, '%(cs_lib_dir)s\\*.cs' % dirs, '%(cs_generated_code_dir)s\\*.cs' % dirs]
     else:
-        csc = ['gmcs', '-t:library', '-unsafe', '-r:System.dll', '-r:System.Drawing.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s/SwinGame.dll' % dirs, '%(cs_lib_dir)s/*.cs' % dirs, '%(cs_generated_code_dir)s/*.cs' % dirs]
+        csc = ['mcs', '-t:library', '-unsafe', '-r:System.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s/SwinGame.dll' % dirs, '%(cs_lib_dir)s/*.cs' % dirs, '%(cs_generated_code_dir)s/*.cs' % dirs]
 
     proc = subprocess.Popen(csc, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out,err = proc.communicate()
