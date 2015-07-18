@@ -9,29 +9,29 @@
 
 struct LightData
 {
-	vec3 position;
-	vec3 direction;
+	vec3 location;
+	vec3 forward;
 	mat4 transform;
 	vec3 intensities;
 	float attenuation;
 	float ambientCoefficient;
 	float cosOuterCone;
 	float cosInnerCone;
-	int lightType;
 	bool castsShadows;
 	int shadowMapLevel;
+	int type;
 };
 
 struct MaterialData
 {
 	vec3 diffuseColor;
+	sampler2D diffuseTexture;
 	vec3 specularColor;
+	sampler2D specularTexture;
 	float specularExponent;
 	float specularIntensity;
-	sampler2D texture;
-	bool useTexture;
+	sampler2D normalMap;
 };
-
 
 uniform MaterialData material;
 uniform LightData lights[MAX_NUMBER_OF_LIGHTS];
@@ -39,29 +39,49 @@ uniform int numberOfLights;
 uniform sampler2DArrayShadow shadowMap;
 
 uniform mat4 model;
-in		mat4 normalModel;
-uniform vec3 cameraPosition;
+uniform mat4 normalModel;
+uniform vec3 cameraLocation;
 
-
-in vec3 fragCoord;
+in vec3 fragLocation;
 in vec3 fragNormal;
-in vec2 fragTexCoord;
+in vec2 fraguv;
+in vec3 globalFragLocation;
 in vec4 fragShadowCoords[MAX_NUMBER_OF_LIGHTS];
 
 out vec4 finalColor;
 
 
+float getShadowFactor(int lightIndex)
+{
+	LightData light = lights[lightIndex];
+	vec4 shadowCoord = fragShadowCoords[lightIndex];
+
+	// Divide by w coord if it is projected
+	if (light.type != LIGHT_TYPE_DIRECTIONAL)
+	{
+		shadowCoord = vec4(shadowCoord.x / shadowCoord.w,
+						   shadowCoord.y / shadowCoord.w,
+						   shadowCoord.z / shadowCoord.w,
+						   shadowCoord.w);
+	}
+
+	float shadowBias = 0.005;
+	float shadowMapValue = texture(shadowMap, vec4(shadowCoord.xy, light.shadowMapLevel, shadowCoord.z - shadowBias));
+	return shadowMapValue;
+}
+
+
 // Returns the modifier for how bright the light is (used only for spot lights)
 // Will return 1 if the light is not a spot light
-float calculateSpotIntensityModifier(LightData light, vec3 surfaceToLight)
+float getSpotFactor(LightData light, vec3 surfaceToLight)
 {
-	if (light.lightType != LIGHT_TYPE_SPOT)
+	if (light.type != LIGHT_TYPE_SPOT)
 	{
 		return 1;
 	}
-	
+
 	// The cos angle
-	float cosAngle = dot(surfaceToLight, -normalize(light.direction));
+	float cosAngle = dot(surfaceToLight, -normalize(light.forward));
 	// Distance from the inner cone
 	cosAngle -= light.cosOuterCone;
 	// Normalized distance from the inner cone
@@ -71,120 +91,60 @@ float calculateSpotIntensityModifier(LightData light, vec3 surfaceToLight)
 	return cosAngle;
 }
 
-// Determines if the fragment is in the light
-float shadowFactor()
+
+vec4 getDiffuseBase()
 {
-	return 1;
+	return vec4(material.diffuseColor, 1) * texture(material.diffuseTexture, fraguv);
 }
 
-vec3 ambientColor()
+
+vec3 getSpecularBase()
 {
-	return vec3(0, 0, 0);
+	return material.specularColor, 1 * texture(material.specularTexture, fraguv).xyz;
 }
 
-vec3 diffuseColor()
+
+vec3 getNormal()
 {
-	return vec3(0, 0, 0);
+	return (normalModel * vec4(fragNormal * (texture(material.normalMap, fraguv) * 2.0 - 1.0).xyz, 0)).xyz;
 }
 
-vec3 specularColor()
+
+vec3 getPhongColor(int lightIndex)
 {
-	return vec3(0, 0, 0);
+	LightData light = lights[lightIndex];
+	vec3 diffuseBase = getDiffuseBase().rgb;
+	vec3 specularBase = getSpecularBase();
+	vec3 normal = getNormal();
+	float surfaceToLightDist = length(light.location - globalFragLocation);
+	vec3 surfaceToLight = normalize(light.location - globalFragLocation);
+	vec3 surfaceToCamera = normalize(cameraLocation - globalFragLocation);
+
+	vec3 ambient = light.ambientCoefficient * light.intensities * diffuseBase;
+
+	// Diffuse and specular are zero if the light is too far away
+	vec3 diffuse = vec3(0, 0, 0);
+	vec3 specular = vec3(0, 0, 0);
+	if (surfaceToLightDist <= light.attenuation)
+	{
+		diffuse = max(0.0, dot(surfaceToLight, normal)) * diffuseBase * light.intensities;
+
+		specular = pow(max(0.0, dot(reflect(-surfaceToLight, normal), surfaceToCamera)), material.specularExponent) * material.specularIntensity * material.specularColor * light.intensities;
+	}
+
+	float attenuation = 1.0 / (1.0 + pow(surfaceToLightDist * 5 / light.attenuation, 2));
+
+	return ambient + attenuation * getShadowFactor(lightIndex) * getSpotFactor(light, surfaceToLight) * (diffuse + specular);
+//	return vec3(1, 0, 0);
 }
 
 
 void main() {
-	vec3 normal = normalize(mat3(normalModel) * fragNormal);
-	vec3 surfacePos = vec3(model * vec4(fragCoord, 1));
-	vec3 surfaceToCamera = normalize(cameraPosition - surfacePos);
-
-	// Determine the surface color based on whether it is textured on not
-	vec4 surfaceColor;
-	if (material.useTexture)
-	{
-		surfaceColor = texture(material.texture, fragTexCoord);
-	}
-	else
-	{
-		surfaceColor = vec4(material.diffuseColor, 1);
-	}
-	
 	// Loop through all of the lights in the scene
-	finalColor = vec4(0, 0, 0, 1);
+	finalColor = vec4(0, 0, 0, getDiffuseBase().a);
 	for (int i = 0; i < numberOfLights; i++)
 	{
-		// Vector from the surface to the supposed light position
-		vec3 surfaceToLight;
-		if (lights[i].lightType == LIGHT_TYPE_DIRECTIONAL)
-		{
-			// Vector is the same as the direction of the light
-			surfaceToLight = -normalize(lights[i].direction);
-		}
-		else
-		{
-			// For other lights it is calculated normally
-			surfaceToLight = normalize(lights[i].position - surfacePos);
-		}
-		
-		// Determine if the fragment is in the light
-		vec4 shadowCoord = fragShadowCoords[i];
-		
-		// Divide by w coord if it is projected
-		if (lights[i].lightType != LIGHT_TYPE_DIRECTIONAL)
-		{
-			shadowCoord = vec4(shadowCoord.x / shadowCoord.w,
-							   shadowCoord.y / shadowCoord.w,
-							   shadowCoord.z / shadowCoord.w,
-							   shadowCoord.w);
-		}
-		
-		shadowCoord = vec4(shadowCoord.x * 0.5 + 0.5,
-						   shadowCoord.y * 0.5 + 0.5,
-						   shadowCoord.z * 0.5 + 0.5,
-						   shadowCoord.w);
-		
-		vec4 col = vec4(1, 0, 0, 1);
-		if (shadowCoord.x < 0 || shadowCoord.y < 0
-			|| shadowCoord.x > 1 || shadowCoord.y > 1)
-		{
-			col = vec4(0, 1, 0, 1);
-		}
-		
-		float shadowBias = 0.005;
-		float shadowMapValue = texture(shadowMap, vec4(shadowCoord.xy, lights[i].shadowMapLevel, shadowCoord.z - shadowBias));
-		bool inLight = shadowMapValue > 0;
-		
-		// Ambient
-		vec3 ambient = lights[i].ambientCoefficient * lights[i].intensities * surfaceColor.rgb;
-		finalColor += vec4(ambient, 1);
-		
-		if (inLight)
-		{
-			// The intensity of the light based on its direction (used only for spot lights)
-			float spotIntensity = calculateSpotIntensityModifier(lights[i], surfaceToLight);
-			
-			// Diffuse
-			// Max prevents light appearing on the back face of the surface
-			float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight)) * spotIntensity;
-			vec3 diffuse = diffuseCoefficient * surfaceColor.rgb * lights[i].intensities;
-			
-			// Specular
-			float specularCoefficient = 0.0;
-			vec3 specular = vec3(0, 0, 0);
-			// Specular can only occur if diffuse is not zero
-			if (diffuseCoefficient > 0.0)
-			{
-				// specInt * lightInt * (surfToCam . reflectionVec) ^ specExpo
-				specularCoefficient = material.specularIntensity * spotIntensity * pow(max(0.0, dot(surfaceToCamera, reflect(-surfaceToLight, normal))), material.specularExponent);
-				specular = specularCoefficient * material.specularColor * lights[i].intensities;
-			}
-			
-			// Attenuation
-			float distanceToLight = length(lights[i].position - surfacePos);
-			float attenuation = 1.0 / (1.0 + lights[i].attenuation * pow(distanceToLight, 2));
-			
-			finalColor += vec4(attenuation * (diffuse + specular), surfaceColor.a);
-		}
+		finalColor += vec4(getPhongColor(i), 0);
 	}
 }
 
@@ -192,4 +152,3 @@ void main() {
 // If you want an array of textures, must use a texture array
 // You can iterate over an array of an opaque type in gl 4.3+
 // A sampler can be a member of a struct, but the struct can only be used as a unifrom
-

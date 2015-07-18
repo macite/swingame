@@ -10,7 +10,7 @@
 #define sgsdl2_SGSDL2Graphics3DTypes_h
 
 #include "sgInterfaces.h"
-#include "Vector3f.h"
+#include "math/Vector3f.h"
 #include "Matrix4f.h"
 #include <vector>
 
