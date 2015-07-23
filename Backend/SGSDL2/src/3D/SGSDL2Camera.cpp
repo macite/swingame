@@ -31,6 +31,15 @@ sgsdl2_camera* sgsdl2_create_camera(sgsdl2_node *parent, sgsdl2_camera_type came
 	return result;
 }
 
+sgsdl2_camera* sgsdl2_create_perspective_camera(sgsdl2_node *parent)
+{
+	sgsdl2_camera *cam = sgsdl2_create_camera(parent, sgsdl2_camera_type::PERSPECTIVE);
+	cam->near = 1;
+	cam->far = 100;
+	sgsdl2_set_proj_dist(cam, 100);
+	return cam;
+}
+
 sgsdl2_camera* sgsdl2_create_temporary_camera(sgsdl2_node *parent, sgsdl2_camera_type camera_type)
 {
 	// Parent must belong to a scene

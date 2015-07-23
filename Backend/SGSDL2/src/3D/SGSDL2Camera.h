@@ -15,6 +15,9 @@
 
 sgsdl2_camera* sgsdl2_create_camera(sgsdl2_node *parent, sgsdl2_camera_type camera_type = sgsdl2_camera_type::PERSPECTIVE);
 
+sgsdl2_camera* sgsdl2_create_perspective_camera(sgsdl2_node *parent);
+
+// PRIVATE
 // A temporary camera does not officially belong in the scene.
 // It is used for one off render passes.
 sgsdl2_camera* sgsdl2_create_temporary_camera(sgsdl2_node *parent, sgsdl2_camera_type camera_type);
