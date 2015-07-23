@@ -382,6 +382,8 @@ void test_graphics3d()
 	
 	// Initialize the scene
 	sgsdl2_scene *scene = sgsdl2_make_scene(&surface);
+	
+	// Cube
 	sgsdl2_node *cube_node = sgsdl2_create_new_node(scene);
 	sgsdl2_mesh *cube = sgsdl2_create_mesh(cube_node);
 	sgsdl2_attach_vertices(cube, vertices, 24);
@@ -391,33 +393,19 @@ void test_graphics3d()
 	sgsdl2_material *mat = new sgsdl2_material();
 	mat->shader = scene->default_shader;
 	mat->depth_shader = scene->default_depth_shader;
-	mat->diffuse_color = {1, 0.5, 0.2, 1};
+	mat->diffuse_color = {0, 0, 1, 1};
 	mat->specular_color = {1, 1, 1, 1};
 	mat->specular_exponent = 0.1;
 	mat->specular_intensity = 1;
 	cube->material = mat;
 	
 	sgsdl2_node *camera_node = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
-	sgsdl2_camera *camera = sgsdl2_create_camera(camera_node, sgsdl2_camera_type::PERSPECTIVE);
+	sgsdl2_camera *camera = sgsdl2_create_perspective_camera(camera_node);
 	sgsdl2_set_active_camera(scene, camera);
-	camera->far = 100;
-	camera->near = 0.1;
-	sgsdl2_set_proj_dist(camera, 100);
 	
 	sgsdl2_node *light_node  = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
-	sgsdl2_light *light = sgsdl2_create_light(light_node);
-	light->color = {1, 1, 1, 1};
-	light->intensity = 1;
-	light->ambient_coefficient = 0.1;
-	light->attenuation_cutoff = 100;
-	light->radius = 0.1;
-//	light->type = sgsdl2_light_type::SPOT;
-	light->type = sgsdl2_light_type::DIRECTIONAL;
-	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
-	light->cos_inner_cone = cosf(M_2_PI * (10.0f / 360.0f));
-	light->cos_outer_cone = cosf(M_2_PI * (45.0f / 360.0f));
-	light->width = 50;
-	light->height = 50;
+	sgsdl2_light *light = sgsdl2_create_spot_light(light_node);
+//	light->type = sgsdl2_light_type::DIRECTIONAL;
 	
 	
 	// Render for 3 seconds
