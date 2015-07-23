@@ -316,15 +316,18 @@ struct sgsdl2_render_options
 
 struct sgsdl2_renderer
 {
-//	sgsdl2_camera *camera = nullptr;
-//	sgsdl2_shader_mode mode;
-//	bool use_lights;
-	
 	sgsdl2_render_options opts;
 	sgsdl2_shader_interface interface;
 	sgsdl2_scene *scene;
 };
+
+struct sgsdl2_attribute
+{
+	SGuint handle = 0;
 	
+	// Note: when using custom locations some are reserved. Probs 1-10
+	SGuint location = 0;
+};
 
 
 	
@@ -461,7 +464,7 @@ struct sgsdl2_mesh
 	SGuint vao = 0;
 
 	// Array of attribute buffers
-	vector<sgsdl2_attribute*> attributes;
+	vector<sgsdl2_attribute> attributes;
 
 	// Handle to the indices buffer
 	SGuint indices_handle = 0;
@@ -495,22 +498,15 @@ struct sgsdl2_camera
 	// Type of camera projection
 	sgsdl2_camera_type type;
 
-	// The near and far clipping distances (used for both camera types)
-	float near = 1;
-	float far = 100;
+	// The near and far clipping distances
+	float near;
+	float far;
 
-	// The other distances (used for orthogonal camera types)
-	float left = -10;
-	float right = 10;
-	float top = 10;
-	float bottom = -10;
-
-	// Whether or no this camera is currently active
-//	bool is_main = false;
-
-	// The cached camera transforms (get recalculated once each pass)
-//	mat4 view_trans;
-//	mat4 proj_trans;
+	// Dimensions of the frustum
+	float left;
+	float right;
+	float top;
+	float bottom;
 };
 
 struct sgsdl2_material
@@ -531,14 +527,17 @@ struct sgsdl2_material
 };
 	
 	
+	
+	/////////////////////////////////////////////
+	// Unused
+	/////////////////////////////////////////////
 
-
-struct sgsdl2_attribute
+struct sgsdl2_uniform
 {
-	SGuint handle = 0;
-
-	// Note: when using custom locations some are reserved. Probs 1-10
-	SGuint location = 0;
+	const char *name;
+	void *value;
+	int count;
+	// Type
 };
 
 struct sgsdl2_texture
@@ -562,131 +561,6 @@ struct sgsdl2_shader
 	// Note: if the shader is being used to render shadow maps, it will not be passed scene lighting data.
 	bool wants_lighting;
 }__attribute__((deprecated));
-
-// Represents all the data about a light that will be passed to the shader
-
-
-
-	
-	
-	
-
-//struct sgsdl2_scene_state
-//{
-//	mat4 view;
-//	mat4 proj;
-//	vec3 camera_loc;
-//
-//	// Lights & is lighting enabled
-//	// bool is_lighting_enabled; // Not implemented yet
-//	sgsdl2_light_state lights[MAX_LIGHTING_COUNT];
-//
-//	// The actual number of used entries in the light array.
-//	SGint lighting_count;
-//
-//	SGuint shadow_map;
-//};
-//
-//struct sgsdl2_node_state
-//{
-//	mat4 model;
-//	mat4 normal_model;
-//};
-	
-
-//
-//struct sgsdl2_render_profile
-//{
-//	// Indicates which type of shader to use
-//	sgsdl2_render_type type;
-//
-//	// Whether shaders are provided with material data
-////	bool use_material;
-//
-//	// When set to false, all lighting calculations are ignored for the pass.
-//	// Lighting data is not generated for the scene state and no info about lights is passed to the shader.
-//	bool use_lights;
-//
-//	// Overrides all other shaders when this value is not 0
-////	GLuint shader_override;
-//
-//	// The framebuffer to use for rendering (leave at 0 to use the default)
-//	//	GLuint framebuffer;
-//
-//	// Override the active camera in the scene
-//	bool override_camera;
-//	mat4 proj_transform;
-//	mat4 view_transform;
-//	vec3 cam_location;
-//};
-
-
-
-
-
-
-
-
-
-//	struct sgsdl2_array_texture : public sgsdl2_texture
-//	{
-//		// The number of levels in this array texture
-//		int num_of_levels;
-//
-//		// What levels in the texture are occupied
-//		bool* occupied_levels;
-//	} __attribute__((deprecated));
-
-	// Represents all the data that will be passed to shaders
-//	struct sgsdl2_render_data
-//	{
-//		//---------------------------------------//
-//		// Global data (not dependent on element)
-//		// --------------------------------------//
-//
-//		// The world-to-camera transform
-//		float view[16];
-//
-//		// The camera-to-clip transform
-//		float proj[16];
-//
-//		// Position of the camera in world space
-//		float camera_pos[3];
-//
-//		// Array active lights in the scene (16 is the max number supported)
-//		sgsdl2_light_data lights[16];
-//
-//		// Actual number of lights in array
-//		int num_of_lights;
-//
-//		// Handle to the global shadow map texture array
-//		unsigned int shadow_map;
-//
-//
-//		// --------------------------------------//
-//		// Local data (changes per element)
-//		// --------------------------------------//
-//
-//		// The model-to-world transform
-//		float model[16];
-//
-//		// Version of the model-to-world transform used for normals
-//		//		float normal_model[16];
-//
-//		// The combined model, view, proj transform
-//		float mvc[16];
-//
-//		// The material the object is using
-//		sgsdl2_material material;
-//	} __attribute__((deprecated));
-
-//	struct sgsdl2_frustrum
-//	{
-//		// Boundaries
-//		float left, right, top, bottom, near, far;
-//		bool isOrthogonal;
-//	} __attribute__((deprecated));
-
 
 
 #endif
