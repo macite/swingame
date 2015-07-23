@@ -24,7 +24,7 @@ bool sgsdl2_possesses_attribute_at(sgsdl2_mesh *mesh, SGuint index);
 // Deletes the buffer data off of the graphics card and then removes the attribute from the mesh's array.
 void sgsdl2_delete_attribute_at(sgsdl2_mesh *mesh, SGuint index);
 
-SGuint sgsdl2_get_attribute_handel(sgsdl2_mesh *mesh, SGuint index);
+SGuint sgsdl2_get_attribute_handle(sgsdl2_mesh *mesh, SGuint index);
 
 // Shortcut method to edit the vertices attribute
 void sgsdl2_attach_vertices(sgsdl2_mesh *mesh, SGfloat const *vertices, SGuint count);

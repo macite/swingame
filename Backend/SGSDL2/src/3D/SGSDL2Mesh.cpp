@@ -7,7 +7,6 @@
 //
 
 #include "SGSDL2Mesh.h"
-#include "SGSDL2Attribute.h"
 #include "SGSDL2Utilities.h"
 
 
@@ -49,20 +48,19 @@ void sgsdl2_add_attribute(sgsdl2_mesh *mesh, SGuint index, SGuint count, SGint s
 		sgsdl2_delete_attribute_at(mesh, index);
 	}
 	
-	sgsdl2_attribute *attr = new sgsdl2_attribute();
-	attr->location = index;
-	glGenBuffers(1, &attr->handle);
-	glBindBuffer(GL_ARRAY_BUFFER, attr->handle);
+	sgsdl2_attribute attr = sgsdl2_attribute();
+	attr.location = index;
+	glGenBuffers(1, &attr.handle);
+	glBindBuffer(GL_ARRAY_BUFFER, attr.handle);
 	glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr) (sizeof(SGfloat) * count), data, GL_STATIC_DRAW);
-	// TODO check for error
-	sgsdl2_check_opengl_error("attach_vertices@buffer_data: ");
+	sgsdl2_check_opengl_error("add_attribute@buffer_data: ");
 	
 	// Specify the format of the data
 	glBindVertexArray(mesh->vao);
 	glEnableVertexAttribArray(index);
 	glVertexAttribPointer(index, size, GL_FLOAT, false, stride, 0);
 	// TODO check for error
-	sgsdl2_check_opengl_error("attach_vertices@data_format: ");
+	sgsdl2_check_opengl_error("add_attribute@data_format: ");
 	
 	mesh->attributes.push_back(attr);
 	
@@ -75,7 +73,7 @@ bool sgsdl2_possesses_attribute_at(sgsdl2_mesh *mesh, SGuint index)
 {
 	for (unsigned long i = 0; i < mesh->attributes.size(); i++)
 	{
-		if (mesh->attributes[i]->location == index)
+		if (mesh->attributes[i].location == index)
 		{
 			return true;
 		}
@@ -87,10 +85,10 @@ void sgsdl2_delete_attribute_at(sgsdl2_mesh *mesh, SGuint index)
 {
 	for (unsigned long i = 0; i < mesh->attributes.size(); i++)
 	{
-		if (mesh->attributes[i]->location == index)
+		if (mesh->attributes[i].location == index)
 		{
-			sgsdl2_attribute *attr = mesh->attributes[i];
-			glBindBuffer(GL_ARRAY_BUFFER, attr->handle);
+			sgsdl2_attribute attr = mesh->attributes[i];
+			glBindBuffer(GL_ARRAY_BUFFER, attr.handle);
 			// Unbind it from the vao if needed
 			if (mesh->vao != 0)
 			{
@@ -99,7 +97,7 @@ void sgsdl2_delete_attribute_at(sgsdl2_mesh *mesh, SGuint index)
 				glBindVertexArray(0);
 			}
 			
-			glDeleteBuffers(1, &attr->handle);
+			glDeleteBuffers(1, &attr.handle);
 			mesh->attributes.erase(mesh->attributes.begin() + (int) i);
 		}
 	}
@@ -109,9 +107,9 @@ SGuint sgsdl2_get_attribute_handle(sgsdl2_mesh *mesh, SGuint index)
 {
 	for (unsigned long i = 0; i < mesh->attributes.size(); i++)
 	{
-		if (mesh->attributes[i]->location == index)
+		if (mesh->attributes[i].location == index)
 		{
-			return mesh->attributes[i]->handle;
+			return mesh->attributes[i].handle;
 		}
 	}
 	return 0;
@@ -146,7 +144,7 @@ void sgsdl2_attach_indices(sgsdl2_mesh *mesh, SGushort const *indices, SGuint co
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (sizeof(GLushort) * count), indices, GL_STATIC_DRAW);
 	mesh->indices_count = (int) count;
 	// TODO check for error
-//	sgsdl2_check_opengl_error("attach_indices: ");
+	sgsdl2_check_opengl_error("attach_indices: ");
 	
 	// Unbind buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -159,7 +157,7 @@ bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh)
 	
 	for (unsigned long i = 0; i < mesh->attributes.size(); i++)
 	{
-		if (mesh->attributes[i]->location < MESH_ATTR_LAST_RES)
+		if (mesh->attributes[i].location < MESH_ATTR_LAST_RES)
 		{
 			present_attrs[i] = true;
 		}
@@ -177,7 +175,7 @@ void sgsdl2_delete_mesh(sgsdl2_mesh *mesh)
 	for (unsigned long i = 0; i < mesh->attributes.size(); i++)
 	{
 		// TODO this is highly inefficient
-		sgsdl2_delete_attribute_at(mesh, mesh->attributes[i]->location);
+		sgsdl2_delete_attribute_at(mesh, mesh->attributes[i].location);
 	}
 	
 	// Delete the vao
