@@ -158,8 +158,10 @@ void sgsdl2_calculate_lighting_state(sgsdl2_scene *scene, sgsdl2_renderer *rende
 		{
 			sgsdl2_light *light = scene->lights[i];
 			sgsdl2_node *light_node = light->parent;
-			result.lights[i].location = light_node->location;
-			result.lights[i].forward = vec3(sgsdl2_get_global_transform(light_node) * vec4(0, 0, -1, 0));
+			mat4 light_trans = sgsdl2_get_global_transform(light_node);
+			
+			result.lights[i].location = vec3(light_trans * vec4(0, 0, 0, 1));
+			result.lights[i].forward = vec3(light_trans * vec4(0, 0, -1, 0));
 			// The transform is normalized between [0-1]
 			result.lights[i].depth_transform = sgsdl2_normalize_shadow_transform(sgsdl2_get_shadow_transform(light));
 			result.lights[i].intensities = sgsdl2_make_vec3_color(light->color) * light->intensity;
