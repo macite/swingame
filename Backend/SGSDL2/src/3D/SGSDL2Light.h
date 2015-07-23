@@ -14,6 +14,8 @@
 
 sgsdl2_light* sgsdl2_create_light(sgsdl2_node *parent);
 
+sgsdl2_light* sgsdl2_create_spot_light(sgsdl2_node *parent);
+
 // Mimics the view of a light onto a camera.
 void sgsdl2_set_camera_frustum(sgsdl2_light *light, sgsdl2_camera *camera);
 
