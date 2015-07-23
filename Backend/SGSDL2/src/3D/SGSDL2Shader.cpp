@@ -206,8 +206,8 @@ void sgsdl2_bind_data_to_shader(SGuint shader, sgsdl2_shader_interface interface
 		glUniform3fv(intensities, 1, value_ptr(light.intensities));
 		glUniform1f(attenuation_cutoff, light.attenuation_cutoff);
 		glUniform1f(ambient_coefficient, light.ambient_coefficient);
-		glUniform1f(cos_outer, light.cos_inner_cone);
-		glUniform1f(cos_inner, light.cos_outer_cone);
+		glUniform1f(cos_inner, light.cos_inner_cone);
+		glUniform1f(cos_outer, light.cos_outer_cone);
 		glUniform1i(casts_shadows, light.casts_shadows);
 		glUniform1i(shadow_map_level, (int) light.shadow_map_level);
 		glUniform1i(type, (int) light.type);

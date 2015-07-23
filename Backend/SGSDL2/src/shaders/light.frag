@@ -79,16 +79,20 @@ float getSpotFactor(LightData light, vec3 surfaceToLight)
 	{
 		return 1;
 	}
+	
+	float cosAngle = dot(normalize(light.forward), -surfaceToLight);
+	float falloff = (cosAngle - light.cosOuterCone) / (light.cosInnerCone - light.cosOuterCone);
+	falloff = clamp(falloff, 0, 1);
 
 	// The cos angle
-	float cosAngle = dot(surfaceToLight, -normalize(light.forward));
 	// Distance from the inner cone
-	cosAngle -= light.cosOuterCone;
+//	cosAngle -= light.cosOuterCone;
 	// Normalized distance from the inner cone
-	cosAngle /= (light.cosInnerCone - light.cosOuterCone);
+//	cosAngle /= (light.cosInnerCone - light.cosOuterCone);
 	// Clamped to within range
-	cosAngle = clamp(cosAngle, 0, 1);
-	return cosAngle;
+//	cosAngle = clamp(cosAngle, 0, 1);
+	return falloff;
+//	return light.cosInnerCone;
 }
 
 
@@ -106,7 +110,8 @@ vec3 getSpecularBase()
 
 vec3 getNormal()
 {
-	return (normalModel * vec4(fragNormal * (texture(material.normalMap, fraguv) * 2.0 - 1.0).xyz, 0)).xyz;
+	vec3 localNormal = fragNormal * (texture(material.normalMap, fraguv) * 2.0 - 1.0).xyz;
+	return (normalModel * vec4(localNormal, 0)).xyz;
 }
 
 
@@ -145,6 +150,9 @@ void main() {
 	for (int i = 0; i < numberOfLights; i++)
 	{
 		finalColor += vec4(getPhongColor(i), 0);
+//		vec3 surfaceToLight = normalize(lights[i].location - globalFragLocation);
+//		finalColor += getSpotFactor(lights[i], surfaceToLight);
+//		finalColor = vec4(lights[i].location, 1);
 	}
 }
 
