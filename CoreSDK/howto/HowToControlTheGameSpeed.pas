@@ -2,7 +2,7 @@ program HowToControlTheGameSpeed;
 uses
     SwinGame, sgTypes;
 
-procedure DoWalking(sprt: Sprite; key: KeyCode; animationName: String; dx, dy: Single);
+procedure DoWalking(sprt: Sprite; key: KeyCode;const animationName: String; dx, dy: Single);
 begin
     if KeyDown(key) then
     begin

@@ -762,7 +762,7 @@ class SGMethod(SGMetaDataContainer):
     def has_const_params(self):
         for param in self.params:
             # print param.modifier, param.is_array(), ', ', 
-            if (param.modifier == 'const' and not param.is_array()): 
+            if (param.modifier == 'const' and not (param.is_array() or param.data_type.name == 'String')): 
                 # print
                 return True
         # print

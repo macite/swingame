@@ -113,7 +113,7 @@ def const_strip_arg_visitor(arg_str, the_arg, for_param_or_type):
     else:
         the_type = for_param_or_type.data_type
     
-    if the_arg != None and isinstance(the_arg, SGParameter) and the_arg.modifier == 'const' and not the_type.is_array:
+    if the_arg != None and isinstance(the_arg, SGParameter) and the_arg.modifier == 'const' and not (the_type.is_array or the_type.name == 'String'):
         return '&' + arg_str
     else:
         return arg_str

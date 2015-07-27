@@ -19,6 +19,8 @@
 #include <SDL_image.h>
 #endif
 
+#include "png.h"
+
 #include "SGSDL2Graphics.h"
 #include "sgBackendUtils.h"
 
@@ -1234,7 +1236,15 @@ Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
             return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
 #endif
         case 4:
-            return *(Uint32 *)p;
+            uint32_t color;
+            uint8_t r, g, b, a;
+            color = *(Uint32 *)p;
+            
+            r = (uint8_t)((color & surface->format->Rmask) >> (surface->format->Rshift));
+            g = (uint8_t)((color & surface->format->Gmask) >> (surface->format->Gshift));
+            b = (uint8_t)((color & surface->format->Bmask) >> (surface->format->Bshift));
+            a = (uint8_t)((color & surface->format->Amask) >> (surface->format->Ashift));
+            return (uint32_t)(r << 24 | g << 16 | b << 8 | a);
         default:
             return 0;
     }
@@ -1243,6 +1253,7 @@ Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
 //
 // To Pixels
 //
+void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz);
 void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
 {
     if ( ! surface || ! surface->_data || surface->width * surface->height != sz) return;
@@ -1436,6 +1447,92 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
     }
 }
 
+// Saving a surface to a png file
+void png_user_warn(png_structp ctx, png_const_charp str)
+{
+    //WriteLn(stderr, 'libpng: warning: ', str);
+}
+
+void png_user_error(png_structp ctx, png_const_charp str)
+{
+    //WriteLn(stderr, 'libpng: error: ', str);
+}
+
+int sgsdl2_save_png(sg_drawing_surface * surface, const char *filename)
+{
+    if ( ! surface || ! surface->_data || surface->width <= 0 || surface->height <= 0  ) return 0;
+    
+    FILE *fp;
+    png_structp png_ptr;
+    png_infop info_ptr;
+    int i, colortype;
+    unsigned long sz;
+    png_bytepp row_pointers;
+    uint8_t *pixels;
+    
+    // Opening output file
+    fp = fopen(filename, "wb");
+    
+    if (fp == NULL) return 0;
+    
+    std::cout << png_get_header_ver(NULL);
+    
+    // Initializing png structures and callbacks
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, &png_user_error, &png_user_warn);
+    if (png_ptr == NULL)
+    {
+        fclose(fp);
+        return 0;
+    }
+    
+    info_ptr = png_create_info_struct(png_ptr);
+    if (info_ptr == NULL)
+    {
+        png_destroy_write_struct(&png_ptr, NULL);
+        //printf("png_create_info_struct error!\n");
+        fclose(fp);
+        return 0;
+    }
+    
+    png_init_io(png_ptr, fp);
+    
+    colortype = PNG_COLOR_TYPE_RGBA;
+    png_set_IHDR( png_ptr, info_ptr,
+                 (png_uint_32)surface->width, (png_uint_32)surface->height, 8, colortype,
+                 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+    
+    // Writing the image
+    png_write_info(png_ptr, info_ptr);
+    
+    png_set_packing(png_ptr);
+    png_set_swap_alpha(png_ptr);
+    png_set_bgr(png_ptr);
+    
+    // actually get the pixel data...
+    sz = (unsigned long)(surface->width * surface->height) * sizeof(uint8_t);
+    pixels = (uint8_t *) malloc(sizeof(uint8_t) * sz * 4);
+    
+    sgsdl2_to_pixels(surface, (int *)pixels, (int)sz);
+    
+    row_pointers = (png_bytepp)png_malloc(png_ptr, (unsigned long)surface->height * sizeof(png_bytep));
+    
+    for (i = 0; i < surface->height; i++)
+    {
+        row_pointers[i] = png_bytep(pixels + i * surface->width * 4);
+    }
+    
+    png_write_image(png_ptr, row_pointers);
+    png_write_end(png_ptr, info_ptr); // was ptr and NULL
+    
+    // Cleaning out...
+    png_free(png_ptr, row_pointers);
+    png_destroy_write_struct(&png_ptr, &info_ptr);
+    free(pixels);
+    
+    fclose(fp);
+    return -1; // success
+}
+
 
 //
 // Load
@@ -1466,6 +1563,7 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
     functions->graphics.show_border = &sgsdl2_show_border;
     functions->graphics.show_fullscreen = &sgsdl2_show_fullscreen;
     functions->graphics.resize = &sgsdl2_resize;
+    functions->graphics.save_png = &sgsdl2_save_png;
 }
 
 
@@ -1645,7 +1743,7 @@ void sgsdl2_finalise_graphics()
         _sgsdl2_destroy_bitmap(_sgsdl2_open_bitmaps[i]);
     }
     
-    // Close all windows 
+    // Close all windows
     for (unsigned int i = 0; i < _sgsdl2_num_open_windows; i++)
     {
         _sgsdl2_destroy_window(_sgsdl2_open_windows[i]);

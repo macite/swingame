@@ -18,25 +18,18 @@ unit sgDriverAudio;
 //=============================================================================
 
 interface
-	uses sgTypes, 
-	{$IFDEF SWINGAME_SDL2}
-		sgDriverAudioSDL2
-	{$ELSE}
-		{$IFDEF SWINGAME_SDL13}sgDriverAudioSDL13Mixer
-		{$ELSE}sgDriverAudioSDLMixer
-		{$ENDIF}
-	{$ENDIF};
+	uses sgTypes, sgDriverAudioSDL2;
 	
 	type
 		// These function and procedure pointers are required by the AudioDriverRecord
 		OpenAudioProcedure = function () : Boolean;
 		CloseAudioProcedure = procedure ();
-		LoadSoundEffectProcedure = function (filename, name : String) : SoundEffect;
+		LoadSoundEffectProcedure = function (const filename, name : String) : SoundEffect;
 		SetMusicVolumeProcedure = procedure (newVolume : Single);
 		GetMusicVolumeProcedure = function () : Single;
 		GetErrorProcedure = function () : String;
 		FreeSoundEffectProcedure = procedure (effect : SoundEffect);
-		LoadMusicProcedure = function (filename, name : String) : Music;
+		LoadMusicProcedure = function (const filename, name : String) : Music;
 		FreeMusicProcedure = procedure (music : Music);
 		PlaySoundEffectProcedure = function (effect : SoundEffect; loops : Integer; volume : Single) : Boolean;
 		PlayMusicProcedure = function (music : Music; loops : Integer) : Boolean;
@@ -99,15 +92,7 @@ implementation
 //=============================================================================
 	procedure LoadDefaultAudioDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL2}
 	  	LoadSDL2MixerAudioDriver();
-	  {$ELSE}
-		  {$IFDEF SWINGAME_SDL13}
-		    LoadSDL13MixerAudioDriver();
-		  {$ELSE}
-		    LoadSDLMixerAudioDriver();
-		  {$ENDIF}
-	  {$ENDIF};
 	end;
 
 //=============================================================================
@@ -123,7 +108,7 @@ implementation
 		AudioDriver.CloseAudio();
 	end;
 	
-	function DefaultLoadSoundEffectProcedure(filename, name : String) : SoundEffect;
+	function DefaultLoadSoundEffectProcedure(const filename, name : String) : SoundEffect;
 	begin
 		LoadDefaultAudioDriver();
 		result := AudioDriver.LoadSoundEffect(filename, name);
@@ -153,7 +138,7 @@ implementation
 		AudioDriver.FreeSoundEffect(effect);
 	end;
 	
-	function DefaultLoadMusicProcedure(filename, name : String) : Music;
+	function DefaultLoadMusicProcedure(const filename, name : String) : Music;
 	begin
 		LoadDefaultAudioDriver();
 		result := AudioDriver.LoadMusic(filename, name);

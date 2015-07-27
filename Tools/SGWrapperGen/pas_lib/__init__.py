@@ -98,6 +98,13 @@ _type_switcher = {
 
     'httpheader' : 'HttpHeader',
     'httpresponse' : 'HttpResponse',
+    'httprequest' : 'HttpRequest',
+    'httpmethod': 'HttpMethod',
+    'connectiontype': 'ConnectionType',
+
+    'drawingoptions': 'DrawingOptions',
+    'message' : 'Message',
+    'serversocket': 'ServerSocket',
 
 }
  

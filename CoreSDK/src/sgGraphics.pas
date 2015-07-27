@@ -342,13 +342,13 @@ interface
   /// Draw a circle onto a destination bitmap.
   /// 
   /// @lib DrawCircleOpts
-  /// @sn drawCircleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  /// @sn drawCircleColor:%s atX:%s y:%s radius:%s opts:%s
   procedure DrawCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
   /// Draw a circle in the game.
   ///
   /// @lib 
-  /// @sn drawCircleColor:%s atX:%s y:%s width:%s height:%s
+  /// @sn drawCircleColor:%s atX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
   procedure DrawCircle(clr : Color; x, y, radius : Single);
@@ -369,13 +369,13 @@ interface
   /// Fill a circle onto a destination bitmap.
   /// 
   /// @lib FillCircleOpts
-  /// @sn fillCircleColor:%s atX:%s y:%s width:%s height:%s opts:%s
+  /// @sn fillCircleColor:%s atX:%s y:%s radius:%s opts:%s
   procedure FillCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
   /// Fill a circle in the game.
   ///
   /// @lib 
-  /// @sn FillCircleColor:%s atX:%s y:%s width:%s height:%s
+  /// @sn fillCircleColor:%s atX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
   procedure FillCircle(clr : Color; x, y, radius : Single);
@@ -429,12 +429,12 @@ interface
   /// 
   /// @lib FillTriangleOpts
   /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
-  procedure FillTriangle(clr : Color;  x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
+  procedure FillTriangle(clr: Color;  x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   
   /// Fill a triangle in the game.
   ///
   /// @lib 
-  /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
   ///
   /// @doc_idx 0
   procedure FillTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
@@ -613,13 +613,13 @@ interface
   /// Draw a ellipse onto a destination bitmap.
   /// 
   /// @lib DrawEllipseOpts
-  /// @sn drawEllipseColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  /// @sn drawEllipseColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Draw a ellipse in the game.
   ///
   /// @lib 
-  /// @sn drawEllipseColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
+  /// @sn drawEllipseColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single);
@@ -640,13 +640,13 @@ interface
   /// Fill a ellipse onto a destination bitmap.
   /// 
   /// @lib FillEllipseOpts
-  /// @sn fillEllipseColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  /// @sn fillEllipseColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Fill a ellipse in the game.
   ///
   /// @lib 
-  /// @sn fillEllipseColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
+  /// @sn fillEllipseColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single);
@@ -1524,7 +1524,6 @@ implementation
 //=============================================================================
 
   uses Math, Classes, SysUtils, // system
-       sgSavePNG, 
        sgTrace, 
        sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
        sgInputBackend;

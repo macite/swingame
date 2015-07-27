@@ -7,7 +7,7 @@ unit sgDriveriOS;
 //=============================================================================
 
 interface
-	uses sgTypes {$IFDEF SWINGAME_SDL13},sgDriveriOSSDL13{$ENDIF};
+	uses sgTypes;
 	
 	type
 		ShowKeyboardProcedure						= procedure();
@@ -39,11 +39,7 @@ interface
 implementation
 	procedure LoadDefaultiOSDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL13}
-		  LoadSDL13iOSDriver();
-		{$ELSE}
-		  //LoadSDLiOSDriver();
-		{$ENDIF}
+		// LoadSDL13iOSDriver();
 	end;
 
 

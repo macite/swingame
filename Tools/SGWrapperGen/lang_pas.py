@@ -39,6 +39,12 @@ _array_copy_data = {
     'spriteeventhandlerarray':  'SpriteEventHandler',
 }
 
+_data_switcher = {
+    #Pascal type: what values of this type switch to %s = data value
+    'String': 'String(%s)'
+}
+
+
 # # dictionary for start of method names for copying fixed
 # # length array data
 # _array_copy_fixed_data = {
@@ -98,6 +104,21 @@ def pas_library_param_visitor(the_param, last):
             '; ' if not last else ''
             )
 
+def pas_library_arg_visitor(arg_str, the_arg, for_param_or_type):
+    '''Called for each argument in a call: for Pascal maps PChar to String'''
+    if isinstance(for_param_or_type, SGType):
+        the_type = for_param_or_type
+    else:
+        the_type = for_param_or_type.data_type
+        
+    if the_type.name in _data_switcher:
+        #convert data using pattern from _data_switcher
+        # print _data_switcher[the_type.name] % arg_str
+        return _data_switcher[the_type.name] % arg_str
+    else:
+        return arg_str
+
+
 # =========================
 # = Code Creation Methods =
 # =========================
@@ -142,7 +163,7 @@ def _do_create_pas_library_code(method):
     
     method_alias = method.alias('pas')
     
-    data = method_alias.to_keyed_dict(pas_library_param_visitor, lang_key='pas')
+    data = method_alias.to_keyed_dict(pas_library_param_visitor, lang_key='pas', arg_visitor = pas_library_arg_visitor)
     
     if method_alias.was_function:
         # Method returned a array of some kind... get the result params and change the 'return_type' in data

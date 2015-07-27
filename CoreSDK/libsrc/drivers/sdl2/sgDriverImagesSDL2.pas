@@ -5,7 +5,7 @@ interface
 	procedure LoadSDL2ImagesDriver();
 		
 implementation
-	uses sgDriverSDL2Types, sgTypes, sgDriverImages, sgShared, sgSavePNG;
+	uses sgDriverSDL2Types, sgTypes, sgDriverImages, sgShared;
 
 	//TODO: remove this
 	procedure InitBitmapColorsProcedure(bmp : Bitmap);
@@ -60,7 +60,7 @@ implementation
 		SetLength(pixels, 0);
 	end;
 
-	function DoLoadBitmapProcedure (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	function DoLoadBitmapProcedure (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	var
 		surface: ^sg_drawing_surface;
 	begin
@@ -168,16 +168,9 @@ implementation
 	begin   
 	end;
 
-	procedure SaveBitmapProcedure(bmpToSave: Bitmap; path : String);
-	var
-		pixels: array of LongInt;
-		sz: Longint;
+	procedure SaveBitmapProcedure(bmpToSave: Bitmap; const path: String);
 	begin
-		sz := bmpToSave^.width * bmpToSave^.height;
-		SetLength(pixels, sz);
-		_sg_functions^.graphics.to_pixels(bmpToSave^.surface, @pixels[0], sz);
-		png_save_pixels(path, @pixels[0], bmpToSave^.width, bmpToSave^.height);
-		SetLength(pixels, 0);
+		_sg_functions^.graphics.save_png(bmpToSave^.surface, PChar(path));
 	end;
 
 	procedure LoadSDL2ImagesDriver();

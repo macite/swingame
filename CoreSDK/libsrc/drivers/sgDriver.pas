@@ -10,14 +10,14 @@ unit sgDriver;
 // Changing this driver will probably cause graphics drivers to break.
 //
 // Notes:
-//		- Pascal PChar is equivalent to a C-type string
-// 		- Pascal Word is equivalent to a Uint16
-//		- Pascal LongWord is equivalent to a Uint32
-//		- Pascal SmallInt is equivalent to Sint16
+//    - Pascal PChar is equivalent to a C-type string
+//    - Pascal Word is equivalent to a Uint16
+//    - Pascal LongWord is equivalent to a Uint32
+//    - Pascal SmallInt is equivalent to Sint16
 //
 //=============================================================================
 
-interface	
+interface 
 uses
   sgTypes;
 
@@ -27,75 +27,59 @@ uses
     InitProcedure = procedure();
     GetKeyCodeProcedure = function(val : LongInt) : LongInt;
     
-  	DriverRecord = record
-  	  GetError                : GetErrorProcedure;
-  	  Quit                    : QuitProcedure;
-  	  Init                    : InitProcedure;
+    DriverRecord = record
+      GetError                : GetErrorProcedure;
+      Quit                    : QuitProcedure;
+      Init                    : InitProcedure;
       GetKeyCode              : GetKeyCodeProcedure;
-	  end;  
+    end;  
 
-	var
-		Driver : DriverRecord = ( GetError: nil; Quit: nil; Init: nil ; GetKeyCode: nil);
-	
-	procedure LoadDefaultDriver();
-		
+  var
+    Driver : DriverRecord = ( GetError: nil; Quit: nil; Init: nil ; GetKeyCode: nil);
+  
+  procedure LoadDefaultDriver();
+    
 implementation
-  	uses 
-  	{$IFDEF SWINGAME_SDL2}sgDriverSDL2
-  	{$ELSE}
-  		{$IFDEF SWINGAME_SDL13}sgDriverSDL13
-  		{$ELSE}sgDriverSDL
-  		{$ENDIF}
-  	{$ENDIF};
+  uses  sgDriverSDL2;
 
-	procedure LoadDefaultDriver();
-	begin
-		{$IFDEF SWINGAME_SDL2}
-			LoadSDL2Driver();
-		{$ELSE}	
-	  {$IFDEF SWINGAME_SDL13}
-      // WriteLn('Loading 1.3');
-		  LoadSDL13Driver();
-		{$ELSE}
-      // WriteLn('Loading 1.2');
-		  LoadSDLDriver();
-		{$ENDIF}
-		{$ENDIF}
-	end;
+  procedure LoadDefaultDriver();
+  begin
+    LoadSDL2Driver();
+  end;
 
-	procedure DefaultInitProcedure();
-	begin
+  procedure DefaultInitProcedure();
+  begin
     // WriteLn('Default Init');
-	 LoadDefaultDriver();
-	 Driver.Init();
-	end;
+   LoadDefaultDriver();
+   Driver.Init();
+  end;
 
-	function DefaultGetErrorProcedure () : PChar;
-	begin
-		LoadDefaultDriver();
-		result := Driver.GetError();
-	end;
-	
-	function DefaultGetKeyCodeProcedure (val : LongInt) : LongInt;
-	begin
-		LoadDefaultDriver();
-		result := Driver.GetKeyCode(val);
-	end;
+  function DefaultGetErrorProcedure () : PChar;
+  begin
+    LoadDefaultDriver();
+    result := Driver.GetError();
+  end;
+  
+  function DefaultGetKeyCodeProcedure (val : LongInt) : LongInt;
+  begin
+    LoadDefaultDriver();
+    result := Driver.GetKeyCode(val);
+  end;
 
-	procedure DefaultQuitProcedure();
-	begin
-	 LoadDefaultDriver();
-	 Driver.Quit();
-	end;  
+  procedure DefaultQuitProcedure();
+  begin
+   LoadDefaultDriver();
+   Driver.Quit();
+  end;  
 
 initialization
   if not Assigned(Driver.Init) then
   begin
     // WriteLn('Loading driver');
-		Driver.GetError               := @DefaultGetErrorProcedure;
-		Driver.Quit                   := @DefaultQuitProcedure;
-		Driver.GetKeyCode             := @DefaultGetKeyCodeProcedure;
-		Driver.Init                   := @DefaultInitProcedure;
-	end;
+    Driver.GetError               := @DefaultGetErrorProcedure;
+    Driver.Quit                   := @DefaultQuitProcedure;
+    Driver.GetKeyCode             := @DefaultGetKeyCodeProcedure;
+    Driver.Init                   := @DefaultInitProcedure;
+  end;
 end.
-	
+  

@@ -112,7 +112,9 @@ _type_dictionary_creation_data = [
             ('shapeprototype',  'shape_prototype'),
             ('shape',           'shape'),
             ('connection',      'connection'),
-            ('arduinodevice',      'arduino_device'),
+            ('arduinodevice',   'arduino_device'),
+            ('serversocket',    'server_socket'),
+
         ],
         '_type_switcher': {
             None:       '#2# ',
@@ -121,7 +123,7 @@ _type_dictionary_creation_data = [
             'return':   '#2#',
         },
         '_adapter_type_switcher': {
-            None:           '#2#_data *',
+            None:           'struct _#2#_data *',
             'ptr-decl':     'struct _#2#_data *',
             'var':          '#2# *',
             'var-cpp':      '#2# &',
@@ -157,18 +159,26 @@ _type_dictionary_creation_data = [
           ('guiradiogroup',   'guiradio_group'),
           ('panel',           'panel'),
           ('region',          'region'),
+          ('httpheader',      'http_header'),
+          ('httprequest',     'http_request'),
+          ('message',         'message'),
+          ('httpresponse',    'http_response'),
       ],
       '_type_switcher': {
-          None:       '#2# ',
-          'var':      '#2# *',
-          'var-cpp':      '#2# &',
-          'return':   '#2#',
+          None:         '#2# ',
+          'var':        '#2# *',
+          'var-cpp':    '#2# &',
+          'const':      'const #2# *',
+          'const-cpp':  'const #2# &',
+          'return':     '#2#',
       },
       '_adapter_type_switcher': {
           None:         '#2# ',
           'ptr-decl':   'struct _#2#_data *',
           'var':        '#2# *',
           'var-cpp':    '#2# &',
+          'const':      'const #2# *',
+          'const-cpp':  'const #2# &',
           'return':     '#2#',
       }
     },
@@ -215,16 +225,20 @@ _type_dictionary_creation_data = [
             ('string',          'char *'),
         ],
         '_type_switcher': {
-            None:       'const #2#',
-            'var':      '#2#',
-            'out':      '#2#',
+            None:           '#2#',
+            'const':        'const #2#',
+            'const-cpp':    'const #2#',
+            'var':          '#2#',
+            'out':          '#2#',
             'var-cpp':      '#2#',
             'out-cpp':      '#2#',
-            'return':   '#2#',
+            'return':       '#2#',
         },
         '_adapter_type_switcher': {
-            None:       'const #2#',
-            'return':   '#2#',
+            None:           '#2#',
+            'const':        'const #2#',
+            'const-cpp':    'const #2#',
+            'return':       '#2#',
         }
     },
     # array types
@@ -285,6 +299,7 @@ _type_dictionary_creation_data = [
             ('circle',              'circle'),
             ('bitmapcell',          'bitmap_cell'),
             ('guilistitem',         'guilist_item'),
+            ('drawingoptions',      'drawing_options'),
         ],
         '_type_switcher': {
             None:       '#2# ', #used for _byval methods
@@ -317,7 +332,9 @@ _type_dictionary_creation_data = [
             ('guielementkind',      'guielement_kind'),
             ('eventkind',           'event_kind'),
             ('filedialogselecttype','file_dialog_select_type'),
-            
+            ('drawingdest',         'drawing_dest'),
+            ('httpmethod',          'http_method'),
+            ('connectiontype',      'connection_type'),
         ],
         '_type_switcher': {
             None:       '#2# ',
@@ -360,6 +377,10 @@ _type_dictionary_creation_data = [
             ('resolution[0..n - 1]',                    'resolution *'),
             ('finger[0..n - 1]',                        'finger *'),
             ('spriteeventhandler[0..n - 1]',            'sprite_event_handler *'),
+            ('byte[0..n - 1]',                          'void *'),
+            ('message[0..n - 1]',                       'message *'),
+            ('connection[0..n - 1]',                    'connection *'),
+            ('httpheader[0..n - 1]',                    'http_header *'),
           
             ('point2d[0..2]',                           'point2d %s[3]'),
             ('single[0..2][0..2]',                      'float %s[3][3]'),

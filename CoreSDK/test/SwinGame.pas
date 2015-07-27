@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-03-09 15:30:33.478190
+// SwinGame.pas was generated on 2015-06-24 21:48:04.446037
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2484,14 +2484,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Adds a header to the Http request with the name and value.
   procedure HttpAddHeader(var aHttpRequest: HttpRequest; const name: String; const value: String); overload;
 
-  // Performs a get request for the resourse at the specified host, path and port.
+  // Perform a get request for the resourse at the specified host, path and port.
   function HttpGet(const host: String; port: Word; const path: String): HttpResponse; overload;
 
   // Returns a header of the Http Request at the specified index.
-  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
+  function HttpHeaderAt(const aHttpRequest: HttpRequest; aIdx: Longint): String; overload;
+
+  // Perform a post request to the specified host, with the supplied body.
+  function HttpPost(const host: String; port: Word; const path: String; const body: String): HttpResponse; overload;
 
   // Removes a header of the Http request at the specified index.
-  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
+  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; aIdx: Longint); overload;
 
   // Converts the Http Request to a string
   function HttpRequestToString(const aHttpRequest: HttpRequest): String; overload;
@@ -2503,7 +2506,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure HttpSetBody(var aHttpRequest: HttpRequest; const aBody: String); overload;
 
   // Sets the method of the Http Request
-  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
+  procedure HttpSetMethod(var aHttpRequest: HttpRequest; aMethod: HttpMethod); overload;
 
   // Sets the URL of the Http Request
   procedure HttpSetURL(var aHttpRequest: HttpRequest; const aURL: String); overload;
@@ -2520,24 +2523,24 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the last connection made to a server socket. When a new client 
   // has connected to the server, this function can be used to get their
   // connection.
-  function LastConnection(const name: String): Connection; overload;
+  function LastConnection(server: ServerSocket): Connection; overload;
 
   // Returns the last connection made to a server socket. When a new client 
   // has connected to the server, this function can be used to get their
   // connection.
-  function LastConnection(server: ServerSocket): Connection; overload;
+  function LastConnection(const name: String): Connection; overload;
 
   // Gets the connection used to send the message (TCP only).
   function MessageConnection(const msg: Message): Connection; overload;
+
+  // Gets the number of messages waiting to be read from this connection
+  function MessageCount(aConnection: Connection): Longint; overload;
 
   // Gets the number of messages waiting to be read from the connection (found via its named)
   function MessageCount(const name: String): Longint; overload;
 
   // Gets the number of messages waiting to be read from this connection
   function MessageCount(svr: ServerSocket): Longint; overload;
-
-  // Gets the number of messages waiting to be read from this connection
-  function MessageCount(aConnection: Connection): Longint; overload;
 
   // Gets the data from a Message. This will be a string.
   function MessageData(const msg: Message): String; overload;
@@ -3852,10 +3855,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
 
   // Get text From Label
-  function LabelText(r: Region): String; overload;
+  function LabelText(lb: GUILabel): String; overload;
 
   // Get text From Label
-  function LabelText(lb: GUILabel): String; overload;
+  function LabelText(r: Region): String; overload;
 
   // Get text From Label
   function LabelText(const id: String): String; overload;
@@ -3911,20 +3914,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Adds an item to the list by text
   procedure ListAddItem(pnl: Panel; const id: String; const text: String); overload;
 
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap.
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
+
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap.
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
+  procedure ListAddItem(r: Region; img: Bitmap; cell: Longint); overload;
 
   // Adds an item to the list
   procedure ListAddItem(r: Region; img: Bitmap; const text: String); overload;
@@ -3934,32 +3933,36 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap.
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint); overload;
+  procedure ListAddItem(const id: String; img: Bitmap; cell: Longint); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(const id: String; img: Bitmap; cell: Longint; const text: String); overload;
+
+  // Adds an item to the list where the items shows a cell of a
+  // bitmap and some text.
+  procedure ListAddItem(r: Region; img: Bitmap; cell: Longint; const text: String); overload;
 
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
-  // bitmap and some text.
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  // bitmap.
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
 
   // Returns the index of the item with the bitmap, img
   function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 
   // Returns the index of the item with the bitmap and cell.
-  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
 
   // Removes all items from the list of the region
   procedure ListClearItems(r: Region); overload;
@@ -7674,12 +7677,17 @@ implementation
     result := sgNetworking.HttpGet(host,port,path);
   end;
 
-  function HttpHeaderAt(const aHttpRequest: HttpRequest; const aIdx: Longint): String; overload;
+  function HttpHeaderAt(const aHttpRequest: HttpRequest; aIdx: Longint): String; overload;
   begin
     result := sgNetworking.HttpHeaderAt(aHttpRequest,aIdx);
   end;
 
-  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; const aIdx: Longint); overload;
+  function HttpPost(const host: String; port: Word; const path: String; const body: String): HttpResponse; overload;
+  begin
+    result := sgNetworking.HttpPost(host,port,path,body);
+  end;
+
+  procedure HttpRemoveHeaderAt(var aHttpRequest: HttpRequest; aIdx: Longint); overload;
   begin
     sgNetworking.HttpRemoveHeaderAt(aHttpRequest,aIdx);
   end;
@@ -7699,7 +7707,7 @@ implementation
     sgNetworking.HttpSetBody(aHttpRequest,aBody);
   end;
 
-  procedure HttpSetMethod(var aHttpRequest: HttpRequest; const aMethod: HttpMethod); overload;
+  procedure HttpSetMethod(var aHttpRequest: HttpRequest; aMethod: HttpMethod); overload;
   begin
     sgNetworking.HttpSetMethod(aHttpRequest,aMethod);
   end;
@@ -7724,19 +7732,24 @@ implementation
     result := sgNetworking.IPv4ToStr(ip);
   end;
 
-  function LastConnection(const name: String): Connection; overload;
-  begin
-    result := sgNetworking.LastConnection(name);
-  end;
-
   function LastConnection(server: ServerSocket): Connection; overload;
   begin
     result := sgNetworking.LastConnection(server);
   end;
 
+  function LastConnection(const name: String): Connection; overload;
+  begin
+    result := sgNetworking.LastConnection(name);
+  end;
+
   function MessageConnection(const msg: Message): Connection; overload;
   begin
     result := sgNetworking.MessageConnection(msg);
+  end;
+
+  function MessageCount(aConnection: Connection): Longint; overload;
+  begin
+    result := sgNetworking.MessageCount(aConnection);
   end;
 
   function MessageCount(const name: String): Longint; overload;
@@ -7747,11 +7760,6 @@ implementation
   function MessageCount(svr: ServerSocket): Longint; overload;
   begin
     result := sgNetworking.MessageCount(svr);
-  end;
-
-  function MessageCount(aConnection: Connection): Longint; overload;
-  begin
-    result := sgNetworking.MessageCount(aConnection);
   end;
 
   function MessageData(const msg: Message): String; overload;
@@ -9484,14 +9492,14 @@ implementation
     sgUserInterface.LabelSetText(pnl,id,newString);
   end;
 
-  function LabelText(r: Region): String; overload;
-  begin
-    result := sgUserInterface.LabelText(r);
-  end;
-
   function LabelText(lb: GUILabel): String; overload;
   begin
     result := sgUserInterface.LabelText(lb);
+  end;
+
+  function LabelText(r: Region): String; overload;
+  begin
+    result := sgUserInterface.LabelText(r);
   end;
 
   function LabelText(const id: String): String; overload;
@@ -9584,24 +9592,19 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,text);
   end;
 
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
+  begin
+    sgUserInterface.ListAddItem(lst,img,cell);
+  end;
+
   procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(lst,img,text);
   end;
 
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint); overload;
+  procedure ListAddItem(r: Region; img: Bitmap; cell: Longint); overload;
   begin
     sgUserInterface.ListAddItem(r,img,cell);
-  end;
-
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(id,img,cell);
-  end;
-
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,cell);
   end;
 
   procedure ListAddItem(r: Region; img: Bitmap; const text: String); overload;
@@ -9614,12 +9617,17 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,img);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint); overload;
+  procedure ListAddItem(const id: String; img: Bitmap; cell: Longint); overload;
   begin
-    sgUserInterface.ListAddItem(pnl,id,img,cell);
+    sgUserInterface.ListAddItem(id,img,cell);
   end;
 
-  procedure ListAddItem(r: Region; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(const id: String; img: Bitmap; cell: Longint; const text: String); overload;
+  begin
+    sgUserInterface.ListAddItem(id,img,cell,text);
+  end;
+
+  procedure ListAddItem(r: Region; img: Bitmap; cell: Longint; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(r,img,cell,text);
   end;
@@ -9629,17 +9637,17 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,img,text);
   end;
 
-  procedure ListAddItem(const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint); overload;
   begin
-    sgUserInterface.ListAddItem(id,img,cell,text);
+    sgUserInterface.ListAddItem(pnl,id,img,cell);
   end;
 
-  procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(lst,img,cell,text);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; const img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,img,cell,text);
   end;
@@ -9649,7 +9657,7 @@ implementation
     result := sgUserInterface.ListBitmapIndex(lst,img);
   end;
 
-  function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+  function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
   begin
     result := sgUserInterface.ListBitmapIndex(lst,img,cell);
   end;

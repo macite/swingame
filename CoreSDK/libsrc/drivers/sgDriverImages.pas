@@ -24,7 +24,7 @@ interface
 	  InitBitmapColorsProcedure            = procedure (bmp : Bitmap);
 	  CreateBitmapProcedure                = procedure (bmp : Bitmap; width, height : LongInt);
 	  SurfaceExistsProcedure               = function  (bmp : Bitmap) : Boolean;
-	  DoLoadBitmapProcedure                = function  (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	  DoLoadBitmapProcedure                = function  (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
     FreeSurfaceProcedure                 = procedure (bmp : Bitmap);
     MakeOpaqueProcedure                  = procedure (bmp : Bitmap);
     SetOpacityProcedure                  = procedure (bmp : Bitmap; pct : Single);
@@ -34,7 +34,7 @@ interface
     BlitSurfaceProcedure                 = procedure (srcBmp: Bitmap; x, y: Single; const opts : DrawingOptions);
     ClearSurfaceProcedure                = procedure (dest : Bitmap; toColor : Color);
     OptimiseBitmapProcedure              = procedure (surface : Bitmap);
-    SaveBitmapProcedure                  = procedure (src : Bitmap; filepath : String);
+    SaveBitmapProcedure                  = procedure (src : Bitmap;const filepath : String);
     SetNonAlphaPixelsProcedure           = procedure (bmp: Bitmap);
     
 	ImagesDriverRecord = record
@@ -59,37 +59,11 @@ interface
 		ImagesDriver : ImagesDriverRecord;
 		
 implementation
-  uses
-  	{$IFDEF SWINGAME_SDL2}
-  		sgDriverImagesSDL2
-  	{$ELSE}
-	    {$IFDEF SWINGAME_OPENGL}
-	      sgDriverImagesOpenGL
-	    {$ELSE}
-	      {$IFDEF SWINGAME_SDL13}
-	        sgDriverImagesSDL13
-	      {$ELSE}
-	        sgDriverImagesSDL
-	      {$ENDIF}
-	    {$ENDIF}
-    {$ENDIF};
+  uses sgDriverImagesSDL2;
     
 	procedure LoadDefaultImagesDriver();
 	begin
-	  {$IFDEF SWINGAME_SDL2}
 	  	LoadSDL2ImagesDriver();
-	  {$ELSE}
-		  {$IFDEF SWINGAME_OPENGL }
-			  LoadOpenGLImagesDriver();
-	    {$ELSE}
-	      {$IFDEF SWINGAME_SDL13}
-	        LoadSDL13ImagesDriver();
-	      {$ELSE}
-	        // WriteLn('SDL 1.3 Not Defined');
-	        LoadSDLImagesDriver();
-	      {$ENDIF}
-			{$ENDIF}
-		{$ENDIF}
 	end;
 	
 	procedure DefaultSetNonAlphaPixelsProcedure(bmp : Bitmap);
@@ -116,7 +90,7 @@ implementation
 		ImagesDriver.CreateBitmap(bmp, width, height);
 	end;  
 	
-	function DefaultDoLoadBitmapProcedure (filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+	function DefaultDoLoadBitmapProcedure (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	begin
 		LoadDefaultImagesDriver();
 		result := ImagesDriver.DoLoadBitmap(filename, transparent, transparentColor);
@@ -176,7 +150,7 @@ implementation
     ImagesDriver.OptimiseBitmap(surface);
   end;
 
-  procedure DefaultSaveBitmapProcedure(src : Bitmap; filepath : String);
+  procedure DefaultSaveBitmapProcedure(src : Bitmap;const filepath : String);
   begin	  
     LoadDefaultImagesDriver();
     ImagesDriver.SaveBitmap(src, filepath);

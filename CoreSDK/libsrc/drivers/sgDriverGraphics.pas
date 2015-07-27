@@ -36,8 +36,8 @@ interface
     ResetClipProcedure                    = procedure (bmp: Bitmap);  
     SetVideoModeFullScreenProcedure       = procedure ();
     SetVideoModeNoFrameProcedure          = procedure ();      
-    InitializeGraphicsWindowProcedure     = procedure (caption : String; screenWidth, screenHeight : LongInt);
-    InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);      
+    InitializeGraphicsWindowProcedure     = procedure (const caption : String; screenWidth, screenHeight : LongInt);
+    InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);      
     ResizeGraphicsWindowProcedure         = procedure (newWidth, newHeight : LongInt);
     RefreshScreenProcedure                = procedure (screen : Bitmap);
     ColorComponentsProcedure              = procedure (c : Color; var r, g, b, a : Byte); 
@@ -83,39 +83,11 @@ interface
 		GraphicsDriver : GraphicsDriverRecord;
 		
 implementation
-uses 
-  {$IFDEF SWINGAME_SDL2}
-    sgDriverGraphicsSDL2;
-  {$ELSE}
-    {$IFDEF SWINGAME_OPENGL}
-      sgDriverGraphicsOpenGL;
-    {$ELSE}
-        {$IFDEF SWINGAME_SDL13}
-          sgDriverGraphicsSDL13;
-        {$ELSE}
-          sgDriverGraphicsSDL;
-        {$ENDIF}
-    {$ENDIF}
-  {$ENDIF}
+uses sgDriverGraphicsSDL2;
     
 	procedure LoadDefaultGraphicsDriver();
 	begin
-    {$IFDEF SWINGAME_SDL2}
       LoadSDL2GraphicsDriver();
-    {$ELSE}
-      {$IFDEF SWINGAME_OPENGL}
-        {$INFO Using OpenGL Driver}
-        LoadOpenGLGraphicsDriver();
-      {$ELSE}
-        {$IFDEF SWINGAME_SDL13}
-          {$INFO Using SDL 2 Driver}
-          LoadSDL13GraphicsDriver();  
-        {$ELSE}
-          {$INFO Using SDL 1.2 Driver}
-          LoadSDLGraphicsDriver();
-        {$ENDIF}
-      {$ENDIF}
-    {$ENDIF}
 	end;
 	
 	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
@@ -214,13 +186,13 @@ uses
     GraphicsDriver.SetVideoModeNoFrame();
   end;
 	
-  procedure DefaultInitializeGraphicsWindowProcedure(caption : String; screenWidth, screenHeight : LongInt);
+  procedure DefaultInitializeGraphicsWindowProcedure(const caption : String; screenWidth, screenHeight : LongInt);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.InitializeGraphicsWindow(caption, screenWidth, screenHeight);
   end;
 
-  procedure DefaultInitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color; msg : String);
+  procedure DefaultInitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.InitializeScreen( screen, width, height, bgColor, stringColor, msg);

@@ -62,12 +62,12 @@ interface
       fValue: string;
       fHashCode : Int64;
 
-      procedure setValue(value: string);
+      procedure setValue(const value: string);
       function compareObjects(obj2: TComparable): integer; override;
     public
       property value: string read fValue write setvalue;
       function hashCode: Int64; override;
-      constructor create(val: string);
+      constructor create(const val: string);
     end;
 
     TStringNoCase = class(TString)
@@ -200,7 +200,7 @@ implementation
     result := CompareStr(value, TString(obj2).value);
   end;
 
-  procedure TString.setValue(value: string);
+  procedure TString.setValue(const value: string);
   var
      h, i: integer;
   begin
@@ -217,7 +217,7 @@ implementation
     result := fHashCode;
   end;
 
-  constructor TString.create(val: string);
+  constructor TString.create(const val: string);
   begin
     inherited create;
     value := val;

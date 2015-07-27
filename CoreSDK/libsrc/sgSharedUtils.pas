@@ -22,28 +22,28 @@ interface
 uses sgTypes;
 
   {$ifndef FPC} // Delphi land
-  function ExtractDelimited(index: integer; value: string; delim: TSysCharSet): string;
+  function ExtractDelimited(index: integer; const value: string; delim: TSysCharSet): string;
   {$endif}
   
-  function ExtractAfterFirstDelim(index: integer; value: string; delim: Char): string;
+  function ExtractAfterFirstDelim(index: integer; const value: string; delim: Char): string;
 
-  function CountDelimiter(value: String; delim: Char): Longint;
-  function CountDelimiterWithRanges(value: String; delim: Char): Longint;
+  function CountDelimiter(const value: String; delim: Char): Longint;
+  function CountDelimiterWithRanges(const value: String; delim: Char): Longint;
   
-  function ExtractDelimitedWithRanges(index: Longint; value: String): String;
-  function ProcessRange(value: String): LongintArray;
-  function ProcessFloatRange(value: String): SingleArray;
+  function ExtractDelimitedWithRanges(index: Longint; const value: String): String;
+  function ProcessRange(const valueIn: String): LongintArray;
+  function ProcessFloatRange(const valueIn: String): SingleArray;
 
-  function MyStrToInt(str: String): Longint; overload;
-  function MyStrToInt(str: String; allowEmpty: Boolean) : Longint; overload;
+  function MyStrToInt(const str: String): Longint; overload;
+  function MyStrToInt(const str: String; allowEmpty: Boolean) : Longint; overload;
   
-  function MyStrToFloat(str: String): Extended; overload;
-  function MyStrToFloat(str: String; allowEmpty: Boolean) : Extended; overload;
+  function MyStrToFloat( const str: String): Extended; overload;
+  function MyStrToFloat(const str: String; allowEmpty: Boolean) : Extended; overload;
 
   function LongintArrayToRange(ints: LongintArray):String;
   function SingleArrayToRange(singles: SingleArray):String;
 
-  function ExtractFileAndPath(fullname: String; out path, filename: String; allowNewFile: Boolean): Boolean;
+  function ExtractFileAndPath(const fullnameIn: String; out path, filename: String; allowNewFile: Boolean): Boolean;
 
   procedure ZeroArray (var ints : LongintArray); overload;
   procedure ZeroArray (var singles : SingleArray); overload;
@@ -54,7 +54,7 @@ uses sgTypes;
   function WithinRange(arrayLength : Integer; currentIndex : Integer) : Boolean;
     
   //Checks if pointer is assigned, then raises a warning and exits
-  function CheckAssigned(msg : String; ptr : Pointer): Boolean;
+  function CheckAssigned(const msg : String; ptr : Pointer): Boolean;
     
   type
     LineData = record
@@ -67,7 +67,7 @@ uses sgTypes;
   // This reads the lines of the passed in file, calling proc for each non comment line.
   // the ptr is then passed to each line to allow custom data to be passed into the line processing
   // procedure.
-  procedure ProcessLinesInFile(filename: String; kind: ResourceKind; proc: LineProcessor; ptr: Pointer);
+  procedure ProcessLinesInFile(const filename: String; kind: ResourceKind; proc: LineProcessor; ptr: Pointer);
   
   
 implementation
@@ -170,13 +170,13 @@ implementation
     
     result += ']';
   end;
-  function MyStrToInt(str: String): Longint; overload;
+  function MyStrToInt(const str: String): Longint; overload;
   begin
     if Length(str) = 0 then result := 0
     else result := StrToInt(Trim(str));
   end;
 
-  function MyStrToInt(str: String; allowEmpty: Boolean) : Longint; overload;
+  function MyStrToInt(const str: String; allowEmpty: Boolean) : Longint; overload;
   begin
     if allowEmpty and (Length(str) = 0) then
     begin
@@ -194,13 +194,13 @@ implementation
     end;
   end;
   
-  function MyStrToFloat(str: String): Extended; overload;
+  function MyStrToFloat(const str: String): Extended; overload;
   begin
     if Length(str) = 0 then result := 0
     else result := StrToFloat(Trim(str));
   end;
 
-  function MyStrToFloat(str: String; allowEmpty: Boolean) : Extended; overload;
+  function MyStrToFloat(const str: String; allowEmpty: Boolean) : Extended; overload;
   begin
     if allowEmpty and (Length(str) = 0) then
     begin
@@ -215,7 +215,7 @@ implementation
 
   {$ifndef FPC} 
   // Delphi land
-  function ExtractDelimited(index: integer; value: string; delim: TSysCharSet): string;
+  function ExtractDelimited(index: integer;const value: string; delim: TSysCharSet): string;
   var
     strs: TStrings;
   begin
@@ -236,7 +236,7 @@ implementation
   // proper ExtractDelimited provided by StrUtils
   {$endif}
   
-  function ExtractAfterFirstDelim(index: integer; value: string; delim: Char): string;
+  function ExtractAfterFirstDelim(index: integer;const value: string; delim: Char): string;
   var
     i: Integer;
   begin
@@ -248,7 +248,7 @@ implementation
     end;
   end;
 
-  function ExtractDelimitedWithRanges(index: Longint; value: String): String;
+  function ExtractDelimitedWithRanges(index: Longint;const value: String): String;
   var
     i, count, start: Longint;
     inRange: Boolean;
@@ -288,7 +288,7 @@ implementation
     end;
   end;
 
-  function CountDelimiter(value: String; delim: Char): Longint;
+  function CountDelimiter(const value: String; delim: Char): Longint;
   var
     i: Integer;
   begin
@@ -300,7 +300,7 @@ implementation
     end;
   end;
   
-  function CountDelimiterWithRanges(value: String; delim: Char): Longint;
+  function CountDelimiterWithRanges(const value: String; delim: Char): Longint;
   var
     i: Integer;
     inRange: Boolean;
@@ -318,10 +318,10 @@ implementation
     end;
   end;
   
-  function ProcessRange(value: String): LongintArray;
+  function ProcessRange(const valueIn: String): LongintArray;
   var
     i, j, count, temp, lowPart, highPart, dashCount: Longint;
-    part: String;
+    part, value: String;
   
     procedure _AddToResult(val: Longint);
     begin
@@ -329,7 +329,7 @@ implementation
       result[High(result)] := val;
     end;  
   begin
-    value := Trim(value);
+    value := Trim(valueIn);
     SetLength(result, 0);
   
     if (value[1] <> '[') or (value[Length(value)] <> ']') then
@@ -392,11 +392,11 @@ implementation
     end;
   end;
   
-  function ProcessFloatRange(value: String): SingleArray;
+  function ProcessFloatRange(const valueIn: String): SingleArray;
   var
     i, count : Longint;
     temp: Extended;
-    part: String;
+    part, value: String;
   
     procedure _AddToResult(val: Single);
     begin
@@ -404,7 +404,7 @@ implementation
       result[High(result)] := val;
     end;
   begin
-    value := Trim(value);
+    value := Trim(valueIn);
     SetLength(result, 0);
   
     if (value[1] <> '[') or (value[Length(value)] <> ']') then
@@ -431,10 +431,12 @@ implementation
   end;
   
   
-  function ExtractFileAndPath(fullname: String; out path, filename: String; allowNewFile: Boolean): Boolean;
+  function ExtractFileAndPath(const fullnameIn: String; out path, filename: String; allowNewFile: Boolean): Boolean;
+  var
+    fullname: String;
   begin
     result    := false;
-    fullname  := ExpandFileName(fullname);
+    fullname  := ExpandFileName(fullnameIn);
     
     if DirectoryExists(fullname) then
     begin
@@ -475,7 +477,7 @@ implementation
     end;
   end;
   
-  procedure ProcessLinesInFile(filename: String; kind: ResourceKind; proc: LineProcessor; ptr: Pointer);
+  procedure ProcessLinesInFile(const filename: String; kind: ResourceKind; proc: LineProcessor; ptr: Pointer);
   var
     path: String;
     input: Text;
@@ -521,7 +523,7 @@ implementation
     {$ENDIF}
   end;
     
-  function CheckAssigned(msg : String; ptr : Pointer): Boolean;
+  function CheckAssigned(const msg : String; ptr : Pointer): Boolean;
   begin
     result := true;
     

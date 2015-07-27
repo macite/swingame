@@ -8,10 +8,10 @@ interface
     procedure AddKeyData(kyCode, kyChar: Longint);
     procedure HandleKeyupEvent(kyCode: LongInt);
     procedure ProcessKeyPress(kyCode, kyChar: Longint);
-    procedure ProcessTextEntry(input: String);
+    procedure ProcessTextEntry(const input: String);
     // text reading/draw collection
     procedure DrawCollectedText(dest: Bitmap);
-    procedure SetText(text: String);
+    procedure SetText(const text: String);
     procedure InputBackendStartReadingText(textColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
     procedure InputBackendStartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
     function  InputBackendEndReadingText(): String;
@@ -246,7 +246,7 @@ implementation
     end;
   end;
 
-  procedure ProcessTextEntry(input: String);
+  procedure ProcessTextEntry(const input: String);
   begin
     if _readingString then
     begin
@@ -285,7 +285,7 @@ implementation
       FreeBitmap(_textBitmap);
   end;
   
-  procedure RenderTextSurface(text : String);
+  procedure RenderTextSurface(const text : String);
   var
     outStr: String;
   begin
@@ -343,7 +343,7 @@ implementation
 
   
   
-  procedure SetText(text: String);
+  procedure SetText(const text: String);
   begin
     _tempString := text;
     

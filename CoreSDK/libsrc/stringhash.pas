@@ -24,7 +24,7 @@ interface
       fCaseSensitive: Boolean;
     public
       constructor create(isCaseSensitive: Boolean);
-      function createObject(value: string): tString;
+      function createObject(const value: string): tString;
     end;
 
     TStringHash = class(TObject)
@@ -32,14 +32,14 @@ interface
       fHashTable: tHashTable;
       fObjectFactory: _StringObjectFactory;
       protected
-      procedure fSetValue(key: string; value: TObject); virtual;
+      procedure fSetValue(const key: string; value: TObject); virtual;
     public
       function getIterator: tStrHashIterator; virtual;
-      function containsKey(key: string): Boolean; virtual;
+      function containsKey(const key: string): Boolean; virtual;
       function containsValue(value: TObject): Boolean; virtual;
-      function getValue(key: string): TObject; virtual;
-      function setValue(key: string; value: TObject): Boolean; virtual;
-      function remove(key: string): TObject; virtual;
+      function getValue(const key: string): TObject; virtual;
+      function setValue(const key: string; value: TObject): Boolean; virtual;
+      function remove(const key: string): TObject; virtual;
       function getCount: integer; virtual;
       property values[key: string]: TObject read getValue write fsetValue;
       property count: integer read getCount;
@@ -69,7 +69,7 @@ implementation
   // basically an adapter shell for tMapIterator
   //---------------------------------------------------------------------------
 
-  procedure throwTypeException(className: string);
+  procedure throwTypeException(const className: string);
   begin
     raise exception.create('Wrong type. Expecting tString, got ' + className);
   end;
@@ -102,7 +102,7 @@ implementation
     fCaseSensitive := isCaseSensitive;
   end;
 
-  function _StringObjectFactory.createObject(value: string): tString;
+  function _StringObjectFactory.createObject(const value: string): tString;
   begin
     if fCaseSensitive then
       result := tString.create(value)
@@ -114,7 +114,7 @@ implementation
 // TStringHash
 //---------------------------------------------------------------------------
 
-  procedure TStringHash.fSetValue(key: string; value: TObject);
+  procedure TStringHash.fSetValue(const key: string; value: TObject);
   begin
     setValue(key, value);
   end;
@@ -124,7 +124,7 @@ implementation
     result := tStrHashIterator.create(fHashTable);
   end;
 
-  function TStringHash.containsKey(key: string): Boolean;
+  function TStringHash.containsKey(const key: string): Boolean;
   var
     s: tString;
   begin
@@ -141,7 +141,7 @@ implementation
     result := fHashTable.containsValue(tComparable(value))
   end;
 
-  function TStringHash.getValue(key: string): TObject;
+  function TStringHash.getValue(const key: string): TObject;
   var
     s: tString;
   begin
@@ -153,7 +153,7 @@ implementation
     end;
   end;
 
-  function TStringHash.setValue(key: string; value: TObject): Boolean;
+  function TStringHash.setValue(const key: string; value: TObject): Boolean;
   begin
     {$IFDEF TRACE}
       //TraceEnter('stringhash', 'TStringHash.setValue');
@@ -166,7 +166,7 @@ implementation
     {$ENDIF}
   end;
 
-  function TStringHash.remove(key: string): TObject;
+  function TStringHash.remove(const key: string): TObject;
   var
     s: tString;
   begin

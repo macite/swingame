@@ -270,10 +270,8 @@ template_details = {
                     'os':             ['Mac OS X', 'Windows', 'Linux'],
                     'lib':            None,
                     'libs':           [
-                                        ('staticlib/sdl12/mac','lib/sdl12'),
-                                        ('staticlib/godly/mac','lib/godly'),
-                                        ('staticlib/sdl13/mac','lib/sdl13'),
-                                        ('lib/win','lib/win'),
+                                        ('staticlib/sdl2/mac','lib/mac'),
+                                        ('lib/sdl2/win','lib/win'),
                                       ],
                     'post_copy':        make_sh_exec
                   },

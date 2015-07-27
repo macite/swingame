@@ -31,12 +31,12 @@ interface
   type
       TraceLevel = (tlNone, tlError, tlWarning, tlInfo, tlVerbose);
 
-    procedure Trace(unitname, action, routine, message: String);
-    procedure TraceIf(tl: TraceLevel; unitname, action, routine, message: String);
-    procedure TraceEnter(unitName, routine: String); overload;
-    procedure TraceEnter(unitName, routine, message: String); overload;
-    procedure TraceExit(unitName, routine: String); overload;
-    procedure TraceExit(unitName, routine, message: String); overload;
+    procedure Trace(const unitname, action, routine, message: String);
+    procedure TraceIf(tl: TraceLevel;const unitname, action, routine, message: String);
+    procedure TraceEnter(const unitName, routine: String); overload;
+    procedure TraceEnter(const unitName, routine, message: String); overload;
+    procedure TraceExit(const unitName, routine: String); overload;
+    procedure TraceExit(const unitName, routine, message: String); overload;
   {$ENDIF}
 
 //=============================================================================
@@ -193,7 +193,7 @@ uses
     end;
   end;
 
-  procedure Trace(unitname, action, routine, message: String);
+  procedure Trace(const unitname, action, routine, message: String);
   begin
     try
       if (not Assigned(TRACE_UNITS)) or ((Length(unitname) > 0) and not TRACE_UNITS.containsKey(unitname)) then exit;
@@ -209,29 +209,29 @@ uses
     end;
   end;
   
-  procedure TraceIf(tl: TraceLevel; unitname, action, routine, message: String);
+  procedure TraceIf(tl: TraceLevel;const unitname, action, routine, message: String);
   begin
     if TRACE_LEVEL >= tl then
       Trace(unitname, action, routine, message);
   end;
   
-  procedure TraceEnter(unitName, routine: String); overload;
+  procedure TraceEnter(const unitName, routine: String); overload;
   begin
     TraceEnter(unitName, routine, '');
   end;
 
-  procedure TraceEnter(unitName, routine, message: String); overload;
+  procedure TraceEnter(const unitName, routine, message: String); overload;
   begin
     Traceif(tlVerbose, unitName, 'Enter', routine, message);
     indentLevel := indentLevel + 1;
   end;
 
-  procedure TraceExit(unitName, routine: String); overload;
+  procedure TraceExit(const unitName, routine: String); overload;
   begin
     TraceExit(unitName, routine, '');
   end;
   
-  procedure TraceExit(unitName, routine, message: String); overload;
+  procedure TraceExit(const unitName, routine, message: String); overload;
   begin
     indentLevel := indentLevel - 1;
     if indentLevel = 0 then

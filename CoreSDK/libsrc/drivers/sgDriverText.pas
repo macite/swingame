@@ -16,33 +16,20 @@ unit sgDriverText;
 //=============================================================================
 
 interface
-	uses sgTypes,
-		{$IFDEF SWINGAME_SDL2}
-			sgDriverTextSDL2
-		{$ELSE}
-			{$IFDEF SWINGAME_OPENGL}
-				sgDriverTextOpenGL
-			{$ELSE}
-				{$IFDEF SWINGAME_SDL13}
-					sgDriverTextSDL13
-				{$ELSE}
-					sgDriverTextSDL
-			{$ENDIF}
-		{$ENDIF}
-   {$ENDIF};
+	uses sgTypes, sgDriverTextSDL2;
 	
 	type
 		// These function and procedure pointers are required by the TextDriverRecord
 			
 		//loads a TTF font with a font name and size. Return a swingame Font 
-		LoadFontProcedure = function(fontName, fileName : String; size : Longint) : font;
+		LoadFontProcedure = function(const fontName, fileName : String; size : Longint) : font;
 		
 		// closes a font.		
 		CloseFontProcedure = procedure(fontToClose : font);
 		/// This function prints "str" with font "font" and color "clrFg"
 	  ///  * onto a rectangle of color "clrBg".
 	  ///  * It does not pad the text.
-		PrintStringsProcedure = procedure(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+		PrintStringsProcedure = procedure(dest: Bitmap; font: Font;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
     /// This function prints "str" with font "font" and color "clrFg"
     ///  * onto a rectangle of color "clrBg".
     ///  * It does not pad the text.
@@ -52,7 +39,7 @@ interface
     // gets the current fontstyle of the given font
 		GetFontStyleProcedure = function(font : Font) : FontStyle;	
     //returns the size of a given text using a given font.
-		SizeOfTextProcedure = function(font : Font ;  theText : String ; var w : Longint; var h : Longint) : Integer;
+		SizeOfTextProcedure = function(font : Font ;const theText : String ; var w : Longint; var h : Longint) : Integer;
     //returns the size of a given text using a given font.
 		SizeOfUnicodeProcedure = function(font : Font; theText : WideString; var w : Longint; var h : Longint) : Integer;
     //closes the font module.
@@ -61,7 +48,7 @@ interface
 		GetErrorProcedure = function() : string;
     //checks if font library is initialiszed.
 		InitProcedure = function() : integer;
-		StringColorProcedure = procedure (dest : Bitmap; x,y : Single; theText : String; theColor : Color);
+		StringColorProcedure = procedure (dest : Bitmap; x,y : Single;const theText : String; theColor : Color);
 
 		FontToIntFn = function (fnt: Font) : Integer;
 		
@@ -93,22 +80,10 @@ interface
 implementation
 	procedure LoadDefaultTextDriver();
 	begin
-	{$IFDEF SWINGAME_SDL2}
-		LoadSDL2TextDriver()
-	{$ELSE}
-		{$IFDEF SWINGAME_OPENGL}
-			LoadOpenGLTextDriver()
-		{$ELSE}
-			{$IFDEF SWINGAME_SDL13}
-				LoadSDL13TextDriver()
-			{$ELSE}
-		 		LoadSDLTextDriver()
-			{$ENDIF}
-		{$ENDIF}
-  {$ENDIF};
+		LoadSDL2TextDriver();
 	end;
 	
-	function DefaultLoadFontProcedure(fontName, fileName : String; size : Longint) : font;
+	function DefaultLoadFontProcedure(const fontName, fileName : String; size : Longint) : font;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.LoadFont(fontName, fileName, size);
@@ -120,7 +95,7 @@ implementation
 		TextDriver.CloseFont(fontToClose);		
 	end;
 	
-	procedure DefaultPrintStringsProcedure(dest: Bitmap; font: Font; str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+	procedure DefaultPrintStringsProcedure(dest: Bitmap; font: Font;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
 	begin
 		LoadDefaultTextDriver();
 		TextDriver.PrintStrings(dest,font,str,rc,clrFg,clrBg,flags)
@@ -144,7 +119,7 @@ implementation
 		result := TextDriver.GetFontStyle(font);
 	end;
 	
-	function DefaultSizeOfTextProcedure(font : Font; theText : String; var w, h : Longint) : Integer;
+	function DefaultSizeOfTextProcedure(font : Font;const theText : String; var w, h : Longint) : Integer;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.SizeOfText(font, theText, w, h);
@@ -174,7 +149,7 @@ implementation
 		result := TextDriver.Init();
 	end;
 	
-	procedure DefaultStringColorProcedure(dest : Bitmap; x,y : Single; theText : String; theColor : Color); 
+	procedure DefaultStringColorProcedure(dest : Bitmap; x,y : Single;const theText : String; theColor : Color); 
 	begin
 	  LoadDefaultTextDriver();
 	  TextDriver.StringColor(dest,x,y,theText,theColor);

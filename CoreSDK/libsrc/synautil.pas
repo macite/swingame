@@ -184,11 +184,11 @@ function DumpStr(const Buffer: Ansistring): string;
 function DumpExStr(const Buffer: Ansistring): string;
 
 {:Dump binary buffer stored in a string to a file with DumpFile filename.}
-procedure Dump(const Buffer: AnsiString; DumpFile: string);
+procedure Dump(const Buffer: AnsiString;const DumpFile: string);
 
 {:Dump binary buffer stored in a string to a file with DumpFile filename. All
  bytes with code of character is written as character, not as hexadecimal value.}
-procedure DumpEx(const Buffer: AnsiString; DumpFile: string);
+procedure DumpEx(const Buffer: AnsiString;const DumpFile: string);
 
 {:Like TrimLeft, but remove only spaces, not control characters!}
 function TrimSPLeft(const S: string): string;
@@ -240,7 +240,7 @@ function IntToBin(Value: Integer; Digits: Byte): string;
 function BinToInt(const Value: string): Integer;
 
 {:Parses a URL to its various components.}
-function ParseURL(URL: string; var Prot, User, Pass, Host, Port, Path,
+function ParseURL(const URL: string; var Prot, User, Pass, Host, Port, Path,
   Para: string): string;
 
 {:Replaces all "Search" string values found within "Value" string, with the
@@ -456,7 +456,7 @@ end;
 
 {==============================================================================}
 
-function DecodeTimeZone(Value: string; var Zone: integer): Boolean;
+function DecodeTimeZone(const Value: string; var Zone: integer): Boolean;
 var
   x: integer;
   zh, zm: integer;
@@ -546,7 +546,7 @@ end;
 function GetMonthNumber(Value: String): integer;
 var
   n: integer;
-  function TestMonth(Value: String; Index: Integer): Boolean;
+  function TestMonth(const Value: String; Index: Integer): Boolean;
   var
     n: integer;
   begin
@@ -964,7 +964,7 @@ end;
 
 {==============================================================================}
 
-procedure Dump(const Buffer: AnsiString; DumpFile: string);
+procedure Dump(const Buffer: AnsiString;const DumpFile: string);
 var
   f: Text;
 begin
@@ -981,7 +981,7 @@ end;
 
 {==============================================================================}
 
-procedure DumpEx(const Buffer: AnsiString; DumpFile: string);
+procedure DumpEx(const Buffer: AnsiString;const DumpFile: string);
 var
   f: Text;
 begin
@@ -1219,7 +1219,7 @@ end;
 
 {==============================================================================}
 
-function ParseURL(URL: string; var Prot, User, Pass, Host, Port, Path,
+function ParseURL(const URL: string; var Prot, User, Pass, Host, Port, Path,
   Para: string): string;
 var
   x, y: Integer;

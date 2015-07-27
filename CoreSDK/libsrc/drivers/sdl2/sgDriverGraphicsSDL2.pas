@@ -222,7 +222,7 @@ implementation
     _sg_functions^.graphics.show_border(@wind, val);
   end;
 	
-  procedure InitializeGraphicsWindowProcedure(caption : String; screenWidth, screenHeight : LongInt);
+  procedure InitializeGraphicsWindowProcedure(const caption : String; screenWidth, screenHeight : LongInt);
   begin
     wind := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
     wind_open := true;
@@ -239,7 +239,7 @@ implementation
     _screen := @wind;
   end;
 
-  procedure InitializeScreenProcedure( screen: Bitmap; x, y : LongInt; bgColor, stringColor : Color; msg : String);
+  procedure InitializeScreenProcedure( screen: Bitmap; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
   var
     clr: sg_color;
   begin

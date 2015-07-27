@@ -144,6 +144,8 @@ interface
 
 		sg_system_data_fn = function(): psg_system_data; cdecl;
 
+		sg_drawing_surface_string_bool_fn = function(surface: psg_drawing_surface; filename: pchar): int; cdecl; // (surface, string) -> bool
+
 		//
 		// Text-related function pointers
 		//
@@ -197,7 +199,7 @@ interface
     	sg_connection_uint_fn = function (connection: psg_network_connection): uint; cdecl;
     	sg_accept_connection_fn = function (connection: psg_network_connection): sg_network_connection; cdecl;
     	sg_udp_send_fn = function (con: psg_network_connection; host: pchar; port: uint16; buffer: pchar; size: LongInt): LongInt; cdecl;
-		sg_read_udp_fn = procedure (con: psg_network_connection; host: puint; port: puint16; buffer: pchar; size: puint);
+		sg_read_udp_fn = procedure (con: psg_network_connection; host: puint; port: puint16; buffer: pchar; size: puint); cdecl;
 
 
 		//
@@ -265,6 +267,7 @@ interface
 				show_border : sg_surface_bool_proc;
 				show_fullscreen : sg_surface_bool_proc;
 				resize : sg_surface_size_proc;
+				save_png: sg_drawing_surface_string_bool_fn;
 			end;
 
 		sg_input_callbacks = record

@@ -27,7 +27,7 @@ APP_PATH="."
 #
 # Step 3: Setup options
 #
-EXTRA_OPTS="-O3 -fPIC -Sewn -vwn -dSWINGAME_LIB"
+EXTRA_OPTS="-O1 -fPIC -Sewn -vwn -dSWINGAME_LIB"
 VERSION_NO=3.0
 VERSION=3.0
 CLEAN="N"
@@ -38,28 +38,23 @@ PAS_FLAGS=""
 #
 # Library versions
 #
-OPENGL=false
-SDL_13=false
 STATIC=false
 FRAMEWORK=false
 IOS=false
-STATIC_NAME="sgsdk-sdl12.a"
-NAME_SUFFIX="-sdl12"
+STATIC_NAME="sgsdk-sdl2.a"
 
 #
 # Step 4: Usage message and process command line arguments
 #
 Usage()
 {
-    echo "Usage: ./build.sh [-c] [-d] [-i] [-h] [-badass] [-godly] [-IOS] [-framework] [-static] [version]"
+    echo "Usage: ./build.sh [-c] [-d] [-i] [-h] [-IOS] [-framework] [-static] [version]"
     echo 
     echo "Creates and Compiles the native SGSDK library."
     echo
     echo "Options:"
     echo " -c       Perform a clean rather than a build"
     echo " -d       Compile with debug symbols"
-    echo " -basass  Compile with SDL2 backend"
-    echo " -godly   Compile with SDL2/OpenGL backend"
     echo " -static  Compile as a static library"
     echo " -h       Show this help message"
     echo " -i       Install after compiling"
@@ -155,21 +150,9 @@ while getopts chdif:I:b:g:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-            STATIC_NAME="sgsdk-sdl13.a"
-            NAME_SUFFIX="-sdl13"
-        fi 
-        ;;
     h)  Usage ;;
     f)  if [ "${OPTARG}" = "ramework" ]; then
             FRAMEWORK=true
-        fi 
-        ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            OPENGL=true
-            STATIC_NAME="sgsdk-godly.a"
-            NAME_SUFFIX="-godly"
         fi 
         ;;
     s)  if [ "${OPTARG}" = "tatic" ]; then
@@ -197,7 +180,7 @@ fi
 # Step 5: Set the paths to local variables
 #
 
-TMP_DIR="${APP_PATH}/tmp/sdl12"
+TMP_DIR="${APP_PATH}/tmp/"
 SDK_SRC_DIR="${APP_PATH}/src"
 LOG_FILE="${APP_PATH}/tmp/out.log"
 
@@ -216,18 +199,6 @@ FPC_VER=`${FPC_BIN} -iV`
 FPC_MAJOR_VER=`echo ${FPC_VER} | awk -F'.' '{print $1}'`
 FPC_MINOR_VER=`echo ${FPC_VER} | awk -F'.' '{print $2}'`
 FPC_LESSR_VER=`echo ${FPC_VER} | awk -F'.' '{print $3}'`
-
-if [ ${SDL_13} = true ]; then
-  TMP_DIR="${APP_PATH}/tmp/sdl13"
-  EXTRA_OPTS="${EXTRA_OPTS} -dSWINGAME_SDL13"
-  VERSION="${VERSION}badass"
-fi
-
-if [ ${OPENGL} = true ]; then
-  TMP_DIR="${APP_PATH}/tmp/godly"
-  EXTRA_OPTS="${EXTRA_OPTS} -dSWINGAME_OPENGL -dSWINGAME_SDL13"
-  VERSION="${VERSION}godly"
-fi
 
 if [ ${IOS} = true ]; then
 
@@ -285,14 +256,10 @@ elif [ "$OS" = "$MAC" ]; then
     CURRENT_DIR="${OUT_DIR}/SGSDK.framework/Versions/Current"
     
     # Set lib dir
-    if [ ${SDL_13} = true ]; then
-      LIB_DIR="${APP_PATH}/staticlib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-      LIB_DIR="${APP_PATH}/staticlib/godly/mac"
-    else
-      LIB_DIR="${APP_PATH}/staticlib/sdl12/mac"
-    fi
+    LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
     
+    PAS_FLAGS="${PAS_FLAGS} -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+
     #
     # Setup framework/dylib details
     #
@@ -357,13 +324,7 @@ fi
 
 DoDriverMessage()
 {
-  if [ ${SDL_13} = true ]; then
-    echo "  ... Using SDL 1.3 Driver"
-  elif [ ${OPENGL} = true ]; then
-    echo "  ... Using OpenGL Driver"
-  else
-    echo "  ... Using SDL 1.2 Driver"
-  fi
+  echo "  ... Using SGSDK Backend Driver"
 }
 
 DisplayHeader()
@@ -416,7 +377,7 @@ doMacCompile()
     ARCH="$1"
     LINK_OPTS="$2"
     
-    FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework QuickTime -framework Carbon -framework ForceFeedback'
+    FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
     
     # FRAMEWORKS=`cd ${LIB_DIR};ls -d *.framework | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
 
@@ -570,13 +531,15 @@ then
         HAS_i386=false
         HAS_x64=false
         
-        HAS_SNOW_LEOPARD_SDK=false
-        SDK_FLAGS=""
-        HAS_LION=false
         OS_VER=`sw_vers -productVersion | awk -F . '{print $1"."$2}'`
         OS_VER_MINOR=`sw_vers -productVersion | awk -F . '{print $2}'`
         XCODE_PREFIX=''
         
+        USR_PATHS='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr'
+        if [ ! -d $USR_PATHS ]; then
+          USR_PATHS='/usr'
+        fi
+
         if [ -d /Applications/Xcode.app/Contents ]; then
           if [ -d /Applications/Xcode.app/Contents/Developer/Platforms ]; then
             XCODE_PREFIX='/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform'
@@ -585,59 +548,38 @@ then
           fi
         fi
         
-        if [ -f /usr/libexec/as/i386/as ]; then
+        if [ -f "${USR_PATHS}/libexec/as/i386/as" ]; then
             HAS_i386=true
         fi
         
-        if [ -f /usr/libexec/as/x86_64/as ]; then
+        if [ -f "${USR_PATHS}/libexec/as/x86_64/as" ]; then
             HAS_x64=true
         fi
         
-        if [ -d ${XCODE_PREFIX}/Developer/SDKs/MacOSX10.6.sdk ]; then
-            HAS_SNOW_LEOPARD_SDK=true
-            SDK_FLAGS="-syslibroot ${XCODE_PREFIX}/Developer/SDKs/MacOSX10.6.sdk -macosx_version_min 10.6"
-        fi
-        
-        if [ $OS_VER = '10.6' ]; then
-            HAS_SNOW_LEOPARD_SDK=true
-        fi
+        PAS_FLAGS="$PAS_FLAGS -WM10.7"
 
-        if [ $OS_VER_MINOR -ge "7" ]; then
-            # Is Lion or later = has PIE
-            HAS_LION=true
+        SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX${OS_VER}.sdk"
+        if [ ! -d ${SDK_PATH} ]; then
+            echo "Unable to locate MacOS SDK. ${SDK_PATH}"
+            exit -1
         fi
-        
-        if [ $HAS_LION = true ]; then
-            PAS_FLAGS="$PAS_FLAGS -WM10.7"
-
-            SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX${OS_VER}.sdk"
-            if [ ! -d ${SDK_PATH} ]; then
-                echo "Unable to locate MacOS SDK."
-                exit -1
-            fi
-            SDK_FLAGS="-syslibroot ${SDK_PATH} -macosx_version_min 10.7"
-        fi
+        SDK_FLAGS="-syslibroot ${SDK_PATH} -macosx_version_min 10.7"
         
         echo "  ... Compiling Library"
         
         if [[ $HAS_i386 = true && $HAS_x64 = true ]]; then
-            echo "  ... Building Universal Binary (DISABLED ATM i386 only)"
+            echo "  ... Building Universal Binary"
             
-            # #Compile i386 version of library
-            # FPC_BIN=`which ppc386`
-            # doMacCompile "i386" "$SDK_FLAGS"
-            
-            #Compile ppc version of library
-            # FPC_BIN=`which ppcx64`
-            # doMacCompile "x86_64" "$SDK_FLAGS"
-            
-            #Combine into a fat dylib
-            # doLipo "i386" "x86_64"
-            
+            #Compile i386 version of library
             FPC_BIN=`which ppc386`
             doMacCompile "i386" "$SDK_FLAGS"
             
-            mv ${OUT_DIR}/libSGSDKi386.dylib ${OUT_DIR}/libSGSDK.dylib
+            #Compile ppc version of library
+            FPC_BIN=`which ppcx64`
+            doMacCompile "x86_64" "$SDK_FLAGS"
+            
+            #Combine into a fat dylib
+            doLipo "i386" "x86_64"
         else
             #Compile i386 version of library
             FPC_BIN=`which ppc386`

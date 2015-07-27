@@ -217,7 +217,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method HttpAddHeader
-  /// @sn httpAddHeader:%s
+  /// @sn httpRequest:%s addHeader:%s value:%s
   procedure HttpAddHeader(var aHttpRequest : HttpRequest; const name, value : String);
 
   /// Removes a header of the Http request at the specified index.
@@ -228,8 +228,8 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpRemoveHeaderAt
-  /// @sn httpRemoveHeaderAt:%s
-  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
+  /// @sn httpRequest:%s RemoveHeaderAt:%s
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; aIdx : LongInt);
 
   /// Returns a header of the Http Request at the specified index.
   ///
@@ -239,8 +239,8 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method HttpHeaderAt
-  /// @sn httpHeaderAt:%s
-  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
+  /// @sn httpRequest:%s headerAt:%s
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; aIdx : LongInt) : String;
 
   /// Returns a header of the Http Request at the specified index.
   ///
@@ -250,7 +250,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetBody
-  /// @sn httpSetBody:%s
+  /// @sn httpRequest:%s setBody:%s
   procedure HttpSetBody(var aHttpRequest : HttpRequest; const aBody : String);
 
   /// Sets the method of the Http Request
@@ -261,8 +261,8 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetMethod
-  /// @sn httpSetMethod:%s
-  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
+  /// @sn httpRequest:%s setMethod:%s
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; aMethod : HttpMethod);
 
   /// Sets the version of the Http Request
   ///
@@ -272,7 +272,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetVersion
-  /// @sn httpSetVersion:%s
+  /// @sn httpRequest:%s setVersion:%s
   procedure HttpSetVersion(var aHttpRequest : HttpRequest; const aVersion : String);
 
   /// Sets the URL of the Http Request
@@ -283,7 +283,7 @@ uses sgTypes;
   /// @lib
   /// @class Connection
   /// @method httpSetURL
-  /// @sn httpSetURL:%s
+  /// @sn httpRequest:%s setURL:%s
   procedure HttpSetURL(var aHttpRequest : HttpRequest; const aURL : String);
 
   /// Converts the Http Request to a string
@@ -304,10 +304,15 @@ uses sgTypes;
   function EncodeBase64(const aData : String) : String;
 
 
-  /// Performs a get request for the resourse at the specified host, path and port.
+  /// Perform a get request for the resourse at the specified host, path and port.
   ///
   /// @lib
   function HttpGet(const host: String; port: Word; const path: String) : HttpResponse;
+
+  /// Perform a post request to the specified host, with the supplied body.
+  ///
+  /// @lib
+  function HttpPost(const host: String; port: Word; const path, body: String): HttpResponse;
 
 //----------------------------------------------------------------------------
 // Misc
@@ -2171,7 +2176,9 @@ var
     //   exit; 
     // end;
 
-    lMsg := HttpRequestToString(aReq) + #13#10#13#10;
+    lMsg := HttpRequestToString(aReq);
+    if aReq.requestType = HTTP_GET then lMsg += #13#10;
+
     SetLength(buffer, Length(lMsg));
 
     for i := 0 to Length(lMsg) - 1 do
@@ -2196,7 +2203,7 @@ var
     aHttpRequest.headervalue[High(aHttpRequest.headervalue)] := value;
   end;
 
-  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; const aIdx : LongInt);
+  procedure HttpRemoveHeaderAt(var aHttpRequest : HttpRequest; aIdx : LongInt);
   var
     i : Integer;
   begin
@@ -2212,7 +2219,7 @@ var
     SetLength(aHttpRequest.headervalue, Length(aHttpRequest.headervalue) - 1);
   end;
 
-  function HttpHeaderAt(const aHttpRequest : HttpRequest; const aIdx : LongInt) : String;
+  function HttpHeaderAt(const aHttpRequest : HttpRequest; aIdx : LongInt) : String;
   begin
     result := '';
     if (aIdx < 0) or (aIdx > High(aHttpRequest.headername)) then exit;
@@ -2225,7 +2232,7 @@ var
     aHttpRequest.body := aBody;
   end;
 
-  procedure HttpSetMethod(var aHttpRequest : HttpRequest; const aMethod : HttpMethod);
+  procedure HttpSetMethod(var aHttpRequest : HttpRequest; aMethod : HttpMethod);
   begin
     aHttpRequest.requestType := aMethod;
   end;
@@ -2252,7 +2259,7 @@ var
       Http_DELETE: result += 'DELETE ';
     end;
     result += aHttpRequest.url;
-    result += ' Http/' + aHttpRequest.version;
+    result += ' HTTP/' + aHttpRequest.version;
     result += #13#10;
     for i := Low(aHttpRequest.headername) to High(aHttpRequest.headername) do
       result += aHttpRequest.headername[i] + ': ' + aHttpRequest.headervalue[i] + #13#10;
@@ -2457,6 +2464,36 @@ var
 
     HttpSetBody(request, '');
     
+    con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
+
+    // CreateHttpConnection(ip, port);
+    SendHttpRequest(request, con);
+    result := ReadHttpResponse(con);
+    // WriteLn('here - ', HttpResponseBodyAsString(result));
+    _sg_functions^.network.close_connection(@con);
+  end;
+
+  function HttpPost(const host: String; port: Word; const path, body: String): HttpResponse;
+  var
+    con : sg_network_connection;
+    request : HttpRequest;
+  begin
+    HttpAddHeader(request, 'Host', host + ':' + IntToStr(port));
+    HttpAddHeader(request, 'Connection', 'close');
+    HttpAddHeader(request, 'User-Agent', 'SwinGame/4.0' );
+    HttpAddHeader(request, 'Content-Type', 'application/json;charset=UTF8' );
+    HttpAddHeader(request, 'Content-Length', IntToStr(Length(body)));
+    HttpAddHeader(request, 'Accept', 'application/json, text/plain, */*');
+
+    // Create Http message
+    HttpSetMethod(request, HTTP_POST);
+    HttpSetURL(request, path);
+    HttpSetVersion(request, '1.1');
+
+    HttpSetBody(request, body);
+    
+    // WriteLn(HttpRequestToString(request));
+
     con := _sg_functions^.network.open_tcp_connection(PChar(host), port);
 
     // CreateHttpConnection(ip, port);

@@ -1246,7 +1246,7 @@ procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; const text: S
 /// @class GUIList
 /// @overload AddItem AddItemWithCell
 /// @csn addBitmap:%s cell:%s
-procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
@@ -1254,7 +1254,7 @@ procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
 /// @lib ListWithIdAddItemWithCell
 /// @sn listWithId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(const id : String; img: Bitmap; cell: Longint); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
@@ -1262,7 +1262,7 @@ procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint); over
 /// @lib ListOnPanelWithIdAddItemWithCell
 /// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s
 ///
-procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; cell: Longint); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1273,7 +1273,7 @@ procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: L
 /// @class GUIList
 /// @overload AddItem AddItemWithCellAndText
 /// @csn addBitmap:%s cell:%s andText:%s
-procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
   
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1281,7 +1281,7 @@ procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint; const text
 /// @lib ListWithIdAddItemWithCellAndText
 /// @sn listWithId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(const id : String; img: Bitmap; cell: Longint; const text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1289,7 +1289,7 @@ procedure ListAddItem(const id : String; const img: Bitmap; cell: Longint; const
 /// @lib ListOnPanelWithIdAddItemWithCellAndText
 /// @sn listOnPanel:%s withId:%s addBitmap:%s cell:%s andText:%s
 ///
-procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; cell: Longint; const text: String); overload;
 
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
@@ -1300,7 +1300,7 @@ procedure ListAddItem(pnl : Panel; const id : String; const img: Bitmap; cell: L
 /// @class Region
 /// @overload AddItem AddItemWithCellAndTextFromRegion
 /// @csn addBitmap:%s cell:%s andText:%s
-procedure ListAddItem(r: Region; const img:Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(r: Region; img: Bitmap; cell: Longint; const text: String); overload;
 
 
 /// Adds an item to the list where the items shows a cell of a
@@ -1313,7 +1313,7 @@ procedure ListAddItem(r: Region; const img:Bitmap; cell: Longint; const text: St
 /// @overload AddItem AddItemWithCellFromRegion
 /// @csn addBitmap:%s cell:%s
 
-procedure ListAddItem(r : Region; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(r : Region; img: Bitmap; cell: Longint); overload;
 
 /// Adds an item to the list by text
 ///
@@ -1356,11 +1356,11 @@ function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
 /// Returns the index of the item with the bitmap and cell.
 ///
 /// @lib ListBitmapCellIndex
-/// @sn list:%s indexOfCell:%s
+/// @sn list:%s bitmapIndex:%s withCell:%s
 ///
 /// @class GUIList
 /// @method CellItemIndex
-function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
 
 /// returns the id of a value in the list.
 ///
@@ -1617,7 +1617,7 @@ procedure ShowOpenDialog(select: FileDialogSelectType); overload;
 
 //Do not use
 //procedure AddPanelToGUI(p: Panel);
-//procedure AddRegionToPanelWithString(d: string; p: panel);
+//procedure AddRegionToPanelWithString(const d: string; p: panel);
 
 //=============================================================================
 implementation
@@ -1969,7 +1969,7 @@ var
     FillTriangle(VectorBackcolorToDraw(forRegion), tri, OptionToScreen());
   end;
   
-  procedure _ResizeItemArea(var area: Rectangle; var imgPt: Point2D; aligned: FontAlignment; const bmp: Bitmap);
+  procedure _ResizeItemArea(var area: Rectangle; var imgPt: Point2D; aligned: FontAlignment; bmp: Bitmap);
   begin
     
     case aligned of
@@ -3089,7 +3089,7 @@ begin
   Result := ListItemText(r, ListActiveItemIndex(r));
 end;
 
-function ListActiveItemText(r:region):String; Overload;
+function ListActiveItemText(r: Region):String; Overload;
 begin
   Result := ListItemText(r, ListActiveItemIndex(r));
 end;
@@ -3195,12 +3195,12 @@ begin
   ListAddItem(lst, img, -1, text);
 end;
 
-procedure ListAddItem(lst: GUIList; const img: Bitmap; cell: Longint); overload;
+procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
 begin
   ListAddItem(lst, img, cell, '');
 end;
 
-procedure ListAddItem(lst: GUIList; const img:Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
 begin
     if not assigned(lst) then exit;
     
@@ -3210,12 +3210,12 @@ begin
     lst^.items[High(lst^.items)].cell     := cell;  //Assign the image to the item
 end;
 
-procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint); overload;
+procedure ListAddItem(r : Region; img: Bitmap; cell: Longint); overload;
 begin
   ListAddItem(r,img, cell, '');
 end;
 
-procedure ListAddItem(r : Region; const img:Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(r : Region; img: Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(ListFromRegion(r), img, cell, text);
 end;
@@ -3236,12 +3236,12 @@ begin
 end;
 
 
-procedure ListAddItem(const id : String; const img:Bitmap; cell: Longint); overload;
+procedure ListAddItem(const id : String; img:Bitmap; cell: Longint); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(const id: String; const img:Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(const id: String; img: Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, text);
 end;
@@ -3261,12 +3261,12 @@ begin
   ListAddItem(RegionWithID(id),img, text);
 end;
 
-procedure ListAddItem(pnl : Panel; const id : String; const img:Bitmap; cell: Longint); overload;
+procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; cell: Longint); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, '');
 end;
 
-procedure ListAddItem(pnl : Panel; const id: String; const img:Bitmap; cell: Longint; const text: String); overload;
+procedure ListAddItem(pnl : Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
 begin
   ListAddItem(RegionWithID(id), img, cell, text);
 end;
@@ -3379,7 +3379,7 @@ begin
   result := ListBitmapIndex(lst, img, -1);
 end;
 
-function ListBitmapIndex(lst: GUIList; const img: Bitmap; cell: Longint): Longint; overload;
+function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
 var
   i: Longint;
 begin
@@ -3548,7 +3548,7 @@ begin
 end;
 
 
-// function CheckboxState(ID: String): Boolean;
+// function CheckboxState(const ID: String): Boolean;
 // var
 //   reg: Region;
 // begin
@@ -4406,7 +4406,7 @@ begin
   result := ButtonClicked(RegionWithId(name));
 end;
 
-// function DoLoadPanel(filename, name: String): Panel;
+// function DoLoadPanel(const filename, name: String): Panel;
 // begin
 //   {$IFDEF TRACE}
 //     TraceEnter('sgUserInterface', 'DoLoadPanel', name + ' = ' + filename);

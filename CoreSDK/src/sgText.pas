@@ -231,7 +231,7 @@ interface
 	/// Draws the text in the rectangle using the fore and back colors, font and options indicated.
 	///
 	/// @lib DrawTextInRectOpts
-	/// @sn bitmap:%s drawText:%s textColor:%s backColor:%s font:%s align:%s in:%s opts:%s
+	/// @sn drawText:%s textColor:%s backColor:%s font:%s align:%s in:%s opts:%s
 	/// @doc_details
 	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
 	

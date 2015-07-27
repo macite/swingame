@@ -1091,7 +1091,6 @@ interface
     ///
     /// @class Connection
     /// @pointer_wrapper
-    /// @field pointer : ^ConnectionData
     Connection  = ^ConnectionData;
 
 
