@@ -12,6 +12,10 @@
 #include "sgInterfaces.h"
 #include <string>
 #include "glm/glm.hpp"
+//#include <assimp/matrix4x4.h>
+//#include <assimp/vector3.h>
+//#include <assimp/quaternion.h>
+#include <assimp/types.h>
 
 using namespace std;
 using namespace glm;
@@ -32,5 +36,20 @@ void sgsdl2_clear_opengl_window(sg_color color);
 
 string sgsdl2_uni_light_name(int i, const char *str);
 
+// Generates a euler angle vector from a quaternion vector. Used by the importer.
+vec3 sgsdl2_angles_from_quat(vec4 quat);
+
+// Turns an array of vectors into a flat array of floats. Used by the importer.
+void sgsdl2_flatten_array(aiVector3D *vectors, unsigned int size, float *&flattened_array, unsigned int &new_size, unsigned int dimension = 3);
+
+
+// Conversion functions
+sg_color sgsdl2_color(aiColor4D);
+
+vec3 sgsdl2_vec3(aiVector3D);
+
+vec4 sgsdl2_vec4(aiQuaternion);
+
+mat4 sgsdl2_mat4(aiMatrix4x4);
 
 #endif /* defined(__sgsdl2__SGSDL2Utilities__) */

@@ -97,8 +97,150 @@ string sgsdl2_uni_light_name(int i, const char *str)
 	return ss.str();
 }
 
+vec3 sgsdl2_angles_from_quat(vec4 quat)
+{
+	vec3 vec = vec3(0, 0, 0);
+	
+	// Code from the assimp library for angles to quat
+//	const TReal fSinPitch(sin(fPitch*static_cast<TReal>(0.5)));
+//	const TReal fCosPitch(cos(fPitch*static_cast<TReal>(0.5)));
+//	const TReal fSinYaw(sin(fYaw*static_cast<TReal>(0.5)));
+//	const TReal fCosYaw(cos(fYaw*static_cast<TReal>(0.5)));
+//	const TReal fSinRoll(sin(fRoll*static_cast<TReal>(0.5)));
+//	const TReal fCosRoll(cos(fRoll*static_cast<TReal>(0.5)));
+//	const TReal fCosPitchCosYaw(fCosPitch*fCosYaw);
+//	const TReal fSinPitchSinYaw(fSinPitch*fSinYaw);
+//	x = fSinRoll * fCosPitchCosYaw     - fCosRoll * fSinPitchSinYaw;
+//	y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
+//	z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
+//	w = fCosRoll * fCosPitchCosYaw     + fSinRoll * fSinPitchSinYaw;
+	
+	
+	// Code from http://stackoverflow.com/questions/14447338/converting-quaternions-to-euler-angles-problems-with-the-range-of-y-angle
 
+//	float w,x,y,z;
+//	
+//	w = quat[0];
+//	x = quat[1];
+//	y = quat[2];
+//	z = quat[3];
+//	
+//	double sqw = w*w;
+//	double sqx = x*x;
+//	double sqy = y*y;
+//	double sqz = z*z;
+//	
+//	vec.z = (atan2(2.0 * (x*y + z*w),(sqx - sqy - sqz + sqw)));
+//	vec.x = (atan2(2.0 * (y*z + x*w),(-sqx - sqy + sqz + sqw)));
+//	vec.y = (asin(-2.0 * (x*z - y*w)));
 
+	
+	// Code from http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
+//	double sqw = quat.w * quat.w;
+//	double sqx = quat.x * quat.x;
+//	double sqy = quat.y * quat.y;
+//	double sqz = quat.z * quat.z;
+//	double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
+//	double test = quat.x * quat.y + quat.z * quat.w;
+	
+//	if (test > 0.499*unit) { // singularity at north pole
+//		vec.y = 2 * atan2(quat.x,quat.w);
+//		vec.z = M_PI/2;
+//		vec.x = 0;
+//		return vec;
+//	}
+//	if (test < -0.499*unit) { // singularity at south pole
+//		vec.y = -2 * atan2(quat.x,quat.w);
+//		vec.z = -M_PI/2;
+//		vec.x = 0;
+//		return vec;
+//	}
+	
+//	vec.x = atan2(2*quat.y*quat.w-2*quat.x*quat.z , sqx - sqy - sqz + sqw);
+//	vec.y = asin(2*test/unit);
+//	vec.z = atan2(2*quat.x*quat.w - 2*quat.y*quat.z , -sqx + sqy - sqz + sqw);
+	
+	// x = atan2(2*(x*y + z*w), 1 - 2(sqy + sqz)
+//	vec.x = atan2(2 * (quat.x * quat.y + quat.z * quat.w), 1 - 2 * (sqy + sqz));
+//	vec.y = asin(2 * (quat.x * quat.z - quat.y * quat.w));
+//	vec.z = atan2(2 * (quat.x * quat.w + quat.y * quat.z), 1 - 2 * (sqz + sqw));
+	
+	
+	// Code from unreal engine
+	// https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/Runtime/Core/Private/Math/UnrealMath.cpp
+	
+	const float SingularityTest = quat.z*quat.x-quat.w*quat.y;
+	const float YawY = 2.f*(quat.w*quat.z+quat.x*quat.y);
+	const float YawX = (1.f-2.f*(quat.y * quat.y + quat.z * quat.z));
+	
+	static const float RAD_TO_DEG = (180.f) / (float) M_PI;
+	static const float DEG_TO_RAD = (float) M_PI / (180.f);
+	const float SINGULARITY_THRESHOLD = 0.4999995f;
+	
+	if (SingularityTest < -SINGULARITY_THRESHOLD)
+	{
+		vec.x = 270.f;
+		vec.y = atan2(YawY, YawX) * RAD_TO_DEG;
+		vec.z = -vec.y - (2.f * atan2(quat.x, quat.w) * RAD_TO_DEG);
+	}
+	else if (SingularityTest > SINGULARITY_THRESHOLD)
+	{
+		vec.x = 90.f;
+		vec.y = atan2(YawY, YawX);
+		vec.z = vec.y - (2.f * atan2(quat.x, quat.w));
+	}
+	else
+	{
+		vec.x = asin(2.f*(SingularityTest)) * RAD_TO_DEG;
+		vec.y = atan2(YawY, YawX) * RAD_TO_DEG;
+		vec.z = atan2(-2.f*(quat.w*quat.x+quat.y*quat.z), 1.f-2.f*(quat.x * quat.x + quat.y * quat.y));
+	}
+	
+	// Convert back to radians
+	vec.x *= DEG_TO_RAD;
+	vec.y *= DEG_TO_RAD;
+	vec.z *= DEG_TO_RAD;
+	return vec;
+}
+
+void sgsdl2_flatten_array(aiVector3D *vectors, unsigned int size, float *&flattened_array, unsigned int &new_size, unsigned int dimension)
+{
+	new_size = size * dimension;
+	flattened_array = (float*) malloc(sizeof(float) * new_size);
+	
+	for (unsigned int i = 0; i < size; i++)
+	{
+		for (unsigned int j = 0; j < dimension; j++)
+		{
+			flattened_array[i * dimension + j] = vectors[i][j];
+		}
+	}
+}
+
+sg_color sgsdl2_color(aiColor4D col)
+{
+	return {col.r, col.g, col.b, col.a};
+}
+
+vec3 sgsdl2_vec3(aiVector3D vec)
+{
+	return vec3(vec.x, vec.y, vec.z);
+}
+
+vec4 sgsdl2_vec4(aiQuaternion q)
+{
+	return vec4(q.x, q.y, q.z, q.w);
+}
+
+mat4 sgsdl2_mat4(aiMatrix4x4 m)
+{
+	mat4 new_mat = mat4();
+	for (unsigned int i = 0; i < 16; i++)
+	{
+		value_ptr(new_mat)[i] = *m[i];
+	}
+	return new_mat;
+}
 
 
 

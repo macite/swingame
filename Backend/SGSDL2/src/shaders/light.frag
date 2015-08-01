@@ -83,22 +83,13 @@ float getSpotFactor(LightData light, vec3 surfaceToLight)
 	float cosAngle = dot(normalize(light.forward), -surfaceToLight);
 	float falloff = (cosAngle - light.cosOuterCone) / (light.cosInnerCone - light.cosOuterCone);
 	falloff = clamp(falloff, 0, 1);
-
-	// The cos angle
-	// Distance from the inner cone
-//	cosAngle -= light.cosOuterCone;
-	// Normalized distance from the inner cone
-//	cosAngle /= (light.cosInnerCone - light.cosOuterCone);
-	// Clamped to within range
-//	cosAngle = clamp(cosAngle, 0, 1);
 	return falloff;
-//	return light.cosInnerCone;
 }
 
 
 vec4 getDiffuseBase()
 {
-	return vec4(material.diffuseColor, 1) * texture(material.diffuseTexture, fraguv);
+	return vec4(material.diffuseColor * texture(material.diffuseTexture, fraguv).rgb, 1);
 }
 
 
@@ -140,19 +131,15 @@ vec3 getPhongColor(int lightIndex)
 	float attenuation = 1.0 / (1.0 + pow(surfaceToLightDist * 5 / light.attenuation, 2));
 
 	return ambient + attenuation * getShadowFactor(lightIndex) * getSpotFactor(light, surfaceToLight) * (diffuse + specular);
-//	return vec3(1, 0, 0);
 }
 
 
 void main() {
 	// Loop through all of the lights in the scene
-	finalColor = vec4(0, 0, 0, getDiffuseBase().a);
+	finalColor = vec4(0, 0, 0, 1);
 	for (int i = 0; i < numberOfLights; i++)
 	{
 		finalColor += vec4(getPhongColor(i), 0);
-//		vec3 surfaceToLight = normalize(lights[i].location - globalFragLocation);
-//		finalColor += getSpotFactor(lights[i], surfaceToLight);
-//		finalColor = vec4(lights[i].location, 1);
 	}
 }
 

@@ -73,16 +73,22 @@ using namespace glm;
 #define SHAD_UNI_NAME_LIGHT_TYPE(n)				sgsdl2_uni_light_name(i, "type").c_str()
 
 // Shader texture locations
-#define SHAD_TEX_INDEX_DIFFUSE 0
-#define SHAD_TEX_INDEX_SPECULAR 1
-#define SHAD_TEX_INDEX_NORMAL 2
-#define SHAD_TEX_INDEX_DEPTH 3
+#define SHAD_TEX_INDEX_DIFFUSE 1
+#define SHAD_TEX_INDEX_SPECULAR 2
+#define SHAD_TEX_INDEX_NORMAL 3
+#define SHAD_TEX_INDEX_DEPTH 4
 
 // Maximum number of lights in the scene. Must be the same as defined in the shaders.
 #define MAX_LIGHTING_COUNT 16
 
-// Width of shadow maps
+// Dimensions of shadow maps
 #define SHAD_MAP_SIZE 1024
+
+// Default shader values
+#define SHAD_NONE			0
+#define SHAD_DEFAULT_FULL	-1
+#define SHAD_DEFAULT_DEPTH	-2
+
 
 
 //
@@ -470,7 +476,7 @@ struct sgsdl2_mesh
 	SGuint indices_handle = 0;
 
 	// Only the length of indices is needed during rendering
-	int indices_count;
+	SGuint indices_count;
 
 	// The surface apperance of the mesh.
 	sgsdl2_material *material;
@@ -511,10 +517,14 @@ struct sgsdl2_camera
 
 struct sgsdl2_material
 {
+	// NOTE: shaders are signed to allow for constants that represent scene level shaders to be used (ie SHAD_DEFAULT_FULL).
+	
 	// Default shader to use in the main render pass
-	SGuint shader;
+	__attribute__((deprecated))
+	SGint shader;
 
 	// Shader to use for any depth render passes.
+	__attribute__((deprecated))
 	SGint depth_shader;
 
 	sg_color diffuse_color;
@@ -525,7 +535,16 @@ struct sgsdl2_material
 	float specular_intensity;
 	SGuint normal_map = 0;
 };
+
+struct sgsdl2_texture
+{
+	// Handle for the texture
+	SGuint handle = 0;
 	
+//	int width;
+//	int height;
+};
+
 	
 	
 	/////////////////////////////////////////////
@@ -538,15 +557,6 @@ struct sgsdl2_uniform
 	void *value;
 	int count;
 	// Type
-};
-
-struct sgsdl2_texture
-{
-	// Handle for the texture
-	SGuint handle = 0;
-
-	int width;
-	int height;
 };
 
 

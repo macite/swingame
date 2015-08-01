@@ -115,17 +115,17 @@ SGuint sgsdl2_get_attribute_handle(sgsdl2_mesh *mesh, SGuint index)
 	return 0;
 }
 
-void sgsdl2_attach_vertices(sgsdl2_mesh *mesh, SGfloat const *vertices, GLuint count)
+void sgsdl2_attach_vertices(sgsdl2_mesh *mesh, SGfloat const *vertices, SGuint count)
 {
 	sgsdl2_add_attribute(mesh, MESH_ATTR_VERTICES, count, 3, 0, vertices);
 }
 
-void sgsdl2_attach_normals(sgsdl2_mesh *mesh, SGfloat const *normals, GLuint count)
+void sgsdl2_attach_normals(sgsdl2_mesh *mesh, SGfloat const *normals, SGuint count)
 {
 	sgsdl2_add_attribute(mesh, MESH_ATTR_NORMALS, count, 3, 0, normals);
 }
 
-void sgsdl2_attach_texcoords(sgsdl2_mesh *mesh, SGfloat const *coords, GLuint count)
+void sgsdl2_attach_texcoords(sgsdl2_mesh *mesh, SGfloat const *coords, SGuint count)
 {
 	sgsdl2_add_attribute(mesh, MESH_ATTR_TEXCOORDS, count, 2, 0, coords);
 }
@@ -142,7 +142,7 @@ void sgsdl2_attach_indices(sgsdl2_mesh *mesh, SGushort const *indices, SGuint co
 	glGenBuffers(1, &mesh->indices_handle);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_handle);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (sizeof(GLushort) * count), indices, GL_STATIC_DRAW);
-	mesh->indices_count = (int) count;
+	mesh->indices_count = count;
 	// TODO check for error
 	sgsdl2_check_opengl_error("attach_indices: ");
 	
@@ -167,6 +167,29 @@ bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh)
 			&& mesh->indices_handle != 0
 			&& present_attrs[MESH_ATTR_VERTICES]
 			&& present_attrs[MESH_ATTR_NORMALS]);
+}
+
+SGuint sgsdl2_get_shader(sgsdl2_mesh const *mesh, sgsdl2_shader_mode mode)
+{
+	SGuint shader = 0;
+	
+	if (mode == sgsdl2_shader_mode::FULL)
+	{
+//		shader = mesh->material->shader;
+//		if (mesh->material->shader > 0)
+//		{
+//			return mesh->material->shader;
+//		}
+//		else
+//		{
+//			shader = mesh->material->shader;
+//		}
+	}
+	else
+	{
+		shader = mesh->material->depth_shader;
+	}
+	return shader;
 }
 
 void sgsdl2_delete_mesh(sgsdl2_mesh *mesh)

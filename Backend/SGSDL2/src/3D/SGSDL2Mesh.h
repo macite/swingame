@@ -42,6 +42,14 @@ void sgsdl2_attach_indices(sgsdl2_mesh *mesh, SGushort const *indices, SGuint co
 // TODO probably shouldn't be used
 bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh);
 
+// Should be moved to material file
+__attribute__((deprecated))
+SGuint sgsdl2_get_shader(sgsdl2_mesh const *mesh, sgsdl2_shader_mode mode);
+
+// Should be moved to material file
+__attribute__((deprecated))
+bool sgsdl2_valid_shader_available(sgsdl2_mesh const *mesh, sgsdl2_shader_mode mode);
+
 void sgsdl2_delete_mesh(sgsdl2_mesh *mesh);
 
 

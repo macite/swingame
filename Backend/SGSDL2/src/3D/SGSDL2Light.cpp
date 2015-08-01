@@ -39,12 +39,12 @@ sgsdl2_light* sgsdl2_create_spot_light(sgsdl2_node *parent)
 	light->type = sgsdl2_light_type::SPOT;
 	light->color = {1, 1, 1, 1};
 	light->intensity = 1;
-	light->ambient_coefficient = 0.1;
+	light->ambient_coefficient = 0.1f;
 	light->attenuation_cutoff = 100;
 	light->radius = 1;
 	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
-	light->cos_inner_cone = cosf(M_PI * (10.0f / 180.0f));
-	light->cos_outer_cone = cosf(M_PI * (45.0f / 180.0f));
+	light->cos_inner_cone = cosf((float) M_PI * (10.0f / 180.0f));
+	light->cos_outer_cone = cosf((float) M_PI * (45.0f / 180.0f));
 	
 	// Set the directional light options even though they aren't used.
 	light->width = 400;

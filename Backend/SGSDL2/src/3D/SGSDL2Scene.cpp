@@ -8,6 +8,9 @@
 
 #include "SGSDL2Scene.h"
 #include <iostream>
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 #include "SGSDL2Node.h"
 #include "SGSDL2Camera.h"
 #include "SGSDL2Utilities.h"

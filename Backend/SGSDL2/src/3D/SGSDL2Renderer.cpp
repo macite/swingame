@@ -13,6 +13,7 @@
 #include "SGSDL2Light.h"
 #include "SGSDL2Utilities.h"
 #include "SGSDL2Node.h"
+#include "SGSDL2Mesh.h"
 
 
 void sgsdl2_rerender_shadow_maps(sgsdl2_scene *scene, sgsdl2_renderer *renderer)
@@ -101,6 +102,13 @@ void sgsdl2_render_node(sgsdl2_node *node, sgsdl2_renderer *renderer)
 		return;
 	}
 	
+	// There must be a valid shader somewhere
+//	if (sgsdl2_valid_shader_available(node->mesh, renderer->opts.mode))
+//	{
+//		// TODO emit warning
+//		return;
+//	}
+	
 	// Node must be active
 	if (!node->mesh->is_active
 		// Must be visible if it is a full render
@@ -127,7 +135,22 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 	
 	sgsdl2_calculate_material_state(mesh->material, renderer);
 	sgsdl2_complete_shader_interface(renderer->interface);
-	SGuint shader = mesh->material->shader;
+	
+	// Select the correct shader to use.
+	SGuint shader = 0;
+	if (renderer->opts.mode == sgsdl2_shader_mode::FULL)
+	{
+		shader = mesh->parent->root->default_shader;
+	}
+	else if (renderer->opts.mode == sgsdl2_shader_mode::DEPTH)
+	{
+		shader = mesh->parent->root->default_depth_shader;
+	}
+	else
+	{
+		// TODO emit warning
+		return;
+	}
 	
 	// Pass all the data to the shader
 	sgsdl2_bind_data_to_shader(shader, renderer->interface);
@@ -135,13 +158,21 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 	// Perform the render
 	glUseProgram(shader);
 	glBindVertexArray(mesh->vao);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_handle);
 	
-	// Validate shader
-	sgsdl2_validate_program(shader);
+	if (mesh->indices_handle != 0)
+	{
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_handle);
+		sgsdl2_validate_program(shader);
+		glDrawElements(GL_TRIANGLES, (int) mesh->indices_count, GL_UNSIGNED_SHORT, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		
+	}
+	else
+	{
+		// Render without indices
+		glDrawArrays(GL_TRIANGLES, 0, (int) mesh->indices_count);
+	}
 	
-	glDrawElements(GL_TRIANGLES, mesh->indices_count, GL_UNSIGNED_SHORT, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 	glUseProgram(0);
 	sgsdl2_check_opengl_error("render_mesh: ");

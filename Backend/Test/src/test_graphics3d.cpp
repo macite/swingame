@@ -8,6 +8,14 @@
 
 #include "test_graphics3d.h"
 
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_net.h>
+#else
+#include <SDL.h>
+#include <SDL_net.h>
+#endif
+
 #include "sgInterfaces.h"
 #include "SGSDL2Types.h"
 #include "SGSDL2Utilities.h"
@@ -16,10 +24,16 @@
 #include "SGSDL2Mesh.h"
 #include "SGSDL2Camera.h"
 #include "SGSDL2Light.h"
+#include "SGSDL2Texture.h"
+#include "SGSDL2Importer.h"
+#include "SGSDL2Input.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
-//
+
+#include <assimp/quaternion.h>
+//#include "assimp/quaternion.inl"
+
 //#define SHAD_VERTEX_COLOR_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/vertexColor.vert"
 //#define SHAD_VERTEX_COLOR_FRAG_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/vertexColor.frag"
 //#define SHAD_SOLID_COLOR_VERT_PATH "/Users/jamesferguson/Documents/Coding/SwingameForked/Backend/SGSDL2/src/shaders/solidColor.vert"
@@ -119,253 +133,68 @@ float texCoords[] = {
 
 
 
-
-//sgsdl2_scene_element* build_old_scene(sgsdl2_scene *scene)
-//{
-//	sgsdl2_geometry *cube1 = sgsdl2_make_geometry({{0, 0, 25}},
-//												  {{0, 0, -1}},
-//												  {{0, 1, 0}});
-//	sgsdl2_geometry *cube2 = sgsdl2_make_geometry({{0, 0, 0}},
-//												  {{0, 0, -1}},
-//												  {{0, 1, 0}});
-//	sgsdl2_camera *camera = sgsdl2_make_camera({{0, 4, -15}},
-//											   {{0, -4, 15}},
-//											   {{0, 1, 0}});
-//	sgsdl2_light *light = sgsdl2_make_light({{0, 0, -15}},
-//											{{0, 0, 15}},
-//											{{0, 1, 0}});
-//	
-////	sgsdl2_texture *cat_texture = sgsdl2_make_texture();
-////	sgsdl2_attach_texture_image(cat_texture, TEXTURE_PATH, GL_RGBA);
-////	sgsdl2_generate_texture_mipmaps(cat_texture);
-//	sgsdl2_material *material1 = new sgsdl2_material();
-//	sgsdl2_material *material2 = new sgsdl2_material();
-//	
-//	light->intensity = 1.2f;
-//	light->attenuation = 0.001f;
-//	light->ambient_coefficient = 0.1f;
-//	light->light_type = sgsdl2_light_type::SPOT;
-////	light->light_type = sgsdl2_light_type::DIRECTIONAL;
-//	light->width = 30;
-//	light->height = 30;
-//	light->cutoff = 50;
-//	light->cos_outer_cone = cosf(20 * M_PI / 180.0);
-//	
-//	material1->diffuse_color = {1, 0, 0, 1};
-//	material1->specular_color = {1, 0.8f, 0.8f, 1};
-//	material1->specular_exponent = 50;
-//	material1->specular_intensity = 1;
-//	material1->shader = (int) scene->default_shader;
-//	
-//	material2->diffuse_color = {0, 1, 0, 1};
-//	material2->specular_color = {0.5, 0.5, 0.5, 1};
-//	material2->specular_exponent = 25;
-//	material2->specular_intensity = 0.5;
-//	material2->shader = (int) scene->default_shader;
-//	
-//	sgsdl2_add_element_to_root(scene, cube1);
-//	sgsdl2_add_element_to_root(scene, cube2);
-//	sgsdl2_add_element_to_root(scene, camera);
-//	sgsdl2_add_element_to_root(scene, light);
-//	scene->active_camera = camera;
-//	
-//	sgsdl2_attach_vertices(cube1, vertices_big, 24, 3);
-//	sgsdl2_attach_vertices(cube2, vertices, 24, 3);
-//	sgsdl2_attach_indices(cube1, indices, 36);
-//	sgsdl2_attach_indices(cube2, indices, 36);
-//	sgsdl2_attach_normals(cube1, normals, 24, 3);
-//	sgsdl2_attach_normals(cube2, normals, 24, 3);
-//	sgsdl2_attach_colors(cube2, colors, 24, 3);
-//	
-//	cube1->material = material1;
-//	cube2->material = material2;
-//	camera->camera_type = sgsdl2_camera_type::PERSPECTIVE;
-//	sgsdl2_set_camera_frustum(camera, (float) M_PI / 3, (float) M_PI / 3, 1, 300);
-//	
-//	return light;
-//}
-
-
-
-//void print_3d_options()
-//{
-//	cout << "0: all " << endl;
-////	cout << "1: basic 3d test"  << endl;
-//	cout << "2: textures" << endl;
-//	cout << "4: lighting example"  << endl;
-//	cout << "8: lighting with shadows"  << endl;
-//	cout << "16: loading geometry from file"  << endl;
-////	cout << "16: input "  << endl;
-////	cout << "32: text "  << endl;
-////	cout << "64: network "  << endl;
-////	cout << "128: graphics" << endl;
-//}
-
-
-//float randomf(float max = 1, float min = 0)
-//{
-//	return ((float) rand()) / ((float) RAND_MAX) * max + min;
-//}
-//
-//
-//sgsdl2_camera* add_default_camera(sgsdl2_scene *scene)
-//{
-//	sgsdl2_camera *camera = sgsdl2_make_camera({{0, 5, 10}},
-//											   {{0, -2, -10}},
-//											   {{0, 1, 0}});
-//	camera->camera_type = sgsdl2_camera_type::PERSPECTIVE;
-//	sgsdl2_set_camera_frustum(camera, (float) M_PI / 3, (float) M_PI / 3, 1, 100);
-//	sgsdl2_add_element_to_root(scene, camera);
-//	scene->active_camera = camera;
-//	return camera;
-//}
-//
-//
-//sgsdl2_light* add_default_light(sgsdl2_scene *scene)
-//{
-//	sgsdl2_light *light = sgsdl2_make_light({{0, 0, 10}},
-//											{{0, 0, -10}},
-//											{{0, 1, 0}});
-//	light->intensity = 1.2f;
-//	light->attenuation = 0.001f;
-//	light->ambient_coefficient = 0.2;
-//	light->light_type = sgsdl2_light_type::DIRECTIONAL;
-//	light->width = 30;
-//	light->height = 30;
-//	light->cutoff = 100;
-//	light->cos_outer_cone = cosf(30 * M_PI / 180);
-//	light->shadow_type = sgsdl2_shadowing_type::DYNAMIC;
-//	sgsdl2_add_element_to_root(scene, light);
-//	
-//	return light;
-//}
-//
-//
-//// Generates n random solid color materials. materials must be pre allocated to store n materials.
-//void generate_random_flat_materials(sgsdl2_material ***materials, int n)
-//{
-//	sgsdl2_material *mat;
-//	for (int i = 0; i < n; i++)
-//	{
-//		mat = new sgsdl2_material;
-//		// Each value is random from 0 to 1
-//		mat->diffuse_color = {randomf(), randomf(), randomf(), 1};
-//		// Always white
-//		mat->specular_color = {1, 1, 1, 1};
-//		// Random from 1 to 50
-//		mat->specular_exponent = randomf(50, 1);
-//		// Random from 0 to 1
-//		mat->specular_intensity = randomf();
-//		// Assigning a shader of zero will default to the default shader for the scene
-//		mat->shader = 0;
-//		(*materials)[i] = mat;
-//	}
-//}
-//
-//
-//sgsdl2_geometry* make_cube(Vector3f location)
-//{
-//	sgsdl2_geometry *cube = sgsdl2_make_geometry(location,
-//												  {{0, 0, -1}},
-//												  {{0, 1, 0}});
-//	sgsdl2_material **array = (sgsdl2_material**) malloc(sizeof(sgsdl2_material*));
-//	generate_random_flat_materials(&array, 1);
-//	cube->material = array[0];
-//	sgsdl2_attach_vertices(cube, vertices, 24, 3);
-//	sgsdl2_attach_indices(cube, indices, 36);
-//	sgsdl2_attach_normals(cube, normals, 24, 3);
-//	return cube;
-//}
-//
-//
-//sgsdl2_geometry* make_big_cube(Vector3f location)
-//{
-//	sgsdl2_geometry *cube = sgsdl2_make_geometry(location,
-//												 {{0, 0, -1}},
-//												 {{0, 1, 0}});
-//	sgsdl2_material **array = (sgsdl2_material**) malloc(sizeof(sgsdl2_material*));
-//	generate_random_flat_materials(&array, 1);
-//	cube->material = array[0];
-//	sgsdl2_attach_vertices(cube, vertices_big, 24, 3);
-//	sgsdl2_attach_indices(cube, indices, 36);
-//	sgsdl2_attach_normals(cube, normals, 24, 3);
-//	return cube;
-//}
-//
-//
-//void add_geometry_from_file_to_scene(sgsdl2_scene *scene, const char *file_name)
-//{
-//	int count = 0;
-//	sgsdl2_geometry **objects;
-//	sgsdl2_create_geometry_objects_from_file(file_name, &objects, &count);
-//	
-//	// Create materials for the geometry
-//	sgsdl2_material **materials = (sgsdl2_material**) malloc(sizeof(sgsdl2_material*) * count);
-//	generate_random_flat_materials(&materials, count);
-//	for (int i = 0; i < count; i++)
-//	{
-//		objects[i]->material = materials[i];
-//		sgsdl2_add_element_to_root(scene, objects[i]);
-//	}
-//}
-//
-//
-//void build_basic_scene(sgsdl2_scene *scene)
-//{
-//	add_default_camera(scene);
-//	sgsdl2_add_element_to_root(scene, make_cube({{0, 0, 0}}));
-//}
-//
-//void build_lighting_scene(sgsdl2_scene *scene)
-//{
-//	add_default_camera(scene);
-//	add_default_light(scene);
-//	sgsdl2_add_element_to_root(scene, make_cube({{0, 0, 0}}));
-//	sgsdl2_add_element_to_root(scene, make_cube({{3, 0, 0}}));
-//	sgsdl2_add_element_to_root(scene, make_cube({{-3, 0, 0}}));
-//}
-//
-//void build_texture_scene(sgsdl2_scene *scene)
-//{
-//	add_default_camera(scene);
-//	add_default_light(scene);
-//	
-//	sgsdl2_texture *cat_texture = sgsdl2_make_texture();
-//	sgsdl2_attach_texture_image(cat_texture, TEXTURE_PATH, GL_RGBA);
-//	sgsdl2_generate_texture_mipmaps(cat_texture);
-//	
-//	sgsdl2_geometry* textured_cube = make_big_cube({{0, 0, -25}});
-//	textured_cube->material->texture = cat_texture->handle;
-//	sgsdl2_attach_texcoords(textured_cube, texCoords, 16);
-//	sgsdl2_add_element_to_root(scene, textured_cube);
-//}
-//
-//void build_shadowing_scene(sgsdl2_scene *scene)
-//{
-//	add_default_camera(scene);
-//	add_default_light(scene);
-//	sgsdl2_add_element_to_root(scene, make_cube({{0, 0, 0}}));
-//	sgsdl2_add_element_to_root(scene, make_big_cube({{0, 0, -25}}));
-//}
-//
-//void load_scene(sgsdl2_scene *scene)
-//{
-//	add_default_camera(scene);
-//	add_default_light(scene);
-//	add_geometry_from_file_to_scene(scene, "3-shape-scene-normals-with-backing.obj");
-//}
-
-void render(sgsdl2_scene *scene, int num_of_frames = 5 * 60)
+void render(sgsdl2_scene *scene, int seconds)
 {
-	for (int frame_num = 0; frame_num < num_of_frames; frame_num++)
+	// Render for 3 seconds
+	bool render = false;
+	int frames = 60 * seconds;
+	while (render || frames > 0)
 	{
+		if (scene->active_camera)
+		{
+			sgsdl2_node *camera_node = scene->active_camera->parent;
+			
+			// Render controls
+			_sg_functions->input.process_events();
+			
+			int forwards = 0;
+			int right = 0;
+			int up = 0;
+			
+			if (_sg_functions->input.key_pressed(SDLK_w))
+			{
+				forwards++;
+			}
+			if (_sg_functions->input.key_pressed(SDLK_s))
+			{
+				forwards--;
+			}
+			if (_sg_functions->input.key_pressed(SDLK_a))
+			{
+				right--;
+			}
+			if (_sg_functions->input.key_pressed(SDLK_d))
+			{
+				right++;
+			}
+			if (_sg_functions->input.key_pressed(SDLK_q))
+			{
+				up--;
+			}
+			if (_sg_functions->input.key_pressed(SDLK_e))
+			{
+				up++;
+			}
+			
+			float speed = 0.2;
+			mat4 trans = eulerAngleXYZ(camera_node->rotation.x, camera_node->rotation.y, camera_node->rotation.z);
+			vec4 forwards_v = trans * vec4(0, 0, -1, 0);
+			vec4 right_v = trans * vec4(1, 0, 0, 0);
+			vec4 up_v = trans * vec4(0, 1, 0, 0);
+			vec4 direction = forwards_v * forwards + right_v * right + up_v * up;
+			direction *= speed;
+			camera_node->location += vec3(direction.x, direction.y, direction.z);
+		}
+		
 		sgsdl2_clear_opengl_window({0, 0, 0, 1});
 		sgsdl2_render_scene(scene);
 		sgsdl2_update_opengl_render(scene->surface);
 		sgsdl2_check_opengl_error("main_loop: ");
-
+		
 		_sg_functions->utils.delay(1000 / 60);
+		frames--;
 	}
+
 }
 
 void test_graphics3d()
@@ -375,49 +204,26 @@ void test_graphics3d()
 //	int test_run = 0;
 //	scanf("%d", &test_run);
 //	if (test_run == 0) test_run = 255;
-//	
+	
 	// Initialize the surface
 	sg_drawing_surface surface = _sg_functions->graphics.open_window("3D Graphics", 800, 600);
 	sgsdl2_print_opengl_version();
 	
 	// Initialize the scene
 	sgsdl2_scene *scene = sgsdl2_make_scene(&surface);
-	
-	// Cube
-	sgsdl2_node *cube_node = sgsdl2_create_new_node(scene);
-	sgsdl2_mesh *cube = sgsdl2_create_mesh(cube_node);
-	sgsdl2_attach_vertices(cube, vertices, 24);
-	sgsdl2_attach_normals(cube, normals, 24);
-	sgsdl2_attach_indices(cube, indices, 36);
-	
-	sgsdl2_material *mat = new sgsdl2_material();
-	mat->shader = scene->default_shader;
-	mat->depth_shader = scene->default_depth_shader;
-	mat->diffuse_color = {0, 0, 1, 1};
-	mat->specular_color = {1, 1, 1, 1};
-	mat->specular_exponent = 0.1;
-	mat->specular_intensity = 1;
-	cube->material = mat;
+	sgsdl2_populate_scene_from_file(scene, "swords.3ds");
 	
 	sgsdl2_node *camera_node = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
 	sgsdl2_camera *camera = sgsdl2_create_perspective_camera(camera_node);
 	sgsdl2_set_active_camera(scene, camera);
 	
-	sgsdl2_node *light_node  = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
+	sgsdl2_node *light_node  = sgsdl2_create_new_node(camera_node, vec3(0, 0, 0), vec3(0, 0, 0), vec3(1, 1, 1));
 	sgsdl2_light *light = sgsdl2_create_spot_light(light_node);
-//	light->type = sgsdl2_light_type::DIRECTIONAL;
+	light->attenuation_cutoff = 200;
+	light->intensity = 1.3;
 	
-	
-	// Render for 3 seconds
-	for (int i = 0; i < 3 * 60; i++)
-	{
-		sgsdl2_clear_opengl_window({0, 0, 0, 1});
-		sgsdl2_render_scene(scene);
-		sgsdl2_update_opengl_render(scene->surface);
-		sgsdl2_check_opengl_error("main_loop: ");
-		
-		_sg_functions->utils.delay(1000 / 60);
-	}
+	// Render the scene
+	render(scene, 0);
 	sgsdl2_delete_scene(scene);
 	
 	
