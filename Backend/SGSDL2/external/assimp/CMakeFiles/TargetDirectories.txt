@@ -1,0 +1,5 @@
+/Users/jamesferguson/Documents/Coding/Swingame/Backend/SGSDL2/external/assimp/CMakeFiles/uninstall.dir
+/Users/jamesferguson/Documents/Coding/Swingame/Backend/SGSDL2/external/assimp/tools/assimp_cmd/CMakeFiles/assimp_cmd.dir
+/Users/jamesferguson/Documents/Coding/Swingame/Backend/SGSDL2/external/assimp/code/CMakeFiles/assimp.dir
+/Users/jamesferguson/Documents/Coding/Swingame/Backend/SGSDL2/external/assimp/CMakeFiles/ALL_BUILD.dir
+/Users/jamesferguson/Documents/Coding/Swingame/Backend/SGSDL2/external/assimp/CMakeFiles/ZERO_CHECK.dir
