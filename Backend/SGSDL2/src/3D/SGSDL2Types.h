@@ -20,6 +20,14 @@ using namespace std;
 using namespace glm;
 
 
+// Filename divider
+#if defined (__APPLE__) || defined (__linux__)
+	#define FILENAME_SEPARATOR '/'
+#elif defined (_WIN32)
+	#define FILENAME_SEPARATOR '\'
+#endif
+
+
 // Constants used by the shader property of sgsdl2_geometry
 // Shader has not been selected, one of the defaults will automatically be selected each frame
 #define SHADER_UNSELECTED 0
