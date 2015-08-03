@@ -11,9 +11,10 @@
 #include "SGSDL2Utilities.h"
 #include "SGSDL2Mesh.h"
 #include "SGSDL2Texture.h"
+#include <iostream>
 
 
-void sgsdl2_populate_scene_from_file(sgsdl2_scene *scene, const char* filename)
+void sgsdl2_populate_scene_from_file(sgsdl2_scene *scene, const char *filename)
 {
 	// Confirm the scene is valid
 	if (!scene->root_node)
@@ -26,19 +27,20 @@ void sgsdl2_populate_scene_from_file(sgsdl2_scene *scene, const char* filename)
 	if (!imported_scene)
 	{
 		// TODO emit error
+		cout << aiGetErrorString();
 		return;
 	}
 	
 	// Create all children of the root node
 	for (unsigned int i = 0; i < imported_scene->mRootNode->mNumChildren; i++)
 	{
-		sgsdl2_recursively_create_node(scene, imported_scene, imported_scene->mRootNode->mChildren[i], nullptr);
+		sgsdl2_recursively_create_node(scene, imported_scene, imported_scene->mRootNode->mChildren[i], nullptr, filename);
 	}
 	
 	aiReleaseImport(imported_scene);
 }
 
-void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported_scene, aiNode *source, sgsdl2_node *dest)
+void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported_scene, aiNode *source, sgsdl2_node *dest, const char *filename)
 {
 	if (dest == nullptr)
 	{
@@ -51,7 +53,7 @@ void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported
 	// For some reason I am optimising for this
 	for (unsigned int i = 0; i < source->mNumChildren; i++)
 	{
-		sgsdl2_recursively_create_node(scene, imported_scene, source->mChildren[i], new_node);
+		sgsdl2_recursively_create_node(scene, imported_scene, source->mChildren[i], new_node, filename);
 	}
 	
 	aiVector3D location;
@@ -80,7 +82,7 @@ void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported
 	// Only one mesh
 	if (source->mNumMeshes == 1)
 	{
-		sgsdl2_create_mesh(new_node, imported_scene, imported_scene->mMeshes[source->mMeshes[0]]);
+		sgsdl2_create_mesh(new_node, imported_scene, imported_scene->mMeshes[source->mMeshes[0]], filename);
 	}
 	// Multiple meshes
 	else if (source->mNumMeshes > 1)
@@ -89,12 +91,12 @@ void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported
 		{
 			// Create an empty sub node for each mesh
 			sgsdl2_node *sub_node = sgsdl2_create_new_node(new_node);
-			sgsdl2_create_mesh(sub_node, imported_scene, imported_scene->mMeshes[source->mMeshes[i]]);
+			sgsdl2_create_mesh(sub_node, imported_scene, imported_scene->mMeshes[source->mMeshes[i]], filename);
 		}
 	}
 }
 
-void sgsdl2_create_mesh(sgsdl2_node *node, const aiScene *imported_scene, aiMesh *mesh)
+void sgsdl2_create_mesh(sgsdl2_node *node, const aiScene *imported_scene, aiMesh *mesh, const char *filename)
 {
 	sgsdl2_mesh *new_mesh = sgsdl2_create_mesh(node);
 	
@@ -117,10 +119,10 @@ void sgsdl2_create_mesh(sgsdl2_node *node, const aiScene *imported_scene, aiMesh
 		sgsdl2_attach_texcoords(new_mesh, data_array, size);
 	}
 	
-	sgsdl2_create_material(new_mesh, imported_scene->mMaterials[mesh->mMaterialIndex]);
+	sgsdl2_create_material(new_mesh, imported_scene->mMaterials[mesh->mMaterialIndex], filename);
 }
 
-void sgsdl2_create_material(sgsdl2_mesh *mesh, aiMaterial *mat)
+void sgsdl2_create_material(sgsdl2_mesh *mesh, aiMaterial *mat, const char *filename)
 {
 	sgsdl2_material *new_mat = new sgsdl2_material();
 	
@@ -163,27 +165,43 @@ void sgsdl2_create_material(sgsdl2_mesh *mesh, aiMaterial *mat)
 	// Textures (Swingame only accepts the first texture of each stack)
 	if (AI_SUCCESS == aiGetMaterialTexture(mat, aiTextureType_DIFFUSE, 0, &string_param))
 	{
-		sgsdl2_texture *tex = sgsdl2_create_texture(string_param.C_Str());
-//		sgsdl2_change_texture_wrapping(tex, GL_REPEAT, GL_REPEAT);
-		sgsdl2_change_texture_filtering(tex, GL_LINEAR, GL_LINEAR);
-		new_mat->diffuse_texture = tex->handle;
+		new_mat->diffuse_texture = sgsdl2_import_texture(string_param, filename)->handle;
 	}
 	
 	if (AI_SUCCESS == aiGetMaterialTexture(mat, aiTextureType_SPECULAR, 0, &string_param))
 	{
-		sgsdl2_texture *tex = sgsdl2_create_texture(string_param.C_Str());
-//		sgsdl2_change_texture_wrapping(tex, GL_REPEAT, GL_REPEAT);
-		sgsdl2_change_texture_filtering(tex, GL_LINEAR, GL_LINEAR);
-		new_mat->specular_texture = tex->handle;
+		new_mat->specular_texture = sgsdl2_import_texture(string_param, filename)->handle;
 	}
 	
 	if (AI_SUCCESS == aiGetMaterialTexture(mat, aiTextureType_NORMALS, 0, &string_param))
 	{
-		sgsdl2_texture *tex = sgsdl2_create_texture(string_param.C_Str());
-//		sgsdl2_change_texture_wrapping(tex, GL_REPEAT, GL_REPEAT);
-		sgsdl2_change_texture_filtering(tex, GL_LINEAR, GL_LINEAR);
-		new_mat->normal_map = tex->handle;
+		new_mat->normal_map = sgsdl2_import_texture(string_param, filename)->handle;
 	}
 	
 	mesh->material = new_mat;
 }
+
+sgsdl2_texture* sgsdl2_import_texture(aiString relative_image_path, const char* scene_filename)
+{
+	// Convert the image path to relative to the scene.
+	string scene_path(scene_filename);
+	scene_path.erase(scene_path.find_last_of(FILENAME_SEPARATOR) + 1, string::npos);
+	string full_image_path = scene_path + string(relative_image_path.C_Str());
+	
+	// Load relatively
+	sgsdl2_texture *tex = sgsdl2_create_texture(full_image_path.c_str());
+	if (!tex)
+	{
+		// TODO emit warning
+		return nullptr;
+	}
+	
+	// Default assign filtering and wrapping
+	sgsdl2_change_texture_wrapping(tex, GL_REPEAT, GL_REPEAT);
+	sgsdl2_change_texture_filtering(tex, GL_LINEAR, GL_LINEAR);
+	
+	return tex;
+}
+
+
+

@@ -20,10 +20,12 @@ void sgsdl2_populate_scene_from_file(sgsdl2_scene *scene, const char* filename);
 
 // Creates a sgsdl2_node to represent the source one and adds it as a child to dest
 // Recursively creates child nodes as well.
-void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported_scene, aiNode *source, sgsdl2_node *dest);
+void sgsdl2_recursively_create_node(sgsdl2_scene *scene, const aiScene *imported_scene, aiNode *source, sgsdl2_node *dest, const char *filename);
 
-void sgsdl2_create_mesh(sgsdl2_node *node, const aiScene *imported_scene, aiMesh *mesh);
+void sgsdl2_create_mesh(sgsdl2_node *node, const aiScene *imported_scene, aiMesh *mesh, const char *filename);
 
-void sgsdl2_create_material(sgsdl2_mesh *mesh, aiMaterial *mat);
+void sgsdl2_create_material(sgsdl2_mesh *mesh, aiMaterial *mat, const char *filename);
+
+sgsdl2_texture* sgsdl2_import_texture(aiString image_path, const char* filename);
 
 #endif /* defined(__sgsdl2__SGSDL2Importer__) */
