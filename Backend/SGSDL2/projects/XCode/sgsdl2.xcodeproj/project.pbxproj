@@ -154,12 +154,21 @@
 		8254255B1B6B1264006455B5 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = "";
+			dstPath = scenes/swords;
 			dstSubfolderSpec = 7;
 			files = (
 				8254255D1B6B1293006455B5 /* sw2ao_d.jpg in CopyFiles */,
 				8254255C1B6B128C006455B5 /* sw2an_d.jpg in CopyFiles */,
 				8254255E1B6B1296006455B5 /* swords.3ds in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		825425831B6EEEB8006455B5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = scenes/jet;
+			dstSubfolderSpec = 7;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,19 +253,9 @@
 		8276F0601AD8DCDA00D51508 /* depth.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = depth.vert; path = ../../src/shaders/depth.vert; sourceTree = "<group>"; };
 		82823BCC1B4A2FA600738C14 /* SGSDL2Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Shader.cpp; sourceTree = "<group>"; };
 		82823BCD1B4A2FA600738C14 /* SGSDL2Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Shader.h; sourceTree = "<group>"; };
-		82C5AAE71AB057780005429A /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_graphics3d.cpp; path = ../src/test_graphics3d.cpp; sourceTree = "<group>"; };
 		82C5AAE91AB14D7D0005429A /* test_graphics3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_graphics3d.h; path = ../src/test_graphics3d.h; sourceTree = "<group>"; };
 		82C5AAF11AB2865C0005429A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		82C5AAF81AB51E1D0005429A /* solidColor.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = solidColor.frag; path = ../../src/shaders/solidColor.frag; sourceTree = "<group>"; };
-		82C5AAF91AB51E1D0005429A /* solidColor.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = solidColor.vert; path = ../../src/shaders/solidColor.vert; sourceTree = "<group>"; };
-		82C5AAFB1AB7B0450005429A /* Matrix4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = Matrix4f.h; path = ../../src/math/Matrix4f.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		82C5AAFE1AB7B1F30005429A /* Vector3f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector3f.h; path = ../../src/math/Vector3f.h; sourceTree = "<group>"; };
-		82C5AAFF1AB7B1F30005429A /* Vector4f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Vector4f.h; path = ../../src/math/Vector4f.h; sourceTree = "<group>"; };
-		82C5AB021AB8098D0005429A /* vertexColor.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = vertexColor.frag; path = ../../src/shaders/vertexColor.frag; sourceTree = "<group>"; };
-		82C5AB031AB8098D0005429A /* vertexColor.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = vertexColor.vert; path = ../../src/shaders/vertexColor.vert; sourceTree = "<group>"; };
-		82C5AB041AB8F01E0005429A /* texture.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.frag; path = ../../src/shaders/texture.frag; sourceTree = "<group>"; };
-		82C5AB051AB8F01E0005429A /* texture.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = texture.vert; path = ../../src/shaders/texture.vert; sourceTree = "<group>"; };
 		82D156D41B5782D20002F9C0 /* SGSDL2Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Renderer.cpp; sourceTree = "<group>"; };
 		82D156D51B5782D20002F9C0 /* SGSDL2Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Renderer.h; sourceTree = "<group>"; };
 		82D156D91B61E3CA0002F9C0 /* SGSDL2Importer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Importer.cpp; sourceTree = "<group>"; };
@@ -446,12 +445,6 @@
 		82C5AAEE1AB278450005429A /* shaders */ = {
 			isa = PBXGroup;
 			children = (
-				82C5AB021AB8098D0005429A /* vertexColor.frag */,
-				82C5AB031AB8098D0005429A /* vertexColor.vert */,
-				82C5AB041AB8F01E0005429A /* texture.frag */,
-				82C5AB051AB8F01E0005429A /* texture.vert */,
-				82C5AAF81AB51E1D0005429A /* solidColor.frag */,
-				82C5AAF91AB51E1D0005429A /* solidColor.vert */,
 				82E0262B1AC6AF1B001758B3 /* light.frag */,
 				82E0262C1AC6AF1B001758B3 /* light.vert */,
 				8276F05F1AD8DCDA00D51508 /* depth.frag */,
@@ -460,20 +453,9 @@
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		82C5AAFD1AB7B0560005429A /* math */ = {
-			isa = PBXGroup;
-			children = (
-				82C5AAFB1AB7B0450005429A /* Matrix4f.h */,
-				82C5AAFE1AB7B1F30005429A /* Vector3f.h */,
-				82C5AAFF1AB7B1F30005429A /* Vector4f.h */,
-			);
-			path = math;
-			sourceTree = "<group>";
-		};
 		9471BD83183B6E5700BE3771 = {
 			isa = PBXGroup;
 			children = (
-				82C5AAE71AB057780005429A /* Notes.txt */,
 				9471BDA1183B72A900BE3771 /* Libraries */,
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
@@ -522,7 +504,6 @@
 		9471BD97183B70ED00BE3771 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				82C5AAFD1AB7B0560005429A /* math */,
 				82C5AAEE1AB278450005429A /* shaders */,
 				8228EAD31B40244E00CD02E7 /* 3D */,
 				8228EAA81B400F9B00CD02E7 /* SGSDL2Audio.cpp */,
@@ -675,6 +656,7 @@
 				82CCB6B31B3266CF00429B19 /* CopyFiles */,
 				825425501B6A77D3006455B5 /* CopyFiles */,
 				8254255B1B6B1264006455B5 /* CopyFiles */,
+				825425831B6EEEB8006455B5 /* CopyFiles */,
 			);
 			buildRules = (
 			);
