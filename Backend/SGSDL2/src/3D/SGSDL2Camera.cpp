@@ -7,6 +7,7 @@
 //
 
 #include "SGSDL2Camera.h"
+#include "SGSDL2Utilities.h"
 
 
 sgsdl2_camera* sgsdl2_create_camera(sgsdl2_node *parent, sgsdl2_camera_type camera_type)
@@ -14,13 +15,13 @@ sgsdl2_camera* sgsdl2_create_camera(sgsdl2_node *parent, sgsdl2_camera_type came
 	// Parent must belong to a scene
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return nullptr;
 	}
 	
 	if (parent->camera)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_CAMERA_ALREADY_EXISTS);
 		return nullptr;
 	}
 	
@@ -45,7 +46,7 @@ sgsdl2_camera* sgsdl2_create_temporary_camera(sgsdl2_node *parent, sgsdl2_camera
 	// Parent must belong to a scene
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return nullptr;
 	}
 	

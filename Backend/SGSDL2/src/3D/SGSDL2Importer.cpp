@@ -19,14 +19,14 @@ void sgsdl2_populate_scene_from_file(sgsdl2_scene *scene, const char *filename)
 	// Confirm the scene is valid
 	if (!scene->root_node)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_SCENE_NO_ROOT);
 		return;
 	}
 	
 	const aiScene *imported_scene = aiImportFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
 	if (!imported_scene)
 	{
-		// TODO emit error
+		sgsdl2_print_error(ERR_SCENE_COULDNT_IMPORT);
 		cout << aiGetErrorString();
 		return;
 	}
@@ -192,7 +192,7 @@ sgsdl2_texture* sgsdl2_import_texture(aiString relative_image_path, const char* 
 	sgsdl2_texture *tex = sgsdl2_create_texture(full_image_path.c_str());
 	if (!tex)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_IMAGE_IMPORT_FAILED);
 		return nullptr;
 	}
 	

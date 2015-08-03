@@ -9,6 +9,7 @@
 #include "SGSDL2Light.h"
 #include "SGSDL2Node.h"
 #include "SGSDL2Camera.h"
+#include "SGSDL2Utilities.h"
 
 
 sgsdl2_light* sgsdl2_create_light(sgsdl2_node *parent)
@@ -16,7 +17,7 @@ sgsdl2_light* sgsdl2_create_light(sgsdl2_node *parent)
 	// Parent must belong to a scene
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return nullptr;
 	}
 	
@@ -112,7 +113,7 @@ void sgsdl2_allocate_shadow_map_location(sgsdl2_node *node)
 	// Node must have an assigned light
 	if (!node->light)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_MISSING_LIGHT);
 		return;
 	}
 	

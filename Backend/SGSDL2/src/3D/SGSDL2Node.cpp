@@ -7,6 +7,7 @@
 //
 
 #include "SGSDL2Node.h"
+#include "SGSDL2Utilities.h"
 #include <vector>
 
 
@@ -14,7 +15,7 @@ sgsdl2_node* sgsdl2_create_new_node(sgsdl2_scene *scene)
 {
 	if (!scene->root_node)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_SCENE_NO_ROOT);
 		return nullptr;
 	}
 	
@@ -26,7 +27,7 @@ sgsdl2_node* sgsdl2_create_new_node(sgsdl2_node *parent)
 	// Node must belong to a scene
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return nullptr;
 	}
 	
@@ -57,7 +58,7 @@ void sgsdl2_add_node(sgsdl2_node *parent, sgsdl2_node *child)
 	// Nodes can only possess children if they belong to a scene.
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return;
 	}
 	
@@ -76,7 +77,7 @@ void sgsdl2_remove_node(sgsdl2_node *node)
 	// The node can only be removed if it has a parent
 	if (!node->parent)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_PARENT);
 		return;
 	}
 	

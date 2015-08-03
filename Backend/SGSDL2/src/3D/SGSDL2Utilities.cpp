@@ -15,15 +15,6 @@
 
 using namespace std;
 
-vec3 sgsdl2_make_vec3_color(sg_color color)
-{
-	vec3 result = vec3(0, 0, 0);
-	result.r = color.r;
-	result.b = color.b;
-	result.g = color.g;
-	return result;
-}
-
 bool sgsdl2_read_file_contents(string const path, string &content)
 {
 	ifstream file;
@@ -41,6 +32,11 @@ bool sgsdl2_read_file_contents(string const path, string &content)
 		return true;
 	}
 	return false;
+}
+
+void sgsdl2_print_error(const char *error)
+{
+	cout << error << endl;
 }
 
 bool sgsdl2_check_opengl_error(string prompt)
@@ -100,72 +96,6 @@ string sgsdl2_uni_light_name(int i, const char *str)
 vec3 sgsdl2_angles_from_quat(vec4 quat)
 {
 	vec3 vec = vec3(0, 0, 0);
-	
-	// Code from the assimp library for angles to quat
-//	const TReal fSinPitch(sin(fPitch*static_cast<TReal>(0.5)));
-//	const TReal fCosPitch(cos(fPitch*static_cast<TReal>(0.5)));
-//	const TReal fSinYaw(sin(fYaw*static_cast<TReal>(0.5)));
-//	const TReal fCosYaw(cos(fYaw*static_cast<TReal>(0.5)));
-//	const TReal fSinRoll(sin(fRoll*static_cast<TReal>(0.5)));
-//	const TReal fCosRoll(cos(fRoll*static_cast<TReal>(0.5)));
-//	const TReal fCosPitchCosYaw(fCosPitch*fCosYaw);
-//	const TReal fSinPitchSinYaw(fSinPitch*fSinYaw);
-//	x = fSinRoll * fCosPitchCosYaw     - fCosRoll * fSinPitchSinYaw;
-//	y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
-//	z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
-//	w = fCosRoll * fCosPitchCosYaw     + fSinRoll * fSinPitchSinYaw;
-	
-	
-	// Code from http://stackoverflow.com/questions/14447338/converting-quaternions-to-euler-angles-problems-with-the-range-of-y-angle
-
-//	float w,x,y,z;
-//	
-//	w = quat[0];
-//	x = quat[1];
-//	y = quat[2];
-//	z = quat[3];
-//	
-//	double sqw = w*w;
-//	double sqx = x*x;
-//	double sqy = y*y;
-//	double sqz = z*z;
-//	
-//	vec.z = (atan2(2.0 * (x*y + z*w),(sqx - sqy - sqz + sqw)));
-//	vec.x = (atan2(2.0 * (y*z + x*w),(-sqx - sqy + sqz + sqw)));
-//	vec.y = (asin(-2.0 * (x*z - y*w)));
-
-	
-	// Code from http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToEuler/
-//	double sqw = quat.w * quat.w;
-//	double sqx = quat.x * quat.x;
-//	double sqy = quat.y * quat.y;
-//	double sqz = quat.z * quat.z;
-//	double unit = sqx + sqy + sqz + sqw; // if normalised is one, otherwise is correction factor
-//	double test = quat.x * quat.y + quat.z * quat.w;
-	
-//	if (test > 0.499*unit) { // singularity at north pole
-//		vec.y = 2 * atan2(quat.x,quat.w);
-//		vec.z = M_PI/2;
-//		vec.x = 0;
-//		return vec;
-//	}
-//	if (test < -0.499*unit) { // singularity at south pole
-//		vec.y = -2 * atan2(quat.x,quat.w);
-//		vec.z = -M_PI/2;
-//		vec.x = 0;
-//		return vec;
-//	}
-	
-//	vec.x = atan2(2*quat.y*quat.w-2*quat.x*quat.z , sqx - sqy - sqz + sqw);
-//	vec.y = asin(2*test/unit);
-//	vec.z = atan2(2*quat.x*quat.w - 2*quat.y*quat.z , -sqx + sqy - sqz + sqw);
-	
-	// x = atan2(2*(x*y + z*w), 1 - 2(sqy + sqz)
-//	vec.x = atan2(2 * (quat.x * quat.y + quat.z * quat.w), 1 - 2 * (sqy + sqz));
-//	vec.y = asin(2 * (quat.x * quat.z - quat.y * quat.w));
-//	vec.z = atan2(2 * (quat.x * quat.w + quat.y * quat.z), 1 - 2 * (sqz + sqw));
-	
-	
 	// Code from unreal engine
 	// https://github.com/EpicGames/UnrealEngine/blob/release/Engine/Source/Runtime/Core/Private/Math/UnrealMath.cpp
 	
@@ -215,6 +145,15 @@ void sgsdl2_flatten_array(aiVector3D *vectors, unsigned int size, float *&flatte
 			flattened_array[i * dimension + j] = vectors[i][j];
 		}
 	}
+}
+
+vec3 sgsdl2_make_vec3_color(sg_color color)
+{
+	vec3 result = vec3(0, 0, 0);
+	result.r = color.r;
+	result.b = color.b;
+	result.g = color.g;
+	return result;
 }
 
 sg_color sgsdl2_color(aiColor4D col)

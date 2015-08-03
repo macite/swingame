@@ -15,13 +15,13 @@ sgsdl2_mesh *sgsdl2_create_mesh(sgsdl2_node *parent)
 	// Node must belong to a scene
 	if (!parent->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return nullptr;
 	}
 	
 	if (parent->mesh)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_MESH_ALREADY_EXISTS);
 		return nullptr;
 	}
 	
@@ -37,14 +37,14 @@ void sgsdl2_add_attribute(sgsdl2_mesh *mesh, SGuint index, SGuint count, SGint s
 {
 	if (mesh->vao == 0)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_VAO_MISSING);
 		return;
 	}
 	
 	// Delete the previous action if needed.
 	if (sgsdl2_possesses_attribute_at(mesh, index))
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_IMPLICIT_DELETE_ATTRIB);
 		sgsdl2_delete_attribute_at(mesh, index);
 	}
 	
@@ -167,29 +167,6 @@ bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh)
 			&& mesh->indices_handle != 0
 			&& present_attrs[MESH_ATTR_VERTICES]
 			&& present_attrs[MESH_ATTR_NORMALS]);
-}
-
-SGuint sgsdl2_get_shader(sgsdl2_mesh const *mesh, sgsdl2_shader_mode mode)
-{
-	SGuint shader = 0;
-	
-	if (mode == sgsdl2_shader_mode::FULL)
-	{
-//		shader = mesh->material->shader;
-//		if (mesh->material->shader > 0)
-//		{
-//			return mesh->material->shader;
-//		}
-//		else
-//		{
-//			shader = mesh->material->shader;
-//		}
-	}
-	else
-	{
-		shader = mesh->material->depth_shader;
-	}
-	return shader;
 }
 
 void sgsdl2_delete_mesh(sgsdl2_mesh *mesh)

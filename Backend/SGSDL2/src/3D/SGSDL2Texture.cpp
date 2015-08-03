@@ -38,7 +38,7 @@ void sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, const cha
 	SDL_Surface *image = IMG_Load(image_path);
 	if (!image)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_IMAGE_COULDNT_LOAD);
 		return;
 	}
 

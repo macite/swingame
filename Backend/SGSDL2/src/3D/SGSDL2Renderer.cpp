@@ -91,7 +91,7 @@ void sgsdl2_render_node(sgsdl2_node *node, sgsdl2_renderer *renderer)
 	// Make sure the node belongs to a scene
 	if (!node->root)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_NODE_NO_ROOT);
 		return;
 	}
 	
@@ -101,13 +101,6 @@ void sgsdl2_render_node(sgsdl2_node *node, sgsdl2_renderer *renderer)
 		// Do not need to emit a warning here as it is legal to call this function with a node that does not have a mesh.
 		return;
 	}
-	
-	// There must be a valid shader somewhere
-//	if (sgsdl2_valid_shader_available(node->mesh, renderer->opts.mode))
-//	{
-//		// TODO emit warning
-//		return;
-//	}
 	
 	// Node must be active
 	if (!node->mesh->is_active
@@ -129,7 +122,7 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 {
 	if (!mesh->material)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_MESH_NO_MAT);
 		return;
 	}
 	
@@ -148,7 +141,7 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 	}
 	else
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_MISSING_SHADER);
 		return;
 	}
 	

@@ -103,7 +103,7 @@ void sgsdl2_add_node(sgsdl2_scene *scene, sgsdl2_node *node)
 {
 	if (!scene->root_node)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_SCENE_NO_ROOT);
 		return;
 	}
 
@@ -114,7 +114,7 @@ void sgsdl2_clear_scene(sgsdl2_scene *scene)
 {
 	if (!scene->root_node)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_SCENE_NO_ROOT);
 		return;
 	}
 
@@ -140,14 +140,14 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 	// Scene must be properly initiated
 	if (!scene->root_node)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_SCENE_NO_ROOT);
 		return;
 	}
 
 	// Scene must have an active camera set.
 	if (scene->active_camera == nullptr)
 	{
-		// TODO emit warning
+		sgsdl2_print_error(ERR_MISSING_CAMERA);
 		return;
 	}
 	
