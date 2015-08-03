@@ -136,9 +136,8 @@ float texCoords[] = {
 void render(sgsdl2_scene *scene, int seconds)
 {
 	// Render for 3 seconds
-	bool render = false;
-	int frames = 60 * seconds;
-	while (render || frames > 0)
+	int frames = 1;
+	while (frames != seconds * 60)
 	{
 		if (scene->active_camera)
 		{
@@ -192,7 +191,7 @@ void render(sgsdl2_scene *scene, int seconds)
 		sgsdl2_check_opengl_error("main_loop: ");
 		
 		_sg_functions->utils.delay(1000 / 60);
-		frames--;
+		frames++;
 	}
 
 }
@@ -211,7 +210,7 @@ void test_graphics3d()
 	
 	// Initialize the scene
 	sgsdl2_scene *scene = sgsdl2_make_scene(&surface);
-	sgsdl2_populate_scene_from_file(scene, "swords.3ds");
+	sgsdl2_populate_scene_from_file(scene, "scenes/swords/swords.3ds");
 	
 	sgsdl2_node *camera_node = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
 	sgsdl2_camera *camera = sgsdl2_create_perspective_camera(camera_node);
