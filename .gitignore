@@ -17,6 +17,3 @@ CoreSDK/trace.gdb
 *.so
 *.swo
 tags
-
-.hg*
-.hg/**

@@ -141,6 +141,7 @@ void main() {
 	{
 		finalColor += vec4(getPhongColor(i), 0);
 	}
+//	finalColor = vec4(1, 0, 0, 1);
 }
 
 
