@@ -44,7 +44,6 @@
 		8228EAFA1B48164000CD02E7 /* SGSDL2Utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228EAF81B48164000CD02E7 /* SGSDL2Utilities.cpp */; };
 		8228EAFB1B48164000CD02E7 /* SGSDL2Utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8228EAF81B48164000CD02E7 /* SGSDL2Utilities.cpp */; };
 		8228EAFC1B48164000CD02E7 /* SGSDL2Utilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 8228EAF91B48164000CD02E7 /* SGSDL2Utilities.h */; };
-		823D26561AEFADE300CAED9B /* libwfc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 823D26551AEFADE300CAED9B /* libwfc.a */; };
 		8254253F1B69BF48006455B5 /* SGSDL2Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8254253D1B69BF48006455B5 /* SGSDL2Texture.cpp */; };
 		825425401B69BF48006455B5 /* SGSDL2Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8254253D1B69BF48006455B5 /* SGSDL2Texture.cpp */; };
 		825425411B69BF48006455B5 /* SGSDL2Texture.h in Headers */ = {isa = PBXBuildFile; fileRef = 8254253E1B69BF48006455B5 /* SGSDL2Texture.h */; };
@@ -236,7 +235,6 @@
 		8228EAEF1B429B4900CD02E7 /* SGSDL2Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Mesh.h; sourceTree = "<group>"; };
 		8228EAF81B48164000CD02E7 /* SGSDL2Utilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Utilities.cpp; sourceTree = "<group>"; };
 		8228EAF91B48164000CD02E7 /* SGSDL2Utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Utilities.h; sourceTree = "<group>"; };
-		823D26551AEFADE300CAED9B /* libwfc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libwfc.a; path = ../../lib/mac/libwfc.a; sourceTree = "<group>"; };
 		8254253D1B69BF48006455B5 /* SGSDL2Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Texture.cpp; sourceTree = "<group>"; };
 		8254253E1B69BF48006455B5 /* SGSDL2Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Texture.h; sourceTree = "<group>"; };
 		8254254B1B6A76F7006455B5 /* cat.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = cat.gif; sourceTree = "<group>"; };
@@ -325,7 +323,6 @@
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
 				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
-				823D26561AEFADE300CAED9B /* libwfc.a in Frameworks */,
 				94821644184DE39200C89CBE /* libsmpeg2.a in Frameworks */,
 				94821629184CA04300C89CBE /* libvorbisfile.a in Frameworks */,
 				9471BDB5183B732800BE3771 /* libfreetype.a in Frameworks */,
@@ -567,7 +564,6 @@
 				9471BDB1183B732800BE3771 /* libSDL2_ttf.a */,
 				9471BDB2183B732800BE3771 /* libSDL2.a */,
 				9471BDB3183B732800BE3771 /* libwebp.a */,
-				823D26551AEFADE300CAED9B /* libwfc.a */,
 				82D156DE1B63AB790002F9C0 /* libassimpd.3.1.1.dylib */,
 			);
 			name = Libraries;
