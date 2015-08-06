@@ -5,9 +5,9 @@ echo "       Fetching External Libraries for SGSDL2 "
 echo "--------------------------------------------------"
 
 DoExit ()
-{ 
-    echo "An error occurred while fetching external libraries"; 
-    cat setup.log    
+{
+    echo "An error occurred while fetching external libraries";
+    cat setup.log
     exit 1;
 }
 
@@ -15,7 +15,7 @@ DoExit ()
 
 # Make sure we are in the scripts directory
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
-APP_PATH=`cd "$APP_PATH"; pwd` 
+APP_PATH=`cd "$APP_PATH"; pwd`
 cd "$APP_PATH"
 
 if [ -f setup.log ]; then
@@ -40,7 +40,8 @@ hg clone http://hg.libsdl.org/SDL_net	./SDL_net >> setup.log
 if [ $? != 0 ]; then DoExit; fi
 
 echo "   Checking out SDL_gfx"
-svn checkout svn://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r29
+# svn checkout svn://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r29
+svn checkout http://svn.code.sf.net/p/sdl2gfx/code/trunk sdl2gfx-code
 
 # echo "   Cloning SDL_rtf"
 # hg clone http://hg.libsdl.org/SDL_rtf	./SDL_rtf >> setup.log
