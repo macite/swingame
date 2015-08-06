@@ -41,7 +41,7 @@ if [ $? != 0 ]; then DoExit; fi
 
 echo "   Checking out SDL_gfx"
 # svn checkout svn://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx -r r29
-svn checkout http://svn.code.sf.net/p/sdl2gfx/code/trunk sdl2gfx-code
+svn checkout http://svn.code.sf.net/p/sdl2gfx/code/trunk ./SDL_gfx
 
 # echo "   Cloning SDL_rtf"
 # hg clone http://hg.libsdl.org/SDL_rtf	./SDL_rtf >> setup.log
