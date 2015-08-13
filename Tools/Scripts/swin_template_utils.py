@@ -504,7 +504,7 @@ template_details = {
                   'lang':           'VB',
                   'source':         'Mono',
                   'target':         'mono',
-                  'os':             [ 'Mac OS X', 'Linux' ],
+                  'os':             [ 'Mac OS X', 'Linux', 'Windows' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
                   'post_copy':      make_sh_exec

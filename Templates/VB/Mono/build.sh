@@ -40,19 +40,22 @@ RELEASE=""
 
 VBNC_FLAGS="-target:winexe -r:./lib/SwinGame.dll -imports:System,SwinGameSDK,SwinGameSDK.SwinGame,System,System.Reflection" #" -r:Microsoft.VisualBasic"
 VB_FLAGS="-optimize+ -debug-"
+PLATFORM_FLAGS="-platform:x86"
 SG_INC="-I${APP_PATH}/lib/"
 
 #Locate the compiler...
-VBNC_BIN=`which vbc 2>> /dev/null`
-if [ -z "$VBNC_BIN" ]; then
-    #try locating gmcs
-    VBNC_BIN=`which vbnc 2>> /dev/null`
+if [ "$OS" = "$WIN" ]; then
+    export PATH=$APP_PATH/lib:/c/Program\ Files\ \(x86\)/Mono/bin/:/c/Program\ Files/Mono/bin/:$PATH:/c/Windows/Microsoft.NET/Framework/v4.0.30319
     
-    if [ -z "$VBNC_BIN" ]; then
-        #no compiler found :(
-        echo "Unable to find a Visual Basic compiler. Install either vbc or vbnc."
-        exit -1
-    fi
+    VBNC_BIN=`which vbc 2>> /dev/null`
+else
+    VBNC_BIN=`which vbnc 2>> /dev/null`
+fi
+
+if [ -z "$VBNC_BIN" ]; then
+    #no compiler found :(
+    echo "Unable to find a Visual Basic compiler. Install either vbc or vbnc."
+    exit -1
 fi
 
 #
@@ -187,7 +190,7 @@ doMacPackage()
     # popd >> /dev/null
     
     cp "${LIB_DIR}/libSGSDK.dylib" "${GAMEAPP_PATH}/Contents/Resources/libSGSDK.dylib"
-    cp -R -p "./lib/SwinGame.dll" "${GAMEAPP_PATH}/Contents/Resources/"
+    cp -R -p "${APP_PATH}/lib/SwinGame.dll" "${GAMEAPP_PATH}/Contents/Resources/"
 
     rm -f "${OUT_DIR}/${GAME_NAME}.exe"
     
@@ -236,7 +239,12 @@ doCompile()
         mkdir -p ${OUT_DIR}
     fi
     
-    ${VBNC_BIN} ${VBNC_FLAGS} ${VB_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]vb$` >> ${LOG_FILE}
+    if [ "$OS" = "$WIN" ]; then
+        ${VBNC_BIN} ${VBNC_FLAGS} ${PLATFORM_FLAGS} ${VB_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 -exec ${APP_PATH}/lib/cygpath -ma {} \; | grep [.]vb$` >> ${LOG_FILE}
+    else
+        ${VBNC_BIN} ${VBNC_FLAGS} ${PLATFORM_FLAGS} ${VB_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]vb$` >> ${LOG_FILE}
+    fi
+
     if [ $? != 0 ]; then 
       [[ -e out.log ]] && cat out.log
       echo "Error compiling."; exit 1; 
@@ -256,6 +264,7 @@ doWindowsPackage()
     
     echo "  ... Copying libraries"
     cp -p -f "${LIB_DIR}"/*.dll "${OUT_DIR}"
+    cp -p -f "${APP_PATH}"/lib/*.dll "${OUT_DIR}"
 }
 
 copyWithoutSVN()
