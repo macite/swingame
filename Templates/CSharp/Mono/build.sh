@@ -39,7 +39,6 @@ if [ "$OS" = "$WIN" ]; then
 fi
 
 #Locate the compiler...
-USING_CSC=false
 GMCS_BIN=`which mcs 2>> /dev/null`
 if [ -z "$GMCS_BIN" ]; then
     #try locating mcs
@@ -47,7 +46,6 @@ if [ -z "$GMCS_BIN" ]; then
     if [ -z "$GMCS_BIN" ]; then
         #try locating gmcs
         GMCS_BIN=`which csc 2>> /dev/null`
-        USING_CSC=true
 
         if [ -z "$GMCS_BIN" ]; then
             #no compiler found :(
@@ -71,7 +69,7 @@ if [ -z "$GMCS_BIN" ]; then
         echo ""
         echo "-------------------------------------------------------------------------------"
         echo ""
-        sleep 1
+        sleep 4
     fi
 fi
 
@@ -263,7 +261,7 @@ doCompile()
         mkdir -p ${OUT_DIR}
     fi
     
-    if [ USING_CSC==true ]; then
+    if [ "$OS" = "$WIN" ]; then
         "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 -exec ${APP_PATH}/lib/cygpath -ma {} \; | grep [.]cs$` >> ${LOG_FILE}
     else
         "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]cs$` >> ${LOG_FILE}
