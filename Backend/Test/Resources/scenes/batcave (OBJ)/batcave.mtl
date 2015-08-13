@@ -1,0 +1,699 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 13.11.2011 08:14:07
+
+newmtl wire_115115115
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.450980 0.450980 0.450980
+	Kd 0.450980 0.450980 0.450980
+	Ks 0.350000 0.350000 0.350000
+
+newmtl power_tubetexture2
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_rod_texture.jpg
+	map_Kd C:\Batcave\textures\stage_rod_texture.jpg
+	map_refl Map__82_Raytrace.tga
+
+newmtl power_tube_texture1
+	Ns 19.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.225000 0.225000 0.225000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\4851-metallic.jpg
+	map_Kd C:\Batcave\textures\4851-metallic.jpg
+	map_Ks C:\Batcave\textures\4851-specstrength.jpg
+	map_bump C:\Batcave\textures\4851-normal.jpg
+	bump C:\Batcave\textures\4851-normal.jpg
+	map_refl Map__77_Raytrace.tga
+
+newmtl container_glass
+	Ns 10.000000
+	Ni 1.500000
+	d 0.160000
+	Tr 0.840000
+	Tf 0.160000 0.160000 0.160000 
+	illum 2
+	Ka 0.380392 0.380392 0.380392
+	Kd 0.380392 0.380392 0.380392
+	Ks 0.279000 0.279000 0.279000
+	Ke 0.000000 0.000000 0.000000
+	map_refl Map__116_Raytrace.tga
+
+newmtl roof_pipe_texture
+	Ns 25.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.585000 0.585000 0.585000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_rod_texture.jpg
+	map_Kd C:\Batcave\textures\stage_rod_texture.jpg
+	map_Ks C:\Batcave\textures\stage_rod_texture_SPEC.jpg
+	map_bump C:\Batcave\textures\stage_rod_texture_NRM.jpg
+	bump C:\Batcave\textures\stage_rod_texture_NRM.jpg
+	map_refl Map__74_Raytrace.tga
+
+newmtl stage_rod_texture
+	Ns 18.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.198000 0.198000 0.198000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_rod_texture.jpg
+	map_Kd C:\Batcave\textures\stage_rod_texture.jpg
+	map_Ks C:\Batcave\textures\stage_rod_texture_SPEC.jpg
+	map_bump C:\Batcave\textures\stage_rod_texture_NRM.jpg
+	bump C:\Batcave\textures\stage_rod_texture_NRM.jpg
+	map_refl Map__85_Raytrace.tga
+
+newmtl bridge_texture4
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\surface_pipe2.jpg
+	map_Kd C:\Batcave\textures\surface_pipe2.jpg
+	map_Ks C:\batcave_model\textures\surface_pipe2_SPEC.jpg
+	map_bump C:\Batcave\textures\surface_pipe2_NRM.jpg
+	bump C:\Batcave\textures\surface_pipe2_NRM.jpg
+	map_refl Map__92_Raytrace.tga
+
+newmtl Standard_18
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\bidge_base_texture.jpg
+	map_Kd C:\Batcave\textures\bidge_base_texture.jpg
+	map_Ks C:\batcave_model\textures\bidge_base_texture_SPEC.jpg
+	map_bump C:\Batcave\textures\bidge_base_normal_map.jpg
+	bump C:\Batcave\textures\bidge_base_normal_map.jpg
+	map_refl Map__177_Raytrace.tga
+
+newmtl bridge_texture
+	Ns 29.999998
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.396000 0.396000 0.396000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\bridge_stage_base_diffuse_map.JPG
+	map_Kd C:\Batcave\textures\bridge_stage_base_diffuse_map.JPG
+	map_Ks C:\Batcave\textures\bridge_stage_base_diffuse_map_SPEC.jpg
+	map_bump C:\Batcave\textures\bridge_stage_base_diffuse_map_NRM.jpg
+	bump C:\Batcave\textures\bridge_stage_base_diffuse_map_NRM.jpg
+	map_refl Map__91_Raytrace.tga
+
+newmtl Material__3525
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\stage_cemented_diffuse.jpg
+	map_Kd C:\batcave_model\textures\stage_cemented_diffuse.jpg
+	map_Ks C:\Batcave\textures\bidge_base_spec_map.jpg
+	map_bump C:\Batcave\textures\bridge_base2_NRM.jpg
+	bump C:\Batcave\textures\bridge_base2_NRM.jpg
+
+newmtl roof_rods_monitor_stand
+	Ns 19.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.225000 0.225000 0.225000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_rod_texture.jpg
+	map_Kd C:\Batcave\textures\stage_rod_texture.jpg
+	map_refl Map__84_Raytrace.tga
+
+newmtl stage_2
+	Ns 26.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.261000 0.261000 0.261000
+	Ke 0.588000 0.588000 0.588000
+	map_Ka C:\Batcave\textures\5016.jpg
+	map_Kd C:\Batcave\textures\5016.jpg
+	map_bump C:\Batcave\textures\5016-normal.jpg
+	bump C:\Batcave\textures\5016-normal.jpg
+
+newmtl surface_pipe_texture
+	Ns 8.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.135000 0.135000 0.135000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\surface_texture.jpg
+	map_Kd C:\Batcave\textures\surface_texture.jpg
+	map_Ks C:\batcave_model\textures\surface_texture_SPEC.jpg
+	map_bump C:\Batcave\textures\surface_texture_NRM.jpg
+	bump C:\Batcave\textures\surface_texture_NRM.jpg
+	map_refl Map__87_Raytrace.tga
+
+newmtl stage_light3_
+	Ns 36.000000
+	Ni 1.500000
+	d 0.920000
+	Tr 0.080000
+	Tf 0.920000 0.920000 0.920000 
+	illum 2
+	Ka 0.172549 0.407843 0.839216
+	Kd 0.172549 0.407843 0.839216
+	Ks 0.135000 0.135000 0.135000
+	Ke 0.007843 0.062745 0.482353
+
+newmtl bridge_rods
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_rod_texture.jpg
+	map_Kd C:\Batcave\textures\stage_rod_texture.jpg
+
+newmtl wire_135006006
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.529412 0.023529 0.023529
+	Kd 0.529412 0.023529 0.023529
+	Ks 0.350000 0.350000 0.350000
+
+newmtl bridge_rod_texture
+	Ns 19.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.207000 0.207000 0.207000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\bridge_railing_diffuse_map.jpg
+	map_Kd C:\batcave_model\textures\bridge_railing_diffuse_map.jpg
+	map_Ks C:\batcave_model\textures\bridge_railing_diffuse_map_SPEC.jpg
+	map_bump C:\batcave_model\textures\bridge_railing_diffuse_map_SPEC.jpg
+	bump C:\batcave_model\textures\bridge_railing_diffuse_map_SPEC.jpg
+	map_refl Map__96_Raytrace.tga
+
+newmtl bridge_side
+	Ns 37.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.315000 0.315000 0.315000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\bridge_side_texture.jpg
+	map_Kd C:\Batcave\textures\bridge_side_texture.jpg
+	map_Ks C:\Batcave\textures\bridge_side_spec.jpg
+	map_bump C:\Batcave\textures\bridge_side_NRM.jpg
+	bump C:\Batcave\textures\bridge_side_NRM.jpg
+	map_refl Map__95_Raytrace.tga
+
+newmtl wire_234234234
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.917647 0.917647 0.917647
+	Kd 0.917647 0.917647 0.917647
+	Ks 0.350000 0.350000 0.350000
+
+newmtl wire_057008136
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.223529 0.031373 0.533333
+	Kd 0.223529 0.031373 0.533333
+	Ks 0.350000 0.350000 0.350000
+
+newmtl shoker_texture
+	Ns 55.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.612000 0.612000 0.612000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\shoker_diffusel_map.jpg
+	map_Kd C:\Batcave\textures\shoker_diffusel_map.jpg
+	map_Ks C:\batcave_model\textures\shoker_spec_map.jpg
+	map_bump C:\batcave_model\textures\shoker_normal_map.jpg
+	bump C:\batcave_model\textures\shoker_normal_map.jpg
+	map_refl Map__54_Raytrace.tga
+
+newmtl shoker_bottom_pipe
+	Ns 33.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.333000 0.333000 0.333000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\shoker_pipe2 .jpg
+	map_Kd C:\Batcave\textures\shoker_pipe2 .jpg
+	map_Ks C:\batcave_model\textures\shoker_pipe2 _SPEC.jpg
+	map_bump C:\batcave_model\textures\shoker_normal_map.jpg
+	bump C:\batcave_model\textures\shoker_normal_map.jpg
+	map_refl Map__97_Raytrace.tga
+
+newmtl pipe_texture2
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+
+newmtl stage_side_texture
+	Ns 35.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.333000 0.333000 0.333000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\lower_stage_map.JPG
+	map_Kd C:\Batcave\textures\lower_stage_map.JPG
+	map_Ks C:\Batcave\textures\lower_stage_map_SPEC.jpg
+	map_bump C:\Batcave\textures\lower_stage_map_NRM.jpg
+	bump C:\Batcave\textures\lower_stage_map_NRM.jpg
+	map_refl Map__90_Raytrace.tga
+
+newmtl monitor_texture
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.243000 0.243000 0.243000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\monitor_cabinet_map.jpg
+	map_Kd C:\batcave_model\textures\monitor_cabinet_map.jpg
+	map_Ks C:\batcave_model\textures\monitor_cabinet_spec_map.jpg
+	map_bump C:\batcave_model\textures\monitor_cabinet_normal_map.jpg
+	bump C:\batcave_model\textures\monitor_cabinet_normal_map.jpg
+	map_refl Map__102_Raytrace.tga
+
+newmtl stage_lower_ring
+	Ns 29.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.333000 0.333000 0.333000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\stage_ring_diffuse_map.JPG
+	map_Kd C:\Batcave\textures\stage_ring_diffuse_map.JPG
+	map_Ks C:\batcave_model\textures\stage_ring_diffuse_map_SPEC.jpg
+	map_bump C:\Batcave\textures\stage_ring_diffuse_map_NRM.jpg
+	bump C:\Batcave\textures\stage_ring_diffuse_map_NRM.jpg
+	map_refl Map__89_Raytrace.tga
+
+newmtl wire_028149177
+	Ns 32
+	d 1
+	Tr 0
+	Tf 1 1 1
+	illum 2
+	Ka 0.109804 0.584314 0.694118
+	Kd 0.109804 0.584314 0.694118
+	Ks 0.350000 0.350000 0.350000
+
+newmtl bridge_texture3
+	Ns 19.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.261000 0.261000 0.261000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\stage_cemented_diffuse.jpg
+	map_Kd C:\batcave_model\textures\stage_cemented_diffuse.jpg
+	map_Ks C:\Batcave\textures\bidge_base_spec_map.jpg
+	map_bump C:\Batcave\textures\bridge_base2_NRM.jpg
+	bump C:\Batcave\textures\bridge_base2_NRM.jpg
+	map_refl Map__94_Raytrace.tga
+
+newmtl Standard_1
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.054000 0.054000 0.054000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\cement ice.jpg
+	map_Kd C:\Batcave\textures\cement ice.jpg
+	map_Ks C:\Batcave\textures\stage_cemented_SPEC.jpg
+	map_bump C:\Batcave\textures\stage_cemented_NRM.jpg
+	bump C:\Batcave\textures\stage_cemented_NRM.jpg
+
+newmtl Standard_20
+	Ns 25.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.270000 0.270000 0.270000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\215-diffuse.jpg
+	map_Kd C:\batcave_model\textures\215-diffuse.jpg
+	map_bump C:\Batcave\textures\chipset_normal.jpg
+	bump C:\Batcave\textures\chipset_normal.jpg
+	map_refl Map__101_Raytrace.tga
+
+newmtl chipset_handel_steel
+	Ns 22.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.223529 0.223529 0.223529
+	Kd 0.223529 0.223529 0.223529
+	Ks 0.387000 0.387000 0.387000
+	Ke 0.000000 0.000000 0.000000
+
+newmtl bat_texture
+	Ns 36.000000
+	Ni 1.500000
+	d 0.920000
+	Tr 0.080000
+	Tf 0.920000 0.920000 0.920000 
+	illum 2
+	Ka 0.250980 0.294118 0.411765
+	Kd 0.250980 0.294118 0.411765
+	Ks 0.135000 0.135000 0.135000
+	Ke 0.000000 0.000000 0.000000
+
+newmtl Material__2434
+	Ns 2.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\cave_diffuse_map.jpg
+	map_Kd C:\batcave_model\textures\cave_diffuse_map.jpg
+	map_Ks C:\batcave_model\textures\cave_diffuse_map_SPEC.jpg
+	map_bump C:\batcave_model\textures\cave_diffuse_map_NRM.jpg
+	bump C:\batcave_model\textures\cave_diffuse_map_NRM.jpg
+
+newmtl monitor3_screen_texture
+	Ns 19.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.252000 0.252000 0.252000
+	Ke 0.000000 0.027451 0.243137
+	map_Ka C:\Batcave\textures\uplink_jobs.jpg
+	map_Kd C:\Batcave\textures\uplink_jobs.jpg
+	map_refl Map__105_Raytrace.tga
+
+newmtl monitor4_screen_texture
+	Ns 36.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.288000 0.288000 0.288000
+	Ke 0.000000 0.172549 0.145098
+	map_Ka C:\Batcave\textures\bs_hacker___zero_expansions-49350.jpg
+	map_Kd C:\Batcave\textures\bs_hacker___zero_expansions-49350.jpg
+	map_refl Map__107_Raytrace.tga
+
+newmtl monitor2_screen_texture
+	Ns 22.999998
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.252000 0.252000 0.252000
+	Ke 0.027451 0.168627 0.235294
+	map_Ka C:\batcave_model\textures\74434portsignhn.gif
+	map_Kd C:\batcave_model\textures\74434portsignhn.gif
+	map_refl Map__104_Raytrace.tga
+
+newmtl monitor5_screen_texture
+	Ns 37.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.252000 0.252000 0.252000
+	Ke 0.000000 0.219608 0.274510
+	map_Ka C:\Batcave\textures\Monitor1.jpg
+	map_Kd C:\Batcave\textures\Monitor1.jpg
+	map_refl Map__106_Raytrace.tga
+
+newmtl monitor1_screen_texture
+	Ns 31.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.243000 0.243000 0.243000
+	Ke 0.000000 0.164706 0.243137
+	map_Ka C:\batcave_model\textures\Screen3.jpg
+	map_Kd C:\batcave_model\textures\Screen3.jpg
+	map_refl Map__103_Raytrace.tga
+
+newmtl Standard_12
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\keyboard3.jpg
+	map_Kd C:\batcave_model\textures\keyboard3.jpg
+	map_Ks C:\batcave_model\textures\keyboard3_SPEC.jpg
+	map_bump C:\batcave_model\textures\keyboard3_NRM.jpg
+	bump C:\batcave_model\textures\keyboard3_NRM.jpg
+
+newmtl Standard_91
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\Keyboard.jpg
+	map_Kd C:\Batcave\textures\Keyboard.jpg
+	map_Ks C:\batcave_model\textures\Keyboard_SPEC.jpg
+	map_bump C:\Batcave\textures\Keyboard_NRM.jpg
+	bump C:\Batcave\textures\Keyboard_NRM.jpg
+
+newmtl Standard_83
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\batcave_model\textures\Keyboard4.jpg
+	map_Kd C:\batcave_model\textures\Keyboard4.jpg
+	map_Ks C:\batcave_model\textures\Keyboard4_SPEC.jpg
+	map_bump C:\batcave_model\textures\Keyboard4_NRM.jpg
+	bump C:\batcave_model\textures\Keyboard4_NRM.jpg
+
+newmtl Standard_82
+	Ns 10.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.000000 0.000000 0.000000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\Keyboard5.jpg
+	map_Kd C:\Batcave\textures\Keyboard5.jpg
+	map_Ks C:\batcave_model\textures\Keyboard5_SPEC.jpg
+	map_bump C:\Batcave\textures\Keyboard5_NRM.jpg
+	bump C:\Batcave\textures\Keyboard5_NRM.jpg
+
+newmtl upper_monitor3_screen_texture
+	Ns 22.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.243000 0.243000 0.243000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\blue_sky_ac_-_developer_edition-21647-1.jpeg
+	map_Kd C:\Batcave\textures\blue_sky_ac_-_developer_edition-21647-1.jpeg
+	map_refl Map__110_Raytrace.tga
+
+newmtl upper_monitor1_screen_texture
+	Ns 26.999998
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.261000 0.261000 0.261000
+	Ke 0.039216 0.156863 0.223529
+	map_Ka C:\Batcave\textures\SuperComputer__mIRC_scheme__by_Flarey.png
+	map_Kd C:\Batcave\textures\SuperComputer__mIRC_scheme__by_Flarey.png
+	map_refl Map__108_Raytrace.tga
+
+newmtl upper_monitor2_screen_texture
+	Ns 22.000000
+	Ni 1.500000
+	d 1.000000
+	Tr 0.000000
+	Tf 1.000000 1.000000 1.000000 
+	illum 2
+	Ka 0.588000 0.588000 0.588000
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.225000 0.225000 0.225000
+	Ke 0.000000 0.000000 0.000000
+	map_Ka C:\Batcave\textures\uplink_map.jpg
+	map_Kd C:\Batcave\textures\uplink_map.jpg
+	map_refl Map__109_Raytrace.tga

@@ -58,8 +58,117 @@
 		82552E851B497C6300DFC7BC /* SGSDL2Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82552E831B497C6300DFC7BC /* SGSDL2Light.cpp */; };
 		82552E861B497C6300DFC7BC /* SGSDL2Light.h in Headers */ = {isa = PBXBuildFile; fileRef = 82552E841B497C6300DFC7BC /* SGSDL2Light.h */; };
 		82552E871B497C7600DFC7BC /* SGSDL2Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82552E831B497C6300DFC7BC /* SGSDL2Light.cpp */; };
+		8261A1801B74492D0001918A /* SGSDL2Material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8261A17E1B74492D0001918A /* SGSDL2Material.cpp */; };
+		8261A1811B74492D0001918A /* SGSDL2Material.h in Headers */ = {isa = PBXBuildFile; fileRef = 8261A17F1B74492D0001918A /* SGSDL2Material.h */; };
 		82823BCE1B4A2FA600738C14 /* SGSDL2Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82823BCC1B4A2FA600738C14 /* SGSDL2Shader.cpp */; };
 		82823BCF1B4A2FA600738C14 /* SGSDL2Shader.h in Headers */ = {isa = PBXBuildFile; fileRef = 82823BCD1B4A2FA600738C14 /* SGSDL2Shader.h */; };
+		8294301D1B7CA98D00A249D1 /* 1324-diffuse.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB21B7CA95A00A249D1 /* 1324-diffuse.jpg */; };
+		8294301E1B7CA98D00A249D1 /* 215-diffuse.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB31B7CA95A00A249D1 /* 215-diffuse.jpg */; };
+		8294301F1B7CA98D00A249D1 /* 2932-normal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB41B7CA95A00A249D1 /* 2932-normal.jpg */; };
+		829430201B7CA98D00A249D1 /* 4851-metallic.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB51B7CA95A00A249D1 /* 4851-metallic.jpg */; };
+		829430211B7CA98D00A249D1 /* 4851-normal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB61B7CA95A00A249D1 /* 4851-normal.jpg */; };
+		829430221B7CA98D00A249D1 /* 4851-specstrength.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB71B7CA95A00A249D1 /* 4851-specstrength.jpg */; };
+		829430231B7CA98D00A249D1 /* 5016.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB81B7CA95A00A249D1 /* 5016.jpg */; };
+		829430241B7CA98D00A249D1 /* 74434portsignhn.gif in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FB91B7CA95A00A249D1 /* 74434portsignhn.gif */; };
+		829430251B7CA98D00A249D1 /* batcave.mtl in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBA1B7CA95A00A249D1 /* batcave.mtl */; };
+		829430261B7CA98D00A249D1 /* batcave.obj in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBB1B7CA95A00A249D1 /* batcave.obj */; };
+		829430271B7CA98D00A249D1 /* batsign.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBC1B7CA95A00A249D1 /* batsign.jpg */; };
+		829430281B7CA98D00A249D1 /* bidge_base_normal_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBD1B7CA95A00A249D1 /* bidge_base_normal_map.jpg */; };
+		829430291B7CA98D00A249D1 /* bidge_base_spec_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBE1B7CA95A00A249D1 /* bidge_base_spec_map.jpg */; };
+		8294302A1B7CA98D00A249D1 /* bidge_base_texture.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FBF1B7CA95A00A249D1 /* bidge_base_texture.jpg */; };
+		8294302B1B7CA98D00A249D1 /* bidge_base_texture_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC01B7CA95A00A249D1 /* bidge_base_texture_SPEC.jpg */; };
+		8294302C1B7CA98D00A249D1 /* blue_sky_ac_-_developer_edition-21647-1.jpeg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC11B7CA95A00A249D1 /* blue_sky_ac_-_developer_edition-21647-1.jpeg */; };
+		8294302D1B7CA98D00A249D1 /* bridge_base2_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC21B7CA95A00A249D1 /* bridge_base2_NRM.jpg */; };
+		8294302E1B7CA98D00A249D1 /* bridge_railing_diffuse_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC31B7CA95A00A249D1 /* bridge_railing_diffuse_map.jpg */; };
+		8294302F1B7CA98D00A249D1 /* bridge_railing_diffuse_map_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC41B7CA95A00A249D1 /* bridge_railing_diffuse_map_NRM.jpg */; };
+		829430301B7CA98D00A249D1 /* bridge_railing_diffuse_map_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC51B7CA95A00A249D1 /* bridge_railing_diffuse_map_SPEC.jpg */; };
+		829430311B7CA98D00A249D1 /* bridge_side_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC61B7CA95A00A249D1 /* bridge_side_NRM.jpg */; };
+		829430321B7CA98D00A249D1 /* bridge_side_spec.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC71B7CA95A00A249D1 /* bridge_side_spec.jpg */; };
+		829430331B7CA98D00A249D1 /* bridge_side_texture.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC81B7CA95A00A249D1 /* bridge_side_texture.jpg */; };
+		829430341B7CA98D00A249D1 /* bridge_stage_base_diffuse_map.JPG in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FC91B7CA95A00A249D1 /* bridge_stage_base_diffuse_map.JPG */; };
+		829430351B7CA98D00A249D1 /* bridge_stage_base_diffuse_map_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCA1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_NRM.jpg */; };
+		829430361B7CA98D00A249D1 /* bridge_stage_base_diffuse_map_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCB1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_SPEC.jpg */; };
+		829430371B7CA98D00A249D1 /* bs_hacker___zero_expansions-49350.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCC1B7CA95A00A249D1 /* bs_hacker___zero_expansions-49350.jpg */; };
+		829430381B7CA98D00A249D1 /* cave_diffuse_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCD1B7CA95A00A249D1 /* cave_diffuse_map.jpg */; };
+		829430391B7CA98D00A249D1 /* cave_diffuse_map_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCE1B7CA95A00A249D1 /* cave_diffuse_map_NRM.jpg */; };
+		8294303A1B7CA98D00A249D1 /* cave_diffuse_map_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FCF1B7CA95A00A249D1 /* cave_diffuse_map_SPEC.jpg */; };
+		8294303B1B7CA98D00A249D1 /* cement ice.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD01B7CA95A00A249D1 /* cement ice.jpg */; };
+		8294303C1B7CA98D00A249D1 /* chipset_normal.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD11B7CA95A00A249D1 /* chipset_normal.jpg */; };
+		8294303D1B7CA98D00A249D1 /* conatiner_diffuse.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD21B7CA95A00A249D1 /* conatiner_diffuse.jpg */; };
+		8294303E1B7CA98D00A249D1 /* conatiner_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD31B7CA95A00A249D1 /* conatiner_NRM.jpg */; };
+		8294303F1B7CA98D00A249D1 /* Keyboard.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD41B7CA95A00A249D1 /* Keyboard.jpg */; };
+		829430401B7CA98D00A249D1 /* Keyboard2.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD51B7CA95A00A249D1 /* Keyboard2.jpg */; };
+		829430411B7CA98D00A249D1 /* Keyboard2_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD61B7CA95A00A249D1 /* Keyboard2_NRM.jpg */; };
+		829430421B7CA98D00A249D1 /* Keyboard2_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD71B7CA95A00A249D1 /* Keyboard2_SPEC.jpg */; };
+		829430431B7CA98D00A249D1 /* keyboard3.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD81B7CA95A00A249D1 /* keyboard3.jpg */; };
+		829430441B7CA98D00A249D1 /* keyboard3_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FD91B7CA95A00A249D1 /* keyboard3_NRM.jpg */; };
+		829430451B7CA98D00A249D1 /* keyboard3_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDA1B7CA95A00A249D1 /* keyboard3_SPEC.jpg */; };
+		829430461B7CA98D00A249D1 /* Keyboard4.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDB1B7CA95A00A249D1 /* Keyboard4.jpg */; };
+		829430471B7CA98D00A249D1 /* Keyboard4_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDC1B7CA95A00A249D1 /* Keyboard4_NRM.jpg */; };
+		829430481B7CA98D00A249D1 /* Keyboard4_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDD1B7CA95A00A249D1 /* Keyboard4_SPEC.jpg */; };
+		829430491B7CA98D00A249D1 /* Keyboard5.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDE1B7CA95A00A249D1 /* Keyboard5.jpg */; };
+		8294304A1B7CA98D00A249D1 /* Keyboard5_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FDF1B7CA95A00A249D1 /* Keyboard5_NRM.jpg */; };
+		8294304B1B7CA98D00A249D1 /* Keyboard5_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE01B7CA95A00A249D1 /* Keyboard5_SPEC.jpg */; };
+		8294304C1B7CA98D00A249D1 /* Keyboard_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE11B7CA95A00A249D1 /* Keyboard_NRM.jpg */; };
+		8294304D1B7CA98D00A249D1 /* Keyboard_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE21B7CA95A00A249D1 /* Keyboard_SPEC.jpg */; };
+		8294304E1B7CA98D00A249D1 /* lower_stage_map.JPG in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE31B7CA95A00A249D1 /* lower_stage_map.JPG */; };
+		8294304F1B7CA98D00A249D1 /* lower_stage_map_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE41B7CA95A00A249D1 /* lower_stage_map_NRM.jpg */; };
+		829430501B7CA98D00A249D1 /* lower_stage_map_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE51B7CA95A00A249D1 /* lower_stage_map_SPEC.jpg */; };
+		829430511B7CA98D00A249D1 /* Map__101_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE61B7CA95A00A249D1 /* Map__101_Raytrace.tga */; };
+		829430521B7CA98D00A249D1 /* Map__102_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE71B7CA95A00A249D1 /* Map__102_Raytrace.tga */; };
+		829430531B7CA98D00A249D1 /* Map__103_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE81B7CA95A00A249D1 /* Map__103_Raytrace.tga */; };
+		829430541B7CA98D00A249D1 /* Map__104_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FE91B7CA95A00A249D1 /* Map__104_Raytrace.tga */; };
+		829430551B7CA98D00A249D1 /* Map__105_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FEA1B7CA95A00A249D1 /* Map__105_Raytrace.tga */; };
+		829430561B7CA98D00A249D1 /* Map__106_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FEB1B7CA95A00A249D1 /* Map__106_Raytrace.tga */; };
+		829430571B7CA98D00A249D1 /* Map__107_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FEC1B7CA95A00A249D1 /* Map__107_Raytrace.tga */; };
+		829430581B7CA98D00A249D1 /* Map__108_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FED1B7CA95A00A249D1 /* Map__108_Raytrace.tga */; };
+		829430591B7CA98D00A249D1 /* Map__109_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FEE1B7CA95A00A249D1 /* Map__109_Raytrace.tga */; };
+		8294305A1B7CA98D00A249D1 /* Map__110_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FEF1B7CA95A00A249D1 /* Map__110_Raytrace.tga */; };
+		8294305B1B7CA98D00A249D1 /* Map__116_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF01B7CA95A00A249D1 /* Map__116_Raytrace.tga */; };
+		8294305C1B7CA98D00A249D1 /* Map__177_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF11B7CA95A00A249D1 /* Map__177_Raytrace.tga */; };
+		8294305D1B7CA98D00A249D1 /* Map__54_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF21B7CA95A00A249D1 /* Map__54_Raytrace.tga */; };
+		8294305E1B7CA98D00A249D1 /* Map__74_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF31B7CA95A00A249D1 /* Map__74_Raytrace.tga */; };
+		8294305F1B7CA98D00A249D1 /* Map__77_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF41B7CA95A00A249D1 /* Map__77_Raytrace.tga */; };
+		829430601B7CA98D00A249D1 /* Map__82_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF51B7CA95A00A249D1 /* Map__82_Raytrace.tga */; };
+		829430611B7CA98D00A249D1 /* Map__84_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF61B7CA95A00A249D1 /* Map__84_Raytrace.tga */; };
+		829430621B7CA98D00A249D1 /* Map__85_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF71B7CA95A00A249D1 /* Map__85_Raytrace.tga */; };
+		829430631B7CA98D00A249D1 /* Map__87_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF81B7CA95A00A249D1 /* Map__87_Raytrace.tga */; };
+		829430641B7CA98D00A249D1 /* Map__89_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FF91B7CA95A00A249D1 /* Map__89_Raytrace.tga */; };
+		829430651B7CA98D00A249D1 /* Map__90_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFA1B7CA95A00A249D1 /* Map__90_Raytrace.tga */; };
+		829430661B7CA98D00A249D1 /* Map__91_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFB1B7CA95A00A249D1 /* Map__91_Raytrace.tga */; };
+		829430671B7CA98D00A249D1 /* Map__92_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFC1B7CA95A00A249D1 /* Map__92_Raytrace.tga */; };
+		829430681B7CA98D00A249D1 /* Map__94_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFD1B7CA95A00A249D1 /* Map__94_Raytrace.tga */; };
+		829430691B7CA98D00A249D1 /* Map__95_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFE1B7CA95A00A249D1 /* Map__95_Raytrace.tga */; };
+		8294306A1B7CA98D00A249D1 /* Map__96_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 82942FFF1B7CA95A00A249D1 /* Map__96_Raytrace.tga */; };
+		8294306B1B7CA98D00A249D1 /* Map__97_Raytrace.tga in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430001B7CA95A00A249D1 /* Map__97_Raytrace.tga */; };
+		8294306C1B7CA98D00A249D1 /* Monitor1.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430011B7CA95A00A249D1 /* Monitor1.jpg */; };
+		8294306D1B7CA98D00A249D1 /* monitor_cabinet_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430021B7CA95A00A249D1 /* monitor_cabinet_map.jpg */; };
+		8294306E1B7CA98D00A249D1 /* monitor_cabinet_normal_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430031B7CA95A00A249D1 /* monitor_cabinet_normal_map.jpg */; };
+		8294306F1B7CA98D00A249D1 /* monitor_cabinet_spec_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430041B7CA95A00A249D1 /* monitor_cabinet_spec_map.jpg */; };
+		829430701B7CA98D00A249D1 /* Screen3.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430051B7CA95A00A249D1 /* Screen3.jpg */; };
+		829430711B7CA98D00A249D1 /* shoker_diffusel_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430061B7CA95A00A249D1 /* shoker_diffusel_map.jpg */; };
+		829430721B7CA98D00A249D1 /* shoker_normal_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430071B7CA95A00A249D1 /* shoker_normal_map.jpg */; };
+		829430731B7CA98D00A249D1 /* shoker_pipe2 .jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430081B7CA95A00A249D1 /* shoker_pipe2 .jpg */; };
+		829430741B7CA98D00A249D1 /* shoker_pipe2 _SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430091B7CA95A00A249D1 /* shoker_pipe2 _SPEC.jpg */; };
+		829430751B7CA98D00A249D1 /* shoker_spec_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300A1B7CA95A00A249D1 /* shoker_spec_map.jpg */; };
+		829430761B7CA98D00A249D1 /* stage_cemented_diffuse.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300B1B7CA95A00A249D1 /* stage_cemented_diffuse.jpg */; };
+		829430771B7CA98D00A249D1 /* stage_cemented_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300C1B7CA95A00A249D1 /* stage_cemented_NRM.jpg */; };
+		829430781B7CA98D00A249D1 /* stage_cemented_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300D1B7CA95A00A249D1 /* stage_cemented_SPEC.jpg */; };
+		829430791B7CA98D00A249D1 /* stage_ring_diffuse_map.JPG in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300E1B7CA95A00A249D1 /* stage_ring_diffuse_map.JPG */; };
+		8294307A1B7CA98D00A249D1 /* stage_ring_diffuse_map_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294300F1B7CA95A00A249D1 /* stage_ring_diffuse_map_NRM.jpg */; };
+		8294307B1B7CA98D00A249D1 /* stage_ring_diffuse_map_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430101B7CA95A00A249D1 /* stage_ring_diffuse_map_SPEC.jpg */; };
+		8294307C1B7CA98D00A249D1 /* stage_rod_texture.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430111B7CA95A00A249D1 /* stage_rod_texture.jpg */; };
+		8294307D1B7CA98D00A249D1 /* stage_rod_texture_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430121B7CA95A00A249D1 /* stage_rod_texture_NRM.jpg */; };
+		8294307E1B7CA98D00A249D1 /* stage_rod_texture_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430131B7CA95A00A249D1 /* stage_rod_texture_SPEC.jpg */; };
+		8294307F1B7CA98D00A249D1 /* SuperComputer__mIRC_scheme__by_Flarey.png in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430141B7CA95A00A249D1 /* SuperComputer__mIRC_scheme__by_Flarey.png */; };
+		829430801B7CA98D00A249D1 /* surface_pipe2.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430151B7CA95A00A249D1 /* surface_pipe2.jpg */; };
+		829430811B7CA98D00A249D1 /* surface_pipe2_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430161B7CA95A00A249D1 /* surface_pipe2_NRM.jpg */; };
+		829430821B7CA98D00A249D1 /* surface_pipe2_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430171B7CA95A00A249D1 /* surface_pipe2_SPEC.jpg */; };
+		829430831B7CA98D00A249D1 /* surface_texture.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430181B7CA95A00A249D1 /* surface_texture.jpg */; };
+		829430841B7CA98D00A249D1 /* surface_texture_NRM.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 829430191B7CA95A00A249D1 /* surface_texture_NRM.jpg */; };
+		829430851B7CA98D00A249D1 /* surface_texture_SPEC.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294301A1B7CA95A00A249D1 /* surface_texture_SPEC.jpg */; };
+		829430861B7CA98D00A249D1 /* uplink_jobs.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294301B1B7CA95A00A249D1 /* uplink_jobs.jpg */; };
+		829430871B7CA98D00A249D1 /* uplink_map.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8294301C1B7CA95A00A249D1 /* uplink_map.jpg */; };
 		82C5AAE61AB04F640005429A /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 942DBEE1183C211C00876830 /* OpenGL.framework */; };
 		82C5AAEB1AB14D7D0005429A /* test_graphics3d.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */; };
 		82C5AAEC1AB14D7D0005429A /* test_graphics3d.h in Headers */ = {isa = PBXBuildFile; fileRef = 82C5AAE91AB14D7D0005429A /* test_graphics3d.h */; };
@@ -165,9 +274,116 @@
 		825425831B6EEEB8006455B5 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
-			dstPath = scenes/jet;
+			dstPath = "scenes/batcave (OBJ)";
 			dstSubfolderSpec = 7;
 			files = (
+				8294301D1B7CA98D00A249D1 /* 1324-diffuse.jpg in CopyFiles */,
+				8294301E1B7CA98D00A249D1 /* 215-diffuse.jpg in CopyFiles */,
+				8294301F1B7CA98D00A249D1 /* 2932-normal.jpg in CopyFiles */,
+				829430201B7CA98D00A249D1 /* 4851-metallic.jpg in CopyFiles */,
+				829430211B7CA98D00A249D1 /* 4851-normal.jpg in CopyFiles */,
+				829430221B7CA98D00A249D1 /* 4851-specstrength.jpg in CopyFiles */,
+				829430231B7CA98D00A249D1 /* 5016.jpg in CopyFiles */,
+				829430241B7CA98D00A249D1 /* 74434portsignhn.gif in CopyFiles */,
+				829430251B7CA98D00A249D1 /* batcave.mtl in CopyFiles */,
+				829430261B7CA98D00A249D1 /* batcave.obj in CopyFiles */,
+				829430271B7CA98D00A249D1 /* batsign.jpg in CopyFiles */,
+				829430281B7CA98D00A249D1 /* bidge_base_normal_map.jpg in CopyFiles */,
+				829430291B7CA98D00A249D1 /* bidge_base_spec_map.jpg in CopyFiles */,
+				8294302A1B7CA98D00A249D1 /* bidge_base_texture.jpg in CopyFiles */,
+				8294302B1B7CA98D00A249D1 /* bidge_base_texture_SPEC.jpg in CopyFiles */,
+				8294302C1B7CA98D00A249D1 /* blue_sky_ac_-_developer_edition-21647-1.jpeg in CopyFiles */,
+				8294302D1B7CA98D00A249D1 /* bridge_base2_NRM.jpg in CopyFiles */,
+				8294302E1B7CA98D00A249D1 /* bridge_railing_diffuse_map.jpg in CopyFiles */,
+				8294302F1B7CA98D00A249D1 /* bridge_railing_diffuse_map_NRM.jpg in CopyFiles */,
+				829430301B7CA98D00A249D1 /* bridge_railing_diffuse_map_SPEC.jpg in CopyFiles */,
+				829430311B7CA98D00A249D1 /* bridge_side_NRM.jpg in CopyFiles */,
+				829430321B7CA98D00A249D1 /* bridge_side_spec.jpg in CopyFiles */,
+				829430331B7CA98D00A249D1 /* bridge_side_texture.jpg in CopyFiles */,
+				829430341B7CA98D00A249D1 /* bridge_stage_base_diffuse_map.JPG in CopyFiles */,
+				829430351B7CA98D00A249D1 /* bridge_stage_base_diffuse_map_NRM.jpg in CopyFiles */,
+				829430361B7CA98D00A249D1 /* bridge_stage_base_diffuse_map_SPEC.jpg in CopyFiles */,
+				829430371B7CA98D00A249D1 /* bs_hacker___zero_expansions-49350.jpg in CopyFiles */,
+				829430381B7CA98D00A249D1 /* cave_diffuse_map.jpg in CopyFiles */,
+				829430391B7CA98D00A249D1 /* cave_diffuse_map_NRM.jpg in CopyFiles */,
+				8294303A1B7CA98D00A249D1 /* cave_diffuse_map_SPEC.jpg in CopyFiles */,
+				8294303B1B7CA98D00A249D1 /* cement ice.jpg in CopyFiles */,
+				8294303C1B7CA98D00A249D1 /* chipset_normal.jpg in CopyFiles */,
+				8294303D1B7CA98D00A249D1 /* conatiner_diffuse.jpg in CopyFiles */,
+				8294303E1B7CA98D00A249D1 /* conatiner_NRM.jpg in CopyFiles */,
+				8294303F1B7CA98D00A249D1 /* Keyboard.jpg in CopyFiles */,
+				829430401B7CA98D00A249D1 /* Keyboard2.jpg in CopyFiles */,
+				829430411B7CA98D00A249D1 /* Keyboard2_NRM.jpg in CopyFiles */,
+				829430421B7CA98D00A249D1 /* Keyboard2_SPEC.jpg in CopyFiles */,
+				829430431B7CA98D00A249D1 /* keyboard3.jpg in CopyFiles */,
+				829430441B7CA98D00A249D1 /* keyboard3_NRM.jpg in CopyFiles */,
+				829430451B7CA98D00A249D1 /* keyboard3_SPEC.jpg in CopyFiles */,
+				829430461B7CA98D00A249D1 /* Keyboard4.jpg in CopyFiles */,
+				829430471B7CA98D00A249D1 /* Keyboard4_NRM.jpg in CopyFiles */,
+				829430481B7CA98D00A249D1 /* Keyboard4_SPEC.jpg in CopyFiles */,
+				829430491B7CA98D00A249D1 /* Keyboard5.jpg in CopyFiles */,
+				8294304A1B7CA98D00A249D1 /* Keyboard5_NRM.jpg in CopyFiles */,
+				8294304B1B7CA98D00A249D1 /* Keyboard5_SPEC.jpg in CopyFiles */,
+				8294304C1B7CA98D00A249D1 /* Keyboard_NRM.jpg in CopyFiles */,
+				8294304D1B7CA98D00A249D1 /* Keyboard_SPEC.jpg in CopyFiles */,
+				8294304E1B7CA98D00A249D1 /* lower_stage_map.JPG in CopyFiles */,
+				8294304F1B7CA98D00A249D1 /* lower_stage_map_NRM.jpg in CopyFiles */,
+				829430501B7CA98D00A249D1 /* lower_stage_map_SPEC.jpg in CopyFiles */,
+				829430511B7CA98D00A249D1 /* Map__101_Raytrace.tga in CopyFiles */,
+				829430521B7CA98D00A249D1 /* Map__102_Raytrace.tga in CopyFiles */,
+				829430531B7CA98D00A249D1 /* Map__103_Raytrace.tga in CopyFiles */,
+				829430541B7CA98D00A249D1 /* Map__104_Raytrace.tga in CopyFiles */,
+				829430551B7CA98D00A249D1 /* Map__105_Raytrace.tga in CopyFiles */,
+				829430561B7CA98D00A249D1 /* Map__106_Raytrace.tga in CopyFiles */,
+				829430571B7CA98D00A249D1 /* Map__107_Raytrace.tga in CopyFiles */,
+				829430581B7CA98D00A249D1 /* Map__108_Raytrace.tga in CopyFiles */,
+				829430591B7CA98D00A249D1 /* Map__109_Raytrace.tga in CopyFiles */,
+				8294305A1B7CA98D00A249D1 /* Map__110_Raytrace.tga in CopyFiles */,
+				8294305B1B7CA98D00A249D1 /* Map__116_Raytrace.tga in CopyFiles */,
+				8294305C1B7CA98D00A249D1 /* Map__177_Raytrace.tga in CopyFiles */,
+				8294305D1B7CA98D00A249D1 /* Map__54_Raytrace.tga in CopyFiles */,
+				8294305E1B7CA98D00A249D1 /* Map__74_Raytrace.tga in CopyFiles */,
+				8294305F1B7CA98D00A249D1 /* Map__77_Raytrace.tga in CopyFiles */,
+				829430601B7CA98D00A249D1 /* Map__82_Raytrace.tga in CopyFiles */,
+				829430611B7CA98D00A249D1 /* Map__84_Raytrace.tga in CopyFiles */,
+				829430621B7CA98D00A249D1 /* Map__85_Raytrace.tga in CopyFiles */,
+				829430631B7CA98D00A249D1 /* Map__87_Raytrace.tga in CopyFiles */,
+				829430641B7CA98D00A249D1 /* Map__89_Raytrace.tga in CopyFiles */,
+				829430651B7CA98D00A249D1 /* Map__90_Raytrace.tga in CopyFiles */,
+				829430661B7CA98D00A249D1 /* Map__91_Raytrace.tga in CopyFiles */,
+				829430671B7CA98D00A249D1 /* Map__92_Raytrace.tga in CopyFiles */,
+				829430681B7CA98D00A249D1 /* Map__94_Raytrace.tga in CopyFiles */,
+				829430691B7CA98D00A249D1 /* Map__95_Raytrace.tga in CopyFiles */,
+				8294306A1B7CA98D00A249D1 /* Map__96_Raytrace.tga in CopyFiles */,
+				8294306B1B7CA98D00A249D1 /* Map__97_Raytrace.tga in CopyFiles */,
+				8294306C1B7CA98D00A249D1 /* Monitor1.jpg in CopyFiles */,
+				8294306D1B7CA98D00A249D1 /* monitor_cabinet_map.jpg in CopyFiles */,
+				8294306E1B7CA98D00A249D1 /* monitor_cabinet_normal_map.jpg in CopyFiles */,
+				8294306F1B7CA98D00A249D1 /* monitor_cabinet_spec_map.jpg in CopyFiles */,
+				829430701B7CA98D00A249D1 /* Screen3.jpg in CopyFiles */,
+				829430711B7CA98D00A249D1 /* shoker_diffusel_map.jpg in CopyFiles */,
+				829430721B7CA98D00A249D1 /* shoker_normal_map.jpg in CopyFiles */,
+				829430731B7CA98D00A249D1 /* shoker_pipe2 .jpg in CopyFiles */,
+				829430741B7CA98D00A249D1 /* shoker_pipe2 _SPEC.jpg in CopyFiles */,
+				829430751B7CA98D00A249D1 /* shoker_spec_map.jpg in CopyFiles */,
+				829430761B7CA98D00A249D1 /* stage_cemented_diffuse.jpg in CopyFiles */,
+				829430771B7CA98D00A249D1 /* stage_cemented_NRM.jpg in CopyFiles */,
+				829430781B7CA98D00A249D1 /* stage_cemented_SPEC.jpg in CopyFiles */,
+				829430791B7CA98D00A249D1 /* stage_ring_diffuse_map.JPG in CopyFiles */,
+				8294307A1B7CA98D00A249D1 /* stage_ring_diffuse_map_NRM.jpg in CopyFiles */,
+				8294307B1B7CA98D00A249D1 /* stage_ring_diffuse_map_SPEC.jpg in CopyFiles */,
+				8294307C1B7CA98D00A249D1 /* stage_rod_texture.jpg in CopyFiles */,
+				8294307D1B7CA98D00A249D1 /* stage_rod_texture_NRM.jpg in CopyFiles */,
+				8294307E1B7CA98D00A249D1 /* stage_rod_texture_SPEC.jpg in CopyFiles */,
+				8294307F1B7CA98D00A249D1 /* SuperComputer__mIRC_scheme__by_Flarey.png in CopyFiles */,
+				829430801B7CA98D00A249D1 /* surface_pipe2.jpg in CopyFiles */,
+				829430811B7CA98D00A249D1 /* surface_pipe2_NRM.jpg in CopyFiles */,
+				829430821B7CA98D00A249D1 /* surface_pipe2_SPEC.jpg in CopyFiles */,
+				829430831B7CA98D00A249D1 /* surface_texture.jpg in CopyFiles */,
+				829430841B7CA98D00A249D1 /* surface_texture_NRM.jpg in CopyFiles */,
+				829430851B7CA98D00A249D1 /* surface_texture_SPEC.jpg in CopyFiles */,
+				829430861B7CA98D00A249D1 /* uplink_jobs.jpg in CopyFiles */,
+				829430871B7CA98D00A249D1 /* uplink_map.jpg in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,10 +463,119 @@
 		8254255A1B6B1240006455B5 /* swords.3ds */ = {isa = PBXFileReference; lastKnownFileType = file; path = swords.3ds; sourceTree = "<group>"; };
 		82552E831B497C6300DFC7BC /* SGSDL2Light.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Light.cpp; sourceTree = "<group>"; };
 		82552E841B497C6300DFC7BC /* SGSDL2Light.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Light.h; sourceTree = "<group>"; };
+		8261A17E1B74492D0001918A /* SGSDL2Material.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Material.cpp; sourceTree = "<group>"; };
+		8261A17F1B74492D0001918A /* SGSDL2Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Material.h; sourceTree = "<group>"; };
 		8276F05F1AD8DCDA00D51508 /* depth.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = depth.frag; path = ../../src/shaders/depth.frag; sourceTree = "<group>"; };
 		8276F0601AD8DCDA00D51508 /* depth.vert */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = depth.vert; path = ../../src/shaders/depth.vert; sourceTree = "<group>"; };
 		82823BCC1B4A2FA600738C14 /* SGSDL2Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGSDL2Shader.cpp; sourceTree = "<group>"; };
 		82823BCD1B4A2FA600738C14 /* SGSDL2Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGSDL2Shader.h; sourceTree = "<group>"; };
+		82942FB21B7CA95A00A249D1 /* 1324-diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "1324-diffuse.jpg"; sourceTree = "<group>"; };
+		82942FB31B7CA95A00A249D1 /* 215-diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "215-diffuse.jpg"; sourceTree = "<group>"; };
+		82942FB41B7CA95A00A249D1 /* 2932-normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "2932-normal.jpg"; sourceTree = "<group>"; };
+		82942FB51B7CA95A00A249D1 /* 4851-metallic.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "4851-metallic.jpg"; sourceTree = "<group>"; };
+		82942FB61B7CA95A00A249D1 /* 4851-normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "4851-normal.jpg"; sourceTree = "<group>"; };
+		82942FB71B7CA95A00A249D1 /* 4851-specstrength.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "4851-specstrength.jpg"; sourceTree = "<group>"; };
+		82942FB81B7CA95A00A249D1 /* 5016.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 5016.jpg; sourceTree = "<group>"; };
+		82942FB91B7CA95A00A249D1 /* 74434portsignhn.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = 74434portsignhn.gif; sourceTree = "<group>"; };
+		82942FBA1B7CA95A00A249D1 /* batcave.mtl */ = {isa = PBXFileReference; lastKnownFileType = text; path = batcave.mtl; sourceTree = "<group>"; };
+		82942FBB1B7CA95A00A249D1 /* batcave.obj */ = {isa = PBXFileReference; lastKnownFileType = text; path = batcave.obj; sourceTree = "<group>"; };
+		82942FBC1B7CA95A00A249D1 /* batsign.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = batsign.jpg; sourceTree = "<group>"; };
+		82942FBD1B7CA95A00A249D1 /* bidge_base_normal_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bidge_base_normal_map.jpg; sourceTree = "<group>"; };
+		82942FBE1B7CA95A00A249D1 /* bidge_base_spec_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bidge_base_spec_map.jpg; sourceTree = "<group>"; };
+		82942FBF1B7CA95A00A249D1 /* bidge_base_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bidge_base_texture.jpg; sourceTree = "<group>"; };
+		82942FC01B7CA95A00A249D1 /* bidge_base_texture_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bidge_base_texture_SPEC.jpg; sourceTree = "<group>"; };
+		82942FC11B7CA95A00A249D1 /* blue_sky_ac_-_developer_edition-21647-1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "blue_sky_ac_-_developer_edition-21647-1.jpeg"; sourceTree = "<group>"; };
+		82942FC21B7CA95A00A249D1 /* bridge_base2_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_base2_NRM.jpg; sourceTree = "<group>"; };
+		82942FC31B7CA95A00A249D1 /* bridge_railing_diffuse_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_railing_diffuse_map.jpg; sourceTree = "<group>"; };
+		82942FC41B7CA95A00A249D1 /* bridge_railing_diffuse_map_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_railing_diffuse_map_NRM.jpg; sourceTree = "<group>"; };
+		82942FC51B7CA95A00A249D1 /* bridge_railing_diffuse_map_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_railing_diffuse_map_SPEC.jpg; sourceTree = "<group>"; };
+		82942FC61B7CA95A00A249D1 /* bridge_side_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_side_NRM.jpg; sourceTree = "<group>"; };
+		82942FC71B7CA95A00A249D1 /* bridge_side_spec.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_side_spec.jpg; sourceTree = "<group>"; };
+		82942FC81B7CA95A00A249D1 /* bridge_side_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_side_texture.jpg; sourceTree = "<group>"; };
+		82942FC91B7CA95A00A249D1 /* bridge_stage_base_diffuse_map.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_stage_base_diffuse_map.JPG; sourceTree = "<group>"; };
+		82942FCA1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_stage_base_diffuse_map_NRM.jpg; sourceTree = "<group>"; };
+		82942FCB1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = bridge_stage_base_diffuse_map_SPEC.jpg; sourceTree = "<group>"; };
+		82942FCC1B7CA95A00A249D1 /* bs_hacker___zero_expansions-49350.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "bs_hacker___zero_expansions-49350.jpg"; sourceTree = "<group>"; };
+		82942FCD1B7CA95A00A249D1 /* cave_diffuse_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cave_diffuse_map.jpg; sourceTree = "<group>"; };
+		82942FCE1B7CA95A00A249D1 /* cave_diffuse_map_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cave_diffuse_map_NRM.jpg; sourceTree = "<group>"; };
+		82942FCF1B7CA95A00A249D1 /* cave_diffuse_map_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cave_diffuse_map_SPEC.jpg; sourceTree = "<group>"; };
+		82942FD01B7CA95A00A249D1 /* cement ice.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "cement ice.jpg"; sourceTree = "<group>"; };
+		82942FD11B7CA95A00A249D1 /* chipset_normal.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = chipset_normal.jpg; sourceTree = "<group>"; };
+		82942FD21B7CA95A00A249D1 /* conatiner_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = conatiner_diffuse.jpg; sourceTree = "<group>"; };
+		82942FD31B7CA95A00A249D1 /* conatiner_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = conatiner_NRM.jpg; sourceTree = "<group>"; };
+		82942FD41B7CA95A00A249D1 /* Keyboard.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard.jpg; sourceTree = "<group>"; };
+		82942FD51B7CA95A00A249D1 /* Keyboard2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard2.jpg; sourceTree = "<group>"; };
+		82942FD61B7CA95A00A249D1 /* Keyboard2_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard2_NRM.jpg; sourceTree = "<group>"; };
+		82942FD71B7CA95A00A249D1 /* Keyboard2_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard2_SPEC.jpg; sourceTree = "<group>"; };
+		82942FD81B7CA95A00A249D1 /* keyboard3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = keyboard3.jpg; sourceTree = "<group>"; };
+		82942FD91B7CA95A00A249D1 /* keyboard3_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = keyboard3_NRM.jpg; sourceTree = "<group>"; };
+		82942FDA1B7CA95A00A249D1 /* keyboard3_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = keyboard3_SPEC.jpg; sourceTree = "<group>"; };
+		82942FDB1B7CA95A00A249D1 /* Keyboard4.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard4.jpg; sourceTree = "<group>"; };
+		82942FDC1B7CA95A00A249D1 /* Keyboard4_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard4_NRM.jpg; sourceTree = "<group>"; };
+		82942FDD1B7CA95A00A249D1 /* Keyboard4_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard4_SPEC.jpg; sourceTree = "<group>"; };
+		82942FDE1B7CA95A00A249D1 /* Keyboard5.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard5.jpg; sourceTree = "<group>"; };
+		82942FDF1B7CA95A00A249D1 /* Keyboard5_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard5_NRM.jpg; sourceTree = "<group>"; };
+		82942FE01B7CA95A00A249D1 /* Keyboard5_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard5_SPEC.jpg; sourceTree = "<group>"; };
+		82942FE11B7CA95A00A249D1 /* Keyboard_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard_NRM.jpg; sourceTree = "<group>"; };
+		82942FE21B7CA95A00A249D1 /* Keyboard_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Keyboard_SPEC.jpg; sourceTree = "<group>"; };
+		82942FE31B7CA95A00A249D1 /* lower_stage_map.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lower_stage_map.JPG; sourceTree = "<group>"; };
+		82942FE41B7CA95A00A249D1 /* lower_stage_map_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lower_stage_map_NRM.jpg; sourceTree = "<group>"; };
+		82942FE51B7CA95A00A249D1 /* lower_stage_map_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = lower_stage_map_SPEC.jpg; sourceTree = "<group>"; };
+		82942FE61B7CA95A00A249D1 /* Map__101_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__101_Raytrace.tga; sourceTree = "<group>"; };
+		82942FE71B7CA95A00A249D1 /* Map__102_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__102_Raytrace.tga; sourceTree = "<group>"; };
+		82942FE81B7CA95A00A249D1 /* Map__103_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__103_Raytrace.tga; sourceTree = "<group>"; };
+		82942FE91B7CA95A00A249D1 /* Map__104_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__104_Raytrace.tga; sourceTree = "<group>"; };
+		82942FEA1B7CA95A00A249D1 /* Map__105_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__105_Raytrace.tga; sourceTree = "<group>"; };
+		82942FEB1B7CA95A00A249D1 /* Map__106_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__106_Raytrace.tga; sourceTree = "<group>"; };
+		82942FEC1B7CA95A00A249D1 /* Map__107_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__107_Raytrace.tga; sourceTree = "<group>"; };
+		82942FED1B7CA95A00A249D1 /* Map__108_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__108_Raytrace.tga; sourceTree = "<group>"; };
+		82942FEE1B7CA95A00A249D1 /* Map__109_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__109_Raytrace.tga; sourceTree = "<group>"; };
+		82942FEF1B7CA95A00A249D1 /* Map__110_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__110_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF01B7CA95A00A249D1 /* Map__116_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__116_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF11B7CA95A00A249D1 /* Map__177_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__177_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF21B7CA95A00A249D1 /* Map__54_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__54_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF31B7CA95A00A249D1 /* Map__74_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__74_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF41B7CA95A00A249D1 /* Map__77_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__77_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF51B7CA95A00A249D1 /* Map__82_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__82_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF61B7CA95A00A249D1 /* Map__84_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__84_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF71B7CA95A00A249D1 /* Map__85_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__85_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF81B7CA95A00A249D1 /* Map__87_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__87_Raytrace.tga; sourceTree = "<group>"; };
+		82942FF91B7CA95A00A249D1 /* Map__89_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__89_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFA1B7CA95A00A249D1 /* Map__90_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__90_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFB1B7CA95A00A249D1 /* Map__91_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__91_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFC1B7CA95A00A249D1 /* Map__92_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__92_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFD1B7CA95A00A249D1 /* Map__94_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__94_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFE1B7CA95A00A249D1 /* Map__95_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__95_Raytrace.tga; sourceTree = "<group>"; };
+		82942FFF1B7CA95A00A249D1 /* Map__96_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__96_Raytrace.tga; sourceTree = "<group>"; };
+		829430001B7CA95A00A249D1 /* Map__97_Raytrace.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Map__97_Raytrace.tga; sourceTree = "<group>"; };
+		829430011B7CA95A00A249D1 /* Monitor1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Monitor1.jpg; sourceTree = "<group>"; };
+		829430021B7CA95A00A249D1 /* monitor_cabinet_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = monitor_cabinet_map.jpg; sourceTree = "<group>"; };
+		829430031B7CA95A00A249D1 /* monitor_cabinet_normal_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = monitor_cabinet_normal_map.jpg; sourceTree = "<group>"; };
+		829430041B7CA95A00A249D1 /* monitor_cabinet_spec_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = monitor_cabinet_spec_map.jpg; sourceTree = "<group>"; };
+		829430051B7CA95A00A249D1 /* Screen3.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Screen3.jpg; sourceTree = "<group>"; };
+		829430061B7CA95A00A249D1 /* shoker_diffusel_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = shoker_diffusel_map.jpg; sourceTree = "<group>"; };
+		829430071B7CA95A00A249D1 /* shoker_normal_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = shoker_normal_map.jpg; sourceTree = "<group>"; };
+		829430081B7CA95A00A249D1 /* shoker_pipe2 .jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "shoker_pipe2 .jpg"; sourceTree = "<group>"; };
+		829430091B7CA95A00A249D1 /* shoker_pipe2 _SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "shoker_pipe2 _SPEC.jpg"; sourceTree = "<group>"; };
+		8294300A1B7CA95A00A249D1 /* shoker_spec_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = shoker_spec_map.jpg; sourceTree = "<group>"; };
+		8294300B1B7CA95A00A249D1 /* stage_cemented_diffuse.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_cemented_diffuse.jpg; sourceTree = "<group>"; };
+		8294300C1B7CA95A00A249D1 /* stage_cemented_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_cemented_NRM.jpg; sourceTree = "<group>"; };
+		8294300D1B7CA95A00A249D1 /* stage_cemented_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_cemented_SPEC.jpg; sourceTree = "<group>"; };
+		8294300E1B7CA95A00A249D1 /* stage_ring_diffuse_map.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_ring_diffuse_map.JPG; sourceTree = "<group>"; };
+		8294300F1B7CA95A00A249D1 /* stage_ring_diffuse_map_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_ring_diffuse_map_NRM.jpg; sourceTree = "<group>"; };
+		829430101B7CA95A00A249D1 /* stage_ring_diffuse_map_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_ring_diffuse_map_SPEC.jpg; sourceTree = "<group>"; };
+		829430111B7CA95A00A249D1 /* stage_rod_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_rod_texture.jpg; sourceTree = "<group>"; };
+		829430121B7CA95A00A249D1 /* stage_rod_texture_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_rod_texture_NRM.jpg; sourceTree = "<group>"; };
+		829430131B7CA95A00A249D1 /* stage_rod_texture_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = stage_rod_texture_SPEC.jpg; sourceTree = "<group>"; };
+		829430141B7CA95A00A249D1 /* SuperComputer__mIRC_scheme__by_Flarey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SuperComputer__mIRC_scheme__by_Flarey.png; sourceTree = "<group>"; };
+		829430151B7CA95A00A249D1 /* surface_pipe2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_pipe2.jpg; sourceTree = "<group>"; };
+		829430161B7CA95A00A249D1 /* surface_pipe2_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_pipe2_NRM.jpg; sourceTree = "<group>"; };
+		829430171B7CA95A00A249D1 /* surface_pipe2_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_pipe2_SPEC.jpg; sourceTree = "<group>"; };
+		829430181B7CA95A00A249D1 /* surface_texture.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_texture.jpg; sourceTree = "<group>"; };
+		829430191B7CA95A00A249D1 /* surface_texture_NRM.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_texture_NRM.jpg; sourceTree = "<group>"; };
+		8294301A1B7CA95A00A249D1 /* surface_texture_SPEC.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = surface_texture_SPEC.jpg; sourceTree = "<group>"; };
+		8294301B1B7CA95A00A249D1 /* uplink_jobs.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = uplink_jobs.jpg; sourceTree = "<group>"; };
+		8294301C1B7CA95A00A249D1 /* uplink_map.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = uplink_map.jpg; sourceTree = "<group>"; };
 		82C5AAE81AB14D7D0005429A /* test_graphics3d.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_graphics3d.cpp; path = ../src/test_graphics3d.cpp; sourceTree = "<group>"; };
 		82C5AAE91AB14D7D0005429A /* test_graphics3d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_graphics3d.h; path = ../src/test_graphics3d.h; sourceTree = "<group>"; };
 		82C5AAF11AB2865C0005429A /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -391,6 +716,8 @@
 				82552E841B497C6300DFC7BC /* SGSDL2Light.h */,
 				8254253D1B69BF48006455B5 /* SGSDL2Texture.cpp */,
 				8254253E1B69BF48006455B5 /* SGSDL2Texture.h */,
+				8261A17E1B74492D0001918A /* SGSDL2Material.cpp */,
+				8261A17F1B74492D0001918A /* SGSDL2Material.h */,
 				8228EADF1B410AA400CD02E7 /* SGSDL2Scene.cpp */,
 				8228EAE01B410AA400CD02E7 /* SGSDL2Scene.h */,
 				82D156D41B5782D20002F9C0 /* SGSDL2Renderer.cpp */,
@@ -424,6 +751,7 @@
 		825425561B6A7830006455B5 /* scenes */ = {
 			isa = PBXGroup;
 			children = (
+				82942FB11B7CA95A00A249D1 /* batcave (OBJ) */,
 				825425571B6B1240006455B5 /* swords */,
 			);
 			path = scenes;
@@ -437,6 +765,120 @@
 				8254255A1B6B1240006455B5 /* swords.3ds */,
 			);
 			path = swords;
+			sourceTree = "<group>";
+		};
+		82942FB11B7CA95A00A249D1 /* batcave (OBJ) */ = {
+			isa = PBXGroup;
+			children = (
+				82942FB21B7CA95A00A249D1 /* 1324-diffuse.jpg */,
+				82942FB31B7CA95A00A249D1 /* 215-diffuse.jpg */,
+				82942FB41B7CA95A00A249D1 /* 2932-normal.jpg */,
+				82942FB51B7CA95A00A249D1 /* 4851-metallic.jpg */,
+				82942FB61B7CA95A00A249D1 /* 4851-normal.jpg */,
+				82942FB71B7CA95A00A249D1 /* 4851-specstrength.jpg */,
+				82942FB81B7CA95A00A249D1 /* 5016.jpg */,
+				82942FB91B7CA95A00A249D1 /* 74434portsignhn.gif */,
+				82942FBA1B7CA95A00A249D1 /* batcave.mtl */,
+				82942FBB1B7CA95A00A249D1 /* batcave.obj */,
+				82942FBC1B7CA95A00A249D1 /* batsign.jpg */,
+				82942FBD1B7CA95A00A249D1 /* bidge_base_normal_map.jpg */,
+				82942FBE1B7CA95A00A249D1 /* bidge_base_spec_map.jpg */,
+				82942FBF1B7CA95A00A249D1 /* bidge_base_texture.jpg */,
+				82942FC01B7CA95A00A249D1 /* bidge_base_texture_SPEC.jpg */,
+				82942FC11B7CA95A00A249D1 /* blue_sky_ac_-_developer_edition-21647-1.jpeg */,
+				82942FC21B7CA95A00A249D1 /* bridge_base2_NRM.jpg */,
+				82942FC31B7CA95A00A249D1 /* bridge_railing_diffuse_map.jpg */,
+				82942FC41B7CA95A00A249D1 /* bridge_railing_diffuse_map_NRM.jpg */,
+				82942FC51B7CA95A00A249D1 /* bridge_railing_diffuse_map_SPEC.jpg */,
+				82942FC61B7CA95A00A249D1 /* bridge_side_NRM.jpg */,
+				82942FC71B7CA95A00A249D1 /* bridge_side_spec.jpg */,
+				82942FC81B7CA95A00A249D1 /* bridge_side_texture.jpg */,
+				82942FC91B7CA95A00A249D1 /* bridge_stage_base_diffuse_map.JPG */,
+				82942FCA1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_NRM.jpg */,
+				82942FCB1B7CA95A00A249D1 /* bridge_stage_base_diffuse_map_SPEC.jpg */,
+				82942FCC1B7CA95A00A249D1 /* bs_hacker___zero_expansions-49350.jpg */,
+				82942FCD1B7CA95A00A249D1 /* cave_diffuse_map.jpg */,
+				82942FCE1B7CA95A00A249D1 /* cave_diffuse_map_NRM.jpg */,
+				82942FCF1B7CA95A00A249D1 /* cave_diffuse_map_SPEC.jpg */,
+				82942FD01B7CA95A00A249D1 /* cement ice.jpg */,
+				82942FD11B7CA95A00A249D1 /* chipset_normal.jpg */,
+				82942FD21B7CA95A00A249D1 /* conatiner_diffuse.jpg */,
+				82942FD31B7CA95A00A249D1 /* conatiner_NRM.jpg */,
+				82942FD41B7CA95A00A249D1 /* Keyboard.jpg */,
+				82942FD51B7CA95A00A249D1 /* Keyboard2.jpg */,
+				82942FD61B7CA95A00A249D1 /* Keyboard2_NRM.jpg */,
+				82942FD71B7CA95A00A249D1 /* Keyboard2_SPEC.jpg */,
+				82942FD81B7CA95A00A249D1 /* keyboard3.jpg */,
+				82942FD91B7CA95A00A249D1 /* keyboard3_NRM.jpg */,
+				82942FDA1B7CA95A00A249D1 /* keyboard3_SPEC.jpg */,
+				82942FDB1B7CA95A00A249D1 /* Keyboard4.jpg */,
+				82942FDC1B7CA95A00A249D1 /* Keyboard4_NRM.jpg */,
+				82942FDD1B7CA95A00A249D1 /* Keyboard4_SPEC.jpg */,
+				82942FDE1B7CA95A00A249D1 /* Keyboard5.jpg */,
+				82942FDF1B7CA95A00A249D1 /* Keyboard5_NRM.jpg */,
+				82942FE01B7CA95A00A249D1 /* Keyboard5_SPEC.jpg */,
+				82942FE11B7CA95A00A249D1 /* Keyboard_NRM.jpg */,
+				82942FE21B7CA95A00A249D1 /* Keyboard_SPEC.jpg */,
+				82942FE31B7CA95A00A249D1 /* lower_stage_map.JPG */,
+				82942FE41B7CA95A00A249D1 /* lower_stage_map_NRM.jpg */,
+				82942FE51B7CA95A00A249D1 /* lower_stage_map_SPEC.jpg */,
+				82942FE61B7CA95A00A249D1 /* Map__101_Raytrace.tga */,
+				82942FE71B7CA95A00A249D1 /* Map__102_Raytrace.tga */,
+				82942FE81B7CA95A00A249D1 /* Map__103_Raytrace.tga */,
+				82942FE91B7CA95A00A249D1 /* Map__104_Raytrace.tga */,
+				82942FEA1B7CA95A00A249D1 /* Map__105_Raytrace.tga */,
+				82942FEB1B7CA95A00A249D1 /* Map__106_Raytrace.tga */,
+				82942FEC1B7CA95A00A249D1 /* Map__107_Raytrace.tga */,
+				82942FED1B7CA95A00A249D1 /* Map__108_Raytrace.tga */,
+				82942FEE1B7CA95A00A249D1 /* Map__109_Raytrace.tga */,
+				82942FEF1B7CA95A00A249D1 /* Map__110_Raytrace.tga */,
+				82942FF01B7CA95A00A249D1 /* Map__116_Raytrace.tga */,
+				82942FF11B7CA95A00A249D1 /* Map__177_Raytrace.tga */,
+				82942FF21B7CA95A00A249D1 /* Map__54_Raytrace.tga */,
+				82942FF31B7CA95A00A249D1 /* Map__74_Raytrace.tga */,
+				82942FF41B7CA95A00A249D1 /* Map__77_Raytrace.tga */,
+				82942FF51B7CA95A00A249D1 /* Map__82_Raytrace.tga */,
+				82942FF61B7CA95A00A249D1 /* Map__84_Raytrace.tga */,
+				82942FF71B7CA95A00A249D1 /* Map__85_Raytrace.tga */,
+				82942FF81B7CA95A00A249D1 /* Map__87_Raytrace.tga */,
+				82942FF91B7CA95A00A249D1 /* Map__89_Raytrace.tga */,
+				82942FFA1B7CA95A00A249D1 /* Map__90_Raytrace.tga */,
+				82942FFB1B7CA95A00A249D1 /* Map__91_Raytrace.tga */,
+				82942FFC1B7CA95A00A249D1 /* Map__92_Raytrace.tga */,
+				82942FFD1B7CA95A00A249D1 /* Map__94_Raytrace.tga */,
+				82942FFE1B7CA95A00A249D1 /* Map__95_Raytrace.tga */,
+				82942FFF1B7CA95A00A249D1 /* Map__96_Raytrace.tga */,
+				829430001B7CA95A00A249D1 /* Map__97_Raytrace.tga */,
+				829430011B7CA95A00A249D1 /* Monitor1.jpg */,
+				829430021B7CA95A00A249D1 /* monitor_cabinet_map.jpg */,
+				829430031B7CA95A00A249D1 /* monitor_cabinet_normal_map.jpg */,
+				829430041B7CA95A00A249D1 /* monitor_cabinet_spec_map.jpg */,
+				829430051B7CA95A00A249D1 /* Screen3.jpg */,
+				829430061B7CA95A00A249D1 /* shoker_diffusel_map.jpg */,
+				829430071B7CA95A00A249D1 /* shoker_normal_map.jpg */,
+				829430081B7CA95A00A249D1 /* shoker_pipe2 .jpg */,
+				829430091B7CA95A00A249D1 /* shoker_pipe2 _SPEC.jpg */,
+				8294300A1B7CA95A00A249D1 /* shoker_spec_map.jpg */,
+				8294300B1B7CA95A00A249D1 /* stage_cemented_diffuse.jpg */,
+				8294300C1B7CA95A00A249D1 /* stage_cemented_NRM.jpg */,
+				8294300D1B7CA95A00A249D1 /* stage_cemented_SPEC.jpg */,
+				8294300E1B7CA95A00A249D1 /* stage_ring_diffuse_map.JPG */,
+				8294300F1B7CA95A00A249D1 /* stage_ring_diffuse_map_NRM.jpg */,
+				829430101B7CA95A00A249D1 /* stage_ring_diffuse_map_SPEC.jpg */,
+				829430111B7CA95A00A249D1 /* stage_rod_texture.jpg */,
+				829430121B7CA95A00A249D1 /* stage_rod_texture_NRM.jpg */,
+				829430131B7CA95A00A249D1 /* stage_rod_texture_SPEC.jpg */,
+				829430141B7CA95A00A249D1 /* SuperComputer__mIRC_scheme__by_Flarey.png */,
+				829430151B7CA95A00A249D1 /* surface_pipe2.jpg */,
+				829430161B7CA95A00A249D1 /* surface_pipe2_NRM.jpg */,
+				829430171B7CA95A00A249D1 /* surface_pipe2_SPEC.jpg */,
+				829430181B7CA95A00A249D1 /* surface_texture.jpg */,
+				829430191B7CA95A00A249D1 /* surface_texture_NRM.jpg */,
+				8294301A1B7CA95A00A249D1 /* surface_texture_SPEC.jpg */,
+				8294301B1B7CA95A00A249D1 /* uplink_jobs.jpg */,
+				8294301C1B7CA95A00A249D1 /* uplink_map.jpg */,
+			);
+			path = "batcave (OBJ)";
 			sourceTree = "<group>";
 		};
 		82C5AAEE1AB278450005429A /* shaders */ = {
@@ -615,6 +1057,7 @@
 				8228EABE1B400F9B00CD02E7 /* SGSDL2Core.h in Headers */,
 				82D156D81B5782D20002F9C0 /* SGSDL2Renderer.h in Headers */,
 				825425411B69BF48006455B5 /* SGSDL2Texture.h in Headers */,
+				8261A1811B74492D0001918A /* SGSDL2Material.h in Headers */,
 				9499C69F184C5F2B00B71B41 /* test_audio.h in Headers */,
 				8228EACE1B400F9B00CD02E7 /* SGSDL2Text.h in Headers */,
 				8228EAFC1B48164000CD02E7 /* SGSDL2Utilities.h in Headers */,
@@ -712,6 +1155,7 @@
 				8228EABF1B400F9B00CD02E7 /* SGSDL2Graphics.cpp in Sources */,
 				8254253F1B69BF48006455B5 /* SGSDL2Texture.cpp in Sources */,
 				82D156D61B5782D20002F9C0 /* SGSDL2Renderer.cpp in Sources */,
+				8261A1801B74492D0001918A /* SGSDL2Material.cpp in Sources */,
 				82823BCE1B4A2FA600738C14 /* SGSDL2Shader.cpp in Sources */,
 				8228EACF1B400F9B00CD02E7 /* SGSDL2Utils.cpp in Sources */,
 			);
