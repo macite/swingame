@@ -17,6 +17,8 @@
 #include "SGSDL2Light.h"
 #include "SGSDL2Shader.h"
 #include "SGSDL2Renderer.h"
+#include "SGSDL2Texture.h"
+#include "SGSDL2Material.h"
 
 // Paths to the default shaders
 #define SHAD_SOURCE_VERT "shaders/light.vert"
@@ -147,6 +149,7 @@ void sgsdl2_render_scene(sgsdl2_scene *scene)
 	// Scene must have an active camera set.
 	if (scene->active_camera == nullptr)
 	{
+		// TODO find the first camera
 		sgsdl2_print_error(ERR_MISSING_CAMERA);
 		return;
 	}
@@ -180,5 +183,19 @@ void sgsdl2_iterate_node(sgsdl2_node *node, void (*func)(sgsdl2_node*))
 
 void sgsdl2_delete_scene(sgsdl2_scene *scene)
 {
+	// For safety, the items in the scene are popped from the array before they are deleted.
+	while (!scene->textures.empty())
+	{
+		sgsdl2_texture *tex = scene->textures.back();
+		scene->textures.pop_back();
+		sgsdl2_delete_texture(tex); // This deletes the pointer.
+	}
+	while (!scene->materials.empty())
+	{
+		sgsdl2_material *mat = scene->materials.back();
+		scene->materials.pop_back();
+		sgsdl2_delete_material(mat); // This deletes the pointer.
+	}
+	// TODO delete all nodes.
 	delete scene;
 }

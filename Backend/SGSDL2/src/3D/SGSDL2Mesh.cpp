@@ -26,6 +26,7 @@ sgsdl2_mesh *sgsdl2_create_mesh(sgsdl2_node *parent)
 	}
 	
 	sgsdl2_mesh *result = new sgsdl2_mesh();
+//	parent->root->meshes.push_back(result);
 	result->parent = parent;
 	parent->mesh = result;
 	glGenVertexArrays(1, &result->vao);
@@ -46,6 +47,12 @@ void sgsdl2_add_attribute(sgsdl2_mesh *mesh, SGuint index, SGuint count, SGint s
 	{
 		sgsdl2_print_error(ERR_IMPLICIT_DELETE_ATTRIB);
 		sgsdl2_delete_attribute_at(mesh, index);
+	}
+	
+	// Update the number of vertices if needed
+	if (index == MESH_ATTR_VERTICES)
+	{
+		mesh->vertices_count = count;
 	}
 	
 	sgsdl2_attribute attr = sgsdl2_attribute();
@@ -99,6 +106,12 @@ void sgsdl2_delete_attribute_at(sgsdl2_mesh *mesh, SGuint index)
 			
 			glDeleteBuffers(1, &attr.handle);
 			mesh->attributes.erase(mesh->attributes.begin() + (int) i);
+			
+			// Reset the number of vertices if needed
+			if (index == MESH_ATTR_VERTICES)
+			{
+				mesh->vertices_count = 0;
+			}
 		}
 	}
 }
@@ -135,19 +148,23 @@ void sgsdl2_attach_indices(sgsdl2_mesh *mesh, SGushort const *indices, SGuint co
 	// Delete the previous buffer if needed
 	if (mesh->indices_handle != 0)
 	{
-		glDeleteBuffers(1, &mesh->indices_handle);
-		mesh->indices_count = 0;
+		sgsdl2_delete_indices(mesh);
 	}
 	
 	glGenBuffers(1, &mesh->indices_handle);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_handle);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (GLsizeiptr) (sizeof(GLushort) * count), indices, GL_STATIC_DRAW);
 	mesh->indices_count = count;
-	// TODO check for error
 	sgsdl2_check_opengl_error("attach_indices: ");
 	
 	// Unbind buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+void sgsdl2_delete_indices(sgsdl2_mesh *mesh)
+{
+	glDeleteBuffers(1, &mesh->indices_handle);
+	mesh->indices_count = 0;
 }
 
 bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh)
@@ -180,5 +197,6 @@ void sgsdl2_delete_mesh(sgsdl2_mesh *mesh)
 	
 	// Delete the vao
 	glDeleteVertexArrays(1, &mesh->vao);
+	delete mesh;
 }
 

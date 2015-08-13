@@ -12,13 +12,15 @@
 #include "SGSDL2Types.h"
 
 // Creates an empty texture
-sgsdl2_texture* sgsdl2_create_texture();
+sgsdl2_texture* sgsdl2_create_texture(sgsdl2_scene *scene);
 
 // Creates an empty texture and automatically loads the given image into it
-sgsdl2_texture* sgsdl2_create_texture(const char *image_path);
+sgsdl2_texture* sgsdl2_create_texture(sgsdl2_scene *scene, const char *image_path);
+
+sgsdl2_texture* sgsdl2_find_or_create_texture(sgsdl2_scene *scene, const char *image_path);
 
 // Attaches an image to an existing texture
-void sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, const char * image_path);
+void sgsdl2_attach_texture_image(sgsdl2_texture * texture, const char * image_path);
 
 // Changes the wrapping parameters for a texture
 // The value of -1 means don't change that value
@@ -31,6 +33,10 @@ void sgsdl2_change_texture_filtering(sgsdl2_texture const * texture, SGint const
 
 // Generates texture mipmaps
 void sgsdl2_generate_texture_mipmaps(sgsdl2_texture const * texture);
+
+// Returns true if the struct refers to a valid ogl texture
+// Returns false if tex is nullptr
+bool sgsdl2_is_texture(sgsdl2_texture *tex);
 
 // Deletes the texture from opengl then deletes the pointer
 void sgsdl2_delete_texture(sgsdl2_texture *texture);

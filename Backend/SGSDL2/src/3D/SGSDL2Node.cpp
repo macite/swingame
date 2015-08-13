@@ -156,8 +156,8 @@ vec3 sgsdl2_get_global_location(sgsdl2_node *node)
 
 void sgsdl2_delete_node(sgsdl2_node *node)
 {
-#pragma unused(node)
-	// TODO
+	// TODO complete
+	delete node;
 }
 
 

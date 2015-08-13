@@ -14,6 +14,7 @@
 #include "SGSDL2Utilities.h"
 #include "SGSDL2Node.h"
 #include "SGSDL2Mesh.h"
+#include "SGSDL2Texture.h"
 
 
 void sgsdl2_rerender_shadow_maps(sgsdl2_scene *scene, sgsdl2_renderer *renderer)
@@ -24,8 +25,8 @@ void sgsdl2_rerender_shadow_maps(sgsdl2_scene *scene, sgsdl2_renderer *renderer)
 	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 	glDrawBuffer(GL_NONE); // No color buffer is drawn to.
 	glViewport(0, 0, SHAD_MAP_SIZE, SHAD_MAP_SIZE);
-	
-	for (unsigned long i = 0; i < scene->lights.size(); i++)
+
+	for (unsigned int i = 0; i < scene->lights.size(); i++)
 	{
 		sgsdl2_light *light = scene->lights[i];
 		sgsdl2_node *light_node = light->parent;
@@ -152,6 +153,7 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 	glUseProgram(shader);
 	glBindVertexArray(mesh->vao);
 	
+	// Default to using indices
 	if (mesh->indices_handle != 0)
 	{
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->indices_handle);
@@ -163,7 +165,7 @@ void sgsdl2_render_mesh(sgsdl2_mesh *mesh, sgsdl2_renderer *renderer)
 	else
 	{
 		// Render without indices
-		glDrawArrays(GL_TRIANGLES, 0, (int) mesh->indices_count);
+		glDrawArrays(GL_TRIANGLES, 0, (int) mesh->vertices_count);
 	}
 	
 	glBindVertexArray(0);
@@ -225,12 +227,12 @@ void sgsdl2_calculate_material_state(sgsdl2_material *mat, sgsdl2_renderer *rend
 {
 	sgsdl2_material_state result;
 	result.diffuse_color = sgsdl2_make_vec3_color(mat->diffuse_color);
-	result.diffuse_texture = (glIsTexture(mat->diffuse_texture)) ? mat->diffuse_texture : renderer->scene->white_texture;
+	result.diffuse_texture = (sgsdl2_is_texture(mat->diffuse_texture)) ? mat->diffuse_texture->handle : renderer->scene->white_texture;
 	result.specular_color = sgsdl2_make_vec3_color(mat->specular_color);
 	result.specular_exponent = mat->specular_exponent;
-	result.specular_texture = (glIsTexture(mat->specular_texture)) ? mat->specular_texture : renderer->scene->white_texture;
+	result.specular_texture = (sgsdl2_is_texture(mat->specular_texture)) ? mat->specular_texture->handle : renderer->scene->white_texture;
 	result.specular_intensity = mat->specular_intensity;
-	result.normal_map = (glIsTexture(mat->normal_map)) ? mat->normal_map : renderer->scene->white_texture;
+	result.normal_map = (sgsdl2_is_texture(mat->normal_map)) ? mat->normal_map->handle : renderer->scene->white_texture;
 	renderer->interface.material = result;
 }
 

@@ -15,6 +15,10 @@
 #include "sgInterfaces.h"
 #include "SGSDL2DriverTypes.h"
 
+#include <assimp/cimport.h>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 
 using namespace std;
 using namespace glm;
@@ -342,12 +346,44 @@ struct sgsdl2_attribute
 	// Note: when using custom locations some are reserved. Probs 1-10
 	SGuint location = 0;
 };
+	
+struct sgsdl2_material
+{
+	// NOTE: shaders are signed to allow for constants that represent scene level shaders to be used (ie SHAD_DEFAULT_FULL).
+	
+	// Default shader to use in the main render pass
+	__attribute__((deprecated))
+	SGint shader;
+	
+	// Shader to use for any depth render passes.
+	__attribute__((deprecated))
+	SGint depth_shader;
+	
+	sg_color diffuse_color;
+	sgsdl2_texture *diffuse_texture;
+	sg_color specular_color;
+	sgsdl2_texture *specular_texture;
+	float specular_exponent;
+	float specular_intensity;
+	sgsdl2_texture *normal_map;
+};
+
+struct sgsdl2_texture
+{
+	// Path to the texture file if it was loaded. Null if it was created from numerical data.
+	char *path;
+	
+	// Handle for the texture
+	SGuint handle = 0;
+};
 
 
 	
 	
 struct sgsdl2_scene
 {
+	sgsdl2_renderer renderer;
+	
 	// The window that this scene is rendering to
 	sg_drawing_surface *surface = nullptr;
 
@@ -356,11 +392,19 @@ struct sgsdl2_scene
 
 	// Pointer to the currently active camera
 	sgsdl2_camera *active_camera = nullptr;
-	
-//	sgsdl2_renderer renderer;
 
 	// Cached array of all lights in the scene
 	vector<sgsdl2_light*> lights;
+	
+	// List of all textures used in the scene
+	vector<sgsdl2_texture*> textures;
+	
+	// List of all materials used in the scene
+	vector<sgsdl2_material*> materials;
+	
+	// List of all meshes used in the scene
+	__attribute__((deprecated))
+	vector<sgsdl2_mesh*> meshes;
 
 	// Array of shadow maps used by lights in the scene
 //	sgsdl2_array_texture* shadow_map_array = nullptr;
@@ -479,6 +523,9 @@ struct sgsdl2_mesh
 
 	// Array of attribute buffers
 	vector<sgsdl2_attribute> attributes;
+	
+	// Number of vertices attached to this mesh. A value of 0 means there are no vertex buffer attached.
+	SGuint vertices_count = 0;
 
 	// Handle to the indices buffer
 	SGuint indices_handle = 0;
@@ -522,36 +569,30 @@ struct sgsdl2_camera
 	float top;
 	float bottom;
 };
-
-struct sgsdl2_material
-{
-	// NOTE: shaders are signed to allow for constants that represent scene level shaders to be used (ie SHAD_DEFAULT_FULL).
 	
-	// Default shader to use in the main render pass
-	__attribute__((deprecated))
-	SGint shader;
-
-	// Shader to use for any depth render passes.
-	__attribute__((deprecated))
-	SGint depth_shader;
-
-	sg_color diffuse_color;
-	SGuint diffuse_texture = 0;
-	sg_color specular_color;
-	SGuint specular_texture = 0;
-	float specular_exponent;
-	float specular_intensity;
-	SGuint normal_map = 0;
+	
+struct sgsdl2_import_details
+{
+	// The scene that everything is being imported into.
+	sgsdl2_scene *dest;
+	
+	// The AI source
+	const aiScene *source;
+	
+	// Path to the enclosing folder of the scene
+	char *root_path;
+	
+	// Maps imported texture indices to their actual sg object.
+	// This is so that other textures still map to the correct object if one cannot be loaded.
+//	sgsdl2_texture **texture_indices;
+	
+	// Maps imported texture indices to their actual sg object.
+	sgsdl2_material **material_indices;
+	
+	sgsdl2_mesh **mesh_indices;
 };
 
-struct sgsdl2_texture
-{
-	// Handle for the texture
-	SGuint handle = 0;
-	
-//	int width;
-//	int height;
-};
+
 
 	
 	

@@ -19,21 +19,35 @@
 #include "SGSDL2Utilities.h"
 
 
-sgsdl2_texture* sgsdl2_create_texture()
+sgsdl2_texture* sgsdl2_create_texture(sgsdl2_scene *scene)
 {
-	sgsdl2_texture* texture = new sgsdl2_texture;
+	sgsdl2_texture *texture = new sgsdl2_texture();
+	scene->textures.push_back(texture);
 	glGenTextures(1, &texture->handle);
 	return texture;
 }
 
-sgsdl2_texture* sgsdl2_create_texture(const char *image_path)
+sgsdl2_texture* sgsdl2_create_texture(sgsdl2_scene *scene, const char *image_path)
 {
-	sgsdl2_texture *tex = sgsdl2_create_texture();
+	sgsdl2_texture *tex = sgsdl2_create_texture(scene);
 	sgsdl2_attach_texture_image(tex, image_path);
 	return tex;
 }
 
-void sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, const char *image_path)
+sgsdl2_texture* sgsdl2_find_or_create_texture(sgsdl2_scene *scene, const char *image_path)
+{
+	// Check to see if the image has been loaded before
+	for (unsigned int i = 0; i < scene->textures.size(); i++)
+	{
+		if (strncmp(image_path, scene->textures[i]->path, strlen(image_path)) == 0)
+		{
+			return scene->textures[i];
+		}
+	}
+	return sgsdl2_create_texture(scene, image_path);
+}
+
+void sgsdl2_attach_texture_image(sgsdl2_texture * texture, const char *image_path)
 {
 	SDL_Surface *image = IMG_Load(image_path);
 	if (!image)
@@ -106,6 +120,11 @@ void sgsdl2_attach_texture_image(sgsdl2_texture const * const texture, const cha
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->w, image->h, 0, format, GL_UNSIGNED_BYTE, image->pixels);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	sgsdl2_check_opengl_error("texture_image: ");
+	
+	// Assign a path to the texture object
+	// TODO this should probably be moved into create_texture(scene, path)
+	texture->path = (char*) malloc(sizeof(char) * strlen(image_path));
+	memcpy(texture->path, image_path, sizeof(char) * strlen(image_path));
 
 	SDL_FreeSurface(image);
 }
@@ -148,8 +167,14 @@ void sgsdl2_generate_texture_mipmaps(sgsdl2_texture const * const texture)
 	sgsdl2_check_opengl_error("texture_image: ");
 }
 
+bool sgsdl2_is_texture(sgsdl2_texture *tex)
+{
+	return (tex && glIsTexture(tex->handle));
+}
+
 void sgsdl2_delete_texture(sgsdl2_texture *texture)
 {
 	glDeleteTextures(1, &texture->handle);
+	delete [] texture->path;
 	delete texture;
 }

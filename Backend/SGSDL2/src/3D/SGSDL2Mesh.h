@@ -38,6 +38,8 @@ void sgsdl2_attach_texcoords(sgsdl2_mesh *mesh, SGfloat const *coords, GLuint co
 // Indices are handled differently to other buffers and therefore can only be set through this function.
 void sgsdl2_attach_indices(sgsdl2_mesh *mesh, SGushort const *indices, SGuint count);
 
+void sgsdl2_delete_indices(sgsdl2_mesh *mesh);
+
 // Checks that the required buffers are non-zero
 // TODO probably shouldn't be used
 bool sgsdl2_can_mesh_be_rendered(sgsdl2_mesh const *mesh);
