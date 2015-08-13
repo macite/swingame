@@ -255,12 +255,12 @@ doLinuxPackage()
 {
     echo "  ... Copying SwinGame Library"
     cp -R -p "${LIB_DIR}/SwinGame.dll" "${OUT_DIR}/"
-    RESOURCE_DIR="${OUT_DIR}/Resources"
+    RESOURCE_DIR="${FULL_OUT_DIR}/Resources"
 }
 
 doWindowsPackage()
 {
-    RESOURCE_DIR=${OUT_PATH}/Resources
+    RESOURCE_DIR=${FULL_OUT_DIR}/Resources
     
     echo "  ... Copying libraries"
     cp -p -f "${LIB_DIR}"/*.dll "${OUT_DIR}"
