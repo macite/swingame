@@ -1,0 +1,519 @@
+# Blender MTL File: 'None'
+# Material Count: 44
+
+newmtl Material__2434
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd cave_diffuse_map.jpg
+map_Bump cave_diffuse_map_NRM.jpg
+map_Ka cave_diffuse_map.jpg
+
+newmtl Material__3525
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_cemented_diffuse.jpg
+map_Bump bridge_base2_NRM.jpg
+map_Ka stage_cemented_diffuse.jpg
+
+newmtl Standard_1
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.054000 0.054000 0.054000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd cement ice.jpg
+map_Bump stage_cemented_NRM.jpg
+map_Ka cement ice.jpg
+
+newmtl Standard_12
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd keyboard3.jpg
+map_Bump keyboard3_NRM.jpg
+map_Ka keyboard3.jpg
+
+newmtl Standard_18
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd bidge_base_texture.jpg
+map_Bump bidge_base_normal_map.jpg
+map_Ka bidge_base_texture.jpg
+refl Map__177_Raytrace.tga
+
+newmtl Standard_20
+Ns 21.568627
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.270000 0.270000 0.270000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd 215-diffuse.jpg
+map_Bump chipset_normal.jpg
+map_Ka 215-diffuse.jpg
+refl Map__101_Raytrace.tga
+
+newmtl Standard_82
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Keyboard5.jpg
+map_Bump Keyboard5_NRM.jpg
+map_Ka Keyboard5.jpg
+
+newmtl Standard_83
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Keyboard4.jpg
+map_Bump Keyboard4_NRM.jpg
+map_Ka Keyboard4.jpg
+
+newmtl Standard_91
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Keyboard.jpg
+map_Bump Keyboard_NRM.jpg
+map_Ka Keyboard.jpg
+
+newmtl bat_texture
+Ns 33.333333
+Ka 0.000000 0.000000 0.000000
+Kd 0.200784 0.235294 0.329412
+Ks 0.135000 0.135000 0.135000
+Ni 1.500000
+d 0.920000
+illum 2
+
+newmtl bridge_rod_texture
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.207000 0.207000 0.207000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd bridge_railing_diffuse_map.jpg
+map_Bump bridge_railing_diffuse_map_SPEC.jpg
+map_Ka bridge_railing_diffuse_map.jpg
+refl Map__96_Raytrace.tga
+
+newmtl bridge_rods
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_rod_texture.jpg
+map_Ka stage_rod_texture.jpg
+
+newmtl bridge_side
+Ns 33.333333
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.315000 0.315000 0.315000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd bridge_side_texture.jpg
+map_Bump bridge_side_NRM.jpg
+map_Ka bridge_side_texture.jpg
+refl Map__95_Raytrace.tga
+
+newmtl bridge_texture
+Ns 27.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.396000 0.396000 0.396000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd bridge_stage_base_diffuse_map.JPG
+map_Bump bridge_stage_base_diffuse_map_NRM.jpg
+map_Ka bridge_stage_base_diffuse_map.JPG
+refl Map__91_Raytrace.tga
+
+newmtl bridge_texture3
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.261000 0.261000 0.261000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_cemented_diffuse.jpg
+map_Bump bridge_base2_NRM.jpg
+map_Ka stage_cemented_diffuse.jpg
+refl Map__94_Raytrace.tga
+
+newmtl bridge_texture4
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd surface_pipe2.jpg
+map_Bump surface_pipe2_NRM.jpg
+map_Ka surface_pipe2.jpg
+refl Map__92_Raytrace.tga
+
+newmtl chipset_handel_steel
+Ns 19.607843
+Ka 0.000000 0.000000 0.000000
+Kd 0.178823 0.178823 0.178823
+Ks 0.387000 0.387000 0.387000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl container_glass
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.304314 0.304314 0.304314
+Ks 0.279000 0.279000 0.279000
+Ni 1.500000
+d 0.160000
+illum 2
+refl Map__116_Raytrace.tga
+
+newmtl monitor1_screen_texture
+Ns 27.450980
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.243000 0.243000 0.243000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Screen3.jpg
+map_Ka Screen3.jpg
+refl Map__103_Raytrace.tga
+
+newmtl monitor2_screen_texture
+Ns 19.607843
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.252000 0.252000 0.252000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd 74434portsignhn.gif
+map_Ka 74434portsignhn.gif
+refl Map__104_Raytrace.tga
+
+newmtl monitor3_screen_texture
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.252000 0.252000 0.252000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd uplink_jobs.jpg
+map_Ka uplink_jobs.jpg
+refl Map__105_Raytrace.tga
+
+newmtl monitor4_screen_texture
+Ns 33.333333
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.288000 0.288000 0.288000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd bs_hacker___zero_expansions-49350.jpg
+map_Ka bs_hacker___zero_expansions-49350.jpg
+refl Map__107_Raytrace.tga
+
+newmtl monitor5_screen_texture
+Ns 33.333333
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.252000 0.252000 0.252000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd Monitor1.jpg
+map_Ka Monitor1.jpg
+refl Map__106_Raytrace.tga
+
+newmtl monitor_texture
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.243000 0.243000 0.243000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd monitor_cabinet_map.jpg
+map_Bump monitor_cabinet_normal_map.jpg
+map_Ka monitor_cabinet_map.jpg
+refl Map__102_Raytrace.tga
+
+newmtl pipe_texture2
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl power_tube_texture1
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.225000 0.225000 0.225000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd 4851-metallic.jpg
+map_Bump 4851-normal.jpg
+map_Ka 4851-metallic.jpg
+refl Map__77_Raytrace.tga
+
+newmtl power_tubetexture2
+Ns 7.843137
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_rod_texture.jpg
+map_Ka stage_rod_texture.jpg
+refl Map__82_Raytrace.tga
+
+newmtl roof_pipe_texture
+Ns 21.568627
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.585000 0.585000 0.585000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_rod_texture.jpg
+map_Bump stage_rod_texture_NRM.jpg
+map_Ka stage_rod_texture.jpg
+refl Map__74_Raytrace.tga
+
+newmtl roof_rods_monitor_stand
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.225000 0.225000 0.225000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_rod_texture.jpg
+map_Ka stage_rod_texture.jpg
+refl Map__84_Raytrace.tga
+
+newmtl shoker_bottom_pipe
+Ns 29.411765
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.333000 0.333000 0.333000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd shoker_pipe2 .jpg
+map_Bump shoker_normal_map.jpg
+map_Ka shoker_pipe2 .jpg
+refl Map__97_Raytrace.tga
+
+newmtl shoker_texture
+Ns 52.941176
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.612000 0.612000 0.612000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd shoker_diffusel_map.jpg
+map_Bump shoker_normal_map.jpg
+map_Ka shoker_diffusel_map.jpg
+refl Map__54_Raytrace.tga
+
+newmtl stage_2
+Ns 23.529412
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.261000 0.261000 0.261000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd 5016.jpg
+map_Bump 5016-normal.jpg
+map_Ka 5016.jpg
+
+newmtl stage_light3_
+Ns 33.333333
+Ka 0.000000 0.000000 0.000000
+Kd 0.138039 0.326274 0.671373
+Ks 0.135000 0.135000 0.135000
+Ni 1.500000
+d 0.920000
+illum 2
+
+newmtl stage_lower_ring
+Ns 25.490196
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.333000 0.333000 0.333000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_ring_diffuse_map.JPG
+map_Bump stage_ring_diffuse_map_NRM.jpg
+map_Ka stage_ring_diffuse_map.JPG
+refl Map__89_Raytrace.tga
+
+newmtl stage_rod_texture
+Ns 15.686275
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.198000 0.198000 0.198000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd stage_rod_texture.jpg
+map_Bump stage_rod_texture_NRM.jpg
+map_Ka stage_rod_texture.jpg
+refl Map__85_Raytrace.tga
+
+newmtl stage_side_texture
+Ns 31.372549
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.333000 0.333000 0.333000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd lower_stage_map.JPG
+map_Bump lower_stage_map_NRM.jpg
+map_Ka lower_stage_map.JPG
+refl Map__90_Raytrace.tga
+
+newmtl surface_pipe_texture
+Ns 5.882353
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.135000 0.135000 0.135000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd surface_texture.jpg
+map_Bump surface_texture_NRM.jpg
+map_Ka surface_texture.jpg
+refl Map__87_Raytrace.tga
+
+newmtl upper_monitor1_screen_texture
+Ns 23.529412
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.261000 0.261000 0.261000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd SuperComputer__mIRC_scheme__by_Flarey.png
+map_Ka SuperComputer__mIRC_scheme__by_Flarey.png
+refl Map__108_Raytrace.tga
+
+newmtl upper_monitor2_screen_texture
+Ns 19.607843
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.225000 0.225000 0.225000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd uplink_map.jpg
+map_Ka uplink_map.jpg
+refl Map__109_Raytrace.tga
+
+newmtl upper_monitor3_screen_texture
+Ns 19.607843
+Ka 0.000000 0.000000 0.000000
+Kd 0.470400 0.470400 0.470400
+Ks 0.243000 0.243000 0.243000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd blue_sky_ac_-_developer_edition-21647-1.jpeg
+map_Ka blue_sky_ac_-_developer_edition-21647-1.jpeg
+refl Map__110_Raytrace.tga
+
+newmtl wire_057008136
+Ns 29.411765
+Ka 0.000000 0.000000 0.000000
+Kd 0.178823 0.025098 0.426666
+Ks 0.350000 0.350000 0.350000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wire_115115115
+Ns 29.411765
+Ka 0.000000 0.000000 0.000000
+Kd 0.360784 0.360784 0.360784
+Ks 0.350000 0.350000 0.350000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wire_135006006
+Ns 29.411765
+Ka 0.000000 0.000000 0.000000
+Kd 0.423530 0.018823 0.018823
+Ks 0.350000 0.350000 0.350000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl wire_234234234
+Ns 29.411765
+Ka 0.000000 0.000000 0.000000
+Kd 0.734118 0.734118 0.734118
+Ks 0.350000 0.350000 0.350000
+Ni 1.000000
+d 1.000000
+illum 2
