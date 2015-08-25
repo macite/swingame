@@ -265,6 +265,8 @@ sgsdl2_texture *sgsdl2_convert_texture(const sgsdl2_import_details det, const ch
 	// Convert the image path to relative to the scene.
 	unsigned long full_path_length = strlen(rel_path) + strlen(det.root_path) + 1;
 	char *full_path = (char*) malloc(sizeof(char) * full_path_length);
+	// Clear the string
+	for (int i = 0; i < full_path_length; i++) full_path[i] = '\0';
 	strlcat(full_path, det.root_path, 512);
 	strlcat(full_path, rel_path, 512);
 	full_path[full_path_length - 1] = '\0';
@@ -272,6 +274,7 @@ sgsdl2_texture *sgsdl2_convert_texture(const sgsdl2_import_details det, const ch
 	// Load relatively
 	sgsdl2_texture *tex = sgsdl2_create_texture(det.dest, full_path);
 	free(full_path);
+	
 	if (!tex)
 	{
 		sgsdl2_print_error(ERR_IMAGE_IMPORT_FAILED);
@@ -280,8 +283,8 @@ sgsdl2_texture *sgsdl2_convert_texture(const sgsdl2_import_details det, const ch
 	
 	// Default assign filtering and wrapping
 	sgsdl2_change_texture_wrapping(tex, GL_REPEAT, GL_REPEAT);
-	sgsdl2_change_texture_filtering(tex, GL_LINEAR, GL_LINEAR);
-
+	sgsdl2_change_texture_filtering(tex, GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR_MIPMAP_LINEAR);
+	sgsdl2_generate_texture_mipmaps(tex);
 	return tex;
 }
 
@@ -454,7 +457,7 @@ char* sgsdl2_find_root_path(const char *filename)
 	scene_path.erase(scene_path.find_last_of(FILENAME_SEPARATOR) + 1, string::npos);
 	size_t string_size = sizeof(char) * scene_path.length();
 	char* return_string = (char*) malloc(string_size);
-	memcpy(return_string, scene_path.c_str(), string_size);
+	strncpy(return_string, scene_path.c_str(), string_size);
 	return return_string;
 }
 

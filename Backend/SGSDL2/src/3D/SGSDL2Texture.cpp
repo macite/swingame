@@ -23,7 +23,6 @@ sgsdl2_texture* sgsdl2_create_texture(sgsdl2_scene *scene)
 {
 	sgsdl2_texture *texture = new sgsdl2_texture();
 	scene->textures.push_back(texture);
-	glGenTextures(1, &texture->handle);
 	return texture;
 }
 
@@ -114,6 +113,15 @@ void sgsdl2_attach_texture_image(sgsdl2_texture * texture, const char *image_pat
 	// TODO this works for the textures tested, but according to
 	// https://www.libsdl.org/release/SDL-1.2.15/docs/html/sdlpixelformat.html
 	// the pixel data may need to be converted before being passed to OpenGL
+	
+	// Generate a texture if one does not exist already
+	if (!sgsdl2_is_texture(texture))
+	{
+		glGenTextures(1, &texture->handle);
+	}
+	
+	// I assume that when glTexImage2D is called twice, new memory is allocated and the old memory is automatically deallocated.
+	
 	glBindTexture(GL_TEXTURE_2D, texture->handle);
 	// Internal format is how the texture is stored on the disk
 	// Format defines the pixel data
@@ -124,7 +132,7 @@ void sgsdl2_attach_texture_image(sgsdl2_texture * texture, const char *image_pat
 	// Assign a path to the texture object
 	// TODO this should probably be moved into create_texture(scene, path)
 	texture->path = (char*) malloc(sizeof(char) * strlen(image_path));
-	memcpy(texture->path, image_path, sizeof(char) * strlen(image_path));
+	strncpy(texture->path, image_path, sizeof(char) * strlen(image_path));
 
 	SDL_FreeSurface(image);
 }
@@ -175,6 +183,6 @@ bool sgsdl2_is_texture(sgsdl2_texture *tex)
 void sgsdl2_delete_texture(sgsdl2_texture *texture)
 {
 	glDeleteTextures(1, &texture->handle);
-	delete [] texture->path;
+	free(texture->path);
 	delete texture;
 }

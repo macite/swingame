@@ -75,4 +75,5 @@ vec4 sgsdl2_vec4(aiQuaternion);
 
 mat4 sgsdl2_mat4(aiMatrix4x4);
 
+
 #endif /* defined(__sgsdl2__SGSDL2Utilities__) */

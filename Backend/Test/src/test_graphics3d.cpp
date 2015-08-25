@@ -205,12 +205,13 @@ void test_graphics3d()
 //	if (test_run == 0) test_run = 255;
 	
 	// Initialize the surface
-	sg_drawing_surface surface = _sg_functions->graphics.open_window("3D Graphics", 800, 600);
+	sg_drawing_surface surface = _sg_functions->graphics.open_window("3D Graphics", 1440, 800);
 	sgsdl2_print_opengl_version();
 	
 	// Initialize the scene
 	sgsdl2_scene *scene = sgsdl2_make_scene(&surface);
-	sgsdl2_populate_scene_from_file(scene, "scenes/swords/swords.3ds");
+//	sgsdl2_populate_scene_from_file(scene, "scenes/swords/swords.3ds");
+	sgsdl2_populate_scene_from_file(scene, "scenes/batcave (OBJ)/batcave.obj");
 	
 	sgsdl2_node *camera_node = sgsdl2_create_new_node(scene->root_node, vec3(0, 0, 10), vec3(0, 0, 0), vec3(1, 1, 1));
 	sgsdl2_camera *camera = sgsdl2_create_perspective_camera(camera_node);
