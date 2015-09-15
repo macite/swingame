@@ -4396,7 +4396,7 @@ end;
 
 function ButtonClicked(r: Region) : Boolean;
 begin
-  result := RegionClicked() = r;
+  result := (RegionClicked() = r) and (r <> nil);
 end;
 
 function ButtonClicked(name: String) : Boolean;
