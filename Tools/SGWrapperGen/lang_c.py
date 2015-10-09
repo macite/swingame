@@ -335,14 +335,17 @@ def _do_create_type_code(member):
             assert False
         
     elif member.is_struct:
-        #typedef struct %s_struct { } struct;
-        member_data.signature = 'typedef struct _%s { \n' % member.lower_name
-        
-        #write the fields
-        for field in member.field_list:
-            member_data.signature += '    %s;\n' % c_code_for_adapter_type(field.data_type, field.lower_name)
-        
-        member_data.signature += '} %s;\n' % member.lower_name
+        if member.same_as:
+            member_data.signature = 'typedef %s %s;\n' % (member.same_as.lower_name, member.lower_name)
+        else:
+            #typedef struct %s_struct { } struct;
+            member_data.signature = 'typedef struct _%s { \n' % member.lower_name
+            
+            #write the fields
+            for field in member.field_list:
+                member_data.signature += '    %s;\n' % c_code_for_adapter_type(field.data_type, field.lower_name)
+            
+            member_data.signature += '} %s;\n' % member.lower_name
         
     elif member.is_enum:
         #enum id { list }

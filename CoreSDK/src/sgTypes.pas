@@ -74,7 +74,6 @@ interface
     /// A Point2D represents an location in Cartesian coordinates (x,y).
     ///
     /// @struct Point2D
-    /// @sameas Vector
     Point2D = packed record
       x, y: Single;
     end;

@@ -25,7 +25,7 @@ class SGCodeModule(SGMetaDataContainer):
         """Initialise the class, setting its name"""
         super(SGCodeModule,self).__init__(['static','module_kind',
             'data_wrapper','pointer_wrapper', 'no_free_pointer_wrapper','type_name', 'doc_types', 
-            'values', 'array_wrapper', 'fixed_array_wrapper', 'via_pointer'])
+            'values', 'array_wrapper', 'fixed_array_wrapper', 'via_pointer', 'sameas'])
         self.name = name
         self.type_name = name
         self.methods = dict()
@@ -44,6 +44,7 @@ class SGCodeModule(SGMetaDataContainer):
         self.via_pointer = False
         self.data_type = None
         self.doc_type = None
+        self.same_as = None
     
     def to_keyed_dict(self, doc_transform = None, type_visitor = None, array_idx_sep = ', ', param_visitor = None, map_data_value = None):
         """Export a keyed dictionary of the class for template matching"""
@@ -128,7 +129,7 @@ class SGCodeModule(SGMetaDataContainer):
             super(SGCodeModule,self).set_tag('name', other)
             super(SGCodeModule,self).set_tag('uname', other)
         elif title == 'type':
-            print 'type ', self
+            # print 'type ', self
             self.module_kind = 'type'
             super(SGCodeModule,self).set_tag('name', other)
         elif title == 'module':
@@ -162,6 +163,10 @@ class SGCodeModule(SGMetaDataContainer):
     is_array_wrapper = property(lambda self: self['array_wrapper'].other, 
         lambda self,value: self.set_tag('array_wrapper', value), 
         None, 'Does the class wrap a variable length array of data from SwinGame')
+
+    same_as = property(lambda self: self['sameas'].other, 
+        lambda self, value: self.set_tag('sameas', value), 
+        None, 'The type is the same as this other type...')
     
     is_fixed_array_wrapper = property(lambda self: self['fixed_array_wrapper'].other, 
         lambda self,value: self.set_tag('fixed_array_wrapper', value), 
@@ -232,6 +237,7 @@ class SGCodeModule(SGMetaDataContainer):
             self.is_data_wrapper = the_type.data_wrapper
             self.is_array_wrapper = the_type.array_wrapper
             self.is_fixed_array_wrapper = the_type.fixed_array_wrapper
+            self.same_as = the_type.same_as
         elif the_type.is_enum:
             self.module_kind = 'enum'
             self.name = the_type['enum'].other

@@ -407,6 +407,7 @@ class SGPasParser():
         the_type = self._read_type_usage()
         #tok = self._match_token('id') #load id of the type...
         self._add_attribute(token[1], the_type)
+        # print token, token[1], the_type
     
     def process_idlist_attribute(self, token):
         '''Process an attribute followed by a list of comma separated identifiers.
