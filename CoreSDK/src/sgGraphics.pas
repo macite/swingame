@@ -3015,6 +3015,8 @@ implementation
       end;
     end;
     
+    ProcessEvents();
+
     {$IFDEF TRACE}
       TraceIf(tlInfo, 'sgGraphics', 'Info', 'OpenGraphicsWindow', 'Window is open (' + caption + ' ' + IntToStr(width) + 'x' + IntToStr(height) + ')');
     {$ENDIF}
