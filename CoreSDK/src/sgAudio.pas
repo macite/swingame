@@ -678,6 +678,7 @@ implementation
     var
         _SoundEffects: TStringHash;
         _Music: TStringHash;
+        _firstLoad: Boolean = false;
     
     function TryOpenAudio(): Boolean;
     begin
@@ -711,6 +712,12 @@ implementation
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'AudioReady', '');
         {$ENDIF}
+        
+        if not _firstLoad then
+        begin
+            OpenAudio();
+            _firstLoad := true;
+        end;
         
         result := sgShared.AudioOpen;
         
@@ -1541,7 +1548,6 @@ implementation
         InitialiseSwinGame();
         _SoundEffects := TStringHash.Create(False, 1024);
         _Music := TStringHash.Create(False, 1024);
-        OpenAudio();
         
         {$IFDEF TRACE}
             TraceExit('sgAudio', 'Initialise');
