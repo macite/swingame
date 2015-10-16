@@ -135,14 +135,6 @@ _type_switcher = {
     None : {    
         #Pascal type: what it maps to
         
-        #Primitives
-        'single': 'float %s',
-        'longint': 'int %s',
-        'string': 'string %s',
-        'boolean': 'bool %s',
-        'byte': 'byte %s',
-        'color': 'Color %s',
-        
         #Resources
         'animationscript':      'AnimationScript %s',
         'animation':            'Animation %s',
@@ -162,10 +154,9 @@ _type_switcher = {
         'guilabel':             'GUILabel %s',
         'connection':           'Connection %s',
         'arduinodevice':        'ArduinoDevice %s',
+        'serversocket':         'ServerSocket %s',
         
         
-        'resourcekind':     'ResourceKind %s',
-        'longword':         'uint %s',
         'bitmap': 'Bitmap %s',
         'pointer': 'IntPtr %s',
         'single[0..2][0..2]': 'float %s[3][3]',
@@ -175,10 +166,8 @@ _type_switcher = {
         'psdl_surface': 'IntPtr %s',
         'boolean[0..n - 1][0..n - 1]': 'bool[][] %s',
         'bitmap[0..n - 1]': 'Bitmap[] %s',
-        'spritekind': 'SpriteKind %s',
         'longint[0..n - 1]': 'int[] %s',
         'vector': 'Vector %s',
-        'spriteendingaction': 'SpriteEndingAction %s',
         'point2d': 'Point2D %s',
         'point2d[0..2]': 'Point2D %s[3]',
         'point2d[0..n - 1]': 'Point2D[] %s',
@@ -188,9 +177,6 @@ _type_switcher = {
         'triangle': 'Triangle %s',
         'linesarray': 'LineSegment[] %s',
         'font': 'Font %s',
-        'uint16': 'ushort %s',
-        'keycode': 'KeyCode %s',
-        'collisionside': 'CollisionSide %s',
         'longint[0..n - 1][0..n - 1]': 'int[][] %s',
         'mapdata': 'MapData %s',
         'animationdata[0..n - 1]': 'AnimationData[] %s',
@@ -203,17 +189,6 @@ _type_switcher = {
         'circle': 'Circle %s',
         'point2darray': 'Point2D[] %s',
         
-        #Enums
-        'shapekind': 'ShapeKind %s',
-        'collisiontestkind': 'CollisionTestKind %s',
-        'fontalignment': 'FontAlignment %s',
-        'fontstyle': 'FontStyle %s',
-        'mousebutton': 'MouseButton %s',
-        'guielementkind':       'GUIElementKind %s',
-        'eventkind':          'EventKind %s',
-        'filedialogselecttype':          'FileDialogSelectType %s',
-        'spriteeventkind': 'SpriteEventKind %s',
-
         'messageptr':          'void *%s',
 
         
@@ -233,6 +208,10 @@ _type_switcher = {
         'vector':       'Vector %s',
         'circle':       'Circle %s',
         'bitmapcell':   'BitmapCell %s',
+        'drawingoptions': 'DrawingOptions %s',
+
+        'string':       'String %s',
+
         
         #Arrays
         'linesarray':   'LineSegment[] %s',
@@ -266,10 +245,10 @@ _type_switcher = {
         'guilabel':              'GUILabel %s',
         'connection':           'Connection %s', 
         'arduinodevice':        'ArduinoDevice %s',
+        'serversocket':         'ServerSocket %s',
+        'httprequest':          'HttpRequest %s',
 
         'string':       'ref string %s',
-        'longint':      'ref int %s',
-        'single':       'ref float %s',
         'rectangle':    'ref Rectangle %s',
         
         'triangle': 'Triangle %s',
@@ -280,12 +259,8 @@ _type_switcher = {
     },
     'out' : {
         'string':       'out string %s',
-        'byte':         'out byte %s',
-        'color':        'out Color %s',
         'timer':        'out Timer %s',
         'point2d':      'out Point2D %s',
-        'longint':      'out int %s',
-        'single':       'out float %s',
         'linesegment':  'out LineSegment %s',
         'linesarray':   'out LineSegment[] %s',
         'matrix2d':     'out Matrix2D %s',
@@ -293,13 +268,6 @@ _type_switcher = {
         'triangle':     'out Triangle %s',
     },
     'return' : {
-        None: 'void %s',
-        'boolean': 'bool %s',
-        'single': 'float %s',
-        'longint': 'int %s',
-        'byte': 'byte %s',
-        'color': 'Color %s',
-        'longword': 'uint %s',
         'string': 'String %s',
 
         #Data
@@ -311,6 +279,8 @@ _type_switcher = {
         'matrix2d':         'Matrix2D %s',
         'bitmapcell':       'BitmapCell %s',
         'directionangles':  'DirectionAngles %s',
+        'serversocket':     'ServerSocket %s',
+        'drawingoptions':   'DrawingOptions %s',
         
         #Resources
         'music':        'Music %s',
@@ -335,17 +305,6 @@ _type_switcher = {
         'connection':   'Connection %s',  
         'arduinodevice':        'ArduinoDevice %s',
         
-        #Enum
-        'collisionside':        'CollisionSide %s',
-        'fontstyle':            'FontStyle %s',
-        'maptag':               'MapTag %s',
-        'maptile':              'MapTile %s',
-        'spriteendingaction':   'SpriteEndingAction %s',
-        'spritekind':           'SpriteKind %s',
-        'shapekind':            'ShapeKind %s',
-        'collisiontestkind':    'CollisionTestKind %s',
-        'fontalignment':        'FontAlignment %s',
-        
         #Arrays
         'linesarray':   'LineSegment[] %s',
         'point2darray': 'Point2D[] %s',
@@ -357,6 +316,7 @@ _type_switcher = {
         'stringarray':  'string[] %s',
         'fingerarray':  'Finger[] %s',
         'regions':  'Region[] %s',
+        'resolutionarray': 'Resolution[] %s',
     }
 }
 
@@ -371,7 +331,7 @@ _data_switcher = {
         'bitmaparray':  'WrapperUtils.BitmapArrayFrom(%s)',
         'stringarray':  'WrapperUtils.StringArrayFrom(%s)',
         
-        'longint':      '%s',
+        'resolutionarray':  '%s',
         'longintarray': '%s',
         'linesarray':   '%s',
         'fingerarray':  '%s',
@@ -380,6 +340,7 @@ _data_switcher = {
     {
         #Pascal type: what values of this type switch to %s = data value
         'boolean': '%s != 0',
+        'color': 'Color.FromArgb(%s)',
         
         'music':                'Music.Create(%s)',
         'soundeffect':          'SoundEffect.Create(%s)',
@@ -401,22 +362,7 @@ _data_switcher = {
         'guitextbox':              'GUITextbox.Create( %s)',
         'guilabel':              'GUILabel.Create( %s)',
         'connection':           'Connection.Create(%s)',  
-        'arduinodevice':        'ArduinoDevice.Create(%s)',
-        
-        
-        
-        'color': 'Color.FromArgb(%s)',
-        
-        'keycode':              '(KeyCode)%s',
-        'mousebutton':          '(MouseButton)%s',
-        'spriteendingaction':   '(SpriteEndingAction)%s',
-        'spritekind':           '(SpriteKind)%s',
-        'maptag':               '(MapTag)%s',
-        'collisionside':        '(CollisionSide)%s',
-        'fontalignment':        '(FontAlignment)%s',
-        'guielementkind':       '(GUIElementKind)%s',
-        'fontstyle':            '(FontStyle)%s',
-        'eventkind':            '(EventKind)%s'
+        'arduinodevice':        'ArduinoDevice.Create(%s)',        
     },
     #Argument with a parameter value
     'arg_val' : 
@@ -424,15 +370,6 @@ _data_switcher = {
         #Pascal type: what values of this type switch to %s = data value
         'boolean': '(%s ? 1 : 0)',
         'color': '%s.ToArgb()',
-        'keycode': '(int)%s',
-        'mousebutton': '(int)%s',
-        'spriteendingaction': '(int)%s',
-        'maptag': '(int)%s',
-        'collisionside': '(int)%s',
-        'resourcekind': '(int)%s',
-        'fontalignment': '(int)%s',
-        'fontstyle': '(int)%s',
-        'guielementkind': '(int)%s',
         'bitmaparray': 'WrapperUtils.BitmapArrToIntPtrArr(%s)'
     },
     #Argument with a literal value
@@ -452,12 +389,7 @@ _data_switcher = {
 _adapter_type_switcher = {
     None: {
         #Primitives
-        'single': 'float %s',
-        'longint': 'int %s',
         'string': 'string %s',
-        'boolean': 'int %s',
-        'byte': 'byte %s',
-        'color': 'int %s',
         
         #Resources
         'soundeffect':          'IntPtr %s',
@@ -479,6 +411,7 @@ _adapter_type_switcher = {
         'guilabel':             'IntPtr %s',        
         'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
+        'serversocket':         'IntPtr %s',
         
         #Structs
         'triangle':     'Triangle %s',
@@ -487,19 +420,11 @@ _adapter_type_switcher = {
         'finger':       'Finger %s',
         
         
-        'longword': 'uint %s',
         'point2d': 'Point2D %s',
         'linesarray': 'LineSegment[] %s',
         'font': 'IntPtr %s',
-        'fontalignment': 'int %s',
-        'fontstyle': 'int %s',
-        'mousebutton': 'int %s',
-        'uint16': 'ushort %s',
         'vector': 'Vector %s',
-        'spriteendingaction': 'int %s',
-        'keycode': 'int %s',
         'matrix2d': 'Matrix2D %s',
-        'collisionside': 'int %s',
         'map': 'IntPtr %s',
         'maptag': 'int %s',
         'maptile': 'MapTile %s',
@@ -509,14 +434,6 @@ _adapter_type_switcher = {
         'point2darray': 'Point2D[] %s',
         'longintarray': 'int[] %s',
         'fingerarray':  'Finger[] %s',
-        
-        #Enums
-        'collisiontestkind':    'CollisionTestKind %s',
-        'resourcekind': 'int %s',
-        'spritekind': 'SpriteKind %s',
-        'shapekind': 'ShapeKind %s',
-        'guielementkind': 'int %s',
-        'filedialogselecttype': 'FileDialogSelectType %s',
         
         #Functions
         'freenotifier':         'FreeNotifier %s',
@@ -528,12 +445,7 @@ _adapter_type_switcher = {
     #No modifier and for the actual library call
     'lib_': {
         #primitive
-        'single': 'float %s',
-        'longint': 'int %s',
         'string': '[MarshalAs(UnmanagedType.LPStr)] string %s',
-        'boolean': 'int %s',
-        'byte': 'byte %s',
-        'color': 'int %s',
         
         #Resources
         'soundeffect':          'IntPtr %s',
@@ -554,10 +466,10 @@ _adapter_type_switcher = {
         'guilabel':             'IntPtr %s',    
         'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
+
+        'serversocket':         'IntPtr %s',
         
               
-        'resourcekind': 'int %s',
-        'longword': 'uint %s',
         'bitmap': 'IntPtr %s',
         
         #Structs
@@ -570,29 +482,14 @@ _adapter_type_switcher = {
         
         'linesarray': '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s)] LineSegment[] %s',
         'font': 'IntPtr %s',
-        'fontalignment': 'int %s',
-        'fontstyle': 'int %s',
-        'mousebutton': 'int %s',
-        'uint16': 'ushort %s',
         'vector': 'Vector %s',
-        'spriteendingaction': 'int %s',
-        'keycode': 'int %s',
         'matrix2d': 'Matrix2D %s',
-        'collisionside': 'int %s',
         'map': 'IntPtr %s',
-        'maptag': 'int %s',
         'maptile': 'MapTile %s',
         'circle': 'Circle %s',
         'point2darray': '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s)] Point2D[] %s',
         'longintarray': '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s)] int[] %s',
-        
-        #Enums
-        'collisiontestkind':    'CollisionTestKind %s',        
-        'spritekind':           'SpriteKind %s',
-        'shapekind':            'ShapeKind %s',
-        'guielementkind':       'int %s',
-        'filedialogselecttype': 'FileDialogSelectType %s',
-        
+                
         #Functions
         'freenotifier':         'FreeNotifier %s',
         'spriteeventhandler':   'SpriteEventHandler %s',
@@ -610,6 +507,10 @@ _adapter_type_switcher = {
         'matrix2d':     'ref Matrix2D %s',
         'triangle':     'ref Triangle %s',
         'vector':       'ref Vector %s',
+
+        'drawingoptions': 'ref DrawingOptions %s',
+
+        'string': '[MarshalAs(UnmanagedType.LPStr)] string %s',
         
         # Arrays are passed by reference already
         'trianglearray':'Triangle[] %s',
@@ -629,6 +530,10 @@ _adapter_type_switcher = {
         'bitmapcell':   'ref BitmapCell %s',
         'matrix2d':     'ref Matrix2D %s',
         'triangle':     'ref Triangle %s',
+
+        'string': '[MarshalAs(UnmanagedType.LPStr)] string %s',
+
+        'drawingoptions': 'ref DrawingOptions %s',
         
         
         # Arrays are passed by reference already
@@ -664,18 +569,11 @@ _adapter_type_switcher = {
         'guilabel':             'ref IntPtr %s',    
         'connection':           'ref IntPtr %s',  
         'arduinodevice':        'ref IntPtr %s',
-        
-        
-        
-        
+        'serversocket':         'ref IntPtr %s',
         
         
         'string':               'StringBuilder %s',
-        
-        'longint':              'ref int %s',
-        'single':               'ref float %s',
-        'byte':                 'ref byte %s',
-        
+                
         'triangle':             'ref Triangle %s',
         'rectangle':            'ref Rectangle %s',
         'point2darray':         'Point2D[] %s',
@@ -688,7 +586,6 @@ _adapter_type_switcher = {
         'soundeffect':          'ref IntPtr %s',
         'music':                'ref IntPtr %s',
         'timer':                'ref IntPtr %s',
-        'byte':                 'ref byte %s',
         'font':                 'ref IntPtr %s',
         'bitmap':               'ref IntPtr %s',
         'sprite':               'ref IntPtr %s',
@@ -704,11 +601,8 @@ _adapter_type_switcher = {
         'guilabel':             'ref IntPtr %s',    
         'connection':           'ref IntPtr %s',  
         'arduinodevice':        'ref IntPtr %s',
-              
-        
-        'single':               'ref float %s',
-        'longint':              'ref int %s',
-        
+        'serversocket':         'ref IntPtr %s',
+                      
         'string':               '[MarshalAs(UnmanagedType.LPStr), In, Out] StringBuilder %s',
         
         'triangle':             'ref Triangle %s',
@@ -718,21 +612,13 @@ _adapter_type_switcher = {
     },
     'out': {
         'string':       'StringBuilder %s',
-        'byte':         'out byte %s',
-        'color':        'out int %s',
-        'single':       'out float %s',
         'point2d':      'out Point2D %s',
-        'longint':      'out int %s',
         'linesegment':  'out LineSegment %s',
         # 'linesarray':   'out LineSegment[] %s',
     },
     'lib_out': {
         'string':       '[MarshalAs(UnmanagedType.LPStr), Out] StringBuilder %s',
-        'byte':         '[Out] out byte %s',
-        'color':        '[Out] out int %s',
-        'single':       '[Out] out float %s',
         'point2d':      '[Out] out Point2D %s',
-        'longint':      '[Out] out int %s',
         'linesegment':  '[Out] out LineSegment %s',
     },
     'result': {
@@ -746,6 +632,7 @@ _adapter_type_switcher = {
         'longintarray':     'int[] %s',
         'bitmaparray':      'IntPtr[] %s',
         'fingerarray':      'Finger[] %s',
+        'resolutionarray':  'Resolution[] %s',
     },
     'lib_result': {
         'string':       '[MarshalAs(UnmanagedType.LPStr), Out] StringBuilder %s',
@@ -760,13 +647,11 @@ _adapter_type_switcher = {
         'fingerarray':  '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s), Out] Finger[] %s',
         
         'bitmaparray':  '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s), Out] IntPtr[] %s',
+
+        'resolutionarray': '[MarshalAs(UnmanagedType.LPArray, SizeParamIndex=%s), Out] Resolution[] %s',
     },
     'return' : {
-        None: 'void %s',
-        'boolean': 'int %s',
-        'single': 'float %s',
         'point2d': 'Point2D %s',
-        'longint': 'int %s',
         
         #Resources
         'animation':            'IntPtr %s',
@@ -790,13 +675,12 @@ _adapter_type_switcher = {
         'guilabel':             'IntPtr %s',    
         'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
+        'serversocket':         'IntPtr %s',
+
+        'drawingoptions':       'DrawingOptions %s',
         
         
         'maptile':              'MapTile %s',
-        
-        'byte':     'byte %s',
-        'color':    'int %s',
-        'longword':   'uint %s',
         
         # Structs
         'bitmapcell':       'BitmapCell %s',
@@ -807,16 +691,6 @@ _adapter_type_switcher = {
         'directionangles':  'DirectionAngles %s',
         'matrix2d':         'Matrix2D %s',
         'triangle':         'Triangle %s',
-        
-        # Enums
-        'fontalignment':        'FontAlignment %s',
-        'spriteendingaction':   'int %s',
-        'spritekind':           'int %s',
-        'shapekind':            'ShapeKind %s',
-        'collisiontestkind':    'CollisionTestKind %s',
-        'collisionside':        'int %s',
-        'fontstyle':            'int %s',
-        'maptag':               'int %s',
     }
 }
 
@@ -834,6 +708,7 @@ _local_type_switcher = {
     'trianglearray':'Triangle[] %s;',
     'stringarray':  'string[] %s;',
     'fingerarray':  'Finger[] %s;',
+    'resolutionarray': 'Resolution[] %s;',
 }
 
 # mapping for struct fields
@@ -843,23 +718,17 @@ _struct_type_switcher = {
     'character': 'internal Character _%s',
     
     #Pascal type: what it maps to
-    'single': 'internal float _%s',
-    'longint': 'internal int _%s',
-    'int64': 'internal long _%s',
-    'word': 'internal ushort _%s',
     
     'soundeffect': 'internal SoundEffect _%s',
     'music': 'internal Music _%s',
     'string': 'internal string _%s',
-    'boolean': 'internal bool _%s',
-    'byte': 'internal byte _%s',
     'timer': 'internal Timer _%s',
-    'color': 'internal Color _%s',
-    'resourcekind': 'internal ResourceKind _%s',
-    'longword': 'internal uint _%s',
     'bitmap': 'internal Bitmap _%s',
     'vector': 'internal Vector _%s',
     'point2d': 'internal Point2D _%s',
+    'drawingdest': 'internal DrawingDest _%s',
+
+    'stringarray': 'internal String[] %s',
 
     # fixed size array fields
     'single[0..2][0..2]': '[ MarshalAs( UnmanagedType.ByValArray, SizeConst=9 )]\ninternal fixed float _%s[9]',
@@ -873,14 +742,10 @@ _struct_type_switcher = {
     'rectangle': 'internal Rectangle _%s',
     'linesarray': 'internal LineSegment[] _%s',
     'font': 'internal Font _%s',
-    'fontalignment': 'internal FontAlignment _%s',
-    'fontstyle': 'internal FontStyle _%s',
-    'mousebutton': 'internal MouseButton _%s',
-    'uint16': 'internal ushort _%s',
-    'keycode': 'internal KeyCode _%s',
-    'collisionside': 'internal CollisionSide _%s',
     'longint[0..n - 1]': 'internal int[] _%s',
     'longint[0..n - 1][0..n - 1]': 'internal int[][] _%s',
+    'httpheader[0..n - 1]': 'internal HttpHeader[] _%s',
+    'byte[0..n - 1]': 'internal byte[] _%s',
     'mapdata': 'internal MapData _%s',
     'animationdata[0..n - 1]': 'internal AnimationData[] _%s',
     'layerdata[0..n - 1]': 'internal LayerData[] _%s',
@@ -896,7 +761,185 @@ _struct_type_switcher = {
 
 _names = []
 
+#------------------
+
+_other = {
+    '_struct_type_switcher': _struct_type_switcher
+}
+
+_type_dicts = {
+    '_type_switcher': _type_switcher, 
+    '_adapter_type_switcher': _adapter_type_switcher,
+    '_other': _other,
+}
+
+_type_dictionary_creation_data = [
+    # Basic types
+    {
+        'identifiers': [
+            ('longint',     'int',      'int'),
+            ('boolean',     'bool',     'int'),
+            ('word',        'ushort',   'ushort'),
+            ('single',      'float',    'float'),
+            ('byte',        'byte',     'byte'),
+            ('color',       'Color',    'int'),
+            ('longword',    'uint',     'uint'),
+            ('uint16',      'ushort',   'ushort'),
+            ('int64',       'long',     'long'),
+            (None,          'void',     'void'),
+        ],
+        '_type_switcher': {
+            None:       '#2# %s',
+            # 'const':    '',
+            'var':      'ref #2# %s',
+            'out':      'out #2# %s',
+            'return':   '#2# %s',
+        },
+        '_data_switcher': {
+            'temp_return':  '%s',
+            # 'return_val':  
+            # 'arg_val' :     
+
+        },
+        '_adapter_type_switcher': {
+            None:       '#3# %s',
+            'lib_':     '#3# %s',
+            # 'const':    '',
+            # 'lib_const':    '',
+            'var':      'ref #3# %s',
+            'lib_var':  'ref #3# %s',
+            'out':      'out #3# %s',
+            'lib_out':  '[Out] out #3# %s',
+            # 'result':   '',
+            # 'lib_result':   '',
+            'return':   '#3# %s',
+        },
+        '_other': {
+            '_struct_type_switcher': 'internal #2# _%s',
+        }
+    },
+    # objects -- records accessed via pointer
+    {
+         'identifiers': [
+            ('connection', 'Connection')
+        ],
+        '_type_switcher': {
+        },
+        '_adapter_type_switcher': {
+        },
+        '_other': {
+            '_struct_type_switcher': 'internal #2# _%s'
+        }
+    },
+    # structs/records
+    {
+        'identifiers': [
+            ('httprequest',     'HttpRequest'),
+            ('httpresponse',    'HttpResponse'),
+            ('message',         'Message'),
+        ],
+        '_type_switcher': {
+            'const':    '#2# %s',
+            'return':   '#2# %s',
+        },
+        '_adapter_type_switcher': {
+            'lib_var':  'ref #2# %s',
+            'lib_const':  'ref #2# %s',
+            'const':  'ref #2# %s',
+            'var':      'ref #2# %s',
+            'return':   '#2# %s',
+        },
+        '_other': {
+
+        }
+    },
+
+    # Enumerations
+    {
+        'identifiers': [
+            ('connectiontype',      'ConnectionType'),
+            ('keycode',             'KeyCode'),
+            ('collisionside',       'CollisionSide'),
+            ('httpmethod',          'HttpMethod'),
+            ('shapekind',           'ShapeKind'),
+            ('collisiontestkind',   'CollisionTestKind'),
+            ('fontalignment',       'FontAlignment'),
+            ('fontstyle',           'FontStyle'),
+            ('mousebutton',         'MouseButton'),
+            ('guielementkind',      'GUIElementKind'),
+            ('eventkind',           'EventKind'),
+            ('filedialogselecttype','FileDialogSelectType'),
+            ('spriteeventkind',     'SpriteEventKind'),
+            ('spritekind',          'SpriteKind'),
+            ('spriteendingaction',  'SpriteEndingAction'),
+            ('resourcekind',        'ResourceKind'),
+        ],
+        '_type_switcher': {
+            None:       '#2# %s',
+            # 'const':    '',
+            # 'var':      'ref #2# %s',
+            # 'out':      'out #2# %s',
+            'return':   '#2# %s',
+        },
+        '_data_switcher': {
+            # 'temp_return':  '%s',
+            'return_val':   '(#2#)%s',  
+            'arg_val' :     '(int)%s',
+
+        },
+        '_adapter_type_switcher': {
+            None:       '#2# %s',
+            'lib_':     '#2# %s',
+            # 'const':    '',
+            # 'lib_const':    '',
+            # 'var':      'ref #3# %s',
+            # 'lib_var':  'ref #3# %s',
+            # 'out':      'out #3# %s',
+            # 'lib_out':  '[Out] out #3# %s',
+            # 'result':   '',
+            # 'lib_result':   '',
+            'return':   '#2# %s',
+        },
+        '_other': {
+            '_struct_type_switcher': 'internal #2# _%s',
+        }
+    },
+]
+
+#------------------
+
+def _add_to_dict(into_dict, details_dict, ident_tupple):
+    #find all the part
+    for key,val in details_dict.iteritems():
+        to_ins = val
+        for idx,part in enumerate(ident_tupple):
+            to_ins = to_ins.replace('#%d#' % (idx + 1), ident_tupple[idx] if not ident_tupple[idx] is None else '')
+        # print 'inserting -> ', key, ':', to_ins
+        
+        if  ident_tupple[0] in into_dict[key]:
+            print 'ERROR: Adding into type dictionary : ', into_dict[key][ident_tupple[0]]
+            print 'key: ', key, 'type', ident_tupple[0]
+            assert False
+        
+        into_dict[key][ident_tupple[0]] = to_ins
+
+def build_type_dictionary(type_dictionary_creation_data, dicts):
+    """Builds the conversion dictionary."""
+    my_keys = dicts.keys()
+    
+    for type_mapping in type_dictionary_creation_data:
+        #print type_mapping
+        # Process each type in this type mapping
+        for identifier_tupple in type_mapping['identifiers']:
+            for a_key in my_keys:
+                _add_to_dict(dicts[a_key], type_mapping[a_key], identifier_tupple)
+
+#------------------
+
+
 def load_data():
+    build_type_dictionary(_type_dictionary_creation_data, _type_dicts)
+
     global _header, _method_wrapper
     global _module_method, _module_header, _module_footer
     global _class_header, _class_footer
@@ -1015,7 +1058,7 @@ def arg_visitor(arg_str, the_arg, for_param):
     #check var/out/const
     if the_type.array_wrapper or the_type.fixed_array_wrapper:
         return result
-    elif (for_param.modifier == 'var' or for_param.modifier == 'const'):
+    elif (for_param.modifier == 'var' or (for_param.modifier == 'const' and the_type.name.lower() != "string")):
         result = 'ref ' + result
     elif (for_param.modifier == 'out') and the_type.name.lower() != "string": #TODO: check for array types...
         result = 'out ' + result
@@ -1029,7 +1072,7 @@ def arg_cs_dll_visitor(arg_str, the_arg, for_param):
     #check var/out/const
     if the_type.array_wrapper or the_type.fixed_array_wrapper:
         return result
-    if (for_param.modifier == 'var' or for_param.modifier == 'const'): # and not (the_type.array_wrapper or the_type.fixed_array_wrapper):
+    if (for_param.modifier == 'var' or (for_param.modifier == 'const' and the_type.name.lower() != "string")): # and not (the_type.array_wrapper or the_type.fixed_array_wrapper):
         result = 'ref ' + result
     elif (for_param.modifier == 'out') and the_type.name.lower() != "string":
         result = 'out ' + result
@@ -1071,6 +1114,7 @@ def delegated_param_visitor(the_param, last, was_lib):
             return '%s%s' % ( _adapter_type_switcher[modifier][key] % (the_param.name), ', ' if not last else '')
     else:
         # map to name + type
+        # print modifier, key, _adapter_type_switcher[modifier][key]
         return '%s%s' % ( _adapter_type_switcher[modifier][key] % the_param.name, ', ' if not last else '')
 
 
@@ -1207,7 +1251,7 @@ def method_visitor(the_method, other, as_accessor_name = None):
                     elif the_method.length_call != None:
                         # print the_method.name, local_var.data_type.name, ' = ', details['length_call']
                         #FIX THIS...
-                        assert local_var.data_type.name in ['LongintArray','Point2DArray','StringArray','LinesArray','BitmapArray','FingerArray']
+                        assert local_var.data_type.name in ['LongintArray','Point2DArray','StringArray','LinesArray','BitmapArray','FingerArray','ResolutionArray']
                         
                         if local_var.data_type.name == 'StringArray':
                             temp_process_params = '%s = WrapperUtils.ResultStringArray(%s);' % (local_var.name, details['length_call'].replace('return ', '') )
@@ -1221,6 +1265,7 @@ def method_visitor(the_method, other, as_accessor_name = None):
                                 else 'LineSegment' if local_var.data_type.name in ['LinesArray'] \
                                 else 'IntPtr' if local_var.data_type.name in ['BitmapArray'] \
                                 else 'Finger' if local_var.data_type.name in ['FingerArray'] \
+                                else 'Resolution' if local_var.data_type.name in ['ResolutionArray'] \
                                 else 'StringBuilder',
                                 details['length_call'].replace('return ', '')
                             )
@@ -1578,7 +1623,7 @@ def write_cs_type_for(member, other):
     if member.is_class:
         #convert to resource pointer
         if member.is_pointer_wrapper:
-            # print member, member.fields
+            print member, member.fields
             assert len(member.fields) == 1
             
             write_sg_class(member, other)

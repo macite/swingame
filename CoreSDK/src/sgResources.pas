@@ -197,7 +197,7 @@ implementation
 				{$endif}
 			 {$endif}
              sgText, sgAudio, sgGraphics, sgInput, sgShared, sgTimers, sgUtils,
-             sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface, sgNetworking,
+             sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface,
              sgArduino; // Swingame
 
 //----------------------------------------------------------------------------
@@ -377,7 +377,7 @@ implementation
         ReleaseAllMusic();
         ReleaseAllPanels();
         ReleaseAllSprites();
-        ReleaseAllConnections();
+        // ReleaseAllConnections();
         ReleaseAllAnimationScripts();
         ReleaseAllSoundEffects();
         ReleaseAllBitmaps();

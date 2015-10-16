@@ -81,12 +81,6 @@ fi
 
 CLEAN="N"
 
-#
-# Library versions
-#
-OPENGL=false
-SDL_13=true
-SDL_12=false
 
 Usage()
 {
@@ -109,25 +103,6 @@ while getopts chri:g:b:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    s)  if [ "${OPTARG}" = "dl12" ]; then
-            SDL_12=true
-            SDL_13=false
-            OPENGL=false
-        fi 
-        ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_12=false
-            SDL_13=true
-            OPENGL=false
-        fi 
-        ;;
-    h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            SDL_12=false
-            SDL_13=false
-            OPENGL=true
-        fi 
-        ;;
     d)  RELEASE="Y" ;;
     i)  ICON="$OPTARG";;
     ?)  Usage
@@ -141,31 +116,13 @@ if [ "a$1a" != "aa" ]; then
 fi
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
-      TMP_DIR="${TMP_DIR}/badass"
-      LIB_DIR="${APP_PATH}/lib/sdl13"
-    elif [ ${OPENGL} = true ]; then
-        TMP_DIR="${TMP_DIR}/godly"
-      LIB_DIR="${APP_PATH}/lib/godly"
-    else
-      TMP_DIR="${TMP_DIR}/sdl12"
-      LIB_DIR="${APP_PATH}/lib/mac"
-    fi
+    TMP_DIR="${TMP_DIR}/mac"
+    LIB_DIR="${APP_PATH}/lib/mac"
 elif [ "$OS" = "$WIN" ]; then
-    #
-    # This needs 1.3 versions of SDL for Windows...
-    # along with function sdl_gfx, sdl_ttf, sdl_image, sdl_mixer
-    #
-    
-    # if [ ${SDL_13} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # elif [ ${OPENGL} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # else
-    SDL_13=false
-    OPENGL=false
+    TMP_DIR="${TMP_DIR}/win"
     LIB_DIR="${APP_PATH}/lib/win"
-    # fi
+else
+    TMP_DIR="${TMP_DIR}/unx"    
 fi
 
 #

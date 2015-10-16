@@ -256,7 +256,7 @@ elif [ "$OS" = "$MAC" ]; then
     CURRENT_DIR="${OUT_DIR}/SGSDK.framework/Versions/Current"
     
     # Set lib dir
-    LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
+    LIB_DIR="${APP_PATH}/staticlib/mac"
     
     PAS_FLAGS="${PAS_FLAGS} -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 
