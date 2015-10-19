@@ -10,8 +10,6 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 
-using Color = System.Drawing.Color;
-
 namespace SwinGameSDK
 {
 	public static class SwinGame

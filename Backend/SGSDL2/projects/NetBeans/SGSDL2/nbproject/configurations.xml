@@ -64,12 +64,17 @@
             <pElem>../../../external/SDL_mixer</pElem>
             <pElem>../../../external/SDL_net</pElem>
             <pElem>../../../external/SDL_ttf</pElem>
+            <pElem>../../../external/PNG/libpng-1.6.18</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <linkerAddLib>
             <pElem>../../../lib/win32</pElem>
           </linkerAddLib>
+          <linkerLibItems>
+            <linkerLibLibItem>png</linkerLibLibItem>
+            <linkerLibLibItem>z</linkerLibLibItem>
+          </linkerLibItems>
           <commandLine>-lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net</commandLine>
         </linkerTool>
       </compileType>

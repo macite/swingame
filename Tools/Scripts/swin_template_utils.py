@@ -5,7 +5,7 @@ import subprocess
 import swin_shutil
 
 # IMPORTANT: Change version here... will copy itself where needed
-sg_version         ="3.6"
+sg_version         ="4.0"
 
 script_path        = os.path.dirname(os.path.realpath(__file__)) + '/'
 swingame_path      = os.path.realpath(script_path + '../..') + '/'
@@ -151,9 +151,9 @@ def build_csharp_lib():
     }
     
     if get_os_name() == "Windows":
-        csc = ['csc', '-t:library', '-r:System.dll', '-unsafe', '-r:System.Drawing.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s\\SwinGame.dll' % dirs, '%(cs_lib_dir)s\\*.cs' % dirs, '%(cs_generated_code_dir)s\\*.cs' % dirs]
+        csc = ['csc', '-t:library', '-r:System.dll', '-unsafe', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s\\SwinGame.dll' % dirs, '%(cs_lib_dir)s\\*.cs' % dirs, '%(cs_generated_code_dir)s\\*.cs' % dirs]
     else:
-        csc = ['gmcs', '-t:library', '-unsafe', '-r:System.dll', '-r:System.Drawing.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s/SwinGame.dll' % dirs, '%(cs_lib_dir)s/*.cs' % dirs, '%(cs_generated_code_dir)s/*.cs' % dirs]
+        csc = ['mcs', '-t:library', '-unsafe', '-r:System.dll', '-define:DEBUG', '-debug+', '-out:%(cs_generated_lib_dir)s/SwinGame.dll' % dirs, '%(cs_lib_dir)s/*.cs' % dirs, '%(cs_generated_code_dir)s/*.cs' % dirs]
 
     proc = subprocess.Popen(csc, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out,err = proc.communicate()
@@ -270,8 +270,8 @@ template_details = {
                     'os':             ['Mac OS X', 'Windows', 'Linux'],
                     'lib':            None,
                     'libs':           [
-                                        ('staticlib/sdl2/mac','lib/mac'),
-                                        ('lib/sdl2/win','lib/win'),
+                                        ('staticlib/mac','lib/mac'),
+                                        ('lib/win','lib/win'),
                                       ],
                     'post_copy':        make_sh_exec
                   },
@@ -381,12 +381,12 @@ template_details = {
                       'lib':          'lib',
                       'staticsgsdk':  False,
                   },
-                  { 
-                    'target':       'iOS',
-                    'os':           ['iOS'],
-                    'lib':          'staticlib/godly',
-                    'staticsgsdk':  True,
-                  },
+                  # { 
+                  #   'target':       'iOS',
+                  #   'os':           ['iOS'],
+                  #   'lib':          'staticlib/ios',
+                  #   'staticsgsdk':  True,
+                  # },
               ],
               'pre_copy_script': None,
           },
@@ -427,7 +427,15 @@ template_details = {
                 { 
                   'source':         'Mono',
                   'target':         'mono',
-                  'os':             [ 'Mac OS X', 'Linux' ],
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
+                  'lib':            'lib',
+                  'staticsgsdk':    False,
+                  'post_copy':      make_sh_exec
+                },
+                { 
+                  'source':         'WinCmd',
+                  'target':         'WinCmd',
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
                   'post_copy':      make_sh_exec
@@ -440,6 +448,12 @@ template_details = {
                   'staticsgsdk':    False,
                 },
                 { 
+                  'source':         'VS13',
+                  'target':         'vs13',
+                  'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
+                  'lib':            'lib',
+                  'staticsgsdk':    False,
+                },                { 
                   'source':         'XamarianStudio',
                   'target':         'XamarianStudio',
                   'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
@@ -488,7 +502,7 @@ template_details = {
                   'lang':           'VB',
                   'source':         'Mono',
                   'target':         'mono',
-                  'os':             [ 'Mac OS X', 'Linux' ],
+                  'os':             [ 'Mac OS X', 'Linux', 'Windows' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
                   'post_copy':      make_sh_exec

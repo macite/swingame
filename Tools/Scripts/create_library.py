@@ -60,9 +60,9 @@ def copy_coresdk_to_dist_source():
 
 _sgsdk_creation_script_options = {
     # 'Mac OS X': [ ['-IOS'], ['-badass','-static'], ['-godly','-static'], ['-static'], ['-badass','-framework'], ['-godly','-framework'], [ '-framework' ]],     # default must be last (for framework creation)
-    'Mac OS X': [ ['-static'], [ '-framework' ]],     # default must be last (for framework creation)
-    'Windows':  [None], #, '-badass', '-godly'],
-    'Linux':  [None], #, '-badass', '-godly'],
+    'Mac OS X': [ [ '-framework' ], None, ['-static']],     # default must be last (for framework creation)
+    'Windows':  [None],
+    'Linux':  [None],
 }
 
 def create_sgsdk_library():

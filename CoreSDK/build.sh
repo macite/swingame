@@ -88,10 +88,10 @@ fi
 if [ "$OS" = "$MAC" ]; then
     FPC_BIN=`which ppcx64`
     TMP_DIR="${APP_PATH}/tmp/sdl2"
-    LIB_DIR="${APP_PATH}/staticlib/sdl2/mac"
+    LIB_DIR="${APP_PATH}/staticlib/mac"
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 elif [ "$OS" = "$WIN" ]; then
-    LIB_DIR="${APP_PATH}/lib/sdl2/win"
+    LIB_DIR="${APP_PATH}/lib/win"
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k-L'${LIB_DIR}' -k-lstdc++ -k-lsgsdl2"
 else # Linux
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""

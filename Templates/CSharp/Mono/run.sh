@@ -53,10 +53,10 @@ fi
 echo "Running ${VERSION}"
 
 if [ "$OS" = "$MAC" ]; then
-    ${EXE_PATH}
+    "${EXE_PATH}"
 elif [ "$OS" = "$LIN" ]; then
     mono "$EXE_PATH"
 else #Windows
-    ${EXE_PATH}
+    "${EXE_PATH}"
 fi
 

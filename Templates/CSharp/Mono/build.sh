@@ -29,24 +29,47 @@ SRC_DIR="${APP_PATH}/src"
 LIB_DIR="${APP_PATH}/lib"
 LOG_FILE="${APP_PATH}/out.log"
 
-GMCS_FLAGS="-target:winexe -r:System.Drawing.dll,./lib/SwinGame.dll" #" -r:Microsoft.VisualBasic"
+GMCS_FLAGS="-target:exe -r:./lib/SwinGame.dll" #" -r:Microsoft.VisualBasic"
 CS_FLAGS="-optimize+"
 SG_INC="-I${APP_PATH}/lib/"
 
+if [ "$OS" = "$WIN" ]; then
+   export PATH=$APP_PATH/lib:/c/Program\ Files\ \(x86\)/Mono/bin/:/c/Program\ Files/Mono/bin/:$PATH:/c/Windows/Microsoft.NET/Framework/v4.0.30319
+   GMCS_FLAGS="$GMCS_FLAGS -platform:x86"
+fi
+
 #Locate the compiler...
-GMCS_BIN=`which csc 2>> /dev/null`
+GMCS_BIN=`which mcs 2>> /dev/null`
 if [ -z "$GMCS_BIN" ]; then
     #try locating mcs
-    GMCS_BIN=`which mcs 2>> /dev/null`
+    GMCS_BIN=`which gmcs 2>> /dev/null`
     if [ -z "$GMCS_BIN" ]; then
         #try locating gmcs
-        GMCS_BIN=`which gmcs 2>> /dev/null`
+        GMCS_BIN=`which csc 2>> /dev/null`
 
         if [ -z "$GMCS_BIN" ]; then
             #no compiler found :(
-            echo "Unable to find a C# compiler. Install either csc or gmcs."
+            echo "Unable to find a C# compiler. Install Mono or add it to your path."
             exit -1
         fi
+
+        echo "-------------------------------------------------------------------------------"
+        echo "                   !!WARNING!! Using the default C# compiler."
+        echo "-------------------------------------------------------------------------------"
+        echo ""
+        echo " This compiler does not support some C# 6.0 features used in the template."
+        echo ""
+        echo " To use the default compiler:"
+        echo "   1: Remove 'using static SwinGameSDK.SwinGame;'"
+        echo "   2: Add 'SwinGame.' to the front of each call to a SwinGame function. "
+        echo "      For example, change 'OpenGraphicsWindow(...) to"
+        echo "                          'SwinGame.OpenGraphicsWindow(...)'"
+        echo ""
+        echo " ... or install Mono from http://www.mono-project.com/download/#download-win"
+        echo ""
+        echo "-------------------------------------------------------------------------------"
+        echo ""
+        sleep 4
     fi
 fi
 
@@ -58,12 +81,6 @@ fi
 
 CLEAN="N"
 
-#
-# Library versions
-#
-OPENGL=false
-SDL_13=true
-SDL_12=false
 
 Usage()
 {
@@ -86,25 +103,6 @@ while getopts chri:g:b:s: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    s)  if [ "${OPTARG}" = "dl12" ]; then
-            SDL_12=true
-            SDL_13=false
-            OPENGL=false
-        fi 
-        ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_12=false
-            SDL_13=true
-            OPENGL=false
-        fi 
-        ;;
-    h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            SDL_12=false
-            SDL_13=false
-            OPENGL=true
-        fi 
-        ;;
     d)  RELEASE="Y" ;;
     i)  ICON="$OPTARG";;
     ?)  Usage
@@ -118,31 +116,13 @@ if [ "a$1a" != "aa" ]; then
 fi
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
-      TMP_DIR="${TMP_DIR}/badass"
-      LIB_DIR="${APP_PATH}/lib/sdl13"
-    elif [ ${OPENGL} = true ]; then
-        TMP_DIR="${TMP_DIR}/godly"
-      LIB_DIR="${APP_PATH}/lib/godly"
-    else
-      TMP_DIR="${TMP_DIR}/sdl12"
-      LIB_DIR="${APP_PATH}/lib/mac"
-    fi
+    TMP_DIR="${TMP_DIR}/mac"
+    LIB_DIR="${APP_PATH}/lib/mac"
 elif [ "$OS" = "$WIN" ]; then
-    #
-    # This needs 1.3 versions of SDL for Windows...
-    # along with function sdl_gfx, sdl_ttf, sdl_image, sdl_mixer
-    #
-    
-    # if [ ${SDL_13} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # elif [ ${OPENGL} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # else
-    SDL_13=false
-    OPENGL=false
+    TMP_DIR="${TMP_DIR}/win"
     LIB_DIR="${APP_PATH}/lib/win"
-    # fi
+else
+    TMP_DIR="${TMP_DIR}/unx"    
 fi
 
 #
@@ -188,7 +168,7 @@ doMacPackage()
     # ln -s ../Frameworks ./Frameworks #Silly macpac uses ./bin folder
     # popd >> /dev/null
     
-    cp ${LIB_DIR}/libSGSDK.dylib ${GAMEAPP_PATH}/Contents/Resources/libSGSDK.dylib
+    cp "${LIB_DIR}/libSGSDK.dylib" "${GAMEAPP_PATH}/Contents/Resources/libSGSDK.dylib"
     cp -R -p "./lib/SwinGame.dll" "${GAMEAPP_PATH}/Contents/Resources/"
     
     rm -f "${OUT_DIR}/${GAME_NAME}.exe"
@@ -238,8 +218,13 @@ doCompile()
         mkdir -p ${OUT_DIR}
     fi
     
-    ${GMCS_BIN} ${GMCS_FLAGS} ${CS_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]cs$` >> ${LOG_FILE}
-    if [ $? != 0 ]; then echo "Error compiling."; exit 1; fi
+    if [ "$OS" = "$WIN" ]; then
+        "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 -exec ${APP_PATH}/lib/cygpath -ma {} \; | grep [.]cs$` >> ${LOG_FILE}
+    else
+        "${GMCS_BIN}" ${GMCS_FLAGS} ${CS_FLAGS} -out:"${OUT_DIR}/${GAME_NAME}.exe" `find ${APP_PATH} -mindepth 2 | grep [.]cs$` >> ${LOG_FILE}
+    fi
+
+    if [ $? != 0 ]; then echo "Error compiling."; cat ${LOG_FILE}; exit 1; fi
 }
 
 doLinuxPackage()
@@ -255,6 +240,7 @@ doWindowsPackage()
     
     echo "  ... Copying libraries"
     cp -p -f "${LIB_DIR}"/*.dll "${OUT_DIR}"
+    cp -R -p "./lib/SwinGame.dll" "${OUT_DIR}"
 }
 
 copyWithoutSVN()

@@ -8,7 +8,8 @@ var
   mus, mus1, miditest: Music;
   i: Integer;
 begin
-  OpenGraphicsWindow('Audio Tests', 640, 480);
+  OpenAudio();
+  //OpenGraphicsWindow('Audio Tests', 640, 480);
   
   //Test releasing of resources - not assigned
   ReleaseSoundEffect('fred');

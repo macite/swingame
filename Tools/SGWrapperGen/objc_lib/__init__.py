@@ -489,7 +489,7 @@ _type_dictionary_creation_data = [
                 ('message', 'SGMessage', 'message', 'message', 'Message'),
             ],
             '_type_switcher': {
-                    None:       '#2#',
+                    None:       '#2# *',
                     'const':    'const #2# *',
                     'var':      '#2# *',
                     'out':      '#2# *',
@@ -551,7 +551,7 @@ _type_dictionary_creation_data = [
             ('stringarray',     'char *',     'NSString',     'Strings',      '\n    [SGStringBufferManager stringBufferManagerFor:%(var)s size:%(size)s];\n    '),
             ('trianglearray',   'triangle',   'SGTriangle',   'Triangles',    ''),
             ('fingerarray',     'finger',     'SGFinger',     'Fingers',      ''),
-            ('resolutionarray', 'resolution', 'SGResolution', 'Resolution',   ''),
+            ('resolutionarray', 'resolution', 'SGResolution', 'Resolutions',   ''),
             
         ],
         '_type_switcher': {

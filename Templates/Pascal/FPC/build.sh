@@ -75,12 +75,6 @@ FPC_LESSR_VER=`echo ${FPC_VER} | awk -F'.' '{print $3}'`
 
 CLEAN="N"
 
-#
-# Library versions
-#
-OPENGL=false
-SDL_13=false
-
 
 Usage()
 {
@@ -103,15 +97,7 @@ while getopts chri:g:b: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-        fi 
-        ;;
     h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            OPENGL=true
-        fi 
-        ;;
     r)  RELEASE="Y" ;;
     i)  ICON="$OPTARG";;
     esac
@@ -120,31 +106,16 @@ done
 shift $((${OPTIND}-1))
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
-      TMP_DIR="${TMP_DIR}/badass"
-      LIB_DIR="${APP_PATH}/lib/sdl13"
-    elif [ ${OPENGL} = true ]; then
-        TMP_DIR="${TMP_DIR}/godly"
-      LIB_DIR="${APP_PATH}/lib/godly"
-    else
-      TMP_DIR="${TMP_DIR}/sdl12"
-      LIB_DIR="${APP_PATH}/lib/sdl12"
-    fi
+    TMP_DIR="${TMP_DIR}/mac"
+    LIB_DIR="${APP_PATH}/lib/mac"
+    PAS_FLAGS="-dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
 elif [ "$OS" = "$WIN" ]; then
-    #
-    # This needs 1.3 versions of SDL for Windows...
-    # along with function sdl_gfx, sdl_ttf, sdl_image, sdl_mixer
-    #
-    
-    # if [ ${SDL_13} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # elif [ ${OPENGL} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # else
+    TMP_DIR="${TMP_DIR}/win"
     LIB_DIR="${APP_PATH}/lib/win"
-    OPENGL=false
-    SDL_13=false
-    # fi
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k-L'${LIB_DIR}' -k-lsgsdl2"
+else
+    TMP_DIR="${TMP_DIR}/unx"
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""
 fi
 
 #
@@ -155,15 +126,10 @@ if [ -n "${RELEASE}" ]; then
     FULL_OUT_DIR="${FULL_OUT_DIR}/Release"
     TMP_DIR="${TMP_DIR}/Release"
 else
-  #its a debug build
-  if [ "$OS" = "$MAC" ]; then
-      PAS_FLAGS="-gw -vw"
-  else
-      PAS_FLAGS="-g -vw"
-  fi
-  OUT_DIR="${OUT_DIR}/Debug"
-  FULL_OUT_DIR="${FULL_OUT_DIR}/Debug"
-  TMP_DIR="${TMP_DIR}/Debug"
+    PAS_FLAGS="-gw -vw ${PAS_FLAGS}"
+    OUT_DIR="${OUT_DIR}/Debug"
+    FULL_OUT_DIR="${FULL_OUT_DIR}/Debug"
+    TMP_DIR="${TMP_DIR}/Debug"
 fi
 
 if [ ! -d ${TMP_DIR} ]; then
@@ -172,15 +138,6 @@ fi
 
 if [ -f "${LOG_FILE}" ]; then
     rm -f "${LOG_FILE}"
-fi
-
-
-if [ ${SDL_13} = true ]; then
-  PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL13"
-fi
-
-if [ ${OPENGL} = true ]; then
-  PAS_FLAGS="-dSWINGAME_OPENGL -dSWINGAME_SDL13"
 fi
 
 
@@ -209,13 +166,7 @@ CleanTmp()
 
 doDriverMessage()
 {
-  if [ ${SDL_13} = true ]; then
-    echo "  ... Using SDL 1.3 Driver"
-  elif [ ${OPENGL} = true ]; then
-    echo "  ... Using OpenGL Driver"
-  else
-    echo "  ... Using SDL 1.2 Driver"
-  fi
+    echo "  ... Using SDL2 Driver"
 }
 
 doBasicMacCompile()
@@ -223,11 +174,11 @@ doBasicMacCompile()
     mkdir -p ${TMP_DIR}
     echo "  ... Compiling $GAME_MAIN"
     
-    FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework QuickTime -framework Carbon -framework ForceFeedback'
+    FRAMEWORKS='-framework Cocoa -framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
     
     STATIC_LIBS=`cd ${LIB_DIR};ls -f *.a | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-l%s ", substr(patharr[idx],4)) }'`
     
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE"${OUT_DIR}" -FU"${TMP_DIR}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"-F'${LIB_DIR}' -framework Cocoa ${FRAMEWORKS}" -k"-lbz2" -k"-lstdc++" -k"${STATIC_LIBS}" -o"${GAME_NAME}" -k"-rpath @loader_path/../Frameworks" -k"-rpath @loader_path" "${SRC_DIR}/${GAME_MAIN}" > "${LOG_FILE}"
+    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -S2 -Sh -FE"${OUT_DIR}" -FU"${TMP_DIR}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"-F'${LIB_DIR}' ${FRAMEWORKS}" -k"${STATIC_LIBS}" -o"${GAME_NAME}" "${SRC_DIR}/${GAME_MAIN}" > "${LOG_FILE}"
     if [ $? != 0 ]; then DoExitCompile; fi
 }
 
@@ -425,6 +376,8 @@ then
         if [ $HAS_LION = true ]; then
             if (( ($FPC_MAJOR_VER == 2) && ($FPC_MINOR_VER == 6) && (FPC_LESSR_VER == 0) )); then
                 PAS_FLAGS="$PAS_FLAGS -k-macosx_version_min -k${OS_VER} -k-no_pie"
+            elif (( $FPC_MAJOR_VER == 3 )); then
+                PAS_FLAGS="$PAS_FLAGS -WM10.${OS_VER_MINOR}"
             else
                 PAS_FLAGS="$PAS_FLAGS -WM10.7"
             fi

@@ -107,7 +107,6 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
                     print >> sys.stderr, 'Missing static libraries for mac'
                 else:
                     swin_shutil.copyfile(dist_source_folder+"bin/ios/libSGSDK.a", specificdist_folder+"lib/ios/libSGSDK.a")
-                    # swin_shutil.copyfile(dist_source_folder+"bin/ios/sgsdk-godly.a", specificdist_folder+"lib/godly/ios/libSGSDK.a")
             
 
         if "Mac OS X" in dist_dict['os']:
@@ -116,48 +115,27 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
             #
             if not os.path.exists(specificdist_folder+"lib/mac"):
                 os.makedirs(specificdist_folder+"lib/mac")
-            if not os.path.exists(specificdist_folder+"lib/sdl13/mac"):
-                os.makedirs(specificdist_folder+"lib/sdl13/mac")
-            if not os.path.exists(specificdist_folder+"lib/godly/mac"):
-                os.makedirs(specificdist_folder+"lib/godly/mac")
 
             if dist_dict['staticsgsdk']:
                 # Copy staticlibs
-                if not os.path.exists(dist_source_folder+"bin/mac/sgsdk-sdl13.a"):
+                if not os.path.exists(dist_source_folder+"bin/mac/sgsdk-sdl2.a"):
                     print >> sys.stderr, 'Missing static libraries for mac'
                 else:
                     print >> sys.stderr, 'Static libraries should be for iOS only!'
                     assert false
                     
-                    swin_shutil.copyfile(dist_source_folder+"bin/mac/sgsdk-sdl13.a", specificdist_folder+"lib/sdl13/mac/libSGSDK.a")
-                    swin_shutil.copyfile(dist_source_folder+"bin/mac/sgsdk-godly.a", specificdist_folder+"lib/godly/mac/libSGSDK.a")
+                    swin_shutil.copyfile(dist_source_folder+"bin/mac/sgsdk-sdl2.a", specificdist_folder+"lib/mac/libSGSDK.a")
             elif use_dylib:
-                if not os.path.exists(dist_source_folder+"bin/mac/libSGSDK-sdl12.dylib"):
+                if not os.path.exists(dist_source_folder+"bin/mac/libSGSDK.dylib"):
                     print >> sys.stderr, 'Missing dynamic libraries for mac'
                 else:
-                    swin_shutil.copyfile(dist_source_folder+"bin/mac/libSGSDK-sdl12.dylib", specificdist_folder+"lib/mac/libSGSDK.dylib")
-                    swin_shutil.copyfile(dist_source_folder+"bin/mac/libSGSDK-sdl13.dylib", specificdist_folder+"lib/sdl13/libSGSDK.dylib")
-                    swin_shutil.copyfile(dist_source_folder+"bin/mac/libSGSDK-godly.dylib", specificdist_folder+"lib/godly/libSGSDK.dylib")
+                    swin_shutil.copyfile(dist_source_folder+"bin/mac/libSGSDK.dylib", specificdist_folder+"lib/mac/libSGSDK.dylib")
             else:
                 if not os.path.exists(dist_source_folder+"bin/mac/SGSDK.framework"):
                     print >> sys.stderr, 'Missing SwinGame framework for mac'
                 else:
-                    # Copy frameworks
+                    # Copy framework
                     copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/mac/SGSDK.framework")
-                    
-                    copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/sdl13/mac/SGSDK.framework")
-                    cur = os.getcwd()
-                    os.chdir(specificdist_folder+"lib/sdl13/mac/SGSDK.framework/Versions")
-                    # print os.getcwd()
-                    os.remove('Current')
-                    os.symlink('./%sbadass' % sg_version, 'Current')
-                    
-                    copy_without_git(dist_source_folder+"bin/mac/SGSDK.framework", specificdist_folder+"lib/godly/mac/SGSDK.framework")
-                    os.chdir(specificdist_folder+"lib/godly/mac/SGSDK.framework/Versions")
-                    # print os.getcwd()
-                    os.remove('Current')
-                    os.symlink('./%sgodly' % sg_version, 'Current')
-                    os.chdir(cur)
 
     if dist_dict.has_key('post_copy'):
         if isinstance(dist_dict['post_copy'], list):

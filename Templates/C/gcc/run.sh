@@ -66,8 +66,6 @@ printf "on run argv \n\
         end tell \n\
     on error \n\
     end try \n\
-    on error
-    end try
     return
 end run " >> "${APP_PATH}/lib/bring_fg.scpt"
     fi

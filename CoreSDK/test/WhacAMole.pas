@@ -147,7 +147,7 @@ const
   TXT_Y = 152;
 begin
   scoreTxt := IntToStr(score);
-  DrawText(scoreTxt, ColorBlack, fnt, TXT_X - TextWidth(fnt, scoreTxt), TXT_Y);
+  //DrawText(scoreTxt, ColorBlack, fnt, TXT_X - TextWidth(fnt, scoreTxt), TXT_Y);
 end;
 
 procedure DisplayMolesRemaining(moleRemain: Integer; fnt: Font);
@@ -158,7 +158,7 @@ const
   MOLE_TXT_Y = 152;
 begin
   moleTxt := IntToStr(moleRemain);
-  DrawText(moleTxt, ColorBlack, fnt, MOLE_TXT_X - TextWidth(fnt, moleTxt), MOLE_TXT_Y);
+  //DrawText(moleTxt, ColorBlack, fnt, MOLE_TXT_X - TextWidth(fnt, moleTxt), MOLE_TXT_Y);
 end;
 
 procedure DisplayCurrentLevel(level: Integer; fnt: Font);
@@ -169,7 +169,7 @@ const
     LEVEL_TXT_Y = 152;
 begin
   lvlTxt := IntToStr(level);
-  DrawText(lvlTxt, ColorBlack, fnt, LEVEL_TXT_X - TextWidth(fnt, lvlTxt), LEVEL_TXT_Y);
+  //DrawText(lvlTxt, ColorBlack, fnt, LEVEL_TXT_X - TextWidth(fnt, lvlTxt), LEVEL_TXT_Y);
 end;
 
 procedure DrawLife(const gData : GameData);

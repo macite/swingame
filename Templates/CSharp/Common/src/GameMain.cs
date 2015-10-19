@@ -1,6 +1,5 @@
 using System;
 using SwinGameSDK;
-using SwinGameSDK.SwinGame;
 
 namespace MyGame
 {
@@ -9,21 +8,21 @@ namespace MyGame
         public static void Main()
         {
             //Open the game window
-            OpenGraphicsWindow("GameMain", 800, 600);
-            ShowSwinGameSplashScreen();
+            SwinGame.OpenGraphicsWindow("GameMain", 800, 600);
+            SwinGame.ShowSwinGameSplashScreen();
             
             //Run the game loop
-            while(false == WindowCloseRequested())
+            while(false == SwinGame.WindowCloseRequested())
             {
                 //Fetch the next batch of UI interaction
-                ProcessEvents();
+                SwinGame.ProcessEvents();
                 
                 //Clear the screen and draw the framerate
-                ClearScreen(Color.White);
-                DrawFramerate(0,0);
+                SwinGame.ClearScreen(Color.White);
+                SwinGame.DrawFramerate(0,0);
                 
                 //Draw onto the screen
-                RefreshScreen(60);
+                SwinGame.RefreshScreen(60);
             }
         }
     }

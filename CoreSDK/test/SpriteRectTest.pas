@@ -1,5 +1,4 @@
 program SpriteRecTest;
-{$IFNDEF UNIX} {$r GameLauncher.res} {$ENDIF}
 uses
   sgTypes, sgAudio, sgText, sgGraphics, sgResources, sgSprites, sgInput, sgPhysics, sgCamera, sgImages;
 
