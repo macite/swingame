@@ -38,35 +38,66 @@ void test_draw_text(sg_font_data *font, float x, float y, sg_font_style style, s
     _sg_functions->graphics.close_drawing_surface(&bitmap);
 }
 
+void test_basic_text(sg_drawing_surface *window)
+{
+    cout <<  "Testing text " << endl;
+    sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 54);
+    
+    cout << " Loaded " << font._data << endl;
+    
+    int line_skip = _sg_functions->text.text_line_skip(&font);
+    cout << " The line skip is: " << line_skip << endl;
+    
+    int w;
+    int h;
+    int text_size = _sg_functions->text.text_size(&font,(char*)"Hello World", &w, &h);
+    cout << "Result for text size is : " << text_size << " with a width of: " << w << " and a height of: " << h << endl;
+    
+    cout << "Testing drawing of different font styles" << endl;
+    test_draw_text(&font, 0, 100, SG_FONT_STYLE_NORMAL, window);
+    test_draw_text(&font, 0, 200, SG_FONT_STYLE_BOLD, window);
+    test_draw_text(&font, 0, 300, SG_FONT_STYLE_ITALIC, window);
+    test_draw_text(&font, 0, 400, SG_FONT_STYLE_UNDERLINE, window);
+    test_draw_text(&font, 0, 500, SG_FONT_STYLE_STRIKETHROUGH, window);
+    
+    cout << "Closing same font twice." << endl;
+    _sg_functions->text.close_font(&font);
+    _sg_functions->text.close_font(&font);
+}
+
+void test_memory_of_draw_text(sg_drawing_surface *window)
+{
+    sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 16);
+    
+    cout << "Hit q key to quit" << endl;
+    
+    char line[256] = "";
+    int i = 0;
+    
+    while ( ! (_sg_functions->input.key_pressed( (int)'q' ) || _sg_functions->input.window_close_requested(window)) )
+    {
+        i++;
+        
+        _sg_functions->input.process_events();
+        
+        sprintf(line, "Iteration %d", i);
+
+        _sg_functions->graphics.clear_drawing_surface(window, {1.0, 1.0, 1.0, 1.0});
+        _sg_functions->text.draw_text(window, &font, 10, 10, line, {0.0, 0.0, 0.0, 1.0});
+        
+        _sg_functions->graphics.refresh_window(window);
+    }
+}
+
 void test_text()
 {
-  sg_drawing_surface window = _sg_functions->graphics.open_window("Text", 800, 600);
+    sg_drawing_surface window = _sg_functions->graphics.open_window("Text", 800, 600);
 
-  cout <<  "Testing text " << endl; 
-  sg_font_data font =  _sg_functions->text.load_font("BATTLEST.TTF", 54);
+    test_basic_text(&window);
+    
+    test_memory_of_draw_text(&window);
 
-  cout << " Loaded " << font._data << endl;
-
-  int line_skip = _sg_functions->text.text_line_skip(&font); 
-  cout << " The line skip is: " << line_skip << endl; 
-
-  int w; 
-  int h; 
-  int text_size = _sg_functions->text.text_size(&font,(char*)"Hello World", &w, &h); 
-  cout << "Result for text size is : " << text_size << " with a width of: " << w << " and a height of: " << h << endl; 
-
-  cout << "Testing drawing of different font styles" << endl;
-  test_draw_text(&font, 0, 100, SG_FONT_STYLE_NORMAL, &window);
-  test_draw_text(&font, 0, 200, SG_FONT_STYLE_BOLD, &window);
-  test_draw_text(&font, 0, 300, SG_FONT_STYLE_ITALIC, &window);
-  test_draw_text(&font, 0, 400, SG_FONT_STYLE_UNDERLINE, &window);
-  test_draw_text(&font, 0, 500, SG_FONT_STYLE_STRIKETHROUGH, &window);
-
-  cout << "Closing same font twice." << endl;
-  _sg_functions->text.close_font(&font); 
-  _sg_functions->text.close_font(&font); 
-
-  cout << "Closing text window" << endl;
-  _sg_functions->graphics.close_drawing_surface(&window);
+    cout << "Closing text window" << endl;
+    _sg_functions->graphics.close_drawing_surface(&window);
 }
 

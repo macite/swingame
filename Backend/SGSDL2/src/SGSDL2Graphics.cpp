@@ -436,6 +436,8 @@ void _sgsdl2_destroy_bitmap(sg_bitmap_be *bitmap_be)
 //
 //--------------------------------------------------------------------------------------
 
+//forward declare process events
+void sgsdl2_process_events();
 
 bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int options, sg_window_be *window_be)
 {
@@ -470,6 +472,8 @@ bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
     SDL_RenderClear(window_be->renderer);
 	
 	_sgsdl2_add_window(window_be);
+    
+    sgsdl2_process_events();
     
     return true;
 }
