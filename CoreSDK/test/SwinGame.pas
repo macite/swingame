@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-10-19 16:13:33.541000
+// SwinGame.pas was generated on 2015-10-19 18:30:17.799401
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
