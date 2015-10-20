@@ -157,9 +157,10 @@ void sgsdl2_draw_text(
 
                 SDL_RenderCopy(renderer, text_texture, NULL, &rect);
 
-                _sgsdl2_complete_render(surface, i); 
+                _sgsdl2_complete_render(surface, i);
+                
+                SDL_DestroyTexture(text_texture);
             }
-            SDL_DestroyTexture(text_texture);
         }
     }
 

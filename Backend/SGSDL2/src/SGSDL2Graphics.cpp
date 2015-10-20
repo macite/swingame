@@ -454,6 +454,13 @@ bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
         return false;
     }
     
+    // Setup the fullscreen mode
+    SDL_DisplayMode fullscreen_mode;
+    SDL_zero(fullscreen_mode);
+    fullscreen_mode.format = SDL_PIXELFORMAT_RGB888;
+    SDL_SetWindowDisplayMode(window_be->window, &fullscreen_mode);
+    
+    // Create the actual renderer -- accellerated,
     window_be->renderer = SDL_CreateRenderer(window_be->window,
                                              -1,
                                              SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
@@ -473,7 +480,8 @@ bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
 	
 	_sgsdl2_add_window(window_be);
     
-    sgsdl2_process_events();
+    SDL_RaiseWindow(window_be->window);
+    SDL_PumpEvents();
     
     return true;
 }

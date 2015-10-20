@@ -838,7 +838,7 @@ bool test_basic_drawing(int drawing_test_run)
         _sg_functions->graphics.show_fullscreen(&window, true);
 
         test_rects( &window, 1);
-
+        
         _sg_functions->graphics.show_fullscreen(&window, false);
     }
     
@@ -1016,6 +1016,48 @@ void output_system_details()
     }
     
     cout << "Time is " << _sg_functions->utils.get_ticks() << endl;
+}
+
+void test_fullscreen()
+{
+    cout << "Calling load_sg..." << endl;
+    _sg_functions = sg_load(get_input_callbacks());
+    
+    if ( !_sg_functions )
+    {
+        cout << "Failed to load functions!" << endl;
+        return;
+    }
+    
+    cout << "Calling init..." << endl;
+    _sg_functions->init();
+
+    sg_drawing_surface window;
+    window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
+    
+    _sg_functions->graphics.show_fullscreen(&window, false);
+    
+    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->input.process_events();
+    _sg_functions->utils.delay(2000);
+    
+    _sg_functions->graphics.show_fullscreen(&window, true);
+    
+    //        test_rects( &window, 1);
+    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 1.0f, 1.0f, 1.0f});
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->input.process_events();
+    _sg_functions->utils.delay(2000);
+    
+    _sg_functions->graphics.show_fullscreen(&window, false);
+    
+    _sg_functions->graphics.clear_drawing_surface(&window, {1.0f, 0.0f, 0.0f, 1.0f});
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->input.process_events();
+    _sg_functions->utils.delay(2000);
+    
+    _sg_functions->graphics.close_drawing_surface(&window);
 }
 
 int main(int argc, const char * argv[])
