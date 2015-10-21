@@ -327,12 +327,13 @@ void _sgsdl2_destroy_window(sg_window_be *window_be)
 {
     _sgsdl2_remove_window(window_be);
     
-    SDL_DestroyRenderer(window_be->renderer);
-    SDL_DestroyWindow(window_be->window);
     if (window_be->backing)
     {
         SDL_DestroyTexture(window_be->backing);
     }
+    
+    SDL_DestroyRenderer(window_be->renderer);
+    SDL_DestroyWindow(window_be->window);
     
     window_be->idx = UINT_MAX;
     window_be->renderer = NULL;
