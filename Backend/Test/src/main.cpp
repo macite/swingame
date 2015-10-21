@@ -26,6 +26,7 @@ sg_interface * _sg_functions = NULL;
 
 // images drawn in tests
 sg_drawing_surface img, img2;
+sg_drawing_surface bmp;
 
 enum test_options 
 { 
@@ -644,6 +645,7 @@ void test_resize(sg_drawing_surface * window_arr, int sz)
 void test_bitmaps(sg_drawing_surface * window_arr, int sz)
 {
     float src_data[] = {0, 0, static_cast<float>(img.width), static_cast<float>(img.height)};
+    float bmp_src_data[] = {0, 0, static_cast<float>(bmp.width), static_cast<float>(bmp.height)};
     float dst_data[] = {0, 0, 0, 0, 0, 1, 1};
     
 	//Draw at TOP LEFT (shows that the scaling of the draw coordinates works)
@@ -651,6 +653,10 @@ void test_bitmaps(sg_drawing_surface * window_arr, int sz)
 	{
 		_sg_functions->graphics.clear_drawing_surface(&window_arr[i], {1, 1, 1, 1});
 
+        _sg_functions->image.draw_bitmap( &bmp, &window_arr[i], bmp_src_data, 4, dst_data, 7, SG_FLIP_NONE);
+        _sg_functions->graphics.refresh_window(&window_arr[i]);
+        _sg_functions->utils.delay(5000);
+        
 		_sg_functions->image.draw_bitmap( &img, &window_arr[i], src_data, 4, dst_data, 7, SG_FLIP_NONE);
 		_sg_functions->graphics.refresh_window(&window_arr[i]);
 		_sg_functions->utils.delay(1000);
@@ -787,6 +793,73 @@ void test_bitmaps(sg_drawing_surface * window_arr, int sz)
     
     _sg_functions->utils.delay(300);
     _sg_functions->input.process_events();
+}
+
+bool test_draw_bitmap_without_window()
+{
+    sg_drawing_surface window;
+    window = _sg_functions->graphics.open_window("Test Bitmap Drawing", 600, 600);
+    
+    cout << "Creating bitmap" << endl;
+    
+    bmp = _sg_functions->image.create_bitmap(100, 100);
+
+    cout << "Drawing to bitmap" << endl;
+    
+    _sg_functions->graphics.clear_drawing_surface(&bmp, {1.0f, 0.0f, 0.0f, 1.0f});
+
+    float data_t[] = {0.0f, 99.0f, 99.0f, 99.0f, 50.0f, 1.0f};
+    _sg_functions->graphics.fill_triangle(&bmp, {1.0,1.0,1.0,1.0}, data_t, 6 );
+    
+    float data[] = {0.0f, 20.0f, 80.0f, 20.0f};
+    _sg_functions->graphics.fill_aabb_rect(&bmp, {0.0f, 1.0f, 0.0f, 1.0f}, data, 4);
+    
+    data[1] = 40.0f;
+    data[2] = 60.0f;
+    _sg_functions->graphics.fill_aabb_rect(&bmp, {0.0f, 0.0f, 1.0f, 1.0f}, data, 4);
+
+    data[1] = 60.0f;
+    data[2] = 40.0f;
+    _sg_functions->graphics.fill_aabb_rect(&bmp, {1.0f, 0.0f, 1.0f, 1.0f}, data, 4);
+
+    data[1] = 80.0f;
+    data[2] = 20.0f;
+    _sg_functions->graphics.fill_aabb_rect(&bmp, {1.0f, 1.0f, 0.0f, 1.0f}, data, 4);
+
+    cout << "Saving bitmap" << endl;
+    
+    _sg_functions->graphics.save_png(&bmp, "/Users/acain/Desktop/test1.png");
+    
+    float src_data[] = {0, 0, static_cast<float>(bmp.width), static_cast<float>(bmp.height)};
+    float dst_data[] = {0, 0, 0, 0, 0, 1, 1};
+    
+    _sg_functions->input.process_events();
+    _sg_functions->graphics.clear_drawing_surface(&window, {0.0f, 0.0f, 0.0f, 1.0f});
+    _sg_functions->image.draw_bitmap( &bmp, &window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->utils.delay(2000);
+    
+    _sg_functions->graphics.save_png(&window, "/Users/acain/Desktop/test2.png");
+    
+    sg_color clr = _sg_functions->graphics.read_pixel(&bmp, 5, 5);
+    
+    cout << "Color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
+    
+    _sg_functions->graphics.close_drawing_surface(&window);
+    
+    _sg_functions->graphics.save_png(&bmp, "/Users/acain/Desktop/test3.png");
+    
+    window = _sg_functions->graphics.open_window("Draw in new window!", 600, 600);
+
+    _sg_functions->input.process_events();
+    _sg_functions->graphics.clear_drawing_surface(&window, {0.0f, 0.0f, 0.0f, 1.0f});
+    _sg_functions->image.draw_bitmap( &bmp, &window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
+    _sg_functions->graphics.refresh_window(&window);
+    _sg_functions->utils.delay(2000);
+    
+    _sg_functions->graphics.close_drawing_surface(&window);
+
+    return true;
 }
 
 bool test_basic_drawing(int drawing_test_run)
@@ -992,6 +1065,9 @@ void test_bitmap_loading_saving()
         }
     }
     
+    sg_color clr = _sg_functions->graphics.read_pixel(&lines, 0, 0);
+    cout << "Lines color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
+    
     _sg_functions->graphics.save_png(&lines, "/Users/acain/Desktop/test.png");
     
     _sg_functions->graphics.close_drawing_surface(&lines);
@@ -1091,6 +1167,12 @@ int main(int argc, const char * argv[])
     }
 
     output_system_details();
+    
+    if (test_run & BASIC_DRAWING && ! test_draw_bitmap_without_window() )
+    {
+        cout << "Drawing to bitmap without window failed..." << endl;
+        return -1;
+    }
     
     if (test_run & BASIC_DRAWING && ! test_basic_drawing(test_drawing_run) )
     {
