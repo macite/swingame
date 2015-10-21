@@ -1365,7 +1365,8 @@ void sgsdl2_show_border(sg_drawing_surface *surface, int border)
 			SDL_DestroyWindow(window);
 			
 #else
-            SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);			
+            SDL_SetWindowBordered(window_be->window, border ? SDL_TRUE : SDL_FALSE);
+            SDL_PumpEvents();
 #endif
             break;
         }
@@ -1390,6 +1391,7 @@ void sgsdl2_show_fullscreen(sg_drawing_surface *surface, int fullscreen)
         case SGDS_Window:
         {
             SDL_SetWindowFullscreen(window_be->window, fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+            SDL_PumpEvents();
             break;
         }
 
