@@ -1448,6 +1448,7 @@ void sgsdl2_resize(sg_drawing_surface *surface, int width, int height)
             // Delete old backing texture
             SDL_DestroyTexture(old);
             
+            SDL_PumpEvents();
             break;
         }
          
