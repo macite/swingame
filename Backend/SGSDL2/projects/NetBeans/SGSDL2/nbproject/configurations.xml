@@ -75,7 +75,7 @@
             <linkerLibLibItem>png</linkerLibLibItem>
             <linkerLibLibItem>z</linkerLibLibItem>
           </linkerLibItems>
-          <commandLine>-lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net</commandLine>
+          <commandLine>-static-libgcc -static-libstdc++ -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net</commandLine>
         </linkerTool>
       </compileType>
       <item path="../../../../Core/include/sgBackendTypes.h"

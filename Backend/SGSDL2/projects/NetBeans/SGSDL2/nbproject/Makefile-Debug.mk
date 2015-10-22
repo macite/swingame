@@ -67,7 +67,7 @@ LDLIBSOPTIONS=-L../../../lib/win32 -lpng -lz
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT}: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net -shared
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libSGSDL2.${CND_DLIB_EXT} ${OBJECTFILES} ${LDLIBSOPTIONS} -static-libgcc -static-libstdc++ -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net -shared
 
 ${OBJECTDIR}/_ext/766657836/sgBackendUtils.o: ../../../../Core/src/sgBackendUtils.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/766657836
