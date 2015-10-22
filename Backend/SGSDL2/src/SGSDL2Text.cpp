@@ -162,9 +162,8 @@ void sgsdl2_draw_text(
                 SDL_DestroyTexture(text_texture);
             }
         }
+        SDL_FreeSurface(text_surface);
     }
-
-    SDL_FreeSurface(text_surface);
 }
 
 void sgsdl2_load_text_fns(sg_interface *functions)

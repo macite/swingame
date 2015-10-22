@@ -8,6 +8,7 @@
 #include "test_text.h"
 
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 

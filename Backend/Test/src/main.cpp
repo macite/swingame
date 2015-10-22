@@ -11,6 +11,7 @@
 #include <climits>
 #include <cstdio>
 #include <cmath>
+#include <ctime>
 
 #include "sgInterfaces.h"
 #include "test_audio.h"
@@ -356,13 +357,13 @@ void test_triangles(sg_drawing_surface *window_arr, int sz)
 
 void test_pixels(sg_drawing_surface *window_arr, int sz)
 {
-	_sg_functions->input.process_events();
+    _sg_functions->input.process_events();
     sg_color clr = { 0.0, 0.0, 0.0, 1.0 };
     for (int w = 0; w < sz; w++)
     {
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
-    _sg_functions->input.process_events();
+        _sg_functions->input.process_events();
     }
     
     _sg_functions->input.process_events();
@@ -380,18 +381,19 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
                 _sg_functions->graphics.draw_pixel(&window_arr[w], clr, data, 2 );
             }
             
-			_sg_functions->input.process_events();
-			refresh_or_draw(&window_arr[w]);
+            _sg_functions->input.process_events();
+            refresh_or_draw(&window_arr[w]);
         }
     }
     
     _sg_functions->input.process_events();
     for (int w = 0; w < sz; w++)
     {
+        sg_drawing_surface *wnd = &window_arr[w];
         int sz = window_arr[w].width * window_arr[w].height;
         int pixels[sz];
         
-        _sg_functions->graphics.to_pixels(&window_arr[w], pixels, sz);
+        _sg_functions->graphics.to_pixels(wnd, pixels, sz);
         
         int count = 0;
         for (int x = 0; x < window_arr[w].width; x++)
@@ -400,14 +402,14 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
             {
                 if  ( pixels[x + y * window_arr[w].width] == 0xffffffff ) count++;
             }
-			_sg_functions->input.process_events();
+            _sg_functions->input.process_events();
         }
         cout << "Window " << w << " has " << count << " white pixels" << endl;
         
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
-		_sg_functions->input.process_events();
-	}
+	_sg_functions->input.process_events();
+    }
 }
 
 
@@ -799,7 +801,7 @@ bool test_draw_bitmap_without_window()
 {
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Bitmap Drawing", 600, 600);
-    
+
     cout << "Creating bitmap" << endl;
     
     bmp = _sg_functions->image.create_bitmap(100, 100);
@@ -828,19 +830,26 @@ bool test_draw_bitmap_without_window()
 
     cout << "Saving bitmap" << endl;
     
+#ifdef WINDOWS
+    _sg_functions->graphics.save_png(&bmp, "c:\\Users\\acain\\Desktop\\test1.png");
+#else
     _sg_functions->graphics.save_png(&bmp, "/Users/acain/Desktop/test1.png");
-    
+#endif
     float src_data[] = {0, 0, static_cast<float>(bmp.width), static_cast<float>(bmp.height)};
     float dst_data[] = {0, 0, 0, 0, 0, 1, 1};
     
-    _sg_functions->input.process_events();
     _sg_functions->graphics.clear_drawing_surface(&window, {0.0f, 0.0f, 0.0f, 1.0f});
     _sg_functions->image.draw_bitmap( &bmp, &window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
     _sg_functions->graphics.refresh_window(&window);
+    
+    _sg_functions->input.process_events();
     _sg_functions->utils.delay(2000);
     
+#ifdef WINDOWS
+    _sg_functions->graphics.save_png(&window, "c:\\Users\\acain\\Desktop\\test2.png");
+#else
     _sg_functions->graphics.save_png(&window, "/Users/acain/Desktop/test2.png");
-    
+#endif    
     sg_color clr = _sg_functions->graphics.read_pixel(&bmp, 5, 5);
     cout << "Bmp Color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
 
@@ -850,7 +859,11 @@ bool test_draw_bitmap_without_window()
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
+#ifdef WINDOWS
+    _sg_functions->graphics.save_png(&bmp, "c:\\Users\\acain\\Desktop\\test3.png");
+#else    
     _sg_functions->graphics.save_png(&bmp, "/Users/acain/Desktop/test3.png");
+#endif
     
     window = _sg_functions->graphics.open_window("Draw in new window!", 600, 600);
 
@@ -1056,7 +1069,7 @@ void test_bitmap_loading_saving()
     int pixels[sz];
     
     for (int i = 0; i < sz; i++) pixels[i] = 0;
-        
+    
     _sg_functions->graphics.to_pixels(&lines, pixels, sz);
     
     for (int i = 0; i < sz; i++)
@@ -1141,6 +1154,7 @@ void test_fullscreen()
 
 int main(int argc, const char * argv[])
 {
+    srand (time(NULL));
     cout << "Starting driver backend test" << endl;
 
     if ( ! test_core_functions() )
@@ -1220,7 +1234,7 @@ int main(int argc, const char * argv[])
     
     if (test_run & NETWORK)
     {
-        test_network();
+        //test_network();
     }
     
     _sg_functions->finalise();
