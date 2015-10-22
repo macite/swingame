@@ -318,17 +318,31 @@ bool _sgsdl2_has_open_bitmap_without_surface()
     return false;
 }
 
+void _sgsdl2_get_pixels_from_renderer(SDL_Renderer *renderer, int x, int y, int w, int h, int *pixels)
+{
+    SDL_Rect rect = {x, y, w, h};
+    
+    // textures appear flipped by default and need to have their pixels inverted
+    int raw_pixels[w * h];
+
+    SDL_RenderReadPixels(renderer, &rect, SDL_PIXELFORMAT_RGBA8888, raw_pixels, w * 4);
+    
+    for (int row = 0; row < h; row++)
+    {
+        // Copy a row from the paw pixels to the dest pixels
+        memcpy(&pixels[(h - row - 1) * w], &raw_pixels[row *  w], sizeof(int) * static_cast<unsigned long>(w));
+    }
+}
+
 void _sgsdl2_bitmap_be_texture_to_pixels(sg_bitmap_be *bitmap_be, int *pixels, int sz, int w, int h)
 {
-    SDL_Rect rect = {0, 0, w, h};
-    
     if (bitmap_be->drawable && _sgsdl2_num_open_windows > 0)
     {
-        // textures appear flipped by default and need to have their pixels inverted
         // read pixels from the texture
         _sgsdl2_set_renderer_target(0, bitmap_be);
-        SDL_RenderReadPixels(_sgsdl2_open_windows[0]->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, w * 4);
+        _sgsdl2_get_pixels_from_renderer(_sgsdl2_open_windows[0]->renderer, 0, 0, w, h, pixels);
         _sgsdl2_restore_default_render_target(_sgsdl2_open_windows[0], bitmap_be);
+        
     }
     else
     {
@@ -1164,13 +1178,15 @@ sg_color sgsdl2_read_pixel(sg_drawing_surface *surface, int x, int y)
 {
     sg_color result = {0,0,0,0};
     unsigned int clr = 0;
-    SDL_Rect rect = {x, y, 1, 1};
+    // Texture is inverted so flip y
+    SDL_Rect rect = {x, surface->height - y - 1, 1, 1};
     
     if ( ! surface || ! surface->_data ) return result;
 
     if ( _sgsdl2_num_open_windows == 0 ) _sgsdl2_create_initial_window();
     
     SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, 0);
+
     SDL_RenderReadPixels(renderer,
                          &rect,
                          SDL_PIXELFORMAT_RGBA8888,
@@ -1432,8 +1448,6 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
 {
     if ( ! surface || ! surface->_data || surface->width * surface->height != sz) return;
 
-    SDL_Rect rect = {0, 0, surface->width, surface->height};
-    
     switch (surface->kind)
     {
         case SGDS_Window:
@@ -1441,7 +1455,8 @@ void sgsdl2_to_pixels(sg_drawing_surface *surface, int *pixels, int sz)
             sg_window_be * window_be;
             window_be = (sg_window_be *)surface->_data;
             
-            SDL_RenderReadPixels(window_be->renderer, &rect, SDL_PIXELFORMAT_RGBA8888, pixels, surface->width * 4);
+            // read pixels from the texture
+            _sgsdl2_get_pixels_from_renderer(window_be->renderer, 0, 0, surface->width, surface->height, pixels);
             break;
         }
             

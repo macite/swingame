@@ -842,8 +842,11 @@ bool test_draw_bitmap_without_window()
     _sg_functions->graphics.save_png(&window, "/Users/acain/Desktop/test2.png");
     
     sg_color clr = _sg_functions->graphics.read_pixel(&bmp, 5, 5);
-    
-    cout << "Color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
+    cout << "Bmp Color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
+
+    clr = _sg_functions->graphics.read_pixel(&window, 0, 0);
+    cout << "Wnd Color is : " << clr.r << ":" << clr.g << ":" << clr.b << ":" << clr.a << endl;
+
     
     _sg_functions->graphics.close_drawing_surface(&window);
     
