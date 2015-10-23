@@ -21,7 +21,7 @@ FC=gfortran
 AS=as
 
 # Macros
-CND_PLATFORM=MinGW-Windows
+CND_PLATFORM=MinGW_1-Windows
 CND_DLIB_EXT=dll
 CND_CONF=Debug
 CND_DISTDIR=dist
@@ -56,13 +56,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../SGSDL2/dist/Debug/MinGW-Windows -L../../../lib/win32 -L../SGSDL2/dist/Debug/MinGW-Windows -lSGSDL2
+LDLIBSOPTIONS=-L../SGSDL2/dist/Debug/MinGW-Windows -L../../../lib/win32 -L../SGSDL2/dist/Debug/MinGW_1-Windows -lSGSDL2
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ../SGSDL2/dist/Debug/MinGW-Windows/libSGSDL2.dll
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ../SGSDL2/dist/Debug/MinGW_1-Windows/libSGSDL2.dll
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testsgsdl2.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}

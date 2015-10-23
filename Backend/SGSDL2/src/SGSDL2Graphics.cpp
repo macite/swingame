@@ -1782,6 +1782,7 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
     surface = IMG_Load(filename);
     
     if ( ! surface ) {
+        std::cout << "error loading image " << IMG_GetError() << std::endl;
         return result;
     }
     

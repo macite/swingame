@@ -38,7 +38,6 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>../../../lib/win32/libSDL2.a</itemPath>
   </logicalFolder>
   <sourceRootList>
     <Elem>../../../src</Elem>
@@ -55,6 +54,7 @@
       <compileType>
         <ccTool>
           <stripSymbols>true</stripSymbols>
+          <architecture>1</architecture>
           <standard>8</standard>
           <incDir>
             <pElem>../../../../Core/include</pElem>
@@ -64,7 +64,7 @@
             <pElem>../../../external/SDL_mixer</pElem>
             <pElem>../../../external/SDL_net</pElem>
             <pElem>../../../external/SDL_ttf</pElem>
-            <pElem>../../../external/PNG/libpng-1.6.18</pElem>
+            <pElem>../../../external/libpng</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
@@ -72,8 +72,8 @@
             <pElem>../../../lib/win32</pElem>
           </linkerAddLib>
           <linkerLibItems>
-            <linkerLibLibItem>png</linkerLibLibItem>
-            <linkerLibLibItem>z</linkerLibLibItem>
+            <linkerLibFileItem>../../../external/libpng/libpng.a</linkerLibFileItem>
+            <linkerLibFileItem>../../../external/zlib/libz.a</linkerLibFileItem>
           </linkerLibItems>
           <commandLine>-static-libgcc -static-libstdc++ -lmingw32 -lSDL2 -lSDL2_mixer -lSDL2_gfx -lSDL2_image -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lversion -luuid -lSDL2_ttf -lSDL2_net</commandLine>
         </linkerTool>
@@ -97,8 +97,6 @@
             ex="false"
             tool="1"
             flavor2="0">
-      </item>
-      <item path="../../../lib/win32/libSDL2.a" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Audio.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -170,8 +168,6 @@
             ex="false"
             tool="1"
             flavor2="0">
-      </item>
-      <item path="../../../lib/win32/libSDL2.a" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../../src/SGSDL2Audio.cpp" ex="false" tool="1" flavor2="0">
       </item>
