@@ -19,7 +19,7 @@ unit sgDriverGraphicsSDL2;
 //=============================================================================
 
 interface
-	uses sgTypes;
+	uses sgTypes, sgBackendTypes;
 
   procedure LoadSDL2GraphicsDriver();
 
@@ -32,7 +32,7 @@ implementation
     result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
 
-	function GetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
+	function GetPixel32Procedure (bmp: BitmapPtr; x, y: Single) : Color;
   var
     clr: sg_color;
 	begin
@@ -55,7 +55,7 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.fill_triangle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.fill_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
 
   procedure DrawTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
@@ -73,7 +73,7 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.draw_triangle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.draw_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
   
   procedure FillCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -86,7 +86,7 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.fill_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.fill_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 
   procedure DrawCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -99,7 +99,7 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.draw_circle(opts.dest^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.draw_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 	
 	procedure FillEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
@@ -113,7 +113,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.fill_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 	
 	procedure DrawEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
@@ -127,7 +127,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_ellipse(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
 	procedure FillRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
@@ -141,7 +141,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.fill_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 
   procedure DrawRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
@@ -155,7 +155,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_aabb_rect(opts.dest^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
 	procedure DrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
@@ -171,7 +171,7 @@ implementation
     XYFromOpts(opts, pts[0], pts[1]);
     XYFromOpts(opts, pts[2], pts[3]);
 
-    _sg_functions^.graphics.draw_line(opts.dest^.surface, _ToSGColor(clr), @pts[0], 5);
+    _sg_functions^.graphics.draw_line(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 5);
   end;
 	
 	procedure DrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);
@@ -183,10 +183,10 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_pixel(opts.dest^.surface, _ToSGColor(clr), @pts[0], 2);
+    _sg_functions^.graphics.draw_pixel(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 2);
 	end;
   
-  procedure SetClipRectangleProcedure(dest : Bitmap; rect : Rectangle);
+  procedure SetClipRectangleProcedure(dest : BitmapPtr; rect : Rectangle);
   var
     pts: array [0..4] of Single;
   begin
@@ -198,7 +198,7 @@ implementation
     _sg_functions^.graphics.set_clip_rect(dest^.surface, @pts[0], 4);
   end;
   
-  procedure ResetClipProcedure(dest : Bitmap);
+  procedure ResetClipProcedure(dest : BitmapPtr);
   begin
     _sg_functions^.graphics.clear_clip_rect(dest^.surface);
   end;
@@ -229,6 +229,7 @@ implementation
 
     // Allocate space for the screen variable - TODO: move this out of here!
     New(screen);
+    screen^.id := BITMAP_PTR;
     screen^.surface := @wind;
     
     screenRect    := RectangleFrom(0,0, screenWidth, screenHeight);
@@ -239,7 +240,7 @@ implementation
     _screen := @wind;
   end;
 
-  procedure InitializeScreenProcedure( screen: Bitmap; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
+  procedure InitializeScreenProcedure( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
   var
     clr: sg_color;
   begin
@@ -259,7 +260,7 @@ implementation
     screen^.height := newHeight;
   end;
   
-  procedure RefreshScreenProcedure(screen : Bitmap);
+  procedure RefreshScreenProcedure(screen : BitmapPtr);
   begin
     _sg_functions^.graphics.refresh_window(psg_drawing_surface(screen^.surface));
   end;
@@ -273,7 +274,7 @@ implementation
     b := c and $000000FF;
   end;
   
-  function ColorFromProcedure(bmp : Bitmap; r, g, b, a: Byte)  : Color;
+  function ColorFromProcedure(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
   begin
     //TODO: standardise and remove from drivers
     result := a shl 24 or r shl 16 or g shl 8 or b ;

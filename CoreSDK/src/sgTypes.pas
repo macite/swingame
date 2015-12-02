@@ -209,34 +209,6 @@ interface
     /// @field pointer: pointer
     Animation = Pointer;
     
-    /// Bitmap data stores the data associated with a Bitmap. Each bitmap contains
-    /// a pointer to the bitmap color information (surface), its width, height,
-    /// and a mask storing the non-transparent pixels that is used for pixel level
-    /// collision checking.
-    ///
-    /// @note Do not use BitmapData directly, use Bitmap.
-    /// @struct BitmapData
-    /// @via_pointer
-    BitmapData = packed record
-      filename, name     : String;      // Used for locating bitmaps during load/freeing
-      surface            : Pointer;     // The actual bitmap image
-      
-      width              : Longint;     //  The width of the bitmap
-      height             : Longint;     //  The height of the bitmap
-      TextureWidthRatio  : Single;      //  bmp width / texture width
-      TextureHeightRatio : Single;      //  bmp height /texture height
-      
-      //Used for bitmaps that are made up of cells
-      cellW                : Longint;    // The width of a cell
-      cellH                : Longint;    // The height of a cell
-      cellCols             : Longint;    // The columns of cells in the bitmap
-      cellRows             : Longint;    // The rows of cells in the bitmap
-      cellCount            : Longint;    // The total number of cells in the bitmap
-      
-      nonTransparentPixels : Array of Array of Boolean;  // Pixel mask used for pixel level collisions
-      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
-    end;
-
     /// The bitmap type is a pointer to a BitmapData. The BitmapData record
     /// contains the data used by the SwinGame API to represent
     /// bitmaps. You can create new bitmaps in memory for drawing operatings
@@ -246,8 +218,8 @@ interface
     ///
     /// @class Bitmap
     /// @pointer_wrapper
-    /// @field pointer: ^BitmapData
-    Bitmap = ^BitmapData;
+    /// @field pointer: pointer
+    Bitmap = Pointer;
     
     /// Determines the effect of the camera on a drawing operation.
     /// `DrawToScreen` means camera has no affect.

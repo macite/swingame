@@ -4,7 +4,7 @@ interface
 	procedure LoadSDL2TextDriver();
 		
 implementation
-	uses sgTypes, sgDriverSDL2Types, sgDriverText, sgShared;
+	uses sgTypes, sgDriverSDL2Types, sgDriverText, sgShared, sgBackendTypes;
 
 	function LoadFontProcedure(const fontName, fileName : String; size : Longint) : Font;
 	var
@@ -56,9 +56,9 @@ implementation
 	    	pts[1] := rc.y;
     		pts[2] := rc.width;
     		pts[3] := rc.height;
-			_sg_functions^.graphics.fill_aabb_rect(dest^.surface, clr, @pts[0], 4);
+			_sg_functions^.graphics.fill_aabb_rect(ToBitmapPtr(dest)^.surface, clr, @pts[0], 4);
 		end;
-		_sg_functions^.text.draw_text(dest^.surface, font^.fptr, rc.x, rc.y, PChar(str), _ToSGColor(clrFg));
+		_sg_functions^.text.draw_text(ToBitmapPtr(dest)^.surface, font^.fptr, rc.x, rc.y, PChar(str), _ToSGColor(clrFg));
 	end;
 	
 	procedure PrintWideStringsProcedure(dest: Bitmap; font: Font; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
@@ -104,7 +104,7 @@ implementation
 	
 	procedure StringColorProcedure(dest : Bitmap; x,y : Single;const theText : String; theColor : Color); 
 	begin
-		_sg_functions^.text.draw_text(dest^.surface, nil, x, y, PChar(theText), _ToSGColor(theColor));
+		_sg_functions^.text.draw_text(ToBitmapPtr(dest)^.surface, nil, x, y, PChar(theText), _ToSGColor(theColor));
 	end;
 
 	function LineSkipFunction(fnt: Font): Integer;

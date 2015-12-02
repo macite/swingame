@@ -19,6 +19,7 @@ uses sgTypes;
     MUSIC_PTR = 'MUSI';
     ANIMATION_PTR = 'ANIM';
     ANIMATION_SCRIPT_PTR = 'ASCR';
+    BITMAP_PTR = 'BMP*';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -77,11 +78,42 @@ uses sgTypes;
       animationName:  String;               // The name of the animation - when it was started
     end;
 
+    BitmapPtr = ^BitmapData;
+
+    /// Bitmap data stores the data associated with a Bitmap. Each bitmap contains
+    /// a pointer to the bitmap color information (surface), its width, height,
+    /// and a mask storing the non-transparent pixels that is used for pixel level
+    /// collision checking.
+    ///
+    /// @note Do not use BitmapData directly, use Bitmap.
+    /// @struct BitmapData
+    /// @via_pointer
+    BitmapData = packed record
+      id                 : PointerIdentifier;
+      filename, name     : String;      // Used for locating bitmaps during load/freeing
+      surface            : Pointer;     // The actual bitmap image
+      
+      width              : Longint;     //  The width of the bitmap
+      height             : Longint;     //  The height of the bitmap
+      TextureWidthRatio  : Single;      //  bmp width / texture width
+      TextureHeightRatio : Single;      //  bmp height /texture height
+      
+      //Used for bitmaps that are made up of cells
+      cellW                : Longint;    // The width of a cell
+      cellH                : Longint;    // The height of a cell
+      cellCols             : Longint;    // The columns of cells in the bitmap
+      cellRows             : Longint;    // The rows of cells in the bitmap
+      cellCount            : Longint;    // The total number of cells in the bitmap
+      
+      nonTransparentPixels : Array of Array of Boolean;  // Pixel mask used for pixel level collisions
+      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
+    end;
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   function ToMusicPtr(m: Music): MusicPtr;
   function ToAnimationScriptPtr(a: AnimationScript): AnimationScriptPtr;
   function ToAnimationPtr(a: Animation): AnimationPtr;
+  function ToBitmapPtr(b: Bitmap): BitmapPtr;
 
 implementation
 uses sgShared;
@@ -122,6 +154,16 @@ uses sgShared;
     if Assigned(result) and (result^.id <> ANIMATION_PTR) then
     begin
       RaiseWarning('Attempted to access an Animation that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToBitmapPtr(b: Bitmap): BitmapPtr;
+  begin
+    result := BitmapPtr(b);
+    if Assigned(result) and (result^.id <> BITMAP_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Bitmap that appears to be an invalid pointer');
       result := nil;
     end;
   end;

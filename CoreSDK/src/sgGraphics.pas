@@ -1526,7 +1526,7 @@ implementation
   uses Math, Classes, SysUtils, // system
        sgTrace, 
        sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
-       sgInputBackend;
+       sgInputBackend, sgBackendTypes;
 
   /// Clears the surface of the screen to the passed in color.
   ///
@@ -1887,19 +1887,23 @@ implementation
   end;
   
   procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;
+  var
+    b: BitmapPtr;
   begin
-    if bmp = nil then begin RaiseWarning('PushClip recieved empty Bitmap'); exit; end;
+    b := ToBitmapPtr(bmp);
 
-    SetLength(bmp^.clipStack, Length(bmp^.clipStack) + 1);
+    if b = nil then begin RaiseWarning('PushClip recieved empty Bitmap'); exit; end;
 
-    if Length(bmp^.clipStack) > 1 then
+    SetLength(b^.clipStack, Length(b^.clipStack) + 1);
+
+    if Length(b^.clipStack) > 1 then
     begin
-      bmp^.clipStack[high(bmp^.clipStack)] := Intersection(r, bmp^.clipStack[High(bmp^.clipStack) - 1]);
+      b^.clipStack[high(b^.clipStack)] := Intersection(r, b^.clipStack[High(b^.clipStack) - 1]);
     end
     else
-      bmp^.clipStack[high(bmp^.clipStack)] := r;
+      b^.clipStack[high(b^.clipStack)] := r;
 
-    DoSetClip(bmp, bmp^.clipStack[high(bmp^.clipStack)]);
+    DoSetClip(bmp, b^.clipStack[high(b^.clipStack)]);
   end;
 
   procedure SetClip(x, y, w, h: Longint); overload;
@@ -1923,10 +1927,14 @@ implementation
   end;
 
   procedure SetClip(bmp: Bitmap; const r: Rectangle); overload;
+  var
+    b: BitmapPtr;
   begin
-    if assigned(bmp) then
+    b := ToBitmapPtr(bmp);
+
+    if assigned(b) then
     begin
-      SetLength(bmp^.clipStack, 0);
+      SetLength(b^.clipStack, 0);
       PushClip(bmp, r);
     end;
   end;
@@ -1942,21 +1950,28 @@ implementation
   end;
   
   procedure PopClip(bmp: Bitmap); overload;
+  var
+    b: BitmapPtr;
   begin
-    if not Assigned(bmp) then exit;
+    b := ToBitmapPtr(bmp);
+    if not Assigned(b) then exit;
 
-    Setlength(bmp^.clipStack, Length(bmp^.clipStack)-1);
-    if Length(bmp^.clipStack) > 0 then
-      DoSetClip(bmp, bmp^.clipStack[High(bmp^.clipStack)])
+    Setlength(b^.clipStack, Length(b^.clipStack)-1);
+    if Length(b^.clipStack) > 0 then
+      DoSetClip(b, b^.clipStack[High(b^.clipStack)])
     else
       ResetClip(bmp);
   end;
 
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
+    var
+    b: BitmapPtr;
   begin
-    if not Assigned(bmp) then exit;
+    b := ToBitmapPtr(bmp);
+
+    if not Assigned(b) then exit;
     
-    if Length(bmp^.clipStack) <> 0 then result:= bmp^.clipStack[high(bmp^.clipStack)]
+    if Length(b^.clipStack) <> 0 then result:= b^.clipStack[high(b^.clipStack)]
     else
       result:=BitmapRectangle(0, 0, bmp);
   end;

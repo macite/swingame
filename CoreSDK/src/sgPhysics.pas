@@ -493,7 +493,7 @@ implementation
 
   uses
     SysUtils, sgTrace,
-    sgGraphics, sgCamera, sgGeometry, sgSprites, sgShared, sgImages;
+    sgGraphics, sgCamera, sgGeometry, sgSprites, sgShared, sgImages, sgBackendTypes;
 
 
   //---------------------------------------------------------------------------
@@ -678,11 +678,16 @@ implementation
   /// locations using per pixel collision detection. This checks to see if
   /// two non-transparent pixels collide.
   function CollisionWithinBitmapImages(bmp1: Bitmap; x1, y1: Single; bmp2: Bitmap; x2, y2: Single): Boolean; overload;
+  var
+    b1, b2: BitmapPtr;
   begin
-    if (not Assigned(bmp1)) or (not Assigned(bmp2)) then result := False
+    b1 := ToBitmapPtr(bmp1);
+    b2 := ToBitmapPtr(bmp2);
+
+    if (not Assigned(b1)) or (not Assigned(b2)) then result := False
     else result := CollisionWithinBitmapImages(
-                bmp1, x1, y1, bmp1^.width, bmp1^.height, 0, 0, 
-                bmp2, x2, y2, bmp2^.width, bmp2^.height, 0, 0);
+                bmp1, x1, y1, b1^.width, b1^.height, 0, 0, 
+                bmp2, x2, y2, b2^.width, b2^.height, 0, 0);
   end;
   
   function CollisionWithinSpriteImages(s1, s2: Sprite): Boolean;

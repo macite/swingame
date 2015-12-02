@@ -18,10 +18,10 @@ unit sgDriverGraphics;
 //=============================================================================
 
 interface
-	uses sgTypes;
+	uses sgTypes, sgBackendTypes;
 	
 	type
-	  GetPixel32Procedure                   = function (bmp: Bitmap; x, y: Single) : Color;
+	  GetPixel32Procedure                   = function (bmp: BitmapPtr; x, y: Single) : Color;
     FillTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);  
     DrawTriangleProcedure                 = procedure (clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);      
     FillCircleProcedure                   = procedure (clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -32,23 +32,23 @@ interface
     DrawRectangleProcedure                = procedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
 		DrawLineProcedure                     = procedure (clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
 		DrawPixelProcedure                    = procedure (clr : Color; x, y : Single; const opts: DrawingOptions);
-    SetClipRectangleProcedure             = procedure (dest : Bitmap; rect : Rectangle);      
-    ResetClipProcedure                    = procedure (bmp: Bitmap);  
+    SetClipRectangleProcedure             = procedure (dest : BitmapPtr; rect : Rectangle);      
+    ResetClipProcedure                    = procedure (bmp: BitmapPtr);  
     SetVideoModeFullScreenProcedure       = procedure ();
     SetVideoModeNoFrameProcedure          = procedure ();      
     InitializeGraphicsWindowProcedure     = procedure (const caption : String; screenWidth, screenHeight : LongInt);
-    InitializeScreenProcedure             = procedure ( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);      
+    InitializeScreenProcedure             = procedure ( screen: BitmapPtr; width, height : LongInt; bgColor, stringColor : Color;const msg : String);      
     ResizeGraphicsWindowProcedure         = procedure (newWidth, newHeight : LongInt);
-    RefreshScreenProcedure                = procedure (screen : Bitmap);
+    RefreshScreenProcedure                = procedure (screen : BitmapPtr);
     ColorComponentsProcedure              = procedure (c : Color; var r, g, b, a : Byte); 
-    ColorFromProcedure                    = function  (bmp : Bitmap; r, g, b, a: Byte)  : Color;
+    ColorFromProcedure                    = function  (bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
     RGBAColorProcedure                    = function  (r, g, b, a: Byte)  : Color;
-    // GetSurfaceWidthProcedure              = function  (src : Bitmap) : LongInt;
-    // GetSurfaceHeightProcedure             = function  (src : Bitmap) : LongInt;
+    // GetSurfaceWidthProcedure              = function  (src : BitmapPtr) : LongInt;
+    // GetSurfaceHeightProcedure             = function  (src : BitmapPtr) : LongInt;
     GetScreenWidthProcedure               = function():LongInt;
     GetScreenHeightProcedure              = function():LongInt;
   	AvaialbleResolutionsProcedure         = function (): ResolutionArray;
-    DrawThinkLineProc                     = procedure (dest : Bitmap; x1, y1, x2, y2, w: Single; clr : Color);
+    DrawThinkLineProc                     = procedure (dest : BitmapPtr; x1, y1, x2, y2, w: Single; clr : Color);
 
 	GraphicsDriverRecord = record
 	  GetPixel32                : GetPixel32Procedure;
@@ -90,7 +90,7 @@ uses sgDriverGraphicsSDL2;
       LoadSDL2GraphicsDriver();
 	end;
 	
-	function DefaultGetPixel32Procedure (bmp: Bitmap; x, y: Single) : Color;
+	function DefaultGetPixel32Procedure (bmp: BitmapPtr; x, y: Single) : Color;
 	begin
 		LoadDefaultGraphicsDriver();
 		result := GraphicsDriver.GetPixel32(bmp, x, y);
@@ -144,7 +144,7 @@ uses sgDriverGraphicsSDL2;
 		GraphicsDriver.DrawLine(clr, x1, y1, x2, y2, opts);
 	end;
 	
-  procedure DefaultDrawThickLineProcedure(dest : Bitmap; x1, y1, x2, y2, w : Single; clr : Color);
+  procedure DefaultDrawThickLineProcedure(dest : BitmapPtr; x1, y1, x2, y2, w : Single; clr : Color);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.DrawThickLine(dest, x1, y1, x2, y2, w, clr);
@@ -162,13 +162,13 @@ uses sgDriverGraphicsSDL2;
 		GraphicsDriver.DrawRectangle(clr, rect, opts);
 	end;
   
-  procedure DefaultSetClipRectangleProcedure(dest : Bitmap; rect : Rectangle);
+  procedure DefaultSetClipRectangleProcedure(dest : BitmapPtr; rect : Rectangle);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.SetClipRectangle(dest, rect);
   end;
   
-  procedure DefaultResetClipProcedure(dest : Bitmap);
+  procedure DefaultResetClipProcedure(dest : BitmapPtr);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.ResetClip(dest);
@@ -192,7 +192,7 @@ uses sgDriverGraphicsSDL2;
     GraphicsDriver.InitializeGraphicsWindow(caption, screenWidth, screenHeight);
   end;
 
-  procedure DefaultInitializeScreenProcedure( screen: Bitmap; width, height : LongInt; bgColor, stringColor : Color;const msg : String);
+  procedure DefaultInitializeScreenProcedure( screen: BitmapPtr; width, height : LongInt; bgColor, stringColor : Color;const msg : String);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.InitializeScreen( screen, width, height, bgColor, stringColor, msg);
@@ -204,7 +204,7 @@ uses sgDriverGraphicsSDL2;
     GraphicsDriver.ResizeGraphicsWindow(newWidth, newHeight);
   end;
     
-  procedure DefaultRefreshScreenProcedure(screen : Bitmap);
+  procedure DefaultRefreshScreenProcedure(screen : BitmapPtr);
   begin
     LoadDefaultGraphicsDriver();
     GraphicsDriver.RefreshScreen(screen);
@@ -216,7 +216,7 @@ uses sgDriverGraphicsSDL2;
     GraphicsDriver.ColorComponents(c, r, g, b, a);
   end;
   
-  function DefaultColorFromProcedure(bmp : Bitmap; r, g, b, a: Byte)  : Color;
+  function DefaultColorFromProcedure(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
   begin
     LoadDefaultGraphicsDriver();
     result := GraphicsDriver.ColorFrom(bmp, r, g, b, a);
@@ -228,13 +228,13 @@ uses sgDriverGraphicsSDL2;
     result := GraphicsDriver.RGBAColor(r, g, b, a);
   end;
 
-  // function DefaultGetSurfaceWidthProcedure(src : Bitmap)  : LongInt;
+  // function DefaultGetSurfaceWidthProcedure(src : BitmapPtr)  : LongInt;
   // begin
   //   LoadDefaultGraphicsDriver();
   //   result := GraphicsDriver.GetSurfaceWidth(src);
   // end;
 
-  // function DefaultGetSurfaceHeightProcedure(src : Bitmap)  : LongInt;
+  // function DefaultGetSurfaceHeightProcedure(src : BitmapPtr)  : LongInt;
   // begin
   //   LoadDefaultGraphicsDriver();
   //   result := GraphicsDriver.GetSurfaceHeight(src);

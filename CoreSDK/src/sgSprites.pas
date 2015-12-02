@@ -2928,7 +2928,7 @@ implementation
   begin
     if not Assigned(s) then result := 0
     else if (idx < 0) or (idx >= Length(s^.layers)) then result := 0
-    else result := s^.layers[idx]^.cellH;
+    else result := BitmapCellHeight(s^.layers[idx]);
   end;
   
   function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
@@ -2941,7 +2941,7 @@ implementation
   begin
     if not Assigned(s) then result := 0
     else if (idx < 0) or (idx >= Length(s^.layers)) then result := 0
-    else result := s^.layers[idx]^.cellW;
+    else result := BitmapCellWidth(s^.layers[idx]);
   end;  
   
   function SpriteWidth(s: Sprite): Longint;

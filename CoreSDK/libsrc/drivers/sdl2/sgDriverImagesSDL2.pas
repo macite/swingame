@@ -5,7 +5,7 @@ interface
 	procedure LoadSDL2ImagesDriver();
 		
 implementation
-	uses sgDriverSDL2Types, sgTypes, sgDriverImages, sgShared;
+	uses sgDriverSDL2Types, sgTypes, sgDriverImages, sgShared, sgBackendTypes;
 
 	//TODO: remove this
 	procedure InitBitmapColorsProcedure(bmp : Bitmap);
@@ -13,35 +13,43 @@ implementation
 	end;
 	
 	function SurfaceExistsProcedure(bmp : Bitmap) : Boolean;
+	var
+		b: BitmapPtr;
 	begin
-		result := Assigned(bmp) and Assigned(bmp^.surface);
+		b := ToBitmapPtr(bmp);
+
+		result := Assigned(b) and Assigned(b^.surface);
 	end;
 	
 	procedure CreateBitmapProcedure (bmp : Bitmap; width, height : LongInt);
 	var
 		surface: ^sg_drawing_surface;
+		b: BitmapPtr;
 	begin
-		if Assigned(bmp^.surface) then exit;
+		b := ToBitmapPtr(bmp);
+		if Assigned(b^.surface) then exit;
 
 		New(surface);
 		surface^ := _sg_functions^.image.create_bitmap(width, height);
-		bmp^.surface := surface;	// bmp owns surface
+		b^.surface := surface;	// bmp owns surface
 	end;  
 	
 	//TODO: move to SwinGame
 	procedure SetNonAlphaPixels(bmp : Bitmap; const pixels: array of Longword); 
 	var
 		r, c: Longint;
+		b: BitmapPtr;
 	begin
-		if not ( Assigned(bmp) ) then exit;
+		b := ToBitmapPtr(bmp);
+		if not ( Assigned(b) ) then exit;
 
-		SetLength(bmp^.nonTransparentPixels, bmp^.width, bmp^.height);
+		SetLength(b^.nonTransparentPixels, b^.width, b^.height);
 
-		for r := 0 to bmp^.height - 1 do
+		for r := 0 to b^.height - 1 do
 		begin
-			for c := 0 to bmp^.width - 1 do
+			for c := 0 to b^.width - 1 do
 			begin
-				bmp^.nonTransparentPixels[c, r] := ((pixels[c + r * bmp^.width] and $000000FF) > 0);
+				b^.nonTransparentPixels[c, r] := ((pixels[c + r * b^.width] and $000000FF) > 0);
 			end;
 		end;
 	end;
@@ -51,9 +59,12 @@ implementation
 		surface: ^sg_drawing_surface;
 		pixels: array of Longword;
 		sz: Longint;
+		b: BitmapPtr;
 	begin
-		surface := bmp^.surface;
-		sz := bmp^.width * bmp^.height;
+		b := ToBitmapPtr(bmp);
+
+		surface := b^.surface;
+		sz := b^.width * b^.height;
 		SetLength(pixels, sz);
 		_sg_functions^.graphics.to_pixels(surface, @pixels[0], sz);
 		SetNonAlphaPixels(bmp, pixels);
@@ -63,6 +74,7 @@ implementation
 	function DoLoadBitmapProcedure (const filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
 	var
 		surface: ^sg_drawing_surface;
+		b: BitmapPtr;
 	begin
 		result := nil;
 
@@ -71,26 +83,37 @@ implementation
 
 		if not Assigned(surface) then exit;
 
-		new(result);
-		result^.surface := surface;
-		result^.width := surface^.width;
-		result^.height := surface^.height;
+		new(b);
+		b^.id := BITMAP_PTR;
+		b^.surface := surface;
+		b^.width := surface^.width;
+		b^.height := surface^.height;
+
+		result := b;
 
 		SetNonAlphaPixelsProcedure(result);
 	end;
 	
 	function SameBitmapProcedure(const bitmap1, bitmap2 : Bitmap) : Boolean;
+	var
+		b1, b2: BitmapPtr;
 	begin
-		result := bitmap1^.surface = bitmap2^.surface;
+		b1 := ToBitmapPtr(bitmap1);
+		b2 := ToBitmapPtr(bitmap2);
+
+		result := (b1^.surface = b2^.surface);
 	end;
 	
 	//TODO: rename to DrawImage
-	procedure BlitSurfaceProcedure(src: Bitmap; x, y: Single; const opts : DrawingOptions);
+	procedure _BlitSurfaceProcedure(src: BitmapPtr; x, y: Single; const opts : DrawingOptions);
 	var
 		srcData: array [0..3] of Single;
 		dstData: array [0..6] of Single;
 		flip : sg_renderer_flip;
+		dest: BitmapPtr;
 	begin
+		if not Assigned(src) then exit;
+
 		if not (opts.isPart) then
 			begin
 				srcData[0] := 0;
@@ -129,13 +152,25 @@ implementation
 		
 		XYFromOpts(opts, dstData[0], dstData[1]); // Camera?
 
-		_sg_functions^.image.draw_bitmap(src^.surface, opts.dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), flip);
+		dest := ToBitmapPtr(opts.dest);
+		_sg_functions^.image.draw_bitmap(src^.surface, dest^.surface, @srcData[0], Length(srcData), @dstData[0], Length(dstData), flip);
+	end;
+
+	procedure BlitSurfaceProcedure(src: Bitmap; x, y: Single; const opts : DrawingOptions);
+	begin
+		_BlitSurfaceProcedure(ToBitmapPtr(src), x, y, opts);
 	end;
 	
 	procedure FreeSurfaceProcedure(bmp : Bitmap);
+	var
+		b: BitmapPtr;
 	begin
-		_sg_functions^.graphics.close_drawing_surface(bmp^.surface);
-		bmp^.surface := nil;   
+		b := ToBitmapPtr(bmp);
+
+		_sg_functions^.graphics.close_drawing_surface(b^.surface);
+		
+		b^.surface := nil;   
+		b^.id := NONE_PTR;
 	end;
 
 	// TODO: remove
@@ -159,8 +194,12 @@ implementation
 	end;
 
 	procedure ClearSurfaceProcedure(dest : Bitmap; toColor : Color);
-	begin   
-		_sg_functions^.graphics.clear_drawing_surface(dest^.surface, _ToSGColor(toColor));
+	var
+		d: BitmapPtr;
+	begin
+		d := ToBitmapPtr(dest);
+		if not Assigned(d) then exit;
+		_sg_functions^.graphics.clear_drawing_surface(d^.surface, _ToSGColor(toColor));
 	end;
 
 	// TODO: remove
@@ -169,8 +208,12 @@ implementation
 	end;
 
 	procedure SaveBitmapProcedure(bmpToSave: Bitmap; const path: String);
+	var
+		b: BitmapPtr;
 	begin
-		_sg_functions^.graphics.save_png(bmpToSave^.surface, PChar(path));
+		b := ToBitmapPtr(bmpToSave);
+		if not Assigned(b) then exit;
+		_sg_functions^.graphics.save_png(b^.surface, PChar(path));
 	end;
 
 	procedure LoadSDL2ImagesDriver();

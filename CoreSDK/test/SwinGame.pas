@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-02 16:20:33.827600
+// SwinGame.pas was generated on 2015-12-02 17:44:45.746208
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -56,8 +56,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type AnimationScript = sgTypes.AnimationScript;
 
   type Animation = sgTypes.Animation;
-
-  type BitmapData = sgTypes.BitmapData;
 
   type Bitmap = sgTypes.Bitmap;
 

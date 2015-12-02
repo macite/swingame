@@ -583,7 +583,7 @@ uses sgResources, sgCamera, sgGeometry, sgGraphics,
      sgDriverImages, sgDriver, sgDrawingOptions,
      stringhash,         // libsrc
      SysUtils, 
-     sgShared, sgTrace;
+     sgShared, sgTrace, sgBackendTypes;
 //=============================================================================
 
 var
@@ -603,6 +603,7 @@ var
   realName: String;
   idx: Longint;
   obj: tResourceContainer;
+  b: BitmapPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'CreateBitmap');
@@ -615,20 +616,23 @@ begin
     exit;
   end;
   
-  New(result);
-  result^.surface := nil;
+  New(b);
+  b^.id := BITMAP_PTR;
+  b^.surface := nil;
   
   ImagesDriver.CreateBitmap(result, width, height);
-  
 
   if (not Assigned(result)) or (not ImagesDriver.SurfaceExists(result)) then
   begin
-    Dispose(result);
+    b^.id := NONE_PTR;
+    Dispose(b);
     result := nil;
     RaiseWarning('Failed to create a bitmap: ' + Driver.GetError());
     exit;
   end;
   
+  result := b;
+
   //
   // Place the bitmap in the _Images hashtable
   //
@@ -643,17 +647,17 @@ begin
     idx := idx + 1;
   end;
   
-  result^.width     := width;
-  result^.height    := height;
+  b^.width     := width;
+  b^.height    := height;
   
-  result^.cellW     := width;
-  result^.cellH     := height;
-  result^.cellCols  := 1;
-  result^.cellRows  := 1;
-  result^.cellCount := 1;
+  b^.cellW     := width;
+  b^.cellH     := height;
+  b^.cellCols  := 1;
+  b^.cellRows  := 1;
+  b^.cellCount := 1;
   
-  result^.name      := realName;
-  result^.filename  := '';
+  b^.name      := realName;
+  b^.filename  := '';
   
   ImagesDriver.InitBitmapColors(result);
   
@@ -705,7 +709,7 @@ begin
   BitmapSetCellDetails(result, w, h, cols, rows, Length(bitmaps));
 end;
 
-function DoLoadBitmap(const name, filename: String; transparent: Boolean; transparentColor: Color): Bitmap;
+function DoLoadBitmap(const name, filename: String; transparent: Boolean; transparentColor: Color): BitmapPtr;
 var
   obj: tResourceContainer;
   fn: String;
@@ -786,12 +790,16 @@ begin
 end;
 
 procedure FreeBitmap(var bitmapToFree : Bitmap);
+var
+  b: BitmapPtr;
 begin
+  b := ToBitmapPtr(bitmapToFree);
+
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'FreeBitmap', 'bitmapToFree = ' + HexStr(bitmapToFree));
   {$ENDIF}
   
-  if Assigned(bitmapToFree) then
+  if Assigned(b) then
   begin    
 
     //Notify others that this is now gone!
@@ -803,7 +811,8 @@ begin
     ImagesDriver.FreeSurface(bitmapToFree);
     
     //Dispose the pointer
-    Dispose(bitmapToFree);
+    b^.id := NONE_PTR;
+    Dispose(b);
   end;
   
   bitmapToFree := nil;
@@ -905,51 +914,75 @@ end;
 //----------------------------------------------------------------------------
 
 function PixelDrawnAtPoint(bmp: Bitmap; x, y: Single): Boolean;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := false
-  else result := (Length(bmp^.nonTransparentPixels) = bmp^.width)
-      and ((x >= 0) and (x < bmp^.width))
-      and ((y >= 0) and (y < bmp^.height))
-      and bmp^.nonTransparentPixels[Round(x), Round(y)];
+  b := ToBitmapPtr(bmp);
+
+  if not assigned(b) then result := false
+  else result := (Length(b^.nonTransparentPixels) = b^.width)
+      and ((x >= 0) and (x < b^.width))
+      and ((y >= 0) and (y < b^.height))
+      and b^.nonTransparentPixels[Round(x), Round(y)];
 end;
 
 procedure BitmapSetCellDetails(bmp: Bitmap; width, height, columns, rows, count: Longint);
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then exit;
+  b := ToBitmapPtr(bmp);
+  if not Assigned(b) then exit;
   
-  bmp^.cellW     := width;
-  bmp^.cellH     := height;
-  bmp^.cellCols  := columns;
-  bmp^.cellRows  := rows;
-  bmp^.cellCount := count;
+  b^.cellW     := width;
+  b^.cellH     := height;
+  b^.cellCols  := columns;
+  b^.cellRows  := rows;
+  b^.cellCount := count;
 end;
 
 function BitmapCellCount(bmp: Bitmap): Longint;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.cellCount;
+  b := ToBitmapPtr(bmp);
+
+  if not Assigned(b) then result := 0
+  else result := b^.cellCount;
 end;
 
 function BitmapCellRows(bmp: Bitmap): Longint;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.cellRows;
+  b := ToBitmapPtr(bmp);
+
+  if not Assigned(b) then result := 0
+  else result := b^.cellRows;
 end;
 
 function BitmapCellColumns(bmp: Bitmap): Longint;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.cellCols;
+  b := ToBitmapPtr(bmp);
+
+  if not Assigned(b) then result := 0
+  else result := b^.cellCols;
 end;
 
 function BitmapsInterchangable(bmp1, bmp2: Bitmap): Boolean;
+var
+  b1, b2: BitmapPtr;
 begin
-  if (not assigned(bmp1)) or (not assigned(bmp2)) then
+  b1 := ToBitmapPtr(bmp1);
+  b2 := ToBitmapPtr(bmp2);
+
+  if (not assigned(b1)) or (not assigned(b2)) then
     result := false
   else
-    result := (bmp1^.cellCount = bmp2^.cellCount) and
-              (bmp1^.cellW = bmp2^.cellW) and
-              (bmp1^.cellH = bmp2^.cellH);
+    result := (b1^.cellCount = b2^.cellCount) and
+              (b1^.cellW = b2^.cellW) and
+              (b1^.cellH = b2^.cellH);
 end;
 
 
@@ -971,9 +1004,13 @@ begin
 end;
 
 procedure SetupBitmapForCollisions(src: Bitmap);
+var
+  b: BitmapPtr;
 begin
-  if not assigned(src) then exit;
-  if Length(src^.nonTransparentPixels) <> 0 then exit;
+  b := ToBitmapPtr(src);
+
+  if not assigned(b) then exit;
+  if Length(b^.nonTransparentPixels) <> 0 then exit;
     
   ImagesDriver.SetNonAlphaPixels(src);
   OptimiseBitmap(src);
@@ -1057,9 +1094,13 @@ end;
 //---------------------------------------------------------------------------
 
 function BitmapRectangle(x, y: Single; bmp: Bitmap): Rectangle; overload;
+var
+  b: BitmapPtr;
 begin
-  if not Assigned(bmp) then result := RectangleFrom(0,0,0,0)
-  else result := RectangleFrom(x, y, bmp^.width, bmp^.height);
+  b := ToBitmapPtr(bmp);
+
+  if not Assigned(b) then result := RectangleFrom(0,0,0,0)
+  else result := RectangleFrom(x, y, b^.width, b^.height);
 end;
 
 function BitmapRectangle(bmp: Bitmap): Rectangle; overload;
@@ -1068,9 +1109,13 @@ begin
 end;
 
 function BitmapCellRectangle(x, y: Single; bmp: Bitmap): Rectangle; overload;
+var
+  b: BitmapPtr;
 begin
-  if not Assigned(bmp) then result := RectangleFrom(0,0,0,0)
-  else result := RectangleFrom(x, y, bmp^.cellW, bmp^.cellH);
+  b := ToBitmapPtr(bmp);
+
+  if not Assigned(b) then result := RectangleFrom(0,0,0,0)
+  else result := RectangleFrom(x, y, b^.cellW, b^.cellH);
 end;
 
 function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
@@ -1078,9 +1123,13 @@ begin
   result := BitmapCellRectangle(0, 0, bmp);
 end;
 
-function BitmapRectangleOfCell(src: Bitmap; cell: Longint): Rectangle;
+function _BitmapRectangleOfCell(src: BitmapPtr; cell: Longint): Rectangle;
+var
+  b: BitmapPtr;
 begin
-  if (not assigned(src)) or (cell >= src^.cellCount) then
+  b := ToBitmapPtr(src);
+
+  if (not assigned(b)) or (cell >= b^.cellCount) then
     result := RectangleFrom(0,0,0,0)
   else if (cell < 0) then
   begin
@@ -1088,49 +1137,72 @@ begin
   end
   else
   begin
-    result.x := (cell mod src^.cellCols) * src^.cellW;
-    result.y := (cell - (cell mod src^.cellCols)) div src^.cellCols * src^.cellH;
-    result.width := src^.cellW;
-    result.height := src^.cellH;
+    result.x := (cell mod b^.cellCols) * b^.cellW;
+    result.y := (cell - (cell mod b^.cellCols)) div b^.cellCols * b^.cellH;
+    result.width := b^.cellW;
+    result.height := b^.cellH;
   end;
 end;
 
-function BitmapWidth(bmp: Bitmap): Longint; overload;
+function BitmapRectangleOfCell(src: Bitmap; cell: Longint): Rectangle;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.width;
+  result := _BitmapRectangleOfCell(ToBitmapPtr(src), cell);
+end;
+
+function BitmapWidth(bmp: Bitmap): Longint; overload;
+var
+  b: BitmapPtr;
+begin
+  b := ToBitmapPtr(bmp);
+  if not assigned(b) then result := 0
+  else result := b^.width;
 end;
 
 function BitmapHeight(bmp: Bitmap): Longint; overload;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.height;
+  b := ToBitmapPtr(bmp);
+  if not assigned(b) then result := 0
+  else result := b^.height;
 end;
 
 function BitmapCellWidth(bmp: Bitmap): Longint;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.cellW;
+  b := ToBitmapPtr(bmp);
+  if not assigned(b) then result := 0
+  else result := b^.cellW;
 end;
 
 function BitmapCellHeight(bmp: Bitmap): Longint;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(bmp) then result := 0
-  else result := bmp^.cellH;
+  b := ToBitmapPtr(bmp);
+  if not assigned(b) then result := 0
+  else result := b^.cellH;
 end;
 
 function BitmapName(bmp:Bitmap): string;
+var
+  b: BitmapPtr;
 begin
+  b := ToBitmapPtr(bmp);
   result:= '';
-  if not assigned(bmp) then exit;
-  result:=bmp^.name;
+  if not assigned(b) then exit;
+  result:=b^.name;
 end;
 
 function BitmapFilename(bmp:Bitmap): string;
+var
+  b: BitmapPtr;
 begin
+  b := ToBitmapPtr(bmp);
   result:= '';
-  if not assigned(bmp) then exit;
-  result:=bmp^.filename;
+  if not assigned(b) then exit;
+  result:=b^.filename;
 end;
 
 function BitmapCircle(bmp: Bitmap; x, y: Single): Circle; overload;
@@ -1192,12 +1264,15 @@ end;
 procedure SetTransparentColor(src: Bitmap; clr:Color);
 var
   x,y : integer;
+var
+  b: BitmapPtr;
 begin
-  if not assigned(src) then exit;
+  b := ToBitmapPtr(src);
+  if not assigned(b) then exit;
   
-  for x:= 0 to src^.Width - 1 do
+  for x:= 0 to b^.Width - 1 do
   begin
-    for y := 0 to src^.Height - 1 do
+    for y := 0 to b^.Height - 1 do
     begin
       if (GetPixel(src, x, y) = clr) then 
         DrawPixel(RGBAColor(0,0,0,0),x,y, OptionDrawTo(src));

@@ -30,7 +30,7 @@ unit sgShared;
 //=============================================================================
 interface
   uses 
-    stringhash, sgInputBackend, sgTypes;
+    stringhash, sgInputBackend, sgTypes, sgBackendTypes;
 //=============================================================================
   
   type
@@ -112,7 +112,7 @@ interface
     
     // This `Bitmap` wraps the an SDL image (and its double-buffered nature)
     // which is used to contain the current "screen" rendered to the window.
-    screen: Bitmap = nil;
+    screen: BitmapPtr = nil;
     
     // Used for on screen tests...
     screenRect: Rectangle;
