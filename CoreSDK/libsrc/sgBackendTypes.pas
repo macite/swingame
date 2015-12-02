@@ -20,6 +20,7 @@ uses sgTypes;
     ANIMATION_PTR = 'ANIM';
     ANIMATION_SCRIPT_PTR = 'ASCR';
     BITMAP_PTR = 'BMP*';
+    SPRITE_PTR = 'SPRT';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -109,11 +110,55 @@ uses sgTypes;
       clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
     end;
 
+    SpritePtr = ^SpriteData;
+
+    SpriteData = packed record
+      id:               PointerIdentifier;
+      name:             String;               // The name of the sprite for resource management
+      
+      layerIds:         NamedIndexCollection; // The name <-> ids mapping for layers
+      layers:           BitmapArray;          // Layers of the sprites
+      visibleLayers:    LongintArray;         // The indexes of the visible layers
+      layerOffsets:     Point2DArray;         // Offsets from drawing the layers
+      
+      values:           SingleArray;          // Values associated with this sprite
+      valueIds:         NamedIndexCollection; // The name <-> ids mappings for values
+      
+      animationInfo:    Animation;            // The data used to animate this sprite
+      animationScript:  AnimationScript;      // The template for this sprite's animations
+      
+      position:         Point2D;              // The game location of the sprite
+      velocity:         Vector;               // The velocity of the sprite
+      
+      collisionKind:    CollisionTestKind;    //The kind of collisions used by this sprite
+      collisionBitmap:  Bitmap;               // The bitmap used for collision testing (default to first image)
+        
+      backupCollisionBitmap:  Bitmap;         // Cache for rotated sprites
+      cacheImage:             Bitmap;         // ...
+      
+      isMoving:     Boolean;                  // Used for events to indicate the sprite is moving
+      destination:  Point2D;                  // The destination the sprite is moving to
+      movingVec:    Vector;                   // The sprite's movement vector
+      arriveInSec:  Single;                   // Amount of time in seconds to arrive at point
+      lastUpdate:   Longint;                  // Time of last update
+
+      announcedAnimationEnd: Boolean;         // Used to avoid multiple announcements of an end of an animation
+
+      evts: SpriteEventHandlerArray;          // The call backs listening for sprite events
+
+      pack: Pointer;                          // Points the the SpritePack that contains this sprite        
+
+      //add later -> 
+      //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape
+    end;
+
+
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   function ToMusicPtr(m: Music): MusicPtr;
   function ToAnimationScriptPtr(a: AnimationScript): AnimationScriptPtr;
   function ToAnimationPtr(a: Animation): AnimationPtr;
   function ToBitmapPtr(b: Bitmap): BitmapPtr;
+  function ToSpritePtr(s: Sprite): SpritePtr;
 
 implementation
 uses sgShared;
@@ -168,4 +213,13 @@ uses sgShared;
     end;
   end;
 
+  function ToSpritePtr(s: Sprite): SpritePtr;
+  begin
+    result := SpritePtr(s);
+    if Assigned(result) and (result^.id <> SPRITE_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Sprite that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
 end.

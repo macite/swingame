@@ -319,8 +319,8 @@ interface
     ///
     /// @class Sprite
     /// @pointer_wrapper
-    /// @field pointer: ^SpriteData
-    Sprite = ^SpriteData;
+    /// @field pointer: Pointer
+    Sprite = Pointer;
 
     /// The SpriteEventHandler function pointer is used when you want to register
     /// to receive events from a Sprite.
@@ -349,46 +349,6 @@ interface
     SpriteEventHandlerArray = array of SpriteEventHandler;
 
 
-    /// @struct SpriteData
-    /// @via_pointer
-    SpriteData = packed record
-      name:             String;               // The name of the sprite for resource management
-      
-      layerIds:         NamedIndexCollection; // The name <-> ids mapping for layers
-      layers:           BitmapArray;          // Layers of the sprites
-      visibleLayers:    LongintArray;         // The indexes of the visible layers
-      layerOffsets:     Point2DArray;         // Offsets from drawing the layers
-      
-      values:           SingleArray;          // Values associated with this sprite
-      valueIds:         NamedIndexCollection; // The name <-> ids mappings for values
-      
-      animationInfo:    Animation;            // The data used to animate this sprite
-      animationScript:  AnimationScript;      // The template for this sprite's animations
-      
-      position:         Point2D;              // The game location of the sprite
-      velocity:         Vector;               // The velocity of the sprite
-      
-      collisionKind:    CollisionTestKind;    //The kind of collisions used by this sprite
-      collisionBitmap:  Bitmap;               // The bitmap used for collision testing (default to first image)
-        
-      backupCollisionBitmap:  Bitmap;         // Cache for rotated sprites
-      cacheImage:             Bitmap;         // ...
-      
-      isMoving:     Boolean;                  // Used for events to indicate the sprite is moving
-      destination:  Point2D;                  // The destination the sprite is moving to
-      movingVec:    Vector;                   // The sprite's movement vector
-      arriveInSec:  Single;                   // Amount of time in seconds to arrive at point
-      lastUpdate:   Longint;                  // Time of last update
-
-      announcedAnimationEnd: Boolean;         // Used to avoid multiple announcements of an end of an animation
-
-      evts: SpriteEventHandlerArray;          // The call backs listening for sprite events
-
-      pack: Pointer;                          // Points the the SpritePack that contains this sprite        
-
-      //add later -> 
-      //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape
-    end;
 
     /// @struct TimerData
     /// @via_pointer

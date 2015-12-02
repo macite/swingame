@@ -1534,7 +1534,7 @@ implementation
 //=============================================================================
 
   uses
-    Classes, SysUtils, Math,  // system
+    Classes, SysUtils, Math, sgBackendTypes,  // system
     sgCamera, sgGraphics, sgSprites, sgPhysics, sgShared, sgTrace, sgUtils;     // SwinGame
 
   const
@@ -2267,7 +2267,11 @@ implementation
   function CalculateAngle(s1, s2: Sprite): Single; overload;
   var
     cx1, cy1, cx2, cy2: Single;
+    sp1, sp2: SpritePtr;
   begin
+    sp1 := ToSpritePtr(s1);
+    sp2 := ToSpritePtr(s2);
+
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'CalculateAngle(s1, s2: Sprite): Single', '');
     {$ENDIF}
@@ -2277,10 +2281,10 @@ implementation
       exit;  
     end;
 
-    cx1 := s1^.position.x + SpriteWidth(s1) / 2;
-    cy1 := s1^.position.y + SpriteHeight(s1) / 2;
-    cx2 := s2^.position.x + SpriteWidth(s2) / 2;
-    cy2 := s2^.position.y + SpriteHeight(s2) / 2;
+    cx1 := sp1^.position.x + SpriteWidth(s1) / 2;
+    cy1 := sp1^.position.y + SpriteHeight(s1) / 2;
+    cx2 := sp2^.position.x + SpriteWidth(s2) / 2;
+    cy2 := sp2^.position.y + SpriteHeight(s2) / 2;
 
     result := CalculateAngle(cx1, cy1, cx2, cy2);
     

@@ -577,9 +577,12 @@ implementation
   function SpriteRectCollision(s: Sprite; const r: Rectangle): Boolean; overload;
   var
     rect: Rectangle;
+    sp: SpritePtr;
   begin
+    sp := ToSpritePtr(s);
+
     result := false;
-    if s = nil then exit;
+    if sp = nil then exit;
 
     rect := r;
     FixRectangle(rect);
@@ -592,7 +595,7 @@ implementation
     if SpriteCollisionKind(s) = AABBCollisions then 
       result := true
     else
-      result := CellRectCollision(s^.collisionBitmap, SpriteCurrentCell(s), s^.position.x, s^.position.y, rect);
+      result := CellRectCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position.x, sp^.position.y, rect);
   end;
   
   /// Performs a collision detection within two bitmaps at the given x, y
@@ -693,8 +696,12 @@ implementation
   function CollisionWithinSpriteImages(s1, s2: Sprite): Boolean;
   var
     part1, part2: Rectangle;
+    sp1, sp2: SpritePtr;
   begin
-    if (s1 = nil) or (s2 = nil) then begin RaiseException('One of the sprites specified is nil'); exit; end;
+    sp1 := ToSpritePtr(s1);
+    sp2 := ToSpritePtr(s2);
+
+    if (s1 = nil) or (sp2 = nil) then begin RaiseException('One of the sprites specified is nil'); exit; end;
     
     // Check if either is not using pixel level collisions
     if SpriteCollisionKind(s1) = AABBCollisions then 
@@ -712,8 +719,8 @@ implementation
     part2 := SpriteCurrentCellRectangle(s2);
     
     result := CollisionWithinBitmapImages(
-                s1^.collisionBitmap, s1^.position.x, s1^.position.y, part1.width, part1.height, part1.x, part1.y, 
-                s2^.collisionBitmap, s2^.position.x, s2^.position.y, part2.width, part2.height, part2.x, part2.y);
+                sp1^.collisionBitmap, sp1^.position.x, sp1^.position.y, part1.width, part1.height, part1.x, part1.y, 
+                sp2^.collisionBitmap, sp2^.position.x, sp2^.position.y, part2.width, part2.height, part2.x, part2.y);
   end;
 
   function BitmapCollision(bmp1: Bitmap; x1, y1: Single; bmp2: Bitmap; x2, y2: Single): Boolean; overload;
@@ -745,17 +752,21 @@ implementation
   end;
   
   function SpriteBitmapCollision(s: Sprite; bmp: Bitmap; const pt: Point2D; const part: Rectangle): Boolean; overload;
+  var
+    sp: SpritePtr;
   begin
+    sp := ToSpritePtr(s);
+
     result := false;
     
-    if not assigned(s) then exit;
+    if not assigned(sp) then exit;
     if (SpriteCollisionKind(s) = AABBCollisions) then
     begin
       result := BitmapRectCollision(bmp, pt, part, SpriteCollisionRectangle(s));
       exit;
     end;
     
-    result := CellBitmapCollision(s^.collisionBitmap, SpriteCurrentCell(s), s^.position, bmp, pt, part);
+    result := CellBitmapCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position, bmp, pt, part);
   end;
   
   /// Determines if a sprite has collided with a bitmap using pixel level
@@ -787,7 +798,10 @@ implementation
   var
     r: Single;
     dist: Single;
+    sp: SpritePtr;
   begin
+    sp := ToSpritePtr(s);
+
     if not Assigned(s) then
     begin
       result := false;
@@ -799,7 +813,7 @@ implementation
     else
       r := SpriteHeight(s) div 2;
       
-    dist := PointLineDistance(s^.position.x + r, s^.position.y + r, line);
+    dist := PointLineDistance(sp^.position.x + r, sp^.position.y + r, line);
     result := dist < r;
   end;
   
@@ -884,7 +898,10 @@ implementation
     npx, npy, dotPod: Single;
     toLine: Vector;
     intersect: Point2D;
+    sp: SpritePtr;
   begin
+    sp := ToSpritePtr(s);
+
     //TODO: fix collision pt.... cast back along velocity...
     intersect := ClosestPointOnLine(CenterPoint(s), line);
 
@@ -893,15 +910,15 @@ implementation
     
     toLine := UnitVector(VectorFromCenterSpriteToPoint(s, intersect));
     // Project velocity across to-line
-    dotPod := - DotProduct(toLine, s^.velocity);
+    dotPod := - DotProduct(toLine, sp^.velocity);
     
     npx := dotPod * toLine.x;
     npy := dotPod * toLine.y;
     
-    s^.velocity.x := s^.velocity.x + 2 * npx;
-    s^.velocity.y := s^.velocity.y + 2 * npy;
+    sp^.velocity.x := sp^.velocity.x + 2 * npx;
+    sp^.velocity.y := sp^.velocity.y + 2 * npy;
     
-    //DrawLine(ColorYellow, CenterPoint(s).x, CenterPoint(s).y, CenterPoint(s).x + (s^.velocity.x * 10), CenterPoint(s).y + (s^.velocity.y * 10));
+    //DrawLine(ColorYellow, CenterPoint(s).x, CenterPoint(s).y, CenterPoint(s).x + (sp^.velocity.x * 10), CenterPoint(s).y + (sp^.velocity.y * 10));
     //RefreshScreen(1) ;
   end;
   
@@ -920,10 +937,14 @@ implementation
     outVec, mvmt: Vector;
     maxIdx: Longint;
     mvmtMag, prop: Single;
+  var
+    sp: SpritePtr;
   begin
-    if not Assigned(s) then exit;
+    sp := ToSpritePtr(s);
 
-    mvmt := s^.velocity;
+    if not Assigned(sp) then exit;
+
+    mvmt := sp^.velocity;
     maxIdx := -1;
     outVec := VectorOverLinesFromCircle(SpriteCollisionCircle(s), lines, mvmt, maxIdx);
     if maxIdx < 0 then exit;
@@ -943,28 +964,32 @@ implementation
     c1, c2: Circle;
     colNormalAngle, a1, a2, optP, s1Mass, s2Mass: Single;
     n: Vector;
+    sp1, sp2: SpritePtr;
   begin
     s1Mass := SpriteMass(s1);
     s2Mass := SpriteMass(s2);
     if (s1Mass <= 0) or (s2Mass <= 0) then begin RaiseWarning('Collision with 0 or negative mass... ensure that mass is greater than 0'); exit; end;
     
+    sp1 := ToSpritePtr(s1);
+    sp2 := ToSpritePtr(s2);
+
     c1 := SpriteCollisionCircle(s1);
     c2 := SpriteCollisionCircle(s2);
     
     //if s1^.mass < s2^.mass then
-    if VectorMagnitude(s1^.velocity) > VectorMagnitude(s2^.velocity) then
+    if VectorMagnitude(sp1^.velocity) > VectorMagnitude(sp2^.velocity) then
     begin
       //move s1 out
-      n := VectorOutOfCircleFromCircle(c1, c2, s1^.velocity);
-      s1^.position.x := s1^.position.x + n.x;
-      s1^.position.y := s1^.position.y + n.y;
+      n := VectorOutOfCircleFromCircle(c1, c2, sp1^.velocity);
+      sp1^.position.x := sp1^.position.x + n.x;
+      sp1^.position.y := sp1^.position.y + n.y;
     end
     else
     begin
       //move s2 out
-      n := VectorOutOfCircleFromCircle(c2, c1, s2^.velocity);
-      s2^.position.x := s2^.position.x + n.x;
-      s2^.position.y := s2^.position.y + n.y;
+      n := VectorOutOfCircleFromCircle(c2, c1, sp2^.velocity);
+      sp2^.position.x := sp2^.position.x + n.x;
+      sp2^.position.y := sp2^.position.y + n.y;
     end;
       
     colNormalAngle := CalculateAngle(s1, s2);
@@ -974,9 +999,9 @@ implementation
     n := VectorTo(Cosine(colNormalAngle), Sine(colNormalAngle));
     // now find the length of the components of each velocity vectors
     // along n, by using dot product.
-    a1 := DotProduct(s1^.velocity, n);
+    a1 := DotProduct(sp1^.velocity, n);
     // Local a1# = c.dx*nX  +  c.dy*nY
-    a2 := DotProduct(s2^.velocity, n);
+    a2 := DotProduct(sp2^.velocity, n);
     // Local a2# = c2.dx*nX +  c2.dy*nY
     // optimisedP = 2(a1 - a2)
     // ----------
@@ -984,11 +1009,11 @@ implementation
     optP := (2.0 * (a1-a2)) / (s1Mass + s2Mass);
     // now find out the resultant vectors
     // Local r1% = c1.v - optimisedP * mass2 * n
-    s1^.velocity.x := s1^.velocity.x - (optP * s2Mass * n.x);
-    s1^.velocity.y := s1^.velocity.y - (optP * s2Mass * n.y);
+    sp1^.velocity.x := sp1^.velocity.x - (optP * s2Mass * n.x);
+    sp1^.velocity.y := sp1^.velocity.y - (optP * s2Mass * n.y);
     // Local r2% = c2.v - optimisedP * mass1 * n
-    s2^.velocity.x := s2^.velocity.x + (optP * s1Mass * n.x);
-    s2^.velocity.y := s2^.velocity.y + (optP * s1Mass * n.y);
+    sp2^.velocity.x := sp2^.velocity.x + (optP * s1Mass * n.x);
+    sp2^.velocity.y := sp2^.velocity.y + (optP * s1Mass * n.y);
   end;
   
   procedure CollideCircleCircle(s: Sprite; const c: Circle);
@@ -997,12 +1022,14 @@ implementation
     outVec, mvmt, normal, colVec: Vector;
     mvmtMag, prop: Single;
     spriteCenter, hitPt: Point2D;
+    sp: SpritePtr;
   begin
-    if not Assigned(s) then exit;
+    sp := ToSpritePtr(s);
+    if not Assigned(sp) then exit;
 
     //TODO: what if height > width!!
     spriteCenter := CenterPoint(s);
-    mvmt := s^.velocity;
+    mvmt := sp^.velocity;
     
     outVec := VectorOutOfCircleFromCircle(SpriteCollisionCircle(s), c, mvmt);
     // Back out of circle
@@ -1035,10 +1062,13 @@ implementation
     lines: LinesArray;
     outVec, mvmt: Vector;
     mvmtMag, prop: Single;
+    sp: SpritePtr;
   begin
-    if not Assigned(s) then exit;
+    sp := ToSpritePtr(s);
+
+    if not Assigned(sp) then exit;
     
-    mvmt := s^.velocity;
+    mvmt := sp^.velocity;
     hitIdx := -1;
     
     // Get the line hit...
