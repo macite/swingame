@@ -53,8 +53,8 @@ begin
     
     ClearScreen(ColorBlack);
     
-    if assigned(boom[currentAnim]^.currentFrame) then
-      WriteLn(currentAnim, ' - ', boom[currentAnim]^.currentFrame^.cellIndex);
+    // if assigned(boom[currentAnim]^.currentFrame) then
+    //   WriteLn(currentAnim, ' - ', boom[currentAnim]^.currentFrame^.cellIndex);
     
     DrawAnimation(boom[currentAnim], expl, 50, 50);
     DrawSprite(s);

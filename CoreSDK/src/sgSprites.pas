@@ -2169,9 +2169,9 @@ implementation
 	if not Assigned(s^.animationScript) then exit;
 	
 	idx := AnimationIndex(s^.animationScript, named);
-	if (idx < 0) or (idx > High(s^.animationScript^.animations)) then
-    begin
-		RaiseWarning('Unable to create animation "' + named + '" for sprite ' + s^.name + ' from script ' + s^.animationScript^.name);
+	if (idx < 0) or (idx >= AnimationCount(s^.animationScript)) then
+  begin
+		RaiseWarning('Unable to create animation "' + named + '" for sprite ' + s^.name + ' from script ' + AnimationScriptName(s^.animationScript));
 		exit;
 	end;
 
@@ -2187,9 +2187,9 @@ implementation
   begin
     if not Assigned(s) then exit;
     if not Assigned(s^.animationScript) then exit;
-    if (idx < 0) or (idx > High(s^.animationScript^.animations)) then
+    if (idx < 0) or (idx >= AnimationCount(s^.animationScript)) then
     begin
-		  RaiseWarning('Unable to create animation no. ' + IntToStr(idx) + ' for sprite ' + s^.name + ' from script ' + s^.animationScript^.name);
+		  RaiseWarning('Unable to create animation no. ' + IntToStr(idx) + ' for sprite ' + s^.name + ' from script ' + AnimationScriptName(s^.animationScript));
 		  exit;
     end;
     

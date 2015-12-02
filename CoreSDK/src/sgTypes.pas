@@ -193,37 +193,6 @@ interface
     /// @field data: Longword
     Color = Longword;
     
-    /// @struct AnimationFrame
-    /// @via_pointer
-    AnimationFrame = ^AnimationFrameData;
-    
-    /// @struct AnimationFrameData
-    /// @via_pointer
-    AnimationFrameData = packed record
-      index:      Longint;          // The index of the frame in the animation template
-      cellIndex:  Longint;          // Which cell of the current bitmap is drawn
-      sound:      SoundEffect;      // Which sound should be played on entry
-      duration:   Single;           // How long should this animation frame play for
-      movement:   Vector;           // Movement data associated with the frame
-      next:       AnimationFrame;   // What is the next frame in this animation
-    end;
-    
-    /// @note Use AnimationScript.
-    ///
-    /// @struct AnimationScriptData
-    /// @via_pointer
-    AnimationScriptData = packed record
-      name:     String;                       // The name of the animation template so it can be retrieved from resources
-      filename: String;                       // The filename from which this template was loaded
-      
-      animationIds: NamedIndexCollection;     // The names and ids of the animations. This links to animations.
-      animations:   LongintArray;             // The starting index of the animations in this template.
-      frames:       Array of AnimationFrame;  // The frames of the animations within this template.
-      
-      animObjs:     Array of Pointer;         // The animations created from this script
-      nextAnimIdx:  LongInt;                  // The index of the last animObjs
-    end;
-    
     /// An Animation Template stores a number of animations. Each animation is
     /// a list of frames linked together in the order they are to be performed.
     /// Each frame has the cell to draw, the duration it should be drawn for and
@@ -233,26 +202,12 @@ interface
     /// @class AnimationScript
     /// @pointer_wrapper
     /// @field pointer: pointer
-    AnimationScript = ^AnimationScriptData;
-    
-    /// @note Do not use AnimationData directly, use Animation.
-    /// @struct AnimationData
-    /// @via_pointer
-    AnimationData = packed record
-      firstFrame:     AnimationFrame;   // Where did it start?
-      currentFrame:   AnimationFrame;   // Where is the animation up to
-      lastFrame:      AnimationFrame;   // The last frame used, so last image can be drawn
-      frameTime:      Single;           // How long have we spent in this frame?
-      enteredFrame:   Boolean;          // Did we just enter this frame? (can be used for sound playing)
-      script:         AnimationScript;  // Which script was it created from?
-      animationName:  String;           // The name of the animation - when it was started
-      //hasEnded:     Boolean;          // Has the animation stopped?
-    end;
-    
+    AnimationScript = Pointer;
+        
     /// @class Animation
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Animation = ^AnimationData;
+    Animation = Pointer;
     
     /// Bitmap data stores the data associated with a Bitmap. Each bitmap contains
     /// a pointer to the bitmap color information (surface), its width, height,

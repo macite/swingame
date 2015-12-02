@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-10-19 18:30:17.799401
+// SwinGame.pas was generated on 2015-12-02 16:20:33.827600
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -45,11 +45,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type TriangleArray = sgTypes.TriangleArray;
 
-  type SoundEffectData = sgTypes.SoundEffectData;
-
   type SoundEffect = sgTypes.SoundEffect;
-
-  type MusicData = sgTypes.MusicData;
 
   type Music = sgTypes.Music;
 
@@ -57,15 +53,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type Color = sgTypes.Color;
 
-  type AnimationFrame = sgTypes.AnimationFrame;
-
-  type AnimationFrameData = sgTypes.AnimationFrameData;
-
-  type AnimationScriptData = sgTypes.AnimationScriptData;
-
   type AnimationScript = sgTypes.AnimationScript;
-
-  type AnimationData = sgTypes.AnimationData;
 
   type Animation = sgTypes.Animation;
 
@@ -158,6 +146,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type ArduinoData = sgTypes.ArduinoData;
 
   type ArduinoDevice = sgTypes.ArduinoDevice;
+
+  // Returns the number of Animations within an Animation Script.
+  function AnimationCount(script: AnimationScript): Integer; overload;
 
   // Returns the current cell (the part of the image or sprite) of this animation.
   // This can be used to animate an image or sprite.
@@ -4176,6 +4167,11 @@ implementation
 	procedure LoadDefaultColors();
 	begin
 	end;
+
+  function AnimationCount(script: AnimationScript): Integer; overload;
+  begin
+    result := sgAnimations.AnimationCount(script);
+  end;
 
   function AnimationCurrentCell(anim: Animation): Longint; overload;
   begin

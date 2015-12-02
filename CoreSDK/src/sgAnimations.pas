@@ -132,6 +132,14 @@ interface
     /// @class AnimationScript
     /// @getter Name
     function AnimationScriptName(script: AnimationScript): String;
+
+    /// Returns the number of Animations within an Animation Script.
+    ///
+    /// @lib
+    ///
+    /// @class AnimationScript
+    /// @getter AnimationCount
+    function AnimationCount(script: animationScript): Integer;
     
     
 //----------------------------------------------------------------------------
@@ -438,7 +446,7 @@ implementation
     uses
         SysUtils, StrUtils, Classes, 
         stringhash, sgSharedUtils, sgNamedIndexCollection,
-        sgShared, sgResources, sgTrace, sgAudio, sgImages, sgGeometry, sgDrawingOptions;
+        sgShared, sgResources, sgTrace, sgAudio, sgImages, sgGeometry, sgDrawingOptions, sgBackendTypes;
 //=============================================================================
 
 var
@@ -456,6 +464,7 @@ type
         startId: Longint;
     end;
 var
+    a: AnimationScriptPtr;
     rows: Array of RowData;
     ids: Array of IdData;
     input: Text; //the bundle file
@@ -738,23 +747,26 @@ var
         end;
         
         //We have the data ready, now lets create the linked lists...
-        New(result);
+        New(a);
         
-        result^.name        := name;        // name taken from parameter of DoLoadAnimationScript
-        result^.filename    := filename;    // filename also taken from parameter
-        result^.frames      := frames;      // The frames of this animation.
+        a^.id          := ANIMATION_SCRIPT_PTR;
+        a^.name        := name;        // name taken from parameter of DoLoadAnimationScript
+        a^.filename    := filename;    // filename also taken from parameter
+        a^.frames      := frames;      // The frames of this animation.
         
-        SetLength(result^.animations, Length(ids));
-        SetLength(result^.animObjs, 0);
-        result^.nextAnimIdx := 0;
-        InitNamedIndexCollection(result^.animationIds);     //Setup the name <-> id mappings
+        SetLength(a^.animations, Length(ids));
+        SetLength(a^.animObjs, 0);
+        a^.nextAnimIdx := 0;
+        InitNamedIndexCollection(a^.animationIds);     //Setup the name <-> id mappings
         
         for j := 0 to High(ids) do                          //Add in the animation starting indexes
         begin
-            addedIdx := AddName(result^.animationIds, ids[j].name);     //Allocate the index
-            result^.animations[addedIdx] := ids[j].startId;             //Store the linked index
+            addedIdx := AddName(a^.animationIds, ids[j].name);     //Allocate the index
+            a^.animations[addedIdx] := ids[j].startId;             //Store the linked index
             //WriteLn('load ids: ', addedIdx, ' - startid ', ids[j].startId)
         end;
+
+        result := a;    
     end;
     
     procedure MakeFalse(var visited: Array of Boolean);
@@ -792,9 +804,9 @@ var
         done := true;
         
         // check for all positive
-        for i := 0 to High(result^.frames) do
+        for i := 0 to High(a^.frames) do
         begin
-            if result^.frames[i]^.duration = 0 then
+            if a^.frames[i]^.duration = 0 then
             begin
                 done := false;
                 break;
@@ -803,14 +815,14 @@ var
         
         if done then exit;
         
-        SetLength(visited, Length(result^.frames));
+        SetLength(visited, Length(a^.frames));
         
         // Check through each animation for a loop
-        for i := 0 to High(result^.animations) do
+        for i := 0 to High(a^.animations) do
         begin
             MakeFalse(visited);
             
-            current := result^.frames[result^.animations[i]];
+            current := a^.frames[a^.animations[i]];
             
             // Check for a loop
             while current <> nil do
@@ -907,15 +919,22 @@ begin
 end;
 
 function AnimationScriptName(script: AnimationScript): String;
+var
+    a: AnimationScriptPtr;
 begin
     result := '';
-    if Assigned(script) then result := script^.name;
+    a := ToAnimationScriptPtr(script);
+    if Assigned(a) then result := a^.name;
 end;
 
 procedure FreeAnimationScript(var scriptToFree: AnimationScript);
+var
+    a: AnimationScriptPtr;
 begin
-    if Assigned(scriptToFree) then
-        ReleaseAnimationScript(scriptToFree^.name);
+    a := ToAnimationScriptPtr(scriptToFree);
+
+    if Assigned(a) then
+        ReleaseAnimationScript(a^.name);
     scriptToFree := nil;
 end;
 
@@ -996,25 +1015,27 @@ end;
 procedure DoFreeAnimationScript(var frm: AnimationScript);
 var
     i: Longint;
+    a: AnimationScriptPtr;
 begin
-    // WriteLn('Freeing Animation Script ', HexStr(frm), ' = ', frm^.name);
-    if not assigned(frm) then exit;
+    a := ToAnimationScriptPtr(frm);
+    if not assigned(a) then exit;
 
-    FreeNamedIndexCollection(frm^.animationIds);
+    FreeNamedIndexCollection(a^.animationIds);
     
-    // WriteLn(frm^.nextAnimIdx);
+    // WriteLn(a^.nextAnimIdx);
     // Must use downto as animations are removed from the array in FreeAnimation!
-    for i := frm^.nextAnimIdx - 1 downto 0 do
+    for i := a^.nextAnimIdx - 1 downto 0 do
     begin
-        FreeAnimation(frm^.animObjs[i]);
+        FreeAnimation(a^.animObjs[i]);
     end;
     
-    for i := 0 to High(frm^.frames) do
+    for i := 0 to High(a^.frames) do
     begin
-        Dispose(frm^.frames[i]);
-        frm^.frames[i] := nil;
+        Dispose(a^.frames[i]);
+        a^.frames[i] := nil;
     end;
-    Dispose(frm);
+    a^.id := NONE_PTR;
+    Dispose(a);
     frm := nil;
 end;
 
@@ -1052,28 +1073,53 @@ begin
     {$ENDIF}
 end;
 
-function StartFrame(id: Longint; temp: AnimationScript) : AnimationFrame;
+function AnimationCount(script: animationScript): Integer;
+var
+    a: AnimationScriptPtr;
 begin
+    a := ToAnimationScriptPtr(script);
+    if Assigned(a) then
+        result := Length(a^.animations)
+    else
+        result := 0;
+end;
+
+function _AnimationEnded(anim: AnimationPtr): Boolean;
+begin
+    if not Assigned(anim) then
+        result := true
+    else 
+        result := not Assigned(anim^.currentFrame);
+end;
+
+function StartFrame(id: Longint; temp: AnimationScript) : AnimationFrame;
+var
+    a: AnimationScriptPtr;
+begin
+    a := ToAnimationScriptPtr(temp);
     result := nil;
-    if temp = nil then exit;
+    if a = nil then exit;
     
-    if (id < 0) or (id > High(temp^.animations)) then exit;
+    if (id < 0) or (id > High(a^.animations)) then exit;
     
-    result := temp^.frames[id];
+    result := a^.frames[id];
     
 end;
 
 //----------------------------------------------------------------------------
 
 function StartFrame(const name: String; temp: AnimationScript) : AnimationFrame;
+var
+    a: AnimationScriptPtr;
 begin
-    if assigned(temp) then
-        result := StartFrame(IndexOf(temp^.animationIds, name), temp)
+    a := ToAnimationScriptPtr(temp);
+    if Assigned(a) then
+        result := StartFrame(IndexOf(a^.animationIds, name), temp)
     else
         result := nil;
 end;
 
-procedure _AddAnimation(script: AnimationScript; ani: Animation);
+procedure _AddAnimation(script: AnimationScriptPtr; ani: AnimationPtr);
 begin
     if Length(script^.animObjs) <= script^.nextAnimIdx then
       SetLength(script^.animObjs, script^.nextAnimIdx + 1);
@@ -1083,7 +1129,7 @@ begin
     script^.nextAnimIdx += 1;
 end;
 
-procedure _RemoveAnimation(script: AnimationScript; ani: Animation);
+procedure _RemoveAnimation(script: AnimationScriptPtr; ani: AnimationPtr);
 var
     i: Integer;
 begin
@@ -1102,41 +1148,47 @@ end;
 
 procedure FreeAnimation(var ani: Animation);
 var
-    toFree: Animation;
+    toFree: AnimationPtr;
+    a: AnimationPtr;
 begin
+    a := ToAnimationPtr(ani);
     // WriteLn('Freeing Anim ', HexStr(ani));
-    if assigned(ani) then
+    if assigned(a) then
     begin
-        toFree := ani;
-        _RemoveAnimation(ani^.script, ani);
+        toFree := a;
+        _RemoveAnimation(a^.script, a);
+        toFree^.id := NONE_PTR;
         // WriteLn('Now Disposing Anim ', HexStr(ani), '=', HexStr(toFree));
         Dispose(toFree); //ani may have been overridden by last call...
         ani := nil;
     end;
 end;
 
-function CreateAnimation(identifier: Longint; script: AnimationScript; withSound: Boolean): Animation; overload;
+procedure _AssignAnimation(anim: AnimationPtr; idx: Longint; script: AnimationScriptPtr; withSound: Boolean); forward;
+
+function _CreateAnimation(identifier: Longint; script: AnimationScriptPtr; withSound: Boolean): Animation; overload;
+var
+    aptr: AnimationPtr;
 begin
     result := nil;
+
     if script = nil then exit;
     if (identifier < 0) or (identifier > High(script^.animations)) then
-      begin
+    begin
       RaiseWarning('Unable to create animation number ' + IntToStr(identifier) + ' from script ' + script^.name);
       exit;
     end;
     
-    new(result);
-    _AddAnimation(script, result);
-    AssignAnimation(result, identifier, script, withSound);
+    new(aptr);
+    aptr^.id := ANIMATION_PTR;
+    _AddAnimation(script, aptr);
+    result := aptr;
+
+    _AssignAnimation(aptr, identifier, script, withSound);
     // WriteLn('Created ', HexStr(result));
 end;
 
-function CreateAnimation(identifier: Longint;    script: AnimationScript): Animation; overload;
-begin
-    result := CreateAnimation(identifier, script, True);
-end;
-
-function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+function _CreateAnimation(const identifier: String; script: AnimationScriptPtr; withSound: Boolean): Animation; overload;
 var
     idx: Integer;
 begin
@@ -1150,7 +1202,22 @@ begin
         exit;
     end;
 
-    result := CreateAnimation(idx, script, withSound);
+    result := _CreateAnimation(idx, script, withSound);
+end;
+
+function CreateAnimation(identifier: Longint; script: AnimationScript; withSound: Boolean): Animation; overload;
+begin
+    result := _CreateAnimation(identifier, ToAnimationScriptPtr(script), withSound);
+end;
+
+function CreateAnimation(identifier: Longint; script: AnimationScript): Animation; overload;
+begin
+    result := CreateAnimation(identifier, script, True);
+end;
+
+function CreateAnimation(const identifier: String; script: AnimationScript; withSound: Boolean): Animation; overload;
+begin
+    result := _CreateAnimation(identifier, ToAnimationScriptPtr(script), withSound);
 end;
 
 function CreateAnimation(const identifier: String;    script: AnimationScript): Animation; overload;
@@ -1175,6 +1242,11 @@ end;
 
 procedure AssignAnimation(anim: Animation; idx: Longint; script: AnimationScript; withSound: Boolean); overload;
 begin
+    _AssignAnimation(ToAnimationPtr(anim), idx, ToAnimationScriptPtr(script), withSound);
+end;
+
+procedure _AssignAnimation(anim: AnimationPtr; idx: Longint; script: AnimationScriptPtr; withSound: Boolean);
+begin
     if (not assigned(anim)) or (not assigned(script)) then exit;
     if (idx < 0) or (idx > High(script^.animations)) then 
     begin 
@@ -1194,14 +1266,14 @@ begin
     RestartAnimation(anim, withSound);
 end;
 
-procedure UpdateAnimation(anim: Animation; pct: Single; withSound: Boolean); overload;
+procedure _UpdateAnimation(anim: AnimationPtr; pct: Single; withSound: Boolean); overload;
 begin
     {$IFDEF TRACE}
         TraceEnter('sgAnimations', 'UpdateAnimation', '');
         try
     {$ENDIF}
     
-    if AnimationEnded(anim) then exit;
+    if _AnimationEnded(anim) then exit;
         
     anim^.frameTime     := anim^.frameTime + pct;
     anim^.enteredFrame  := false;
@@ -1228,6 +1300,11 @@ begin
     {$ENDIF}
 end;
 
+procedure UpdateAnimation(anim: Animation; pct: Single; withSound: Boolean); overload;
+begin
+    _UpdateAnimation(ToAnimationPtr(anim), pct, withSound);
+end;
+
 procedure UpdateAnimation(anim: Animation; pct: Single); overload;
 begin
     UpdateAnimation(anim, pct, True);
@@ -1240,18 +1317,10 @@ end;
 
 function AnimationEnded(anim: Animation): Boolean;
 begin
-    if not Assigned(anim) then
-        result := true
-    else 
-        result := not Assigned(anim^.currentFrame);
+    result := _AnimationEnded(ToAnimationPtr(anim));
 end;
 
-procedure RestartAnimation(anim: Animation); overload;
-begin
-    RestartAnimation(anim, true);
-end;
-
-procedure RestartAnimation(anim: Animation; withSound: Boolean); overload;
+procedure _RestartAnimation(anim: AnimationPtr; withSound: Boolean); overload;
 begin
     if not assigned(anim) then exit;
     
@@ -1264,12 +1333,21 @@ begin
         PlaySoundEffect(anim^.currentFrame^.sound);
 end;
 
+procedure RestartAnimation(anim: Animation); overload;
+begin
+    RestartAnimation(ToAnimationPtr(anim), true);
+end;
 
-function AnimationCurrentCell(anim: Animation): Longint;
+procedure RestartAnimation(anim: Animation; withSound: Boolean); overload;
+begin
+    _RestartAnimation(ToAnimationPtr(anim), withSound);
+end;
+
+function _AnimationCurrentCell(anim: AnimationPtr): Longint;
 begin
     if not assigned(anim) then
         result := 0 //no animation - return the first frame
-    else if not AnimationEnded(anim) then
+    else if not _AnimationEnded(anim) then
         result := anim^.currentFrame^.cellIndex
     else if not assigned(anim^.lastFrame) then
         result := -1
@@ -1277,7 +1355,12 @@ begin
         result := anim^.lastFrame^.cellIndex;
 end;
 
-function AnimationCurrentVector(anim: Animation): Vector;
+function AnimationCurrentCell(anim: Animation): Longint;
+begin
+    result := _AnimationCurrentCell(ToAnimationPtr(anim));
+end;
+
+function _AnimationCurrentVector(anim: AnimationPtr): Vector;
 begin
     if not assigned(anim) then 
         result := VectorTo(0,0)
@@ -1290,7 +1373,12 @@ begin
         result := VectorTo(0,0)
 end;
 
-function AnimationEnteredFrame(anim: Animation): Boolean;
+function AnimationCurrentVector(anim: Animation): Vector;
+begin
+    result := _AnimationCurrentVector(ToAnimationPtr(anim));
+end;
+
+function _AnimationEnteredFrame(anim: AnimationPtr): Boolean;
 begin
     if not Assigned(anim) then
         result := false
@@ -1298,12 +1386,20 @@ begin
         result := anim^.enteredFrame;
 end;
 
-function AnimationFrameTime(anim: Animation): Single;
+function AnimationEnteredFrame(anim: Animation): Boolean;
 begin
-    if not Assigned(anim) then
+    result := _AnimationEnteredFrame(ToAnimationPtr(anim));
+end;
+
+function AnimationFrameTime(anim: Animation): Single;
+var
+    a: AnimationPtr;
+begin
+    a := ToAnimationPtr(anim);
+    if not Assigned(a) then
         result := -1
     else 
-        result := anim^.frameTime;
+        result := a^.frameTime;
 end;
 
 
@@ -1341,21 +1437,31 @@ end;
 
 
 function AnimationIndex(temp: AnimationScript; const name: String): Longint;
+var
+    a: AnimationScriptPtr;
 begin
-    if not assigned(temp) then result := -1
-    else result := IndexOf(temp^.animationIds, name);
+    a := ToAnimationScriptPtr(temp);
+    if not assigned(a) then result := -1
+    else result := IndexOf(a^.animationIds, name);
 end;
 
 function AnimationName(temp: AnimationScript; idx: Longint): String;
+var
+    a: AnimationScriptPtr;
 begin
-    if not assigned(temp) then result := ''
-    else result := NameAt(temp^.animationIds, idx);
+    a := ToAnimationScriptPtr(temp);
+    if not assigned(a) then result := ''
+    else result := NameAt(a^.animationIds, idx);
 end;
 
 function AnimationName(temp: Animation): String;
+var
+    a: AnimationPtr;
 begin
-    if not assigned(temp) then result := ''
-    else result := temp^.animationName;
+    a := ToAnimationPtr(temp);
+
+    if not assigned(a) then result := ''
+    else result := a^.animationName;
 end;
 
 //=============================================================================
