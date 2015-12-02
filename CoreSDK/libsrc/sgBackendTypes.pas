@@ -16,6 +16,7 @@ uses sgTypes;
   //
   const
     AUDIO_PTR = 'AUDO'; // 4 type values
+    MUSIC_PTR = 'MUSI'; // 4 type values
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -31,9 +32,12 @@ uses sgTypes;
       filename, name: String;
     end;
 
-  SoundEffectPtr = ^SoundEffectData;
+    SoundEffectPtr = ^SoundEffectData;
+    MusicPtr = ^SoundEffectData;
+
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
+  function ToMusicPtr(m: Music): MusicPtr;
 
 implementation
 uses sgShared;
@@ -44,6 +48,16 @@ uses sgShared;
     if Assigned(result) and (result^.id <> AUDIO_PTR) then
     begin
       RaiseWarning('Attempted to access a SoundEffect that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToMusicPtr(m: Music): MusicPtr;
+  begin
+    result := SoundEffectPtr(m);
+    if Assigned(result) and (result^.id <> MUSIC_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Music that appears to be an invalid pointer');
       result := nil;
     end;
   end;

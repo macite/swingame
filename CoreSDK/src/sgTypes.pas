@@ -160,35 +160,19 @@ interface
     SoundEffect = Pointer;
     
     
-    /// @struct MusicData
-    /// @via_pointer
-    MusicData = packed record
-      music: Pointer;
-      filename, name: String;
-    end;
-    
-    
-    /// The SoundEffect type is used to refer to sound effects that can be
-    /// played by the SwinGame audio code. Sound effects are loaded with
-    /// `LoadSoundEffect`, played using `PlaySoundEffect`, and must be
+    /// The Music type is used to refer to music that can be
+    /// played by the SwinGame audio code. Music files are loaded with
+    /// `LoadMusic`, played using `PlayMusic`, and must be
     /// released using `FreeMusic`.
     ///
-    /// SwinGame will mix the audio from multiple sound effects, making it
-    /// possible to play multiple SoundEffects, or even to play the one
-    /// SoundEffect multiple times.
-    ///
-    /// You can check if a SoundEffect is currently playing using
-    /// `SoundEffectPlaying`.
-    ///
-    /// To stop a SoundEffect playing use `StopSoundEffect`. This will stop all
-    /// instances of this one sound effect from playing.
-    ///
-    /// @note Use `SoundEffect` for the foreground sound effects of for your games.
+    /// Unlike `SoundEffect`s, there can only be one Music track
+    /// playing at a time. Playing an new track will stop the currently
+    /// playing music and switch to the new track.
     ///
     /// @class Music
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Music = ^MusicData;
+    Music = Pointer;
 
     /// In SwinGame, Matrices can be used to combine together a number of
     /// operations that need to be performed on Vectors.

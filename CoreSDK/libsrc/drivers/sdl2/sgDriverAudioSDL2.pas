@@ -148,32 +148,52 @@ implementation
   end;
   
   //TODO: Move this to Audio unit
-  function LoadMusicProcedure(const filename, name: String) : Music;
+  function LoadMusicProcedure(const filename, name: String): Music;
+  var
+    m: MusicPtr;
   begin
-    New(result); 
+    New(m); 
 
-    result^.music := _LoadSoundData(filename, name, SGSD_MUSIC);
+    m^.effect := _LoadSoundData(filename, name, SGSD_MUSIC);
 
-    if result^.music = nil then 
+    if m^.effect = nil then 
     begin
-      Dispose(result);
-      result := nil;
+      m^.id := NONE_PTR;
+      Dispose(m);
+      m := nil;
     end
     else
     begin
-      result^.filename := filename;
-      result^.name := name;
+      m^.id := MUSIC_PTR;
+      m^.filename := filename;
+      m^.name := name;
     end;
+
+    result := m;
+  end;
+
+  function _Music(music: Music): Pointer;
+  var
+    m: MusicPtr;
+  begin
+    m := ToMusicPtr(music);
+    if Assigned(m) then result := m^.effect
+    else result := nil;
   end;
   
   procedure FreeMusicProcedure(music : Music);
   var
+    m: MusicPtr;
     sndData: ^sg_sound_data;
   begin
-    sndData := music^.music;
+    m := ToMusicPtr(music);
+
+    sndData := m^.effect;
     _sg_functions^.audio.close_sound_data(sndData);
     Dispose(sndData);
-    music^.music := nil;
+
+    m^.effect := nil;
+    m^.id := NONE_PTR;
   end;
   
   procedure SetMusicVolumeProcedure(newVolume : Single);
@@ -191,13 +211,13 @@ implementation
     pct: Single;
   begin
     pct := GetMusicVolumeProcedure();
-    _sg_functions^.audio.play_sound(music^.music, loops, pct);
+    _sg_functions^.audio.play_sound(_Music(music), loops, pct);
     result := true;
   end;
   
   function FadeMusicInProcedure(music : Music; loops, ms : Integer) : Boolean;
   begin
-    _sg_functions^.audio.fade_in(music^.music, loops, ms);
+    _sg_functions^.audio.fade_in(_Music(music), loops, ms);
     result := true;
   end;
   

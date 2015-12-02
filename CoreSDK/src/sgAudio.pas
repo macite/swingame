@@ -1041,12 +1041,16 @@ implementation
     end;
     
     procedure FreeMusic(var mus: Music);
+    var
+        m: MusicPtr;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'FreeMusic', 'mus = ' + HexStr(mus));
         {$ENDIF}
         
-        if assigned(mus) then ReleaseMusic(mus^.name);
+        m := ToMusicPtr(mus);
+
+        if assigned(mus) then ReleaseMusic(m^.name);
         mus := nil;
         
         {$IFDEF TRACE}
@@ -1471,7 +1475,7 @@ implementation
         {$ENDIF}
         
         tmp := _Music.values[name];
-        if assigned(tmp) then result := Music(tResourceContainer(tmp).Resource)
+        if Assigned(tmp) then result := Music(tResourceContainer(tmp).Resource)
         else
         begin 
             filename := PathToResource(name, SoundResource);
@@ -1489,12 +1493,16 @@ implementation
     end;
     
     function MusicName(mus: Music): String;
+    var
+        m: MusicPtr;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'MusicName', HexStr(mus));
         {$ENDIF}
         
-        if assigned(mus) then result := mus^.name
+        m := ToMusicPtr(mus);
+
+        if Assigned(m) then result := m^.name
         else result := '';
         
         {$IFDEF TRACE}
@@ -1503,12 +1511,16 @@ implementation
     end;
     
     function MusicFilename(mus: Music): String;
+    var
+        m: MusicPtr;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'MusicFilename', HexStr(mus));
         {$ENDIF}
         
-        if assigned(mus) then result := mus^.filename
+        m := ToMusicPtr(mus);
+
+        if Assigned(m) then result := m^.filename
         else result := '';
         
         {$IFDEF TRACE}
