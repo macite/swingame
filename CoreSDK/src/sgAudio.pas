@@ -672,7 +672,7 @@ implementation
     uses
         SysUtils, Classes, 
         stringhash,                 // libsrc
-        sgShared, sgResources, sgTrace, sgDriverAudio;
+        sgShared, sgResources, sgTrace, sgDriverAudio, sgBackendTypes;
 //=============================================================================
 
     var
@@ -862,16 +862,20 @@ implementation
     // private:
     // Called to actually free the resource
     procedure DoFreeSoundEffect(var effect: SoundEffect);
+    var
+        s: SoundEffectPtr;
     begin
+        s := ToSoundEffectPtr(effect);
+
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'DoFreeSoundEffect', 'effect = ' + HexStr(effect));
         {$ENDIF}
         
-        if assigned(effect) then
+        if assigned(s) then
         begin
             CallFreeNotifier(effect);
             AudioDriver.FreeSoundEffect(effect);
-            Dispose(effect);
+            Dispose(s);
         end;
         effect := nil;
         {$IFDEF TRACE}
@@ -887,7 +891,7 @@ implementation
         
         if(assigned(effect)) then
         begin
-            ReleaseSoundEffect(effect^.name);
+            ReleaseSoundEffect(SoundEffectPtr(effect^)^.name);
         end;
         effect := nil;
         
@@ -1406,12 +1410,16 @@ implementation
     end;
     
     function SoundEffectName(effect: SoundEffect): String;
+    var
+        s: SoundEffectPtr;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'SoundEffectName', HexStr(effect));
         {$ENDIF}
         
-        if assigned(effect) then result := effect^.name
+        s := ToSoundEffectPtr(effect);
+
+        if Assigned(s) then result := s^.name
         else result := '';
         
         {$IFDEF TRACE}
@@ -1420,12 +1428,16 @@ implementation
     end;
     
     function SoundEffectFilename(effect: SoundEffect): String;
+    var
+        s: SoundEffectPtr;
     begin
         {$IFDEF TRACE}
             TraceEnter('sgAudio', 'SoundEffectFilename', HexStr(effect));
         {$ENDIF}
         
-        if assigned(effect) then result := effect^.filename
+        s := ToSoundEffectPtr(effect);
+
+        if Assigned(s) then result := s^.filename
         else result := '';
         
         {$IFDEF TRACE}

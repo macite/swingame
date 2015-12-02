@@ -137,13 +137,6 @@ interface
     /// @field data: array of Triangle
     TriangleArray = Array of Triangle;
     
-    /// @struct SoundEffectData
-    /// @via_pointer
-    SoundEffectData = packed record
-      effect: Pointer;
-      filename, name: String;
-    end;
-    
     /// The `SoundEffect` type is used to refer to sound effects that can be
     /// played by the SwinGame audio code. Sound effects are loaded with
     /// `LoadSoundEffect`, played using `PlaySoundEffect`, and must be
@@ -164,7 +157,7 @@ interface
     /// @class SoundEffect
     /// @pointer_wrapper
     /// @field pointer: pointer
-    SoundEffect = ^SoundEffectData;
+    SoundEffect = Pointer;
     
     
     /// @struct MusicData
