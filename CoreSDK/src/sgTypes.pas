@@ -31,17 +31,6 @@ interface
     /// @field data: array of Single
     SingleArray = array of Single;
     
-    /// The named index collection type is used to maintain a named collection of 
-    /// index values that can then be used to lookup the location of the
-    /// named value within a collection.
-    ///
-    /// @struct NamedIndexCollection
-    /// @via_pointer
-    NamedIndexCollection = packed record
-      names: StringArray;   // The names of these ids
-      ids: Pointer;             // A pointer to a TStringHash with this data
-    end;
-    
     /// A Point2D represents an location in Cartesian coordinates (x,y).
     ///
     /// @struct Point2D
@@ -340,15 +329,6 @@ interface
     ///
     /// @type SpriteSingleFunction
     SpriteSingleFunction = procedure(s: Sprite; val: Single);
-
-    /// An array of SpriteEventHandlers used internally by Sprites.
-    ///
-    /// @type SpriteEventHandlerArray
-    /// @array_wrapper
-    /// @field data: array of SpriteEventHandler
-    SpriteEventHandlerArray = array of SpriteEventHandler;
-
-
 
     /// @struct TimerData
     /// @via_pointer
@@ -701,6 +681,7 @@ interface
       gkList = 32,
       gkAnyKind = 63 // = (1 or 2 or 4 or 8 or 16 or 32) 
       );
+
     /// The Event kind is an enum of all the events that could happen to a gui element
     ///
     /// @enum EventKind
@@ -709,87 +690,6 @@ interface
         ekTextEntryEnded,
         ekSelectionMade
       );
-
-      /// GUIList is a list GUI Element which contains ItemLists
-      ///
-      /// @class GUIList
-      /// @pointer_wrapper
-      /// @no_free_pointer_wrapper
-      /// @field pointer: pointer
-      GUIList = ^GUIListData;
-
-      /// Each list item has text and an image
-      ///
-      /// @struct GUIListItem
-      ///
-      /// @via_pointer
-      GUIListItem = packed record
-        text:     String;
-        image:    Bitmap;
-        cell:     Longint;
-        parent:   GUIList;
-      end;
-      
-      /// @struct GUIListData
-      /// @via_pointer
-      GUIListData = packed record
-        verticalScroll: Boolean;
-        //The areas for the up/left down/right scrolling buttons
-        scrollUp:     Rectangle;
-        scrollDown:   Rectangle;
-        scrollArea:   Rectangle;
-        columns:      Longint;
-        rows:         Longint;
-        rowHeight:    Single;
-        colWidth:     Single;
-        scrollSize:   Longint;
-        placeholder:  Array of Rectangle;
-        activeItem:   Longint;
-        startingAt:   Longint;
-        font:         Font;
-        items:        Array of GUIListItem;
-        scrollButton: Bitmap;
-        alignment:    FontAlignment;
-      end;
-
-
-      /// @struct GUILabelData
-      /// @via_pointer
-    GUILabelData = packed record
-      contentString:  String;
-      font:           Font;
-      alignment:      FontAlignment;
-    end;
-    
-    /// GUILabel is a Label GUI Element which contains string font and font alignment
-    ///
-    /// @class GUILabel
-    /// @pointer_wrapper
-    /// @no_free_pointer_wrapper
-    /// @field pointer: ^GUILabelData
-    GUILabel = ^GUILabelData;
-
-    
-
-
-    
-
-
-    /// @struct GUICheckboxData
-    /// @via_pointer
-    GUICheckboxData = packed record
-      state:        Boolean;
-    end;
-    
-    /// GUICheckbox is a Checkbox GUI Element which contains a bool
-    ///
-    /// @class GUICheckbox
-    /// @pointer_wrapper
-    /// @no_free_pointer_wrapper
-    /// @field pointer: ^GUICheckboxData
-    GUICheckbox = ^GUICheckboxData;
-    
-
 
     /// The file dialog select type is an enum of how a file dialog displays files/directories
     ///
@@ -800,138 +700,32 @@ interface
       fdFilesAndDirectories = 3 // = (1 or 2)
       );
     
-
-
-    /// panel
+    /// Panel
     ///
     /// @class Panel
     /// @pointer_wrapper
-    /// @field pointer: ^PanelData
-    Panel = ^PanelData;
-    
+    /// @field pointer: Pointer
+    Panel = Pointer;
     
     /// Region is the area within a panel
     ///
     /// @class Region
     /// @pointer_wrapper
     /// @no_free_pointer_wrapper
-    /// @field pointer: ^RegionData
-    Region = ^RegionData;
-    
-    /// GUITextbox is a textbox gui component in swingame 
-    /// it has a string font length limit region and font alignment
-    ///
-    /// @class GUITextbox
-    /// @pointer_wrapper
-    /// @no_free_pointer_wrapper
-    /// @field pointer: ^RegionData
-    GUITextbox = ^GUITextboxData;
-    
+    /// @field pointer: Pointer
+    Region = Pointer;
     
     /// GUIEventCallback is a callbackfunction for gui eventsin swingame 
     ///
     /// @type GUIEventCallback
     GUIEventCallback = procedure (r: Region; kind: EventKind);
     
-    /// @struct RegionData
-    /// @via_pointer
-    RegionData = packed record
-      stringID:       String;
-      kind:           GUIElementKind;
-      regionIdx:      Longint;
-      elementIndex:   Longint;
-      area:           Rectangle;
-      active:         Boolean;
-      parent:         Panel;
-      callbacks:      Array of GUIEventCallback;
-    end;
-
-    
-    
-    
-    /// @struct GUIRadioGroupData
-    /// @via_pointer
-    GUIRadioGroupData = packed record
-      groupID:      string;
-      buttons:      Array of Region;
-      activeButton: Longint;
-    end;
-    
-    
-    
-    /// GUI radio group is a radio group gui component in swingame.
-    ///
-    ///
-    /// @class GUIRadioGroup
-    /// @pointer_wrapper
-    /// @no_free_pointer_wrapper
-    /// @field pointer : ^GUIRadioGroupData
-    GUIRadioGroup = ^GUIRadioGroupData;
-    
-    
-    /// @struct GUITextboxData
-    /// @via_pointer
-    GUITextboxData = packed record
-      contentString:  String;
-      font:           Font;
-      lengthLimit:    Longint;
-      forRegion:      Region;
-      alignment:      FontAlignment;
-    end;
-    
-    ///@struct PanelData
-    ///@via_pointer
-    PanelData = packed record
-      name:                 String;
-      filename:             String;
-      panelID:              Longint;
-      area:                 Rectangle;
-      visible:              Boolean;
-      active:               Boolean;
-      draggable:            Boolean;
-
-      // The panel's bitmaps
-      panelBitmap:          Bitmap;
-      panelBitmapInactive:  Bitmap;
-      panelBitmapActive:    Bitmap;
-
-      // The regions within the Panel
-      regions:              Array of RegionData;
-      regionIds:            NamedIndexCollection;
-
-      // The extra details for the different kinds of controls
-      labels:               Array of GUILabelData;
-      checkBoxes:           Array of GUICheckboxData;
-      radioGroups:          Array of GUIRadioGroupData;
-      textBoxes:            Array of GUITextBoxData;
-      lists:                Array of GUIListData;
-
-      modal:                Boolean;                      // A panel that is modal blocks events from panels shown earlier.
-
-      // Event callback mechanisms
-      DrawAsVectors:        Boolean;
-    end;
-
-    ///@struct ArduinoData
-    ///@via_pointer
-    ArduinoData = record
-      name: String;
-      ptr: Pointer;
-      
-      port: String;
-      baud: LongInt;
-      
-      open: Boolean;
-      hasError: Boolean;
-      errorMessage: String;
-    end;
-
     /// A connection to an Arduino device.
     ///
     /// @class ArduinoDevice
     /// @pointer_wrapper
-    /// @field pointer : ^ArduinoData
-    ArduinoDevice = ^ArduinoData;
+    /// @field pointer : Pointer
+    ArduinoDevice = Pointer;
 
     
 //=============================================================================

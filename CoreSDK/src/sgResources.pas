@@ -122,17 +122,6 @@ interface
     /// @sn pathToResource:%s kind:%s inSubdir:%s
     function PathToResource(const filename: String; kind: ResourceKind; const subdir: String): String; overload;
     
-    /// Returns the path to a resource given its filename, kind, and any subPaths. For example: to load
-    /// the image ``bullet01.png`` from the ``bullets`` subdirectory you pass in ``bullet01.png`` as the filename,
-    /// ``ImageResource`` as the kind, and ``bullets`` as the subPaths. This will then return the full path
-    /// to the resource according to the platform in question. 
-    ///
-    /// For example: ``.../Resources/images/bullets/bullet01.png``
-    /// 
-    /// @lib PathToResourceWithSubPaths
-    /// @sn pathToResourceFilename:%s kind:%s subPaths:%s
-    function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
-    
     /// Returns the path to the filename for a given file resource.
     /// 
     /// @lib PathToResource
@@ -212,7 +201,9 @@ implementation
 
         _AppPathSet: Boolean;
         
-    
+
+    function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload; forward;
+
     procedure RegisterFreeNotifier(fn: FreeNotifier);
     begin
         {$IFDEF TRACE}

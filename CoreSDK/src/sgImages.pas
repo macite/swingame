@@ -617,6 +617,7 @@ begin
   end;
   
   New(b);
+  result := b;
   b^.id := BITMAP_PTR;
   b^.surface := nil;
   
@@ -630,8 +631,6 @@ begin
     RaiseWarning('Failed to create a bitmap: ' + Driver.GetError());
     exit;
   end;
-  
-  result := b;
 
   //
   // Place the bitmap in the _Images hashtable

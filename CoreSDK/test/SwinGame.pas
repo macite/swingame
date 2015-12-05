@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-02 19:51:24.741440
+// SwinGame.pas was generated on 2015-12-05 12:50:54.026815
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -14,8 +14,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type StringArray = sgTypes.StringArray;
 
   type SingleArray = sgTypes.SingleArray;
-
-  type NamedIndexCollection = sgTypes.NamedIndexCollection;
 
   type Point2D = sgTypes.Point2D;
 
@@ -81,8 +79,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type SpriteSingleFunction = sgTypes.SpriteSingleFunction;
 
-  type SpriteEventHandlerArray = sgTypes.SpriteEventHandlerArray;
-
   type TimerData = sgTypes.TimerData;
 
   type Timer = sgTypes.Timer;
@@ -105,41 +101,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type EventKind = sgTypes.EventKind;
 
-  type GUIList = sgTypes.GUIList;
-
-  type GUIListItem = sgTypes.GUIListItem;
-
-  type GUIListData = sgTypes.GUIListData;
-
-  type GUILabelData = sgTypes.GUILabelData;
-
-  type GUILabel = sgTypes.GUILabel;
-
-  type GUICheckboxData = sgTypes.GUICheckboxData;
-
-  type GUICheckbox = sgTypes.GUICheckbox;
-
   type FileDialogSelectType = sgTypes.FileDialogSelectType;
 
   type Panel = sgTypes.Panel;
 
   type Region = sgTypes.Region;
 
-  type GUITextbox = sgTypes.GUITextbox;
-
   type GUIEventCallback = sgTypes.GUIEventCallback;
-
-  type RegionData = sgTypes.RegionData;
-
-  type GUIRadioGroupData = sgTypes.GUIRadioGroupData;
-
-  type GUIRadioGroup = sgTypes.GUIRadioGroup;
-
-  type GUITextboxData = sgTypes.GUITextboxData;
-
-  type PanelData = sgTypes.PanelData;
-
-  type ArduinoData = sgTypes.ArduinoData;
 
   type ArduinoDevice = sgTypes.ArduinoDevice;
 
@@ -2517,14 +2485,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // ``ImageResource`` as the kind and ``level1`` as the subdir.
   function PathToResource(const filename: String; kind: ResourceKind; const subdir: String): String; overload;
 
-  // Returns the path to a resource given its filename, kind, and any subPaths. For example: to load
-  // the image ``bullet01.png`` from the ``bullets`` subdirectory you pass in ``bullet01.png`` as the filename,
-  // ``ImageResource`` as the kind, and ``bullets`` as the subPaths. This will then return the full path
-  // to the resource according to the platform in question. 
-  //
-  // For example: ``.../Resources/images/bullets/bullet01.png``
-  function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
-
   // Returns the path to a resource based on a base path and a the resource kind.
   function PathToResourceWithBase(const path: String; const filename: String): String; overload;
 
@@ -3364,9 +3324,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Activate the passed in panel. If shown, the panel will be clickable. This is the default state of a panel.
   procedure ActivatePanel(p: Panel); overload;
 
-  // Takes a radiogroup and returns the active button
-  function ActiveRadioButton(grp: GUIRadioGroup): Region; overload;
-
   // Takes an ID and returns the active button
   function ActiveRadioButton(const id: String): Region; overload;
 
@@ -3375,9 +3332,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Takes a radiogroup and returns the active button's index.
   function ActiveRadioButtonIndex(const id: String): Longint; overload;
-
-  // Takes a radiogroup and returns the active button's index.
-  function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): Longint; overload;
 
   // Takes a radiogroup and returns the active button's index.
   function ActiveRadioButtonIndex(pnl: Panel; const id: String): Longint; overload;
@@ -3394,14 +3348,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns true when the region has been clicked.
   function ButtonClicked(r: Region): Boolean; overload;
 
-  // Takes a region and returns the checkbox of that region
-  function CheckboxFromRegion(r: Region): GUICheckbox; overload;
-
   // Sets the checkbox state to val given the ID.
   procedure CheckboxSetState(const id: String; val: Boolean); overload;
-
-  // Sets the checkbox state to val.
-  procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
 
   // Sets the checkbox state to val.
   procedure CheckboxSetState(r: Region; val: Boolean); overload;
@@ -3414,9 +3362,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns checkbox state of the checkbox with ID from string
   function CheckboxState(const s: String): Boolean; overload;
-
-  // Returns checkbox state of the given checkbox
-  function CheckboxState(chk: GUICheckbox): Boolean; overload;
 
   // Returns checkbox state of the checkbox with ID in a given Panel
   function CheckboxState(p: Panel; const s: String): Boolean; overload;
@@ -3458,9 +3403,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // indicated name.
   procedure GUISetActiveTextbox(const name: String); overload;
 
-  // Sets the active textbox
-  procedure GUISetActiveTextbox(t: GUITextbox); overload;
-
   // Sets the active textbox from region
   procedure GUISetActiveTextbox(r: Region); overload;
 
@@ -3475,9 +3417,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Sets the inactive ForeGround color of the GUI
   procedure GUISetForegroundColorInactive(c: Color); overload;
-
-  // Returns the textbox in which text was changed/added into most recently.
-  function GUITextBoxOfTextEntered(): GUITextbox; overload;
 
   // Checks if TextEntry finished, returns true/false
   function GUITextEntryComplete(): Boolean; overload;
@@ -3503,41 +3442,20 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns FontAlignment from label given region
   function LabelAlignment(r: Region): FontAlignment; overload;
 
-  // Returns FontAlignment from label given region
-  function LabelAlignment(lbl: GUILabel): FontAlignment; overload;
-
   // Get Font From Label
   function LabelFont(r: Region): Font; overload;
 
-  // Get Font From Label
-  function LabelFont(l: GUILabel): Font; overload;
-
-  // returns a GUILabel From given region
-  function LabelFromRegion(r: Region): GUILabel; overload;
-
-  // Sets FontAlignment for label given region
-  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
-
   // Sets FontAlignment for label given region
   procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
-
-  // Set Font For Label
-  procedure LabelSetFont(l: GUILabel; const s: String); overload;
-
-  // Set text for Label
-  procedure LabelSetText(lb: GUILabel; const newString: String); overload;
-
-  // Set text for Label
-  procedure LabelSetText(const id: String; const newString: String); overload;
 
   // Set text for Label
   procedure LabelSetText(r: Region; const newString: String); overload;
 
   // Set text for Label
-  procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
+  procedure LabelSetText(const id: String; const newString: String); overload;
 
-  // Get text From Label
-  function LabelText(lb: GUILabel): String; overload;
+  // Set text for Label
+  procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
 
   // Get text From Label
   function LabelText(r: Region): String; overload;
@@ -3547,9 +3465,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Get text From Label
   function LabelText(pnl: Panel; const id: String): String; overload;
-
-  // Returns active item's index from the list
-  function ListActiveItemIndex(lst: GUIList): Longint; overload;
 
   // Returns active item's index from the list
   function ListActiveItemIndex(const id: String): Longint; overload;
@@ -3563,20 +3478,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the text of the active item in the list of the region
   function ListActiveItemText(r: Region): String; overload;
 
-  // Returns the text of the active item in the list of the region
-  function ListActiveItemText(list: GUIList): String; overload;
-
   // Returns the active item text of the List in with ID
   function ListActiveItemText(const ID: String): String; overload;
 
   // Returns the active item text of the List in panel, pnl- with ID, ID
   function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
-
-  // Adds an item to the list by bitmap
-  procedure ListAddItem(lst: GUIList; img: Bitmap); overload;
-
-  // Adds an item to the list by text
-  procedure ListAddItem(r: Region; const text: String); overload;
 
   // Adds an item to the list by text
   procedure ListAddItem(const id: String; const text: String); overload;
@@ -3588,20 +3494,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ListAddItem(r: Region; img: Bitmap); overload;
 
   // Adds an item to the list by text
-  procedure ListAddItem(lst: GUIList; const text: String); overload;
+  procedure ListAddItem(r: Region; const text: String); overload;
 
   // Adds an item to the list by text and Bitmap
   procedure ListAddItem(const id: String; img: Bitmap; const text: String); overload;
 
   // Adds an item to the list by text
   procedure ListAddItem(pnl: Panel; const id: String; const text: String); overload;
-
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap.
-  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
-
-  // Adds an item to the list by text and Bitmap
-  procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap.
@@ -3625,26 +3524,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // bitmap and some text.
   procedure ListAddItem(r: Region; img: Bitmap; cell: Longint; const text: String); overload;
 
-  // Adds an item to the list by text and Bitmap
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
-
   // Adds an item to the list where the items shows a cell of a
   // bitmap.
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint); overload;
 
-  // Adds an item to the list where the items shows a cell of a
-  // bitmap and some text.
-  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
+  // Adds an item to the list by text and Bitmap
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
 
   // Adds an item to the list where the items shows a cell of a
   // bitmap and some text.
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
-
-  // Returns the index of the item with the bitmap, img
-  function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
-
-  // Returns the index of the item with the bitmap and cell.
-  function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
 
   // Removes all items from the list of the region
   procedure ListClearItems(r: Region); overload;
@@ -3653,40 +3542,22 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ListClearItems(const id: String); overload;
 
   // Removes all items from the list.
-  procedure ListClearItems(lst: GUIList); overload;
-
-  // Removes all items from the list.
   procedure ListClearItems(pnl: Panel; const id: String); overload;
-
-  // Returns the font of the list
-  function ListFont(lst: GUIList): Font; overload;
 
   // Returns the font of the list of the region
   function ListFont(r: Region): Font; overload;
 
-  // Returns the font alignment of a list
-  function ListFontAlignment(lst: GUIList): FontAlignment; overload;
-
   // Returns the font alignment of a list from region
   function ListFontAlignment(r: Region): FontAlignment; overload;
 
-  // Returns Returns the list of the region r
-  function ListFromRegion(r: Region): GUIList; overload;
-
   // Returns the number of items in the list
   function ListItemCount(const id: String): Longint; overload;
-
-  // Returns the number of items in the list
-  function ListItemCount(lst: GUIList): Longint; overload;
 
   // Returns the number of items in the list of the region
   function ListItemCount(r: Region): Longint; overload;
 
   // Returns the number of items in the list
   function ListItemCount(pnl: Panel; const id: String): Longint; overload;
-
-  // Returns the text of the item at index idx
-  function ListItemText(lst: GUIList; idx: Longint): String; overload;
 
   // Returns the text of the item at index idx from the List of the Region
   function ListItemText(r: Region; idx: Longint): String; overload;
@@ -3696,9 +3567,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the text of the item at index idx
   function ListItemText(pnl: Panel; const id: String; idx: Longint): String; overload;
-
-  // Returns the largest index that startingAt should be set to.
-  function ListLargestStartIndex(lst: GUIList): Longint; overload;
 
   // Removes the active item from a list
   procedure ListRemoveActiveItem(const id: String); overload;
@@ -3710,31 +3578,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ListRemoveActiveItem(pnl: Panel; const id: String); overload;
 
   // Removes item at index idx from the list
-  procedure ListRemoveItem(lst: GUIList; idx: Longint); overload;
-
-  // Removes item at index idx from the list
   procedure ListRemoveItem(const id: String; idx: Longint); overload;
 
   // Removes item at index idx from the list
   procedure ListRemoveItem(pnl: Panel; const id: String; idx: Longint); overload;
 
-  // Returns the largest index that startingAt should be set to.
-  function ListScrollIncrement(lst: GUIList): Longint; overload;
-
   // Set the active item in the list to the item at index idx
   procedure ListSetActiveItemIndex(const id: String; idx: Longint); overload;
 
   // Set the active item in the list to the item at index idx
-  procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint); overload;
-
-  // Set the active item in the list to the item at index idx
   procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
-
-  // Sets the font of the list to font f
-  procedure ListSetFont(lst: GUIList; f: Font); overload;
-
-  // Returns the font alignment of a list
-  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
 
   // Returns the font alignment of a list from region
   procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
@@ -3742,17 +3595,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Sets the starting point for the list from region
   procedure ListSetStartAt(r: Region; idx: Longint); overload;
 
-  // Sets the starting point for the list
-  procedure ListSetStartAt(lst: GUIList; idx: Longint); overload;
-
-  // Returns the starting point for the list
-  function ListStartAt(lst: GUIList): Longint; overload;
-
   // Returns the starting point for the list from region
   function ListStartAt(r: Region): Longint; overload;
-
-  // returns the id of a value in the list.
-  function ListTextIndex(lst: GUIList; const value: String): Longint; overload;
 
   // Loads panel from panel directory with filename
   function LoadPanel(const filename: String): Panel; overload;
@@ -3803,10 +3647,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function PanelVisible(p: Panel): Boolean; overload;
 
   // Returns the panel's width
-  function PanelWidth(const name: String): Longint; overload;
+  function PanelWidth(p: Panel): Longint; overload;
 
   // Returns the panel's width
-  function PanelWidth(p: Panel): Longint; overload;
+  function PanelWidth(const name: String): Longint; overload;
 
   // Returns panel x value
   function PanelX(p: Panel): Single; overload;
@@ -3819,15 +3663,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns true if point is in a region with the indicate `kind` of the panel `p`.
   function PointInRegion(const pt: Point2D; p: Panel; kind: GUIElementKind): Boolean; overload;
-
-  // Takes an ID and returns the RadioGroup.
-  function RadioGroupFromId(const id: String): GUIRadioGroup; overload;
-
-  // Takes panel and ID and returns the RadioGroup.
-  function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup; overload;
-
-  // Takes region and returns the RadioGroup.
-  function RadioGroupFromRegion(r: Region): GUIRadioGroup; overload;
 
   // Returns true when the region is active.
   function RegionActive(forRegion: Region): Boolean; overload;
@@ -3884,14 +3719,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Takes an ID and returns the active button
   procedure SelectRadioButton(const id: String); overload;
 
-  // Takes a RadioGroup and Region and selects the button
-  procedure SelectRadioButton(rGroup: GUIRadioGroup; r: Region); overload;
-
   // Takes a panel and an ID and selects the button
   procedure SelectRadioButton(pnl: Panel; const id: String); overload;
-
-  // Takes a RadioGroup and index and selects the button
-  procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: Longint); overload;
 
   // Sets the region active to Boolean
   procedure SetRegionActive(forRegion: Region; b: Boolean); overload;
@@ -3917,26 +3746,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Displays a SaveDialog with file/folder/both filter
   procedure ShowSaveDialog(select: FileDialogSelectType); overload;
 
-  // returns font of textbox
-  function TextBoxFont(tb: GUITextbox): Font; overload;
-
   // returns font of region's textbox (If it has one)
   function TextBoxFont(r: Region): Font; overload;
 
-  // The the TextBox from an ID
-  function TextBoxFromID(const id: String): GUITextbox; overload;
-
-  // Sets the textbox text from region
-  function TextBoxFromRegion(r: Region): GUITextbox; overload;
-
-  // Gets the textbox text
-  function TextBoxText(tb: GUITextbox): String; overload;
+  // Gets the textbox text from region
+  function TextBoxText(r: Region): String; overload;
 
   // Gets the textbox text from region
   function TextBoxText(const id: String): String; overload;
-
-  // Gets the textbox text from region
-  function TextBoxText(r: Region): String; overload;
 
   // Gets the textbox text from region
   function TextBoxText(pnl: Panel; const id: String): String; overload;
@@ -3944,17 +3761,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the alignment of the text in textbox passed in as region
   function TextboxAlignment(r: Region): FontAlignment; overload;
 
-  // Gets the textbox alignmnet of the textbox
-  function TextboxAlignment(tb: GUITextbox): FontAlignment; overload;
-
   // Set the textbox alignment of the textbox passed in
   procedure TextboxSetAlignment(r: Region; align: FontAlignment); overload;
-
-  // Set the textbox alignment of the textbox
-  procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment); overload;
-
-  // Sets the textbox font
-  procedure TextboxSetFont(Tb: GUITextbox; f: Font); overload;
 
   // Sets the textbox text from Id
   procedure TextboxSetText(const id: String; const s: String); overload;
@@ -3971,17 +3779,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Sets the textbox text from region
   procedure TextboxSetText(r: Region; i: Longint); overload;
 
-  // Sets the textbox text from region
-  procedure TextboxSetText(tb: GUITextbox; i: Longint); overload;
-
   // Sets the textbox text from Id
   procedure TextboxSetText(const id: String; i: Longint); overload;
-
-  // Sets the textbox text from Textbox
-  procedure TextboxSetText(tb: GUITextbox; single: Single); overload;
-
-  // Sets the textbox text from region
-  procedure TextboxSetText(tb: GUITextbox; const s: String); overload;
 
   // Sets the textbox text from panel and Id
   procedure TextboxSetText(pnl: Panel; const id: String; i: Longint); overload;
@@ -3997,9 +3796,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Toggles the state of a checkbox (ticked/unticked)
   procedure ToggleCheckboxState(const id: String); overload;
-
-  // Toggles the state of a checkbox (ticked/unticked)
-  procedure ToggleCheckboxState(c: GUICheckbox); overload;
 
   // Toggles the state of a checkbox (ticked/unticked)
   procedure ToggleCheckboxState(pnl: Panel; const id: String); overload;
@@ -7419,11 +7215,6 @@ implementation
     result := sgResources.PathToResource(filename,kind,subdir);
   end;
 
-  function PathToResource(const filename: String; kind: ResourceKind; const subPaths: StringArray): String; overload;
-  begin
-    result := sgResources.PathToResource(filename,kind,subPaths);
-  end;
-
   function PathToResourceWithBase(const path: String; const filename: String): String; overload;
   begin
     result := sgResources.PathToResourceWithBase(path,filename);
@@ -8494,11 +8285,6 @@ implementation
     sgUserInterface.ActivatePanel(p);
   end;
 
-  function ActiveRadioButton(grp: GUIRadioGroup): Region; overload;
-  begin
-    result := sgUserInterface.ActiveRadioButton(grp);
-  end;
-
   function ActiveRadioButton(const id: String): Region; overload;
   begin
     result := sgUserInterface.ActiveRadioButton(id);
@@ -8512,11 +8298,6 @@ implementation
   function ActiveRadioButtonIndex(const id: String): Longint; overload;
   begin
     result := sgUserInterface.ActiveRadioButtonIndex(id);
-  end;
-
-  function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): Longint; overload;
-  begin
-    result := sgUserInterface.ActiveRadioButtonIndex(RadioGroup);
   end;
 
   function ActiveRadioButtonIndex(pnl: Panel; const id: String): Longint; overload;
@@ -8544,19 +8325,9 @@ implementation
     result := sgUserInterface.ButtonClicked(r);
   end;
 
-  function CheckboxFromRegion(r: Region): GUICheckbox; overload;
-  begin
-    result := sgUserInterface.CheckboxFromRegion(r);
-  end;
-
   procedure CheckboxSetState(const id: String; val: Boolean); overload;
   begin
     sgUserInterface.CheckboxSetState(id,val);
-  end;
-
-  procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
-  begin
-    sgUserInterface.CheckboxSetState(chk,val);
   end;
 
   procedure CheckboxSetState(r: Region; val: Boolean); overload;
@@ -8577,11 +8348,6 @@ implementation
   function CheckboxState(const s: String): Boolean; overload;
   begin
     result := sgUserInterface.CheckboxState(s);
-  end;
-
-  function CheckboxState(chk: GUICheckbox): Boolean; overload;
-  begin
-    result := sgUserInterface.CheckboxState(chk);
   end;
 
   function CheckboxState(p: Panel; const s: String): Boolean; overload;
@@ -8649,11 +8415,6 @@ implementation
     sgUserInterface.GUISetActiveTextbox(name);
   end;
 
-  procedure GUISetActiveTextbox(t: GUITextbox); overload;
-  begin
-    sgUserInterface.GUISetActiveTextbox(t);
-  end;
-
   procedure GUISetActiveTextbox(r: Region); overload;
   begin
     sgUserInterface.GUISetActiveTextbox(r);
@@ -8677,11 +8438,6 @@ implementation
   procedure GUISetForegroundColorInactive(c: Color); overload;
   begin
     sgUserInterface.GUISetForegroundColorInactive(c);
-  end;
-
-  function GUITextBoxOfTextEntered(): GUITextbox; overload;
-  begin
-    result := sgUserInterface.GUITextBoxOfTextEntered();
   end;
 
   function GUITextEntryComplete(): Boolean; overload;
@@ -8724,29 +8480,9 @@ implementation
     result := sgUserInterface.LabelAlignment(r);
   end;
 
-  function LabelAlignment(lbl: GUILabel): FontAlignment; overload;
-  begin
-    result := sgUserInterface.LabelAlignment(lbl);
-  end;
-
   function LabelFont(r: Region): Font; overload;
   begin
     result := sgUserInterface.LabelFont(r);
-  end;
-
-  function LabelFont(l: GUILabel): Font; overload;
-  begin
-    result := sgUserInterface.LabelFont(l);
-  end;
-
-  function LabelFromRegion(r: Region): GUILabel; overload;
-  begin
-    result := sgUserInterface.LabelFromRegion(r);
-  end;
-
-  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); overload;
-  begin
-    sgUserInterface.LabelSetAlignment(tb,align);
   end;
 
   procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
@@ -8754,14 +8490,9 @@ implementation
     sgUserInterface.LabelSetAlignment(r,align);
   end;
 
-  procedure LabelSetFont(l: GUILabel; const s: String); overload;
+  procedure LabelSetText(r: Region; const newString: String); overload;
   begin
-    sgUserInterface.LabelSetFont(l,s);
-  end;
-
-  procedure LabelSetText(lb: GUILabel; const newString: String); overload;
-  begin
-    sgUserInterface.LabelSetText(lb,newString);
+    sgUserInterface.LabelSetText(r,newString);
   end;
 
   procedure LabelSetText(const id: String; const newString: String); overload;
@@ -8769,19 +8500,9 @@ implementation
     sgUserInterface.LabelSetText(id,newString);
   end;
 
-  procedure LabelSetText(r: Region; const newString: String); overload;
-  begin
-    sgUserInterface.LabelSetText(r,newString);
-  end;
-
   procedure LabelSetText(pnl: Panel; const id: String; const newString: String); overload;
   begin
     sgUserInterface.LabelSetText(pnl,id,newString);
-  end;
-
-  function LabelText(lb: GUILabel): String; overload;
-  begin
-    result := sgUserInterface.LabelText(lb);
   end;
 
   function LabelText(r: Region): String; overload;
@@ -8797,11 +8518,6 @@ implementation
   function LabelText(pnl: Panel; const id: String): String; overload;
   begin
     result := sgUserInterface.LabelText(pnl,id);
-  end;
-
-  function ListActiveItemIndex(lst: GUIList): Longint; overload;
-  begin
-    result := sgUserInterface.ListActiveItemIndex(lst);
   end;
 
   function ListActiveItemIndex(const id: String): Longint; overload;
@@ -8824,11 +8540,6 @@ implementation
     result := sgUserInterface.ListActiveItemText(r);
   end;
 
-  function ListActiveItemText(list: GUIList): String; overload;
-  begin
-    result := sgUserInterface.ListActiveItemText(list);
-  end;
-
   function ListActiveItemText(const ID: String): String; overload;
   begin
     result := sgUserInterface.ListActiveItemText(ID);
@@ -8837,16 +8548,6 @@ implementation
   function ListActiveItemText(pnl: Panel; const ID: String): String; overload;
   begin
     result := sgUserInterface.ListActiveItemText(pnl,ID);
-  end;
-
-  procedure ListAddItem(lst: GUIList; img: Bitmap); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img);
-  end;
-
-  procedure ListAddItem(r: Region; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(r,text);
   end;
 
   procedure ListAddItem(const id: String; const text: String); overload;
@@ -8864,9 +8565,9 @@ implementation
     sgUserInterface.ListAddItem(r,img);
   end;
 
-  procedure ListAddItem(lst: GUIList; const text: String); overload;
+  procedure ListAddItem(r: Region; const text: String); overload;
   begin
-    sgUserInterface.ListAddItem(lst,text);
+    sgUserInterface.ListAddItem(r,text);
   end;
 
   procedure ListAddItem(const id: String; img: Bitmap; const text: String); overload;
@@ -8877,16 +8578,6 @@ implementation
   procedure ListAddItem(pnl: Panel; const id: String; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,text);
-  end;
-
-  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,cell);
-  end;
-
-  procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(lst,img,text);
   end;
 
   procedure ListAddItem(r: Region; img: Bitmap; cell: Longint); overload;
@@ -8919,34 +8610,19 @@ implementation
     sgUserInterface.ListAddItem(r,img,cell,text);
   end;
 
-  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
-  begin
-    sgUserInterface.ListAddItem(pnl,id,img,text);
-  end;
-
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,img,cell);
   end;
 
-  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
+  procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; const text: String); overload;
   begin
-    sgUserInterface.ListAddItem(lst,img,cell,text);
+    sgUserInterface.ListAddItem(pnl,id,img,text);
   end;
 
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
   begin
     sgUserInterface.ListAddItem(pnl,id,img,cell,text);
-  end;
-
-  function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
-  begin
-    result := sgUserInterface.ListBitmapIndex(lst,img);
-  end;
-
-  function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
-  begin
-    result := sgUserInterface.ListBitmapIndex(lst,img,cell);
   end;
 
   procedure ListClearItems(r: Region); overload;
@@ -8959,19 +8635,9 @@ implementation
     sgUserInterface.ListClearItems(id);
   end;
 
-  procedure ListClearItems(lst: GUIList); overload;
-  begin
-    sgUserInterface.ListClearItems(lst);
-  end;
-
   procedure ListClearItems(pnl: Panel; const id: String); overload;
   begin
     sgUserInterface.ListClearItems(pnl,id);
-  end;
-
-  function ListFont(lst: GUIList): Font; overload;
-  begin
-    result := sgUserInterface.ListFont(lst);
   end;
 
   function ListFont(r: Region): Font; overload;
@@ -8979,29 +8645,14 @@ implementation
     result := sgUserInterface.ListFont(r);
   end;
 
-  function ListFontAlignment(lst: GUIList): FontAlignment; overload;
-  begin
-    result := sgUserInterface.ListFontAlignment(lst);
-  end;
-
   function ListFontAlignment(r: Region): FontAlignment; overload;
   begin
     result := sgUserInterface.ListFontAlignment(r);
   end;
 
-  function ListFromRegion(r: Region): GUIList; overload;
-  begin
-    result := sgUserInterface.ListFromRegion(r);
-  end;
-
   function ListItemCount(const id: String): Longint; overload;
   begin
     result := sgUserInterface.ListItemCount(id);
-  end;
-
-  function ListItemCount(lst: GUIList): Longint; overload;
-  begin
-    result := sgUserInterface.ListItemCount(lst);
   end;
 
   function ListItemCount(r: Region): Longint; overload;
@@ -9012,11 +8663,6 @@ implementation
   function ListItemCount(pnl: Panel; const id: String): Longint; overload;
   begin
     result := sgUserInterface.ListItemCount(pnl,id);
-  end;
-
-  function ListItemText(lst: GUIList; idx: Longint): String; overload;
-  begin
-    result := sgUserInterface.ListItemText(lst,idx);
   end;
 
   function ListItemText(r: Region; idx: Longint): String; overload;
@@ -9034,11 +8680,6 @@ implementation
     result := sgUserInterface.ListItemText(pnl,id,idx);
   end;
 
-  function ListLargestStartIndex(lst: GUIList): Longint; overload;
-  begin
-    result := sgUserInterface.ListLargestStartIndex(lst);
-  end;
-
   procedure ListRemoveActiveItem(const id: String); overload;
   begin
     sgUserInterface.ListRemoveActiveItem(id);
@@ -9054,11 +8695,6 @@ implementation
     sgUserInterface.ListRemoveActiveItem(pnl,id);
   end;
 
-  procedure ListRemoveItem(lst: GUIList; idx: Longint); overload;
-  begin
-    sgUserInterface.ListRemoveItem(lst,idx);
-  end;
-
   procedure ListRemoveItem(const id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListRemoveItem(id,idx);
@@ -9069,34 +8705,14 @@ implementation
     sgUserInterface.ListRemoveItem(pnl,id,idx);
   end;
 
-  function ListScrollIncrement(lst: GUIList): Longint; overload;
-  begin
-    result := sgUserInterface.ListScrollIncrement(lst);
-  end;
-
   procedure ListSetActiveItemIndex(const id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListSetActiveItemIndex(id,idx);
   end;
 
-  procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint); overload;
-  begin
-    sgUserInterface.ListSetActiveItemIndex(lst,idx);
-  end;
-
   procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListSetActiveItemIndex(pnl,id,idx);
-  end;
-
-  procedure ListSetFont(lst: GUIList; f: Font); overload;
-  begin
-    sgUserInterface.ListSetFont(lst,f);
-  end;
-
-  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
-  begin
-    sgUserInterface.ListSetFontAlignment(lst,align);
   end;
 
   procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
@@ -9109,24 +8725,9 @@ implementation
     sgUserInterface.ListSetStartAt(r,idx);
   end;
 
-  procedure ListSetStartAt(lst: GUIList; idx: Longint); overload;
-  begin
-    sgUserInterface.ListSetStartAt(lst,idx);
-  end;
-
-  function ListStartAt(lst: GUIList): Longint; overload;
-  begin
-    result := sgUserInterface.ListStartAt(lst);
-  end;
-
   function ListStartAt(r: Region): Longint; overload;
   begin
     result := sgUserInterface.ListStartAt(r);
-  end;
-
-  function ListTextIndex(lst: GUIList; const value: String): Longint; overload;
-  begin
-    result := sgUserInterface.ListTextIndex(lst,value);
   end;
 
   function LoadPanel(const filename: String): Panel; overload;
@@ -9209,14 +8810,14 @@ implementation
     result := sgUserInterface.PanelVisible(p);
   end;
 
-  function PanelWidth(const name: String): Longint; overload;
-  begin
-    result := sgUserInterface.PanelWidth(name);
-  end;
-
   function PanelWidth(p: Panel): Longint; overload;
   begin
     result := sgUserInterface.PanelWidth(p);
+  end;
+
+  function PanelWidth(const name: String): Longint; overload;
+  begin
+    result := sgUserInterface.PanelWidth(name);
   end;
 
   function PanelX(p: Panel): Single; overload;
@@ -9237,21 +8838,6 @@ implementation
   function PointInRegion(const pt: Point2D; p: Panel; kind: GUIElementKind): Boolean; overload;
   begin
     result := sgUserInterface.PointInRegion(pt,p,kind);
-  end;
-
-  function RadioGroupFromId(const id: String): GUIRadioGroup; overload;
-  begin
-    result := sgUserInterface.RadioGroupFromId(id);
-  end;
-
-  function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup; overload;
-  begin
-    result := sgUserInterface.RadioGroupFromId(pnl,id);
-  end;
-
-  function RadioGroupFromRegion(r: Region): GUIRadioGroup; overload;
-  begin
-    result := sgUserInterface.RadioGroupFromRegion(r);
   end;
 
   function RegionActive(forRegion: Region): Boolean; overload;
@@ -9344,19 +8930,9 @@ implementation
     sgUserInterface.SelectRadioButton(id);
   end;
 
-  procedure SelectRadioButton(rGroup: GUIRadioGroup; r: Region); overload;
-  begin
-    sgUserInterface.SelectRadioButton(rGroup,r);
-  end;
-
   procedure SelectRadioButton(pnl: Panel; const id: String); overload;
   begin
     sgUserInterface.SelectRadioButton(pnl,id);
-  end;
-
-  procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: Longint); overload;
-  begin
-    sgUserInterface.SelectRadioButton(rGroup,idx);
   end;
 
   procedure SetRegionActive(forRegion: Region; b: Boolean); overload;
@@ -9399,39 +8975,19 @@ implementation
     sgUserInterface.ShowSaveDialog(select);
   end;
 
-  function TextBoxFont(tb: GUITextbox): Font; overload;
-  begin
-    result := sgUserInterface.TextBoxFont(tb);
-  end;
-
   function TextBoxFont(r: Region): Font; overload;
   begin
     result := sgUserInterface.TextBoxFont(r);
   end;
 
-  function TextBoxFromID(const id: String): GUITextbox; overload;
+  function TextBoxText(r: Region): String; overload;
   begin
-    result := sgUserInterface.TextBoxFromID(id);
-  end;
-
-  function TextBoxFromRegion(r: Region): GUITextbox; overload;
-  begin
-    result := sgUserInterface.TextBoxFromRegion(r);
-  end;
-
-  function TextBoxText(tb: GUITextbox): String; overload;
-  begin
-    result := sgUserInterface.TextBoxText(tb);
+    result := sgUserInterface.TextBoxText(r);
   end;
 
   function TextBoxText(const id: String): String; overload;
   begin
     result := sgUserInterface.TextBoxText(id);
-  end;
-
-  function TextBoxText(r: Region): String; overload;
-  begin
-    result := sgUserInterface.TextBoxText(r);
   end;
 
   function TextBoxText(pnl: Panel; const id: String): String; overload;
@@ -9444,24 +9000,9 @@ implementation
     result := sgUserInterface.TextboxAlignment(r);
   end;
 
-  function TextboxAlignment(tb: GUITextbox): FontAlignment; overload;
-  begin
-    result := sgUserInterface.TextboxAlignment(tb);
-  end;
-
   procedure TextboxSetAlignment(r: Region; align: FontAlignment); overload;
   begin
     sgUserInterface.TextboxSetAlignment(r,align);
-  end;
-
-  procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment); overload;
-  begin
-    sgUserInterface.TextboxSetAlignment(tb,align);
-  end;
-
-  procedure TextboxSetFont(Tb: GUITextbox; f: Font); overload;
-  begin
-    sgUserInterface.TextboxSetFont(Tb,f);
   end;
 
   procedure TextboxSetText(const id: String; const s: String); overload;
@@ -9489,24 +9030,9 @@ implementation
     sgUserInterface.TextboxSetText(r,i);
   end;
 
-  procedure TextboxSetText(tb: GUITextbox; i: Longint); overload;
-  begin
-    sgUserInterface.TextboxSetText(tb,i);
-  end;
-
   procedure TextboxSetText(const id: String; i: Longint); overload;
   begin
     sgUserInterface.TextboxSetText(id,i);
-  end;
-
-  procedure TextboxSetText(tb: GUITextbox; single: Single); overload;
-  begin
-    sgUserInterface.TextboxSetText(tb,single);
-  end;
-
-  procedure TextboxSetText(tb: GUITextbox; const s: String); overload;
-  begin
-    sgUserInterface.TextboxSetText(tb,s);
   end;
 
   procedure TextboxSetText(pnl: Panel; const id: String; i: Longint); overload;
@@ -9532,11 +9058,6 @@ implementation
   procedure ToggleCheckboxState(const id: String); overload;
   begin
     sgUserInterface.ToggleCheckboxState(id);
-  end;
-
-  procedure ToggleCheckboxState(c: GUICheckbox); overload;
-  begin
-    sgUserInterface.ToggleCheckboxState(c);
   end;
 
   procedure ToggleCheckboxState(pnl: Panel; const id: String); overload;

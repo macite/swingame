@@ -21,11 +21,25 @@ uses sgTypes;
     ANIMATION_SCRIPT_PTR = 'ASCR';
     BITMAP_PTR = 'BMP*';
     SPRITE_PTR = 'SPRT';
+    REGION_PTR = 'REGI';
+    PANEL_PTR = 'PANL';
+    ARDUINO_PTR = 'ARDU';
     NONE_PTR = 'NONE'; // done after clear
 
 
   type
     PointerIdentifier = array [0..3] of Char;
+
+    /// The named index collection type is used to maintain a named collection of 
+    /// index values that can then be used to lookup the location of the
+    /// named value within a collection.
+    ///
+    /// @struct NamedIndexCollection
+    /// @via_pointer
+    NamedIndexCollection = packed record
+      names: StringArray;   // The names of these ids
+      ids: Pointer;             // A pointer to a TStringHash with this data
+    end;
 
     //
     // SoundEffect -> SoundEffectData
@@ -110,6 +124,13 @@ uses sgTypes;
       clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
     end;
 
+    /// An array of SpriteEventHandlers used internally by Sprites.
+    ///
+    /// @type SpriteEventHandlerArray
+    /// @array_wrapper
+    /// @field data: array of SpriteEventHandler
+    SpriteEventHandlerArray = array of SpriteEventHandler;
+
     SpritePtr = ^SpriteData;
 
     SpriteData = packed record
@@ -152,6 +173,183 @@ uses sgTypes;
       //collisionShape: Shape;                // This can be used in place of pixel level collisions for a Shape
     end;
 
+    /// GUIList is a list GUI Element which contains ItemLists
+    ///
+    /// @class GUIList
+    /// @pointer_wrapper
+    /// @no_free_pointer_wrapper
+    /// @field pointer: pointer
+    GUIList = ^GUIListData;
+    
+    /// GUILabel is a Label GUI Element which contains string font and font alignment
+    ///
+    /// @class GUILabel
+    /// @pointer_wrapper
+    /// @no_free_pointer_wrapper
+    /// @field pointer: ^GUILabelData
+    GUILabel = ^GUILabelData;
+    
+    /// GUICheckbox is a Checkbox GUI Element which contains a bool
+    ///
+    /// @class GUICheckbox
+    /// @pointer_wrapper
+    /// @no_free_pointer_wrapper
+    /// @field pointer: ^GUICheckboxData
+    GUICheckbox = ^GUICheckboxData;
+
+    /// GUITextbox is a textbox gui component in swingame 
+    /// it has a string font length limit region and font alignment
+    ///
+    /// @class GUITextbox
+    /// @pointer_wrapper
+    /// @no_free_pointer_wrapper
+    /// @field pointer: ^RegionData
+    GUITextbox = ^GUITextboxData;
+
+    /// GUI radio group is a radio group gui component in swingame.
+    ///
+    ///
+    /// @class GUIRadioGroup
+    /// @pointer_wrapper
+    /// @no_free_pointer_wrapper
+    /// @field pointer : ^GUIRadioGroupData
+    GUIRadioGroup = ^GUIRadioGroupData;
+
+    /// Each list item has text and an image
+    ///
+    /// @struct GUIListItem
+    ///
+    /// @via_pointer
+    GUIListItem = packed record
+      text:     String;
+      image:    Bitmap;
+      cell:     Longint;
+      parent:   GUIList;
+    end;
+    
+    /// @struct GUIListData
+    /// @via_pointer
+    GUIListData = packed record
+      verticalScroll: Boolean;
+      //The areas for the up/left down/right scrolling buttons
+      scrollUp:     Rectangle;
+      scrollDown:   Rectangle;
+      scrollArea:   Rectangle;
+      columns:      Longint;
+      rows:         Longint;
+      rowHeight:    Single;
+      colWidth:     Single;
+      scrollSize:   Longint;
+      placeholder:  Array of Rectangle;
+      activeItem:   Longint;
+      startingAt:   Longint;
+      font:         Font;
+      items:        Array of GUIListItem;
+      scrollButton: Bitmap;
+      alignment:    FontAlignment;
+    end;
+
+    /// @struct GUICheckboxData
+    /// @via_pointer
+    GUICheckboxData = packed record
+      state:        Boolean;
+    end;
+
+      /// @struct GUILabelData
+      /// @via_pointer
+    GUILabelData = packed record
+      contentString:  String;
+      font:           Font;
+      alignment:      FontAlignment;
+    end;
+
+    RegionPtr = ^RegionData;
+    PanelPtr = ^PanelData;
+
+    /// @struct RegionData
+    /// @via_pointer
+    RegionData = packed record
+      id:             PointerIdentifier;
+      stringID:       String;
+      kind:           GUIElementKind;
+      regionIdx:      Longint;
+      elementIndex:   Longint;
+      area:           Rectangle;
+      active:         Boolean;
+      parent:         PanelPtr;
+      callbacks:      Array of GUIEventCallback;
+    end;
+  
+    /// @struct GUIRadioGroupData
+    /// @via_pointer
+    GUIRadioGroupData = packed record
+      groupID:      string;
+      buttons:      Array of RegionPtr;
+      activeButton: Longint;
+    end;
+    
+    /// @struct GUITextboxData
+    /// @via_pointer
+    GUITextboxData = packed record
+      contentString:  String;
+      font:           Font;
+      lengthLimit:    Longint;
+      forRegion:      RegionPtr;
+      alignment:      FontAlignment;
+    end;
+
+    ///@struct PanelData
+    ///@via_pointer
+    PanelData = packed record
+      id:                   PointerIdentifier;
+      name:                 String;
+      filename:             String;
+      panelID:              Longint;
+      area:                 Rectangle;
+      visible:              Boolean;
+      active:               Boolean;
+      draggable:            Boolean;
+
+      // The panel's bitmaps
+      panelBitmap:          Bitmap;
+      panelBitmapInactive:  Bitmap;
+      panelBitmapActive:    Bitmap;
+
+      // The regions within the Panel
+      regions:              Array of RegionData;
+      regionIds:            NamedIndexCollection;
+
+      // The extra details for the different kinds of controls
+      labels:               Array of GUILabelData;
+      checkBoxes:           Array of GUICheckboxData;
+      radioGroups:          Array of GUIRadioGroupData;
+      textBoxes:            Array of GUITextBoxData;
+      lists:                Array of GUIListData;
+
+      modal:                Boolean;                      // A panel that is modal blocks events from panels shown earlier.
+
+      // Event callback mechanisms
+      DrawAsVectors:        Boolean;
+    end;
+
+    ArduinoPtr = ^ArduinoData;
+
+    ///@struct ArduinoData
+    ///@via_pointer
+    ArduinoData = record
+      id: PointerIdentifier;
+      name: String;
+      ptr: Pointer;
+      
+      port: String;
+      baud: LongInt;
+      
+      open: Boolean;
+      hasError: Boolean;
+      errorMessage: String;
+    end;
+
+
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   function ToMusicPtr(m: Music): MusicPtr;
@@ -159,6 +357,9 @@ uses sgTypes;
   function ToAnimationPtr(a: Animation): AnimationPtr;
   function ToBitmapPtr(b: Bitmap): BitmapPtr;
   function ToSpritePtr(s: Sprite): SpritePtr;
+  function ToPanelPtr(p: Panel): PanelPtr;
+  function ToRegionPtr(r: Region): RegionPtr;
+  function ToArduinoPtr(a: ArduinoDevice): ArduinoPtr;
 
 implementation
 uses sgShared;
@@ -219,6 +420,36 @@ uses sgShared;
     if Assigned(result) and (result^.id <> SPRITE_PTR) then
     begin
       RaiseWarning('Attempted to access a Sprite that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToPanelPtr(p: Panel): PanelPtr;
+  begin
+    result := PanelPtr(p);
+    if Assigned(result) and (result^.id <> PANEL_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Panel that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToRegionPtr(r: Region): RegionPtr;
+  begin
+    result := RegionPtr(r);
+    if Assigned(result) and (result^.id <> REGION_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Panel that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToArduinoPtr(a: ArduinoDevice): ArduinoPtr;
+  begin
+    result := ArduinoPtr(a);
+    if Assigned(result) and (result^.id <> ARDUINO_PTR) then
+    begin
+      RaiseWarning('Attempted to access an Arduino that appears to be an invalid pointer');
       result := nil;
     end;
   end;

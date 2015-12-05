@@ -12,7 +12,7 @@
 
 unit sgNamedIndexCollection;
 interface
-  uses sgTypes;
+  uses sgBackendTypes, sgTypes; //TODO: Remove sgTypes when removed StringArray
   
   /// Get the name of the value at index idx.
   ///

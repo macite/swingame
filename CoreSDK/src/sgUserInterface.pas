@@ -53,7 +53,6 @@ interface
   function GUIClicked(): Boolean;
   
   
-  
 //---------------------------------------------------------------------------
 // Panels
 //---------------------------------------------------------------------------
@@ -494,14 +493,6 @@ function CheckboxState(const s: String): Boolean; overload;
 /// @csn checkboxStateWithId:%s
 function CheckboxState(p: Panel; const s: String): Boolean; overload;
 
-/// Returns checkbox state of the given checkbox
-///
-/// @lib CheckboxStateFromCheckbox
-/// 
-/// @class Checkbox
-/// @getter State
-function CheckboxState(chk: GUICheckbox): Boolean; overload;
-
 /// Returns checkbox state of the checkbox with ID from string
 ///
 /// @lib CheckboxStateFromRegion
@@ -519,16 +510,6 @@ function CheckboxState(r: Region): Boolean; overload;
 /// @setter CheckboxState
 procedure CheckboxSetState(r: region; val: Boolean); overload;
 
-/// Sets the checkbox state to val.
-/// 
-/// @lib
-/// @sn checkBox:%s setCheckBoxState:%s
-///
-/// @class Checkbox
-/// @setter State
-procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload;
-
-
 /// Sets the checkbox state to val given the ID.
 /// 
 /// @lib CheckBoxSetStateWithId
@@ -540,15 +521,6 @@ procedure CheckboxSetState(const id: String ; val: Boolean); overload;
 /// 
 /// @lib CheckboxSetStateOnPanel/// @sn checkboxOnPanel:%s withID:%s setState:%s
 procedure CheckboxSetState( pnl: Panel; const id: String; val: Boolean); overload;
-
-
-/// Toggles the state of a checkbox (ticked/unticked)
-///
-/// @lib
-///
-/// @class Checkbox
-/// @method ToggleState
-procedure ToggleCheckboxState(c: GUICheckbox);
   
 /// Toggles the state of a checkbox (ticked/unticked)
 ///
@@ -565,47 +537,10 @@ procedure ToggleCheckboxState(pnl : Panel; const id: String);
 /// @lib ToggleCheckboxStateFromID
 procedure ToggleCheckboxState(const id: String);
 
-/// Takes a region and returns the checkbox of that region
-///
-/// @lib
-function CheckboxFromRegion(r: Region): GUICheckbox;
-
-
 
 // ===============
 // = Radio Group =
 // ===============
-
-/// Takes panel and ID and returns the RadioGroup.
-///
-/// @lib RadioGroupOnPanelWidthId
-/// @sn radioGroupOnPanel:%s withId:%s
-///
-/// @class GUIRadioGroup
-/// @constructor
-/// @csn initOnPanel:%s withId :%s
-function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup;overload;
-
-/// Takes an ID and returns the RadioGroup.
-///
-/// @lib
-function RadioGroupFromId(const id: String): GUIRadioGroup;overload;
-
-/// Takes region and returns the RadioGroup.
-///
-/// @lib
-function RadioGroupFromRegion(r: Region): GUIRadioGroup;
-
-/// Takes a radiogroup and returns the active button's index.
-///
-/// @lib
-///
-/// @class RadioGroup
-/// @getter ActiveButtonIndex
-function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): LongInt;
-
-
-
   
 /// Takes a radiogroup and returns the active button's index.
 ///
@@ -618,16 +553,7 @@ function ActiveRadioButtonIndex(const id: String): LongInt;
 ///
 /// @class Panel
 /// @method ActiveRadioButtonIndexWithID
-function ActiveRadioButtonIndex(pnl:Panel; const id: String): LongInt;
-
-
-/// Takes a radiogroup and returns the active button
-///
-/// @lib ActiveRadioButton
-///
-/// @class RadioGroup
-/// @getter ActiveButton
-function ActiveRadioButton(grp: GUIRadioGroup): Region; overload;
+function ActiveRadioButtonIndex(pnl: Panel; const id: String): LongInt;
 
 /// Takes an ID and returns the active button
 ///
@@ -648,24 +574,6 @@ function ActiveRadioButton(pnl: Panel; const id: String): Region; overload;
 /// @lib SelectRadioButton
 procedure SelectRadioButton(r: Region); overload;
 
-/// Takes a RadioGroup and Region and selects the button
-///
-/// @lib SelectRadioButtonFromRadioGroupAndRegion
-/// @sn radioGroup:%s selectButton:%s
-///
-/// @class RadioGroup
-/// @method SelectRadioButton
-procedure SelectRadioButton(rGroup: GUIRadioGroup; r: Region); overload;
-
-/// Takes a RadioGroup and index and selects the button
-///
-/// @lib SelectRadioButtonFromRadioGroupAndIndex
-/// @sn radioGroup:%s selectButtonIdx:%s
-///
-/// @class RadioGroup
-/// @method SelectRadioButton
-procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: LongInt); overload;
-
 /// Takes an ID and returns the active button
 ///
 /// @lib SelectRadioButtonWithID
@@ -684,14 +592,6 @@ procedure SelectRadioButton(pnl : Panel; const id: String); overload;
 // = Textbox =
 // ===========
 
-/// returns font of textbox
-///
-/// @lib
-///
-/// @class Textbox
-/// @getter Font
-function TextBoxFont(tb: GUITextBox): Font; overload;
-
 /// returns font of region's textbox (If it has one)
 ///
 /// @lib TextBoxFontFromRegion
@@ -699,15 +599,6 @@ function TextBoxFont(tb: GUITextBox): Font; overload;
 /// @class Region
 /// @getter TextboxFont
 function TextBoxFont(r: Region): Font; overload;
-
-/// Sets the textbox font
-/// 
-/// @lib 
-/// @sn textbox:%s setFont:%s
-///
-/// @class Textbox
-/// @setter Font
-procedure TextboxSetFont(Tb: GUITextbox; f: Font);
 
 /// Gets the textbox text from region
 /// 
@@ -728,14 +619,6 @@ function TextBoxText(pnl : Panel; const id: String): String; overload;
 /// @class Region
 /// @getter TextboxText
 function TextBoxText(r: Region): String; overload;
-
-/// Gets the textbox text
-/// 
-/// @lib
-///
-/// @class Textbox
-/// @getter Text
-function TextBoxText(tb: GUITextBox): String; overload;
 
 /// Sets the textbox text from region
 /// 
@@ -760,25 +643,9 @@ procedure TextboxSetText(pnl: Panel; const id, s: string); overload;
 
 /// Sets the textbox text from region
 /// 
-/// @lib TextboxSetText
-/// @sn textbox:%s setText:%s
-///
-/// @class Textbox
-/// @setter Text
-procedure TextboxSetText(tb: GUITextBox; const s: string); overload;
-
-/// Sets the textbox text from region
-/// 
 /// @lib TextboxSetTextToIntFromRegion
 /// @sn textboxForRegion:%s setInt:%s
-procedure TextboxSetText(r: Region; i: Longint); overload;
-
-/// Sets the textbox text from region
-/// 
-/// @lib TextboxSetTextToInt
-/// @sn textbox:%s setInt:%s
-procedure TextboxSetText(tb: GUITextBox; i: Longint); overload;
-  
+procedure TextboxSetText(r: Region; i: Longint); overload;  
   
 /// Sets the textbox text from Id
 /// 
@@ -786,19 +653,12 @@ procedure TextboxSetText(tb: GUITextBox; i: Longint); overload;
 /// @sn textboxForId:%s setInt:%s
 procedure TextboxSetText(const id : String; i : LongInt); overload;
 
-
 /// Sets the textbox text from panel and Id
 /// 
 /// @lib TextboxSetTextToIntOnPanelWithId
 /// @sn textboxOnPanel:%s withId:%s setInt:%s
 procedure TextboxSetText(pnl : Panel; const id : String; i : LongInt); overload;
-    
-/// Sets the textbox text from Textbox
-/// 
-/// @lib TextboxSetTextToSingle
-/// @sn textbox:%s setFloat:%s
-procedure TextboxSetText(tb: GUITextBox; single: Single); overload;
-  
+      
 /// Sets the textbox text from region
 /// 
 /// @lib TextboxSetTextToSingleFromRegion
@@ -817,13 +677,6 @@ procedure TextboxSetText(const id : String; single: Single); overload;
 /// @sn textboxOnPanel:%s withId:%s setFloat:%s
 procedure TextboxSetText(pnl : Panel; const id : String; single: Single); overload;
 
-
-/// Sets the textbox text from region
-/// 
-/// @lib TextboxFromRegion
-function TextBoxFromRegion(r: Region): GUITextBox;
-
-
 /// Sets the active textbox from region
 /// 
 /// @lib GUISetActiveTextboxFromRegion
@@ -834,12 +687,6 @@ procedure GUISetActiveTextbox(r: Region); overload;
 /// 
 /// @lib GUISetActiveTextboxNamed
 procedure GUISetActiveTextbox(const name: String); overload;
-
-
-/// Sets the active textbox
-/// 
-/// @lib
-procedure GUISetActiveTextbox(t: GUITextBox); overload;
 
 /// Deactivates the active textbox
 ///
@@ -855,11 +702,6 @@ function ActiveTextIndex(): Longint;
 ///
 /// @lib
 function GUITextEntryComplete(): Boolean;
-
-/// Returns the textbox in which text was changed/added into most recently.
-///
-/// @lib
-function GUITextBoxOfTextEntered(): GUITextbox;
 
 /// Returns the region of the textbox in which text was changed/added into most recently.
 ///
@@ -896,34 +738,11 @@ function ActiveTextBoxParent() : Panel;
 /// @lib TextBoxAlignmentFromRegion
 function TextboxAlignment(r: Region): FontAlignment; overload;
 
-/// Gets the textbox alignmnet of the textbox
-///
-/// @lib
-///
-/// @class Textbox
-/// @getter Alignmnet
-function TextboxAlignment(tb: GUITextbox): FontAlignment; overload;
-
-/// Set the textbox alignment of the textbox
-///
-/// @lib
-/// @sn textbox:%s setAlignment:%s
-///
-/// @class Textbox
-/// @setter Alignmnet
-procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment);
-
 /// Set the textbox alignment of the textbox passed in
 ///
 /// @lib TextBoxSetAlignmentFromRegion
 /// @sn textboxForRegion:%s setAlignment:%s
 procedure TextboxSetAlignment(r: Region; align: FontAlignment);
-
-/// The the TextBox from an ID
-///
-/// @lib
-function TextBoxFromID(const id : String) : GUITextbox;
-
 
 
 //---------------------------------------------------------------------------
@@ -949,16 +768,6 @@ procedure ListRemoveActiveItem(const id : string); overload;
 /// @sn listRemoveActiveItemOnPanel:%s withId:%s
 procedure ListRemoveActiveItem(pnl : Panel; const id: string); overload;
 
-
-/// Set the active item in the list to the item at index idx
-///
-/// @lib
-/// @sn list:%s setActiveItemIndex:%s
-///
-/// @class GUIList
-/// @setter ActiveItemIndex
-procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint);
-
 /// Set the active item in the list to the item at index idx
 ///
 /// @lib ListSetActiveItemIndexWithId
@@ -971,16 +780,6 @@ procedure ListSetActiveItemIndex(const id : String; idx: Longint);
 /// @sn listSetActiveItemFromPane:%s withId:%s at:%s
 procedure ListSetActiveItemIndex(pnl : Panel; const id : String; idx: Longint);
 
-
-
-/// Returns Returns the list of the region r
-///
-/// @lib
-///
-/// @class Region
-/// @getter List
-function ListFromRegion(r: Region): GUIList; overload;
-
 /// Returns the font of the list of the region
 ///
 /// @lib ListFontFromRegion
@@ -988,23 +787,6 @@ function ListFromRegion(r: Region): GUIList; overload;
 /// @class Region
 /// @getter ListFont
 function ListFont(r: Region): Font; overload;
-
-/// Returns the font of the list
-///
-/// @lib
-///
-/// @class GUIList
-/// @getter Font
-function ListFont(lst: GUIList): Font; overload;
-
-/// Sets the font of the list to font f
-///
-/// @lib
-/// @sn list:%s setFont:%s
-///
-/// @class GUIList
-/// @setter Font
-procedure ListSetFont(lst: GUIList; f: font);
 
 /// Returns the text of the item at index idx from the List of the Region
 ///
@@ -1017,15 +799,6 @@ function ListItemText(r: Region; idx: Longint): String; overload;
 
 /// Returns the text of the item at index idx
 ///
-/// @lib
-/// @sn list:%s textAtIndex:%s
-///
-/// @class GUIList
-/// @method ItemTextAtIndex
-function ListItemText(lst: GUIList; idx: Longint): String; overload;
-
-/// Returns the text of the item at index idx
-///
 /// @lib ListItemTextFromId
 /// @sn listWithId:%s textAtIndex:%s
 function ListItemText(const id : String; idx: Longint): String; overload;
@@ -1035,15 +808,6 @@ function ListItemText(const id : String; idx: Longint): String; overload;
 /// @lib ListItemTextOnPanelWithId
 /// @sn listOnPanel:%s withId :%s textAtIndex:%s
 function ListItemText(pnl : Panel; const id : String; idx: Longint): String; overload;
-
-/// Returns the text of the active item in the list of the region
-///
-/// @lib
-///
-/// @class GUIList
-/// @getter ActiveItemText
-function ListActiveItemText(list: GUIList): String; overload;
-
 
 /// Returns the text of the active item in the list of the region
 ///
@@ -1074,14 +838,6 @@ function ListItemCount(r: Region): Longint; overload;
 
 /// Returns the number of items in the list
 ///
-/// @lib ListItemCount
-///
-/// @class GUIList
-/// @getter ItemCount
-function ListItemCount(lst:GUIList): Longint; overload;
-
-/// Returns the number of items in the list
-///
 /// @lib ListItemCountWithId
 function ListItemCount(const id : String): Longint; overload;
 
@@ -1101,14 +857,6 @@ function ListActiveItemIndex(r: Region): Longint; overload;
 
 /// Returns active item's index from the list
 ///
-/// @lib
-///
-/// @class GUIList
-/// @getter ActiveItemIndex
-function ListActiveItemIndex(lst: GUIList): Longint; overload;
-
-/// Returns active item's index from the list
-///
 /// @lib ListActiveItemIndexWithId
 ///
 function ListActiveItemIndex(const id: String): Longint; overload;
@@ -1118,16 +866,6 @@ function ListActiveItemIndex(const id: String): Longint; overload;
 /// @lib ListActiveItemIndexOnPanelWithId
 /// @sn listActiveItemIndexOnPanel:%s withId:%s
 function ListActiveItemIndex(pnl : Panel; const id: String): Longint; overload;
-
-
-/// Removes item at index idx from the list
-///
-/// @lib
-/// @sn list:%s removeItemAtIndex:%s
-///
-/// @class GUIList
-/// @method RemoveItem
-procedure ListRemoveItem(lst: GUIList; idx: Longint);
 
 /// Removes item at index idx from the list
 ///
@@ -1140,14 +878,6 @@ procedure ListRemoveItem(pnl : Panel; const id : String; idx: Longint);
 /// @lib ListRemoveItemFromWithId
 /// @sn listWithId:%s removeItemAtIndex:%s
 procedure ListRemoveItem(const id : String; idx: Longint);
-
-/// Removes all items from the list.
-///
-/// @lib
-///
-/// @class GUIList
-/// @method ClearItems
-procedure ListClearItems(lst: GUIList); overload;
 
 /// Removes all items from the list.
 ///
@@ -1167,17 +897,7 @@ procedure ListClearItems(pnl : Panel; const id : String); overload;
 ///
 /// @class Region
 /// @method ListClearItems
-procedure ListClearItems(r : Region); overload;
-
-/// Adds an item to the list by text
-///
-/// @lib AddItemByText
-/// @sn list:%s addText:%s
-///
-/// @class GUIList
-/// @method AddTextItem
-procedure ListAddItem(lst: GUIList; const text: String); overload;
-  
+procedure ListClearItems(r : Region); overload;  
 
 /// Adds an item to the list by text
 ///
@@ -1191,17 +911,6 @@ procedure ListAddItem(const id, text: String); overload;
 /// @lib AddItemOnPanelWithIdByText
 /// @sn listOnPanel:%s withId:%s addText:%s
 procedure ListAddItem(pnl : Panel; const id, text: String); overload;
-
-
-
-/// Adds an item to the list by bitmap
-///
-/// @lib AddItemByBitmap
-/// @sn list:%s addBitmap:%s
-///
-/// @class GUIList
-/// @method AddBitmapItem
-procedure ListAddItem(lst: GUIList; img:Bitmap); overload;
   
 /// Adds an item to the list by bitmap
 ///
@@ -1214,16 +923,6 @@ procedure ListAddItem(const id : String; img:Bitmap); overload;
 /// @lib ListAddItemBitmap
 /// @sn listOnPanel:%s withId:%s addBitmap:%s
 procedure ListAddItem(pnl : Panel; const id : String; img:Bitmap); overload;
-
-/// Adds an item to the list by text and Bitmap
-///
-/// @lib ListAddBitmapAndTextItem
-/// @sn list:%s addItemBitmap:%s withText:%s
-///
-/// @class GUIList
-/// @method AddBitmapWithTextItem
-/// @csn addImg:%s andText:%s
-procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload;
 
 /// Adds an item to the list by text and Bitmap
 ///
@@ -1240,17 +939,6 @@ procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; const text: S
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap.
 ///
-/// @lib ListAddItemWithCell
-/// @sn list:%s addBitmap:%s cell:%s
-///
-/// @class GUIList
-/// @overload AddItem AddItemWithCell
-/// @csn addBitmap:%s cell:%s
-procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload;
-  
-/// Adds an item to the list where the items shows a cell of a
-/// bitmap.
-///
 /// @lib ListWithIdAddItemWithCell
 /// @sn listWithId:%s addBitmap:%s cell:%s
 ///
@@ -1264,17 +952,6 @@ procedure ListAddItem(const id : String; img: Bitmap; cell: Longint); overload;
 ///
 procedure ListAddItem(pnl : Panel; const id : String; img: Bitmap; cell: Longint); overload;
 
-/// Adds an item to the list where the items shows a cell of a
-/// bitmap and some text.
-///
-/// @lib ListAddItemWithCellAndText
-/// @sn list:%s addBitmap:%s cell:%s andText:%s
-///
-/// @class GUIList
-/// @overload AddItem AddItemWithCellAndText
-/// @csn addBitmap:%s cell:%s andText:%s
-procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload;
-  
 /// Adds an item to the list where the items shows a cell of a
 /// bitmap and some text.
 ///
@@ -1344,41 +1021,6 @@ procedure ListAddItem(r : Region; img:Bitmap); overload;
 /// @csn listAddBitmap:%s andText:%s
 procedure ListAddItem(r : Region; img:Bitmap; const text: String); overload;
 
-/// Returns the index of the item with the bitmap, img
-///
-/// @lib 
-/// @sn list:%s indexOfBitmap:%s
-///
-/// @class GUIList
-/// @method BitmapItemIndex
-function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload;
-
-/// Returns the index of the item with the bitmap and cell.
-///
-/// @lib ListBitmapCellIndex
-/// @sn list:%s bitmapIndex:%s withCell:%s
-///
-/// @class GUIList
-/// @method CellItemIndex
-function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload;
-
-/// returns the id of a value in the list.
-///
-/// @lib
-/// @sn list:%s indexOfText:%s
-///
-/// @class GUIList
-/// @method IndexOfTextItem
-function ListTextIndex(lst: GUIList; const value: String): Longint;
-
-/// Returns the starting point for the list
-///
-/// @lib
-///
-/// @class GUIList
-/// @getter StartAt
-function ListStartAt(lst: GUIList): Longint;
-
 /// Returns the starting point for the list from region
 ///
 /// @lib ListStartingAtFromRegion
@@ -1386,15 +1028,6 @@ function ListStartAt(lst: GUIList): Longint;
 /// @class Region
 /// @getter ListStartAt
 function ListStartAt(r: Region): Longint;
-
-/// Sets the starting point for the list
-///
-/// @lib ListSetStartingAt
-/// @sn list:%s setStartAt:%s
-///
-/// @class GUIList
-/// @setter StartAt
-procedure ListSetStartAt(lst: GUIList; idx: Longint);
 
 /// Sets the starting point for the list from region
 ///
@@ -1413,14 +1046,6 @@ procedure ListSetStartAt(r: Region; idx: Longint);
 /// @getter ListFontAlignment
 function ListFontAlignment(r: Region): FontAlignment; overload;
 
-/// Returns the font alignment of a list
-///
-/// @lib ListFontAlignment
-///
-/// @class GUIList
-/// @getter FontAlignment
-function ListFontAlignment(lst: GUIList): FontAlignment; overload;
-
 /// Returns the font alignment of a list from region
 ///
 /// @lib ListSetFontAlignmentFromRegion
@@ -1430,65 +1055,14 @@ function ListFontAlignment(lst: GUIList): FontAlignment; overload;
 /// @setter ListFontAlignment
 procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
 
-/// Returns the font alignment of a list
-///
-/// @lib ListSetFontAlignment
-/// @sn list:%s setFontAlignment:%s
-///
-/// @class GUIList
-/// @setter FontAlignment
-procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
-
-/// Returns the largest index that startingAt should be set to.
-///
-/// @lib ListLargestStartIndex
-///
-/// @class GUIList
-/// @getter LargestStartIndex
-function ListLargestStartIndex(lst: GUIList): Longint;
-
-/// Returns the largest index that startingAt should be set to.
-///
-/// @lib
-///
-/// @class GUIList
-/// @getter ScrollIncrement
-function ListScrollIncrement(lst: GUIList): Longint;
-
 // =========
 // = Label =
 // =========
-
-
-/// Get Font From Label
-///
-/// @lib
-/// @class Label
-/// @getter Font
-///
-function  LabelFont(l: GUILabel): Font; overload;
-
 
 /// Get Font From Label
 ///
 /// @lib LabelFromRegionGetFont
 function  LabelFont(r: Region): Font; overload;
-
-/// Set Font For Label
-///
-/// @lib
-/// @sn label:%s setFont:%s
-///
-/// @class Label
-/// @method setFont
-procedure LabelSetFont(l: GUILabel; const s: String);
-
-/// Get text From Label
-///
-/// @lib
-/// @class Label
-/// @getter Text
-function  LabelText(lb: GUILabel): string; overload;
 
 /// Get text From Label
 ///
@@ -1514,15 +1088,6 @@ procedure LabelSetText(const id, newString: String); overload;
 
 /// Set text for Label
 ///
-/// @lib 
-/// @sn label:%s setText:%s
-///
-/// @class Label
-/// @setter Text
-procedure LabelSetText(lb: GUILabel; const newString: String); overload;
-
-/// Set text for Label
-///
 /// @lib LabelFromRegionSetText
 /// @sn labelForRegion:%s setText:%s
 procedure LabelSetText(r: Region; const newString: String); overload;
@@ -1533,40 +1098,16 @@ procedure LabelSetText(r: Region; const newString: String); overload;
 /// @sn labelOnPanel:%s withId:%s setText:%s
 procedure LabelSetText(pnl: Panel; const id, newString: String); overload;
 
-/// returns a GUILabel From given region
-///
-/// @lib
-function  LabelFromRegion(r: Region): GUILabel;
-
 /// Returns FontAlignment from label given region
 ///
 /// @lib LabelAlignementFromRegion
 function LabelAlignment(r: Region): FontAlignment;
-
-
-/// Returns FontAlignment from label given region
-///
-/// @lib
-///
-/// @class Label
-/// @getter FontAlignment
-function LabelAlignment(lbl: GUILabel): FontAlignment;
 
 /// Sets FontAlignment for label given region
 ///
 /// @lib SetLabelAlignmentFromRegion
 /// @sn labelFromRegion:%s setAlignment:%s
 procedure LabelSetAlignment(r: Region; align: FontAlignment);
-
-/// Sets FontAlignment for label given region
-///
-/// @lib SetLabelAlignment
-/// @sn label:%s setAlignment:%s
-///
-/// @class Label
-/// @setter FontAlignment
-procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment);
-
 
 
 // ===============
@@ -1625,38 +1166,39 @@ implementation
     SysUtils, StrUtils, Classes, Math,
     stringhash, sgSharedUtils, sgNamedIndexCollection,   // libsrc
     sgShared, sgResources, sgTrace, sgImages, sgGraphics,
-    sgGeometry, sgText, sgInput, sgAudio, sgDrawingOptions;
+    sgGeometry, sgText, sgInput, sgAudio, sgDrawingOptions,
+    sgBackendTypes;
 //=============================================================================
 
 procedure DoFreePanel(var pnl: Panel); forward;
 
 type
   GUIController = record
-    panels:                Array of Panel;         // The panels that are loaded into the GUI
-    visiblePanels:         Array of Panel;         // The panels that are currently visible (in reverse z order - back to front)
+    panels:                Array of PanelPtr;         // The panels that are loaded into the GUI
+    visiblePanels:         Array of PanelPtr;         // The panels that are currently visible (in reverse z order - back to front)
     globalGUIFont:         Font;
     foregroundClr:         Color;                  // The color of the foreground
     backgroundClr:         Color;                  // The color of the background
     foregroundClrInactive: Color;
     backgroundClrInactive: Color;
     VectorDrawing:         Boolean;
-    lastClicked:           Region;
-    activeTextBox:         Region;
-    lastActiveTextBox:     Region;
+    lastClicked:           RegionPtr;
+    activeTextBox:         RegionPtr;
+    lastActiveTextBox:     RegionPtr;
     doneReading:           Boolean;
     lastTextRead:          String;                 // The text that was in the most recently changed textbox before it was changed.
     panelIds:              TStringHash;
     
     // Variables for dragging panels
     downRegistered:     Boolean;
-    panelDragging:      Panel;
+    panelDragging:      PanelPtr;
     
     // The panel clicked
-    panelClicked:       Panel;
+    panelClicked:       PanelPtr;
   end;
 
   FileDialogData = packed record
-    dialogPanel:          Panel;      // The panel used to show the dialog
+    dialogPanel:          PanelPtr;      // The panel used to show the dialog
     currentPath:          String;     // The path to the current directory being shown
     currentSelectedPath:  String;     // The path to the file selected by the user
     cancelled:            Boolean;
@@ -1672,6 +1214,449 @@ var
   // The file dialog
   dialog: FileDialogData;
 
+function RegionPtrAtPoint(p: PanelPtr; const pt: Point2D): RegionPtr; forward;
+
+
+/// Returns checkbox state of the given checkbox
+///
+/// @lib CheckboxStateFromCheckbox
+/// 
+/// @class Checkbox
+/// @getter State
+function CheckboxState(chk: GUICheckbox): Boolean; overload; forward;
+
+/// Sets the checkbox state to val.
+/// 
+/// @lib
+/// @sn checkBox:%s setCheckBoxState:%s
+///
+/// @class Checkbox
+/// @setter State
+procedure CheckboxSetState(chk: GUICheckbox; val: Boolean); overload; forward;
+
+/// Toggles the state of a checkbox (ticked/unticked)
+///
+/// @lib
+///
+/// @class Checkbox
+/// @method ToggleState
+procedure ToggleCheckboxState(c: GUICheckbox); forward;
+
+/// Takes a region and returns the checkbox of that region
+///
+/// @lib
+function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
+
+  /// Takes panel and ID and returns the RadioGroup.
+  ///
+  /// @lib RadioGroupOnPanelWidthId
+  /// @sn radioGroupOnPanel:%s withId:%s
+  ///
+  /// @class GUIRadioGroup
+  /// @constructor
+  /// @csn initOnPanel:%s withId :%s
+  function RadioGroupFromId(pnl: PanelPtr; const id: String): GUIRadioGroup;overload; forward;
+
+  /// Takes an ID and returns the RadioGroup.
+  ///
+  /// @lib
+  function RadioGroupFromId(const id: String): GUIRadioGroup;overload; forward;
+
+  /// Takes region and returns the RadioGroup.
+  ///
+  /// @lib
+  function RadioGroupFromRegion(r: RegionPtr): GUIRadioGroup; forward;
+
+  /// Takes a radiogroup and returns the active button's index.
+  ///
+  /// @lib
+  ///
+  /// @class RadioGroup
+  /// @getter ActiveButtonIndex
+  function ActiveRadioButtonIndex(RadioGroup: GUIRadioGroup): LongInt; forward;
+
+  /// Takes a radiogroup and returns the active button
+  ///
+  /// @lib ActiveRadioButton
+  ///
+  /// @class RadioGroup
+  /// @getter ActiveButton
+  function ActiveRadioButton(grp: GUIRadioGroup): Region; overload; forward;
+
+  /// Takes a RadioGroup and Region and selects the button
+  ///
+  /// @lib SelectRadioButtonFromRadioGroupAndRegion
+  /// @sn radioGroup:%s selectButton:%s
+  ///
+  /// @class RadioGroup
+  /// @method SelectRadioButton
+  procedure SelectRadioButton(rGroup: GUIRadioGroup; r: Region); overload; forward;
+
+  /// Takes a RadioGroup and index and selects the button
+  ///
+  /// @lib SelectRadioButtonFromRadioGroupAndIndex
+  /// @sn radioGroup:%s selectButtonIdx:%s
+  ///
+  /// @class RadioGroup
+  /// @method SelectRadioButton
+  procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: LongInt); overload; forward;
+
+  /// returns font of textbox
+  ///
+  /// @lib
+  ///
+  /// @class Textbox
+  /// @getter Font
+  function TextBoxFont(tb: GUITextBox): Font; overload; forward;
+
+  /// Sets the textbox font
+  /// 
+  /// @lib 
+  /// @sn textbox:%s setFont:%s
+  ///
+  /// @class Textbox
+  /// @setter Font
+  procedure TextboxSetFont(Tb: GUITextbox; f: Font); forward;
+
+  /// Gets the textbox text
+  /// 
+  /// @lib
+  ///
+  /// @class Textbox
+  /// @getter Text
+  function TextBoxText(tb: GUITextBox): String; overload; forward;
+
+  /// Sets the textbox text from region
+  /// 
+  /// @lib TextboxSetText
+  /// @sn textbox:%s setText:%s
+  ///
+  /// @class Textbox
+  /// @setter Text
+  procedure TextboxSetText(tb: GUITextBox; const s: string); overload; forward;
+
+  /// Sets the textbox text from region
+  /// 
+  /// @lib TextboxSetTextToInt
+  /// @sn textbox:%s setInt:%s
+  procedure TextboxSetText(tb: GUITextBox; i: Longint); overload; forward;
+
+  /// Sets the textbox text from Textbox
+  /// 
+  /// @lib TextboxSetTextToSingle
+  /// @sn textbox:%s setFloat:%s
+  procedure TextboxSetText(tb: GUITextBox; single: Single); overload; forward;
+
+  /// Sets the textbox text from region
+  /// 
+  /// @lib TextboxFromRegion
+  function TextBoxFromRegion(r: RegionPtr): GUITextBox; forward;
+
+  /// Sets the active textbox
+  /// 
+  /// @lib
+  procedure GUISetActiveTextbox(t: GUITextBox); overload; forward;
+
+  /// Returns the textbox in which text was changed/added into most recently.
+  ///
+  /// @lib
+  function GUITextBoxOfTextEntered(): GUITextbox; forward;
+
+  /// Gets the textbox alignmnet of the textbox
+  ///
+  /// @lib
+  ///
+  /// @class Textbox
+  /// @getter Alignmnet
+  function TextboxAlignment(tb: GUITextbox): FontAlignment; overload; forward;
+
+  /// Set the textbox alignment of the textbox
+  ///
+  /// @lib
+  /// @sn textbox:%s setAlignment:%s
+  ///
+  /// @class Textbox
+  /// @setter Alignmnet
+  procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment); forward;
+
+  /// The the TextBox from an ID
+  ///
+  /// @lib
+  function TextBoxFromID(const id : String) : GUITextbox;  forward;
+
+  /// Set the active item in the list to the item at index idx
+  ///
+  /// @lib
+  /// @sn list:%s setActiveItemIndex:%s
+  ///
+  /// @class GUIList
+  /// @setter ActiveItemIndex
+  procedure ListSetActiveItemIndex(lst: GUIList; idx: Longint); forward;
+
+  /// Returns Returns the list of the region r
+  ///
+  /// @lib
+  ///
+  /// @class Region
+  /// @getter List
+  function ListFromRegion(r: RegionPtr): GUIList; overload;  forward;
+
+  /// Returns the font of the list
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @getter Font
+  function ListFont(lst: GUIList): Font; overload; forward;
+
+  /// Sets the font of the list to font f
+  ///
+  /// @lib
+  /// @sn list:%s setFont:%s
+  ///
+  /// @class GUIList
+  /// @setter Font
+  procedure ListSetFont(lst: GUIList; f: font); forward;
+
+  /// Returns the text of the item at index idx
+  ///
+  /// @lib
+  /// @sn list:%s textAtIndex:%s
+  ///
+  /// @class GUIList
+  /// @method ItemTextAtIndex
+  function ListItemText(lst: GUIList; idx: Longint): String; overload; forward;
+
+  /// Returns the text of the active item in the list of the region
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @getter ActiveItemText
+  function ListActiveItemText(list: GUIList): String; overload; forward;
+
+  /// Returns the number of items in the list
+  ///
+  /// @lib ListItemCount
+  ///
+  /// @class GUIList
+  /// @getter ItemCount
+  function ListItemCount(lst:GUIList): Longint; overload; forward;
+
+  /// Returns active item's index from the list
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @getter ActiveItemIndex
+  function ListActiveItemIndex(lst: GUIList): Longint; overload; forward;
+
+  /// Removes item at index idx from the list
+  ///
+  /// @lib
+  /// @sn list:%s removeItemAtIndex:%s
+  ///
+  /// @class GUIList
+  /// @method RemoveItem
+  procedure ListRemoveItem(lst: GUIList; idx: Longint); forward;
+
+  /// Removes all items from the list.
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @method ClearItems
+  procedure ListClearItems(lst: GUIList); overload; forward;
+
+  /// Adds an item to the list by text
+  ///
+  /// @lib AddItemByText
+  /// @sn list:%s addText:%s
+  ///
+  /// @class GUIList
+  /// @method AddTextItem
+  procedure ListAddItem(lst: GUIList; const text: String); overload; forward;
+
+  /// Adds an item to the list by bitmap
+  ///
+  /// @lib AddItemByBitmap
+  /// @sn list:%s addBitmap:%s
+  ///
+  /// @class GUIList
+  /// @method AddBitmapItem
+  procedure ListAddItem(lst: GUIList; img:Bitmap); overload; forward;
+
+  /// Adds an item to the list by text and Bitmap
+  ///
+  /// @lib ListAddBitmapAndTextItem
+  /// @sn list:%s addItemBitmap:%s withText:%s
+  ///
+  /// @class GUIList
+  /// @method AddBitmapWithTextItem
+  /// @csn addImg:%s andText:%s
+  procedure ListAddItem(lst: GUIList; img: Bitmap; const text: String); overload; forward;
+
+  /// Adds an item to the list where the items shows a cell of a
+  /// bitmap.
+  ///
+  /// @lib ListAddItemWithCell
+  /// @sn list:%s addBitmap:%s cell:%s
+  ///
+  /// @class GUIList
+  /// @overload AddItem AddItemWithCell
+  /// @csn addBitmap:%s cell:%s
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint); overload; forward;
+    
+  /// Adds an item to the list where the items shows a cell of a
+  /// bitmap and some text.
+  ///
+  /// @lib ListAddItemWithCellAndText
+  /// @sn list:%s addBitmap:%s cell:%s andText:%s
+  ///
+  /// @class GUIList
+  /// @overload AddItem AddItemWithCellAndText
+  /// @csn addBitmap:%s cell:%s andText:%s
+  procedure ListAddItem(lst: GUIList; img: Bitmap; cell: Longint; const text: String); overload; forward;
+    
+  /// Returns the index of the item with the bitmap, img
+  ///
+  /// @lib 
+  /// @sn list:%s indexOfBitmap:%s
+  ///
+  /// @class GUIList
+  /// @method BitmapItemIndex
+  function ListBitmapIndex(lst: GUIList; img: Bitmap): Longint; overload; forward;
+
+  /// Returns the index of the item with the bitmap and cell.
+  ///
+  /// @lib ListBitmapCellIndex
+  /// @sn list:%s bitmapIndex:%s withCell:%s
+  ///
+  /// @class GUIList
+  /// @method CellItemIndex
+  function ListBitmapIndex(lst: GUIList; img: Bitmap; cell: Longint): Longint; overload; forward;
+
+  /// returns the id of a value in the list.
+  ///
+  /// @lib
+  /// @sn list:%s indexOfText:%s
+  ///
+  /// @class GUIList
+  /// @method IndexOfTextItem
+  function ListTextIndex(lst: GUIList; const value: String): Longint; forward;
+
+  /// Returns the starting point for the list
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @getter StartAt
+  function ListStartAt(lst: GUIList): Longint; forward;
+
+  /// Sets the starting point for the list
+  ///
+  /// @lib ListSetStartingAt
+  /// @sn list:%s setStartAt:%s
+  ///
+  /// @class GUIList
+  /// @setter StartAt
+  procedure ListSetStartAt(lst: GUIList; idx: Longint); forward;
+
+  /// Returns the font alignment of a list
+  ///
+  /// @lib ListFontAlignment
+  ///
+  /// @class GUIList
+  /// @getter FontAlignment
+  function ListFontAlignment(lst: GUIList): FontAlignment; overload; forward;
+
+  /// Returns the font alignment of a list
+  ///
+  /// @lib ListSetFontAlignment
+  /// @sn list:%s setFontAlignment:%s
+  ///
+  /// @class GUIList
+  /// @setter FontAlignment
+  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload; forward;
+
+  /// Returns the largest index that startingAt should be set to.
+  ///
+  /// @lib ListLargestStartIndex
+  ///
+  /// @class GUIList
+  /// @getter LargestStartIndex
+  function ListLargestStartIndex(lst: GUIList): Longint; forward;
+
+  /// Returns the largest index that startingAt should be set to.
+  ///
+  /// @lib
+  ///
+  /// @class GUIList
+  /// @getter ScrollIncrement
+  function ListScrollIncrement(lst: GUIList): Longint; forward;
+
+
+
+  /// Get Font From Label
+  ///
+  /// @lib
+  /// @class Label
+  /// @getter Font
+  ///
+  function  LabelFont(l: GUILabel): Font; overload; forward;
+
+  /// Set Font For Label
+  ///
+  /// @lib
+  /// @sn label:%s setFont:%s
+  ///
+  /// @class Label
+  /// @method setFont
+  procedure LabelSetFont(l: GUILabel; const s: String); forward;
+
+  /// Get text From Label
+  ///
+  /// @lib
+  /// @class Label
+  /// @getter Text
+  function  LabelText(lb: GUILabel): string; overload; forward;
+
+  /// Set text for Label
+  ///
+  /// @lib 
+  /// @sn label:%s setText:%s
+  ///
+  /// @class Label
+  /// @setter Text
+  procedure LabelSetText(lb: GUILabel; const newString: String); overload; forward;
+
+  /// returns a GUILabel From given region
+  ///
+  /// @lib
+  function  LabelFromRegion(r: RegionPtr): GUILabel; forward;
+
+  /// Returns FontAlignment from label given region
+  ///
+  /// @lib
+  ///
+  /// @class Label
+  /// @getter FontAlignment
+  function LabelAlignment(lbl: GUILabel): FontAlignment; forward;
+
+  /// Sets FontAlignment for label given region
+  ///
+  /// @lib SetLabelAlignment
+  /// @sn label:%s setAlignment:%s
+  ///
+  /// @class Label
+  /// @setter FontAlignment
+  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); forward;
+
+
+
+
+
+
 //
 // Event management code
 //
@@ -1681,16 +1666,19 @@ var
 procedure SendEvent(r: Region; kind: EventKind);
 var
   i: Longint;
-  pnl: Panel;
+  pnl: PanelPtr;
+  rp: RegionPtr;
 begin
-  if not assigned(r) then exit;
-  pnl := r^.parent;
+  rp := ToRegionPtr(r);
+
+  if not assigned(rp) then exit;
+  pnl := rp^.parent;
   if not assigned(pnl) then exit;
   
-  for i := 0 to High(r^.callbacks) do
+  for i := 0 to High(rp^.callbacks) do
   begin
     try
-      r^.callbacks[i](r, kind);
+      rp^.callbacks[i](r, kind);
     except
       WriteLn(stderr, 'Error with event callback!');
     end;
@@ -1703,7 +1691,7 @@ end;
 
 
 
-procedure HandlePanelInput(pnl: Panel); forward;
+procedure HandlePanelInput(pnl: PanelPtr); forward;
 
 function GUITextEntryComplete(): Boolean;
 begin
@@ -1728,7 +1716,7 @@ function IndexOfLastUpdatedTextBox(): Longint;
 begin
   result := -1;
   if not assigned(GUIC.lastActiveTextBox) then exit;
-  result := RegionOfLastUpdatedTextBox()^.elementIndex;
+  result := ToRegionPtr(RegionOfLastUpdatedTextBox())^.elementIndex;
 end;
 
 function ActiveTextIndex(): Longint;
@@ -1750,10 +1738,13 @@ begin
 end;
 
 function RegionRectangleOnscreen(r: Region): Rectangle;
+var
+  rp: RegionPtr;
 begin
-  if not assigned(r) then begin result := RectangleFrom(0,0,0,0); exit; end;
+  rp := ToRegionPtr(r);
+  if not assigned(rp) then begin result := RectangleFrom(0,0,0,0); exit; end;
   
-  result := RectangleOffset(r^.area, RectangleTopLeft(r^.parent^.area));
+  result := RectangleOffset(rp^.area, RectangleTopLeft(rp^.parent^.area));
 end;
 
 function GUIClicked(): Boolean;
@@ -1761,7 +1752,7 @@ begin
   result := GUIC.panelClicked <> nil;
 end;
 
-function ModalBefore(pnl: Panel): Boolean;
+function ModalBefore(pnl: PanelPtr): Boolean;
 var
   i: Longint;
 begin
@@ -1782,7 +1773,7 @@ end;
 // Drawing Loops
 //---------------------------------------------------------------------------------------  
 
-function BitmapToDraw(r: Region): Bitmap;
+function BitmapToDraw(r: RegionPtr): Bitmap;
 begin
   result := nil;
   if not(assigned(r)) then exit;
@@ -1821,7 +1812,7 @@ begin
 end;
 
 //Helper functions used to determine the text rectangle for text boxes
-function TextboxTextArea(r: Rectangle): Rectangle; overload;
+function TextboxTextArea(const r: Rectangle): Rectangle; overload;
 begin
   result := InsetRectangle(r, 1);
 end;
@@ -1831,7 +1822,7 @@ begin
   result := TextboxTextArea(RegionRectangleOnScreen(r));
 end;
 
-function VectorForecolorToDraw(r: region): Color;
+function VectorForecolorToDraw(r: RegionPtr): Color;
 begin
   result := GUIC.foregroundClr;
   if not(assigned(r)) then exit;
@@ -1853,7 +1844,7 @@ begin
   end;
 end;
 
-function VectorBackcolorToDraw(r: region): Color;
+function VectorBackcolorToDraw(r: RegionPtr): Color;
 begin
   result := GUIC.backgroundClr;
   if not(assigned(r)) then exit;
@@ -1875,7 +1866,7 @@ begin
   end;
 end;
 
-procedure DrawVectorCheckbox(forRegion: Region; const area: Rectangle);
+procedure DrawVectorCheckbox(forRegion: RegionPtr; const area: Rectangle);
 begin
   DrawRectangle(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
@@ -1885,7 +1876,7 @@ begin
   end;
 end;
 
-procedure DrawVectorRadioButton(forRegion: Region; const area: Rectangle);
+procedure DrawVectorRadioButton(forRegion: RegionPtr; const area: Rectangle);
 begin
   DrawEllipse(VectorForecolorToDraw(forRegion), area, OptionToScreen());
   
@@ -1895,7 +1886,7 @@ begin
   end;
 end;
 
-procedure DrawTextbox(forRegion: Region; const area: Rectangle);
+procedure DrawTextbox(forRegion: RegionPtr; const area: Rectangle);
 begin
   if not Assigned(forRegion) then exit;
 
@@ -1911,7 +1902,7 @@ begin
             OptionToScreen());
 end;
   
-procedure DrawList(forRegion: Region; const area: Rectangle);
+procedure DrawList(forRegion: RegionPtr; const area: Rectangle);
 var
   tempList:               GUIList;
   i, itemIdx:             Longint;
@@ -2145,29 +2136,20 @@ begin
     begin
       // Draw the text onto the screen as normal...
       DrawText(ListItemText(tempList, itemIdx), 
-               VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
+               VectorForecolorToDraw(forRegion), 
+               ColorTransparent, 
                ListFont(tempList), ListFontAlignment(tempList), 
                itemTextArea,
                OptionToScreen());
     end
     else // the item is the selected item...
     begin
-      if forRegion^.parent^.DrawAsVectors or GUIC.VectorDrawing then
-      begin
-        DrawText(ListItemText(tempList, itemIdx), 
-                 VectorBackcolorToDraw(forRegion), VectorForecolorToDraw(forRegion),
-                 ListFont(tempList), ListFontAlignment(tempList),
-                 itemTextArea,
-                 OptionToScreen());
-      end
-      else
-      begin
-        DrawText( ListItemText(tempList, itemIdx), 
-                  VectorForecolorToDraw(forRegion), VectorBackcolorToDraw(forRegion), 
-                  ListFont(tempList), ListFontAlignment(tempList),
-                  itemTextArea,
-                  OptionToScreen());
-      end;
+      DrawText(ListItemText(tempList, itemIdx), 
+               VectorBackcolorToDraw(forRegion), 
+               ColorTransparent,
+               ListFont(tempList), ListFontAlignment(tempList),
+               itemTextArea,
+               OptionToScreen());
     end;
     
     PopClip(); // item area
@@ -2176,22 +2158,22 @@ begin
   PopClip(); // region
 end;
 
-procedure DrawLabelText(forRegion: Region; const area: Rectangle);
+procedure DrawLabelText(forRegion: RegionPtr; const area: Rectangle);
 begin
   DrawText(LabelText(forRegion), 
            VectorForecolorToDraw(forRegion),
            ColorTransparent, //VectorBackcolorToDraw(forRegion), 
            LabelFont(forRegion),
-           LabelAlignment(forRegion), 
+           LabelAlignment(Region(forRegion)), 
            TextboxTextArea(area),
            OptionToScreen());
 end;
 
-procedure DrawAsVectors(p: Panel);
+procedure DrawAsVectors(p: PanelPtr);
 var
   j: LongInt;
-  current: Panel;
-  currentReg: Region;
+  current: PanelPtr;
+  currentReg: RegionPtr;
 begin
   current := p;
   if not assigned(current) then exit;
@@ -2224,7 +2206,7 @@ begin
   PopClip();
 end;
 
-function PanelBitmapToDraw(p: Panel): bitmap;
+function PanelBitmapToDraw(p: PanelPtr): Bitmap;
 begin
   if not PanelActive(p) then
   begin
@@ -2235,10 +2217,10 @@ begin
   result := p^.PanelBitmap;
 end;
 
-procedure DrawAsBitmaps(p: Panel);
+procedure DrawAsBitmaps(p: PanelPtr);
 var
   j: LongInt;
-  currentReg: Region;
+  currentReg: RegionPtr;
 begin
   DrawBitmap(PanelBitmapToDraw(p), RoundInt(RectangleTopLeft(p^.area).x), RoundInt(RectangleTopLeft(p^.area).y), OptionToScreen());
   
@@ -2277,69 +2259,94 @@ end;
 //---------------------------------------------------------------------------------------
 
 function RegionWidth(r: Region): Longint;
+var
+  rp: RegionPtr;
 begin
+  rp := ToRegionPtr(r);
   result := -1;
-  if not(assigned(r)) then exit;
+  if not(Assigned(rp)) then exit;
   
-  result := Round(r^.area.width);
+  result := Round(rp^.area.width);
 end;
 
 function RegionHeight(r: Region): Longint;
+var
+  rp: RegionPtr;
 begin
+  rp := ToRegionPtr(r);
   result := -1;
-  if not(assigned(r)) then exit;
+  if not(assigned(rp)) then exit;
   
-  result := Round(r^.area.height);
+  result := Round(rp^.area.height);
 end;
 
 function RegionX(r: Region): Single;
+var
+  rp: RegionPtr;
 begin
+  rp := ToRegionPtr(r);
   result := -1;
   
-  if not(assigned(r)) then exit;
+  if not(assigned(rp)) then exit;
   
-  result := r^.area.x;
+  result := rp^.area.x;
 end;
 
 function RegionY(r: Region): Single;
+var
+  rp: RegionPtr;
 begin
+  rp := ToRegionPtr(r);
   result := -1;
-  if not(assigned(r)) then exit;
+  if not(assigned(rp)) then exit;
   
-  result := r^.area.y;
+  result := rp^.area.y;
 end;
 
 procedure SetRegionActive(forRegion: Region; b: Boolean);
+var
+  rp: RegionPtr;
 begin
-  if not assigned(forRegion) then exit;
+  rp := ToRegionPtr(forRegion);
 
-  forRegion^.active := b;
+  if not assigned(rp) then exit;
+  rp^.active := b;
 end;
 
 function RegionActive(forRegion: Region): Boolean;
+var
+  rp: RegionPtr;
 begin
-  if not assigned(forRegion) then result := false
-  else result := forRegion^.active;
+  rp := ToRegionPtr(forRegion);
+
+  if not assigned(rp) then result := false
+  else result := rp^.active;
 end;
 
 procedure ToggleRegionActive(forRegion: Region);
+var
+  rp: RegionPtr;
 begin
-  if not assigned(forRegion) then exit;
-  
-  forRegion^.active := not forRegion^.active;
+  rp := ToRegionPtr(forRegion);
+
+  if not assigned(rp) then exit;
+  rp^.active := not rp^.active;
 end;
 
 function RegionWithID(pnl: Panel; const ID: String): Region; overload;
 var
   idx: Longint;
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(pnl);
+
   result := nil;
-  if not assigned(pnl) then exit;
+  if not assigned(pp) then exit;
   
-  idx := IndexOf(pnl^.regionIds, ID);
+  idx := IndexOf(pp^.regionIds, ID);
   if idx >= 0 then
   begin
-    result := @pnl^.regions[idx];
+    result := @pp^.regions[idx];
   end;  
 end;
 
@@ -2357,15 +2364,19 @@ begin
 end;
 
 function RegionID(r: Region): string;
+var
+  rp: RegionPtr;
 begin
-  if assigned(r) then
-    result := r^.stringID
+  rp := ToRegionPtr(r);
+
+  if assigned(rp) then
+    result := rp^.stringID
   else
     result := '';
 end;
 
 // Check which of the regions was clicked in this panel
-procedure HandlePanelInput(pnl: Panel);
+procedure HandlePanelInput(pnl: PanelPtr);
   procedure _ScrollWithScrollArea(lst: GUIList; const mouse: Point2D);
   var
     largestStartIdx: Longint;
@@ -2461,12 +2472,12 @@ procedure HandlePanelInput(pnl: Panel);
   procedure _UpdateMouseDown(const mouse: Point2D);
   var
     pointDownInRegion: Point2D;
-    r: Region;
+    r: RegionPtr;
   begin
     if ReadingText() then
       FinishReadingText();
     
-    r := RegionAtPoint(pnl, mouse);
+    r := RegionPtrAtPoint(pnl, mouse);
     if not assigned(r) then exit;
     
     // Adjust the mouse point into the region's coordinates (offset from top left of region)
@@ -2480,9 +2491,9 @@ procedure HandlePanelInput(pnl: Panel);
   
   procedure _UpdateScrollUp(const mouse: Point2D);
   var
-    r: Region;
+    r: RegionPtr;
   begin
-    r := RegionAtPoint(pnl, mouse);
+    r := RegionPtrAtPoint(pnl, mouse);
     if not assigned(r) then exit;
     
     // Perform kind based updating
@@ -2493,9 +2504,9 @@ procedure HandlePanelInput(pnl: Panel);
   
   procedure _UpdateScrollDown(const mouse: Point2D);
   var
-    r: Region;
+    r: RegionPtr;
   begin
-    r := RegionAtPoint(pnl, mouse);
+    r := RegionPtrAtPoint(pnl, mouse);
     if not assigned(r) then exit;
     
     // Perform kind based updating
@@ -2507,12 +2518,12 @@ procedure HandlePanelInput(pnl: Panel);
   procedure _UpdateMouseClicked(const pointClicked: Point2D);
   var
     pointClickedInRegion: Point2D;
-    r: Region;
+    r: RegionPtr;
   begin
     if ReadingText() then
       FinishReadingText();
     
-    r := RegionAtPoint(pnl, pointClicked);
+    r := RegionPtrAtPoint(pnl, pointClicked);
     if not assigned(r) then exit;
     if not r^.active then exit;
     
@@ -2548,34 +2559,31 @@ begin
   else if MouseClicked(WheelDownButton) then _UpdateScrollDown(pointClickedInPnl);
 end;
 
-function RegionClicked(): region;
+function RegionClicked(): Region;
 begin   
-  result := nil;  
-  if not assigned(GUIC.lastClicked) then exit;
-  
-  result := GUIC.lastClicked;
+  result := Region(GUIC.lastClicked);
 end;
 
 function RegionClickedID(): String;
 begin
-  result := '';
-  if not assigned(GUIC.lastClicked) then exit;
-  
   result := RegionID(GUIC.lastClicked);
 end;
 
 function RegionPanel(r: Region): Panel;
+var
+  rp: RegionPtr;
 begin
+  rp := ToRegionPtr(r);
   result := nil;
-  if not assigned(r) then exit;
+  if not assigned(rp) then exit;
   
-  result := r^.parent;
+  result := rp^.parent;
 end;
 
-function RegionAtPoint(p: Panel; const pt: Point2D): Region;
+function RegionPtrAtPoint(p: PanelPtr; const pt: Point2D): RegionPtr;
 var
   i: Longint;
-  current: Region;
+  current: RegionPtr;
 begin
   result := nil;
   if not assigned(p) then exit;
@@ -2593,11 +2601,17 @@ begin
     end;
   end;
 end;
+
+function RegionAtPoint(p: Panel; const pt: Point2D): Region;
+begin
+  result := Region(RegionPtrAtPoint(ToPanelPtr(p), pt));
+end;
+
 //---------------------------------------------------------------------------------------
 // Get element from region
 //---------------------------------------------------------------------------------------
 
-function RadioGroupFromRegion(r: Region): GUIRadioGroup;
+function RadioGroupFromRegion(r: RegionPtr): GUIRadioGroup;
 begin
   result := nil;
   
@@ -2609,7 +2623,7 @@ begin
   result := @r^.parent^.radioGroups[r^.elementIndex];
 end;
 
-function RadioGroupFromId(pnl: Panel; const id: String): GUIRadioGroup;
+function RadioGroupFromId(pnl: PanelPtr; const id: String): GUIRadioGroup;
 var
   i: Longint;
   lid: String;
@@ -2634,7 +2648,7 @@ begin
   result := RadioGroupFromRegion(RegionWithID(id));
 end;
 
-function LabelFromRegion(r: Region): GUILabel;
+function LabelFromRegion(r: RegionPtr): GUILabel;
 begin
   result := nil;
   
@@ -2647,7 +2661,7 @@ begin
   result := @r^.parent^.labels[r^.elementIndex]
 end;
 
-function TextBoxFromRegion(r: Region): GUITextBox;
+function TextBoxFromRegion(r: RegionPtr): GUITextBox;
 begin
   result := nil;
   
@@ -2659,7 +2673,7 @@ begin
   result := @r^.parent^.textBoxes[r^.elementIndex]
 end;
 
-function ListFromRegion(r: Region): GUIList; overload;
+function ListFromRegion(r: RegionPtr): GUIList; overload;
 begin
   result := nil;
   
@@ -2671,7 +2685,7 @@ begin
   result := @r^.parent^.lists[r^.elementIndex]
 end;
 
-function CheckboxFromRegion(r: Region): GUICheckbox;
+function CheckboxFromRegion(r: RegionPtr): GUICheckbox;
 begin
   result := nil;
   
@@ -3578,31 +3592,45 @@ end;
 //---------------------------------------------------------------------------------------
 
 function PanelDraggable(p: panel): Boolean;
+var
+  pp: PanelPtr;
 begin
-  if not assigned(p) then exit;
+  pp := ToPanelPtr(p);
+  if not assigned(pp) then exit;
   
-  Result := p^.draggable;
+  Result := pp^.draggable;
 end;
 
 procedure PanelSetDraggable(p: panel; b:Boolean);
+var
+  pp: PanelPtr;
 begin
-  if not assigned(p) then exit;
+  pp := ToPanelPtr(p);
+  if not assigned(pp) then exit;
   
-   p^.draggable := b;
+   pp^.draggable := b;
 end;
 
 procedure PanelSetX(p: Panel; nX: Longint);
+var
+  pp: PanelPtr;
 begin
-  if not(assigned(p)) then exit;
+  pp := ToPanelPtr(p);
+
+  if not(assigned(pp)) then exit;
   
-  p^.area.X := nX;
+  pp^.area.X := nX;
 end;
 
 procedure PanelSetY(p: Panel; nY: Longint);
+var
+  pp: PanelPtr;
 begin
-  if not(assigned(p)) then exit;
+  pp := ToPanelPtr(p);
+
+  if not(assigned(pp)) then exit;
   
-  p^.area.Y := nY;
+  pp^.area.Y := nY;
 end;
 
 function PanelWidth(const name: String): Longint;
@@ -3611,11 +3639,15 @@ begin
 end;
 
 function PanelWidth(p: Panel): Longint;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
+
   result := -1;
-  if not(assigned(p)) then exit;
+  if not(assigned(pp)) then exit;
   
-  result := Round(p^.area.width);
+  result := Round(pp^.area.width);
 end;
 
 function PanelHeight(const name: String): Longint;
@@ -3624,65 +3656,97 @@ begin
 end;
 
 function PanelHeight(p: Panel): Longint;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
+
   result := -1;
-  if not(assigned(p)) then exit;
+  if not(assigned(pp)) then exit;
   
-  result := Round(p^.area.height);
+  result := Round(pp^.area.height);
 end;
 
 function PanelX(p: Panel): Single;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
+
   result := -1;
-  if not(assigned(p)) then exit;
+  if not(assigned(pp)) then exit;
   
-  result := p^.area.x;
+  result := pp^.area.x;
 end;
 
 function PanelY(p: Panel): Single;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
+
   result := -1;
-  if not(assigned(p)) then exit;
+  if not(assigned(pp)) then exit;
   
-  result := p^.area.y;
+  result := pp^.area.y;
 end;
 
 function PanelVisible(p: Panel): Boolean;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
+
   result := false;
-  if not(assigned(p)) then exit;
+  if not(assigned(pp)) then exit;
   
-  result := p^.visible;
+  result := pp^.visible;
 end;
 
 procedure AddPanelToGUI(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then
   begin
     SetLength(GUIC.panels, Length(GUIC.panels) + 1);
-    GUIC.panels[High(GUIC.panels)] := p;
+    GUIC.panels[High(GUIC.panels)] := pp;
   end;
 end;
 
 procedure ActivatePanel(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then p^.active := true;
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then pp^.active := true;
 end;
 
 procedure DeactivatePanel(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then p^.active := false;
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then pp^.active := false;
 end;
 
 procedure ToggleActivatePanel(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then p^.active := not p^.active;
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then pp^.active := not pp^.active;
 end;
 
-function InitPanel(const name, filename:string): Panel;
+function InitPanel(const name, filename: String): PanelPtr;
 begin
   New(result);
-
+  result^.id := PANEL_PTR;
   result^.name      := name;
   result^.filename  := filename;
   
@@ -3713,7 +3777,7 @@ end;
 
 function NewPanel(const pnlName: String): Panel;
 var
-  pnl: Panel;
+  pnl: PanelPtr;
   obj: tResourceContainer;
 begin
   if GUIC.panelIds.containsKey(pnlName) then
@@ -3733,28 +3797,36 @@ begin
   else
   begin
     AddPanelToGUI(pnl);
-    result := pnl;
+    result := Panel(pnl);
   end;
   
 end;
 
 procedure ShowPanelDialog(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then 
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then 
   begin
-    if p^.visible then //hide it...
+    if pp^.visible then //hide it...
       ToggleShowPanel(p);
     
     // show the panel last...
     ToggleShowPanel(p);
     // and make it modal
-    p^.modal := true;
+    pp^.modal := true;
   end;
 end;
 
 procedure ShowPanel(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) and (not p^.visible) then ToggleShowPanel(p);
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) and (not pp^.visible) then ToggleShowPanel(p);
 end;
 
 procedure ShowPanel(const name: String);
@@ -3763,8 +3835,12 @@ begin
 end;
 
 procedure HidePanel(p: Panel);
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) and (p^.visible) then ToggleShowPanel(p);
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) and (pp^.visible) then ToggleShowPanel(p);
 end;
 
 procedure HidePanel(const name: String);
@@ -3777,19 +3853,23 @@ procedure ToggleShowPanel(p: Panel);
 var
   i: Longint;
   found: Boolean;
+var
+  pp: PanelPtr;
 begin
-  if assigned(p) then
+  pp := ToPanelPtr(p);
+
+  if assigned(pp) then
   begin
-    p^.visible  := not p^.visible;
+    pp^.visible  := not pp^.visible;
     
     // set to non-modal by default
-    p^.modal    := false;
+    pp^.modal    := false;
     
-    if p^.visible then
+    if pp^.visible then
     begin
       // Now visible so add to the visible panels
       SetLength(GUIC.visiblePanels, Length(GUIC.visiblePanels) + 1);
-      GUIC.visiblePanels[High(GUIC.visiblePanels)] := p;
+      GUIC.visiblePanels[High(GUIC.visiblePanels)] := pp;
     end
     else
     begin
@@ -3813,11 +3893,15 @@ begin
 end;
 
 function MousePointInPanel(pnl: Panel): Point2D;
+var
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(pnl);
+
   result.x := -1; result.y := -1;
-  if not assigned(pnl) then exit;
+  if not assigned(pp) then exit;
   
-  result := PointAdd(MousePosition(), InvertVector(RectangleTopLeft(pnl^.area)));
+  result := PointAdd(MousePosition(), InvertVector(RectangleTopLeft(pp^.area)));
 end;
 
 function PanelClicked(): Panel;
@@ -3825,11 +3909,6 @@ begin
   result := nil;
   
   if not ModalBefore(GUIC.panelClicked) then result := GUIC.panelClicked;
-  
-  // result := nil;
-  // if not MouseClicked(Leftbutton) then exit;
-  // 
-  // result := PanelAtPoint(MousePosition());
 end;
 
 function PanelClicked(pnl: Panel): Boolean;
@@ -3862,7 +3941,7 @@ function StringToKind(const s: String): GUIElementKind;
       RaiseException(s + ' is an invalid kind for region.');
   end;
   
-  procedure CreateLabel(forRegion: Region; const d: string; result: Panel);
+  procedure CreateLabel(forRegion: RegionPtr; const d: string; result: PanelPtr);
   var
     newLbl: GUILabelData;
   begin
@@ -3878,13 +3957,13 @@ function StringToKind(const s: String): GUIElementKind;
     forRegion^.elementIndex := High(result^.labels);  // The label index for the region -> so it knows which label
   end;
   
-  procedure AddRegionToGroup(regToAdd: Region; groupToRecieve: GUIRadioGroup);
+  procedure AddRegionToGroup(regToAdd: RegionPtr; groupToRecieve: GUIRadioGroup);
   begin
     SetLength(groupToRecieve^.buttons, Length(groupToRecieve^.buttons) + 1);
     groupToRecieve^.buttons[High(groupToRecieve^.buttons)] := regToAdd;    
   end;
   
-  procedure CreateRadioButton(forRegion: Region; const data: String; result: Panel);
+  procedure CreateRadioButton(forRegion: RegionPtr; const data: String; result: PanelPtr);
   var
     newRadioGroup: GUIRadioGroupData;
     i: Longint;
@@ -3913,14 +3992,14 @@ function StringToKind(const s: String): GUIElementKind;
     forRegion^.elementIndex := High(result^.radioGroups);
   end;
   
-  procedure CreateCheckbox(forRegion: Region; const data: string; result: Panel);
+  procedure CreateCheckbox(forRegion: RegionPtr; const data: string; result: PanelPtr);
   begin
     SetLength(result^.Checkboxes, Length(result^.Checkboxes) + 1);
     result^.Checkboxes[High(result^.Checkboxes)].state := LowerCase(ExtractDelimited(7, data, [','])) = 'true';
     forRegion^.elementIndex := High(result^.Checkboxes);
   end;
   
-  procedure CreateTextbox(r: region; const data: string; result: panel);
+  procedure CreateTextbox(r: RegionPtr; const data: String; result: PanelPtr);
   var
     newTextbox: GUITextboxData;
   begin
@@ -3945,7 +4024,7 @@ function StringToKind(const s: String): GUIElementKind;
     r^.ElementIndex := High(result^.textBoxes);
   end;
   
-  procedure CreateList(r: Region; const data: string; result: Panel);
+  procedure CreateList(r: RegionPtr; const data: string; result: PanelPtr);
   var
     newList: GUIListData;
     scrollSz, rhs, btm, height, width: Single;
@@ -4021,7 +4100,7 @@ function StringToKind(const s: String): GUIElementKind;
   
   // Rewires points to regions in the panel, assumes that the
   // newRegions is larger than or equal to the number of old regions in the panel
-  procedure RewireRegions(p: Panel; newRegions: RegionDataArray);
+  procedure RewireRegions(p: PanelPtr; newRegions: RegionDataArray);
   var
     i, j, elemIdx: Longint;
   begin
@@ -4056,7 +4135,7 @@ function StringToKind(const s: String): GUIElementKind;
     p^.regions := newRegions;    
   end;
   
-  procedure AddRegionToPanelWithString(const d: string; p: panel);
+  procedure AddRegionToPanelWithString(const d: string; p: PanelPtr);
   var
     regID: string;
     regX, regY: Single;
@@ -4072,6 +4151,7 @@ function StringToKind(const s: String): GUIElementKind;
     regW := StrToInt(Trim(ExtractDelimited(3, d, [','])));
     regH := StrToInt(Trim(ExtractDelimited(4, d, [','])));
     
+    r.id := REGION_PTR;
     r.kind := StringToKind(Trim(ExtractDelimited(5, d, [','])));
     
     regID := Trim(ExtractDelimited(6, d, [',']));
@@ -4115,10 +4195,10 @@ function StringToKind(const s: String): GUIElementKind;
     end;    
   end;
   
-function DoLoadPanel(const filename, name: string): Panel;
+function DoLoadPanel(const filename, name: string): PanelPtr;
 var
-  pathToFile, line, id, data: string;
-  panelFile: text;
+  pathToFile, line, id, data: String;
+  panelFile: Text;
   lineNo: LongInt;
   regionDataArr: Array of String;
   
@@ -4287,9 +4367,12 @@ begin
 end;
 
 function PanelActive(pnl: Panel): Boolean;
+var
+  pp: PanelPtr;
 begin
-  if assigned(pnl) then 
-    result := pnl^.active and not ModalBefore(pnl)
+  pp := ToPanelPtr(pnl);
+  if assigned(pp) then 
+    result := pp^.active and not ModalBefore(pnl)
   else result := false;
 end;
 
@@ -4301,14 +4384,16 @@ end;
 function PointInRegion(const pt: Point2D; p: Panel; kind: GUIElementKind): Boolean; overload;
 var
   i: Longint;
-  curr: Region;
+  curr: RegionPtr;
+  pp: PanelPtr;
 begin
+  pp := ToPanelPtr(p);
   result := false;
-  if not assigned(p) then exit;
+  if not assigned(pp) then exit;
   
-  for i := Low(p^.Regions) to High(p^.Regions) do
+  for i := Low(pp^.Regions) to High(pp^.Regions) do
   begin
-    curr := @p^.Regions[i];
+    curr := @pp^.Regions[i];
     if PointInRect(MousePointInPanel(p), curr^.area) and IsSet(kind, curr^.kind) then 
     begin     
       result := true;
@@ -4325,7 +4410,7 @@ end;
 function PanelAtPoint(const pt: Point2D): Panel;
 var
   i: Longint;
-  curPanel: Panel;
+  curPanel: PanelPtr;
 begin
   result := nil;
   
@@ -4390,10 +4475,13 @@ begin
 end;
 
 procedure MovePanel(p: Panel; const mvmt: Vector);
+var
+  pp: PanelPtr;
 begin
-  if not assigned(p) then exit;
+  pp := ToPanelPtr(p);
+  if not assigned(pp) then exit;
   
-  p^.area := RectangleOffset(p^.area, mvmt);
+  pp^.area := RectangleOffset(pp^.area, mvmt);
 end;
 
 function ButtonClicked(r: Region) : Boolean;
@@ -4497,23 +4585,27 @@ end;
 // Called to actually free the resource
 
 procedure DoFreePanel(var pnl: Panel);
-var i, j: Longint;
+var 
+  i, j: Longint;
+  pp: PanelPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgUserInterface', 'DoFreePanel', 'pnl = ' + HexStr(pnl));
   {$ENDIF}
   
-  if assigned(pnl) then
+  pp := ToPanelPtr(pnl);
+
+  if assigned(pp) then
   begin
     
-    if GUIC.panelDragging = pnl then GUIC.panelDragging := nil;
-    if dialog.dialogPanel = pnl then dialog.dialogPanel := nil;
+    if GUIC.panelDragging = pp then GUIC.panelDragging := nil;
+    if dialog.dialogPanel = pp then dialog.dialogPanel := nil;
     
-    HidePanel(pnl);
+    HidePanel(pp);
     
     for i := Low(GUIC.panels) to High(GUIC.panels) do
     begin
-      if GUIC.panels[i] = pnl then
+      if GUIC.panels[i] = pp then
       begin
         for j := i to (High(GUIC.panels) - 1) do
         begin
@@ -4525,41 +4617,40 @@ begin
       end;
     end;
     
-    for i:= Low(pnl^.labels) to High(pnl^.labels) do
+    for i:= Low(pp^.labels) to High(pp^.labels) do
     begin
-      CallFreeNotifier(@pnl^.labels[i]);
+      CallFreeNotifier(@pp^.labels[i]);
     end;
     
-    for i:= Low(pnl^.checkBoxes) to High(pnl^.checkBoxes) do
+    for i:= Low(pp^.checkBoxes) to High(pp^.checkBoxes) do
     begin
-      CallFreeNotifier(@pnl^.checkBoxes[i]);
+      CallFreeNotifier(@pp^.checkBoxes[i]);
     end;
     
-    for i:= Low(pnl^.radioGroups) to High(pnl^.radioGroups) do
+    for i:= Low(pp^.radioGroups) to High(pp^.radioGroups) do
     begin
-      CallFreeNotifier(@pnl^.radioGroups[i]);
+      CallFreeNotifier(@pp^.radioGroups[i]);
     end;
     
-    for i:= Low(pnl^.textBoxes) to High(pnl^.textBoxes) do
+    for i:= Low(pp^.textBoxes) to High(pp^.textBoxes) do
     begin
-      CallFreeNotifier(@pnl^.textBoxes[i]);
+      CallFreeNotifier(@pp^.textBoxes[i]);
     end;
 
-    for i:= Low(pnl^.lists) to High(pnl^.lists) do
+    for i:= Low(pp^.lists) to High(pp^.lists) do
     begin
-      CallFreeNotifier(@pnl^.lists[i]);
+      CallFreeNotifier(@pp^.lists[i]);
     end;
     
-    for i:= Low(pnl^.regions) to High(pnl^.regions) do
+    for i:= Low(pp^.regions) to High(pp^.regions) do
     begin
-      CallFreeNotifier(@pnl^.regions[i]);
+      CallFreeNotifier(@pp^.regions[i]);
     end;
     
     CallFreeNotifier(pnl);
     
-    
-    FreeNamedIndexCollection(pnl^.regionIds);
-    Dispose(pnl);
+    FreeNamedIndexCollection(pp^.regionIds);
+    Dispose(pp);
   end;
   
   pnl := nil;
@@ -4569,14 +4660,18 @@ begin
 end;
 
 procedure FreePanel(var pnl: Panel);
+var
+  pp: PanelPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgUserInterface', 'FreePanel', 'pnl = ' + HexStr(pnl));
   {$ENDIF}
   
-  if(assigned(pnl)) then
+  pp := ToPanelPtr(pnl);
+
+  if(assigned(pp)) then
   begin
-    ReleasePanel(pnl^.name);
+    ReleasePanel(pp^.name);
   end;
   pnl := nil;
   
@@ -4587,13 +4682,13 @@ end;
 
 procedure ReleasePanel(const name: String);
 var
-  pnl: Panel;
+  pnl: PanelPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgUserInterface', 'ReleasePanel', 'pnl = ' + name);
   {$ENDIF}
   
-  pnl := PanelNamed(name);
+  pnl := ToPanelPtr(PanelNamed(name));
   if (assigned(pnl)) then
   begin
     GUIC.panelIds.remove(name).Free();
@@ -4649,12 +4744,16 @@ function HasPanel(const name: String): Boolean;
   end;
   
   function PanelName(pnl: Panel): String;
+  var
+    pp: PanelPtr;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgUserInterface', 'PanelName', HexStr(pnl));
     {$ENDIF}
+
+    pp := ToPanelPtr(pnl);
     
-    if assigned(pnl) then result := pnl^.name
+    if assigned(pp) then result := pp^.name
     else result := '';
     
     {$IFDEF TRACE}
@@ -4663,12 +4762,16 @@ function HasPanel(const name: String): Boolean;
   end;
   
   function PanelFilename(pnl: Panel): String;
+  var
+    pp: PanelPtr;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgUserInterface', 'PanelFilename', HexStr(pnl));
     {$ENDIF}
+
+    pp := ToPanelPtr(pnl);
     
-    if assigned(pnl) then result := pnl^.filename
+    if assigned(pp) then result := pp^.filename
     else result := '';
     
     {$IFDEF TRACE}
@@ -5052,8 +5155,8 @@ end;
 procedure UpdateInterface();
   procedure _UpdateTextEntry();
   var
-    pnl: Panel;
-    r: Region;
+    pnl: PanelPtr;
+    r: RegionPtr;
     txtCount, inc, idx: Longint;
     txt: GUITextBox;
   begin
@@ -5108,10 +5211,13 @@ begin
 end;
 
 procedure RegisterEventCallback(r: Region; callback: GUIEventCallback);
+var
+  rp: RegionPtr;
 begin
-  if not assigned(r) then exit;
+  rp := ToRegionPtr(r);
+  if not Assigned(rp) then exit;
   
-  with r^ do
+  with rp^ do
   begin
     SetLength(callbacks, Length(callbacks) + 1);
     callbacks[High(callbacks)] := callback;

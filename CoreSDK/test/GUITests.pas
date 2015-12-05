@@ -21,10 +21,10 @@ begin
 end;
 
   
-procedure InitInterface(var pnla, pnlb: panel);
+procedure InitInterface(var pnla, pnlb: Panel);
 begin
   GUISetForegroundColor(RGBAColor(128,128,128,127));
-  GUISetBackgroundColor(ColorTransparent);
+  GUISetBackgroundColor(ColorWhite);
   writeln('colors set');
   pnla := LoadPanel('panelwithbutton.txt');
   pnlb := LoadPanel('panelwithlabel.txt');
@@ -42,9 +42,7 @@ begin
 end;
 
 
-procedure UpdateGUI(var pnla, pnlb: panel; lst: GUilist);
-var
-  radGroup: GUIRadioGroup;
+procedure UpdateGUI(var pnla, pnlb: Panel);
 begin
   // if (RegionClickedID() = 'Button1') then
   // begin
@@ -62,49 +60,46 @@ begin
     PanelSetDraggable(pnla, true)
   else
     PanelSetDraggable(pnla, false);
-    
-  radGroup := RadioGroupFromRegion(RegionWithID('radButton1'));
 end;
   
 procedure Main();
 var
 	pnla, pnlb: Panel;
-	lst: GUIList;
 begin
-  OpenAudio();
   OpenGraphicsWindow('Hello World', 800, 600);
   
   //ToggleFullScreen();
   
   LoadResourceBundle('MainMenu.txt');
+
   InitInterface(pnla,pnlb);
-  lst := ListFromRegion(regionWithID('List1'));
-  ListAddItem(lst, BitmapNamed('hat'),'Hat');
-  ListAddItem(lst, BitmapNamed('sword'),'Sword');
-  ListAddItem(lst, BitmapNamed('cape'),'Cape');
-  ListAddItem(lst, 'Cheese');
-  ListAddItem(lst, 'Cake');
-  ListAddItem(lst, 'Mouse');
-  ListAddItem(lst, 'Dog');
-  ListAddItem(lst, 'Axe');
-  ListAddItem(lst, 'Mace');
-  ListAddItem(lst, 'Chainmail');
-  ListAddItem(lst, 'Ninja');
-  ListAddItem(lst, 'Newspaper');
-  ListAddItem(lst, 'Car');  
-  ListAddItem(lst, 'Hat2');
-  ListAddItem(lst, 'Sword2');
-  ListAddItem(lst, 'Cape2');
-  ListAddItem(lst, 'Cheese2');
-  ListAddItem(lst, 'Cake2');
-  ListAddItem(lst, 'Mouse2');
-  ListAddItem(lst, 'Dog2');
-  ListAddItem(lst, 'Axe2');
-  ListAddItem(lst, 'Mace2');
-  ListAddItem(lst, 'Chainmail2');
-  ListAddItem(lst, 'Ninja2');
-  ListAddItem(lst, 'Newspaper2');
-  ListAddItem(lst, 'Car2');
+
+  ListAddItem('List1', BitmapNamed('hat'),'Hat');
+  ListAddItem('List1', BitmapNamed('sword'),'Sword');
+  ListAddItem('List1', BitmapNamed('cape'),'Cape');
+  ListAddItem('List1', 'Cheese');
+  ListAddItem('List1', 'Cake');
+  ListAddItem('List1', 'Mouse');
+  ListAddItem('List1', 'Dog');
+  ListAddItem('List1', 'Axe');
+  ListAddItem('List1', 'Mace');
+  ListAddItem('List1', 'Chainmail');
+  ListAddItem('List1', 'Ninja');
+  ListAddItem('List1', 'Newspaper');
+  ListAddItem('List1', 'Car');  
+  ListAddItem('List1', 'Hat2');
+  ListAddItem('List1', 'Sword2');
+  ListAddItem('List1', 'Cape2');
+  ListAddItem('List1', 'Cheese2');
+  ListAddItem('List1', 'Cake2');
+  ListAddItem('List1', 'Mouse2');
+  ListAddItem('List1', 'Dog2');
+  ListAddItem('List1', 'Axe2');
+  ListAddItem('List1', 'Mace2');
+  ListAddItem('List1', 'Chainmail2');
+  ListAddItem('List1', 'Ninja2');
+  ListAddItem('List1', 'Newspaper2');
+  ListAddItem('List1', 'Car2');
   
   
   repeat
@@ -112,7 +107,7 @@ begin
     ClearScreen(ColorGreen);
     
     DrawInterface();
-    UpdateGUI(pnla, pnlb, lst);
+    UpdateGUI(pnla, pnlb);
     UpdateInterface();
     
     DrawFramerate(0,0);

@@ -146,7 +146,7 @@ interface
 
 implementation
 uses
-	SysUtils, Classes, Synaser, sgShared, sgUtils, stringhash;
+	SysUtils, Classes, Synaser, sgShared, sgUtils, stringhash, sgBackendTypes;
 
     var _ArduinoDevices: TStringHash;
 
@@ -159,7 +159,8 @@ uses
 	function CreateArduinoDevice(const name, port: String; baud: LongInt) : ArduinoDevice;
     var
         obj: tResourceContainer;
-	    ser: TBlockSerial;	
+	    ser: TBlockSerial;
+	    ap: ArduinoPtr;
 	begin
         if HasArduinoDevice(name) then
         begin
@@ -167,16 +168,19 @@ uses
             exit;
         end;
 
-		New(result);
-		result^.name := name;
-		result^.ptr := Pointer(TBlockSerial.Create());
-		result^.port := port;
-		result^.baud := baud;
-		result^.open := false;
-		result^.hasError := false;
-		result^.errorMessage := 'Working';
+		New(ap);
+		result := ap;
 
-		obj := tResourceContainer.Create(result);
+		ap^.id := ARDUINO_PTR;
+		ap^.name := name;
+		ap^.ptr := Pointer(TBlockSerial.Create());
+		ap^.port := port;
+		ap^.baud := baud;
+		ap^.open := false;
+		ap^.hasError := false;
+		ap^.errorMessage := 'Working';
+
+		obj := tResourceContainer.Create(ap);
         if not _ArduinoDevices.setValue(name, obj) then
         begin
             RaiseWarning('** Leaking: Caused by ArduinoDevice resource loading twice, ' + name);
@@ -184,9 +188,9 @@ uses
             exit;
         end;
 
-		if assigned(result) then
+		if assigned(ap) then
 		begin
-			ser := TBlockSerial(result^.ptr);
+			ser := TBlockSerial(ap^.ptr);
 		    // WriteLn('Connecting...');
 		    ser.Connect(port);
 
@@ -195,11 +199,20 @@ uses
 		    if ser.LastError <> sOK then
 		    begin
     		    RaiseWarning('Error configuring connection to Arduino: ' + IntToStr(ser.LastError) + ' ' + ser.LastErrorDesc);
-		    	result^.hasError := true;
-		    	result^.errorMessage := ser.LastErrorDesc;
+		    	ap^.hasError := true;
+		    	ap^.errorMessage := ser.LastErrorDesc;
 		    	exit;
 		    end;
 	    end;
+	end;
+
+	function _Serial(dev: ArduinoDevice): TBlockSerial;
+	var
+		ap: ArduinoPtr;
+	begin
+		ap := ToArduinoPtr(dev);
+		if Assigned(ap) then result := TBlockSerial(ap^.ptr)
+		else result := nil;
 	end;
 
 	function ArduinoHasData(dev: ArduinoDevice): Boolean;
@@ -209,7 +222,7 @@ uses
 		result := false;
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			// result := ser.CanRead(0);
 			result := ser.WaitingData() > 0;
 		end;
@@ -227,7 +240,7 @@ uses
 		result := '';
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			result := ser.RecvString(timeout)
 		end;
 	end;
@@ -244,7 +257,7 @@ uses
 		result := 0;
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			result := ser.RecvByte(timeout);
 		end;
 	end;
@@ -255,7 +268,7 @@ uses
 	begin
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			ser.SendByte(value);
 		end;
 	end;
@@ -266,7 +279,7 @@ uses
 	begin
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			ser.SendString(value);
 			ser.SendString(#13#10);
 		end;
@@ -278,7 +291,7 @@ uses
 	begin
 		if assigned(dev) then
 		begin
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			ser.SendString(value);
 		end;
 	end;
@@ -291,14 +304,14 @@ uses
 
     // private:
     // Called to actually free the resource
-    procedure DoFreeArduinoDevice(var dev: ArduinoDevice);
+    procedure DoFreeArduinoDevice(var dev: ArduinoPtr);
 	var
 	    ser: TBlockSerial;	
     begin
         if assigned(dev) then
         begin
             CallFreeNotifier(dev);
-			ser := TBlockSerial(dev^.ptr);
+			ser := _Serial(dev);
 			ser.Free();
 			dev^.ptr := nil;
             Dispose(dev);
@@ -308,10 +321,14 @@ uses
     end;
     
     procedure FreeArduinoDevice(var dev: ArduinoDevice);
+    var
+    	ap: ArduinoPtr;
 	begin
-		if assigned(dev) then
+		ap := ToArduinoPtr(dev);
+
+		if assigned(ap) then
 		begin
-			ReleaseArduinoDevice(dev^.name);
+			ReleaseArduinoDevice(ap^.name);
 		end;
 
         dev := nil;
@@ -320,12 +337,13 @@ uses
     procedure ReleaseArduinoDevice(const name: String);
     var
         dev: ArduinoDevice;
+        ap: ArduinoPtr;
     begin
         dev := ArduinoDeviceNamed(name);
         if assigned(dev) then
         begin
             _ArduinoDevices.remove(name).Free();
-            DoFreeArduinoDevice(dev);
+            DoFreeArduinoDevice(ap);
         end;
     end;
     
