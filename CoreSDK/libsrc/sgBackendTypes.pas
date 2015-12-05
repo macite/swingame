@@ -243,10 +243,8 @@ uses sgTypes;
       placeholder:  Array of Rectangle;
       activeItem:   Longint;
       startingAt:   Longint;
-      font:         Font;
       items:        Array of GUIListItem;
       scrollButton: Bitmap;
-      alignment:    FontAlignment;
     end;
 
     /// @struct GUICheckboxData
@@ -259,8 +257,6 @@ uses sgTypes;
       /// @via_pointer
     GUILabelData = packed record
       contentString:  String;
-      font:           Font;
-      alignment:      FontAlignment;
     end;
 
     RegionPtr = ^RegionData;
@@ -278,6 +274,8 @@ uses sgTypes;
       active:         Boolean;
       parent:         PanelPtr;
       callbacks:      Array of GUIEventCallback;
+      font:           Font;
+      alignment:      FontAlignment;
     end;
   
     /// @struct GUIRadioGroupData
@@ -292,10 +290,8 @@ uses sgTypes;
     /// @via_pointer
     GUITextboxData = packed record
       contentString:  String;
-      font:           Font;
       lengthLimit:    Longint;
       forRegion:      RegionPtr;
-      alignment:      FontAlignment;
     end;
 
     ///@struct PanelData
@@ -439,7 +435,7 @@ uses sgShared;
     result := RegionPtr(r);
     if Assigned(result) and (result^.id <> REGION_PTR) then
     begin
-      RaiseWarning('Attempted to access a Panel that appears to be an invalid pointer');
+      RaiseWarning('Attempted to access a Region that appears to be an invalid pointer');
       result := nil;
     end;
   end;

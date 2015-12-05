@@ -457,6 +457,42 @@ interface
   /// @getter Width
   function RegionWidth(r: Region): Longint;
 
+  /// Returns the font used for text rendered in this region.
+  ///
+  /// @lib
+  ///
+  /// @class Region
+  /// @getter Font
+  function RegionFont(r: Region): Font;
+
+  /// Sets the font for the region
+  /// 
+  /// @lib 
+  /// @sn region:%s setFont:%s
+  ///
+  /// @class Region
+  /// @setter Font
+  procedure RegionSetFont(r: REgion; f: Font);
+
+  /// Returns the font alignment of text for this region.
+  ///
+  /// @lib
+  ///
+  /// @class Region
+  /// @getter FontAlignment
+  function RegionFontAlignment(r: Region): FontAlignment;
+
+  /// Allows the font to be set for a region
+  ///
+  /// @lib
+  /// @sn region:%s setFontAlignment:%s
+  ///
+  /// @class Region
+  /// @setter FontAlignment
+  procedure RegionSetFontAlignment(r: Region; align: FontAlignment);
+
+
+
   /// Returns the region from the panel at the point
   ///
   /// @lib
@@ -592,14 +628,6 @@ procedure SelectRadioButton(pnl : Panel; const id: String); overload;
 // = Textbox =
 // ===========
 
-/// returns font of region's textbox (If it has one)
-///
-/// @lib TextBoxFontFromRegion
-///
-/// @class Region
-/// @getter TextboxFont
-function TextBoxFont(r: Region): Font; overload;
-
 /// Gets the textbox text from region
 /// 
 /// @lib TextboxTextWithId
@@ -733,18 +761,6 @@ procedure FinishReadingText();
 /// @lib
 function ActiveTextBoxParent() : Panel;
 
-/// Returns the alignment of the text in textbox passed in as region
-///
-/// @lib TextBoxAlignmentFromRegion
-function TextboxAlignment(r: Region): FontAlignment; overload;
-
-/// Set the textbox alignment of the textbox passed in
-///
-/// @lib TextBoxSetAlignmentFromRegion
-/// @sn textboxForRegion:%s setAlignment:%s
-procedure TextboxSetAlignment(r: Region; align: FontAlignment);
-
-
 //---------------------------------------------------------------------------
 //Lists
 //---------------------------------------------------------------------------
@@ -779,14 +795,6 @@ procedure ListSetActiveItemIndex(const id : String; idx: Longint);
 /// @lib ListSet
 /// @sn listSetActiveItemFromPane:%s withId:%s at:%s
 procedure ListSetActiveItemIndex(pnl : Panel; const id : String; idx: Longint);
-
-/// Returns the font of the list of the region
-///
-/// @lib ListFontFromRegion
-///
-/// @class Region
-/// @getter ListFont
-function ListFont(r: Region): Font; overload;
 
 /// Returns the text of the item at index idx from the List of the Region
 ///
@@ -1038,31 +1046,9 @@ function ListStartAt(r: Region): Longint;
 /// @setter ListStartAt
 procedure ListSetStartAt(r: Region; idx: Longint);
 
-/// Returns the font alignment of a list from region
-///
-/// @lib ListFontAlignmentFromRegion
-///
-/// @class Region
-/// @getter ListFontAlignment
-function ListFontAlignment(r: Region): FontAlignment; overload;
-
-/// Returns the font alignment of a list from region
-///
-/// @lib ListSetFontAlignmentFromRegion
-/// @sn listForRegion:%s setFontAlignment:%s
-///
-/// @class Region
-/// @setter ListFontAlignment
-procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
-
 // =========
 // = Label =
 // =========
-
-/// Get Font From Label
-///
-/// @lib LabelFromRegionGetFont
-function  LabelFont(r: Region): Font; overload;
 
 /// Get text From Label
 ///
@@ -1097,18 +1083,6 @@ procedure LabelSetText(r: Region; const newString: String); overload;
 /// @lib LabelOnPanelWithIdSetText
 /// @sn labelOnPanel:%s withId:%s setText:%s
 procedure LabelSetText(pnl: Panel; const id, newString: String); overload;
-
-/// Returns FontAlignment from label given region
-///
-/// @lib LabelAlignementFromRegion
-function LabelAlignment(r: Region): FontAlignment;
-
-/// Sets FontAlignment for label given region
-///
-/// @lib SetLabelAlignmentFromRegion
-/// @sn labelFromRegion:%s setAlignment:%s
-procedure LabelSetAlignment(r: Region; align: FontAlignment);
-
 
 // ===============
 // = Dialog Code =
@@ -1301,23 +1275,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   /// @method SelectRadioButton
   procedure SelectRadioButton(rGroup: GUIRadioGroup; idx: LongInt); overload; forward;
 
-  /// returns font of textbox
-  ///
-  /// @lib
-  ///
-  /// @class Textbox
-  /// @getter Font
-  function TextBoxFont(tb: GUITextBox): Font; overload; forward;
-
-  /// Sets the textbox font
-  /// 
-  /// @lib 
-  /// @sn textbox:%s setFont:%s
-  ///
-  /// @class Textbox
-  /// @setter Font
-  procedure TextboxSetFont(Tb: GUITextbox; f: Font); forward;
-
   /// Gets the textbox text
   /// 
   /// @lib
@@ -1362,23 +1319,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   /// @lib
   function GUITextBoxOfTextEntered(): GUITextbox; forward;
 
-  /// Gets the textbox alignmnet of the textbox
-  ///
-  /// @lib
-  ///
-  /// @class Textbox
-  /// @getter Alignmnet
-  function TextboxAlignment(tb: GUITextbox): FontAlignment; overload; forward;
-
-  /// Set the textbox alignment of the textbox
-  ///
-  /// @lib
-  /// @sn textbox:%s setAlignment:%s
-  ///
-  /// @class Textbox
-  /// @setter Alignmnet
-  procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment); forward;
-
   /// The the TextBox from an ID
   ///
   /// @lib
@@ -1400,23 +1340,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   /// @class Region
   /// @getter List
   function ListFromRegion(r: RegionPtr): GUIList; overload;  forward;
-
-  /// Returns the font of the list
-  ///
-  /// @lib
-  ///
-  /// @class GUIList
-  /// @getter Font
-  function ListFont(lst: GUIList): Font; overload; forward;
-
-  /// Sets the font of the list to font f
-  ///
-  /// @lib
-  /// @sn list:%s setFont:%s
-  ///
-  /// @class GUIList
-  /// @setter Font
-  procedure ListSetFont(lst: GUIList; f: font); forward;
 
   /// Returns the text of the item at index idx
   ///
@@ -1562,23 +1485,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   /// @setter StartAt
   procedure ListSetStartAt(lst: GUIList; idx: Longint); forward;
 
-  /// Returns the font alignment of a list
-  ///
-  /// @lib ListFontAlignment
-  ///
-  /// @class GUIList
-  /// @getter FontAlignment
-  function ListFontAlignment(lst: GUIList): FontAlignment; overload; forward;
-
-  /// Returns the font alignment of a list
-  ///
-  /// @lib ListSetFontAlignment
-  /// @sn list:%s setFontAlignment:%s
-  ///
-  /// @class GUIList
-  /// @setter FontAlignment
-  procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload; forward;
-
   /// Returns the largest index that startingAt should be set to.
   ///
   /// @lib ListLargestStartIndex
@@ -1594,25 +1500,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   /// @class GUIList
   /// @getter ScrollIncrement
   function ListScrollIncrement(lst: GUIList): Longint; forward;
-
-
-
-  /// Get Font From Label
-  ///
-  /// @lib
-  /// @class Label
-  /// @getter Font
-  ///
-  function  LabelFont(l: GUILabel): Font; overload; forward;
-
-  /// Set Font For Label
-  ///
-  /// @lib
-  /// @sn label:%s setFont:%s
-  ///
-  /// @class Label
-  /// @method setFont
-  procedure LabelSetFont(l: GUILabel; const s: String); forward;
 
   /// Get text From Label
   ///
@@ -1634,26 +1521,6 @@ function CheckboxFromRegion(r: RegionPtr): GUICheckbox; forward;
   ///
   /// @lib
   function  LabelFromRegion(r: RegionPtr): GUILabel; forward;
-
-  /// Returns FontAlignment from label given region
-  ///
-  /// @lib
-  ///
-  /// @class Label
-  /// @getter FontAlignment
-  function LabelAlignment(lbl: GUILabel): FontAlignment; forward;
-
-  /// Sets FontAlignment for label given region
-  ///
-  /// @lib SetLabelAlignment
-  /// @sn label:%s setAlignment:%s
-  ///
-  /// @class Label
-  /// @setter FontAlignment
-  procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment); forward;
-
-
-
 
 
 
@@ -1896,8 +1763,8 @@ begin
     DrawText(TextboxText(forRegion), 
             VectorForecolorToDraw(forRegion),
             VectorBackcolorToDraw(forRegion), 
-            TextboxFont(forRegion), 
-            TextboxAlignment(forRegion),
+            forRegion^.font, 
+            forRegion^.alignment,
             TextboxTextArea(area),
             OptionToScreen());
 end;
@@ -2104,7 +1971,7 @@ begin
       imagePt   := RectangleTopLeft(itemArea);    
       imagePt.y := imagePt.y + (itemArea.height - BitmapCellHeight(tempList^.items[itemidx].image)) / 2.0;
       
-      _ResizeItemArea(itemTextArea, imagePt, ListFontAlignment(tempList), tempList^.items[itemIdx].image);
+      _ResizeItemArea(itemTextArea, imagePt, forRegion^.alignment, tempList^.items[itemIdx].image);
     end;
     
     // if selected draw the alternate background
@@ -2138,7 +2005,8 @@ begin
       DrawText(ListItemText(tempList, itemIdx), 
                VectorForecolorToDraw(forRegion), 
                ColorTransparent, 
-               ListFont(tempList), ListFontAlignment(tempList), 
+               forRegion^.font, 
+               forRegion^.alignment, 
                itemTextArea,
                OptionToScreen());
     end
@@ -2147,7 +2015,8 @@ begin
       DrawText(ListItemText(tempList, itemIdx), 
                VectorBackcolorToDraw(forRegion), 
                ColorTransparent,
-               ListFont(tempList), ListFontAlignment(tempList),
+               forRegion^.font, 
+               forRegion^.alignment,
                itemTextArea,
                OptionToScreen());
     end;
@@ -2163,8 +2032,8 @@ begin
   DrawText(LabelText(forRegion), 
            VectorForecolorToDraw(forRegion),
            ColorTransparent, //VectorBackcolorToDraw(forRegion), 
-           LabelFont(forRegion),
-           LabelAlignment(Region(forRegion)), 
+           forRegion^.font,
+           forRegion^.alignment, 
            TextboxTextArea(area),
            OptionToScreen());
 end;
@@ -2814,50 +2683,46 @@ begin
   lb^.contentString := newString;
 end;
 
-procedure LabelSetFont(l: GUILabel; const s: String);
+procedure RegionSetFont(r: Region; f: Font);
+var
+  rp: RegionPtr;
 begin
-  if not assigned(l) then exit;
-  l^.font := FontNamed(s);
+  rp := ToRegionPtr(r);
+  if not assigned(rp) then exit;
+  rp^.font := f;
 end;
 
-function LabelFont(r: Region): Font; overload;
-begin
-  result := LabelFont(LabelFromRegion(r));
-end;
-
-function LabelFont(l: GUILabel): Font;
+function RegionFont(r: Region): Font;
+var
+  rp: RegionPtr;
 begin
   result := nil;
-  if not assigned(l) then exit;
+  rp := ToRegionPtr(r);
+  if not assigned(rp) then exit;
   
-  result := l^.font;
+  result := rp^.font;
 end;
 
-function LabelAlignment(lbl: GUILabel): FontAlignment;
+function RegionFontAlignment(r: Region): FontAlignment;
+var
+  rp: RegionPtr;
 begin
   result := AlignLeft;
-  if not assigned(lbl) then exit;
+  rp := ToRegionPtr(r);
+  if not assigned(rp) then exit;
   
-  result := lbl^.alignment;
+  result := rp^.alignment;
 end;
 
-function LabelAlignment(r: Region): FontAlignment;
+procedure RegionSetFontAlignment(r: Region; align: FontAlignment);
+var
+  rp: RegionPtr;
 begin
-  result := LabelAlignment(LabelFromRegion(r));
-end;
-
-procedure LabelSetAlignment(tb: GUILabel; align: FontAlignment);
-begin
-  if not assigned(tb) then exit;
+  rp := ToRegionPtr(r);
+  if not assigned(rp) then exit;
   
-  tb^.alignment := align;
+  rp^.alignment := align;
 end;
-
-procedure LabelSetAlignment(r: Region; align: FontAlignment);
-begin
-  LabelSetAlignment(LabelFromRegion(r), align);
-end;
-
 
 function LabelText(lb: GUILabel): String; overload;
 begin
@@ -2885,26 +2750,6 @@ end;
 //---------------------------------------------------------------------------------------
 // Textbox Code
 //---------------------------------------------------------------------------------------
-
-procedure TextboxSetFont(Tb: GUITextbox; f: font);
-begin
-  if not(assigned(tb)) OR not(assigned(f)) then exit;
-
-  Tb^.font := f;
-end;
-
-function TextBoxFont(r: Region): Font; overload;
-begin
-  result := TextBoxFont(TextBoxFromRegion(r));
-end;
-
-function TextBoxFont(tb: GUITextBox): Font; overload;
-begin
-  result := nil;
-  if not assigned(tb) then exit;
-  
-  result := tb^.font;
-end;
 
 procedure TextboxSetText(const id, s: string); overload;
 begin
@@ -3049,33 +2894,8 @@ begin
                             GUIC.foregroundClr,
                             GUIC.backgroundClr, 
                             t^.lengthLimit, 
-                            t^.Font, 
+                            t^.forRegion^.Font, 
                             InsetRectangle(TextboxTextArea(t^.forRegion), 1)); // Need to inset 1 further to match printing text lines
-end;
-
-function TextboxAlignment(r: Region): FontAlignment; overload;
-begin
-  result := TextboxAlignment(TextBoxFromRegion(r));
-end;
-
-function TextboxAlignment(tb: GUITextbox): FontAlignment; overload;
-begin
-  result := AlignLeft;
-  if not assigned(tb) then exit;
-  
-  result := tb^.alignment;
-end;
-
-procedure TextboxSetAlignment(tb: GUITextbox; align: FontAlignment);
-begin
-  if not assigned(tb) then exit;
-  
-  tb^.alignment := align;
-end;
-
-procedure TextboxSetAlignment(r: Region; align: FontAlignment);
-begin
-  TextboxSetAlignment(TextBoxFromRegion(r), align);
 end;
 
 //---------------------------------------------------------------------------------------
@@ -3123,28 +2943,6 @@ end;
 procedure ListSetActiveItemIndex(const id : String; idx : LongInt);
 begin
   ListSetActiveItemIndex(ListFromRegion(RegionWithID(id)),idx);
-end;
-
-
-procedure ListSetFont(lst: GUIList; f: font);
-begin
-  if not(assigned(lst)) OR not(assigned(f)) then exit;
-     
-  lst^.font := f;
-end;
-
-
-function ListFont(r: Region): Font; overload;
-begin
-  result := ListFont(ListFromRegion(r));
-end;
-
-function ListFont(lst: GUIList): Font; overload;
-begin
-  result := nil;
-  if not assigned(lst) then exit;
-  
-  result := lst^.font;
 end;
 
 function ListItemText(r: Region; idx: Longint): String; overload;
@@ -3471,31 +3269,6 @@ end;
 procedure ListSetStartAt(r: Region; idx: Longint);
 begin
   ListSetStartAt(ListFromRegion(r), idx);
-end;
-
-function ListFontAlignment(r: Region): FontAlignment; overload;
-begin
-  result := ListFontAlignment(ListFromRegion(r));
-end;
-
-function ListFontAlignment(lst: GUIList): FontAlignment; overload;
-begin
-  result := AlignLeft;
-  if not assigned(lst) then exit;
-  
-  result := lst^.alignment;
-end;
-
-procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
-begin
-  ListSetFontAlignment(ListFromRegion(r), align);
-end;
-
-procedure ListSetFontAlignment(lst: GUIList; align: FontAlignment); overload;
-begin
-  if not assigned(lst) then exit;
-  
-  lst^.alignment := align;
 end;
 
 function ListLargestStartIndex(lst: GUIList): Longint;
@@ -3948,8 +3721,8 @@ function StringToKind(const s: String): GUIElementKind;
     //Format is
     // 1, 2, 3, 4, 5, 6,   7,    8,     9, 
     // x, y, w, h, 5, id , font, align, text
-    newLbl.font           := FontNamed(Trim(ExtractDelimited(7, d, [','])));
-    newLbl.alignment      := TextAlignmentFrom(Trim(ExtractDelimited(8, d, [','])));
+    forRegion^.font       := FontNamed(Trim(ExtractDelimited(7, d, [','])));
+    forRegion^.alignment  := TextAlignmentFrom(Trim(ExtractDelimited(8, d, [','])));
     newLbl.contentString  := Trim(ExtractDelimited(9, d, [',']));
     
     SetLength(result^.Labels, Length(result^.Labels) + 1);
@@ -4013,9 +3786,9 @@ function StringToKind(const s: String): GUIElementKind;
       exit;
     end;
     
-    newTextbox.font           := FontNamed(Trim(ExtractDelimited(7, data, [','])));
+    r^.font                   := FontNamed(Trim(ExtractDelimited(7, data, [','])));
     newTextbox.lengthLimit    := StrToInt(Trim(ExtractDelimited(8, data, [','])));
-    newTextBox.alignment      := TextAlignmentFrom(Trim(ExtractDelimited(9, data, [','])));
+    r^.alignment              := TextAlignmentFrom(Trim(ExtractDelimited(9, data, [','])));
     newTextBox.contentString  := Trim(ExtractDelimited(10, data, [',']));
     newTextBox.forRegion      := r;
     
@@ -4036,8 +3809,8 @@ function StringToKind(const s: String): GUIElementKind;
     newList.columns         := StrToInt(Trim(ExtractDelimited(7, data, [','])));
     newList.rows            := StrToInt(Trim(ExtractDelimited(8, data, [','])));
     newList.activeItem      := StrToInt(Trim(ExtractDelimited(9, data, [','])));
-    newList.font            := FontNamed(Trim(ExtractDelimited(10, data, [','])));
-    newList.alignment       := TextAlignmentFrom(Trim(ExtractDelimited(11, data, [','])));
+    r^.font                 := FontNamed(Trim(ExtractDelimited(10, data, [','])));
+    r^.alignment            := TextAlignmentFrom(Trim(ExtractDelimited(11, data, [','])));
     newList.scrollSize      := StrToInt(Trim(ExtractDelimited(12, data, [','])));;
     newList.verticalScroll  := LowerCase(Trim(ExtractDelimited(13, data, [',']))) = 'v';
     
@@ -4891,9 +4664,10 @@ begin
   
   // WriteLn('tw: ', TextWidth(TextboxFont(pathTxt), selectedPath));
   // WriteLn('rw: ', RegionWidth(pathTxt));
-  if TextWidth(TextboxFont(pathTxt), selectedPath) > RegionWidth(pathTxt) then
-    TextboxSetAlignment(pathTxt, AlignRight)
-  else TextboxSetAlignment(pathTxt, AlignLeft);
+  if TextWidth(RegionFont(pathTxt), selectedPath) > RegionWidth(pathTxt) then
+    RegionSetFontAlignment(pathTxt, AlignRight)
+  else 
+    RegionSetFontAlignment(pathTxt, AlignLeft);
   
   TextboxSetText(pathTxt, selectedPath);
 end;
