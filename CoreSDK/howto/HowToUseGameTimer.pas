@@ -20,10 +20,10 @@ begin
         DrawText('[S]top', ColorBlack, 0, 20);
         DrawText('[B]egin', ColorBlack, 0, 30);
         
-        if KeyTyped(VK_P) then PauseTimer(gameTime);
-        if KeyTyped(VK_R) then ResumeTimer(gameTime);
-        if KeyTyped(VK_S) then StopTimer(gameTime);
-        if KeyTyped(VK_B) then StartTimer(gameTime);
+        if KeyTyped(PKey) then PauseTimer(gameTime);
+        if KeyTyped(RKey) then ResumeTimer(gameTime);
+        if KeyTyped(SKey) then StopTimer(gameTime);
+        if KeyTyped(BKey) then StartTimer(gameTime);
 
         ticks := TimerTicks(gameTime);
         Str(ticks, toDraw);

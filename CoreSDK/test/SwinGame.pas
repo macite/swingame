@@ -2147,7 +2147,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function KeyDown(key: KeyCode): Boolean; overload;
 
   // The KeyName function returns a string name for a given `KeyCode`. For 
-  // example, vk_Comma returns the string 'Comma'. This function could be used
+  // example, CommaKey returns the string 'Comma'. This function could be used
   // to display more meaningful key names for configuring game controls, etc.
   function KeyName(key: KeyCode): String; overload;
 

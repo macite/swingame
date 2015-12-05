@@ -33,10 +33,10 @@ begin
     repeat
     	ProcessEvents();
 
-    	if KeyTyped(vk_Space) then CreateNewBall();
-    	if KeyTyped(vk_1) then SelectSpritePack('Default');
-    	if KeyTyped(vk_2) then SelectSpritePack('Other');
-    	if KeyTyped(vk_3) then SelectSpritePack('Non Existant');
+    	if KeyTyped(SpaceKey) then CreateNewBall();
+    	if KeyTyped(Key1) then SelectSpritePack('Default');
+    	if KeyTyped(Key2) then SelectSpritePack('Other');
+    	if KeyTyped(Key3) then SelectSpritePack('Non Existant');
 
     	ClearScreen(ColorWhite);
     	DrawText('Pack: ' + CurrentSpritePack(), ColorBlack, 0, 0);

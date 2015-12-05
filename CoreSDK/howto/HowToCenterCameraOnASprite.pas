@@ -19,10 +19,10 @@ begin
     
     ClearScreen(ColorWhite);    
     
-    if KeyDown(vk_UP) then  SpriteSetY(sSprite, SpriteY(sSprite)-1);          
-    if KeyDown(vk_DOWN) then SpriteSetY(sSprite, SpriteY(sSprite)+1);    
-    if KeyDown(vk_LEFT) then SpriteSetX(sSprite, SpriteX(sSprite)-1);    
-    if KeyDown(vk_RIGHT) then SpriteSetX(sSprite, SpriteX(sSprite)+1);    
+    if KeyDown(UPKey) then  SpriteSetY(sSprite, SpriteY(sSprite)-1);          
+    if KeyDown(DOWNKey) then SpriteSetY(sSprite, SpriteY(sSprite)+1);    
+    if KeyDown(LEFTKey) then SpriteSetX(sSprite, SpriteX(sSprite)-1);    
+    if KeyDown(RIGHTKey) then SpriteSetX(sSprite, SpriteX(sSprite)+1);    
     
     FillRectangle(RGBColor(205,201,201), -150, 250, 1150, 20);    
     FillRectangle(RGBColor(205,201,201), -150, 330, 1150, 20);
@@ -44,7 +44,7 @@ begin
     FillRectangle(RGBColor(205,201,201), 320, -275, 20, 1150);    
     FillRectangle(RGBColor(205,201,201), 510, -275, 20, 1150);
             
-    if KeyTyped(vk_SPACE) then CenterCameraOn(sSprite, 0, 0);    
+    if KeyTyped(SPACEKey) then CenterCameraOn(sSprite, 0, 0);    
         
     DrawTextOnScreen(PointToString(CameraPos()), ColorBlack, 0, 0);    
     DrawSprite(sSprite);    

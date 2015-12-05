@@ -127,18 +127,18 @@ end;
 
 procedure HandleInput(var p: Player);
 begin
-	if KeyDown(VK_RIGHT) then
+	if KeyDown(RIGHTKey) then
 	begin
 		if SpriteX(p.fighter) < ScreenWidth() - SPRITE_WIDTH then 
 			SpriteSetDx(p.fighter, PLAYER_SPEED);
 	end
-	else if KeyDown(VK_LEFT) then
+	else if KeyDown(LEFTKey) then
 	begin
 		if SpriteX(p.fighter) > 0 then
 			SpriteSetDx(p.fighter, -PLAYER_SPEED);
 	end;
 
-	if KeyTyped(VK_SPACE) then
+	if KeyTyped(SPACEKey) then
 	begin
 		FireBullet(p.playerBlt, p.fighter, true);
 	end;

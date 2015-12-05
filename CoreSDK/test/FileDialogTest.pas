@@ -36,7 +36,7 @@ begin
     DrawFramerate(0,0);
     RefreshScreen();
     
-    if KeyTyped(vk_s) then TakeScreenShot('FileDialogTest');
+    if KeyTyped(sKey) then TakeScreenShot('FileDialogTest');
   until WindowCloseRequested() or DialogComplete() or DialogCancelled();
   
   WriteLn(DialogPath());

@@ -27,10 +27,10 @@ begin
 
         UpdateSprite(explosion);
 
-        if KeyTyped(VK_A) then SpriteStartAnimation(explosion, 'FireExplosion')
-        else if KeyDown(VK_T) then DrawText('Hi!!!', ColorRed, FontNamed('harabaraText'), 120, 125)
-        else if KeyTyped(VK_S) then PlaySoundEffect(SoundEffectNamed('danceBeat'))
-        else if KeyTyped(VK_M) then PlayMusic(MusicNamed('danceMusic'), 1);
+        if KeyTyped(AKey) then SpriteStartAnimation(explosion, 'FireExplosion')
+        else if KeyDown(TKey) then DrawText('Hi!!!', ColorRed, FontNamed('harabaraText'), 120, 125)
+        else if KeyTyped(SKey) then PlaySoundEffect(SoundEffectNamed('danceBeat'))
+        else if KeyTyped(MKey) then PlayMusic(MusicNamed('danceMusic'), 1);
 
         RefreshScreen(60);
     until WindowCloseRequested();

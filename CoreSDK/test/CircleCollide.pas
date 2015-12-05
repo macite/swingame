@@ -287,14 +287,14 @@ begin
     // 
     // mouseOut := VectorOutOfRectFromCircle(temp, r2, rect, mouseMvmt);
     
-    if KeyDown(vk_Right) then mouseMvmt := MatrixMultiply(rm, mouseMvmt);
-    if KeyDown(vk_Left) then mouseMvmt := MatrixMultiply(nrm, mouseMvmt);
+    if KeyDown(RightKey) then mouseMvmt := MatrixMultiply(rm, mouseMvmt);
+    if KeyDown(LeftKey) then mouseMvmt := MatrixMultiply(nrm, mouseMvmt);
       
-    if KeyDown(vk_R) then 
+    if KeyDown(RKey) then 
     begin
       tmp := AddVectors(InvertVector(mouseMvmt), temp);
       MoveMouse(Round(tmp.x), Round(tmp.y));      
-    end else if KeyDown(vk_F) then 
+    end else if KeyDown(FKey) then 
     begin
       tmp := AddVectors(mouseMvmt, temp);
       MoveMouse(Round(tmp.x), Round(tmp.y));      

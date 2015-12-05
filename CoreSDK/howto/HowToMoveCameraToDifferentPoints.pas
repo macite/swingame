@@ -11,16 +11,16 @@ begin
     ProcessEvents();  
     
     //Move the camera by KeyBoard
-    if KeyDown(vk_UP) then MoveCameraBy(0, -1);
-    if KeyDown(vk_DOWN) then MoveCameraBy(0, +1);
-    if KeyDown(vk_LEFT) then MoveCameraBy(-1, 0);
-    if KeyDown(vk_RIGHT) then MoveCameraBy(+1, 0);
+    if KeyDown(UPKey) then MoveCameraBy(0, -1);
+    if KeyDown(DOWNKey) then MoveCameraBy(0, +1);
+    if KeyDown(LEFTKey) then MoveCameraBy(-1, 0);
+    if KeyDown(RIGHTKey) then MoveCameraBy(+1, 0);
         
     
     // Move Camera to a certain point
-    if KeyTyped(vk_A) then MoveCameraTo(400, 450); 
-    if KeyTyped(vk_B) then MoveCameraTo(1400, 1300);
-    if KeyTyped(vk_C) then MoveCameraTo(-500, -300);        
+    if KeyTyped(AKey) then MoveCameraTo(400, 450); 
+    if KeyTyped(BKey) then MoveCameraTo(1400, 1300);
+    if KeyTyped(CKey) then MoveCameraTo(-500, -300);        
     
     ClearScreen(ColorWhite);
     

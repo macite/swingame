@@ -21,7 +21,7 @@ begin
     ClearScreen(ColorWhite);
     DrawText('Press Space to progress :)', ColorBlack, 10, 10);
     DrawBitmap ('empty', 46, 180);
-    if KeyTyped(VK_SPACE) then
+    if KeyTyped(SpaceKey) then
     begin
         width := width + 31;
         partRect := RectangleFrom(0, 0, width, 39);

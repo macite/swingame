@@ -27,9 +27,9 @@ begin
         UpdateSprite(explosion);
 
         ProcessEvents();
-        if KeyTyped(VK_E) then SpriteStartAnimation(explosion, 'explosion');
-        if KeyTyped(VK_I) then SpriteStartAnimation(explosion, 'implosion');
-        if KeyTyped(VK_L) then SpriteStartAnimation(explosion, 'explosion_loop');
+        if KeyTyped(EKey) then SpriteStartAnimation(explosion, 'explosion');
+        if KeyTyped(IKey) then SpriteStartAnimation(explosion, 'implosion');
+        if KeyTyped(LKey) then SpriteStartAnimation(explosion, 'explosion_loop');
 
     until WindowCloseRequested();
     FreeSprite(explosion);

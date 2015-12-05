@@ -18,25 +18,25 @@ begin
     ProcessEvents();
     ClearScreen(ColorWhite);
 
-    if KeyDown(VK_RIGHT) then
+    if KeyDown(RIGHTKey) then
     begin
         SpriteSetDx(ball, 1);
         SpriteSetDy(ball, 0);
     end
 
-    else if KeyDown(VK_LEFT) then
+    else if KeyDown(LEFTKey) then
     begin
         SpriteSetDx(ball, -1);
         SpriteSetDy(ball, 0);
     end
 
-    else if KeyDown(VK_UP) then
+    else if KeyDown(UPKey) then
     begin
         SpriteSetDx(ball, 0);
         SpriteSetDy(ball, -1);
     end
 
-    else if KeyDown(VK_DOWN) then
+    else if KeyDown(DOWNKey) then
     begin
         SpriteSetDx(ball, 0);
         SpriteSetDy(ball, 1);

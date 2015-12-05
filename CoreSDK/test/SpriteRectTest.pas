@@ -32,15 +32,15 @@ begin
       FillRectangle(ColorWhite, x, y, 640 - Round(x) - 10, 10);
     
     
-    if KeyDown(vk_UP) then y -= 1;
-    if KeyDown(vk_DOWN) then y += 1;
-    if KeyDown(vk_LEFT) then x -= 1;
-    if KeyDown(vk_RIGHT) then x += 1;
+    if KeyDown(UPKey) then y -= 1;
+    if KeyDown(DOWNKey) then y += 1;
+    if KeyDown(LEFTKey) then x -= 1;
+    if KeyDown(RIGHTKey) then x += 1;
     
-    if KeyDown(vk_a) then SpriteSetX(s, SpriteX(s) - 1);
-    if KeyDown(vk_s) then SpriteSetY(s, SpriteY(s) + 1);
-    if KeyDown(vk_d) then SpriteSetX(s, SpriteX(s) + 1);
-    if KeyDown(vk_w) then SpriteSetY(s, SpriteY(s) - 1);
+    if KeyDown(aKey) then SpriteSetX(s, SpriteX(s) - 1);
+    if KeyDown(sKey) then SpriteSetY(s, SpriteY(s) + 1);
+    if KeyDown(dKey) then SpriteSetX(s, SpriteX(s) + 1);
+    if KeyDown(wKey) then SpriteSetY(s, SpriteY(s) - 1);
     
     if x < 0 then x := 0;
     if y < 0 then y := 0;

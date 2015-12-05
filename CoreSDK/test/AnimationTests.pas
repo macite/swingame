@@ -38,8 +38,8 @@ begin
     
     if MouseClicked(LeftButton) then SpriteToggleLayerVisible(s, 'count');
     if MouseClicked(RightButton) then SpriteToggleLayerVisible(s, 'explosion');
-    if KeyTyped(vk_Up) then SpriteBringLayerForward(s, 1);
-    if KeyTyped(vk_Down) then SpriteSendLayerBackward(s, 0);
+    if KeyTyped(UpKey) then SpriteBringLayerForward(s, 1);
+    if KeyTyped(DownKey) then SpriteSendLayerBackward(s, 0);
     
     UpdateSprite(s);
     

@@ -458,7 +458,7 @@ begin
     AddBitmapToPalette(m);
    end;
 
-   if KeyTyped(vk_DELETE) and (ListActiveItemIndex(RegionWithId('lst.Palette'))<>-1) then
+   if KeyTyped(DELETEKey) and (ListActiveItemIndex(RegionWithId('lst.Palette'))<>-1) then
    begin
    //writeln(ListActiveItemIndex(RegionWithId('lst.Palette')));
        MapRemoveBitmap(m, ListActiveItemIndex(RegionWithId('lst.Palette')));
@@ -522,13 +522,13 @@ end;
 procedure UpdateCamera();
 begin
 
-  if KeyDown(VK_LEFT) then
+  if KeyDown(LEFTKey) then
     MoveCameraBy(-5,0)
-  else if KeyDown(VK_RIGHT) then
+  else if KeyDown(RIGHTKey) then
     MoveCameraBy(5,0)
-  else if KeyDown(VK_UP) then
+  else if KeyDown(UPKey) then
     MoveCameraBy(0,-5)
-  else if KeyDown(VK_DOWN) then
+  else if KeyDown(DOWNKey) then
     MoveCameraBy(0,5)
 end;
 

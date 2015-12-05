@@ -15,22 +15,22 @@ begin
   repeat // The game loop...
     // Update the game
     ProcessEvents();
-    if KeyDown(vk_UP) then
+    if KeyDown(UPKey) then
     begin
       r.y -= 1;
       if r.y < -20 then r.y := 240;
     end;
-    if KeyDown(vk_DOWN) then
+    if KeyDown(DOWNKey) then
     begin
       r.y += 1;
       if r.y > 240 then r.y := -20;
     end;
-    if KeyDown(vk_LEFT) then
+    if KeyDown(LEFTKey) then
     begin
       r.x -= 1;
       if r.x < -40 then r.x := 320;
     end;
-    if KeyDown(vk_RIGHT) then
+    if KeyDown(RIGHTKey) then
     begin
       r.x += 1;
       if r.x > 320 then r.x := -40;

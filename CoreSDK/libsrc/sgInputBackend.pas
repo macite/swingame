@@ -174,7 +174,7 @@ implementation
   var
     i: Integer;
   begin
-    // if (kyCode = LongInt(vk_LSHIFT)) or (kyCode = LongInt(vk_RSHIFT)) then exit;
+    // if (kyCode = LongInt(LSHIFTKey)) or (kyCode = LongInt(RSHIFTKey)) then exit;
     
     for i := 0 to High(_KeyDown) do
     begin
@@ -223,15 +223,15 @@ implementation
       oldStr := _tempString;
             
       //If the key is not a control character
-      if (kyCode = LongInt(vk_BACKSPACE)) and (Length(_tempString) > 0) then
+      if (kyCode = LongInt(BACKSPACEKey)) and (Length(_tempString) > 0) then
       begin
          _tempString := Copy(_tempString, 1, Length(_tempString) - 1);
       end
-      else if (kyCode = LongInt(vk_RETURN)) or (kyCode = LongInt(vk_KP_ENTER)) then
+      else if (kyCode = LongInt(RETURNKey)) or (kyCode = LongInt(KeyPadENTER)) then
       begin
         _readingString := false;
       end
-      else if kyCode = LongInt(vk_ESCAPE) then
+      else if kyCode = LongInt(ESCAPEKey) then
       begin
         _tempString := '';
         _readingString := false;

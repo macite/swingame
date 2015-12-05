@@ -20,22 +20,22 @@ begin
   repeat // The game loop...
     ProcessEvents();
     
-    if KeyDown(vk_RCTRL) OR KeyDown(vk_LCTRL) then
+    if KeyDown(RightCtrlKey) OR KeyDown(LeftCtrlKey) then
     begin
-      if KeyTyped(vk_1) then sndEffect := SoundEffectNamed('chipmunk.ogg');
-      if KeyTyped(vk_2) then sndEffect := SoundEffectNamed('bells.ogg');
-      if KeyTyped(vk_3) then sndEffect := SoundEffectNamed('camera.ogg');
-      if KeyTyped(vk_4) then sndEffect := SoundEffectNamed('comedy_boing.ogg');
-      if KeyTyped(vk_5) then sndEffect := SoundEffectNamed('dinosaur.ogg');
-      if KeyTyped(vk_6) then sndEffect := SoundEffectNamed('dog_bark.ogg');
+      if KeyTyped(Key1) then sndEffect := SoundEffectNamed('chipmunk.ogg');
+      if KeyTyped(Key2) then sndEffect := SoundEffectNamed('bells.ogg');
+      if KeyTyped(Key3) then sndEffect := SoundEffectNamed('camera.ogg');
+      if KeyTyped(Key4) then sndEffect := SoundEffectNamed('comedy_boing.ogg');
+      if KeyTyped(Key5) then sndEffect := SoundEffectNamed('dinosaur.ogg');
+      if KeyTyped(Key6) then sndEffect := SoundEffectNamed('dog_bark.ogg');
     end
     else
     begin
-      if KeyTyped(vk_1) then PlaySoundEffect(sndEffect);
-      if KeyTyped(vk_2) then PlaySoundEffect(sndEffect, 0.5);
-      if KeyTyped(vk_3) then PlaySoundEffect(sndEffect, 3, 0.25);
-      if KeyTyped(vk_4) then PlaySoundEffect(sndEffect, -1, 0.1);
-      if KeyTyped(vk_5) then if SoundEffectPlaying(sndEffect) then StopSoundEffect(sndEffect);
+      if KeyTyped(Key1) then PlaySoundEffect(sndEffect);
+      if KeyTyped(Key2) then PlaySoundEffect(sndEffect, 0.5);
+      if KeyTyped(Key3) then PlaySoundEffect(sndEffect, 3, 0.25);
+      if KeyTyped(Key4) then PlaySoundEffect(sndEffect, -1, 0.1);
+      if KeyTyped(Key5) then if SoundEffectPlaying(sndEffect) then StopSoundEffect(sndEffect);
     end;
     
     ClearScreen(ColorWhite);
@@ -48,7 +48,7 @@ begin
     DrawText('CTRL + (1-6) load different sound effects', ColorBlue, 'Arial', 14, 20, 200);		
     
     RefreshScreen(60);
-  until WindowCloseRequested() OR KeyTyped(vk_ESCAPE) OR KeyTyped(VK_Q);
+  until WindowCloseRequested() OR KeyTyped(EscapeKey) OR KeyTyped(QKey);
 
   CloseAudio();
   ReleaseAllResources();

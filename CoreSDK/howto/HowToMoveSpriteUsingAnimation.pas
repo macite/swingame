@@ -39,15 +39,15 @@ begin
             SpriteSetDX(myFrog, 0);
             SpriteSetDY(myFrog, 0);
             
-            DoWalking(myFrog, VK_UP, 'WalkBack', 0, -0.25);
-            DoWalking(myFrog, VK_DOWN, 'WalkFront', 0, +0.25);
-            DoWalking(myFrog, VK_LEFT, 'WalkLeft',  -0.25, 0);
-            DoWalking(myFrog, VK_RIGHT, 'WalkRight',  +0.25, 0);
+            DoWalking(myFrog, UPKey, 'WalkBack', 0, -0.25);
+            DoWalking(myFrog, DOWNKey, 'WalkFront', 0, +0.25);
+            DoWalking(myFrog, LEFTKey, 'WalkLeft',  -0.25, 0);
+            DoWalking(myFrog, RIGHTKey, 'WalkRight',  +0.25, 0);
 
-            DoWalking(myFrog, VK_W, 'MoonWalkBack', 0, -0.25);
-            DoWalking(myFrog, VK_S, 'MoonWalkFront', 0, +0.25);
-            DoWalking(myFrog, VK_A, 'MoonWalkLeft', -0.25, 0);
-            DoWalking(myFrog, VK_D, 'MoonWalkRight', +0.25, 0);
+            DoWalking(myFrog, WKey, 'MoonWalkBack', 0, -0.25);
+            DoWalking(myFrog, SKey, 'MoonWalkFront', 0, +0.25);
+            DoWalking(myFrog, AKey, 'MoonWalkLeft', -0.25, 0);
+            DoWalking(myFrog, DKey, 'MoonWalkRight', +0.25, 0);
         end;
     until WindowCloseRequested();
     FreeSprite(myFrog);

@@ -23,16 +23,16 @@ begin
   repeat // The game loop...
     ProcessEvents();
 
-    if KeyTyped(vk_F) then
+    if KeyTyped(FKey) then
     begin
       ToggleFullscreen();
       WriteLn('Toggle Fullscreen');
     end;
 
-    if KeyTyped(vk_S) then 
+    if KeyTyped(SKey) then 
       TakeScreenshot('test');
-    if KeyTyped(vk_B) then ToggleWindowBorder();
-    if KeyTyped(vk_C) then
+    if KeyTyped(BKey) then ToggleWindowBorder();
+    if KeyTyped(CKey) then
     begin
       WriteLn('Centre pixel is ', GetPixelFromScreen(320, 240));
       MoveMouse(320, 240);

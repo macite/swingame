@@ -15,8 +15,8 @@ begin
     
     ClearScreen(ColorWhite);
     
-    if KeyTyped(vk_h) then HideMouse();
-    if KeyTyped(vk_s) then ShowMouse();
+    if KeyTyped(hKey) then HideMouse();
+    if KeyTyped(sKey) then ShowMouse();
     if MouseShown () then DrawText('visible', ColorBlue, 'Arial', 14, 120, 90);
     if NOT MouseShown () then DrawText('not visible', ColorBlue, 'Arial', 14, 120, 90);
     if MouseClicked(LeftButton) then str := FloatToStr(MouseX()) + ',' + FloatToStr(MouseY());
@@ -24,13 +24,13 @@ begin
     if MouseUp(LeftButton) then DrawText('is up', ColorBlue, 'Arial', 14, 200, 140);
     if MouseDown(RightButton) then DrawText('is down', ColorBlue, 'Arial', 14, 200, 165);
     if MouseUp(RightButton) then DrawText('is up', ColorBlue, 'Arial', 14, 200, 165);
-    if KeyDown(vk_DOWN) then
+    if KeyDown(DOWNKey) then
     begin
       mPos := MousePosition();      
       mPos.y += 1;
       MoveMouse(mPos);    
     end;    
-    if KeyDown(vk_UP) then 
+    if KeyDown(UPKey) then 
     begin
       mPos := MousePosition();
       if mPos.y > 0 then
@@ -39,7 +39,7 @@ begin
         MoveMouse(mPos);
       end;  
     end;
-    if KeyDown(vk_LEFT) then 
+    if KeyDown(LEFTKey) then 
     begin
       mPos := MousePosition();
       if mPos.x > 0 then
@@ -48,7 +48,7 @@ begin
         MoveMouse(mPos);
       end;  
     end;
-    if KeyDown(vk_RIGHT) then 
+    if KeyDown(RIGHTKey) then 
     begin
       mPos := MousePosition();
       mPos.x += 1;
@@ -66,7 +66,7 @@ begin
     DrawText('Use Up, Down, Left, Right to move the mouse cursor', ColorBlue, 'Arial', 14, 20, 190);
     
     RefreshScreen(60);    
-  until WindowCloseRequested() OR KeyTyped(vk_ESCAPE) OR KeyTyped(VK_Q);  
+  until WindowCloseRequested() OR KeyTyped(ESCAPEKey) OR KeyTyped(QKey);  
   
   ReleaseAllResources();
 end;

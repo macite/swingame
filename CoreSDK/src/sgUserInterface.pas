@@ -4935,13 +4935,13 @@ procedure UpdateInterface();
     txt: GUITextBox;
   begin
     //Enable tabbing between text boxes
-    if assigned(GUIC.activeTextBox) and KeyTyped(vk_tab) then 
+    if assigned(GUIC.activeTextBox) and KeyTyped(tabKey) then 
     begin
       r := GUIC.activeTextBox;
       pnl := r^.parent;
       txtCount := Length(pnl^.textBoxes);
       
-      if KeyDown(vk_lshift) or KeyDown(vk_rshift) then inc := -1
+      if KeyDown(LeftShiftKey) or KeyDown(RightShiftKey) then inc := -1
       else inc := +1;
       
       // Only tab if more than one textbox

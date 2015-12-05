@@ -57,21 +57,21 @@ begin
     
     time := TimerTicks(t);
     
-    if KeyTyped(vk_p) then PrototypeSetKind(p, pkPoint);
-    if KeyTyped(vk_c) then PrototypeSetKind(p, pkCircle);
-    // if KeyTyped(vk_e) then PrototypeSetKind(p, pkEllipse);
-    if KeyTyped(vk_k) then PrototypeSetKind(p, pkLine);
-    if KeyTyped(vk_t) then PrototypeSetKind(p, pkTriangle);
-    if KeyTyped(vk_j) then PrototypeSetKind(p, pkLineList);
-    if KeyTyped(vk_h) then PrototypeSetKind(p, pkLineStrip);
-    // if KeyTyped(vk_o) then PrototypeSetKind(p, pkPolygon);
-    if KeyTyped(vk_l) then PrototypeSetKind(p, pkTriangleList);
-    if KeyTyped(vk_s) then PrototypeSetKind(p, pkTriangleStrip);
-    if KeyTyped(vk_f) then PrototypeSetKind(p, pkTriangleFan);
+    if KeyTyped(pKey) then PrototypeSetKind(p, pkPoint);
+    if KeyTyped(cKey) then PrototypeSetKind(p, pkCircle);
+    // if KeyTyped(eKey) then PrototypeSetKind(p, pkEllipse);
+    if KeyTyped(kKey) then PrototypeSetKind(p, pkLine);
+    if KeyTyped(tKey) then PrototypeSetKind(p, pkTriangle);
+    if KeyTyped(jKey) then PrototypeSetKind(p, pkLineList);
+    if KeyTyped(hKey) then PrototypeSetKind(p, pkLineStrip);
+    // if KeyTyped(oKey) then PrototypeSetKind(p, pkPolygon);
+    if KeyTyped(lKey) then PrototypeSetKind(p, pkTriangleList);
+    if KeyTyped(sKey) then PrototypeSetKind(p, pkTriangleStrip);
+    if KeyTyped(fKey) then PrototypeSetKind(p, pkTriangleFan);
     
-    if KeyTyped(vk_space) then filled := not filled;
+    if KeyTyped(spaceKey) then filled := not filled;
       
-    //if KeyDown(vk_left) then 
+    //if KeyDown(leftKey) then 
     
     aabb := ShapeAABB(s);
     FillRectangle(ColorLightGrey, aabb);

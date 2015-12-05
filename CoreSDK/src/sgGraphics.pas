@@ -2584,11 +2584,11 @@ implementation
         procedure InnerProcessEvents();
         begin
             ProcessEvents();
-            if (KeyDown(sgTypes.vk_LSUPER) or KeyDown(sgTypes.vk_LCTRL)) and KeyTyped(sgTypes.vk_p) then
+            if (KeyDown(sgTypes.SuperKey) or KeyDown(sgTypes.CtrlKey)) and KeyTyped(PKey) then
             begin
                 isPaused := not isPaused;
             end;
-            if WindowCloseRequested() or KeyDown(sgTypes.vk_Escape) then isSkip := true;
+            if WindowCloseRequested() or KeyDown(sgTypes.EscapeKey) then isSkip := true;
         end;
     begin
 

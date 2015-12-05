@@ -26,7 +26,7 @@ begin
     end;
   
     RefreshScreen(60);
-  until WindowCloseRequested() OR KeyTyped(vk_ESCAPE) OR KeyTyped(VK_Q);
+  until WindowCloseRequested() OR KeyTyped(EscapeKey) OR KeyTyped(QKey);
 
   ReleaseAllResources();
 end;

@@ -10,13 +10,13 @@ begin
     ProcessEvents();      
       
     //Move the camera
-    if KeyDown(vk_UP) then MoveCameraBy(0, -1);
-    if KeyDown(vk_DOWN) then MoveCameraBy(0, +1);
-    if KeyDown(vk_LEFT) then MoveCameraBy(-1, 0);
-    if KeyDown(vk_RIGHT) then MoveCameraBy(+1, 0);
+    if KeyDown(UPKey) then MoveCameraBy(0, -1);
+    if KeyDown(DOWNKey) then MoveCameraBy(0, +1);
+    if KeyDown(LEFTKey) then MoveCameraBy(-1, 0);
+    if KeyDown(RIGHTKey) then MoveCameraBy(+1, 0);
     
     // Move Camera to a certain point
-    if KeyTyped(vk_0) then MoveCameraTo(0, 0);     
+    if KeyTyped(Key0) then MoveCameraTo(0, 0);     
     
     //Draw the scene
     ClearScreen(ColorWhite);    
