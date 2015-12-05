@@ -276,7 +276,7 @@ interface
 //=============================================================================
 implementation
 	uses SysUtils, Classes, 
-			 stringhash, sgTrace,         // libsrc
+			 stringhash, sgTrace, sgBackendTypes,         // libsrc
 			 sgUtils, sgGeometry, sgGraphics, sgCamera, sgShared, sgResources, sgImages, sgDriverText, sgDrawingOptions;
 //=============================================================================
 
@@ -293,8 +293,12 @@ implementation
 	end;
 	
 	procedure _DoFreeFont(var fontToFree: Font);
+	var
+		fp: FontPtr;
 	begin
-		if Assigned(fontToFree) then
+		fp := ToFontPtr(fontToFree);
+
+		if Assigned(fp) then
 		begin
 			{$IFDEF TRACE}
 				Trace('Resources', 'IN', 'FreeFont', 'After calling free notifier');
@@ -305,8 +309,9 @@ implementation
 				{$ENDIF}
 				
 				CallFreeNotifier(fontToFree);
-		TextDriver.CloseFont(fontToFree);
-				Dispose(fontToFree);
+				TextDriver.CloseFont(fp);
+				fp^.id := NONE_PTR;
+				Dispose(fp);
 				fontToFree := nil;
 				{$IFDEF TRACE}
 						Trace('Resources', 'IN', 'FreeFont', 'At end of free font');
@@ -319,8 +324,12 @@ implementation
 	end;
 	
 	procedure FreeFont(var fontToFree: Font);
+	var
+		fp: FontPtr;
 	begin
-		if Assigned(fontToFree) then ReleaseFont(fontToFree^.name);
+		fp := ToFontPtr(fontToFree);
+
+		if Assigned(fp) then ReleaseFont(fp^.name);
 			
 		fontToFree := nil;
 	end;
@@ -330,7 +339,7 @@ implementation
 	function LoadFontNamed(const name, filename: String; size: Longint): Font;
 	var
 		obj: tResourceContainer;
-		fnt: Font;
+		fnt: FontPtr;
 		
 		function _DoLoadFont(const fontName: String; size: Longint): Font;
 		var
@@ -457,17 +466,25 @@ implementation
 	//----------------------------------------------------------------------------
 	
 	procedure FontSetStyle(font: Font; value: FontStyle);
+	var
+		fp: FontPtr;
 	begin
-		if not Assigned(font) then begin RaiseWarning('No font supplied to FontSetStyle'); exit; end;
+		fp := ToFontPtr(font);
+
+		if not Assigned(fp) then begin RaiseWarning('No font supplied to FontSetStyle'); exit; end;
 		//TTF_SetFontStyle(font^.fptr, Longint(value));
-	TextDriver.SetFontStyle(font,value);
+		TextDriver.SetFontStyle(fp, value);
 	end;
 	
 	function FontFontStyle(font: Font): FontStyle;
+	var
+		fp: FontPtr;
 	begin
+		fp := ToFontPtr(font);
+
 		result := NormalFont;
-		if not Assigned(font) then begin RaiseWarning('No font supplied to FontFontStyle'); exit; end;
-		result := TextDriver.GetFontStyle(font);
+		if not Assigned(fp) then begin RaiseWarning('No font supplied to FontFontStyle'); exit; end;
+		result := TextDriver.GetFontStyle(fp);
 	end;
 
 	function IsSet(toCheck, checkFor: FontAlignment): Boolean; overload;
@@ -481,7 +498,7 @@ implementation
 	// a bitmap that will surround these with the given font.
 	// -- note initial values for width and height need to be supplied.
 	//
-	function ToLineArray(str: String; font: Font; var width, height: Longint): StringArray;
+	function ToLineArray(str: String; font: FontPtr; var width, height: Longint): StringArray;
 	var
 		n, i, w, h, newHeight, baseHeight: Longint;
 		subStr: String;
@@ -540,7 +557,7 @@ implementation
 	/// This function prints "str" with font "font" and color "clrFg"
 	///  * onto a rectangle of color "clrBg".
 	///  * It does not pad the text.
-	procedure PrintStrings(dest: Bitmap; font: Font; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	procedure PrintStrings(dest: Bitmap; font: FontPtr; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	var
 		lineSkip, width, height: Longint;
 		lines: StringArray;
@@ -609,17 +626,20 @@ implementation
 		resultBitmap : Bitmap;
 		bitmapSize : Rectangle;
 		w, h: Longint;
+		fp: FontPtr;
 	begin
+		fp := ToFontPtr(font);
+
 		result := nil;
 		// If there's nothing to draw, return NULL
-		if (Length(str) = 0) or (font = nil) then exit;
+		if (Length(str) = 0) or (fp = nil) then exit;
 
 		bitmapSize.x := 0;
 		bitmapSize.y := 0;
 		
 		w := 0;
 		h := 0;
-		ToLineArray(str, font, w, h);
+		ToLineArray(str, fp, w, h);
 
 		bitmapSize.width := w;
 		bitmapSize.height := h;
@@ -628,7 +648,7 @@ implementation
 
 		resultBitmap := CreateBitmap(Round(bitmapSize.width), Round(bitmapSize.height));
 		ClearSurface(resultBitmap, backgroundColor);
-		PrintStrings(resultBitmap, font, str, bitmapSize, clrFg, ColorTransparent, AlignLeft);
+		PrintStrings(resultBitmap, fp, str, bitmapSize, clrFg, ColorTransparent, AlignLeft);
 	
 		result := resultBitmap;
 	end;
@@ -657,8 +677,11 @@ implementation
 	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single; const opts: DrawingOptions); overload;
 	var
 		rect: Rectangle;
+		fp: FontPtr;
 	begin
-		if not Assigned(theFont) then exit;
+		fp := ToFontPtr(theFont);
+
+		if not Assigned(fp) then exit;
 		if not Assigned(opts.dest) then begin RaiseWarning('Cannot draw text, as no destination was supplied'); exit; end;
 		if Length(theText) <= 0 then exit;
 		
@@ -668,7 +691,7 @@ implementation
 
 		rect.width := -1; //TextWidth(theFont, theText); // + 2;
 		rect.height := -1; //TextHeight(theFont, theText); // + 2;
-		PrintStrings(opts.dest, theFont, theText, rect, textColor, ColorTransparent, AlignLeft);
+		PrintStrings(opts.dest, fp, theText, rect, textColor, ColorTransparent, AlignLeft);
 	end;
 
 	procedure DrawText(const theText: String; textColor: Color; theFont: Font; x, y: Single); overload;
@@ -701,13 +724,17 @@ implementation
 //----------------------------------------------------------------------------
 
 	procedure DrawText(const theText: String; textColor, backColor: Color; theFont: Font; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
+	var
+		fp: FontPtr;
 	begin
-		if not Assigned(theFont) then exit;
+		fp := ToFontPtr(theFont);
+
+		if not Assigned(fp) then exit;
 		if not Assigned(opts.dest) then begin RaiseWarning('Cannot draw text, as no destination was supplied'); exit; end;
 		if Length(theText) <= 0 then exit;
 		if (area.width <= 0) or (area.height <= 0) then exit;
 
-		PrintStrings(opts.dest, theFont, theText, area, textColor, backColor, align);
+		PrintStrings(opts.dest, fp, theText, area, textColor, backColor, align);
 	end;
 	
 	procedure DrawText(const theText: String; textColor, backColor: Color; const name: String; align: FontAlignment; const area: Rectangle; const opts: DrawingOptions); overload;
@@ -743,26 +770,32 @@ implementation
 	function TextWidth(theFont: Font; const theText: String): Longint; overload;
 	var
 		height: Longint; //SizeText returns both... store and ignore height
+		fp: FontPtr;
 	begin
+		fp := ToFontPtr(theFont);
+
 		result := 0;
 		height := 0;
-		if length(theText) = 0 then result := 0;
-		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextWidth'); exit; end;
+		if length(theText) = 0 then exit;
+		if not Assigned(fp) then exit;
 
-		ToLineArray(theText, theFont, result, height);
+		ToLineArray(theText, fp, result, height);
 	end;
 
 	/// Calculates the height of a string when drawn with a given font.
 	function TextHeight(theFont: Font; const theText: String): Longint; overload;
 	var
 		width: Longint; //SizeText returns both... store and ignore w
+		fp: FontPtr;
 	begin
+		fp := ToFontPtr(theFont);
+
 		result := 0;
 		width := 0;
-		if length(theText) = 0 then result := 0;
-		if not Assigned(theFont) then begin RaiseWarning('No font supplied to TextHeight'); exit; end;
+		if length(theText) = 0 then exit;
+		if not Assigned(fp) then exit;
 
-		ToLineArray(theText, theFont, width, result);
+		ToLineArray(theText, fp, width, result);
 	end;
 	
 	procedure DrawFramerate(x, y: Single); overload;

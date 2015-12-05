@@ -16,32 +16,32 @@ unit sgDriverText;
 //=============================================================================
 
 interface
-	uses sgTypes, sgDriverTextSDL2;
+	uses sgTypes, sgDriverTextSDL2, sgBackendTypes;
 	
 	type
 		// These function and procedure pointers are required by the TextDriverRecord
 			
 		//loads a TTF font with a font name and size. Return a swingame Font 
-		LoadFontProcedure = function(const fontName, fileName : String; size : Longint) : font;
+		LoadFontProcedure = function(const fontName, fileName : String; size : Longint) : FontPtr;
 		
 		// closes a font.		
-		CloseFontProcedure = procedure(fontToClose : font);
+		CloseFontProcedure = procedure(fontToClose : FontPtr);
 		/// This function prints "str" with font "font" and color "clrFg"
 	  ///  * onto a rectangle of color "clrBg".
 	  ///  * It does not pad the text.
-		PrintStringsProcedure = procedure(dest: Bitmap; font: Font;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+		PrintStringsProcedure = procedure(dest: Bitmap; font: FontPtr;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
     /// This function prints "str" with font "font" and color "clrFg"
     ///  * onto a rectangle of color "clrBg".
     ///  * It does not pad the text.
-		PrintWideStringsProcedure = procedure(dest: Bitmap; font: Font; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+		PrintWideStringsProcedure = procedure(dest: Bitmap; font: FontPtr; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
     // sets the current font and font style.
-		SetFontStyleProcedure = procedure(fontToSet : Font; value: Fontstyle);
+		SetFontStyleProcedure = procedure(fontToSet : FontPtr; value: Fontstyle);
     // gets the current fontstyle of the given font
-		GetFontStyleProcedure = function(font : Font) : FontStyle;	
+		GetFontStyleProcedure = function(font : FontPtr) : FontStyle;	
     //returns the size of a given text using a given font.
-		SizeOfTextProcedure = function(font : Font ;const theText : String ; var w : Longint; var h : Longint) : Integer;
+		SizeOfTextProcedure = function(font : FontPtr ;const theText : String ; var w : Longint; var h : Longint) : Integer;
     //returns the size of a given text using a given font.
-		SizeOfUnicodeProcedure = function(font : Font; theText : WideString; var w : Longint; var h : Longint) : Integer;
+		SizeOfUnicodeProcedure = function(font : FontPtr; theText : WideString; var w : Longint; var h : Longint) : Integer;
     //closes the font module.
 		QuitProcedure = procedure();
     // shows error messages.
@@ -50,7 +50,7 @@ interface
 		InitProcedure = function() : integer;
 		StringColorProcedure = procedure (dest : Bitmap; x,y : Single;const theText : String; theColor : Color);
 
-		FontToIntFn = function (fnt: Font) : Integer;
+		FontToIntFn = function (fnt: FontPtr) : Integer;
 		
 		
 		TextDriverRecord = record
@@ -83,49 +83,49 @@ implementation
 		LoadSDL2TextDriver();
 	end;
 	
-	function DefaultLoadFontProcedure(const fontName, fileName : String; size : Longint) : font;
+	function DefaultLoadFontProcedure(const fontName, fileName : String; size : Longint) : FontPtr;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.LoadFont(fontName, fileName, size);
 	end;
 	
-	procedure DefaultCloseFontProcedure(fontToClose : font);
+	procedure DefaultCloseFontProcedure(fontToClose : FontPtr);
 	begin
 		LoadDefaultTextDriver();
 		TextDriver.CloseFont(fontToClose);		
 	end;
 	
-	procedure DefaultPrintStringsProcedure(dest: Bitmap; font: Font;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+	procedure DefaultPrintStringsProcedure(dest: Bitmap; font: FontPtr;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
 	begin
 		LoadDefaultTextDriver();
 		TextDriver.PrintStrings(dest,font,str,rc,clrFg,clrBg,flags)
 	end;
 	
-	procedure DefaultPrintWideStringsProcedure(dest: Bitmap; font: Font; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	procedure DefaultPrintWideStringsProcedure(dest: Bitmap; font: FontPtr; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	begin
 		LoadDefaultTextDriver();
 		TextDriver.PrintWideStrings(dest,font,str,rc,clrFg,clrBg,flags)
 	end;
 	
-	procedure DefaultSetFontStyleProcedure(fontToSet : font; value : FontStyle);
+	procedure DefaultSetFontStyleProcedure(fontToSet : FontPtr; value : FontStyle);
 	begin
 		LoadDefaultTextDriver();
 		TextDriver.SetFontStyle(fontToSet , value);
 	end;
 	
-	function DefaultGetFontStyleProcedure(font : Font) : FontStyle;
+	function DefaultGetFontStyleProcedure(font : FontPtr) : FontStyle;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.GetFontStyle(font);
 	end;
 	
-	function DefaultSizeOfTextProcedure(font : Font;const theText : String; var w, h : Longint) : Integer;
+	function DefaultSizeOfTextProcedure(font : FontPtr;const theText : String; var w, h : Longint) : Integer;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.SizeOfText(font, theText, w, h);
 	end;
 	
-	function DefaultSizeOfUnicodeProcedure(font : Font; theText : WideString; var w : Longint; var h : Longint) : Integer;
+	function DefaultSizeOfUnicodeProcedure(font : FontPtr; theText : WideString; var w : Longint; var h : Longint) : Integer;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.SizeOfUnicode(font, theText, w, h);
@@ -155,7 +155,7 @@ implementation
 	  TextDriver.StringColor(dest,x,y,theText,theColor);
 	end;
 
-	function DefaultLineSkipFunction(fnt: Font) : Integer;
+	function DefaultLineSkipFunction(fnt: FontPtr) : Integer;
 	begin
 		LoadDefaultTextDriver();
 		result := TextDriver.LineSkip(fnt);		

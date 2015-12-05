@@ -6,11 +6,13 @@ interface
 implementation
 	uses sgTypes, sgDriverSDL2Types, sgDriverText, sgShared, sgBackendTypes;
 
-	function LoadFontProcedure(const fontName, fileName : String; size : Longint) : Font;
+	function LoadFontProcedure(const fontName, fileName : String; size : Longint) : FontPtr;
 	var
 		fdata: psg_font_data;
 	begin
 		New(result);
+		result^.id := FONT_PTR;
+
 		New(fdata);
 		if (result = nil) or (fdata = nil) then
 		begin
@@ -32,7 +34,7 @@ implementation
 		result^.name := fontName;
 	end;
 	
-	procedure CloseFontProcedure(fontToClose : Font);
+	procedure CloseFontProcedure(fontToClose : FontPtr);
 	var
 		fdata: psg_font_data;   
 	begin
@@ -43,7 +45,7 @@ implementation
 	end;
 	
 	//TODO: move most of this to sgText
-	procedure PrintStringsProcedure(dest: Bitmap; font: Font;const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
+	procedure PrintStringsProcedure(dest: Bitmap; font: FontPtr; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment);
 	var
 		clr: sg_color;
     	pts: array [0..4] of Single;
@@ -61,27 +63,27 @@ implementation
 		_sg_functions^.text.draw_text(ToBitmapPtr(dest)^.surface, font^.fptr, rc.x, rc.y, PChar(str), _ToSGColor(clrFg));
 	end;
 	
-	procedure PrintWideStringsProcedure(dest: Bitmap; font: Font; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	procedure PrintWideStringsProcedure(dest: Bitmap; font: FontPtr; str: WideString; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	begin
 		WriteLn('PrintWideStringsProcedure!!!');
 	end;
 	
-	procedure SetFontStyleProcedure(fontToSet : font; value : FontStyle);
+	procedure SetFontStyleProcedure(fontToSet : FontPtr; value : FontStyle);
 	begin
 		_sg_functions^.text.set_font_style(fontToSet^.fptr, Longint(value));
 	end;
 	
-	function GetFontStyleProcedure(font : Font) : FontStyle;
+	function GetFontStyleProcedure(font : FontPtr) : FontStyle;
 	begin
 		result := FontStyle(_sg_functions^.text.get_font_style(font^.fptr));
 	end;
 	
-	function SizeOfTextProcedure(font : Font;const theText : String; var w : Longint ; var h : Longint) : Integer;
+	function SizeOfTextProcedure(font : FontPtr ;const theText : String; var w : Longint ; var h : Longint) : Integer;
 	begin
 		result := _sg_functions^.text.text_size(font^.fptr, PChar(theText), @w, @h);
 	end;
 	
-	function SizeOfUnicodeProcedure(font : Font; theText : WideString; var w : Longint; var h : Longint) : Integer;
+	function SizeOfUnicodeProcedure(font : FontPtr; theText : WideString; var w : Longint; var h : Longint) : Integer;
 	begin
 		result := 0;
 	end;
@@ -102,12 +104,12 @@ implementation
 		result := 0;
 	end;
 	
-	procedure StringColorProcedure(dest : Bitmap; x,y : Single;const theText : String; theColor : Color); 
+	procedure StringColorProcedure(dest : Bitmap; x,y : Single; const theText : String; theColor : Color); 
 	begin
 		_sg_functions^.text.draw_text(ToBitmapPtr(dest)^.surface, nil, x, y, PChar(theText), _ToSGColor(theColor));
 	end;
 
-	function LineSkipFunction(fnt: Font): Integer;
+	function LineSkipFunction(fnt: FontPtr): Integer;
 	begin
 		result := _sg_functions^.text.text_line_skip(fnt^.fptr);
 	end;

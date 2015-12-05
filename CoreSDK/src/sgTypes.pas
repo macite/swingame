@@ -338,16 +338,7 @@ interface
     /// @pointer_wrapper
     /// @field pointer: pointer
     Timer = Pointer;
-    
-    
-    /// @struct FontData
-    /// @via_pointer
-    FontData = packed record
-      fptr : Pointer;
-        //fptr: PTTF_Font;
-        name: String;
-    end;
-    
+        
     /// Fonts are used to render text to bitmaps and to the screen.
     /// Fonts must be loaded using the CreateFont routine. Also see the
     /// DrawText and DrawTextLines routines.
@@ -355,7 +346,7 @@ interface
     /// @class Font
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Font = ^FontData;
+    Font = Pointer;
 
     /// Use font styles to set the style of a font. Setting the style is time
     /// consuming, so create alternative font variables for each different

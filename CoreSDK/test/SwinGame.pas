@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-05 12:50:54.026815
+// SwinGame.pas was generated on 2015-12-05 18:08:56.449712
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -79,11 +79,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type SpriteSingleFunction = sgTypes.SpriteSingleFunction;
 
-  type TimerData = sgTypes.TimerData;
-
   type Timer = sgTypes.Timer;
-
-  type FontData = sgTypes.FontData;
 
   type Font = sgTypes.Font;
 
@@ -3439,15 +3435,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns if panel is currently being dragged
   function IsDragging(pnl: Panel): Boolean; overload;
 
-  // Returns FontAlignment from label given region
-  function LabelAlignment(r: Region): FontAlignment; overload;
-
-  // Get Font From Label
-  function LabelFont(r: Region): Font; overload;
-
-  // Sets FontAlignment for label given region
-  procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
-
   // Set text for Label
   procedure LabelSetText(r: Region; const newString: String); overload;
 
@@ -3535,20 +3522,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // bitmap and some text.
   procedure ListAddItem(pnl: Panel; const id: String; img: Bitmap; cell: Longint; const text: String); overload;
 
+  // Removes all items from the list.
+  procedure ListClearItems(const id: String); overload;
+
   // Removes all items from the list of the region
   procedure ListClearItems(r: Region); overload;
 
   // Removes all items from the list.
-  procedure ListClearItems(const id: String); overload;
-
-  // Removes all items from the list.
   procedure ListClearItems(pnl: Panel; const id: String); overload;
-
-  // Returns the font of the list of the region
-  function ListFont(r: Region): Font; overload;
-
-  // Returns the font alignment of a list from region
-  function ListFontAlignment(r: Region): FontAlignment; overload;
 
   // Returns the number of items in the list
   function ListItemCount(const id: String): Longint; overload;
@@ -3588,9 +3569,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Set the active item in the list to the item at index idx
   procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
-
-  // Returns the font alignment of a list from region
-  procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
 
   // Sets the starting point for the list from region
   procedure ListSetStartAt(r: Region; idx: Longint); overload;
@@ -3676,6 +3654,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the ID of the last region clicked on by user.
   function RegionClickedID(): String; overload;
 
+  // Returns the font used for text rendered in this region.
+  function RegionFont(r: Region): Font; overload;
+
+  // Returns the font alignment of text for this region.
+  function RegionFontAlignment(r: Region): FontAlignment; overload;
+
   // Returns the Region height value
   function RegionHeight(r: Region): Longint; overload;
 
@@ -3687,6 +3671,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the Region with the ID passed from the panel passed
   function RegionPanel(r: Region): Panel; overload;
+
+  // Sets the font for the region
+  procedure RegionSetFont(r: Region; f: Font); overload;
+
+  // Allows the font to be set for a region
+  procedure RegionSetFontAlignment(r: Region; align: FontAlignment); overload;
 
   // Returns the Region Wdith value
   function RegionWidth(r: Region): Longint; overload;
@@ -3746,9 +3736,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Displays a SaveDialog with file/folder/both filter
   procedure ShowSaveDialog(select: FileDialogSelectType); overload;
 
-  // returns font of region's textbox (If it has one)
-  function TextBoxFont(r: Region): Font; overload;
-
   // Gets the textbox text from region
   function TextBoxText(r: Region): String; overload;
 
@@ -3757,12 +3744,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Gets the textbox text from region
   function TextBoxText(pnl: Panel; const id: String): String; overload;
-
-  // Returns the alignment of the text in textbox passed in as region
-  function TextboxAlignment(r: Region): FontAlignment; overload;
-
-  // Set the textbox alignment of the textbox passed in
-  procedure TextboxSetAlignment(r: Region; align: FontAlignment); overload;
 
   // Sets the textbox text from Id
   procedure TextboxSetText(const id: String; const s: String); overload;
@@ -8475,21 +8456,6 @@ implementation
     result := sgUserInterface.IsDragging(pnl);
   end;
 
-  function LabelAlignment(r: Region): FontAlignment; overload;
-  begin
-    result := sgUserInterface.LabelAlignment(r);
-  end;
-
-  function LabelFont(r: Region): Font; overload;
-  begin
-    result := sgUserInterface.LabelFont(r);
-  end;
-
-  procedure LabelSetAlignment(r: Region; align: FontAlignment); overload;
-  begin
-    sgUserInterface.LabelSetAlignment(r,align);
-  end;
-
   procedure LabelSetText(r: Region; const newString: String); overload;
   begin
     sgUserInterface.LabelSetText(r,newString);
@@ -8625,29 +8591,19 @@ implementation
     sgUserInterface.ListAddItem(pnl,id,img,cell,text);
   end;
 
-  procedure ListClearItems(r: Region); overload;
-  begin
-    sgUserInterface.ListClearItems(r);
-  end;
-
   procedure ListClearItems(const id: String); overload;
   begin
     sgUserInterface.ListClearItems(id);
   end;
 
+  procedure ListClearItems(r: Region); overload;
+  begin
+    sgUserInterface.ListClearItems(r);
+  end;
+
   procedure ListClearItems(pnl: Panel; const id: String); overload;
   begin
     sgUserInterface.ListClearItems(pnl,id);
-  end;
-
-  function ListFont(r: Region): Font; overload;
-  begin
-    result := sgUserInterface.ListFont(r);
-  end;
-
-  function ListFontAlignment(r: Region): FontAlignment; overload;
-  begin
-    result := sgUserInterface.ListFontAlignment(r);
   end;
 
   function ListItemCount(const id: String): Longint; overload;
@@ -8713,11 +8669,6 @@ implementation
   procedure ListSetActiveItemIndex(pnl: Panel; const id: String; idx: Longint); overload;
   begin
     sgUserInterface.ListSetActiveItemIndex(pnl,id,idx);
-  end;
-
-  procedure ListSetFontAlignment(r: Region; align: FontAlignment); overload;
-  begin
-    sgUserInterface.ListSetFontAlignment(r,align);
   end;
 
   procedure ListSetStartAt(r: Region; idx: Longint); overload;
@@ -8860,6 +8811,16 @@ implementation
     result := sgUserInterface.RegionClickedID();
   end;
 
+  function RegionFont(r: Region): Font; overload;
+  begin
+    result := sgUserInterface.RegionFont(r);
+  end;
+
+  function RegionFontAlignment(r: Region): FontAlignment; overload;
+  begin
+    result := sgUserInterface.RegionFontAlignment(r);
+  end;
+
   function RegionHeight(r: Region): Longint; overload;
   begin
     result := sgUserInterface.RegionHeight(r);
@@ -8878,6 +8839,16 @@ implementation
   function RegionPanel(r: Region): Panel; overload;
   begin
     result := sgUserInterface.RegionPanel(r);
+  end;
+
+  procedure RegionSetFont(r: Region; f: Font); overload;
+  begin
+    sgUserInterface.RegionSetFont(r,f);
+  end;
+
+  procedure RegionSetFontAlignment(r: Region; align: FontAlignment); overload;
+  begin
+    sgUserInterface.RegionSetFontAlignment(r,align);
   end;
 
   function RegionWidth(r: Region): Longint; overload;
@@ -8975,11 +8946,6 @@ implementation
     sgUserInterface.ShowSaveDialog(select);
   end;
 
-  function TextBoxFont(r: Region): Font; overload;
-  begin
-    result := sgUserInterface.TextBoxFont(r);
-  end;
-
   function TextBoxText(r: Region): String; overload;
   begin
     result := sgUserInterface.TextBoxText(r);
@@ -8993,16 +8959,6 @@ implementation
   function TextBoxText(pnl: Panel; const id: String): String; overload;
   begin
     result := sgUserInterface.TextBoxText(pnl,id);
-  end;
-
-  function TextboxAlignment(r: Region): FontAlignment; overload;
-  begin
-    result := sgUserInterface.TextboxAlignment(r);
-  end;
-
-  procedure TextboxSetAlignment(r: Region; align: FontAlignment); overload;
-  begin
-    sgUserInterface.TextboxSetAlignment(r,align);
   end;
 
   procedure TextboxSetText(const id: String; const s: String); overload;

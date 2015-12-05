@@ -25,6 +25,7 @@ uses sgTypes;
     PANEL_PTR = 'PANL';
     ARDUINO_PTR = 'ARDU';
     TIMER_PTR = 'TIMR';
+    FONT_PTR = 'FONT';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -360,6 +361,18 @@ uses sgTypes;
       name: String;         // the name of the timer registered with the _timers dictionary
     end;
 
+    FontPtr = ^FontData;
+
+    /// @struct FontData
+    /// @via_pointer
+    FontData = packed record
+      id: PointerIdentifier;
+      fptr : Pointer;
+        //fptr: PTTF_Font;
+        name: String;
+    end;
+
+
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   function ToMusicPtr(m: Music): MusicPtr;
@@ -371,6 +384,7 @@ uses sgTypes;
   function ToRegionPtr(r: Region): RegionPtr;
   function ToArduinoPtr(a: ArduinoDevice): ArduinoPtr;
   function ToTimerPtr(t: Timer): TimerPtr;
+  function ToFontPtr(f: Font): FontPtr;
 
 implementation
 uses sgShared;
@@ -471,6 +485,16 @@ uses sgShared;
     if Assigned(result) and (result^.id <> TIMER_PTR) then
     begin
       RaiseWarning('Attempted to access a Timer that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToFontPtr(f: Font): FontPtr;
+  begin
+    result := FontPtr(f);
+    if Assigned(result) and (result^.id <> FONT_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Font that appears to be an invalid pointer');
       result := nil;
     end;
   end;
