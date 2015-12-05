@@ -173,7 +173,7 @@ interface
 implementation
   uses  sgTrace, sgShared, sgDriverTimer,
         SysUtils,
-        stringhash;         // libsrc;
+        stringhash, sgBackendTypes;         // libsrc;
 //=============================================================================
 
 var
@@ -200,15 +200,18 @@ end;
 function CreateTimer(const name: String): Timer; overload;
 var
   obj: tResourceContainer;
+  t: TimerPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'CreateTimer', name);
   {$ENDIF}
   
-  New(result);
-  result^.name := name;
+  New(t);
+  result := t;
+  t^.id := TIMER_PTR;
+  t^.name := name;
   
-  with result^ do
+  with t^ do
   begin
     startTicks := 0;
     pausedTicks := 0;
@@ -216,12 +219,12 @@ begin
     started := false;
   end;
   
-  obj := tResourceContainer.Create(result);
+  obj := tResourceContainer.Create(t);
   
   if not _Timers.setValue(name, obj) then
   begin
     RaiseException('Error: Failed to assign timer ' + name);
-    Dispose(result);
+    Dispose(t);
     result := nil;
     exit;
   end;
@@ -237,14 +240,17 @@ begin
 end;
 
 procedure ResetTimer(tmr: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(tmr);
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ResetTimer');
   {$ENDIF}
-  if Assigned(tmr) then
+  if Assigned(tp) then
   begin
-     tmr^.startTicks := TimerDriver.GetTicks();
-     tmr^.pausedTicks := 0;
+     tp^.startTicks := TimerDriver.GetTicks();
+     tp^.pausedTicks := 0;
   end; 
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ResetTimer');
@@ -254,20 +260,24 @@ end;
 procedure ReleaseTimer(const name: String);
 var
   tmr: Timer;
+  tp: TimerPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ReleaseTimer', 'tmr = ' + name);
   {$ENDIF}
   
   tmr := TimerNamed(name);
+
   if assigned(tmr) then
   begin
     _Timers.remove(name).Free();
+
+    tp := ToTimerPtr(tmr);
     
-    if Assigned(tmr) then
+    if Assigned(tp) then
     begin
-      Dispose(tmr);
       CallFreeNotifier(tmr);
+      Dispose(tp);
     end;
   end;
   
@@ -289,17 +299,19 @@ begin
   {$ENDIF}
 end;
 
-
-
 procedure FreeTimer(var toFree: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toFree);
+
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'FreeTimer');
   {$ENDIF}
   
   if Assigned(toFree) then
   begin
-    ReleaseTimer(toFree^.name);
+    ReleaseTimer(tp^.name);
   end;
   
   toFree := nil;
@@ -333,13 +345,16 @@ begin
 end;
 
 procedure StartTimer(toStart: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toStart);
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'StartTimer');
   {$ENDIF}
-  if not Assigned(toStart) then begin RaiseException('No timer supplied'); exit; end;
+  if not Assigned(tp) then begin RaiseException('No timer supplied'); exit; end;
   
-  with toStart^ do
+  with tp^ do
   begin
     started := true;
     paused := false;
@@ -356,12 +371,16 @@ begin
 end;
 
 procedure StopTimer(toStop: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toStop);
+
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'StopTimer');
   {$ENDIF}
-  if not Assigned(toStop) then begin RaiseException('No timer supplied'); exit; end;
-  with toStop^ do
+  if not Assigned(tp) then begin RaiseException('No timer supplied'); exit; end;
+  with tp^ do
   begin
     started := false;
     paused := false;
@@ -377,12 +396,16 @@ begin
 end;
 
 procedure PauseTimer(toPause: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toPause);
+
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'PauseTimer');
   {$ENDIF}
-  if not Assigned(toPause) then begin RaiseException('No timer supplied'); exit; end;
-  with toPause^ do
+  if not Assigned(tp) then begin RaiseException('No timer supplied'); exit; end;
+  with tp^ do
   begin
     if started and (not paused) then
     begin
@@ -401,12 +424,16 @@ begin
 end;
 
 procedure ResumeTimer(toUnpause: Timer);
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toUnpause);
+
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'ResumeTimer');
   {$ENDIF}
-  if not Assigned(toUnpause) then begin RaiseException('No timer supplied'); exit; end;
-  with toUnpause^ do
+  if not Assigned(tp) then begin RaiseException('No timer supplied'); exit; end;
+  with tp^ do
   begin
     if paused then
     begin
@@ -426,14 +453,18 @@ begin
 end;
 
 function TimerTicks(toGet: Timer): Longword;
+var
+  tp: TimerPtr;
 begin
+  tp := ToTimerPtr(toGet);
+
   {$IFDEF TRACE}
     TraceEnter('sgTimers', 'TimerTicks');
   {$ENDIF}
   
-  if not Assigned(toGet) then begin RaiseException('No timer supplied'); exit; end;
+  if not Assigned(tp) then begin RaiseException('No timer supplied'); exit; end;
   
-  with toGet^ do
+  with tp^ do
   begin
     if started then
     begin

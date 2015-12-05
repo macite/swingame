@@ -24,6 +24,7 @@ uses sgTypes;
     REGION_PTR = 'REGI';
     PANEL_PTR = 'PANL';
     ARDUINO_PTR = 'ARDU';
+    TIMER_PTR = 'TIMR';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -345,6 +346,19 @@ uses sgTypes;
       errorMessage: String;
     end;
 
+    TimerPtr = ^TimerData;
+
+    /// @struct TimerData
+    /// @via_pointer
+    TimerData = packed record
+      id: PointerIdentifier;
+      startTicks: Longword;
+      pausedTicks: Longword;
+      paused: Boolean;
+      started: Boolean;
+      
+      name: String;         // the name of the timer registered with the _timers dictionary
+    end;
 
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
@@ -356,6 +370,7 @@ uses sgTypes;
   function ToPanelPtr(p: Panel): PanelPtr;
   function ToRegionPtr(r: Region): RegionPtr;
   function ToArduinoPtr(a: ArduinoDevice): ArduinoPtr;
+  function ToTimerPtr(t: Timer): TimerPtr;
 
 implementation
 uses sgShared;
@@ -446,6 +461,16 @@ uses sgShared;
     if Assigned(result) and (result^.id <> ARDUINO_PTR) then
     begin
       RaiseWarning('Attempted to access an Arduino that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToTimerPtr(t: Timer): TimerPtr;
+  begin
+    result := TimerPtr(t);
+    if Assigned(result) and (result^.id <> TIMER_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Timer that appears to be an invalid pointer');
       result := nil;
     end;
   end;

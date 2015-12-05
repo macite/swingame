@@ -329,17 +329,6 @@ interface
     ///
     /// @type SpriteSingleFunction
     SpriteSingleFunction = procedure(s: Sprite; val: Single);
-
-    /// @struct TimerData
-    /// @via_pointer
-    TimerData = packed record
-      startTicks: Longword;
-      pausedTicks: Longword;
-      paused: Boolean;
-      started: Boolean;
-      
-      name: String;         // the name of the timer registered with the _timers dictionary
-    end;
     
     /// A timer can be used to track how much time has elapsed since the timer
     /// was started. In games this can be used to ensure the game runs at the
@@ -347,8 +336,8 @@ interface
     /// 
     /// @class Timer
     /// @pointer_wrapper
-    /// @field pointer: ^TimerData
-    Timer = ^TimerData;
+    /// @field pointer: pointer
+    Timer = Pointer;
     
     
     /// @struct FontData
