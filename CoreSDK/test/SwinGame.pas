@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 16:08:00.493657
+// SwinGame.pas was generated on 2015-12-06 17:13:12.097882
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -17,15 +17,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type Circle = sgTypes.Circle;
 
-  type Resolution = sgTypes.Resolution;
-
   type LineSegment = sgTypes.LineSegment;
 
   type Triangle = sgTypes.Triangle;
 
-  type LinesArray = sgTypes.LinesArray;
-
-  type TriangleArray = sgTypes.TriangleArray;
+  type Resolution = sgTypes.Resolution;
 
   type SoundEffect = sgTypes.SoundEffect;
 
@@ -626,9 +622,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the radius of the passed in circle.
   function CircleRadius(const c: Circle): Single; overload;
 
-  // Returns true if the circle is completely within the rectangle.
-  function CircleWithinRect(const c: Circle; const rect: Rectangle): Boolean; overload;
-
   // Returns the X value of the center point of a circle.
   function CircleX(const c: Circle): Single; overload;
 
@@ -646,9 +639,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the point on the line that is closest to the circle.
   function ClosestPointOnLineFromCircle(const c: Circle; const line: LineSegment): Point2D; overload;
-
-  // Returns the point on the lines that is closest in the indicated array from the circle.
-  function ClosestPointOnLinesFromCircle(const c: Circle; const lines: LinesArray): Point2D; overload;
 
   // Returns the point on the rectangle that is closest to the circle.
   function ClosestPointOnRectFromCircle(const c: Circle; const rect: Rectangle): Point2D; overload;
@@ -687,9 +677,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a rectangle from a given x,y location with a given width
   // and height.
   function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
-
-  // Returns a rectangle that encloses the lines in the lines array.
-  function CreateRectangle(const lines: LinesArray): Rectangle; overload;
 
   // Returns a rectangle that encloses th epoints in a triangle.
   function CreateRectangle(const tri: Triangle): Rectangle; overload;
@@ -779,10 +766,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // normal vector (see `LineNormal`) for the line.
   function LineAsVector(const line: LineSegment): Vector; overload;
 
-  // Which of the lines from the array of line segments did the circle collide with given the
-  // indicated velocity.
-  function LineCircleHit(const c: Circle; const velocity: Vector; const lines: LinesArray; out found: LineSegment): Boolean; overload;
-
   // Returns a line segment from x1,y1 to x2,y2.
   function LineFrom(x1: Single; y1: Single; x2: Single; y2: Single): LineSegment; overload;
 
@@ -806,9 +789,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns true if the line segment intersects the circle.
   function LineIntersectsCircle(const l: LineSegment; const c: Circle): Boolean; overload;
 
-  // Returns true if the line intersect any of the lines in the array.
-  function LineIntersectsLines(const line: LineSegment; const lines: LinesArray): Boolean; overload;
-
   // Returns true if the line intersects the rectangle.
   function LineIntersectsRect(const line: LineSegment; const rect: Rectangle): Boolean; overload;
 
@@ -831,15 +811,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Get a text description of the line segment.
   function LineToString(const ln: LineSegment): String; overload;
-
-  // Returns an array containing the four lines of the rectangle.
-  function LinesFrom(const rect: Rectangle): LinesArray; overload;
-
-  // Returns an array containing the three lines from the triangle.
-  function LinesFrom(const tri: Triangle): LinesArray; overload;
-
-  // Returns true if any of the lines in the array intersect with the Rectangle `r`.
-  function LinesRectIntersect(const lines: LinesArray; const r: Rectangle): Boolean; overload;
 
   // Multiplies the `Vector` parameter ``v`` with the `Matrix2D` ``m`` and 
   // returns the result as a `Vector`. Use this to transform the vector with 
@@ -956,11 +927,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // and height.
   function RectangleFrom(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
 
-  // Returns a rectangle that encloses th epoints in a triangle.
+  // Returns a rectangle that encloses the points in a triangle.
   function RectangleFrom(const tri: Triangle): Rectangle; overload;
-
-  // Returns a rectangle that encloses the lines in the lines array.
-  function RectangleFrom(const lines: LinesArray): Rectangle; overload;
 
   // Returns a rectangle that encloses the two points on the line segment.
   function RectangleFrom(const line: LineSegment): Rectangle; overload;
@@ -1047,9 +1015,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Get a text description of the triangle.
   function TriangleToString(const tri: Triangle): String; overload;
 
-  // Returns true if any of the triangles intersects with the rectangle.
-  function TrianglesRectangleIntersect(const tri: TriangleArray; const rect: Rectangle): Boolean; overload;
-
   // Returns the unit vector of the parameter vector (v). The unit vector has a
   // magnitude of 1, resulting in a vector that indicates the direction of
   // the original vector.
@@ -1116,14 +1081,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns the vector needed to move rectangle ``src`` out of rectangle``bounds`` given the velocity specified.
   function VectorOutOfRectFromRect(const src: Rectangle; const bounds: Rectangle; const velocity: Vector): Vector; overload;
-
-  // Returns a vector that can be used to move a circle over the lines in the array.
-  function VectorOverLinesFromCircle(const c: Circle; const lines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector; overload;
-
-  // Returns a vector that can be used to move a group of lines back over other lines. This is
-  // used internally to determine vectors that can be used to move a rectangle back out of another rectangle
-  // and similar operations.
-  function VectorOverLinesFromLines(const srcLines: LinesArray; const boundLines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector; overload;
 
   // Returns a new `Vector` using the ``x`` and ``y`` values provided.
   function VectorTo(x: Single; y: Single): Vector; overload;
@@ -2308,9 +2265,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // based on the sprites width or height value -- whatever is largest.
   function CircleLineCollision(s: Sprite; const line: LineSegment): Boolean; overload;
 
-  // Returns True if the circle has collided with any of the lines from the ``rect`` rectangle.
-  function CircleLinesCollision(const c: Circle; const lines: LinesArray): Boolean; overload;
-
   // Returns True if the Circle collised with rectangle ``rect``.
   function CircleRectCollision(const c: Circle; const rect: Rectangle): Boolean; overload;
 
@@ -2325,12 +2279,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure CollideCircleLine(s: Sprite; const line: LineSegment); overload;
 
   // Perform a physical collision with a sprite as a circle bouncing off
-  // the closest line in the array of lines.
-  procedure CollideCircleLines(s: Sprite; const lines: LinesArray); overload;
-
-  // Perform a physical collision with a sprite as a circle bouncing off
   // a stationary rectangle.
   procedure CollideCircleRectangle(s: Sprite; const rect: Rectangle); overload;
+
+  // Perform a physical collision with a sprite as a circle bouncing off
+  // a stationary triangle.
+  procedure CollideCircleTriangle(s: Sprite; const tri: Triangle); overload;
 
   // Perform a physical collision between two circular sprites.
   procedure CollideCircles(s1: Sprite; s2: Sprite); overload;
@@ -4344,11 +4298,6 @@ implementation
     result := sgGeometry.CircleRadius(c);
   end;
 
-  function CircleWithinRect(const c: Circle; const rect: Rectangle): Boolean; overload;
-  begin
-    result := sgGeometry.CircleWithinRect(c,rect);
-  end;
-
   function CircleX(const c: Circle): Single; overload;
   begin
     result := sgGeometry.CircleX(c);
@@ -4377,11 +4326,6 @@ implementation
   function ClosestPointOnLineFromCircle(const c: Circle; const line: LineSegment): Point2D; overload;
   begin
     result := sgGeometry.ClosestPointOnLineFromCircle(c,line);
-  end;
-
-  function ClosestPointOnLinesFromCircle(const c: Circle; const lines: LinesArray): Point2D; overload;
-  begin
-    result := sgGeometry.ClosestPointOnLinesFromCircle(c,lines);
   end;
 
   function ClosestPointOnRectFromCircle(const c: Circle; const rect: Rectangle): Point2D; overload;
@@ -4437,11 +4381,6 @@ implementation
   function CreateRectangle(x: Single; y: Single; w: Single; h: Single): Rectangle; overload;
   begin
     result := sgGeometry.CreateRectangle(x,y,w,h);
-  end;
-
-  function CreateRectangle(const lines: LinesArray): Rectangle; overload;
-  begin
-    result := sgGeometry.CreateRectangle(lines);
   end;
 
   function CreateRectangle(const tri: Triangle): Rectangle; overload;
@@ -4564,11 +4503,6 @@ implementation
     result := sgGeometry.LineAsVector(line);
   end;
 
-  function LineCircleHit(const c: Circle; const velocity: Vector; const lines: LinesArray; out found: LineSegment): Boolean; overload;
-  begin
-    result := sgGeometry.LineCircleHit(c,velocity,lines,found);
-  end;
-
   function LineFrom(x1: Single; y1: Single; x2: Single; y2: Single): LineSegment; overload;
   begin
     result := sgGeometry.LineFrom(x1,y1,x2,y2);
@@ -4604,11 +4538,6 @@ implementation
     result := sgGeometry.LineIntersectsCircle(l,c);
   end;
 
-  function LineIntersectsLines(const line: LineSegment; const lines: LinesArray): Boolean; overload;
-  begin
-    result := sgGeometry.LineIntersectsLines(line,lines);
-  end;
-
   function LineIntersectsRect(const line: LineSegment; const rect: Rectangle): Boolean; overload;
   begin
     result := sgGeometry.LineIntersectsRect(line,rect);
@@ -4642,21 +4571,6 @@ implementation
   function LineToString(const ln: LineSegment): String; overload;
   begin
     result := sgGeometry.LineToString(ln);
-  end;
-
-  function LinesFrom(const rect: Rectangle): LinesArray; overload;
-  begin
-    result := sgGeometry.LinesFrom(rect);
-  end;
-
-  function LinesFrom(const tri: Triangle): LinesArray; overload;
-  begin
-    result := sgGeometry.LinesFrom(tri);
-  end;
-
-  function LinesRectIntersect(const lines: LinesArray; const r: Rectangle): Boolean; overload;
-  begin
-    result := sgGeometry.LinesRectIntersect(lines,r);
   end;
 
   function MatrixMultiply(const m: Matrix2D; const v: Vector): Vector; overload;
@@ -4834,11 +4748,6 @@ implementation
     result := sgGeometry.RectangleFrom(tri);
   end;
 
-  function RectangleFrom(const lines: LinesArray): Rectangle; overload;
-  begin
-    result := sgGeometry.RectangleFrom(lines);
-  end;
-
   function RectangleFrom(const line: LineSegment): Rectangle; overload;
   begin
     result := sgGeometry.RectangleFrom(line);
@@ -4974,11 +4883,6 @@ implementation
     result := sgGeometry.TriangleToString(tri);
   end;
 
-  function TrianglesRectangleIntersect(const tri: TriangleArray; const rect: Rectangle): Boolean; overload;
-  begin
-    result := sgGeometry.TrianglesRectangleIntersect(tri,rect);
-  end;
-
   function UnitVector(const v: Vector): Vector; overload;
   begin
     result := sgGeometry.UnitVector(v);
@@ -5072,16 +4976,6 @@ implementation
   function VectorOutOfRectFromRect(const src: Rectangle; const bounds: Rectangle; const velocity: Vector): Vector; overload;
   begin
     result := sgGeometry.VectorOutOfRectFromRect(src,bounds,velocity);
-  end;
-
-  function VectorOverLinesFromCircle(const c: Circle; const lines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector; overload;
-  begin
-    result := sgGeometry.VectorOverLinesFromCircle(c,lines,velocity,maxIdx);
-  end;
-
-  function VectorOverLinesFromLines(const srcLines: LinesArray; const boundLines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector; overload;
-  begin
-    result := sgGeometry.VectorOverLinesFromLines(srcLines,boundLines,velocity,maxIdx);
   end;
 
   function VectorTo(x: Single; y: Single): Vector; overload;
@@ -6809,11 +6703,6 @@ implementation
     result := sgPhysics.CircleLineCollision(s,line);
   end;
 
-  function CircleLinesCollision(const c: Circle; const lines: LinesArray): Boolean; overload;
-  begin
-    result := sgPhysics.CircleLinesCollision(c,lines);
-  end;
-
   function CircleRectCollision(const c: Circle; const rect: Rectangle): Boolean; overload;
   begin
     result := sgPhysics.CircleRectCollision(c,rect);
@@ -6834,14 +6723,14 @@ implementation
     sgPhysics.CollideCircleLine(s,line);
   end;
 
-  procedure CollideCircleLines(s: Sprite; const lines: LinesArray); overload;
-  begin
-    sgPhysics.CollideCircleLines(s,lines);
-  end;
-
   procedure CollideCircleRectangle(s: Sprite; const rect: Rectangle); overload;
   begin
     sgPhysics.CollideCircleRectangle(s,rect);
+  end;
+
+  procedure CollideCircleTriangle(s: Sprite; const tri: Triangle); overload;
+  begin
+    sgPhysics.CollideCircleTriangle(s,tri);
   end;
 
   procedure CollideCircles(s1: Sprite; s2: Sprite); overload;

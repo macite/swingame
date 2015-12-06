@@ -363,12 +363,6 @@ interface
   /// @sn circle:%s collisionWithRect:%s
   function CircleRectCollision(const c: Circle; const rect: Rectangle): Boolean;
   
-  /// Returns True if the circle has collided with any of the lines from the ``rect`` rectangle.
-  ///
-  /// @lib
-  /// @sn circle:%s collisionWithLine:%s
-  function CircleLinesCollision(const c: Circle; const lines: LinesArray): Boolean;
-  
   /// Returns True if the circles have collided.
   ///
   /// @lib
@@ -464,6 +458,17 @@ interface
   /// @method CircleCollideRectangle
   /// @csn circleCollideWithRectangle:%s
   procedure CollideCircleRectangle(s: Sprite; const rect: Rectangle); overload;
+
+  /// Perform a physical collision with a sprite as a circle bouncing off
+  /// a stationary triangle.
+  ///
+  /// @lib
+  /// @sn sprite:%s circleCollideWithTriangle:%s
+  ///
+  /// @class Sprite
+  /// @method CircleCollideTriangle
+  /// @csn circleCollideWithTriangle:%s
+  procedure CollideCircleTriangle(s: Sprite; const tri: Triangle); overload;
   
   /// Perform a physical collision between two circular sprites.
   /// 
@@ -475,17 +480,6 @@ interface
   /// @csn circlesCollide:%s
   procedure CollideCircles(s1, s2: Sprite);
   
-  /// Perform a physical collision with a sprite as a circle bouncing off
-  /// the closest line in the array of lines.
-  /// 
-  /// @lib
-  /// @sn sprite:%s circleCollideWithLines:%s
-  /// 
-  /// @class Sprite
-  /// @method CircleCollideWithLines
-  /// @csn circleCollideWithLines:%s
-  procedure CollideCircleLines(s: Sprite; const lines: LinesArray);
-  
   
 //=============================================================================
 implementation
@@ -493,8 +487,7 @@ implementation
 
   uses
     SysUtils, sgTrace,
-    sgGraphics, sgCamera, sgGeometry, sgSprites, sgShared, sgImages, sgBackendTypes;
-
+    sgGraphics, sgCamera, sgGeometry, sgSprites, sgShared, sgImages, sgBackendTypes, GeometryHelper;
 
   //---------------------------------------------------------------------------
 
@@ -922,16 +915,6 @@ implementation
     //RefreshScreen(1) ;
   end;
   
-  procedure CollideCircleLine(s: Sprite; const line: LineSegment);
-  var
-    lines: LinesArray;
-  begin
-    SetLength(lines, 1);
-    lines[0] := line;
-    
-    CollideCircleLines(s, lines);
-  end;
-  
   procedure CollideCircleLines(s: Sprite; const lines: LinesArray);
   var 
     outVec, mvmt: Vector;
@@ -957,7 +940,16 @@ implementation
     prop := VectorMagnitude(outVec) / mvmtMag; //proportion of move "undone" by back out
     if prop > 0 then MoveSprite(s, prop); //TODO: Allow proportion of move to be passed in (overload)... then do velocity based on prop * pct
   end;
-  
+
+  procedure CollideCircleLine(s: Sprite; const line: LineSegment);
+  var
+    lines: LinesArray;
+  begin
+    SetLength(lines, 1);
+    lines[0] := line;
+    
+    CollideCircleLines(s, lines);
+  end;
   
   procedure CollideCircles(s1, s2: Sprite);
   var
@@ -1099,6 +1091,15 @@ implementation
     CollideCircleRectangle(s, rect, True);
   end;
 
+  procedure CollideCircleTriangle(s: Sprite; const tri: Triangle); overload;
+  var
+    lines: LinesArray;
+  begin
+    lines := LinesFrom(tri);
+    
+    CollideCircleLines(s, lines);
+  end;
+
   
   //----------------------------------------------------------------------------
 
@@ -1108,12 +1109,6 @@ implementation
 //---------------------------------------------------------------------------
 // Geometry Collision Tests
 //---------------------------------------------------------------------------
-  
-  function CircleRectCollision(const c: Circle; const rect: Rectangle): Boolean;
-  begin
-    if CircleLinesCollision(c, LinesFrom(rect)) then result := True
-    else result := PointInRect(c.center, rect.x, rect.y, rect.width, rect.height);
-  end;
   
   function CircleLinesCollision(const c: Circle; const lines: LinesArray): Boolean;
   var
@@ -1135,6 +1130,14 @@ implementation
     end;
   end;
 
+  function CircleRectCollision(const c: Circle; const rect: Rectangle): Boolean;
+  begin
+    if CircleLinesCollision(c, LinesFrom(rect)) then result := True
+    else 
+      result := PointInRect(c.center, rect.x, rect.y, rect.width, rect.height)
+        or PointInCircle( PointAt(rect.x, rect.y), c);
+  end;
+  
   function CircleCircleCollision(const c1, c2: Circle): Boolean;
   begin
     result := PointPointDistance(c1.center, c2.center) < c1.radius + c2.radius;

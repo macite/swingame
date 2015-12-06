@@ -66,6 +66,22 @@ interface
       radius: Single;
     end;
 
+    /// A Line Segment is a line that extends from a start point
+    /// to an end point.
+    ///
+    /// @struct LineSegment
+    LineSegment = packed record
+        startPoint: Point2D;
+        endPoint: Point2D;
+    end;
+    
+    /// A Triangle consists of three points -- one for each of the points on the triangle
+    ///
+    /// @struct Triangle
+    Triangle = packed record 
+      points : array [0..2] of Point2D;
+    end;
+
 
     //TODO: Add touch support when iOS version is working again!
     //
@@ -103,29 +119,6 @@ interface
     //   yAxis: Longint;
     //   zAxis: Longint;
     // end;
-
-    /// @struct LineSegment
-    LineSegment = packed record
-        startPoint: Point2D;
-        endPoint: Point2D;
-    end;
-    
-    /// A Triangle contains an array of three points.
-    ///
-    /// @struct Triangle
-    Triangle = packed record 
-      points : array [0..2] of Point2D;
-    end;
-    
-    /// @type LinesArray
-    /// @array_wrapper
-    /// @field data: array of LineSegment
-    LinesArray = Array of LineSegment;
-    
-    /// @type TriangleArray
-    /// @array_wrapper
-    /// @field data: array of Triangle
-    TriangleArray = Array of Triangle;
     
     /// The `SoundEffect` type is used to refer to sound effects that can be
     /// played by the SwinGame audio code. Sound effects are loaded with

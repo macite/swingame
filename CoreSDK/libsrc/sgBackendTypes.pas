@@ -57,6 +57,15 @@ uses sgTypes;
     /// @field data: array of Point2D
     Point2DArray = Array of Point2D;
 
+    /// @type TriangleArray
+    /// @array_wrapper
+    /// @field data: array of Triangle
+    TriangleArray = Array of Triangle;
+
+    /// @type LinesArray
+    /// @array_wrapper
+    /// @field data: array of LineSegment
+    LinesArray = Array of LineSegment;
 
     /// The named index collection type is used to maintain a named collection of 
     /// index values that can then be used to lookup the location of the

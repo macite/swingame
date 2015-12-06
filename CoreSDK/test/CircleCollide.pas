@@ -1,6 +1,6 @@
 program HelloWorld;
 uses
-  sgTypes, SwinGame;
+  sgTypes, SwinGame, sgBackendTypes, GeometryHelper;
 
 procedure KeepOnScreen(s: Sprite);
 begin
@@ -132,26 +132,10 @@ begin
 end;
 
 procedure CheckCollisionWithLine(s: Sprite; const l: LineSegment);
-var
-  mvmtLine: LineSegment;
-  outVec: Vector;
-  lines: LinesArray;
 begin
-  //mvmtLine := LineFromVector(CenterPoint(s), InvertVector(s^.movement));
-  
-  //todo: check LineSegmentsIntersect
-  
   if CircleLineCollision(s, l) then
   begin
-    // the have collided
-    SetLength(lines, 1);
-    lines[0] := l;
-    
-    //outVec := VectorOverLinesFromCircle(CenterPoint(s), SpriteWidth(s) / 2, lines, s^.movement);
-    //MoveSprite(s, outVec);
-    CollideCircleLines(s, lines);
-    //WriteLn('hit');
-    //MoveSprite(s);
+    CollideCircleLine(s, l);
   end;
 end;
 
@@ -160,9 +144,7 @@ var lines: LinesArray;
 begin
   if CircleTriangleCollision(SpriteCircle(s), t) then
   begin
-    lines := LinesFrom(t);
-    
-    CollideCircleLines(s, lines);
+    CollideCircleTriangle(s, t);
   end;
 end;
 
@@ -248,13 +230,6 @@ begin
     if CircleRectCollision(CircleAt(temp, r2), rect) then
     begin
       DrawCircle(ColorBlue, temp.x, temp.y, r2);
-      if LineCircleHit(CircleAt(temp, r2), mouseMvmt, LinesFrom(rect), found) then
-      begin
-        DrawLine(ColorWhite, found);
-        mouseOut := VectorOutOfRectFromCircle(CircleAt(temp, r2), rect, mouseMvmt);
-        mouseOut := AddVectors(temp, mouseOut);
-        DrawCircle(ColorGreen, mouseOut.x, mouseOut.y, r2);
-      end;
     end
     else if CircleCircleCollision(CircleAt(temp, r2), CircleAt(c1, r1)) then
     begin

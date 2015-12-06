@@ -320,9 +320,9 @@ implementation
 
   uses SysUtils, Classes, sgPhysics, sgTrace, sgShared, sgText, sgGeometry, sgSharedUtils, sgInputBackend, sgDriverInput, sgDriver{$IFDEF IOS}, sgDriveriOS {$ENDIF};
 
-  var
-  // seems to work well with this value
-    _AccelerometerThreshold : Single = 0.01;
+  // var
+  // // seems to work well with this value
+  //   _AccelerometerThreshold : Single = 0.01;
 
 //----------------------------------------------------------------------------
 // Game Loop Essentials
