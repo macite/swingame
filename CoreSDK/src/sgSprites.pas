@@ -27,7 +27,7 @@ interface
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer have name 'layer1'.
+  /// pixel level collisions, no animations, and have one layer named 'layer1'.
   ///
   /// This version of the constructor will assign a default name to the sprite for resource management purposes.
   /// 
@@ -50,50 +50,6 @@ interface
   
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
-  /// given x,y location.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateBasicSpriteXY
-  /// @sn createSpriteWithLayer:%s x:%s y:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s x:%s y:%s
-  function CreateSprite(layer: Bitmap; x, y: Single): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
-  /// given location.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateBasicSpritePt
-  /// @sn createSpriteWithLayer:%s atPoint:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s position:%s
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, and the specified layer have name.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateSpriteWithLayer
-  /// @sn createSpriteWithLayer:%s layerNamed:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s layerNamed:%s
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   /// pixel level collisions, the specified animation template, the layer have name 'layer1'.
   ///
   /// This version of the constructor will assign a default name to the sprite for resource management purposes.
@@ -108,106 +64,6 @@ interface
 
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, the layer have name 'layer1', at the given
-  /// x, y location.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateSpriteWithAnimationXY
-  /// @sn createSpriteWithLayer:%s animationScript:%s x:%s y:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s animationScript:%s x:%s y:%s
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; x, y: Single): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, the layer have name 'layer1', at the given
-  /// location.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateSpriteWithAnimationPt
-  /// @sn createSpriteWithLayer:%s animationScript:%s position:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s animationScript:%s position:%s
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, and layer name.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateSpriteWithLayerAndAnimation
-  /// @sn createSpriteWithLayer:%s layerNamed:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmap:%s layerNamed:%s animationScript:%s
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateLayeredSprite
-  /// @sn createSpriteWithLayers:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmaps:%s
-  function CreateSprite(const layers: BitmapArray): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, and the specified layer names.
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateLayeredSpriteWithLayerNames
-  /// @sn createSpriteWithLayers:%s layersNamed:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmaps:%s layerNames:%s
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, the layer names 'layer1', 'layer2',... .
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateLayeredSpriteWithAnimationScript
-  /// @sn createSpriteWithLayers:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmaps:%s animationScript:%s
-  function CreateSprite(const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  ///
-  /// This version of the constructor will assign a default name to the sprite for resource management purposes.
-  /// 
-  /// @lib CreateLayeredSpriteWithLayerNamesAndAnimationScript
-  /// @sn createSpriteWithLayers:%s layersNamed:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initWithBitmaps:%s layerNames:%s animationScript:%s
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   /// pixel level collisions, no animation, the layer have name 'layer1'.
   /// 
   /// @lib CreateBasicSpriteNamed
@@ -220,18 +76,6 @@ interface
 
   /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, and the specified layer have name.
-  /// 
-  /// @lib CreateSpriteWithLayerNamed
-  /// @sn createSpriteNamed:%s layer:%s layerNamed:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed:%s withBitmap:%s layerNamed:%s
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   /// pixel level collisions, the specified animation template, the layer have name 'layer1'.
   /// 
   /// @lib CreateSpriteWithAnimationNamed
@@ -241,66 +85,6 @@ interface
   /// @constructor
   /// @csn initNamed:%s withBitmap:%s animationScript:%s
   function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, and layer name.
-  /// 
-  /// @lib CreateSpriteWithLayerAndAnimationNamed
-  /// @sn createSpriteNamed:%s layer:%s layerNamed:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed:%s withBitmap:%s layerNamed:%s animationScript:%s
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  /// 
-  /// @lib CreateLayeredSpriteNamed
-  /// @sn createSpriteNamed:%s layers:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed:%s withBitmaps:%s
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, and the specified layer names.
-  /// 
-  /// @lib CreateLayeredSpriteWithLayerNamesNamed
-  /// @sn createSpriteNamed:%s layers:%s layersNamed:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed:%s withBitmaps:%s layerNames:%s
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, the specified animation template, the layer names 'layer1', 'layer2',... .
-  /// 
-  /// @lib CreateLayeredSpriteWithAnimationScriptNamed
-  /// @sn createSpriteNamed:%s layers:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed: %s withBitmaps:%s animationScript:%s
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  
-  /// Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  /// sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  /// pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  /// 
-  /// @lib CreateLayeredSpriteWithLayerNamesAndAnimationScriptNamed
-  /// @sn createSpriteNamed:%s layers:%s layersNamed:%s animationScript:%s
-  /// 
-  /// @class Sprite
-  /// @constructor
-  /// @csn initNamed:%s withBitmaps:%s layerNames:%s animationScript:%s
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
   
   /// Free the resources associated with a sprite.
   /// 
@@ -1524,9 +1308,8 @@ interface
   /// @lib
   ///
   /// @class Sprite
-  /// @getter ValueNames
-  /// @length SpriteValueCount
-  function SpriteValueNames(s: Sprite) : StringArray; 
+  /// @getter ValueNameAt
+  function SpriteValueName(s: Sprite; idx: Longint): String; 
   
   /// Returns the sprite's value at the index specified
   ///
@@ -1724,159 +1507,34 @@ implementation
   
   function CreateSprite(layer: Bitmap): Sprite; overload;
   begin
-    result := CreateSprite(layer, 'layer0', nil);
+    result := CreateSprite(layer, AnimationScript(nil));
   end;
-  
-  function CreateSprite(layer: Bitmap; x, y: Single): Sprite; overload;
-  begin
-    result := CreateSprite(layer);
-    SpriteSetX(result, x);
-    SpriteSetY(result, y);
-  end;
-  
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-  begin
-    result := CreateSprite(layer);
-    SpriteSetPosition(result, pt);
-  end;
-  
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-  begin
-    result := CreateSprite(layer, layerName, nil);
-  end;
-  
-  function CreateSprite(layer: Bitmap; ani: AnimationScript): Sprite; overload;
-  begin
-    result := CreateSprite(layer, 'layer0', ani);
-  end;
-
+    
   function CreateSprite(const bitmapName, animationName: String): Sprite; overload;
   begin
     result := CreateSprite(BitmapNamed(bitmapName), AnimationScriptNamed(animationName));
   end;
   
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; x, y: Single): Sprite; overload;
+  function CreateSprite(layer: Bitmap; ani: AnimationScript): Sprite; overload;
   begin
-    result := CreateSprite(layer, ani);
-    SpriteSetX(result, x);
-    SpriteSetY(result, y);
-  end;
-  
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-  begin
-    result := CreateSprite(layer);
-    SpriteSetPosition(result, pt);
-  end;
-  
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  var
-    layerNames: StringArray;
-    layers: BitmapArray;
-  begin
-    SetLength(layerNames, 1);
-    SetLength(layers, 1);
-    
-    layerNames[0] := layerName;
-    layers[0] := layer;
-    
-    result := CreateSprite(layers, layerNames, ani);
-  end;
-  
-  function CreateSprite(const layers: BitmapArray): Sprite; overload;
-  begin
-    result := CreateSprite(layers, AnimationScript(nil));
-  end;
-  
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  begin
-    result := CreateSprite(layers, layerNames, nil);
-  end;
-  
-  function CreateSprite(const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  var
-    layerNames: StringArray;
-    i: Longint;
-  begin
-    SetLength(layerNames, Length(layers));
-    for i := 0 to High(layers) do
-    begin
-      layerNames[i] := 'layer' + IntToStr(i);
-    end;
-    
-    result := CreateSprite(layers, layerNames, ani);
-  end;
-  
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
-  begin
-    result := CreateSprite('Sprite', layers, layerNames, ani);
+    result := CreateSprite('Sprite', layer, ani);
   end;
   
   function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
   begin
-    result := CreateSprite(name, layer, 'layer0', nil);
-  end;
-  
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
-  begin
-    result := CreateSprite(name, layer, layerName, nil);
+    result := CreateSprite(name, layer, nil);
   end;
   
   function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
-  begin
-    result := CreateSprite(name, layer, 'layer0', ani);
-  end;
-  
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  var
-    layerNames: StringArray;
-    layers: BitmapArray;
-  begin
-    SetLength(layerNames, 1);
-    SetLength(layers, 1);
-    
-    layerNames[0] := layerName;
-    layers[0] := layer;
-    
-    result := CreateSprite(name, layers, layerNames, ani);
-  end;
-  
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
-  begin
-    result := CreateSprite(name, layers, AnimationScript(nil));
-  end;
-  
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  begin
-    result := CreateSprite(name, layers, layerNames, nil);
-  end;
-  
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  var
-    layerNames: StringArray;
-    i: Longint;
-  begin
-    SetLength(layerNames, Length(layers));
-    for i := 0 to High(layers) do
-    begin
-      layerNames[i] := 'layer' + IntToStr(i);
-    end;
-    
-    result := CreateSprite(name, layers, layerNames, ani);
-  end;
-  
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
   var
     sn: String;
-    i, idx, count, cellCount: Longint;
+    idx: Longint;
     obj: tResourceContainer;
     sp: SpritePtr;
+    layerNames: StringArray;
   begin
     result := nil; 
-    count := Length(layers);
-    
-    if count <> Length(layerNames) then begin RaiseException('The number of layers and layer names do not match.'); exit; end;
-    if count = 0 then begin exit; end;
-    
+
     // Find a unique name for this sprite
     idx := 0;
     sn := name;
@@ -1886,6 +1544,9 @@ implementation
       sn := name + IntToStr(idx);
       idx += 1;
     end;
+
+    SetLength(layerNames, 1);
+    layerNames[0] := 'BaseLayer';
     
     //Allocate the space for the sprite
     New(sp);
@@ -1893,30 +1554,12 @@ implementation
     sp^.name := sn;
     
     //Set lengths of the layer arrays
-    SetLength(sp^.layers, count);
-    SetLength(sp^.layerOffsets, count);
+    SetLength(sp^.layers, 1);
+    SetLength(sp^.layerOffsets, 1);
     
-    //Get the number of cells from the first layer
-    cellCount := BitmapCellCount(layers[0]);
-    
-    //Copy across the layers...
-    for i := 0 to High(sp^.layers) do
-    begin
-      sp^.layers[i] := layers[i];
-      sp^.layerOffsets[i] := PointAt(0,0);
-      
-      // Make sure that this image can be used interchangably with the other layers of the
-      // sprite.
-      if BitmapCellCount(sp^.layers[i]) <> cellCount then
-      begin
-        sp^.id := NONE_PTR;
-        Dispose(sp);
-        result := nil;
-        RaiseException('Layer ' + IntToStr(i + 1) + ' does not have the same number of cells as the other layers in the sprite ' + name);
-        exit;
-      end;
-    end;
-    
+    sp^.layers[0] := layer;
+    sp^.layerOffsets[0] := PointAt(0,0);
+        
     // Setup the layer name <-> id mapping
     InitNamedIndexCollection(sp^.layerIds, layerNames);
     
@@ -3396,16 +3039,16 @@ implementation
     result := NameCount(sp^.valueIds);
   end;
   
-  function SpriteValueNames(s: Sprite) : StringArray; 
+  function SpriteValueName(s: Sprite; idx: Longint) : String; 
   var
     sp: SpritePtr;
   begin
     sp := ToSpritePtr(s);
+    result := '';
 
-    SetLength(result, 0);
     if not Assigned(sp) then exit;
     
-    result := NamesOf(sp^.valueIds);
+    result := NameAt(sp^.valueIds, idx);
   end;
   
   function SpriteValue(s: Sprite; index: Longint): Single; overload;

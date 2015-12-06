@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 12:46:51.152686
+// SwinGame.pas was generated on 2015-12-06 14:54:59.390310
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -8,8 +8,6 @@ unit SwinGame;
 
 interface
 uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
-
-  type StringArray = sgTypes.StringArray;
 
   type Point2D = sgTypes.Point2D;
 
@@ -2514,17 +2512,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer have name 'layer1'.
+  // pixel level collisions, no animations, and have one layer named 'layer1'.
   //
   // This version of the constructor will assign a default name to the sprite for resource management purposes.
   function CreateSprite(layer: Bitmap): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(const layers: BitmapArray): Sprite; overload;
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
@@ -2535,13 +2526,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // animationName is used to indicate which AnimationScript to use.
   function CreateSprite(const bitmapName: String; const animationName: String): Sprite; overload;
 
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, and the specified layer names.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, the specified animation template, the layer have name 'layer1'.
@@ -2551,98 +2535,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
   // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
-  // given location.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, and the specified layer have name.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, the layer names 'layer1', 'layer2',... .
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, the layer have name 'layer1', at the given
-  // location.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, and layer name.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
   // pixel level collisions, the specified animation template, the layer have name 'layer1'.
   function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, and the specified layer have name.
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, and the specified layer names.
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer have name 'layer1', and position the sprite at the
-  // given x,y location.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; x: Single; y: Single): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, and layer name.
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap image. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, the specified animation template, the layer have name 'layer1', at the given
-  // x, y location.
-  //
-  // This version of the constructor will assign a default name to the sprite for resource management purposes.
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; x: Single; y: Single): Sprite; overload;
-
-  // Creates a sprite for the passed in bitmap images. The sprite will use the cell information within the 
-  // sprite if it is animated at a later stage. This version of CreateSprite will initialise the sprite to use
-  // pixel level collisions, no animation, the layer names 'layer1', 'layer2',... .
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
 
   // Create a new SpritePack with a given name. This pack can then be 
   // selected and used to control which sprites are drawn/updated in
@@ -3015,7 +2909,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteValueCount(s: Sprite): Longint; overload;
 
   // Returns the names of all of the values of the sprite
-  function SpriteValueNames(s: Sprite): StringArray; overload;
+  function SpriteValueName(s: Sprite; idx: Longint): String; overload;
 
   // Returns the current velocity of the Sprite. When the Sprite is updated (see ``UpdateSprite``)
   // this vector is used to move the Sprite.
@@ -7249,11 +7143,6 @@ implementation
     result := sgSprites.CreateSprite(layer);
   end;
 
-  function CreateSprite(const layers: BitmapArray): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layers);
-  end;
-
   function CreateSprite(const name: String; layer: Bitmap): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layer);
@@ -7264,89 +7153,14 @@ implementation
     result := sgSprites.CreateSprite(bitmapName,animationName);
   end;
 
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layers,layerNames);
-  end;
-
   function CreateSprite(layer: Bitmap; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(layer,ani);
   end;
 
-  function CreateSprite(layer: Bitmap; const pt: Point2D): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,pt);
-  end;
-
-  function CreateSprite(layer: Bitmap; const layerName: String): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,layerName);
-  end;
-
-  function CreateSprite(const name: String; const layers: BitmapArray): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layers);
-  end;
-
-  function CreateSprite(const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layers,ani);
-  end;
-
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; const pt: Point2D): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,ani,pt);
-  end;
-
-  function CreateSprite(layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,layerName,ani);
-  end;
-
   function CreateSprite(const name: String; layer: Bitmap; ani: AnimationScript): Sprite; overload;
   begin
     result := sgSprites.CreateSprite(name,layer,ani);
-  end;
-
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layer,layerName);
-  end;
-
-  function CreateSprite(const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layers,layerNames,ani);
-  end;
-
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layers,layerNames);
-  end;
-
-  function CreateSprite(const name: String; const layers: BitmapArray; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layers,ani);
-  end;
-
-  function CreateSprite(layer: Bitmap; x: Single; y: Single): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,x,y);
-  end;
-
-  function CreateSprite(const name: String; layer: Bitmap; const layerName: String; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layer,layerName,ani);
-  end;
-
-  function CreateSprite(layer: Bitmap; ani: AnimationScript; x: Single; y: Single): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(layer,ani,x,y);
-  end;
-
-  function CreateSprite(const name: String; const layers: BitmapArray; const layerNames: StringArray; ani: AnimationScript): Sprite; overload;
-  begin
-    result := sgSprites.CreateSprite(name,layers,layerNames,ani);
   end;
 
   procedure CreateSpritePack(const name: String); overload;
@@ -7859,9 +7673,9 @@ implementation
     result := sgSprites.SpriteValueCount(s);
   end;
 
-  function SpriteValueNames(s: Sprite): StringArray; overload;
+  function SpriteValueName(s: Sprite; idx: Longint): String; overload;
   begin
-    result := sgSprites.SpriteValueNames(s);
+    result := sgSprites.SpriteValueName(s,idx);
   end;
 
   function SpriteVelocity(s: Sprite): Vector; overload;

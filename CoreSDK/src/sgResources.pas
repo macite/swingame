@@ -187,7 +187,7 @@ implementation
 			 {$endif}
              sgText, sgAudio, sgGraphics, sgInput, sgShared, sgTimers, sgUtils,
              sgSprites, sgTrace, sgImages, sgAnimations, sgUserInterface,
-             sgArduino; // Swingame
+             sgArduino, sgBackendTypes; // Swingame
 
 //----------------------------------------------------------------------------
 // Global variables for resource management.

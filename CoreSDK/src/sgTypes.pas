@@ -16,11 +16,6 @@ interface
 
   type
 
-    /// @type StringArray
-    /// @array_wrapper
-    /// @field data: array of String
-    StringArray = array of String;
-    
     /// A Point2D represents an location in Cartesian coordinates (x,y).
     ///
     /// @struct Point2D

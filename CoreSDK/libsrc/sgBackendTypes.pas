@@ -42,6 +42,11 @@ uses sgTypes;
     /// @field data: array of Single
     SingleArray = array of Single;
 
+    /// @type StringArray
+    /// @array_wrapper
+    /// @field data: array of String
+    StringArray = array of String;
+
     /// The named index collection type is used to maintain a named collection of 
     /// index values that can then be used to lookup the location of the
     /// named value within a collection.
