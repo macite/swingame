@@ -253,17 +253,17 @@ interface
   /// @lib
   function KeyUp(key: KeyCode): Boolean;
   
-  /// Returns the number of fingers that are currently
-  /// on the screen.
-  ///
-  /// @lib
-  function NumberOfFingersOnScreen() : LongInt;
+  // /// Returns the number of fingers that are currently
+  // /// on the screen.
+  // ///
+  // /// @lib
+  // function NumberOfFingersOnScreen() : LongInt;
   
-  /// Returns an Array of Fingers that are on the screen.
-  ///
-  /// @lib
-  /// @length NumberOfFingersOnScreen
-  function FingersOnScreen() : FingerArray;
+  // /// Returns an Array of Fingers that are on the screen.
+  // ///
+  // /// @lib
+  // /// @length NumberOfFingersOnScreen
+  // function FingersOnScreen() : FingerArray;
   
   /// Returns false when the key requested is being held down. This is updated
   /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
@@ -297,9 +297,9 @@ interface
   /// @lib
   function DeviceMovedInZAxis() : Single;
   
-  /// returns a boolean indicating if the screen was touched.
-  /// @lib
-  function ScreenTouched() : Boolean;
+  // /// returns a boolean indicating if the screen was touched.
+  // /// @lib
+  // function ScreenTouched() : Boolean;
 
   /// Shows iOS Keyboard
   /// @lib
@@ -396,20 +396,20 @@ end;
 
 //Touch
 
-function FingersOnScreen() : FingerArray;
-begin
-  result := GetFingers();
-end;
+// function FingersOnScreen() : FingerArray;
+// begin
+//   result := GetFingers();
+// end;
 
-function NumberOfFingersOnScreen() : LongInt;
-begin
-  result := GetNumberOfFingers();
-end;
+// function NumberOfFingersOnScreen() : LongInt;
+// begin
+//   result := GetNumberOfFingers();
+// end;
 
-function ScreenTouched() : Boolean;
-begin
-  result := iDeviceTouched();
-end;
+// function ScreenTouched() : Boolean;
+// begin
+//   result := iDeviceTouched();
+// end;
 
 
 //Accelerometer

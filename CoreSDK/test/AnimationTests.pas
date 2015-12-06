@@ -26,7 +26,7 @@ begin
   
   currentAnim := -1;
   
-  s := CreateSprite(BitmapNamed('red_explosion'),'explosion',AnimationScriptNamed('explosion_temp'));
+  s := CreateSprite(BitmapNamed('red_explosion'), AnimationScriptNamed('explosion_temp'));
   SpriteAddLayer(s, BitmapNamed('count'), 'count');
   SpriteShowLayer(s, 'count');
   SpriteSetLayerOffset(s, 'count', PointAt(3,3));

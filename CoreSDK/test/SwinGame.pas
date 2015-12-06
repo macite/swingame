@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 15:23:39.617085
+// SwinGame.pas was generated on 2015-12-06 15:39:35.297658
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -14,10 +14,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type Vector = sgTypes.Vector;
 
   type Rectangle = sgTypes.Rectangle;
-
-  type Finger = sgTypes.Finger;
-
-  type FingerArray = sgTypes.FingerArray;
 
   type Resolution = sgTypes.Resolution;
 
@@ -2113,9 +2109,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // `StartReadingTextWithText` was called.
   function EndReadingText(): String; overload;
 
-  // Returns an Array of Fingers that are on the screen.
-  function FingersOnScreen(): FingerArray; overload;
-
   // Hides iOS Keyboard
   procedure HideKeyboard(); overload;
 
@@ -2188,10 +2181,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Moves the mouse cursor to the specified screen location.
   procedure MoveMouse(x: Longint; y: Longint); overload;
 
-  // Returns the number of fingers that are currently
-  // on the screen.
-  function NumberOfFingersOnScreen(): Longint; overload;
-
   // ProcessEvents allows the SwinGame API to react to user interactions. This
   // routine checks the current keyboard and mouse states. This routine must
   // be called frequently within your game loop to enable user interaction.
@@ -2206,9 +2195,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // false when the user presses enter or escape. At this point you can
   // read the string entered as either ASCII or Unicode.
   function ReadingText(): Boolean; overload;
-
-  // returns a boolean indicating if the screen was touched.
-  function ScreenTouched(): Boolean; overload;
 
   // Shows iOS Keyboard
   procedure ShowKeyboard(); overload;
@@ -6630,11 +6616,6 @@ implementation
     result := sgInput.EndReadingText();
   end;
 
-  function FingersOnScreen(): FingerArray; overload;
-  begin
-    result := sgInput.FingersOnScreen();
-  end;
-
   procedure HideKeyboard(); overload;
   begin
     sgInput.HideKeyboard();
@@ -6730,11 +6711,6 @@ implementation
     sgInput.MoveMouse(x,y);
   end;
 
-  function NumberOfFingersOnScreen(): Longint; overload;
-  begin
-    result := sgInput.NumberOfFingersOnScreen();
-  end;
-
   procedure ProcessEvents(); overload;
   begin
     sgInput.ProcessEvents();
@@ -6743,11 +6719,6 @@ implementation
   function ReadingText(): Boolean; overload;
   begin
     result := sgInput.ReadingText();
-  end;
-
-  function ScreenTouched(): Boolean; overload;
-  begin
-    result := sgInput.ScreenTouched();
   end;
 
   procedure ShowKeyboard(); overload;

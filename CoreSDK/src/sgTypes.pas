@@ -43,34 +43,41 @@ interface
     /// @field y: Single
     /// @sameas Point2D
     Vector = Point2D;
-        
+    
+    /// Rectangles are simple rectangle shapes that exist at a point and have a set width 
+    /// and height. This means that the rectangle always has edges that follow the sides of
+    /// the Window or Bitmap (so they are aligned with the x and y axes).
+    ///       
     /// @struct Rectangle
     Rectangle = packed record
       x, y: Single;
       width, height: Single;
     end;
-    
 
-    /// @struct Finger
-    Finger = Packed record
-      id : Int64;
-      position : Point2D;
-      positionDelta : Point2D;
-      lastPosition : Point2D;
-      pressure : Single; //unknown unit guessing that it uses the size of the contact point on the screen. not much documentation from SDL.
-      // lastPressure :Word;
-      down : Boolean;
-    end;
+    //TODO: Add touch support when iOS version is working again!
+    //
+    // /// @struct Finger
+    // Finger = packed record
+    //   id : Int64;
+    //   position : Point2D;
+    //   positionDelta : Point2D;
+    //   lastPosition : Point2D;
+    //   pressure : Single; //unknown unit guessing that it uses the size of the contact point on the screen. not much documentation from SDL.
+    //   // lastPressure :Word;
+    //   down : Boolean;
+    // end;
 
     
-    /// @type FingerArray
-    /// @array_wrapper
-    /// @field data: array of Finger
-    FingerArray = Array of Finger;
+    // /// @type FingerArray
+    // /// @array_wrapper
+    // /// @field data: array of Finger
+    // FingerArray = Array of Finger;
       
 
 
-    
+    /// Each Resolution value has a format, as well as refresh rate, width and height.
+    /// These can be used to determine the available screen resolutions.
+    ///
     /// @struct Resolution
     Resolution = packed record
       format : Longword;
