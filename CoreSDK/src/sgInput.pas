@@ -265,54 +265,54 @@ interface
   // /// @length NumberOfFingersOnScreen
   // function FingersOnScreen() : FingerArray;
   
-  /// Returns false when the key requested is being held down. This is updated
-  /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
-  /// to specify the key to be checked.
-  ///
-  /// @lib SetAccelerometerThreshold
-  procedure AccelerometerThreshold(value : Single); overload;
+  // /// Returns false when the key requested is being held down. This is updated
+  // /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
+  // /// to specify the key to be checked.
+  // ///
+  // /// @lib SetAccelerometerThreshold
+  // procedure AccelerometerThreshold(value : Single); overload;
 
-  /// Returns false when the key requested is being held down. This is updated
-  /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
-  /// to specify the key to be checked.
-  ///
-  /// @lib GetAccelerometerThreshold
-  function AccelerometerThreshold() : Single; overload;
+  // /// Returns false when the key requested is being held down. This is updated
+  // /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
+  // /// to specify the key to be checked.
+  // ///
+  // /// @lib GetAccelerometerThreshold
+  // function AccelerometerThreshold() : Single; overload;
 
-  /// Returns a value ranging from 0 to 1 showing delta
-  /// in x Axis from level(being flat on the ground).
-  ///
-  /// @lib
-  function DeviceMovedInXAxis() : Single;
-
-  /// Returns a value ranging from 0 to 1 showing delta
-  /// in y Axis from level(being flat on the ground).
-  ///
-  /// @lib
-  function DeviceMovedInYAxis() : Single;
-
-  /// Returns a value ranging from 0 to 1 showing delta
-  /// in z Axis from level(being flat on the ground).
-  ///
-  /// @lib
-  function DeviceMovedInZAxis() : Single;
-  
-  // /// returns a boolean indicating if the screen was touched.
+  // /// Returns a value ranging from 0 to 1 showing delta
+  // /// in x Axis from level(being flat on the ground).
+  // ///
   // /// @lib
-  // function ScreenTouched() : Boolean;
+  // function DeviceMovedInXAxis() : Single;
 
-  /// Shows iOS Keyboard
-  /// @lib
-  procedure ShowKeyboard();
-  /// Hides iOS Keyboard
-  /// @lib
-  procedure HideKeyboard();
-  /// Toggles iOS Keyboard
-  /// @lib
-  procedure ToggleKeyboard();
-  /// returns boolean indicating if iOS keyboard is shown
-  /// @lib
-  function KeyboardShown():Boolean;
+  // /// Returns a value ranging from 0 to 1 showing delta
+  // /// in y Axis from level(being flat on the ground).
+  // ///
+  // /// @lib
+  // function DeviceMovedInYAxis() : Single;
+
+  // /// Returns a value ranging from 0 to 1 showing delta
+  // /// in z Axis from level(being flat on the ground).
+  // ///
+  // /// @lib
+  // function DeviceMovedInZAxis() : Single;
+  
+  // // /// returns a boolean indicating if the screen was touched.
+  // // /// @lib
+  // // function ScreenTouched() : Boolean;
+
+  // /// Shows iOS Keyboard
+  // /// @lib
+  // procedure ShowKeyboard();
+  // /// Hides iOS Keyboard
+  // /// @lib
+  // procedure HideKeyboard();
+  // /// Toggles iOS Keyboard
+  // /// @lib
+  // procedure ToggleKeyboard();
+  // /// returns boolean indicating if iOS keyboard is shown
+  // /// @lib
+  // function KeyboardShown():Boolean;
 
 //=============================================================================
 implementation
@@ -414,43 +414,43 @@ end;
 
 //Accelerometer
 
-procedure AccelerometerThreshold(value : Single); overload;
-begin
-  _AccelerometerThreshold := value;
-end;
+// procedure AccelerometerThreshold(value : Single); overload;
+// begin
+//   _AccelerometerThreshold := value;
+// end;
 
-function AccelerometerThreshold() : Single; overload;
-begin
-  result := _AccelerometerThreshold;
-end;
+// function AccelerometerThreshold() : Single; overload;
+// begin
+//   result := _AccelerometerThreshold;
+// end;
 
-//THESE ARE SWITCHED because at the time of coding we only allowed landscape mode.
-function DeviceMovedInXAxis() : Single;
-begin
-  result := GetNormalisedDeltaYAxis();
-  if result < _AccelerometerThreshold then
-  begin
-    result := 0;
-  end;
-end;
+// //THESE ARE SWITCHED because at the time of coding we only allowed landscape mode.
+// function DeviceMovedInXAxis() : Single;
+// begin
+//   result := GetNormalisedDeltaYAxis();
+//   if result < _AccelerometerThreshold then
+//   begin
+//     result := 0;
+//   end;
+// end;
 
-function DeviceMovedInYAxis() : Single;
-begin
-  result := GetNormalisedDeltaXAxis();
-  if result < _AccelerometerThreshold then
-  begin
-    result := 0;
-  end;
-end;
+// function DeviceMovedInYAxis() : Single;
+// begin
+//   result := GetNormalisedDeltaXAxis();
+//   if result < _AccelerometerThreshold then
+//   begin
+//     result := 0;
+//   end;
+// end;
 
-function DeviceMovedInZAxis() : Single;
-begin
-  result := GetNormalisedDeltaZAxis();
-  if result < _AccelerometerThreshold then
-  begin
-    result := 0;
-  end;
-end;
+// function DeviceMovedInZAxis() : Single;
+// begin
+//   result := GetNormalisedDeltaZAxis();
+//   if result < _AccelerometerThreshold then
+//   begin
+//     result := 0;
+//   end;
+// end;
 
 
 

@@ -46,13 +46,26 @@ interface
     
     /// Rectangles are simple rectangle shapes that exist at a point and have a set width 
     /// and height. This means that the rectangle always has edges that follow the sides of
-    /// the Window or Bitmap (so they are aligned with the x and y axes).
+    /// the Window or Bitmap (so they are aligned with the x and y axes). The rectangle's
+    /// position is its top left corner - it then extends to the right and down from 
+    /// this position.
     ///       
     /// @struct Rectangle
     Rectangle = packed record
       x, y: Single;
       width, height: Single;
     end;
+
+    /// Circles have a center point and a radius. This means that, unlike other shapes
+    /// like the `Rectangle`, the circle extends out both left and right, and up and down
+    /// from the point you position it at.
+    ///
+    /// @struct Circle
+    Circle = packed record
+      center: Point2D;
+      radius: Single;
+    end;
+
 
     //TODO: Add touch support when iOS version is working again!
     //
@@ -84,18 +97,12 @@ interface
       refreshRate, width, height: Longint;
     end;
         
-    /// @struct Circle
-    Circle = packed record
-      center: Point2D;
-      radius: Single;
-    end;
-
-    /// @struct AccelerometerMotion
-    AccelerometerMotion = packed record
-      xAxis: Longint;
-      yAxis: Longint;
-      zAxis: Longint;
-    end;
+    // /// @struct AccelerometerMotion
+    // AccelerometerMotion = packed record
+    //   xAxis: Longint;
+    //   yAxis: Longint;
+    //   zAxis: Longint;
+    // end;
 
     /// @struct LineSegment
     LineSegment = packed record

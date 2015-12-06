@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 15:57:17.999116
+// SwinGame.pas was generated on 2015-12-06 16:08:00.493657
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -15,11 +15,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type Rectangle = sgTypes.Rectangle;
 
-  type Resolution = sgTypes.Resolution;
-
   type Circle = sgTypes.Circle;
 
-  type AccelerometerMotion = sgTypes.AccelerometerMotion;
+  type Resolution = sgTypes.Resolution;
 
   type LineSegment = sgTypes.LineSegment;
 
@@ -2078,38 +2076,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Setup the passed in bitmap for pixel level collisions.
   procedure SetupBitmapForCollisions(src: Bitmap); overload;
 
-  // Returns false when the key requested is being held down. This is updated
-  // as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
-  // to specify the key to be checked.
-  function AccelerometerThreshold(): Single; overload;
-
-  // Returns false when the key requested is being held down. This is updated
-  // as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
-  // to specify the key to be checked.
-  procedure AccelerometerThreshold(value: Single); overload;
-
   // Checks to see if any key has been pressed since the last time 
   // `ProcessEvents` was called.
   function AnyKeyPressed(): Boolean; overload;
 
-  // Returns a value ranging from 0 to 1 showing delta
-  // in x Axis from level(being flat on the ground).
-  function DeviceMovedInXAxis(): Single; overload;
-
-  // Returns a value ranging from 0 to 1 showing delta
-  // in y Axis from level(being flat on the ground).
-  function DeviceMovedInYAxis(): Single; overload;
-
-  // Returns a value ranging from 0 to 1 showing delta
-  // in z Axis from level(being flat on the ground).
-  function DeviceMovedInZAxis(): Single; overload;
-
   // Returns the string that has been read since `StartReadingText` or 
   // `StartReadingTextWithText` was called.
   function EndReadingText(): String; overload;
-
-  // Hides iOS Keyboard
-  procedure HideKeyboard(); overload;
 
   // Tells the mouse cursor to hide (no longer visible) if it is currently 
   // showing. Use `ShowMouse` to make the mouse cursor visible again.
@@ -2141,9 +2114,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
   // to specify the key to be checked.
   function KeyUp(key: KeyCode): Boolean; overload;
-
-  // returns boolean indicating if iOS keyboard is shown
-  function KeyboardShown(): Boolean; overload;
 
   // Returns true if the specified button was clicked since the last time
   // `ProcessEvents` was called
@@ -2195,9 +2165,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // read the string entered as either ASCII or Unicode.
   function ReadingText(): Boolean; overload;
 
-  // Shows iOS Keyboard
-  procedure ShowKeyboard(); overload;
-
   // Tells the mouse cursor to be visible if it was previously hidden with 
   // by a `HideMouse` or `SetMouseVisible`(False) call.
   procedure ShowMouse(); overload;
@@ -2243,9 +2210,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // user as ASCII. See TextReasAsUNICODE, StartReadingText and ReadingText
   // for more details.
   function TextReadAsASCII(): String; overload;
-
-  // Toggles iOS Keyboard
-  procedure ToggleKeyboard(); overload;
 
   // Checks to see if the window has been asked to close. You need to handle
   // this if you want the game to end when the window is closed. This value
@@ -6580,44 +6544,14 @@ implementation
     sgImages.SetupBitmapForCollisions(src);
   end;
 
-  function AccelerometerThreshold(): Single; overload;
-  begin
-    result := sgInput.AccelerometerThreshold();
-  end;
-
-  procedure AccelerometerThreshold(value: Single); overload;
-  begin
-    sgInput.AccelerometerThreshold(value);
-  end;
-
   function AnyKeyPressed(): Boolean; overload;
   begin
     result := sgInput.AnyKeyPressed();
   end;
 
-  function DeviceMovedInXAxis(): Single; overload;
-  begin
-    result := sgInput.DeviceMovedInXAxis();
-  end;
-
-  function DeviceMovedInYAxis(): Single; overload;
-  begin
-    result := sgInput.DeviceMovedInYAxis();
-  end;
-
-  function DeviceMovedInZAxis(): Single; overload;
-  begin
-    result := sgInput.DeviceMovedInZAxis();
-  end;
-
   function EndReadingText(): String; overload;
   begin
     result := sgInput.EndReadingText();
-  end;
-
-  procedure HideKeyboard(); overload;
-  begin
-    sgInput.HideKeyboard();
   end;
 
   procedure HideMouse(); overload;
@@ -6648,11 +6582,6 @@ implementation
   function KeyUp(key: KeyCode): Boolean; overload;
   begin
     result := sgInput.KeyUp(key);
-  end;
-
-  function KeyboardShown(): Boolean; overload;
-  begin
-    result := sgInput.KeyboardShown();
   end;
 
   function MouseClicked(button: MouseButton): Boolean; overload;
@@ -6720,11 +6649,6 @@ implementation
     result := sgInput.ReadingText();
   end;
 
-  procedure ShowKeyboard(); overload;
-  begin
-    sgInput.ShowKeyboard();
-  end;
-
   procedure ShowMouse(); overload;
   begin
     sgInput.ShowMouse();
@@ -6773,11 +6697,6 @@ implementation
   function TextReadAsASCII(): String; overload;
   begin
     result := sgInput.TextReadAsASCII();
-  end;
-
-  procedure ToggleKeyboard(); overload;
-  begin
-    sgInput.ToggleKeyboard();
   end;
 
   function WindowCloseRequested(): Boolean; overload;

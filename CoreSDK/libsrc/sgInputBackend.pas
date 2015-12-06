@@ -28,17 +28,17 @@ interface
     function WasKeyDown(kyCode : LongInt) : Boolean;
     function WasKeyJustTyped(kyCode : LongInt) : Boolean;
     // procedure HandleTouchEvent(const fingers : FingerArray; down, up: Boolean);
-    procedure HandleAxisMotionEvent(Accelerometer :  AccelerometerMotion);
-    function GetDeltaXAxis():LongInt;
-    function GetDeltaYAxis():LongInt;
-    function GetDeltaZAxis():LongInt;
+    // procedure HandleAxisMotionEvent(Accelerometer :  AccelerometerMotion);
+    // function GetDeltaXAxis():LongInt;
+    // function GetDeltaYAxis():LongInt;
+    // function GetDeltaZAxis():LongInt;
     // function GetFingers(): FingerArray;
     // function GetNumberOfFingers(): LongInt;
-    function GetNormalisedDeltaXAxis():Single;
-    function GetNormalisedDeltaYAxis():Single;
-    function GetNormalisedDeltaZAxis():Single;
-    function iDeviceTouched():Boolean;
-    function iDeviceMoved():Boolean;
+    // function GetNormalisedDeltaXAxis():Single;
+    // function GetNormalisedDeltaYAxis():Single;
+    // function GetNormalisedDeltaZAxis():Single;
+    // function iDeviceTouched():Boolean;
+    // function iDeviceMoved():Boolean;
     // function LastFingerPosition():Point2D;
   type
     KeyDownData = record
@@ -72,7 +72,7 @@ interface
 
     //IOS Variables
     // _fingers:            FingerArray;
-    _deltaAccelerometer: AccelerometerMotion;
+    // _deltaAccelerometer: AccelerometerMotion;
 
 implementation
   uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics;
@@ -536,69 +536,69 @@ implementation
   // end;
 
 
-  procedure HandleAxisMotionEvent(Accelerometer :  AccelerometerMotion);
-  begin
-    _justMoved := true;
-    _deltaAccelerometer := Accelerometer;    
-  end;
+  // procedure HandleAxisMotionEvent(Accelerometer :  AccelerometerMotion);
+  // begin
+  //   _justMoved := true;
+  //   _deltaAccelerometer := Accelerometer;    
+  // end;
 
-  function GetDeltaXAxis():LongInt;
-  begin
-    result := 0;
-    {$IFDEF IOS}
-      result := _deltaAccelerometer.xAxis;
-    {$ENDIF}
-  end;
+  // function GetDeltaXAxis():LongInt;
+  // begin
+  //   result := 0;
+  //   {$IFDEF IOS}
+  //     result := _deltaAccelerometer.xAxis;
+  //   {$ENDIF}
+  // end;
 
-  function GetDeltaYAxis():LongInt;
-  begin
-    result := 0;
-    {$IFDEF IOS}
-      result := _deltaAccelerometer.yAxis;
-    {$ENDIF}
-  end;
+  // function GetDeltaYAxis():LongInt;
+  // begin
+  //   result := 0;
+  //   {$IFDEF IOS}
+  //     result := _deltaAccelerometer.yAxis;
+  //   {$ENDIF}
+  // end;
   
-  function GetDeltaZAxis():LongInt;
-  begin
-    result := 0;
-    {$IFDEF IOS}
-      result := _deltaAccelerometer.zAxis;
-    {$ENDIF}
-  end;
+  // function GetDeltaZAxis():LongInt;
+  // begin
+  //   result := 0;
+  //   {$IFDEF IOS}
+  //     result := _deltaAccelerometer.zAxis;
+  //   {$ENDIF}
+  // end;
   
-  function GetNormalisedDeltaXAxis():Single;
-  begin
-    result := 0;
-    {$IFDEF IOS}
-      result := iOSDriver.AxisToG(_deltaAccelerometer.xAxis);
-    {$ENDIF}
-  end;
+  // function GetNormalisedDeltaXAxis():Single;
+  // begin
+  //   result := 0;
+  //   {$IFDEF IOS}
+  //     result := iOSDriver.AxisToG(_deltaAccelerometer.xAxis);
+  //   {$ENDIF}
+  // end;
 
-  function GetNormalisedDeltaYAxis():Single;
-  begin
-    result := 0;
-  {$IFDEF IOS}
-    result := iOSDriver.AxisToG(_deltaAccelerometer.yAxis);
-  {$ENDIF}
-  end;
+  // function GetNormalisedDeltaYAxis():Single;
+  // begin
+  //   result := 0;
+  // {$IFDEF IOS}
+  //   result := iOSDriver.AxisToG(_deltaAccelerometer.yAxis);
+  // {$ENDIF}
+  // end;
   
-  function GetNormalisedDeltaZAxis():Single;
-  begin
-    result := 0;
-  {$IFDEF IOS}
-    result := iOSDriver.AxisToG(_deltaAccelerometer.zAxis);
-  {$ENDIF}
-  end;
+  // function GetNormalisedDeltaZAxis():Single;
+  // begin
+  //   result := 0;
+  // {$IFDEF IOS}
+  //   result := iOSDriver.AxisToG(_deltaAccelerometer.zAxis);
+  // {$ENDIF}
+  // end;
 
-  function iDeviceTouched():Boolean;
-  begin
-    result := _justTouched;
-  end;
+  // function iDeviceTouched():Boolean;
+  // begin
+  //   result := _justTouched;
+  // end;
 
-  function iDeviceMoved():Boolean;
-  begin
-    result := _justMoved;
-  end;
+  // function iDeviceMoved():Boolean;
+  // begin
+  //   result := _justMoved;
+  // end;
 
   
 initialization
