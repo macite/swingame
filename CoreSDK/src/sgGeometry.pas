@@ -1230,32 +1230,7 @@ interface
   /// @sn vectorFromLines:%s overLones:%s givenHeading:%s resultingMaxIdx:%s
   ///
   /// @doc_details
-  function VectorOverLinesFromLines(const srcLines, boundLines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector;
-  
-//---------------------------------------------------------------------------
-// Points functions and procedures
-//---------------------------------------------------------------------------
-  
-  /// Returns the four points from the corners of a rectangle.
-  /// 
-  /// @lib PointsFromRect
-  /// @fixed_result_size 4
-  /// @sn pointsFromRect:%s
-  /// 
-  /// @class Rectangle
-  /// @getter Points
-  function PointsFrom(const rect: Rectangle): Point2DArray; overload;
-  
-  /// Returns the two points from the ends of a line segment.
-  /// 
-  /// @lib PointsFromLine
-  /// @fixed_result_size 2
-  /// @sn pointsFromLine:%s
-  /// 
-  /// @class LineSegment
-  /// @getter Points
-  function PointsFrom(const line: LineSegment): Point2DArray; overload;
-  
+  function VectorOverLinesFromLines(const srcLines, boundLines: LinesArray; const velocity: Vector; out maxIdx: Longint): Vector;  
   
   
 //---------------------------------------------------------------------------
@@ -1469,19 +1444,7 @@ interface
   /// @updatesArrayParam 2
   /// @csn applyToTriangle:%s
   procedure ApplyMatrix(const m: Matrix2D; var tri: Triangle);
-  
-  /// Apply the passed in Matrix2D to all of the points in the 
-  /// Point2DArray.
-  /// 
-  /// @lib ApplyMatrixToPoints
-  /// @sn matrix:%s applyToPoints:%s
-  /// 
-  /// @class Matrix2D
-  /// @overload ApplyTo ApplyToPoints
-  /// @updatesArrayParam 2
-  /// @csn applyToPoints:%s
-  procedure ApplyMatrix(const m: Matrix2D; var pts: Point2DArray);
-  
+    
   {$ifdef FPC}
   /// Multiply matrix by the vector.
   /// 
@@ -1540,6 +1503,38 @@ implementation
   const
     DEG_TO_RAD = 0.0174532925199432957692369076848861271344287188854172545609;
   
+  function PointsFrom(const rect: Rectangle): Point2DArray; overload;
+  begin
+    {$IFDEF TRACE}
+      TraceEnter('sgGeometry', 'PointsFrom(const rect: Rectangle): Point2DArray', '');
+    {$ENDIF}
+    
+    SetLength(result, 4);
+    result[0] := PointAt(rect.x, rect.y);
+    result[1] := PointAt(rect.x + rect.width, rect.y);
+    result[2] := PointAt(rect.x, rect.y + rect.height);
+    result[3] := PointAt(rect.x + rect.width, rect.y + rect.height);
+    
+    {$IFDEF TRACE}
+      TraceExit('sgGeometry', 'PointsFrom(const rect: Rectangle): Point2DArray', '');
+    {$ENDIF}
+  end;
+  
+  function PointsFrom(const line: LineSegment): Point2DArray; overload;
+  begin
+    {$IFDEF TRACE}
+      TraceEnter('sgGeometry', 'PointsFrom(line): Point2DArray', '');
+    {$ENDIF}
+    
+    SetLength(result, 2);
+    result[0] := line.startPoint;
+    result[1] := line.endPoint;
+    
+    {$IFDEF TRACE}
+      TraceExit('sgGeometry', 'PointsFrom(line): Point2DArray', '');
+    {$ENDIF}
+  end;
+
   //
   // This internal function is used to calculate the vector and determine if a hit has occurred...
   //
@@ -4399,39 +4394,7 @@ implementation
 //---------------------------------------------------------------------------
 // Points functions and procedures
 //---------------------------------------------------------------------------
-  
-  function PointsFrom(const rect: Rectangle): Point2DArray; overload;
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGeometry', 'PointsFrom(const rect: Rectangle): Point2DArray', '');
-    {$ENDIF}
     
-    SetLength(result, 4);
-    result[0] := PointAt(rect.x, rect.y);
-    result[1] := PointAt(rect.x + rect.width, rect.y);
-    result[2] := PointAt(rect.x, rect.y + rect.height);
-    result[3] := PointAt(rect.x + rect.width, rect.y + rect.height);
-    
-    {$IFDEF TRACE}
-      TraceExit('sgGeometry', 'PointsFrom(const rect: Rectangle): Point2DArray', '');
-    {$ENDIF}
-  end;
-  
-  function PointsFrom(const line: LineSegment): Point2DArray; overload;
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGeometry', 'PointsFrom(line): Point2DArray', '');
-    {$ENDIF}
-    
-    SetLength(result, 2);
-    result[0] := line.startPoint;
-    result[1] := line.endPoint;
-    
-    {$IFDEF TRACE}
-      TraceExit('sgGeometry', 'PointsFrom(line): Point2DArray', '');
-    {$ENDIF}
-  end;
-  
   function CenterPoint(const c: Circle): Point2D; overload;
   begin
     {$IFDEF TRACE}

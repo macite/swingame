@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 14:54:59.390310
+// SwinGame.pas was generated on 2015-12-06 15:23:39.617085
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -12,8 +12,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type Point2D = sgTypes.Point2D;
 
   type Vector = sgTypes.Vector;
-
-  type Point2DArray = sgTypes.Point2DArray;
 
   type Rectangle = sgTypes.Rectangle;
 
@@ -609,10 +607,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // the result as a new `Vector`.
   function AddVectors(const v1: Vector; const v2: Vector): Vector; overload;
 
-  // Apply the passed in Matrix2D to all of the points in the 
-  // Point2DArray.
-  procedure ApplyMatrix(const m: Matrix2D; var pts: Point2DArray); overload;
-
   // Use a matrix to transform all of the points in a triangle.
   procedure ApplyMatrix(const m: Matrix2D; var tri: Triangle); overload;
 
@@ -926,12 +920,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Get a text description of the point2D.
   function PointToString(const pt: Point2D): String; overload;
-
-  // Returns the four points from the corners of a rectangle.
-  function PointsFrom(const rect: Rectangle): Point2DArray; overload;
-
-  // Returns the two points from the ends of a line segment.
-  function PointsFrom(const line: LineSegment): Point2DArray; overload;
 
   // Create a Point2D that points at the X,Y location passed in.
   function RandomScreenPoint(): Point2D; overload;
@@ -2724,9 +2712,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Gets the offset of the specified layer.
   function SpriteLayerOffset(s: Sprite; idx: Longint): Point2D; overload;
 
-  // Returns the offets of the layers in the Sprite.
-  function SpriteLayerOffsets(s: Sprite): Point2DArray; overload;
-
   // Gets a rectangle that surrounds the indicated layer.
   function SpriteLayerRectangle(s: Sprite; idx: Longint): Rectangle; overload;
 
@@ -2825,9 +2810,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Sets the offset of the specified layer.
   procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D); overload;
-
-  // Sets the layer offsets for the sprite.
-  procedure SpriteSetLayerOffsets(s: Sprite; const values: Point2DArray); overload;
 
   // Allows you to change the mass of a Sprite.
   procedure SpriteSetMass(s: Sprite; value: Single); overload;
@@ -4368,11 +4350,6 @@ implementation
     result := sgGeometry.AddVectors(v1,v2);
   end;
 
-  procedure ApplyMatrix(const m: Matrix2D; var pts: Point2DArray); overload;
-  begin
-    sgGeometry.ApplyMatrix(m,pts);
-  end;
-
   procedure ApplyMatrix(const m: Matrix2D; var tri: Triangle); overload;
   begin
     sgGeometry.ApplyMatrix(m,tri);
@@ -4836,16 +4813,6 @@ implementation
   function PointToString(const pt: Point2D): String; overload;
   begin
     result := sgGeometry.PointToString(pt);
-  end;
-
-  function PointsFrom(const rect: Rectangle): Point2DArray; overload;
-  begin
-    result := sgGeometry.PointsFrom(rect);
-  end;
-
-  function PointsFrom(const line: LineSegment): Point2DArray; overload;
-  begin
-    result := sgGeometry.PointsFrom(line);
   end;
 
   function RandomScreenPoint(): Point2D; overload;
@@ -7413,11 +7380,6 @@ implementation
     result := sgSprites.SpriteLayerOffset(s,idx);
   end;
 
-  function SpriteLayerOffsets(s: Sprite): Point2DArray; overload;
-  begin
-    result := sgSprites.SpriteLayerOffsets(s);
-  end;
-
   function SpriteLayerRectangle(s: Sprite; idx: Longint): Rectangle; overload;
   begin
     result := sgSprites.SpriteLayerRectangle(s,idx);
@@ -7551,11 +7513,6 @@ implementation
   procedure SpriteSetLayerOffset(s: Sprite; const name: String; const value: Point2D); overload;
   begin
     sgSprites.SpriteSetLayerOffset(s,name,value);
-  end;
-
-  procedure SpriteSetLayerOffsets(s: Sprite; const values: Point2DArray); overload;
-  begin
-    sgSprites.SpriteSetLayerOffsets(s,values);
   end;
 
   procedure SpriteSetMass(s: Sprite; value: Single); overload;

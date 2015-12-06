@@ -15,8 +15,13 @@ interface
 //=============================================================================
 
   type
-
     /// A Point2D represents an location in Cartesian coordinates (x,y).
+    /// The x value represents the distance from the left edge of the window or bitmap, increasing
+    /// in value as you travel right. The y value represents the distance from the top 
+    /// edge of the window or bitmap, and increases as you travel down toward the bottom.
+    ///
+    /// Point2D is a great way to keep track of the location of something in a 2D space like
+    /// a Window or Bitmap.
     ///
     /// @struct Point2D
     /// @sameas Vector
@@ -24,19 +29,21 @@ interface
       x, y: Single;
     end;
 
-    /// Vectors represent a direction and distance, stored as x,y components.
+    /// Vectors represent a direction and distance, and can be visualised as an arrow from
+    /// one point to another in 2 dimensional space. Internally, the Vector is stored as its
+    /// x and y components (same as a `Point2D`).
+    ///
+    /// Vector is a great way to represent movement or forces. You could use a vector to track
+    /// how much a character moves each update (as the Vector stores the direction and distance).
+    /// Similarly, you could use a Vector to represent gravity or other forces. You can then 
+    /// add a number of force vectors together to get a final force to be applied to a character.
     ///
     /// @struct Vector
     /// @field x: Single
     /// @field y: Single
     /// @sameas Point2D
     Vector = Point2D;
-    
-    /// @type Point2DArray
-    /// @array_wrapper
-    /// @field data: array of Point2D
-    Point2DArray = Array of Point2D;
-    
+        
     /// @struct Rectangle
     Rectangle = packed record
       x, y: Single;

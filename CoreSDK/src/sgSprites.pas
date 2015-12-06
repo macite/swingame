@@ -330,25 +330,6 @@ interface
   /// @length SpriteLayerCount
   function SpriteLayers(s: Sprite): BitmapArray;
   
-  /// Returns the offets of the layers in the Sprite.
-  ///
-  /// @lib
-  ///
-  /// @class Sprite
-  /// @getter LayerOffsets
-  /// @length SpriteLayerCount
-  function SpriteLayerOffsets(s: Sprite): Point2DArray;
-  
-  /// Sets the layer offsets for the sprite.
-  ///
-  /// @lib
-  /// @sn sprite:%s setLayerOffsets:%s
-  ///
-  /// @class Sprite
-  /// @setter LayerOffsets
-  /// @length SpriteLayerCount
-  procedure SpriteSetLayerOffsets(s: Sprite; const values: Point2DArray);
-  
   /// Gets the offset of the specified layer.
   ///
   /// @lib SpriteLayerOffsetNamed

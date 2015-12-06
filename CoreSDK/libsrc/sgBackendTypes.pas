@@ -47,6 +47,12 @@ uses sgTypes;
     /// @field data: array of String
     StringArray = array of String;
 
+    /// @type Point2DArray
+    /// @array_wrapper
+    /// @field data: array of Point2D
+    Point2DArray = Array of Point2D;
+
+
     /// The named index collection type is used to maintain a named collection of 
     /// index values that can then be used to lookup the location of the
     /// named value within a collection.
