@@ -19,7 +19,7 @@
 unit sgSharedUtils;
 
 interface
-uses sgTypes;
+uses sgTypes, sgBackendTypes;
 
   {$ifndef FPC} // Delphi land
   function ExtractDelimited(index: integer; const value: string; delim: TSysCharSet): string;

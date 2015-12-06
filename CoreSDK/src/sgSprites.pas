@@ -527,14 +527,15 @@ interface
   /// @getter VisibleLayerCount
   function SpriteVisibleLayerCount(s: Sprite): Longint;
   
-  /// Returns the ids of the layers that are currently visible. In order back to front.
+  /// Returns the id of the layer at index `idx` that is currently visible.
+  /// Index 0 is the background, with larger indexes moving toward the foreground.
+  /// This returns -1 if there are no visible layers.
   ///
   /// @lib
   ///
   /// @class Sprite
-  /// @getter VisibleLayerIds
-  /// @length SpriteVisibleLayerCount
-  function SpriteVisibleLayerIds(s: Sprite) : LongintArray;
+  /// @method VisibleLayerIdAt
+  function SpriteVisibleLayerId(s: Sprite; idx: Longint) : Longint;
   
   /// Returns the bitmaps of the layers in the Sprite.
   ///
@@ -2735,14 +2736,14 @@ implementation
     else result := Length(sp^.visibleLayers);
   end;
   
-  function SpriteVisibleLayerIds(s: Sprite) : LongintArray;
+  function SpriteVisibleLayerId(s: Sprite; idx: Longint) : Longint;
   var
     sp: SpritePtr;
   begin
     sp := ToSpritePtr(s);
 
-    if not Assigned(sp) then result := nil
-    else result := sp^.visibleLayers;
+    if (not Assigned(sp)) or (idx < 0) or (idx > High(sp^.visibleLayers)) then result := -1
+    else result := sp^.visibleLayers[idx];
   end;
   
   function SpriteLayers(s: Sprite): BitmapArray;

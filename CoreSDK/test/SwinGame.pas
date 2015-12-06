@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-05 18:08:56.449712
+// SwinGame.pas was generated on 2015-12-06 12:45:14.281646
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -8,8 +8,6 @@ unit SwinGame;
 
 interface
 uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
-
-  type LongintArray = sgTypes.LongintArray;
 
   type StringArray = sgTypes.StringArray;
 
@@ -3037,8 +3035,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the number of layers that are currently visible for the sprite.
   function SpriteVisibleLayerCount(s: Sprite): Longint; overload;
 
-  // Returns the ids of the layers that are currently visible. In order back to front.
-  function SpriteVisibleLayerIds(s: Sprite): LongintArray; overload;
+  // Returns the id of the layer at index `idx` that is currently visible.
+  // Index 0 is the background, with larger indexes moving toward the foreground.
+  // This returns -1 if there are no visible layers.
+  function SpriteVisibleLayerId(s: Sprite; idx: Longint): Longint; overload;
 
   // The current Width of the sprite (aligned to the X axis).
   function SpriteWidth(s: Sprite): Longint; overload;
@@ -7891,9 +7891,9 @@ implementation
     result := sgSprites.SpriteVisibleLayerCount(s);
   end;
 
-  function SpriteVisibleLayerIds(s: Sprite): LongintArray; overload;
+  function SpriteVisibleLayerId(s: Sprite; idx: Longint): Longint; overload;
   begin
-    result := sgSprites.SpriteVisibleLayerIds(s);
+    result := sgSprites.SpriteVisibleLayerId(s,idx);
   end;
 
   function SpriteWidth(s: Sprite): Longint; overload;

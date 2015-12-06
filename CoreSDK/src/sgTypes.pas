@@ -16,10 +16,7 @@ interface
 
   type
 
-    /// @type LongintArray
-    /// @array_wrapper
-    /// @field data: array of Longint
-    LongintArray = array of Longint;
+    
     
     /// @type StringArray
     /// @array_wrapper
