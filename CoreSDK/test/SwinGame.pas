@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 12:45:14.281646
+// SwinGame.pas was generated on 2015-12-06 12:46:51.152686
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -10,8 +10,6 @@ interface
 uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
 
   type StringArray = sgTypes.StringArray;
-
-  type SingleArray = sgTypes.SingleArray;
 
   type Point2D = sgTypes.Point2D;
 

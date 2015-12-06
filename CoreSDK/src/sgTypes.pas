@@ -16,17 +16,10 @@ interface
 
   type
 
-    
-    
     /// @type StringArray
     /// @array_wrapper
     /// @field data: array of String
     StringArray = array of String;
-
-    /// @type SingleArray
-    /// @array_wrapper
-    /// @field data: array of Single
-    SingleArray = array of Single;
     
     /// A Point2D represents an location in Cartesian coordinates (x,y).
     ///
