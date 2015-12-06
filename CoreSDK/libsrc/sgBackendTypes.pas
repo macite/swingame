@@ -32,6 +32,11 @@ uses sgTypes;
   type
     PointerIdentifier = array [0..3] of Char;
 
+    /// @type ResolutionArray
+    /// @array_wrapper
+    /// @field data: array of Resolution
+    ResolutionArray = Array of Resolution;
+
     /// @type LongintArray
     /// @array_wrapper
     /// @field data: array of Longint

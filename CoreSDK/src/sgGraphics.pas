@@ -46,11 +46,11 @@ interface
   /// @lib
   function NumberOfResolutions(): Longint;
 
-  /// Returns a list of the available resolutions.
+  /// Returns the details of one of the available resolutions. Use idx from 0 to
+  /// `NumberOfResolutions` - 1 to access all of the available resolutions.
   ///
   /// @lib
-  /// @length NumberOfResolutions
-  function AvailableResolutions(): ResolutionArray;
+  function AvailableResolution(idx: LongInt): Resolution;
   
   /// Opens the graphical window so that it can be drawn onto. You can set the
   /// icon for this window using `SetIcon`. The window itself is only drawn when
@@ -2556,9 +2556,20 @@ implementation
   end;
 
 
-  function AvailableResolutions(): ResolutionArray;
+  function AvailableResolution(idx: LongInt): Resolution;
+  var
+    temp: ResolutionArray;
   begin
-    result := GraphicsDriver.AvailableResolutions();
+    temp := GraphicsDriver.AvailableResolutions();
+    if (idx >= 0) and (idx <= High(temp)) then
+      result := temp[idx]
+    else
+    begin
+      result.format := 0;
+      result.refreshRate := 0;
+      result.width := 0;
+      result.height := 0;
+    end;
   end;
 
   function NumberOfResolutions(): Longint;

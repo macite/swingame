@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 15:39:35.297658
+// SwinGame.pas was generated on 2015-12-06 15:57:17.999116
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -16,8 +16,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type Rectangle = sgTypes.Rectangle;
 
   type Resolution = sgTypes.Resolution;
-
-  type ResolutionArray = sgTypes.ResolutionArray;
 
   type Circle = sgTypes.Circle;
 
@@ -1150,8 +1148,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the two widest points on the circle that lie along the indicated vector.
   procedure WidestPoints(const c: Circle; const along: Vector; out pt1: Point2D; out pt2: Point2D); overload;
 
-  // Returns a list of the available resolutions.
-  function AvailableResolutions(): ResolutionArray; overload;
+  // Returns the details of one of the available resolutions. Use idx from 0 to
+  // `NumberOfResolutions` - 1 to access all of the available resolutions.
+  function AvailableResolution(idx: Longint): Resolution; overload;
 
   // Get the blue value of ``color``.
   function BlueOf(c: Color): Byte; overload;
@@ -5151,9 +5150,9 @@ implementation
     sgGeometry.WidestPoints(c,along,pt1,pt2);
   end;
 
-  function AvailableResolutions(): ResolutionArray; overload;
+  function AvailableResolution(idx: Longint): Resolution; overload;
   begin
-    result := sgGraphics.AvailableResolutions();
+    result := sgGraphics.AvailableResolution(idx);
   end;
 
   function BlueOf(c: Color): Byte; overload;
