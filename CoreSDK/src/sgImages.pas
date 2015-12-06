@@ -305,6 +305,17 @@ uses sgTypes;
   /// @method ToCellCircle
   /// @csn circleCellAtPT:%s 
   function BitmapCellCircle(bmp: Bitmap; const pt: Point2D): Circle; overload;
+
+  /// Creates a circle that will encompass a cell of the passed in bitmap if it
+  /// were drawn at the indicated point, with the specified scale.
+  ///
+  /// @lib BitmapCellCircleScale
+  /// @sn circleFromBitmapCell:%s atPt:%s scale:%s
+  ///
+  /// @class Bitmap
+  /// @method ToCellCircle
+  /// @csn circleCellAtPT:%s scale:%s
+  function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
   
   /// Creates a circle from within a cell in a bitmap, uses the larger of the width and
   /// height.
@@ -1220,10 +1231,15 @@ end;
 
 function BitmapCellCircle(bmp: Bitmap; x, y: Single): Circle; overload;
 begin
-  result := BitmapCellCircle(bmp, PointAt(x, y));
+  result := BitmapCellCircle(bmp, PointAt(x, y), 1.0);
 end;
 
 function BitmapCellCircle(bmp: Bitmap; const pt: Point2D): Circle; overload;
+begin
+  result := BitmapCellCircle(bmp, pt, 1.0);  
+end;
+
+function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'BitmapCellCircle', '');
@@ -1232,9 +1248,9 @@ begin
   result.center := pt;
   
   if BitmapCellWidth(bmp) > BitmapCellHeight(bmp) then
-    result.radius := RoundInt(BitmapCellWidth(bmp) / 2.0)
+    result.radius := Abs(RoundInt(BitmapCellWidth(bmp) / 2.0) * scale)
   else
-    result.radius := RoundInt(BitmapCellHeight(bmp) / 2.0);
+    result.radius := Abs(RoundInt(BitmapCellHeight(bmp) / 2.0) * scale);
   
   {$IFDEF TRACE}
     TraceExit('sgImages', 'BitmapCellCircle', '');

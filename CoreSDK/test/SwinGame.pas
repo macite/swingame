@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 17:40:27.092202
+// SwinGame.pas was generated on 2015-12-07 09:53:05.283459
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1843,6 +1843,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // height.
   function BitmapCellCircle(bmp: Bitmap; x: Single; y: Single): Circle; overload;
 
+  // Creates a circle that will encompass a cell of the passed in bitmap if it
+  // were drawn at the indicated point, with the specified scale.
+  function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
+
   // Returns the number of columns of cells in the specified bitmap.
   function BitmapCellColumns(bmp: Bitmap): Longint; overload;
 
@@ -2515,6 +2519,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // to the value passed in.
   procedure SpriteAddValue(s: Sprite; const name: String; initVal: Single); overload;
 
+  // Returns the anchor point of the sprite. This is the point around which the sprite rotates.
+  // This is in sprite coordinates, so as if the Sprite is drawn at 0,0.
+  function SpriteAnchorPoint(s: Sprite): Point2D; overload;
+
   // Indicates if the sprites animation has ended.
   function SpriteAnimationHasEnded(s: Sprite): Boolean; overload;
 
@@ -2613,15 +2621,20 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
 
   // The width of a given layer of the Sprite (aligned to the X axis).
-  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
 
   // The width of a given layer of the Sprite (aligned to the X axis).
-  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
 
   // This indicates the mass of the Sprite for any of the collide methods from
   // Physics. The mass of two colliding sprites will determine the relative
   // velocitys after the collision.
   function SpriteMass(s: Sprite): Single; overload;
+
+  // Indicates if the sprite is moved from its anchor point, or from its top left.
+  // When this returns true the location of the Sprite will indicate its anchor point.
+  // When this returns false the location of the Sprite is its top left corner.
+  function SpriteMoveFromAnchorPoint(s: Sprite): Boolean; overload;
 
   // This procedure starts the sprite moving to the indicated
   // destination point, over a specified number of seconds. When the 
@@ -2678,6 +2691,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Sends the layer specified to the back in the visible layer order.
   procedure SpriteSendLayerToBack(s: Sprite; visibleLayer: Longint); overload;
 
+  // Allows you to set the anchor point for the sprite. This is the point around
+  // which the sprite rotates. This is in sprite coordinates, so as if the Sprite
+  // is drawn at 0,0.
+  procedure SpriteSetAnchorPoint(s: Sprite; pt: Point2D); overload;
+
   // Sets the bitmap used by the Sprite to determine if it has collided with
   // other objects in the game. By default the CollisionBitmap is set to the
   // bitmap from the Sprite's first layer.
@@ -2704,6 +2722,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Allows you to change the mass of a Sprite.
   procedure SpriteSetMass(s: Sprite; value: Single); overload;
+
+  // Allows you to indicate if the sprite is moved from its anchor point, or from its
+  // top left.
+  // When set to true the location of the Sprite will be its anchor point.
+  // When set to false the location of the Sprite is its top left corner.
+  procedure SpriteSetMoveFromAnchorPoint(s: Sprite; value: Boolean); overload;
 
   // Sets the Sprite's position.
   procedure SpriteSetPosition(s: Sprite; const value: Point2D); overload;
@@ -6186,6 +6210,11 @@ implementation
     result := sgImages.BitmapCellCircle(bmp,x,y);
   end;
 
+  function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
+  begin
+    result := sgImages.BitmapCellCircle(bmp,pt,scale);
+  end;
+
   function BitmapCellColumns(bmp: Bitmap): Longint; overload;
   begin
     result := sgImages.BitmapCellColumns(bmp);
@@ -6996,6 +7025,11 @@ implementation
     sgSprites.SpriteAddValue(s,name,initVal);
   end;
 
+  function SpriteAnchorPoint(s: Sprite): Point2D; overload;
+  begin
+    result := sgSprites.SpriteAnchorPoint(s);
+  end;
+
   function SpriteAnimationHasEnded(s: Sprite): Boolean; overload;
   begin
     result := sgSprites.SpriteAnimationHasEnded(s);
@@ -7151,19 +7185,24 @@ implementation
     result := sgSprites.SpriteLayerRectangle(s,name);
   end;
 
-  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
-  begin
-    result := sgSprites.SpriteLayerWidth(s,idx);
-  end;
-
   function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
   begin
     result := sgSprites.SpriteLayerWidth(s,name);
   end;
 
+  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
+  begin
+    result := sgSprites.SpriteLayerWidth(s,idx);
+  end;
+
   function SpriteMass(s: Sprite): Single; overload;
   begin
     result := sgSprites.SpriteMass(s);
+  end;
+
+  function SpriteMoveFromAnchorPoint(s: Sprite): Boolean; overload;
+  begin
+    result := sgSprites.SpriteMoveFromAnchorPoint(s);
   end;
 
   procedure SpriteMoveTo(s: Sprite; const pt: Point2D; takingSeconds: Longint); overload;
@@ -7236,6 +7275,11 @@ implementation
     sgSprites.SpriteSendLayerToBack(s,visibleLayer);
   end;
 
+  procedure SpriteSetAnchorPoint(s: Sprite; pt: Point2D); overload;
+  begin
+    sgSprites.SpriteSetAnchorPoint(s,pt);
+  end;
+
   procedure SpriteSetCollisionBitmap(s: Sprite; bmp: Bitmap); overload;
   begin
     sgSprites.SpriteSetCollisionBitmap(s,bmp);
@@ -7274,6 +7318,11 @@ implementation
   procedure SpriteSetMass(s: Sprite; value: Single); overload;
   begin
     sgSprites.SpriteSetMass(s,value);
+  end;
+
+  procedure SpriteSetMoveFromAnchorPoint(s: Sprite; value: Boolean); overload;
+  begin
+    sgSprites.SpriteSetMoveFromAnchorPoint(s,value);
   end;
 
   procedure SpriteSetPosition(s: Sprite; const value: Point2D); overload;

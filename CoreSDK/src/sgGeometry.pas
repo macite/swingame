@@ -4140,7 +4140,7 @@ implementation
     {$ENDIF}
     
     result.center := pt;
-    result.radius := radius;
+    result.radius := Abs(radius);
     
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'CircleAt(const pt: Point2D', '');
@@ -4154,7 +4154,7 @@ implementation
     {$ENDIF}
     
     result.center := PointAt(x, y);
-    result.radius := radius;
+    result.radius := Abs(radius);
     
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'CircleAt(x, y: Single', '');

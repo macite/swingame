@@ -924,6 +924,47 @@ interface
   /// @getter CenterPoint
   function CenterPoint(s: Sprite): Point2D; overload;
   
+  /// Returns the anchor point of the sprite. This is the point around which the sprite rotates.
+  /// This is in sprite coordinates, so as if the Sprite is drawn at 0,0.
+  /// 
+  /// @lib
+  ///
+  /// @class Sprite
+  /// @getter AnchorPoint
+  function SpriteAnchorPoint(s: Sprite): Point2D;
+
+  /// Allows you to set the anchor point for the sprite. This is the point around
+  /// which the sprite rotates. This is in sprite coordinates, so as if the Sprite
+  /// is drawn at 0,0.
+  ///
+  /// @lib
+  ///
+  /// @class Sprite
+  /// @setter AnchorPoint
+  procedure SpriteSetAnchorPoint(s: Sprite; pt: Point2D);
+
+
+  /// Indicates if the sprite is moved from its anchor point, or from its top left.
+  /// When this returns true the location of the Sprite will indicate its anchor point.
+  /// When this returns false the location of the Sprite is its top left corner.
+  ///
+  /// @lib
+  ///
+  /// @class Sprite
+  /// @getter MoveFromAnchorPoint
+  function SpriteMoveFromAnchorPoint(s: Sprite): Boolean;
+
+  /// Allows you to indicate if the sprite is moved from its anchor point, or from its
+  /// top left.
+  /// When set to true the location of the Sprite will be its anchor point.
+  /// When set to false the location of the Sprite is its top left corner.
+  ///
+  /// @lib
+  ///
+  /// @class Sprite
+  /// @setter MoveFromAnchorPoint
+  procedure SpriteSetMoveFromAnchorPoint(s: Sprite; value: Boolean);
+
   
   
 //---------------------------------------------------------------------------
@@ -1126,8 +1167,6 @@ interface
   /// @class Sprite
   /// @setter Heading
   procedure SpriteSetHeading(s: Sprite; value: Single);
-  
-  
   
 //---------------------------------------------------------------------------
 // Sprite Current Frame
@@ -1531,6 +1570,9 @@ implementation
     
     sp^.layers[0] := layer;
     sp^.layerOffsets[0] := PointAt(0,0);
+
+    sp^.anchorPoint := PointAt(0, 0);
+    sp^.positionAtAnchorPoint := false;
         
     // Setup the layer name <-> id mapping
     InitNamedIndexCollection(sp^.layerIds, layerNames);
@@ -1566,10 +1608,6 @@ implementation
     sp^.collisionKind           := PixelCollisions;
     sp^.collisionBitmap         := sp^.layers[0];
     
-    // Setup cache details
-    sp^.backupCollisionBitmap   := nil;
-    sp^.cacheImage              := nil;
-
     // Event details
     sp^.announcedAnimationEnd := false;
     sp^.isMoving := false;
@@ -1634,76 +1672,6 @@ implementation
     ReleaseAll(_Sprites, @ReleaseSprite);
   end;
   
-  
-  //
-  // Update the buffered image for rotation and scaling of a bitmap based sprite.
-  //
-  procedure _UpdateSpriteImageCache(s: SpritePtr);
-  var
-    dest, bmp: Bitmap; //temporary surface
-    cells: BitmapArray;
-    i, idx, currentCell, numCells: Longint; //for image parts
-  begin
-    if (s^.cacheImage <> nil) then FreeBitmap(s^.cacheImage);
-    if (s^.backupCollisionBitmap <> nil) then
-    begin
-      FreeBitmap(s^.collisionBitmap); // cache is the copy...
-      s^.collisionBitmap := s^.backupCollisionBitmap;
-      s^.backupCollisionBitmap := nil;
-    end; 
-    if (SpriteRotation(s) = 0) and (SpriteScale(s) = 1) then exit; //no need to transform
-    
-    numCells := BitmapCellCount(s^.layers[0]);
-    if numCells = 0 then exit;
-    
-    SetLength(cells, numCells);
-    
-    //Draw non-transformed bitmap onto temp surface
-    for currentCell := 0 to High(cells) do
-    begin
-      dest := CreateBitmap('sprite-rot-cell-' + IntToStr(currentCell) + '-' + SpriteName(s), SpriteWidth(s), SpriteHeight(s));
-      for i := 0 to High(s^.visibleLayers) do
-      begin
-        idx := s^.visibleLayers[i];
-        bmp := s^.layers[idx]; // the bitmap to draw + rotate
-        MakeOpaque(bmp);
-        DrawCell(bmp, currentCell, Round(s^.layerOffsets[idx].x), Round(s^.layerOffsets[idx].y), OptionDrawTo(dest));
-        MakeTransparent(bmp);
-      end;
-      cells[currentCell] := dest; //RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
-      // FreeBitmap(dest);
-    end;
-    
-    // Make into a new image...
-    // s^.cacheImage := CombineIntoGrid(cells, 6);
-    
-    for currentCell := 0 to High(cells) do FreeBitmap(cells[currentCell]);
-    
-    // Repeat for cacheCollisionBitmap
-    s^.backupCollisionBitmap := s^.collisionBitmap;
-    bmp := s^.collisionBitmap;
-    numCells := BitmapCellCount(bmp);
-    
-    if numCells = 0 then exit;
-    SetLength(cells, numCells);
-    
-    //Draw non-transformed bitmap onto temp surface
-    for currentCell := 0 to High(cells) do
-    begin
-      dest := CreateBitmap('collision-cache-cell' + IntToStr(currentCell) + '-' + BitmapName(bmp), BitmapCellWidth(bmp), BitmapCellHeight(bmp));
-      MakeOpaque(bmp);
-      DrawCell(bmp, currentCell, 0, 0, OptionDrawTo(dest));
-      MakeTransparent(bmp);
-      cells[currentCell] := dest; //RotateScaleBitmap(dest, SpriteRotation(s), SpriteScale(s));
-      // FreeBitmap(dest);
-    end;
-    
-    // s^.collisionBitmap := CombineIntoGrid(cells, 6);
-    for currentCell := 0 to High(cells) do FreeBitmap(cells[currentCell]);
-    
-    SetupBitmapForCollisions(s^.collisionBitmap);
-  end;
-  
   procedure FreeSprite(var s : Sprite);
   var
     sp: SpritePtr;
@@ -1729,11 +1697,7 @@ implementation
       sp^.animationScript := nil;
       
       //Free buffered rotation image
-      if sp^.cacheImage <> nil then FreeBitmap(sp^.cacheImage);
-      if sp^.backupCollisionBitmap <> nil then FreeBitmap(sp^.collisionBitmap);
-      sp^.cacheImage := nil;
       sp^.collisionBitmap := nil;
-      sp^.backupCollisionBitmap := nil;
       
       TSpritePack(sp^.pack).RemoveSprite(s);
       
@@ -1770,8 +1734,6 @@ implementation
     //Add the values to the array
     sp^.layers[result] := newLayer;
     sp^.layerOffsets[result] := PointAt(0,0);
-    
-    _UpdateSpriteImageCache(sp);
   end;
   
   procedure SpriteReplayAnimation(s: Sprite);
@@ -1941,28 +1903,31 @@ implementation
   procedure DrawSprite(s: Sprite; xOffset, yOffset: Longint); overload;
   var
     i, idx: Longint;
+    angle, scale: Single;
     sp: SpritePtr;
+    opts: DrawingOptions;
   begin
     sp := ToSpritePtr(s);
 
-    if not Assigned(sp) then begin RaiseException('No sprite supplied'); exit; end;
+    if not Assigned(sp) then exit;
     
-    if Assigned(sp^.cacheImage) then 
-    begin
-      DrawCell(sp^.cacheImage, SpriteCurrentCell(s), 
-        Round(sp^.position.x + xOffset), 
-        Round(sp^.position.y + yOffset),
-        OptionDefaults());
-      exit;
-    end;
-    
+    angle := SpriteRotation(s);
+    if angle <> 0 then
+      opts := OptionRotateBmp( angle, sp^.anchorPoint.x, sp^.anchorPoint.y )
+    else
+      opts := OptionDefaults();
+
+    scale := SpriteScale(s);
+    if scale <> 1 then
+      opts := OptionScaleBmp( scale, scale, opts );
+
     for i := 0 to High(sp^.visibleLayers) do
     begin
       idx := sp^.visibleLayers[i];
       DrawCell(SpriteLayer(s, idx), SpriteCurrentCell(s), 
         Round(sp^.position.x + xOffset + sp^.layerOffsets[idx].x), 
         Round(sp^.position.y + yOffset + sp^.layerOffsets[idx].y),
-        OptionDefaults());
+        opts);
     end;
   end;
 
@@ -1984,14 +1949,17 @@ implementation
     mvmt: Vector;
     trans: Matrix2D;
     sp: SpritePtr;
+    angle: Single;
   begin
     sp := ToSpritePtr(s);
 
     if not Assigned(sp) then begin RaiseWarning('No sprite supplied to MoveSprite'); exit; end;
     
-    if SpriteRotation(s) <> 0 then
+    angle := SpriteRotation(s);
+
+    if angle <> 0 then
     begin
-      trans := RotationMatrix(-SpriteRotation(s));
+      trans := RotationMatrix(angle);
       mvmt := MatrixMultiply(trans, distance);
     end
     else  
@@ -2031,6 +1999,9 @@ implementation
   
     sp^.position.x := x;
     sp^.position.y := y;
+
+    if sp^.positionAtAnchorPoint then
+      sp^.position += sp^.anchorPoint;
   end;
 
   procedure MoveSprite(s: Sprite); overload;
@@ -2275,8 +2246,6 @@ implementation
       SetLength(sp^.visibleLayers, Length(sp^.visibleLayers) + 1);
       result := High(sp^.visibleLayers);
       sp^.visibleLayers[result] := id;
-      
-      _UpdateSpriteImageCache(s);
     end;
   end;
   
@@ -2310,7 +2279,6 @@ implementation
     
     //Resize the array to remove element
     SetLength(sp^.visibleLayers, Length(sp^.visibleLayers) - 1);
-    _UpdateSpriteImageCache(s);
   end;
   
   procedure SpriteToggleLayerVisible(s: Sprite; const name: String); overload;
@@ -2384,7 +2352,6 @@ implementation
     begin
       sp^.layerOffsets[i] := values[i];
     end;
-    _UpdateSpriteImageCache(s);
   end;
   
   function SpriteLayerOffset(s: Sprite; const name: String): Point2D;
@@ -2496,8 +2463,6 @@ implementation
     begin
       Swap(sp^.visibleLayers[i], sp^.visibleLayers[i + 1]);
     end;
-    
-    _UpdateSpriteImageCache(s);
   end;
   
   procedure SpriteSendLayerBackward(s: Sprite; visibleLayer: Longint);
@@ -2511,7 +2476,6 @@ implementation
     if (visibleLayer < 0) or (visibleLayer >= Length(sp^.visibleLayers) - 1) then exit;
     
     Swap(sp^.visibleLayers[visibleLayer], sp^.visibleLayers[visibleLayer + 1]);
-    _UpdateSpriteImageCache(s);
   end;
   
   procedure SpriteBringLayerForward(s: Sprite; visibleLayer: Longint);
@@ -2525,7 +2489,6 @@ implementation
     if (visibleLayer < 1) or (visibleLayer >= Length(sp^.visibleLayers)) then exit;
     
     Swap(sp^.visibleLayers[visibleLayer], sp^.visibleLayers[visibleLayer - 1]);
-    _UpdateSpriteImageCache(s);
   end;
   
   procedure SpriteBringLayerToFront(s: Sprite; visibleLayer: Longint);
@@ -2544,8 +2507,6 @@ implementation
     begin
       Swap(sp^.visibleLayers[i], sp^.visibleLayers[i - 1]);
     end;
-    
-    _UpdateSpriteImageCache(s);
   end;
   
   function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
@@ -2619,10 +2580,10 @@ implementation
     {$ENDIF}
     
     if not Assigned(sp) then result := CircleAt(0, 0, 0)
-    else if (idx < 0) or (idx > High(sp^.layers)) then begin RaiseException('Layer out of range in SpriteLayerCircle.'); result := CircleAt(0,0,0); exit; end
+    else if (idx < 0) or (idx > High(sp^.layers)) then result := CircleAt(0,0,0)
     else
     begin
-      result := BitmapCellCircle(sp^.layers[idx], CenterPoint(s));
+      result := BitmapCellCircle(sp^.layers[idx], CenterPoint(s), SpriteScale(s));
     end;
     
     {$IFDEF TRACE}
@@ -2641,7 +2602,7 @@ implementation
     {$ENDIF}
     
     if (not Assigned(sp)) or (not Assigned(sp^.collisionBitmap)) then result := CircleAt(0, 0, 0)
-    else result := BitmapCellCircle(sp^.collisionBitmap, CenterPoint(s));
+    else result := BitmapCellCircle(sp^.collisionBitmap, CenterPoint(s), SpriteScale(s));
     
     {$IFDEF TRACE}
       TraceExit('sgSprites', 'SpriteLayerCircle(s: Sprite): Circle', '');
@@ -2836,7 +2797,58 @@ implementation
   begin
     result := SpriteLayerHeight(s, 0);
   end;
+
+  function SpriteAnchorPoint(s: Sprite): Point2D;
+  var
+    sp: SpritePtr;
+  begin
+    sp := ToSpritePtr(s);
+    if Assigned(sp) then
+    begin
+      result := sp^.anchorPoint;
+    end
+    else
+    begin
+      result := PointAt(0,0);
+    end;
+  end;
+
+  procedure SpriteSetAnchorPoint(s: Sprite; pt: Point2D);
+  var
+    sp: SpritePtr;
+  begin
+    sp := ToSpritePtr(s);
+    if Assigned(sp) then
+    begin
+      sp^.anchorPoint := pt;
+    end;
+  end;
+
+  function SpriteMoveFromAnchorPoint(s: Sprite): Boolean;
+  var
+    sp: SpritePtr;
+  begin
+    sp := ToSpritePtr(s);
+    if Assigned(sp) then
+    begin
+      result := sp^.positionAtAnchorPoint;
+    end
+    else
+    begin
+      result := false;
+    end;
+  end;
   
+  procedure SpriteSetMoveFromAnchorPoint(s: Sprite; value: Boolean);
+  var
+    sp: SpritePtr;
+  begin
+    sp := ToSpritePtr(s);
+    if Assigned(sp) then
+    begin
+      sp^.positionAtAnchorPoint := value;
+    end;
+  end;
   
 //---------------------------------------------------------------------------
 // Sprite mass
@@ -2883,8 +2895,17 @@ implementation
 
     if Assigned(sp) then 
     begin
+      if value < 0 then
+      begin
+        value := 360 + (value + Abs(Trunc(value / 360) * 360));
+      end;
+      
+      if value > 360 then
+      begin
+        value := value - Trunc(value / 360) * 360;
+      end;
+
       sp^.values[ROTATION_IDX] := value;
-      _UpdateSpriteImageCache(s);
     end;
   end;
   
@@ -2911,7 +2932,6 @@ implementation
     if Assigned(sp) then 
     begin
       sp^.values[SCALE_IDX] := value;
-      _UpdateSpriteImageCache(sp);
     end;
   end;
   

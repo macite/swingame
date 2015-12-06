@@ -195,10 +195,10 @@ uses sgTypes;
       
       collisionKind:    CollisionTestKind;    //The kind of collisions used by this sprite
       collisionBitmap:  Bitmap;               // The bitmap used for collision testing (default to first image)
+
+      anchorPoint:            Point2D;
+      positionAtAnchorPoint:  Boolean;
         
-      backupCollisionBitmap:  Bitmap;         // Cache for rotated sprites
-      cacheImage:             Bitmap;         // ...
-      
       isMoving:     Boolean;                  // Used for events to indicate the sprite is moving
       destination:  Point2D;                  // The destination the sprite is moving to
       movingVec:    Vector;                   // The sprite's movement vector
