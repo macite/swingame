@@ -558,7 +558,8 @@ interface
     /// @type FreeNotifier
     FreeNotifier = procedure (p: Pointer); cdecl;
     
-    /// GUIElementKind is an enum of all the GUI types
+    /// GUIElementKind is an enum of all the GUI element types (such as buttons,
+    /// labels and textboxes).
     /// 
     ///
     /// @enum GUIElementKind
@@ -590,14 +591,17 @@ interface
       fdFilesAndDirectories = 3 // = (1 or 2)
       );
     
-    /// Panel
+    /// In SwinGame a Panel is an input area that contains a number of GUI elements (like a 
+    /// Window in the operating system). You can have a number of Panels open at once and 
+    /// they are drawn with DrawInterface and UpdateInterface.
     ///
     /// @class Panel
     /// @pointer_wrapper
     /// @field pointer: Pointer
     Panel = Pointer;
     
-    /// Region is the area within a panel
+    /// Region is the area within a panel and is used to represent the positions of the
+    /// different kinds of elements you want to appear for the user to interact with.
     ///
     /// @class Region
     /// @pointer_wrapper
@@ -605,12 +609,18 @@ interface
     /// @field pointer: Pointer
     Region = Pointer;
     
-    /// GUIEventCallback is a callbackfunction for gui eventsin swingame 
+    /// GUIEventCallback is a callback function for gui events in SwinGame. 
+    /// This callback will be passed the region where the event occurred and
+    /// the kind of event it was. You can then use this to trigger actions within
+    /// your program. These callbacks are called as part of the process that
+    /// runs within `UpdateInterface`. 
     ///
     /// @type GUIEventCallback
     GUIEventCallback = procedure (r: Region; kind: EventKind);
     
-    /// A connection to an Arduino device.
+    /// A serial connection to an Arduino device. You can use this to send
+    /// and receive data from the Sketch you have running within your
+    /// Arduino device.
     ///
     /// @class ArduinoDevice
     /// @pointer_wrapper
