@@ -158,7 +158,9 @@ interface
     Music = Pointer;
 
     /// In SwinGame, Matrices can be used to combine together a number of
-    /// operations that need to be performed on Vectors.
+    /// operations that need to be performed on Vectors. You can translate, 
+    /// rotate and scale, and combine these together into a single matrix
+    /// that can then be applied to vectors and points.
     ///
     /// @struct Matrix2D
     Matrix2D = packed record
@@ -176,7 +178,7 @@ interface
     /// @field data: Longword
     Color = Longword;
     
-    /// An Animation Template stores a number of animations. Each animation is
+    /// An Animation Script stores a number of animations. Each animation is
     /// a list of frames linked together in the order they are to be performed.
     /// Each frame has the cell to draw, the duration it should be drawn for and
     /// the next frame in the animation. The template can then be used to create
@@ -187,6 +189,18 @@ interface
     /// @field pointer: pointer
     AnimationScript = Pointer;
         
+    /// An Animation stores all of the details about animating a single image. It
+    /// includes the current animation frame (which has the cell to be drawn, and
+    /// the number of updates, the next frame, etc) and the number of times this has 
+    /// been updated.
+    ///
+    /// When you update an animation it checks its `AnimationScript` to determine if it
+    /// should move to the next frame. 
+    ///
+    /// When draw a bitmap with an animation, the animation is used to determine the 
+    /// current cell to draw. This will change over time as the Animation is updated
+    /// and it moves between the frames of the `AnimationScript`.
+    ///
     /// @class Animation
     /// @pointer_wrapper
     /// @field pointer: pointer
@@ -234,11 +248,6 @@ interface
       camera: DrawingDest;      // Draw to world or screen coordinates (camera has effect?)
       lineWidth: Longint;       // Specify the width of line drawings.
     end;
-
-    /// @type BitmapArray
-    /// @array_wrapper
-    /// @field data: array of Bitmap
-    BitmapArray = array of Bitmap;
         
     /// The CollisionSide enumeration is used to indicate the side a collision
     /// has occurred on.

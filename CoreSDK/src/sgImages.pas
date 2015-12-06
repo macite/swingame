@@ -52,16 +52,6 @@ uses sgTypes;
   /// @csn initNamed:%s withWidth:%s andHeight:%s
   function CreateBitmap(const name: String; width, height: Longint): Bitmap; overload;
   
-  /// Creates a new bitmap by combining together the bitmaps from an array. 
-  /// The bitmaps will be arranged in the number of columns specified, the 
-  /// number of rows will be determined by the number of columns specified.
-  /// This can be used to create a bitmap that can be used by a Sprite for
-  /// animation.
-  ///
-  /// @lib
-  /// @sn combineIntoBitmap:%s columns:%s
-  function CombineIntoGrid(const bitmaps: BitmapArray; cols: LongInt): Bitmap;
-  
   /// Loads a bitmap from file using where the specified transparent color
   /// is used as a color key for the transparent color.
   ///

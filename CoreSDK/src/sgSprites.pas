@@ -321,15 +321,6 @@ interface
   /// @method VisibleLayerIdAt
   function SpriteVisibleLayerId(s: Sprite; idx: Longint) : Longint;
   
-  /// Returns the bitmaps of the layers in the Sprite.
-  ///
-  /// @lib
-  ///
-  /// @class Sprite
-  /// @getter Layers
-  /// @length SpriteLayerCount
-  function SpriteLayers(s: Sprite): BitmapArray;
-  
   /// Gets the offset of the specified layer.
   ///
   /// @lib SpriteLayerOffsetNamed
@@ -1684,7 +1675,7 @@ implementation
     end;
     
     // Make into a new image...
-    s^.cacheImage := CombineIntoGrid(cells, 6);
+    // s^.cacheImage := CombineIntoGrid(cells, 6);
     
     for currentCell := 0 to High(cells) do FreeBitmap(cells[currentCell]);
     
@@ -1707,7 +1698,7 @@ implementation
       // FreeBitmap(dest);
     end;
     
-    s^.collisionBitmap := CombineIntoGrid(cells, 6);
+    // s^.collisionBitmap := CombineIntoGrid(cells, 6);
     for currentCell := 0 to High(cells) do FreeBitmap(cells[currentCell]);
     
     SetupBitmapForCollisions(s^.collisionBitmap);
@@ -2368,16 +2359,6 @@ implementation
 
     if (not Assigned(sp)) or (idx < 0) or (idx > High(sp^.visibleLayers)) then result := -1
     else result := sp^.visibleLayers[idx];
-  end;
-  
-  function SpriteLayers(s: Sprite): BitmapArray;
-  var
-    sp: SpritePtr;
-  begin
-    sp := ToSpritePtr(s);
-
-    if not Assigned(sp) then result := nil
-    else result := sp^.layers;
   end;
   
   function SpriteLayerOffsets(s: Sprite): Point2DArray;

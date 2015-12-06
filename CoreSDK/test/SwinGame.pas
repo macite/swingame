@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-06 17:13:12.097882
+// SwinGame.pas was generated on 2015-12-06 17:40:27.092202
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -40,8 +40,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type DrawingDest = sgTypes.DrawingDest;
 
   type DrawingOptions = sgTypes.DrawingOptions;
-
-  type BitmapArray = sgTypes.BitmapArray;
 
   type CollisionSide = sgTypes.CollisionSide;
 
@@ -1918,13 +1916,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Clear the drawing on the Bitmap to the passed in color.
   procedure ClearSurface(dest: Bitmap; toColor: Color); overload;
 
-  // Creates a new bitmap by combining together the bitmaps from an array. 
-  // The bitmaps will be arranged in the number of columns specified, the 
-  // number of rows will be determined by the number of columns specified.
-  // This can be used to create a bitmap that can be used by a Sprite for
-  // animation.
-  function CombineIntoGrid(const bitmaps: BitmapArray; cols: Longint): Bitmap; overload;
-
   // Creates a bitmap in memory that is the specified width and height (in pixels).
   // The new bitmap is initially transparent and can be used as the target 
   // for various drawing operations. Once you have drawn the desired image onto
@@ -2626,9 +2617,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // The width of a given layer of the Sprite (aligned to the X axis).
   function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
-
-  // Returns the bitmaps of the layers in the Sprite.
-  function SpriteLayers(s: Sprite): BitmapArray; overload;
 
   // This indicates the mass of the Sprite for any of the collide methods from
   // Physics. The mass of two colliding sprites will determine the relative
@@ -6303,11 +6291,6 @@ implementation
     sgImages.ClearSurface(dest,toColor);
   end;
 
-  function CombineIntoGrid(const bitmaps: BitmapArray; cols: Longint): Bitmap; overload;
-  begin
-    result := sgImages.CombineIntoGrid(bitmaps,cols);
-  end;
-
   function CreateBitmap(width: Longint; height: Longint): Bitmap; overload;
   begin
     result := sgImages.CreateBitmap(width,height);
@@ -7176,11 +7159,6 @@ implementation
   function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
   begin
     result := sgSprites.SpriteLayerWidth(s,name);
-  end;
-
-  function SpriteLayers(s: Sprite): BitmapArray; overload;
-  begin
-    result := sgSprites.SpriteLayers(s);
   end;
 
   function SpriteMass(s: Sprite): Single; overload;
