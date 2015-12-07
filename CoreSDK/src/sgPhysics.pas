@@ -503,6 +503,8 @@ implementation
     xA, yA, xB, yB: Longint;
     xOffA, yOffA, xOffB, yOffB: Single;
     positionInB: Vector;
+
+    stepX, stepY, yPosInB, posInB: Vector;
   begin
 
     if w1 * h1 <= w2 * h2 then // use bitmap 1 as the one to scan
@@ -542,6 +544,20 @@ implementation
       transformAToB := matrix2 * MatrixInverse(matrix1);
     end;
 
+    // Calculate the top left corner of A in B's local space
+    // This variable will be reused to keep track of the start of each row
+    yPosInB := transformAToB * VectorTo(0,0);
+
+    // When a point moves in A's local space, it moves in B's local space with a
+    // fixed direction and distance proportional to the movement in A.
+    // This algorithm steps through A one pixel at a time along A's X and Y axes
+    // Calculate the analogous steps in B:
+    stepX := transformAToB * VectorTo(1, 0) - yPosInB;
+    stepY := transformAToB * VectorTo(0, 1) - yPosInB;
+
+    // WriteLn('StepX ', PointToString(stepX));
+    // WriteLn('StepY ', PointToString(stepY));
+    
     // FillRectangle(ColorWhite, 0, 0, 50, 80);
     // DrawRectangle(ColorYellow, 0, 0, 36, 72);
     // DrawBitmap(bmp1, 0, 0);
@@ -550,20 +566,21 @@ implementation
     // For each row of pixels in A (the smaller)
     for yA := 0 to Round(hA) do
     begin
+      posInB := yPosInB;
+
       // For each pixel in this row
       for xA := 0 to Round(wA) do
       begin
         // Calculate this pixel's location in B
-        positionInB := transformAToB * VectorTo(xA, yA);
+        // positionInB := transformAToB * VectorTo(xA, yA);
 
         // Round to the nearest pixel
-        xB := Round(positionInB.X);
-        yB := Round(positionInB.Y);
+        xB := Round(posInB.X);
+        yB := Round(posInB.Y);
 
         // If the pixel lies within the bounds of B
         if  (0 <= xB) and (xB < wB) and (0 <= yB) and (yB < hB) then
         begin
-
           // DrawPixel(ColorBlack, xB + xOffB, yB + yOffB);
           // DrawPixel(ColorRed, xA + xOffA, yA + yOffA);
           // RefreshScreen();
@@ -579,7 +596,13 @@ implementation
             exit;
           end;
         end;
+
+        // Move to the next pixel in the row
+        posInB += stepX;
       end;
+
+      // Move to the next row
+      yPosInB += stepY;
     end;
 
     // No intersection found
