@@ -1347,6 +1347,14 @@ interface
   /// @overload Multiply MultiplyVector
   /// @csn multiplyByVector:%s
   function MatrixMultiply(const m: Matrix2D; const v: Vector): Vector; overload;
+
+  /// Calculate the inverse of a matrix.
+  ///
+  /// @lib
+  ///
+  /// @class Matrix2D
+  /// @method Inverse
+  function MatrixInverse(const m: Matrix2D): Matrix2D;
   
   /// Use a matrix to transform all of the points in a triangle.
   /// 
@@ -2334,6 +2342,33 @@ implementation
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'ScaleRotateTranslateMatrix(const scale: Point2D', '');
     {$ENDIF}
+  end;
+
+  function MatrixInverse(const m: Matrix2D): Matrix2D;
+  var
+    det, invdet: Single;
+  begin
+    det :=  m.elements[0, 0] * (m.elements[1, 1] * m.elements[2, 2] - m.elements[2, 1] * m.elements[1, 2]) -
+            m.elements[0, 1] * (m.elements[1, 0] * m.elements[2, 2] - m.elements[1, 2] * m.elements[2, 0]) +
+            m.elements[0, 2] * (m.elements[1, 0] * m.elements[2, 1] - m.elements[1, 1] * m.elements[2, 0]);
+
+    if det = 0 then //cant actually compute inverse!
+    begin
+      invdet := 3.4E38;
+      WriteLn('HERE');
+    end
+    else
+      invdet := 1 / det;
+
+    result.elements[0, 0] := (m.elements[1, 1] * m.elements[2, 2] - m.elements[2, 1] * m.elements[1, 2]) * invdet;
+    result.elements[0, 1] := (m.elements[0, 2] * m.elements[2, 1] - m.elements[0, 1] * m.elements[2, 2]) * invdet;
+    result.elements[0, 2] := (m.elements[0, 1] * m.elements[1, 2] - m.elements[0, 2] * m.elements[1, 1]) * invdet;
+    result.elements[1, 0] := (m.elements[1, 2] * m.elements[2, 0] - m.elements[1, 0] * m.elements[2, 2]) * invdet;
+    result.elements[1, 1] := (m.elements[0, 0] * m.elements[2, 2] - m.elements[0, 2] * m.elements[2, 0]) * invdet;
+    result.elements[1, 2] := (m.elements[1, 0] * m.elements[0, 2] - m.elements[0, 0] * m.elements[1, 2]) * invdet;
+    result.elements[2, 0] := (m.elements[1, 0] * m.elements[2, 1] - m.elements[2, 0] * m.elements[1, 1]) * invdet;
+    result.elements[2, 1] := (m.elements[2, 0] * m.elements[0, 1] - m.elements[0, 0] * m.elements[2, 1]) * invdet;
+    result.elements[2, 2] := (m.elements[0, 0] * m.elements[1, 1] - m.elements[1, 0] * m.elements[0, 1]) * invdet;
   end;
 
   function MatrixMultiply(const m1, m2: Matrix2D): Matrix2D; overload;

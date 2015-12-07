@@ -1,17 +1,49 @@
 program SpriteRotationTest;
 uses SwinGame, sgTypes;
 
+function SpriteLocationMatrix(s: Sprite): Matrix2D;
+var
+	scale, newX, newY, w, h: Single;
+	anchorMatrix: Matrix2D;
+begin
+	scale := SpriteScale(s);
+	w := SpriteLayerWidth(s, 0);
+	h := SpriteLayerHeight(s, 0);
+	
+	anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
+
+	result := IdentityMatrix();
+	result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
+	result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
+	result := MatrixMultiply(anchorMatrix, result);
+
+	newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
+	newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
+	result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
+
+	result := MatrixMultiply(ScaleMatrix(scale), result);	
+end;
+
 procedure Main();
 var
-	sprt: Sprite;
+	sprt, s2: Sprite;
+	tri, initTri: Triangle;
+	triB, initTriB: Triangle;
 begin
 	OpenGraphicsWindow('Sprite Rotation', 600, 600);
 	sprt := CreateSprite(BitmapNamed('rocket_sprt.png'));
-
 	SpriteSetMoveFromAnchorPoint(sprt, true);
-
 	SpriteSetX(sprt, 300);
 	SpriteSetY(sprt, 300);
+
+	s2 := CreateSprite(BitmapNamed('rocket_sprt.png'));
+	SpriteSetMoveFromAnchorPoint(s2, true);
+	SpriteSetX(s2, 100);
+	SpriteSetY(s2, 100);
+
+
+	initTri := TriangleFrom(0, 0, BitmapWidth(BitmapNamed('rocket_sprt.png')), BitmapHeight(BitmapNamed('rocket_sprt.png')), 0, BitmapHeight(BitmapNamed('rocket_sprt.png')));
+	initTriB := TriangleFrom(BitmapWidth(BitmapNamed('rocket_sprt.png')), 0, BitmapWidth(BitmapNamed('rocket_sprt.png')), BitmapHeight(BitmapNamed('rocket_sprt.png')), 0, 0);
 
 	repeat
 		ProcessEvents();
@@ -57,15 +89,32 @@ begin
 		if KeyTyped(Key0) then SpriteSetRotation(sprt, -9045);
 		if KeyTyped(Key9) then SpriteSetRotation(sprt, 9045);
 
+		tri := initTri;
+		triB := initTriB;
+		ApplyMatrix(SpriteLocationMatrix(sprt), tri);
+		ApplyMatrix(SpriteLocationMatrix(sprt), triB);
+		FillTriangle(ColorGreen, tri);
+		FillTriangle(ColorGreen, triB);
+
+		tri := initTri;
+		triB := initTriB;
+		ApplyMatrix(SpriteLocationMatrix(s2), tri);
+		ApplyMatrix(SpriteLocationMatrix(s2), triB);
+		FillTriangle(ColorBlue, tri);
+		FillTriangle(ColorBlue, triB);
 
 		DrawSprite(sprt);
+		DrawSprite(s2);
 		UpdateSprite(sprt);
+
+		if SpriteCollision(sprt, s2) then
+		begin
+			DrawCircle(ColorRed, SpriteCollisionCircle(s2));
+		end;
 
 		DrawCircle(ColorGreen, SpriteCollisionCircle(sprt));
 
 		DrawLine(ColorGreen, LineFromVector(CenterPoint(sprt), MatrixMultiply(RotationMatrix(SpriteRotation(sprt)), VectorMultiply(SpriteVelocity(sprt), 10.0))));
-
-		WriteLn(SpriteRotation(sprt):4:2);
 
 		RefreshScreen();
 	until WindowCloseRequested();

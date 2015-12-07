@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-07 09:53:05.283459
+// SwinGame.pas was generated on 2015-12-07 15:33:24.501233
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -809,6 +809,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Get a text description of the line segment.
   function LineToString(const ln: LineSegment): String; overload;
+
+  // Calculate the inverse of a matrix.
+  function MatrixInverse(const m: Matrix2D): Matrix2D; overload;
 
   // Multiplies the `Vector` parameter ``v`` with the `Matrix2D` ``m`` and 
   // returns the result as a `Vector`. Use this to transform the vector with 
@@ -4583,6 +4586,11 @@ implementation
   function LineToString(const ln: LineSegment): String; overload;
   begin
     result := sgGeometry.LineToString(ln);
+  end;
+
+  function MatrixInverse(const m: Matrix2D): Matrix2D; overload;
+  begin
+    result := sgGeometry.MatrixInverse(m);
   end;
 
   function MatrixMultiply(const m: Matrix2D; const v: Vector): Vector; overload;

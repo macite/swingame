@@ -45,13 +45,17 @@ implementation
 
 		SetLength(b^.nonTransparentPixels, b^.width, b^.height);
 
+		// WriteLn(b^.name);
 		for r := 0 to b^.height - 1 do
 		begin
 			for c := 0 to b^.width - 1 do
 			begin
-				b^.nonTransparentPixels[c, r] := ((pixels[c + r * b^.width] and $000000FF) > 0);
+				b^.nonTransparentPixels[c, r] := ((pixels[c + r * b^.width] and $000000FF) > $0000008F );
+				// if b^.nonTransparentPixels[c, r] then Write(1) else Write(0);
 			end;
+			// WriteLn();
 		end;
+		// WriteLn();
 	end;
 
 	procedure SetNonAlphaPixelsProcedure(bmp : Bitmap); 

@@ -73,8 +73,6 @@ interface
   /// @csn collisionWithRect:%s
   function SpriteRectCollision(s: Sprite; const r: Rectangle): Boolean; overload;
   
-  
-  
 //---------------------------------------------------------------------------
 // Sprite <-> Bitmap Collision Detection
 //---------------------------------------------------------------------------
@@ -486,10 +484,107 @@ implementation
 //=============================================================================
 
   uses
-    SysUtils, sgTrace,
+    SysUtils, sgTrace, sgUtils,
     sgGraphics, sgCamera, sgGeometry, sgSprites, sgShared, sgImages, sgBackendTypes, GeometryHelper;
 
   //---------------------------------------------------------------------------
+
+  // See http://www.austincc.edu/cchrist1/GAME1343/TransformedCollision/TransformedCollision.htm
+  function _CollisionWithinBitmapImagesWithTranslation(
+             bmp1: Bitmap; w1, h1, offsetX1, offsetY1: Single; //bbox1: Boolean;
+             matrix1: Matrix2D;
+             bmp2: Bitmap; w2, h2, offsetX2, offsetY2: Single; //bbox2: Boolean
+             matrix2: Matrix2D
+           ): Boolean; overload;
+  var
+    a, b: Bitmap;
+    transformAToB: Matrix2D;
+    hA, wA, hB, wB: Single;
+    xA, yA, xB, yB: Longint;
+    xOffA, yOffA, xOffB, yOffB: Single;
+    positionInB: Vector;
+  begin
+
+    if w1 * h1 <= w2 * h2 then // use bitmap 1 as the one to scan
+    begin
+      a := bmp1;
+      hA := h1;
+      wA := w1;
+      xOffA := offsetX1;
+      yOffA := offsetY1;
+
+      b := bmp2;
+      hB := h2;
+      wB := w2;
+      xOffB := offsetX2;
+      yOffB := offsetY2;
+
+      // Calculate a matrix which transforms from 1's local space into
+      // world space and then into 2's local space
+      transformAToB := matrix1 * MatrixInverse(matrix2);
+    end
+    else // use bitmap 2
+    begin
+      a := bmp2;
+      hA := h2;
+      wA := w2;
+      xOffA := offsetX2;
+      yOffA := offsetY2;
+
+      b := bmp1;
+      hB := h1;
+      wB := w1;
+      xOffB := offsetX1;
+      yOffB := offsetY1;
+
+      // Calculate a matrix which transforms from 1's local space into
+      // world space and then into 2's local space
+      transformAToB := matrix2 * MatrixInverse(matrix1);
+    end;
+
+    // FillRectangle(ColorWhite, 0, 0, 50, 80);
+    // DrawRectangle(ColorYellow, 0, 0, 36, 72);
+    // DrawBitmap(bmp1, 0, 0);
+
+    // Have to check all pixels of one bitmap
+    // For each row of pixels in A (the smaller)
+    for yA := 0 to Round(hA) do
+    begin
+      // For each pixel in this row
+      for xA := 0 to Round(wA) do
+      begin
+        // Calculate this pixel's location in B
+        positionInB := transformAToB * VectorTo(xA, yA);
+
+        // Round to the nearest pixel
+        xB := Round(positionInB.X);
+        yB := Round(positionInB.Y);
+
+        // If the pixel lies within the bounds of B
+        if  (0 <= xB) and (xB < wB) and (0 <= yB) and (yB < hB) then
+        begin
+
+          // DrawPixel(ColorBlack, xB + xOffB, yB + yOffB);
+          // DrawPixel(ColorRed, xA + xOffA, yA + yOffA);
+          // RefreshScreen();
+
+          if PixelDrawnAtPoint(a, xA + xOffA, yA + yOffA) and PixelDrawnAtPoint(b, xB + xOffB, yB + yOffB) then
+          begin
+            result := true;
+            // DrawPixel(ColorGreen, xA, yA);
+            // DrawPixel(ColorGreen, xB, yB);
+            // RefreshScreen();
+            // WriteLn('Checking ', xA, ',', yA, ' --> ', xB, ',', yB);
+            // Delay(5000);
+            exit;
+          end;
+        end;
+      end;
+    end;
+
+    // No intersection found
+    result := false;
+  end;
 
   function BitmapPartRectCollision(bmp: Bitmap; x, y: Single; const part: Rectangle; const rect: Rectangle): Boolean;
   var
@@ -590,7 +685,7 @@ implementation
     else
       result := CellRectCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position.x, sp^.position.y, rect);
   end;
-  
+
   /// Performs a collision detection within two bitmaps at the given x, y
   /// locations. The bbox values indicate if each bitmap should use per
   /// pixel collision detection or a bbox collision detection. This version
@@ -686,6 +781,29 @@ implementation
                 bmp2, x2, y2, b2^.width, b2^.height, 0, 0);
   end;
   
+  function SpriteLocationMatrix(s: SpritePtr): Matrix2D;
+  var
+    scale, newX, newY, w, h: Single;
+    anchorMatrix: Matrix2D;
+  begin
+    scale := SpriteScale(s);
+    w := SpriteLayerWidth(s, 0);
+    h := SpriteLayerHeight(s, 0);
+    
+    anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
+
+    result := IdentityMatrix();
+    result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
+    result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
+    result := MatrixMultiply(anchorMatrix, result);
+
+    newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
+    newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
+    result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
+
+    result := MatrixMultiply(ScaleMatrix(scale), result); 
+  end;
+
   function CollisionWithinSpriteImages(s1, s2: Sprite): Boolean;
   var
     part1, part2: Rectangle;
@@ -694,7 +812,7 @@ implementation
     sp1 := ToSpritePtr(s1);
     sp2 := ToSpritePtr(s2);
 
-    if (s1 = nil) or (sp2 = nil) then begin RaiseException('One of the sprites specified is nil'); exit; end;
+    if (s1 = nil) or (sp2 = nil) then begin result := false; exit; end;
     
     // Check if either is not using pixel level collisions
     if SpriteCollisionKind(s1) = AABBCollisions then 
@@ -711,9 +829,16 @@ implementation
     part1 := SpriteCurrentCellRectangle(s1);
     part2 := SpriteCurrentCellRectangle(s2);
     
-    result := CollisionWithinBitmapImages(
+    if (SpriteRotation(s1) = 0) and (SpriteRotation(s2) = 0) then
+      result := CollisionWithinBitmapImages(
                 sp1^.collisionBitmap, sp1^.position.x, sp1^.position.y, part1.width, part1.height, part1.x, part1.y, 
-                sp2^.collisionBitmap, sp2^.position.x, sp2^.position.y, part2.width, part2.height, part2.x, part2.y);
+                sp2^.collisionBitmap, sp2^.position.x, sp2^.position.y, part2.width, part2.height, part2.x, part2.y)
+    else
+    begin
+      result := _CollisionWithinBitmapImagesWithTranslation(
+                sp1^.collisionBitmap, part1.width, part1.height, part1.x, part1.y, SpriteLocationMatrix(sp1),
+                sp2^.collisionBitmap, part2.width, part2.height, part2.x, part2.y, SpriteLocationMatrix(sp2))
+    end;
   end;
 
   function BitmapCollision(bmp1: Bitmap; x1, y1: Single; bmp2: Bitmap; x2, y2: Single): Boolean; overload;
@@ -736,7 +861,9 @@ implementation
   
   function SpriteCollision(s1, s2: Sprite): Boolean;
   begin
-    if not SpriteRectCollision(s1, SpriteCollisionRectangle(s2)) then 
+    if not CircleCircleCollision(SpriteCircle(s1), SpriteCircle(s2)) then
+      result := false
+    else if (SpriteRotation(s1) = 0) and (SpriteRotation(s2) = 0 ) and not RectanglesIntersect(SpriteCollisionRectangle(s1), SpriteCollisionRectangle(s2)) then 
       result := false
     else if (SpriteCollisionKind(s1) = PixelCollisions) or (SpriteCollisionKind(s2) = PixelCollisions) then
       result := CollisionWithinSpriteImages(s1, s2)

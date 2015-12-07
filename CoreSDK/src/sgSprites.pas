@@ -1571,7 +1571,7 @@ implementation
     sp^.layers[0] := layer;
     sp^.layerOffsets[0] := PointAt(0,0);
 
-    sp^.anchorPoint := PointAt(0, 0);
+    sp^.anchorPoint := PointAt(BitmapWidth(layer) / 2, BitmapHeight(layer) / 2);
     sp^.positionAtAnchorPoint := false;
         
     // Setup the layer name <-> id mapping
@@ -1913,7 +1913,7 @@ implementation
     
     angle := SpriteRotation(s);
     if angle <> 0 then
-      opts := OptionRotateBmp( angle, sp^.anchorPoint.x, sp^.anchorPoint.y )
+      opts := OptionRotateBmp( angle, sp^.anchorPoint.x - SpriteLayerWidth(s, 0) / 2, sp^.anchorPoint.y  - SpriteLayerHeight(s, 0) / 2 )
     else
       opts := OptionDefaults();
 
