@@ -915,6 +915,7 @@ implementation
   function SpriteBitmapCollision(s: Sprite; bmp: Bitmap; const pt: Point2D; const part: Rectangle): Boolean; overload;
   var
     sp: SpritePtr;
+    part1: Rectangle;
   begin
     sp := ToSpritePtr(s);
 
@@ -927,7 +928,15 @@ implementation
       exit;
     end;
     
-    result := CellBitmapCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position, bmp, pt, part);
+    if SpriteRotation(s) <> 0 then
+    begin
+      part1 := SpriteCurrentCellRectangle(s);
+      result := _CollisionWithinBitmapImagesWithTranslation(
+                sp^.collisionBitmap, part1.width, part1.height, part1.x, part1.y, SpriteLocationMatrix(sp),
+                bmp, part.width, part.height, part.x, part.y, TranslationMatrix(pt));
+    end
+    else
+      result := CellBitmapCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position, bmp, pt, part);
   end;
   
   /// Determines if a sprite has collided with a bitmap using pixel level

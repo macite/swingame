@@ -110,6 +110,11 @@ begin
 		else
 			DrawRectangle(ColorPurple, r);
 
+		DrawBitmap('ufo.png', 400, 300);
+
+		if SpriteBitmapCollision(sprt, BitmapNamed('ufo.png'), 400, 300) then
+			DrawRectangle(ColorPurple, 400, 300, BitmapWidth(BitmapNamed('ufo.png')), BitmapHeight(BitmapNamed('ufo.png')));
+
 		DrawSprite(sprt);
 		DrawSprite(s2);
 		UpdateSprite(sprt);
