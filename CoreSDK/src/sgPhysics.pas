@@ -1,3 +1,5 @@
+{$modeswitch nestedprocvars}
+
 //=============================================================================
 // sgPhysics.pas
 //=============================================================================
@@ -489,37 +491,57 @@ implementation
 
   //---------------------------------------------------------------------------
 
+  function SpriteLocationMatrix(s: SpritePtr): Matrix2D;
+  var
+    scale, newX, newY, w, h: Single;
+    anchorMatrix: Matrix2D;
+  begin
+    scale := SpriteScale(s);
+    w := SpriteLayerWidth(s, 0);
+    h := SpriteLayerHeight(s, 0);
+    
+    anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
+
+    result := IdentityMatrix();
+    result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
+    result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
+    result := MatrixMultiply(anchorMatrix, result);
+
+    newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
+    newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
+    result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
+
+    result := MatrixMultiply(ScaleMatrix(scale), result); 
+  end;
+
+
+  type MyFunc = function (x1, y1, x2, y2: Single): Boolean is nested;
+
+  // Step over pixels in the two areas based on the supplied matrix
+  //
   // See http://www.austincc.edu/cchrist1/GAME1343/TransformedCollision/TransformedCollision.htm
-  function _CollisionWithinBitmapImagesWithTranslation(
-             bmp1: Bitmap; w1, h1, offsetX1, offsetY1: Single; //bbox1: Boolean;
-             matrix1: Matrix2D;
-             bmp2: Bitmap; w2, h2, offsetX2, offsetY2: Single; //bbox2: Boolean
-             matrix2: Matrix2D
+  function _StepThroughPixels(
+             w1, h1: Single; 
+             const matrix1: Matrix2D;
+             w2, h2: Single; //bbox2: Boolean
+             const matrix2: Matrix2D;
+             endFn: MyFunc
            ): Boolean; overload;
   var
-    a, b: Bitmap;
+    aIs1: Boolean;
     transformAToB: Matrix2D;
     hA, wA, hB, wB: Single;
     xA, yA, xB, yB: Longint;
-    xOffA, yOffA, xOffB, yOffB: Single;
-    positionInB: Vector;
-
     stepX, stepY, yPosInB, posInB: Vector;
   begin
-
     if w1 * h1 <= w2 * h2 then // use bitmap 1 as the one to scan
     begin
-      a := bmp1;
+      aIs1 := true;
       hA := h1;
       wA := w1;
-      xOffA := offsetX1;
-      yOffA := offsetY1;
 
-      b := bmp2;
       hB := h2;
       wB := w2;
-      xOffB := offsetX2;
-      yOffB := offsetY2;
 
       // Calculate a matrix which transforms from 1's local space into
       // world space and then into 2's local space
@@ -527,17 +549,12 @@ implementation
     end
     else // use bitmap 2
     begin
-      a := bmp2;
+      aIs1 := false;
       hA := h2;
       wA := w2;
-      xOffA := offsetX2;
-      yOffA := offsetY2;
 
-      b := bmp1;
       hB := h1;
       wB := w1;
-      xOffB := offsetX1;
-      yOffB := offsetY1;
 
       // Calculate a matrix which transforms from 1's local space into
       // world space and then into 2's local space
@@ -554,13 +571,6 @@ implementation
     // Calculate the analogous steps in B:
     stepX := transformAToB * VectorTo(1, 0) - yPosInB;
     stepY := transformAToB * VectorTo(0, 1) - yPosInB;
-
-    // WriteLn('StepX ', PointToString(stepX));
-    // WriteLn('StepY ', PointToString(stepY));
-    
-    // FillRectangle(ColorWhite, 0, 0, 50, 80);
-    // DrawRectangle(ColorYellow, 0, 0, 36, 72);
-    // DrawBitmap(bmp1, 0, 0);
 
     // Have to check all pixels of one bitmap
     // For each row of pixels in A (the smaller)
@@ -581,18 +591,11 @@ implementation
         // If the pixel lies within the bounds of B
         if  (0 <= xB) and (xB < wB) and (0 <= yB) and (yB < hB) then
         begin
-          // DrawPixel(ColorBlack, xB + xOffB, yB + yOffB);
-          // DrawPixel(ColorRed, xA + xOffA, yA + yOffA);
-          // RefreshScreen();
 
-          if PixelDrawnAtPoint(a, xA + xOffA, yA + yOffA) and PixelDrawnAtPoint(b, xB + xOffB, yB + yOffB) then
+          if   (     aIs1  and endFn(xA, yA, xB, yB)) 
+            or ((not aIs1) and endFn(xB, yB, xA, yA)) then
           begin
             result := true;
-            // DrawPixel(ColorGreen, xA, yA);
-            // DrawPixel(ColorGreen, xB, yB);
-            // RefreshScreen();
-            // WriteLn('Checking ', xA, ',', yA, ' --> ', xB, ',', yB);
-            // Delay(5000);
             exit;
           end;
         end;
@@ -607,6 +610,39 @@ implementation
 
     // No intersection found
     result := false;
+  end;
+
+  // See http://www.austincc.edu/cchrist1/GAME1343/TransformedCollision/TransformedCollision.htm
+  function _CollisionWithinBitmapImagesWithTranslation(
+             bmp1: Bitmap; w1, h1, offsetX1, offsetY1: Single; //bbox1: Boolean;
+             const matrix1: Matrix2D;
+             bmp2: Bitmap; w2, h2, offsetX2, offsetY2: Single; //bbox2: Boolean
+             const matrix2: Matrix2D
+           ): Boolean; overload;
+
+    function _CheckBmps(x1, y1, x2, y2: Single): Boolean;
+    begin
+      result := 
+        PixelDrawnAtPoint(bmp1, x1 + offsetX1, y1 + offsetY1) and PixelDrawnAtPoint(bmp2, x2 + offsetX2, y2 + offsetY2);
+    end;
+  begin
+    result := _StepThroughPixels(w1, h1, matrix1, w2, h2, matrix2, @_CheckBmps);
+  end;
+
+  // Check if part of a bitmap collides with a rect (given the rotation/scaling/translation in the bmpMatrix)
+  function _BitmapPartRectCollisionWithTranslation(
+      bmp: Bitmap; const bmpMatrix: Matrix2D; const part, rect: Rectangle): Boolean;
+  var
+    matrix2: Matrix2D;
+
+    function _CheckBmpVsRect(x1, y1, x2, y2: Single): Boolean;
+    begin
+      result := 
+        PixelDrawnAtPoint(bmp, x1 + part.x, y1 + part.y);
+    end;
+  begin
+    matrix2 := TranslationMatrix(rect.x, rect.y);
+    result := _StepThroughPixels(part.width, part.height, bmpMatrix, rect.width, rect.height, matrix2, @_CheckBmpVsRect);
   end;
 
   function BitmapPartRectCollision(bmp: Bitmap; x, y: Single; const part: Rectangle; const rect: Rectangle): Boolean;
@@ -706,7 +742,12 @@ implementation
     if SpriteCollisionKind(s) = AABBCollisions then 
       result := true
     else
-      result := CellRectCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position.x, sp^.position.y, rect);
+    begin
+      if SpriteRotation(s) <> 0 then
+        result := _BitmapPartRectCollisionWithTranslation(sp^.collisionBitmap, SpriteLocationMatrix(sp), SpriteCurrentCellRectangle(sp), rect)
+      else
+        result := CellRectCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position.x, sp^.position.y, rect);
+    end;
   end;
 
   /// Performs a collision detection within two bitmaps at the given x, y
@@ -804,29 +845,6 @@ implementation
                 bmp2, x2, y2, b2^.width, b2^.height, 0, 0);
   end;
   
-  function SpriteLocationMatrix(s: SpritePtr): Matrix2D;
-  var
-    scale, newX, newY, w, h: Single;
-    anchorMatrix: Matrix2D;
-  begin
-    scale := SpriteScale(s);
-    w := SpriteLayerWidth(s, 0);
-    h := SpriteLayerHeight(s, 0);
-    
-    anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
-
-    result := IdentityMatrix();
-    result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
-    result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
-    result := MatrixMultiply(anchorMatrix, result);
-
-    newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
-    newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
-    result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
-
-    result := MatrixMultiply(ScaleMatrix(scale), result); 
-  end;
-
   function CollisionWithinSpriteImages(s1, s2: Sprite): Boolean;
   var
     part1, part2: Rectangle;
