@@ -1,5 +1,4 @@
-
-unit sgDriverGraphicsSDL2;
+unit sgDriverGraphics;
 //=============================================================================
 // sgDriverGraphics.pas
 //=============================================================================
@@ -21,26 +20,52 @@ unit sgDriverGraphicsSDL2;
 interface
 	uses sgTypes, sgBackendTypes;
 
-  procedure LoadSDL2GraphicsDriver();
+  procedure LoadGraphicsDriver();
+
+  function RGBAColor(r, g, b, a: Byte)  : Color;
+  function GetPixel32 (bmp: BitmapPtr; x, y: Single) : Color;
+  procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
+  procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
+  procedure FillCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions);
+  procedure DrawCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
+  procedure FillEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
+  procedure DrawEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
+  procedure FillRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
+  procedure DrawRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
+  procedure DrawLine(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
+  procedure DrawPixel(clr : Color; x, y : Single; const opts: DrawingOptions);
+  procedure SetClipRectangle(dest : BitmapPtr; rect : Rectangle);
+  procedure ResetClip(dest : BitmapPtr);
+  procedure SetVideoModeFullScreen();
+  procedure SetVideoModeNoFrame();
+  procedure InitializeGraphicsWindow(const caption : String; screenWidth, screenHeight : LongInt);
+  procedure InitializeScreen( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
+  procedure ResizeGraphicsWindow(newWidth, newHeight : LongInt);
+  procedure RefreshScreen(screen : BitmapPtr);
+  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
+  function ColorFrom(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
+  function GetScreenWidth(): LongInt; 
+  function GetScreenHeight(): LongInt; 
+  function AvailableResolutions(): ResolutionArray;
 
 implementation
-  uses sgDriverSDL2Types, sgDriverGraphics, sgShared, sgGeometry;
+  uses sgDriverSDL2Types, sgShared, sgGeometry;
 
-  function RGBAColorProcedure(r, g, b, a: Byte)  : Color;
+  function RGBAColor(r, g, b, a: Byte)  : Color;
   begin
     //TODO: standardise and remove from drivers
     result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
 
-	function GetPixel32Procedure (bmp: BitmapPtr; x, y: Single) : Color;
+	function GetPixel32 (bmp: BitmapPtr; x, y: Single) : Color;
   var
     clr: sg_color;
 	begin
     clr := _sg_functions^.graphics.read_pixel(bmp^.surface, Round(x), Round(y));
-    result := RGBAColorProcedure(Round(clr.r * 255), Round(clr.g * 255), Round(clr.b * 255), Round(clr.a * 255));
+    result := RGBAColor(Round(clr.r * 255), Round(clr.g * 255), Round(clr.b * 255), Round(clr.a * 255));
 	end;
 	
-  procedure FillTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
+  procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   var
     pts: array [0..6] of Single;
   begin
@@ -58,7 +83,7 @@ implementation
     _sg_functions^.graphics.fill_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
 
-  procedure DrawTriangleProcedure(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
+  procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   var
     pts: array [0..6] of Single;
   begin
@@ -76,7 +101,7 @@ implementation
     _sg_functions^.graphics.draw_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
   end;
   
-  procedure FillCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
+  procedure FillCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   var
     pts: array [0..3] of Single;
   begin
@@ -89,7 +114,7 @@ implementation
     _sg_functions^.graphics.fill_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 
-  procedure DrawCircleProcedure(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
+  procedure DrawCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
   var
     pts: array [0..3] of Single;
   begin
@@ -102,7 +127,7 @@ implementation
     _sg_functions^.graphics.draw_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
   end;
 	
-	procedure FillEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
+	procedure FillEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
 	begin
@@ -116,7 +141,7 @@ implementation
     _sg_functions^.graphics.fill_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 	
-	procedure DrawEllipseProcedure (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
+	procedure DrawEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -130,7 +155,7 @@ implementation
     _sg_functions^.graphics.draw_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
-	procedure FillRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
+	procedure FillRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -144,7 +169,7 @@ implementation
     _sg_functions^.graphics.fill_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
 	end;
 
-  procedure DrawRectangleProcedure (clr : Color; rect : Rectangle; const opts : DrawingOptions);
+  procedure DrawRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;
   begin
@@ -158,7 +183,7 @@ implementation
     _sg_functions^.graphics.draw_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
-	procedure DrawLineProcedure(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
+	procedure DrawLine(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
   var
     pts: array [0..5] of Single;
   begin
@@ -174,7 +199,7 @@ implementation
     _sg_functions^.graphics.draw_line(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 5);
   end;
 	
-	procedure DrawPixelProcedure(clr : Color; x, y : Single; const opts: DrawingOptions);
+	procedure DrawPixel(clr : Color; x, y : Single; const opts: DrawingOptions);
   var
     pts: array [0..2] of Single;
   begin
@@ -186,7 +211,7 @@ implementation
     _sg_functions^.graphics.draw_pixel(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 2);
 	end;
   
-  procedure SetClipRectangleProcedure(dest : BitmapPtr; rect : Rectangle);
+  procedure SetClipRectangle(dest : BitmapPtr; rect : Rectangle);
   var
     pts: array [0..4] of Single;
   begin
@@ -198,12 +223,12 @@ implementation
     _sg_functions^.graphics.set_clip_rect(dest^.surface, @pts[0], 4);
   end;
   
-  procedure ResetClipProcedure(dest : BitmapPtr);
+  procedure ResetClip(dest : BitmapPtr);
   begin
     _sg_functions^.graphics.clear_clip_rect(dest^.surface);
   end;
 
-  procedure SetVideoModeFullScreenProcedure();
+  procedure SetVideoModeFullScreen();
   var
     val: Longint = 0;
   begin
@@ -213,7 +238,7 @@ implementation
     _sg_functions^.graphics.show_fullscreen(@wind, val);
   end;
 
-  procedure SetVideoModeNoFrameProcedure();
+  procedure SetVideoModeNoFrame();
   var
     val: Longint = 0;
   begin
@@ -222,7 +247,7 @@ implementation
     _sg_functions^.graphics.show_border(@wind, val);
   end;
 	
-  procedure InitializeGraphicsWindowProcedure(const caption : String; screenWidth, screenHeight : LongInt);
+  procedure InitializeGraphicsWindow(const caption : String; screenWidth, screenHeight : LongInt);
   begin
     wind := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
     wind_open := true;
@@ -240,7 +265,7 @@ implementation
     _screen := @wind;
   end;
 
-  procedure InitializeScreenProcedure( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
+  procedure InitializeScreen( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
   var
     clr: sg_color;
   begin
@@ -251,7 +276,7 @@ implementation
     _sg_functions^.text.draw_text( psg_drawing_surface(screen^.surface), nil, x - 30, y, PChar(msg), clr);
   end;
   
-  procedure ResizeGraphicsWindowProcedure(newWidth, newHeight : LongInt);
+  procedure ResizeGraphicsWindow(newWidth, newHeight : LongInt);
   begin
     _sg_functions^.graphics.resize(@wind, newWidth, newHeight);
     screenRect.width := newWidth;
@@ -260,12 +285,12 @@ implementation
     screen^.height := newHeight;
   end;
   
-  procedure RefreshScreenProcedure(screen : BitmapPtr);
+  procedure RefreshScreen(screen : BitmapPtr);
   begin
     _sg_functions^.graphics.refresh_window(psg_drawing_surface(screen^.surface));
   end;
   
-  procedure ColorComponentsProcedure(c : Color; var r, g, b, a : Byte);
+  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
   begin
     //TODO: standardise and remove from drivers
     a := c and $FF000000 shr 24;
@@ -274,23 +299,23 @@ implementation
     b := c and $000000FF;
   end;
   
-  function ColorFromProcedure(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
+  function ColorFrom(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
   begin
     //TODO: standardise and remove from drivers
     result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
   
-  function GetScreenWidthProcedure(): LongInt; 
+  function GetScreenWidth(): LongInt; 
   begin
     result := Round(screenRect.width);
   end;
   
-  function GetScreenHeightProcedure(): LongInt; 
+  function GetScreenHeight(): LongInt; 
   begin
     result := Round(screenRect.height);
   end;
 
-  function AvailableResolutionsProcedure(): ResolutionArray;
+  function AvailableResolutions(): ResolutionArray;
   var
     sysData: ^sg_system_data;
   begin
@@ -313,34 +338,8 @@ implementation
     end;    
   end;
 
-
-	procedure LoadSDL2GraphicsDriver();
+	procedure LoadGraphicsDriver();
 	begin
-    GraphicsDriver.GetPixel32               := @GetPixel32Procedure;    // # (done)
-    GraphicsDriver.FillTriangle             := @FillTriangleProcedure;  // #
-    GraphicsDriver.DrawTriangle             := @DrawTriangleProcedure;  // #    
-    GraphicsDriver.FillCircle               := @FillCircleProcedure;    // #
-    GraphicsDriver.DrawCircle               := @DrawCircleProcedure;    // #
-    GraphicsDriver.FillEllipse              := @FillEllipseProcedure;   // #
-    GraphicsDriver.DrawEllipse              := @DrawEllipseProcedure;   // #
-    GraphicsDriver.FillRectangle            := @FillRectangleProcedure; // #
-    GraphicsDriver.DrawLine                 := @DrawLineProcedure;      // #  
-    GraphicsDriver.DrawPixel                := @DrawPixelProcedure; // #
-    GraphicsDriver.DrawRectangle            := @DrawRectangleProcedure; // #
-    GraphicsDriver.SetClipRectangle         := @SetClipRectangleProcedure;  // #
-    GraphicsDriver.ResetClip                := @ResetClipProcedure;         // #
-    GraphicsDriver.SetVideoModeFullScreen   := @SetVideoModeFullScreenProcedure;    // # show_fullscreen  
-    GraphicsDriver.SetVideoModeNoFrame      := @SetVideoModeNoFrameProcedure;       // # show_border 
-    GraphicsDriver.InitializeGraphicsWindow := @InitializeGraphicsWindowProcedure;  // #
-    GraphicsDriver.InitializeScreen         := @InitializeScreenProcedure;          // #
-    GraphicsDriver.ResizeGraphicsWindow     := @ResizeGraphicsWindowProcedure;      // #
-    GraphicsDriver.RefreshScreen            := @RefreshScreenProcedure;         // #
-    GraphicsDriver.ColorComponents          := @ColorComponentsProcedure;       // -
-    GraphicsDriver.ColorFrom                := @ColorFromProcedure;             // -
-    GraphicsDriver.RGBAColor                := @RGBAColorProcedure;             // -
-    GraphicsDriver.GetScreenWidth           := @GetScreenWidthProcedure;        // -
-    GraphicsDriver.GetScreenHeight          := @GetScreenHeightProcedure;       // -
-    GraphicsDriver.AvailableResolutions     := @AvailableResolutionsProcedure;  // # 
 	end;
 end.
 	

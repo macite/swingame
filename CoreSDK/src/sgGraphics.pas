@@ -1550,7 +1550,7 @@ implementation
 
   function GetPixel(bmp: Bitmap; x, y: Single): Color;
   begin
-    result := GraphicsDriver.GetPixel32(bmp, x, y);
+    result := sgDriverGraphics.GetPixel32(bmp, x, y);
   end;
 
   function GetPixelFromScreen(x, y: Single): Color;
@@ -1701,44 +1701,44 @@ implementation
 
   procedure DrawEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   begin
-    GraphicsDriver.DrawEllipse(clr, xPos, yPos, width, height, opts);
+    sgDriverGraphics.DrawEllipse(clr, xPos, yPos, width, height, opts);
   end;
 
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single);
   begin
-    GraphicsDriver.DrawEllipse(clr, xPos, yPos, width, height, OptionDefaults());
+    sgDriverGraphics.DrawEllipse(clr, xPos, yPos, width, height, OptionDefaults());
   end;
 
   procedure DrawEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
   begin
-    GraphicsDriver.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
+    sgDriverGraphics.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
   end;
     
   procedure DrawEllipse(clr : Color; const rec: Rectangle);
   begin
-    GraphicsDriver.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
+    sgDriverGraphics.DrawEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
   end;
 
   //=============================================================================
        
   procedure FillEllipse(clr: Color; xPos, yPos, width, height: Single; const opts : DrawingOptions);
   begin
-    GraphicsDriver.FillEllipse(clr, xPos, yPos, width, height, opts);
+    sgDriverGraphics.FillEllipse(clr, xPos, yPos, width, height, opts);
   end;
 
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single);
   begin
-    GraphicsDriver.FillEllipse(clr, xPos, yPos, width, height, OptionDefaults());
+    sgDriverGraphics.FillEllipse(clr, xPos, yPos, width, height, OptionDefaults());
   end;
     
   procedure FillEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
   begin
-    GraphicsDriver.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
+    sgDriverGraphics.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, opts);
   end;
     
   procedure FillEllipse(clr : Color; const rec: Rectangle);
   begin
-    GraphicsDriver.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
+    sgDriverGraphics.FillEllipse(clr, rec.x, rec.y, rec.width, rec.height, OptionDefaults());
   end;
     
   //=============================================================================
@@ -1765,7 +1765,7 @@ implementation
     rect.width := Round(width);
     rect.height := Round(height);
     
-    GraphicsDriver.DrawRectangle(clr, rect, opts);
+    sgDriverGraphics.DrawRectangle(clr, rect, opts);
   end;
 
   procedure FillRectangle(clr : Color;  xPos, yPos, width, height : Single; const opts : DrawingOptions);
@@ -1790,7 +1790,7 @@ implementation
     rect.width := Round(width);
     rect.height := Round(height);
     
-    GraphicsDriver.FillRectangle(clr, rect, opts);
+    sgDriverGraphics.FillRectangle(clr, rect, opts);
   end;
 
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
@@ -1800,7 +1800,7 @@ implementation
         RaiseWarning('DrawTriangle - No destination bitmap supplied');
         exit; 
       end;
-    GraphicsDriver.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
+    sgDriverGraphics.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
 
   procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
@@ -1810,7 +1810,7 @@ implementation
         RaiseWarning('FillTriangle - No destination bitmap supplied');
         exit; 
       end;
-    GraphicsDriver.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
+    sgDriverGraphics.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
   procedure DrawCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions); overload;
@@ -1820,7 +1820,7 @@ implementation
         RaiseWarning('DrawCircle - No destination bitmap supplied');
         exit; 
       end;
-    GraphicsDriver.DrawCircle(clr, x, y, radius, opts);
+    sgDriverGraphics.DrawCircle(clr, x, y, radius, opts);
   end;
 
   procedure FillCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions);
@@ -1830,7 +1830,7 @@ implementation
         RaiseWarning('FillCircle - No destination bitmap supplied');
         exit; 
       end;
-    GraphicsDriver.FillCircle(clr, x, y, radius, opts);
+    sgDriverGraphics.FillCircle(clr, x, y, radius, opts);
   end;
 
   procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
@@ -1840,7 +1840,7 @@ implementation
         RaiseWarning('DrawLine - No destination bitmap supplied');
         exit; 
       end;
-    GraphicsDriver.DrawLine(clr, xPosStart, yPosStart, xPosEnd, yPosEnd, opts);
+    sgDriverGraphics.DrawLine(clr, xPosStart, yPosStart, xPosEnd, yPosEnd, opts);
   end;
 
 
@@ -1850,7 +1850,7 @@ implementation
   begin
     if opts.dest = nil then begin RaiseWarning('DrawPixel - No destination supplied'); exit; end;
     
-    GraphicsDriver.DrawPixel(clr, x, y, opts);
+    sgDriverGraphics.DrawPixel(clr, x, y, opts);
   end;
 
   procedure DrawPixel(clr: Color; x, y: Single); overload;
@@ -1873,7 +1873,7 @@ implementation
   
   procedure ResetClip(bmp: Bitmap); overload;
   begin
-    GraphicsDriver.ResetClip(bmp);
+    sgDriverGraphics.ResetClip(bmp);
   end;
 
   procedure ResetClip(); overload;
@@ -1883,7 +1883,7 @@ implementation
   
   procedure DoSetClip(bmp: Bitmap; const r: Rectangle); overload;
   begin
-    GraphicsDriver.SetClipRectangle(bmp, r);
+    sgDriverGraphics.SetClipRectangle(bmp, r);
   end;
   
   procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;
@@ -2021,8 +2021,8 @@ implementation
     end;
 
     try         
-      GraphicsDriver.InitializeGraphicsWindow(caption, width, height);
-      GraphicsDriver.InitializeScreen(screen, screenWidth div 2 - 30, screenHeight div 2, ColorWhite, ColorGrey, 'Loading ...');
+      sgDriverGraphics.InitializeGraphicsWindow(caption, width, height);
+      sgDriverGraphics.InitializeScreen(screen, screenWidth div 2 - 30, screenHeight div 2, ColorWhite, ColorGrey, 'Loading ...');
       RefreshScreen();
     except on e: Exception do
       begin
@@ -2060,7 +2060,7 @@ implementation
 
     try
       //Remember... _screen is a pointer to screen buffer, not a "surface"!
-      GraphicsDriver.SetVideoModeFullScreen();
+      sgDriverGraphics.SetVideoModeFullScreen();
     except on exc: Exception do
     end;
     {$IFDEF TRACE}
@@ -2076,7 +2076,7 @@ implementation
     
     try
       //Remember... _screen is a pointer to screen buffer, not a "surface"!
-      GraphicsDriver.SetVideoModeNoFrame();
+      sgDriverGraphics.SetVideoModeNoFrame();
     except on exc: Exception do
     end;
     {$IFDEF TRACE}
@@ -2101,7 +2101,7 @@ implementation
       exit; 
     end;
     if (width = ScreenWidth()) and (height = ScreenHeight()) then exit;
-    GraphicsDriver.ResizeGraphicsWindow(width, height);
+    sgDriverGraphics.ResizeGraphicsWindow(width, height);
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ChangeScreenSize');
     {$ENDIF}
@@ -2118,7 +2118,7 @@ implementation
       exit;
     end;
     
-    result := GraphicsDriver.GetScreenWidth();
+    result := sgDriverGraphics.GetScreenWidth();
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ScreenWidth');
     {$ENDIF}
@@ -2134,7 +2134,7 @@ implementation
       RaiseWarning('Screen has not been created. Unable to get screen height.');
       exit;
     end;
-    result := GraphicsDriver.GetScreenHeight();
+    result := sgDriverGraphics.GetScreenHeight();
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ScreenHeight');
     {$ENDIF}
@@ -2185,7 +2185,7 @@ implementation
       TraceEnter('sgGraphics', 'RefreshScreen');
     {$ENDIF}
     DrawCollectedText(screen);
-    GraphicsDriver.RefreshScreen(screen);
+    sgDriverGraphics.RefreshScreen(screen);
     
     nowTime := GetTicks();
     delta := nowTime - _lastUpdateTime;
@@ -2236,7 +2236,7 @@ implementation
       b := (c and $000000FF);
     {$IFNDEF SWINGAME_OPENGL}
     end;
-    GraphicsDriver.ColorComponents(c, r, g, b, a);
+    sgDriverGraphics.ColorComponents(c, r, g, b, a);
     {$ENDIF}
 
     {$IFDEF TRACE}
@@ -2397,7 +2397,7 @@ implementation
     
     ColorComponents(apiColor, r, g, b, a);
     
-    result := GraphicsDriver.ColorFrom(bmp, r, g, b, a);
+    result := sgDriverGraphics.ColorFrom(bmp, r, g, b, a);
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ColorFrom');
     {$ENDIF}
@@ -2420,7 +2420,7 @@ implementation
     end;
 
     try
-      result := GraphicsDriver.RGBAColor(red, green, blue, alpha);
+      result := sgDriverGraphics.RGBAColor(red, green, blue, alpha);
     except
       RaiseException('Error occured while trying to get a color from RGBA components');
       exit;
@@ -2560,7 +2560,7 @@ implementation
   var
     temp: ResolutionArray;
   begin
-    temp := GraphicsDriver.AvailableResolutions();
+    temp := sgDriverGraphics.AvailableResolutions();
     if (idx >= 0) and (idx <= High(temp)) then
       result := temp[idx]
     else
@@ -2574,7 +2574,7 @@ implementation
 
   function NumberOfResolutions(): Longint;
   begin
-    result := Length(GraphicsDriver.AvailableResolutions());
+    result := Length(sgDriverGraphics.AvailableResolutions());
   end;
 
 //-----------------------------------------------------------------------------

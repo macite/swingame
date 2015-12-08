@@ -56,6 +56,15 @@ interface
       width, height: Single;
     end;
 
+    /// Quads are rectangular shapes, but unlike `Rectangle`, these shapes can have axis that
+    /// do not line up with screen/bitmap axis. In essence, they are a rectangle that you 
+    /// can rotate.
+    ///
+    /// @struct Quad
+    Quad = packed record
+      points: array [0..3] of Point2D;
+    end;
+
     /// Circles have a center point and a radius. This means that, unlike other shapes
     /// like the `Rectangle`, the circle extends out both left and right, and up and down
     /// from the point you position it at.
