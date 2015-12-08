@@ -531,6 +531,30 @@ interface
   /// @sn drawRectangleColor:%s data:%s
   procedure DrawRectangle(clr : Color; const rect: Rectangle);
 
+  /// Draw a quad in the game.
+  ///
+  /// @lib DrawQuadStruct
+  /// @sn drawQuadColor:%s data:%s
+  procedure DrawQuad(clr : Color; const q: Quad); overload;
+
+  /// Fill a quad in the game.
+  ///
+  /// @lib FillQuadStruct
+  /// @sn fillQuadColor:%s data:%s
+  procedure FillQuad(clr : Color; const q: Quad); overload;
+
+  /// Draw a quad in the game.
+  ///
+  /// @lib DrawQuadStructOpts
+  /// @sn drawQuadColor:%s data:%s opts:%s
+  procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+
+  /// Fill a quad in the game.
+  ///
+  /// @lib FillQuadStructOpts
+  /// @sn fillQuadColor:%s data:%s opts:%s
+  procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+
 
   /// Fill a rectangle onto a destination bitmap.
   /// 
@@ -1993,6 +2017,27 @@ implementation
     end;
   end;
   
+  procedure DrawQuad(clr : Color; const q: Quad); overload;
+  begin
+    DrawQuad(clr, q, OptionDefaults());
+  end;
+
+  procedure FillQuad(clr : Color; const q: Quad); overload;
+  begin
+    FillQuad(clr, q, OptionDefaults());
+  end;
+
+  procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+  begin
+    sgDriverGraphics.DrawQuad(clr, q, opts);
+  end;
+
+  procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+  begin
+    sgDriverGraphics.FillQuad(clr, q, opts);
+  end;
+
+
 //----------------------------------------------------------------------------
 // Set Icon / Window Open / Screen Size / Resize
 //----------------------------------------------------------------------------

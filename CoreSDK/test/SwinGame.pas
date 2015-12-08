@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-08 18:05:24.936847
+// SwinGame.pas was generated on 2015-12-08 20:30:46.342068
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -14,6 +14,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type Vector = sgTypes.Vector;
 
   type Rectangle = sgTypes.Rectangle;
+
+  type Quad = sgTypes.Quad;
 
   type Circle = sgTypes.Circle;
 
@@ -596,6 +598,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Use a matrix to transform all of the points in a triangle.
   procedure ApplyMatrix(const m: Matrix2D; var tri: Triangle); overload;
 
+  // Use a matrix to transform all of the points in a quad.
+  procedure ApplyMatrix(const m: Matrix2D; var quad: Quad); overload;
+
   // Calculates the angle from one vector to another.
   function CalculateAngle(const v1: Vector; const v2: Vector): Single; overload;
 
@@ -885,6 +890,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Get a text description of the point2D.
   function PointToString(const pt: Point2D): String; overload;
 
+  // Returns a quad for the passed in points.
+  function QuadFrom(const rect: Rectangle): Quad; overload;
+
+  // Returns a quad for the passed in points.
+  function QuadFrom(xTopLeft: Single; yTopLeft: Single; xTopRight: Single; yTopRight: Single; xBottomLeft: Single; yBottomLeft: Single; xBottomRight: Single; yBottomRight: Single): Quad; overload;
+
   // Create a Point2D that points at the X,Y location passed in.
   function RandomScreenPoint(): Point2D; overload;
 
@@ -979,6 +990,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Create a matrix that can scale, rotate then translate geometry points.
   function ScaleRotateTranslateMatrix(const scale: Point2D; deg: Single; const translate: Point2D): Matrix2D; overload;
+
+  // Change the location of a point on a Quad.
+  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2D); overload;
 
   // Returns the sine of the passed in angle (in degrees).
   function Sine(angle: Single): Single; overload;
@@ -1628,6 +1642,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Draw a pixel with options.
   procedure DrawPixel(clr: Color; x: Single; y: Single; const opts: DrawingOptions); overload;
 
+  // Draw a quad in the game.
+  procedure DrawQuad(clr: Color; const q: Quad); overload;
+
+  // Draw a quad in the game.
+  procedure DrawQuad(clr: Color; const q: Quad; const opts: DrawingOptions); overload;
+
   // Draw a rectangle in the game.
   procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
 
@@ -1675,6 +1695,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Fill a ellipse onto a destination bitmap.
   procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
+
+  // Fill a quad in the game.
+  procedure FillQuad(clr: Color; const q: Quad); overload;
+
+  // Fill a quad in the game.
+  procedure FillQuad(clr: Color; const q: Quad; const opts: DrawingOptions); overload;
 
   // Fill a rectangle in the game.
   procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -2627,10 +2653,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function SpriteLayerRectangle(s: Sprite; const name: String): Rectangle; overload;
 
   // The width of a given layer of the Sprite (aligned to the X axis).
-  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
 
   // The width of a given layer of the Sprite (aligned to the X axis).
-  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
+  function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
+
+  // Returns a matrix that can be used to transform points into the coordinate space
+  // of the passed in sprite.
+  function SpriteLocationMatrix(s: Sprite): Matrix2D; overload;
 
   // This indicates the mass of the Sprite for any of the collide methods from
   // Physics. The mass of two colliding sprites will determine the relative
@@ -4276,6 +4306,11 @@ implementation
     sgGeometry.ApplyMatrix(m,tri);
   end;
 
+  procedure ApplyMatrix(const m: Matrix2D; var quad: Quad); overload;
+  begin
+    sgGeometry.ApplyMatrix(m,quad);
+  end;
+
   function CalculateAngle(const v1: Vector; const v2: Vector): Single; overload;
   begin
     result := sgGeometry.CalculateAngle(v1,v2);
@@ -4701,6 +4736,16 @@ implementation
     result := sgGeometry.PointToString(pt);
   end;
 
+  function QuadFrom(const rect: Rectangle): Quad; overload;
+  begin
+    result := sgGeometry.QuadFrom(rect);
+  end;
+
+  function QuadFrom(xTopLeft: Single; yTopLeft: Single; xTopRight: Single; yTopRight: Single; xBottomLeft: Single; yBottomLeft: Single; xBottomRight: Single; yBottomRight: Single): Quad; overload;
+  begin
+    result := sgGeometry.QuadFrom(xTopLeft,yTopLeft,xTopRight,yTopRight,xBottomLeft,yBottomLeft,xBottomRight,yBottomRight);
+  end;
+
   function RandomScreenPoint(): Point2D; overload;
   begin
     result := sgGeometry.RandomScreenPoint();
@@ -4849,6 +4894,11 @@ implementation
   function ScaleRotateTranslateMatrix(const scale: Point2D; deg: Single; const translate: Point2D): Matrix2D; overload;
   begin
     result := sgGeometry.ScaleRotateTranslateMatrix(scale,deg,translate);
+  end;
+
+  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2D); overload;
+  begin
+    sgGeometry.SetQuadPoint(q,idx,value);
   end;
 
   function Sine(angle: Single): Single; overload;
@@ -5901,6 +5951,16 @@ implementation
     sgGraphics.DrawPixel(clr,x,y,opts);
   end;
 
+  procedure DrawQuad(clr: Color; const q: Quad); overload;
+  begin
+    sgGraphics.DrawQuad(clr,q);
+  end;
+
+  procedure DrawQuad(clr: Color; const q: Quad; const opts: DrawingOptions); overload;
+  begin
+    sgGraphics.DrawQuad(clr,q,opts);
+  end;
+
   procedure DrawRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
   begin
     sgGraphics.DrawRectangle(clr,x,y,width,height);
@@ -5979,6 +6039,16 @@ implementation
   procedure FillEllipse(clr: Color; xPos: Single; yPos: Single; width: Single; height: Single; const opts: DrawingOptions); overload;
   begin
     sgGraphics.FillEllipse(clr,xPos,yPos,width,height,opts);
+  end;
+
+  procedure FillQuad(clr: Color; const q: Quad); overload;
+  begin
+    sgGraphics.FillQuad(clr,q);
+  end;
+
+  procedure FillQuad(clr: Color; const q: Quad; const opts: DrawingOptions); overload;
+  begin
+    sgGraphics.FillQuad(clr,q,opts);
   end;
 
   procedure FillRectangle(clr: Color; x: Single; y: Single; width: Single; height: Single); overload;
@@ -7201,14 +7271,19 @@ implementation
     result := sgSprites.SpriteLayerRectangle(s,name);
   end;
 
+  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
+  begin
+    result := sgSprites.SpriteLayerWidth(s,idx);
+  end;
+
   function SpriteLayerWidth(s: Sprite; const name: String): Longint; overload;
   begin
     result := sgSprites.SpriteLayerWidth(s,name);
   end;
 
-  function SpriteLayerWidth(s: Sprite; idx: Longint): Longint; overload;
+  function SpriteLocationMatrix(s: Sprite): Matrix2D; overload;
   begin
-    result := sgSprites.SpriteLayerWidth(s,idx);
+    result := sgSprites.SpriteLocationMatrix(s);
   end;
 
   function SpriteMass(s: Sprite): Single; overload;

@@ -30,6 +30,7 @@ var
 	tri, initTri: Triangle;
 	triB, initTriB: Triangle;
 	r: Rectangle;
+	q: Quad;
 begin
 	OpenGraphicsWindow('Sprite Rotation', 600, 600);
 	sprt := CreateSprite(BitmapNamed('rocket_sprt.png'));
@@ -43,6 +44,9 @@ begin
 	SpriteSetY(s2, 100);
 
 	r := RectangleFrom(400, 100, 100, 50);
+	q := QuadFrom(r);
+	ApplyMatrix(
+		MatrixMultiply(TranslationMatrix(0, 50), RotationMatrix(45)) , q);
 
 	initTri := TriangleFrom(0, 0, BitmapWidth(BitmapNamed('rocket_sprt.png')), BitmapHeight(BitmapNamed('rocket_sprt.png')), 0, BitmapHeight(BitmapNamed('rocket_sprt.png')));
 	initTriB := TriangleFrom(BitmapWidth(BitmapNamed('rocket_sprt.png')), 0, BitmapWidth(BitmapNamed('rocket_sprt.png')), BitmapHeight(BitmapNamed('rocket_sprt.png')), 0, 0);
@@ -104,6 +108,7 @@ begin
 		ApplyMatrix(SpriteLocationMatrix(s2), triB);
 		FillTriangle(ColorBlue, tri);
 		FillTriangle(ColorBlue, triB);
+		FillQuad(ColorBrown, q);
 
 		if SpriteRectCollision(sprt, r) then
 			FillRectangle(ColorPurple, r)

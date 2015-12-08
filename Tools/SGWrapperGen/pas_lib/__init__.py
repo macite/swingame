@@ -29,6 +29,7 @@ _type_switcher = {
     'point2d': 'Point2D',
     'vector': 'Vector',
     'rectangle': 'Rectangle',
+    'quad': 'Quad',
     'sprite': 'Sprite',
     
     'font': 'Font',

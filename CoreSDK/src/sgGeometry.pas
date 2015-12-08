@@ -367,6 +367,36 @@ interface
   /// @lib
   function LineMidPoint(const line: LineSegment): Point2D;
   
+
+  /// Returns a quad for the passed in points.
+  ///
+  /// @lib
+  /// @sn quadFromXTopLeft:%s yTopLeft:%s xTopRight:%s yTopRight:%s xBottomLeft:%s yBottomLeft:%s xBottomRight:%s yBottomRight:%s
+  function QuadFrom(xTopLeft, yTopLeft, xTopRight, yTopRight, xBottomLeft, yBottomLeft, xBottomRight, yBottomRight: Single ): Quad;
+
+  /// Returns a quad for the passed in points.
+  ///
+  /// @lib QuadFromRect
+  /// @sn quadFromRect:%s
+  function QuadFrom(const rect: Rectangle ): Quad;
+
+  /// Use a matrix to transform all of the points in a quad.
+  /// 
+  /// @lib ApplyMatrixToQuad
+  /// @sn matrix:%s applyToQuad:%s
+  ///
+  /// @class Matrix2D
+  /// @method ApplyTo
+  /// @updatesArrayParam 2
+  /// @csn applyToQuad:%s
+  procedure ApplyMatrix(const m: Matrix2D; var quad: Quad);
+
+  /// Change the location of a point on a Quad.
+  ///
+  /// @lib
+  /// @sn quad:%s setPoint:%s to:%s
+  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2d);
+
   /// Returns a rectangle from a given x,y location with a given width
   /// and height.
   ///
@@ -4284,6 +4314,60 @@ implementation
   begin
     result.X := pt1.X + pt2.X;
     result.Y := pt1.Y + pt2.Y;
+  end;
+
+  function QuadFrom(xTopLeft, yTopLeft, xTopRight, yTopRight, xBottomLeft, yBottomLeft, xBottomRight, yBottomRight: Single ): Quad;
+  begin
+    result.points[0].x := xTopLeft;
+    result.points[0].y := yTopLeft;
+    result.points[1].x := xTopRight;
+    result.points[1].y := yTopRight;
+    result.points[2].x := xBottomLeft;
+    result.points[2].y := yBottomLeft;
+    result.points[3].x := xBottomRight;
+    result.points[3].y := yBottomRight;
+  end;
+
+  /// Returns a quad for the passed in points.
+  ///
+  /// @lib
+  /// @sn quadFromRect:%s
+  function QuadFrom(const rect: Rectangle ): Quad;
+  begin
+    result := QuadFrom( 
+      RectangleLeft(rect), RectangleTop(rect),
+      RectangleRight(rect), RectangleTop(rect),
+      RectangleLeft(rect), RectangleBottom(rect),
+      RectangleRight(rect), RectangleBottom(rect) )
+  end;
+
+  /// Use a matrix to transform all of the points in a quad.
+  /// 
+  /// @lib
+  /// @sn matrix:%s applyToQuad:%s
+  ///
+  /// @class Matrix2D
+  /// @method ApplyTo
+  /// @updatesArrayParam 2
+  /// @csn applyToQuad:%s
+  procedure ApplyMatrix(const m: Matrix2D; var quad: Quad);
+  var
+    i: Integer;
+  begin
+    for i := 0 to 3 do
+    begin
+      quad.points[i] := MatrixMultiply(m, quad.points[i]);
+    end;
+  end;
+
+  /// Change the location of a point on a Quad.
+  ///
+  /// @lib
+  /// @sn quad:%s setPoint:%s to:%s
+  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2d);
+  begin
+    if (idx < 0) or (idx > 3) then exit; 
+    q.points[idx] := value;
   end;
     
 end.

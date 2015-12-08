@@ -47,6 +47,8 @@ interface
   function GetScreenWidth(): LongInt; 
   function GetScreenHeight(): LongInt; 
   function AvailableResolutions(): ResolutionArray;
+  procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+  procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
 
 implementation
   uses sgDriverSDL2Types, sgShared, sgGeometry;
@@ -155,6 +157,36 @@ implementation
     _sg_functions^.graphics.draw_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
   end;
 	
+  procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+  var
+    pts: array [0..7] of Single;
+    i: Integer;
+  begin
+    for i := 0 to 3 do
+    begin
+      pts[i * 2] := q.points[i].x;
+      pts[i * 2 + 1] := q.points[i].y;
+      XYFromOpts(opts, pts[i * 2], pts[i * 2 + 1]);
+    end;
+
+    _sg_functions^.graphics.draw_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 8);
+  end;
+
+  procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
+  var
+    pts: array [0..7] of Single;
+    i: Integer;
+  begin
+    for i := 0 to 3 do
+    begin
+      pts[i * 2] := q.points[i].x;
+      pts[i * 2 + 1] := q.points[i].y;
+      XYFromOpts(opts, pts[i * 2], pts[i * 2 + 1]);
+    end;
+
+    _sg_functions^.graphics.fill_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 8);
+  end;
+
 	procedure FillRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   var
     pts: array [0..4] of Single;

@@ -56,9 +56,12 @@ interface
       width, height: Single;
     end;
 
-    /// Quads are rectangular shapes, but unlike `Rectangle`, these shapes can have axis that
-    /// do not line up with screen/bitmap axis. In essence, they are a rectangle that you 
-    /// can rotate.
+    /// Quads (Quadrilaterals) are shapes with 4 sides, but unlike `Rectangle`, these shapes can have axis that
+    /// do not line up with screen/bitmap axis.
+    ///
+    /// Points should be constructed with the top left as the first point, top right as the second, 
+    /// bottom left as the third, and bottom right as the last point. Other orders may give unexpected
+    /// outcomes.
     ///
     /// @struct Quad
     Quad = packed record
