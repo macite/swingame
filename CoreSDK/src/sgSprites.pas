@@ -467,7 +467,15 @@ interface
   /// @method CollisionCircle
   function SpriteCollisionCircle(s: Sprite): Circle;
   
-  
+  /// Returns a matrix that can be used to transform points into the coordinate space
+  /// of the passed in sprite.
+  ///
+  /// @lib
+  ///
+  /// @class Sprite
+  /// @getter LocationMatrix
+  /// @csn locationMatrix
+  function SpriteLocationMatrix(s: Sprite): Matrix2D;
   
 //---------------------------------------------------------------------------
 // Sprite Animation code
@@ -2539,6 +2547,11 @@ implementation
   function SpriteCollisionRectangle(s: Sprite): Rectangle;
   var
     sp: SpritePtr;
+    pts: array [0..3] of Point2D;
+    cw, ch: Single;
+    m: Matrix2D;
+    minX, minY, maxX, maxY: Single;
+    i: Integer;
   begin
     sp := ToSpritePtr(s);
 
@@ -2546,8 +2559,43 @@ implementation
       TraceEnter('sgSprites', 'SpriteCollisionRectangle(s: Sprite): Rectangle', '');
     {$ENDIF}
     
-    if not Assigned(s) then result := RectangleFrom(0,0,0,0)
-    else result := BitmapCellRectangle(sp^.position.x, sp^.position.y, sp^.collisionBitmap);
+    if not Assigned(s) then 
+      result := RectangleFrom(0,0,0,0)
+    else if (SpriteRotation(s) = 0) and (SpriteScale(s) = 1) then 
+      result := BitmapCellRectangle(sp^.position.x, sp^.position.y, sp^.collisionBitmap)
+    else
+    begin
+      cw := BitmapCellWidth(sp^.collisionBitmap);
+      ch := BitmapCellHeight(sp^.collisionBitmap);
+
+      pts[0] := PointAt(0, 0);
+      pts[1] := PointAt(0, ch - 1);
+      pts[2] := PointAt(cw - 1, 0);
+      pts[3] := PointAt(cw - 1, ch - 1);
+
+      m := SpriteLocationMatrix(s);
+
+      for i := 0 to 3 do
+      begin
+        pts[i] := MatrixMultiply(m, pts[i]);
+      end;
+      
+      minX := pts[0].x;
+      maxX := pts[0].x;
+      minY := pts[0].y;
+      maxY := pts[0].y;
+
+      for i := 1 to 3 do
+      begin
+        if pts[i].x < minX then minX := pts[i].x
+        else if pts[i].x > maxX then maxX := pts[i].x;
+
+        if pts[i].y < minY then minY := pts[i].y
+        else if pts[i].y > maxY then maxY := pts[i].y;
+      end;
+      
+      result := RectangleFrom(minX, minY, maxX - minX, maxY - minY);
+    end;
     
     {$IFDEF TRACE}
       TraceExit('sgSprites', 'SpriteCollisionRectangle(s: Sprite): Rectangle', '');
@@ -3124,6 +3172,34 @@ implementation
     sp^.isMoving := true;
     sp^.movingVec := VectorMultiply(UnitVector(VectorFromPoints(CenterPoint(s), pt)), PointPointDistance(CenterPoint(s), pt) / takingSeconds);
     sp^.lastUpdate := TimerTicks(_spriteTimer);
+  end;
+
+  function SpriteLocationMatrix(s: Sprite): Matrix2D;
+  var
+    scale, newX, newY, w, h: Single;
+    anchorMatrix: Matrix2D;
+    // sp: SpritePtr;
+  begin
+    result := IdentityMatrix();
+
+    // sp := ToSpritePtr(s);
+    // if not Assigned(sp) then exit;
+    
+    scale := SpriteScale(s);
+    w := SpriteLayerWidth(s, 0);
+    h := SpriteLayerHeight(s, 0);
+    
+    anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
+
+    result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
+    result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
+    result := MatrixMultiply(anchorMatrix, result);
+
+    newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
+    newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
+    result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
+
+    result := MatrixMultiply(ScaleMatrix(scale), result); 
   end;
 
 //---------------------------------------------------------------------------

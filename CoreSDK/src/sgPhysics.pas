@@ -74,6 +74,17 @@ interface
   /// @overload RectCollision RectangleCollision
   /// @csn collisionWithRect:%s
   function SpriteRectCollision(s: Sprite; const r: Rectangle): Boolean; overload;
+
+  /// Returns true if the sprite exists at a certain point.
+  /// 
+  /// @lib
+  /// @sn sprite:%s atPoint:%s
+  /// 
+  /// @class Sprite
+  /// @method AtPoint
+  /// @csn atPoint:%s
+  function SpriteAtPoint(s: Sprite; const pt: Point2D): Boolean; overload;
+
   
 //---------------------------------------------------------------------------
 // Sprite <-> Bitmap Collision Detection
@@ -491,30 +502,6 @@ implementation
 
   //---------------------------------------------------------------------------
 
-  function SpriteLocationMatrix(s: SpritePtr): Matrix2D;
-  var
-    scale, newX, newY, w, h: Single;
-    anchorMatrix: Matrix2D;
-  begin
-    scale := SpriteScale(s);
-    w := SpriteLayerWidth(s, 0);
-    h := SpriteLayerHeight(s, 0);
-    
-    anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
-
-    result := IdentityMatrix();
-    result := MatrixMultiply(MatrixInverse(anchorMatrix), result);
-    result := MatrixMultiply(RotationMatrix(SpriteRotation(s)), result);
-    result := MatrixMultiply(anchorMatrix, result);
-
-    newX := SpriteX(s) - (w * scale / 2.0) + (w / 2.0);
-    newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
-    result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
-
-    result := MatrixMultiply(ScaleMatrix(scale), result); 
-  end;
-
-
   type MyFunc = function (x1, y1, x2, y2: Single): Boolean is nested;
 
   // Step over pixels in the two areas based on the supplied matrix
@@ -721,6 +708,11 @@ implementation
     result := SpriteRectCollision(s, RectangleFrom(x, y, width, height));
   end;
 
+  function SpriteAtPoint(s: Sprite; const pt: Point2D): Boolean; overload;
+  begin
+    result := SpriteRectCollision(s, RectangleFrom(pt, 1, 1));
+  end;
+
   function SpriteRectCollision(s: Sprite; const r: Rectangle): Boolean; overload;
   var
     rect: Rectangle;
@@ -735,7 +727,7 @@ implementation
     FixRectangle(rect);
    // if (width < 1) or (height < 1) then exit;
     
-    if not RectanglesIntersect(SpriteCollisionRectangle(s), rect) then 
+    if not CircleRectCollision(SpriteCollisionCircle(s), rect) then 
       exit;
     
     //  Check pixel level details
@@ -743,7 +735,7 @@ implementation
       result := true
     else
     begin
-      if SpriteRotation(s) <> 0 then
+      if (SpriteRotation(s) <> 0) or (SpriteScale(s) <> 1)  then
         result := _BitmapPartRectCollisionWithTranslation(sp^.collisionBitmap, SpriteLocationMatrix(sp), SpriteCurrentCellRectangle(sp), rect)
       else
         result := CellRectCollision(sp^.collisionBitmap, SpriteCurrentCell(s), sp^.position.x, sp^.position.y, rect);
@@ -870,7 +862,7 @@ implementation
     part1 := SpriteCurrentCellRectangle(s1);
     part2 := SpriteCurrentCellRectangle(s2);
     
-    if (SpriteRotation(s1) = 0) and (SpriteRotation(s2) = 0) then
+    if (SpriteRotation(s1) = 0) and (SpriteRotation(s2) = 0) and (SpriteScale(s1) = 1) and (SpriteScale(s2) = 1) then
       result := CollisionWithinBitmapImages(
                 sp1^.collisionBitmap, sp1^.position.x, sp1^.position.y, part1.width, part1.height, part1.x, part1.y, 
                 sp2^.collisionBitmap, sp2^.position.x, sp2^.position.y, part2.width, part2.height, part2.x, part2.y)

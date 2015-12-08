@@ -115,6 +115,9 @@ begin
 		if SpriteBitmapCollision(sprt, BitmapNamed('ufo.png'), 400, 300) then
 			DrawRectangle(ColorPurple, 400, 300, BitmapWidth(BitmapNamed('ufo.png')), BitmapHeight(BitmapNamed('ufo.png')));
 
+		if SpriteAtPoint(sprt, MousePosition()) then
+			FillCircle(ColorYellow, SpriteCollisionCircle(sprt));
+
 		DrawSprite(sprt);
 		DrawSprite(s2);
 		UpdateSprite(sprt);
@@ -125,6 +128,7 @@ begin
 		end;
 
 		DrawCircle(ColorGreen, SpriteCollisionCircle(sprt));
+		DrawRectangle(ColorGreen, SpriteCollisionRectangle(sprt));
 
 		DrawLine(ColorGreen, LineFromVector(CenterPoint(sprt), MatrixMultiply(RotationMatrix(SpriteRotation(sprt)), VectorMultiply(SpriteVelocity(sprt), 10.0))));
 

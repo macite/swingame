@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-07 15:33:24.501233
+// SwinGame.pas was generated on 2015-12-08 18:05:24.936847
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2298,6 +2298,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the side of that needs to be checked for collisions given the
   // movement velocity.
   function SideForCollisionTest(const velocity: Vector): CollisionSide; overload;
+
+  // Returns true if the sprite exists at a certain point.
+  function SpriteAtPoint(s: Sprite; const pt: Point2D): Boolean; overload;
 
   // Determines if the `Sprite` ``s`` has collided with the bitmap ``bmp`` using
   // pixel level testing if required.
@@ -6771,6 +6774,11 @@ implementation
   function SideForCollisionTest(const velocity: Vector): CollisionSide; overload;
   begin
     result := sgPhysics.SideForCollisionTest(velocity);
+  end;
+
+  function SpriteAtPoint(s: Sprite; const pt: Point2D): Boolean; overload;
+  begin
+    result := sgPhysics.SpriteAtPoint(s,pt);
   end;
 
   function SpriteBitmapCollision(s: Sprite; bmp: Bitmap; const pt: Point2D): Boolean; overload;
