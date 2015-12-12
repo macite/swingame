@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-12 15:44:57.880688
+// SwinGame.pas was generated on 2015-12-13 08:18:37.075176
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -3753,6 +3753,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Save screenshot to specific directory.
   procedure SaveScreenshot(src: Window; const filepath: String); overload;
+
+  // 
+  procedure SetCurrentWindow(wnd: Window); overload;
+
+  // 
+  procedure SetCurrentWindow(name: String); overload;
 
   // Get the window with the speficied name.
   function WindowNamed(const name: String): Window; overload;
@@ -8894,6 +8900,16 @@ implementation
   procedure SaveScreenshot(src: Window; const filepath: String); overload;
   begin
     sgWindowManager.SaveScreenshot(src,filepath);
+  end;
+
+  procedure SetCurrentWindow(wnd: Window); overload;
+  begin
+    sgWindowManager.SetCurrentWindow(wnd);
+  end;
+
+  procedure SetCurrentWindow(name: String); overload;
+  begin
+    sgWindowManager.SetCurrentWindow(name);
   end;
 
   function WindowNamed(const name: String): Window; overload;

@@ -59,6 +59,9 @@ begin
 		ClearScreen(ColorWhite);
 		DrawFramerate(0, 0);
 
+		if KeyTyped(OKey) then SetCurrentWindow('Other Window');
+		if KeyTyped(MKey) then SetCurrentWindow('Sprite Rotation');
+
 		if KeyDown(LeftKey) then
 		begin
 			SpriteSetRotation(sprt, SpriteRotation(sprt) - 5);

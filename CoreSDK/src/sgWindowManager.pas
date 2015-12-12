@@ -71,6 +71,18 @@ interface
   /// @csn saveScreenshotTo:%s
   procedure SaveScreenshot(src: Window; const filepath: String);
 
+  ///
+  /// @lib
+  ///
+  procedure SetCurrentWindow(wnd: Window);
+
+  ///
+  /// @lib SetCurrentWindowNamed
+  ///
+  procedure SetCurrentWindow(name: String);
+
+
+
 //=============================================================================
 implementation
 uses  SysUtils, StringHash,
@@ -179,6 +191,19 @@ begin
   if not assigned(surface) then exit;
   
   sgDriverImages.SaveSurface(surface, filepath);
+end;
+
+procedure SetCurrentWindow(wnd: Window);
+var
+  w: WindowPtr;
+begin
+  w := ToWindowPtr(wnd);
+  if Assigned(w) then _CurrentWindow := w;
+end;
+
+procedure SetCurrentWindow(name: String);
+begin
+  SetCurrentWindow(WindowNamed(name));
 end;
 
 
