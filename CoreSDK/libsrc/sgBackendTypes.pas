@@ -9,7 +9,7 @@
 unit sgBackendTypes;
 
 interface
-uses sgTypes;
+uses sgTypes, sgDriverSDL2Types;
 
   //
   // The kinds of ponters we manage
@@ -26,6 +26,7 @@ uses sgTypes;
     ARDUINO_PTR = 'ARDU';
     TIMER_PTR = 'TIMR';
     FONT_PTR = 'FONT';
+    WINDOW_PTR = 'WIND';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -137,6 +138,11 @@ uses sgTypes;
 
     BitmapPtr = ^BitmapData;
 
+    ImageData = packed record
+      surface            : sg_drawing_surface;  // The actual bitmap image
+      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
+    end;
+
     /// Bitmap data stores the data associated with a Bitmap. Each bitmap contains
     /// a pointer to the bitmap color information (surface), its width, height,
     /// and a mask storing the non-transparent pixels that is used for pixel level
@@ -147,13 +153,8 @@ uses sgTypes;
     /// @via_pointer
     BitmapData = packed record
       id                 : PointerIdentifier;
-      filename, name     : String;      // Used for locating bitmaps during load/freeing
-      surface            : Pointer;     // The actual bitmap image
-      
-      width              : Longint;     //  The width of the bitmap
-      height             : Longint;     //  The height of the bitmap
-      TextureWidthRatio  : Single;      //  bmp width / texture width
-      TextureHeightRatio : Single;      //  bmp height /texture height
+      filename, name     : String;              // Used for locating bitmaps during load/freeing
+      image              : ImageData;
       
       //Used for bitmaps that are made up of cells
       cellW                : Longint;    // The width of a cell
@@ -163,7 +164,6 @@ uses sgTypes;
       cellCount            : Longint;    // The total number of cells in the bitmap
       
       nonTransparentPixels : Array of Array of Boolean;  // Pixel mask used for pixel level collisions
-      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
     end;
 
     /// An array of SpriteEventHandlers used internally by Sprites.
@@ -412,7 +412,27 @@ uses sgTypes;
         name: String;
     end;
 
+    WindowPtr = ^WindowData;
 
+    WindowData = packed record
+      id:         PointerIdentifier;
+      caption:    String;
+      
+      image:      ImageData;
+
+      open:       Boolean;
+      fullscreen: Boolean;
+      border:     Boolean;
+
+      screenRect: Rectangle;
+    end;
+
+    UnknownDataPtr = ^UnknownData;
+    UnknownData = packed record
+      id : PointerIdentifier;
+    end;
+
+  function PtrKind(p: Pointer): PointerIdentifier;
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   function ToMusicPtr(m: Music): MusicPtr;
@@ -425,9 +445,23 @@ uses sgTypes;
   function ToArduinoPtr(a: ArduinoDevice): ArduinoPtr;
   function ToTimerPtr(t: Timer): TimerPtr;
   function ToFontPtr(f: Font): FontPtr;
+  function ToWindowPtr(w: Window): WindowPtr;
+
+  function ToSurfacePtr(p: Pointer): psg_drawing_surface;
 
 implementation
 uses sgShared;
+
+  function PtrKind(p: Pointer): PointerIdentifier;
+  var
+    ptr: UnknownDataPtr;
+  begin
+    ptr := UnknownDataPtr(p);
+    if Assigned(ptr) then
+      result := ptr^.id
+    else
+      result := NONE_PTR;
+  end;
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
   begin
@@ -537,5 +571,35 @@ uses sgShared;
       RaiseWarning('Attempted to access a Font that appears to be an invalid pointer');
       result := nil;
     end;
+  end;
+
+  function ToWindowPtr(w: Window): WindowPtr;
+  begin
+    result := WindowPtr(w);
+    if Assigned(result) and (result^.id <> WINDOW_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Window that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToSurfacePtr(p: Pointer): psg_drawing_surface;
+  var
+    id: PointerIdentifier;
+    w: WindowPtr;
+    b: BitmapPtr; 
+  begin
+    id := PtrKind(p);
+    if id = WINDOW_PTR then 
+    begin
+      w := ToWindowPtr(p);
+      result := @w^.image.surface;
+    end
+    else if id = BITMAP_PTR then
+    begin
+      b := ToBitmapPtr(p);
+      result := @b^.image.surface;
+    end
+    else result := nil;
   end;
 end.

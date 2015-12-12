@@ -18,12 +18,13 @@ unit sgDriverGraphics;
 //=============================================================================
 
 interface
-	uses sgTypes, sgBackendTypes;
-
-  procedure LoadGraphicsDriver();
+	uses sgTypes, sgBackendTypes, sgDriverSDL2Types;
 
   function RGBAColor(r, g, b, a: Byte)  : Color;
-  function GetPixel32 (bmp: BitmapPtr; x, y: Single) : Color;
+  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
+
+  function GetPixel (src: psg_drawing_surface; x, y: Single) : Color;
+
   procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   procedure FillCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions);
@@ -34,24 +35,23 @@ interface
   procedure DrawRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
   procedure DrawLine(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
   procedure DrawPixel(clr : Color; x, y : Single; const opts: DrawingOptions);
-  procedure SetClipRectangle(dest : BitmapPtr; rect : Rectangle);
-  procedure ResetClip(dest : BitmapPtr);
-  procedure SetVideoModeFullScreen();
-  procedure SetVideoModeNoFrame();
-  procedure InitializeGraphicsWindow(const caption : String; screenWidth, screenHeight : LongInt);
-  procedure InitializeScreen( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
-  procedure ResizeGraphicsWindow(newWidth, newHeight : LongInt);
-  procedure RefreshScreen(screen : BitmapPtr);
-  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
-  function ColorFrom(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
-  function GetScreenWidth(): LongInt; 
-  function GetScreenHeight(): LongInt; 
-  function AvailableResolutions(): ResolutionArray;
   procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
   procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
 
+  procedure SetClipRectangle(dest : psg_drawing_surface; rect : Rectangle);
+  procedure ResetClip(dest : psg_drawing_surface);
+
+  function OpenWindow(const caption : String; screenWidth, screenHeight : LongInt): WindowPtr;
+  procedure CloseWindow(var wind: WindowPtr);
+  procedure ResizeWindow(wind: WindowPtr; newWidth, newHeight : LongInt);
+  procedure RefreshWindow(window : WindowPtr);
+  procedure SetVideoModeFullScreen(wind: WindowPtr);
+  procedure SetVideoModeNoFrame(wind: WindowPtr);
+
+  function AvailableResolutions(): ResolutionArray;
+
 implementation
-  uses sgDriverSDL2Types, sgShared, sgGeometry;
+  uses sgShared, sgGeometry;
 
   function RGBAColor(r, g, b, a: Byte)  : Color;
   begin
@@ -59,11 +59,20 @@ implementation
     result := a shl 24 or r shl 16 or g shl 8 or b ;
   end;
 
-	function GetPixel32 (bmp: BitmapPtr; x, y: Single) : Color;
+  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
+  begin
+    //TODO: standardise and remove from drivers
+    a := c and $FF000000 shr 24;
+    r := c and $00FF0000 shr 16;
+    g := c and $0000FF00 shr 8;
+    b := c and $000000FF;
+  end;
+
+	function GetPixel (src: psg_drawing_surface; x, y: Single) : Color;
   var
     clr: sg_color;
 	begin
-    clr := _sg_functions^.graphics.read_pixel(bmp^.surface, Round(x), Round(y));
+    clr := _sg_functions^.graphics.read_pixel(src, Round(x), Round(y));
     result := RGBAColor(Round(clr.r * 255), Round(clr.g * 255), Round(clr.b * 255), Round(clr.a * 255));
 	end;
 	
@@ -82,7 +91,7 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.fill_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.fill_triangle(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 6);
   end;
 
   procedure DrawTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
@@ -100,7 +109,7 @@ implementation
     pts[4] := x3;
     pts[5] := y3;
 
-    _sg_functions^.graphics.draw_triangle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 6);
+    _sg_functions^.graphics.draw_triangle(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 6);
   end;
   
   procedure FillCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -113,7 +122,7 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.fill_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.fill_circle(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 3);
   end;
 
   procedure DrawCircle(clr: Color; xc, yc, radius: Single; const opts : DrawingOptions); 
@@ -126,7 +135,7 @@ implementation
     pts[1] := yc;
     pts[2] := radius;
 
-    _sg_functions^.graphics.draw_circle(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 3);
+    _sg_functions^.graphics.draw_circle(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 3);
   end;
 	
 	procedure FillEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
@@ -140,7 +149,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.fill_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_ellipse(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 4);
 	end;
 	
 	procedure DrawEllipse (clr: Color; x, y, width, height: Single; const opts : DrawingOptions);
@@ -154,7 +163,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_ellipse(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_ellipse(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 4);
   end;
 	
   procedure DrawQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
@@ -169,7 +178,7 @@ implementation
       XYFromOpts(opts, pts[i * 2], pts[i * 2 + 1]);
     end;
 
-    _sg_functions^.graphics.draw_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 8);
+    _sg_functions^.graphics.draw_rect(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 8);
   end;
 
   procedure FillQuad(clr : Color; const q: Quad; const opts: DrawingOptions); overload;
@@ -184,7 +193,7 @@ implementation
       XYFromOpts(opts, pts[i * 2], pts[i * 2 + 1]);
     end;
 
-    _sg_functions^.graphics.fill_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 8);
+    _sg_functions^.graphics.fill_rect(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 8);
   end;
 
 	procedure FillRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
@@ -198,7 +207,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.fill_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.fill_aabb_rect(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 4);
 	end;
 
   procedure DrawRectangle (clr : Color; rect : Rectangle; const opts : DrawingOptions);
@@ -212,7 +221,7 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_aabb_rect(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 4);
+    _sg_functions^.graphics.draw_aabb_rect(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 4);
   end;
 	
 	procedure DrawLine(clr : Color; x1, y1, x2, y2 : Single; const opts : DrawingOptions);
@@ -228,7 +237,7 @@ implementation
     XYFromOpts(opts, pts[0], pts[1]);
     XYFromOpts(opts, pts[2], pts[3]);
 
-    _sg_functions^.graphics.draw_line(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 5);
+    _sg_functions^.graphics.draw_line(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 5);
   end;
 	
 	procedure DrawPixel(clr : Color; x, y : Single; const opts: DrawingOptions);
@@ -240,10 +249,10 @@ implementation
 
     XYFromOpts(opts, pts[0], pts[1]);
 
-    _sg_functions^.graphics.draw_pixel(ToBitmapPtr(opts.dest)^.surface, _ToSGColor(clr), @pts[0], 2);
+    _sg_functions^.graphics.draw_pixel(ToSurfacePtr(opts.dest), _ToSGColor(clr), @pts[0], 2);
 	end;
   
-  procedure SetClipRectangle(dest : BitmapPtr; rect : Rectangle);
+  procedure SetClipRectangle(dest : psg_drawing_surface; rect : Rectangle);
   var
     pts: array [0..4] of Single;
   begin
@@ -252,101 +261,78 @@ implementation
     pts[2] := rect.width;
     pts[3] := rect.height;
 
-    _sg_functions^.graphics.set_clip_rect(dest^.surface, @pts[0], 4);
+    _sg_functions^.graphics.set_clip_rect(dest, @pts[0], 4);
   end;
   
-  procedure ResetClip(dest : BitmapPtr);
+  procedure ResetClip(dest : psg_drawing_surface);
   begin
-    _sg_functions^.graphics.clear_clip_rect(dest^.surface);
+    _sg_functions^.graphics.clear_clip_rect(dest);
   end;
 
-  procedure SetVideoModeFullScreen();
+  procedure SetVideoModeFullScreen(wind: WindowPtr);
   var
     val: Longint = 0;
   begin
-    _wind_fullscreen := not _wind_fullscreen;
-    if _wind_fullscreen then val := -1;
+    wind^.fullscreen := not wind^.fullscreen;
+    if wind^.fullscreen then val := -1;
 
-    _sg_functions^.graphics.show_fullscreen(@wind, val);
+    _sg_functions^.graphics.show_fullscreen(@wind^.image.surface, val);
   end;
 
-  procedure SetVideoModeNoFrame();
+  procedure SetVideoModeNoFrame(wind: WindowPtr);
   var
     val: Longint = 0;
   begin
-    _wind_border := not _wind_border;
-    if _wind_border then val := -1;
-    _sg_functions^.graphics.show_border(@wind, val);
+    wind^.border := not wind^.border;
+    if wind^.border then val := -1;
+    _sg_functions^.graphics.show_border(@wind^.image.surface, val);
   end;
 	
-  procedure InitializeGraphicsWindow(const caption : String; screenWidth, screenHeight : LongInt);
-  begin
-    wind := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
-    wind_open := true;
-
-    // Allocate space for the screen variable - TODO: move this out of here!
-    New(screen);
-    screen^.id := BITMAP_PTR;
-    screen^.surface := @wind;
-    
-    screenRect    := RectangleFrom(0,0, screenWidth, screenHeight);
-    screen^.width := screenWidth;
-    screen^.height := screenHeight;
-
-    //TODO: remove dependency on this global variable
-    _screen := @wind;
-  end;
-
-  procedure InitializeScreen( screen: BitmapPtr; x, y : LongInt; bgColor, stringColor : Color;const msg : String);
+  function OpenWindow(const caption : String; screenWidth, screenHeight : LongInt): WindowPtr;
   var
     clr: sg_color;
   begin
-    clr := _ToSGColor(bgColor);
-    _sg_functions^.graphics.clear_drawing_surface(psg_drawing_surface(screen^.surface), clr);
+    New(result);
+    result^.id := WINDOW_PTR;
 
-    clr := _ToSGColor(stringColor);
-    _sg_functions^.text.draw_text( psg_drawing_surface(screen^.surface), nil, x - 30, y, PChar(msg), clr);
-  end;
-  
-  procedure ResizeGraphicsWindow(newWidth, newHeight : LongInt);
-  begin
-    _sg_functions^.graphics.resize(@wind, newWidth, newHeight);
-    screenRect.width := newWidth;
-    screenRect.height := newHeight;
-    screen^.width := newWidth;
-    screen^.height := newHeight;
-  end;
-  
-  procedure RefreshScreen(screen : BitmapPtr);
-  begin
-    _sg_functions^.graphics.refresh_window(psg_drawing_surface(screen^.surface));
-  end;
-  
-  procedure ColorComponents(c : Color; var r, g, b, a : Byte);
-  begin
-    //TODO: standardise and remove from drivers
-    a := c and $FF000000 shr 24;
-    r := c and $00FF0000 shr 16;
-    g := c and $0000FF00 shr 8;
-    b := c and $000000FF;
-  end;
-  
-  function ColorFrom(bmp : BitmapPtr; r, g, b, a: Byte)  : Color;
-  begin
-    //TODO: standardise and remove from drivers
-    result := a shl 24 or r shl 16 or g shl 8 or b ;
-  end;
-  
-  function GetScreenWidth(): LongInt; 
-  begin
-    result := Round(screenRect.width);
-  end;
-  
-  function GetScreenHeight(): LongInt; 
-  begin
-    result := Round(screenRect.height);
+    result^.image.surface := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
+    
+    result^.caption := caption;
+
+    result^.open := true;
+    result^.fullscreen := false;
+    result^.border := true;
+
+    result^.screenRect := RectangleFrom(0,0,screenWidth, screenHeight);
+
+    clr := _ToSGColor(RGBAColor(255,255,255,255));
+    _sg_functions^.graphics.clear_drawing_surface(@result^.image.surface, clr);
+
+    clr := _ToSGColor(RGBAColor(128,128,128,255));
+    _sg_functions^.text.draw_text( @result^.image.surface, nil, screenWidth div 2 - 60, screenHeight div 2, 'Getting ready to make a Splash!', clr);
+
+    RefreshWindow(result);
   end;
 
+  procedure CloseWindow(var wind: WindowPtr);
+  begin
+    _sg_functions^.graphics.close_drawing_surface(@wind^.image.surface);
+    wind^.id := NONE_PTR;
+    Dispose(wind);
+    wind := nil;
+  end;
+  
+  procedure ResizeWindow(wind: WindowPtr; newWidth, newHeight : LongInt);
+  begin
+    _sg_functions^.graphics.resize(@wind^.image.surface, newWidth, newHeight);
+    wind^.screenRect := RectangleFrom(0, 0, newWidth, newHeight);
+  end;
+  
+  procedure RefreshWindow(window : WindowPtr);
+  begin
+    _sg_functions^.graphics.refresh_window(@window^.image.surface);
+  end;
+  
   function AvailableResolutions(): ResolutionArray;
   var
     sysData: ^sg_system_data;
@@ -369,10 +355,6 @@ implementation
       result[0].refreshRate := sysData^.displays^.refresh_rate;
     end;    
   end;
-
-	procedure LoadGraphicsDriver();
-	begin
-	end;
 end.
 	
 	

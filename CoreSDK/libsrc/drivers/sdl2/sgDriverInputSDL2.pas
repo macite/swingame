@@ -7,7 +7,7 @@ interface
   function GetInputCallbackFunction() : sg_input_callbacks;
 
 implementation
-  uses sgDriverInput, sgInputBackend, sgTypes;
+  uses sgDriverInput, sgInputBackend, sgTypes, sgShared;
 
   function IsKeyPressedProcedure(virtKeyCode : LongInt) : Boolean;
   begin
@@ -21,7 +21,7 @@ implementation
       or
       (IsKeyPressedProcedure(SDLK_F4) and(IsKeyPressedProcedure(SDLK_RALT) or IsKeyPressedProcedure(SDLK_LALT)));
 
-    result := result or (wind_open and (_sg_functions^.input.window_close_requested(@wind) <> 0));
+    result := result or (Assigned(_PrimaryWindow) and (_sg_functions^.input.window_close_requested(@_PrimaryWindow^.image.surface) <> 0));
   end;
   
   procedure ProcessEventsProcedure();
@@ -52,7 +52,8 @@ implementation
   
   procedure WarpMouseProcedure(x,y : Word); 
   begin
-    _sg_functions^.input.warp_mouse(@wind, x, y);
+    if Assigned(_CurrentWindow) then
+      _sg_functions^.input.warp_mouse(@_CurrentWindow^.image.surface, x, y);
   end;
 
   procedure HandleKeydownEventCallback(code: Longint); cdecl;

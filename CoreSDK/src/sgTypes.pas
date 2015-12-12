@@ -131,6 +131,18 @@ interface
     //   yAxis: Longint;
     //   zAxis: Longint;
     // end;
+
+    /// @struct Wnd
+    Wnd = record end;
+
+    /// The Window type is used to refer to a window that you have opened
+    /// in SwinGame. You create new Windows using `OpenWindow` and they can 
+    /// be closed using `CloseWindow`.
+    ///
+    /// @class Window
+    /// @pointer_wrapper
+    /// @field pointer: pointer
+    Window = ^Wnd;
     
     /// The `SoundEffect` type is used to refer to sound effects that can be
     /// played by the SwinGame audio code. Sound effects are loaded with
@@ -218,6 +230,9 @@ interface
     /// @field pointer: pointer
     Animation = Pointer;
     
+    /// @struct Bmp
+    Bmp = record end;
+
     /// The bitmap type is a pointer to a BitmapData. The BitmapData record
     /// contains the data used by the SwinGame API to represent
     /// bitmaps. You can create new bitmaps in memory for drawing operatings
@@ -228,7 +243,7 @@ interface
     /// @class Bitmap
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Bitmap = Pointer;
+    Bitmap = ^Bmp;
     
     /// Determines the effect of the camera on a drawing operation.
     /// `DrawToScreen` means camera has no affect.
@@ -247,7 +262,7 @@ interface
     ///
     /// @struct DrawingOptions
     DrawingOptions = packed record
-      dest : Bitmap;            // The bitmap used to draw on to
+      dest : Pointer;           // The bitmap or window used to draw on to
       scaleX : Single;          // Scale data
       scaleY : Single;          //
       angle : Single;           // Angle for rotations

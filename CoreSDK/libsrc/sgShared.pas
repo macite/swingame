@@ -109,14 +109,7 @@ interface
   var
     // The base path to the program's executable.
     applicationPath: String = '';
-    
-    // This `Bitmap` wraps the an SDL image (and its double-buffered nature)
-    // which is used to contain the current "screen" rendered to the window.
-    screen: BitmapPtr = nil;
-    
-    // Used for on screen tests...
-    screenRect: Rectangle;
-    
+        
     // The singleton instance manager used to check events and called
     // registered "handlers". See `RegisterEventProcessor`.
     //sdlManager: TSDLManager = nil;
@@ -143,18 +136,14 @@ interface
     // Timing details related to calculating FPS
     _lastUpdateTime: Longword = 0;
     
-    // The pointer to the screen's surface
-    _screen: Pointer = nil;
-    
     _UpdateFPSData: IntProc = nil;
     
     UseExceptions: Boolean = True;
 
-    ///
-    /// The screen offset variables
-    ///
-    _cameraX : Single = 0.0;
-    _cameraY : Single = 0.0;
+    // The main application window -- close this to quit
+    _PrimaryWindow: WindowPtr;
+    // The one the programmer has currently selected
+    _CurrentWindow: WindowPtr;
 
   const
     DLL_VERSION = 'TEST BUILD';
@@ -420,7 +409,7 @@ begin
   // check cases where drawn without camera...
   case opts.camera of
     DrawToScreen: exit;
-    DrawDefault: if opts.dest <> screen then exit;
+    DrawDefault: if opts.dest <> _CurrentWindow then exit;
   end;
 
   // update location using camera
@@ -449,13 +438,6 @@ end;
             end;
         {$ENDIF}
     {$endif}
-    
-    if screen <> nil then
-    begin
-        ImagesDriver.FreeSurface(screen);
-        Dispose(screen);
-        screen := nil;
-    end;
     
     Driver.Quit();
     

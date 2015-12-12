@@ -68,19 +68,9 @@ interface
   /// @lib
   /// @uname OpenGraphicsWindow
   /// @sn openGraphicsWindow:%s width:%s height:%s
+  ///
+  /// @deprecated
   procedure OpenGraphicsWindow(const caption: String; width, height: Longint); overload;
-
-  /// Opens the graphical window as an 800 x 600 window. See OpenGramhicsWinddow
-  /// for more options.
-  /// @param caption: The caption for the window
-  ///
-  /// Side Effects:
-  /// - A graphical window is opened
-  ///
-  /// @lib OpenGraphicsWindow(caption, 800, 600)
-  /// @uname OpenGraphicsWindow800x600
-  /// @sn openGraphicsWindow:%s
-  procedure OpenGraphicsWindow(const caption: String); overload;
 
   /// Shows the SwinGame intro splash screen.
   /// It would be great if you could include this at the start of
@@ -170,24 +160,15 @@ interface
   /// @lib RefreshScreenRestrictFPS
   procedure RefreshScreen(TargetFPS: LongInt); overload;
   
+  /// Refresh the display on the passed in window.
+  ///
+  /// @lib RefreshScrenWindowFPS
+  procedure RefreshScreen(wnd: Window; targetFPS: Longint); overload;
   
   
 //----------------------------------------------------------------------------
 // Color
 //----------------------------------------------------------------------------
-
-  /// Maps a color from a given bitmap. This is used when determining color
-  /// keys for transparent images.
-  ///
-  /// @param bmp:   the bitmap to get the color for
-  /// @param apiColor:     The api color to match
-  /// @returns:           The color matched to the bitmaps pixel format
-  ///
-  /// @lib ColorFromBitmap
-  /// @sn colorFrom:%s apiColor:%s
-  ///
-  /// @doc_group colors
-  function ColorFrom(bmp: Bitmap; apiColor: Color): Color;
 
   /// Creates and returns a random color where R, G, B and A are all randomised.
   ///
@@ -693,13 +674,7 @@ interface
 // Clipping
 //---------------------------------------------------------------------------
   
-  /// Push a clip rectangle to the screen. This can be undone using PopClip.
-  ///
-  /// @lib PushClipXY
-  /// @sn pushClipX:%s y:%s width:%s height:%s
-  procedure PushClip(x, y, w, h: Longint); overload;
-  
-  /// Push a clip rectangle to the screen. This can be undone using PopClip.
+  /// Push a clip rectangle to the current window. This can be undone using PopClip.
   ///
   /// @lib PushClipRect
   /// @sn pushClip:%s
@@ -714,11 +689,30 @@ interface
   /// @overload PushClip PushClipRect
   /// @csn pushClip:%s
   procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;  
+
+  /// Add the clipping rectangle of a window and uses the intersect between the new rectangle and previous clip.
+  /// 
+  /// @lib PushClipRectForWindow
+  /// @sn window:%s PushClipRect:%s
+  ///
+  /// @class Window
+  /// @overload PushClip PushClipRect
+  /// @csn pushClip:%s
+  procedure PushClip(wnd: Window; const r: Rectangle); overload;  
+
   
-  /// Reset the clipping rectangle of the screen.
+  /// Reset the clipping rectangle of the current window.
   /// 
   /// @lib
   procedure ResetClip(); overload;
+
+  /// Reset the clipping rectangle on a window.
+  ///
+  /// @lib ResetClipForWindow
+  ///
+  /// @class Window
+  /// @method ResetClip
+  procedure ResetClip(wnd: Window); overload;
   
   /// Reset the clipping rectangle on a bitmap.
   ///
@@ -730,34 +724,27 @@ interface
 
   /// Set the clip rectangle of the bitmap.
   ///
-  /// @lib SetBmpClip
+  /// @lib SetClipForBitmap
   /// @sn bitmap:%s setClip:%s
   ///
   /// @class Bitmap
   /// @method SetClip
   procedure SetClip(bmp: Bitmap; const r: Rectangle); overload;
 
-  /// Set the clip rectangle of the screen.
+  /// Set the clip rectangle of a window.
+  ///
+  /// @lib SetClipForWindow
+  /// @sn bitmap:%s setClip:%s
+  ///
+  /// @class Window
+  /// @method SetClip
+  procedure SetClip(wnd: Window; const r: Rectangle); overload;
+
+  /// Set the clip rectangle of the current window.
   ///
   /// @lib SetClip
   /// @sn setClip:%s
   procedure SetClip(const r: Rectangle); overload;
-  
-  /// Set the clip rectangle of the screen.
-  ///
-  /// @lib SetClipXY
-  /// @sn setClipX:%s y:%s width:%s height:%s
-  procedure SetClip(x, y, w, h: Longint); overload;
-
-  /// Set the clip rectangle of the bitmap.
-  ///
-  /// @lib SetBmpClipXY
-  /// @sn bitmap:%s setClipX:%s y:%s width:%s height:%s
-  ///
-  /// @class Bitmap
-  /// @overload SetClip SetClipXY
-  /// @csn setClipX:%s y:%s width:%s height:%s
-  procedure SetClip(bmp: Bitmap; x, y, w, h: Longint); overload;
   
   /// Pop the clip rectangle of the screen.
   ///
@@ -766,26 +753,43 @@ interface
 
   /// Pop the clipping rectangle of a bitmap.
   /// 
-  /// @lib PopClipBmp
-  /// @sn popClipBitmap:%s
+  /// @lib PopClipForBitmap
+  /// @sn popClipForBitmap:%s
   ///
   /// @class Bitmap
   /// @method PopClip
   procedure PopClip(bmp: Bitmap); overload;
 
-  /// Returns the rectangle of the currentl clip of bitmap
+  /// Pop the clipping rectangle of a bitmap.
+  /// 
+  /// @lib PopClipForWindow
+  /// @sn popClipForWindow:%s
   ///
-  /// @lib CurrentBmpClip
-  /// @sn currentClip:%s
+  /// @class Window
+  /// @method PopClip
+  procedure PopClip(wnd: Window); overload;
+
+  /// Returns the rectangle of the current clip area for a bitmap
+  ///
+  /// @lib CurrentClipForBitmap
+  /// @sn currentClipForBitmap:%s
   ///
   /// @class Bitmap
   /// @getter CurrentClip
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
 
-  /// Returns the rectangle of the currentl clip of bitmap
+  /// Returns the rectangle of the clip area for a window
   ///
-  /// @lib CurrentScreenClip
+  /// @lib CurrentClipForWindow
+  /// @sn currentClipForWindow:%s
   ///
+  /// @class Window
+  /// @getter CurrentClip
+  function CurrentClip(wnd: Window): Rectangle; overload;
+
+  /// Returns the rectangle of the clip area of the current window
+  ///
+  /// @lib CurrentWindowClip
   function CurrentClip(): Rectangle; overload;
   
   
@@ -797,13 +801,24 @@ interface
   /// Returns the color of the pixel at the x,y location on
   /// the supplied bitmap.
   /// 
-  /// @lib
+  /// @lib GetPixelFromBitmap
   /// @sn bitmap:%s colorAtX:%s y:%s
   ///
   /// @class Bitmap
   /// @method GetPixel
   /// @csn colorAtX:%s y:%s
   function GetPixel(bmp: Bitmap; x, y: Single): Color;
+
+  /// Returns the color of the pixel at the x,y location on
+  /// the supplied window.
+  /// 
+  /// @lib GetPixelFromWindow
+  /// @sn WindowPixelColor:%s x:%s y:%s
+  ///
+  /// @class Window
+  /// @method GetPixel
+  /// @csn colorAtX:%s y:%s
+  function GetPixel(wnd: Window; x, y: Single): Color;
   
   /// Returns the color of the pixel at the given x,y location.
   ///
@@ -1550,7 +1565,7 @@ implementation
   uses Math, Classes, SysUtils, // system
        sgTrace, 
        sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
-       sgInputBackend, sgBackendTypes;
+       sgInputBackend, sgBackendTypes, sgWindowManager, sgDriverSDL2Types;
 
   /// Clears the surface of the screen to the passed in color.
   ///
@@ -1560,7 +1575,7 @@ implementation
   /// - Screen's surface is set to the toColor
   procedure ClearScreen(toColor : Color); overload;
   begin
-    ClearSurface(screen, toColor);
+    ClearSurface(ToSurfacePtr(_CurrentWindow), toColor);
   end;
 
   /// Clears the screen to Black.
@@ -1569,17 +1584,22 @@ implementation
   /// - screen's surface is set to black
   procedure ClearScreen(); overload;
   begin
-    ClearScreen(ColorBlack);
+    ClearScreen(ColorWhite);
   end;
 
   function GetPixel(bmp: Bitmap; x, y: Single): Color;
   begin
-    result := sgDriverGraphics.GetPixel32(bmp, x, y);
+    result := sgDriverGraphics.GetPixel(ToSurfacePtr(bmp), x, y);
+  end;
+
+  function GetPixel(wnd: Window; x, y: Single): Color;
+  begin
+    result := sgDriverGraphics.GetPixel(ToSurfacePtr(wnd), x, y);
   end;
 
   function GetPixelFromScreen(x, y: Single): Color;
   begin
-    result := GetPixel(screen, x, y);
+    result := sgDriverGraphics.GetPixel(ToSurfacePtr(_CurrentWindow), x, y);
   end;
 
 //=============================================================================
@@ -1894,60 +1914,82 @@ implementation
 
   //=============================================================================
 
+
+  procedure ResetClip(var img: ImageData); overload;
+  begin
+    SetLength(img.clipStack, 0);
+    sgDriverGraphics.ResetClip(@img.surface);
+  end;
   
   procedure ResetClip(bmp: Bitmap); overload;
+  var
+    b: BitmapPtr;
   begin
-    sgDriverGraphics.ResetClip(bmp);
+    b := ToBitmapPtr(bmp);
+    if Assigned(b) then ResetClip(b^.image);
+  end;
+
+  procedure ResetClip(wnd: Window); overload;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if Assigned(w) then ResetClip(w^.image);
   end;
 
   procedure ResetClip(); overload;
+  var
+    surf: psg_drawing_surface;
   begin
-    ResetClip(screen);
+    surf := ToSurfacePtr(_CurrentWindow);
+    if Assigned(surf) then
+      ResetClip(surf);
   end;
   
-  procedure DoSetClip(bmp: Bitmap; const r: Rectangle); overload;
+  procedure DoSetClip(surf: psg_drawing_surface; const r: Rectangle); overload;
   begin
-    sgDriverGraphics.SetClipRectangle(bmp, r);
+    sgDriverGraphics.SetClipRectangle(surf, r);
   end;
   
+  procedure PushClip(var img: ImageData; const r: Rectangle); overload;
+  begin
+    SetLength(img.clipStack, Length(img.clipStack) + 1);
+
+    if Length(img.clipStack) > 1 then
+    begin
+      img.clipStack[high(img.clipStack)] := Intersection(r, img.clipStack[High(img.clipStack) - 1]);
+    end
+    else
+      img.clipStack[high(img.clipStack)] := r;
+
+    DoSetClip(@img.surface, img.clipStack[high(img.clipStack)]);
+  end;
+
   procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;
   var
     b: BitmapPtr;
   begin
     b := ToBitmapPtr(bmp);
 
-    if b = nil then begin RaiseWarning('PushClip recieved empty Bitmap'); exit; end;
+    if b = nil then begin exit; end;
 
-    SetLength(b^.clipStack, Length(b^.clipStack) + 1);
-
-    if Length(b^.clipStack) > 1 then
-    begin
-      b^.clipStack[high(b^.clipStack)] := Intersection(r, b^.clipStack[High(b^.clipStack) - 1]);
-    end
-    else
-      b^.clipStack[high(b^.clipStack)] := r;
-
-    DoSetClip(bmp, b^.clipStack[high(b^.clipStack)]);
+    PushClip(b^.image, r);
   end;
 
-  procedure SetClip(x, y, w, h: Longint); overload;
+  procedure PushClip(wnd: Window; const r: Rectangle); overload;
+  var
+    w: WindowPtr;
   begin
-    SetClip(screen, RectangleFrom(x, y, w, h));
-  end;
-  
-  procedure SetClip(bmp: Bitmap; x, y, w, h: Longint); overload;
-  begin
-    SetClip(bmp, RectangleFrom(x, y, w, h));
+    w := ToWindowPtr(wnd);
+
+    if w = nil then begin exit; end;
+
+    PushClip(w^.image, r);
   end;
 
-  procedure PushClip(x, y, w, h: Longint); overload;
-  begin
-    PushClip(screen, RectangleFrom(x, y, w, h));
-  end;
-  
   procedure PushClip(const r: Rectangle); overload;
   begin
-    PushClip(screen, r);
+    PushClip(Window(_CurrentWindow), r);
   end;
 
   procedure SetClip(bmp: Bitmap; const r: Rectangle); overload;
@@ -1958,21 +2000,43 @@ implementation
 
     if assigned(b) then
     begin
-      SetLength(b^.clipStack, 0);
+      SetLength(b^.image.clipStack, 0);
       PushClip(bmp, r);
+    end;
+  end;
+
+  procedure SetClip(wnd: Window; const r: Rectangle); overload;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+
+    if assigned(w) then
+    begin
+      SetLength(w^.image.clipStack, 0);
+      PushClip(wnd, r);
     end;
   end;
 
   procedure SetClip(const r: Rectangle); overload;
   begin
-    SetClip(screen, r);
+    SetClip(Window(_CurrentWindow), r);
   end;
 
   procedure PopClip(); overload;
   begin
-    PopClip(screen);
+    PopClip(Window(_CurrentWindow));
   end;
   
+  procedure PopClip(var img: ImageData); overload;
+  begin
+    Setlength(img.clipStack, Length(img.clipStack)-1);
+    if Length(img.clipStack) > 0 then
+      DoSetClip(@img.surface, img.clipStack[High(img.clipStack)])
+    else
+      ResetClip(img);
+  end;
+
   procedure PopClip(bmp: Bitmap); overload;
   var
     b: BitmapPtr;
@@ -1980,29 +2044,52 @@ implementation
     b := ToBitmapPtr(bmp);
     if not Assigned(b) then exit;
 
-    Setlength(b^.clipStack, Length(b^.clipStack)-1);
-    if Length(b^.clipStack) > 0 then
-      DoSetClip(b, b^.clipStack[High(b^.clipStack)])
+    PopClip(b^.image);
+  end;
+
+  procedure PopClip(wnd: Window); overload;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if not Assigned(w) then exit;
+
+    PopClip(w^.image);
+  end;
+
+  function CurrentClip(const img: ImageData): Rectangle; overload;
+  begin
+    if Length(img.clipStack) <> 0 then
+      result := img.clipStack[high(img.clipStack)]
     else
-      ResetClip(bmp);
+      result := RectangleFrom(0, 0, img.surface.width, img.surface.height);
   end;
 
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
-    var
+  var
     b: BitmapPtr;
   begin
     b := ToBitmapPtr(bmp);
 
     if not Assigned(b) then exit;
     
-    if Length(b^.clipStack) <> 0 then result:= b^.clipStack[high(b^.clipStack)]
-    else
-      result:=BitmapRectangle(0, 0, bmp);
+    result := CurrentClip(b^.image);
+  end;
+
+  function CurrentClip(wnd: Window): Rectangle; overload;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+
+    if not Assigned(w) then exit;
+    
+    result := CurrentClip(w^.image);
   end;
 
   function CurrentClip(): Rectangle; overload;
   begin
-    result := CurrentClip(screen);
+    result := CurrentClip(Window(_CurrentWindow));
   end;
 
  //=============================================================================
@@ -2055,46 +2142,7 @@ implementation
   
   procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
   begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'OpenGraphicsWindow', caption + ': W' + IntToStr(width) + ': H' + IntToStr(height));
-    {$ENDIF}
-
-    if screen <> nil then
-    begin
-      RaiseWarning('Screen has been created. Cannot create multiple windows.');
-      exit;
-    end;
-
-    try         
-      sgDriverGraphics.InitializeGraphicsWindow(caption, width, height);
-      sgDriverGraphics.InitializeScreen(screen, screenWidth div 2 - 30, screenHeight div 2, ColorWhite, ColorGrey, 'Loading ...');
-      RefreshScreen();
-    except on e: Exception do
-      begin
-        RaiseException('Error in OpenGraphicsWindow: ' + e.Message);
-        exit;
-      end;
-    end;
-    
-    {$IFDEF TRACE}
-      TraceIf(tlInfo, 'sgGraphics', 'Info', 'OpenGraphicsWindow', 'Window is open (' + caption + ' ' + IntToStr(width) + 'x' + IntToStr(height) + ')');
-    {$ENDIF}
-    
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'OpenGraphicsWindow');
-    {$ENDIF}
-  end;
-  
-
-  procedure OpenGraphicsWindow(const caption: String); overload;
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'OpenGraphicsWindow');
-    {$ENDIF}
-    OpenGraphicsWindow(caption, 800,600);
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'OpenGraphicsWindow');
-    {$ENDIF}
+    OpenWindow(caption, width, height);
   end;
 
   procedure ToggleFullScreen();
@@ -2103,11 +2151,9 @@ implementation
       TraceEnter('sgGraphics', 'ToggleFullScreen');
     {$ENDIF}
 
-    try
-      //Remember... _screen is a pointer to screen buffer, not a "surface"!
-      sgDriverGraphics.SetVideoModeFullScreen();
-    except on exc: Exception do
-    end;
+    if Assigned(_CurrentWindow) then
+      sgDriverGraphics.SetVideoModeFullScreen(_CurrentWindow);
+
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ToggleFullScreen');
     {$ENDIF}
@@ -2119,11 +2165,8 @@ implementation
       TraceEnter('sgGraphics', 'ToggleWindowBorder');
     {$ENDIF}
     
-    try
-      //Remember... _screen is a pointer to screen buffer, not a "surface"!
-      sgDriverGraphics.SetVideoModeNoFrame();
-    except on exc: Exception do
-    end;
+    sgDriverGraphics.SetVideoModeNoFrame(_CurrentWindow);
+
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ToggleWindowBorder');
     {$ENDIF}
@@ -2134,58 +2177,51 @@ implementation
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'ChangeScreenSize');
     {$ENDIF}
-    if (screen = nil) then
-    begin
-      RaiseWarning('Screen has not been created. Unable to get screen width.');
-      exit;
-    end;
+    if not Assigned(_CurrentWindow) then exit;
 
     if (width < 1) or (height < 1) then
     begin
-      RaiseWarning('Screen Width and Height must be greater then 0 when resizing a Graphical Window');
       exit; 
     end;
-    if (width = ScreenWidth()) and (height = ScreenHeight()) then exit;
-    sgDriverGraphics.ResizeGraphicsWindow(width, height);
+
+    if (width = _CurrentWindow^.image.surface.width) and (height = _CurrentWindow^.image.surface.height) then exit;
+
+    sgDriverGraphics.ResizeWindow(_CurrentWindow, width, height);
+
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ChangeScreenSize');
     {$ENDIF}
   end;
 
+  function WindowWidth(wnd: Window): Longint;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if not Assigned(w) then result := 0
+    else result := w^.image.surface.width;
+  end;
+
+  function WindowHeight(wnd: Window): Longint;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if not Assigned(w) then result := 0
+    else result := w^.image.surface.height;
+  end;
+
   function ScreenWidth(): Longint;
   begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ScreenWidth');
-    {$ENDIF}
-    if (_screen = nil) then
-    begin
-      RaiseWarning('Screen has not been created. Unable to get screen width.');
-      exit;
-    end;
-    
-    result := sgDriverGraphics.GetScreenWidth();
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ScreenWidth');
-    {$ENDIF}
+    result := WindowWidth(Window(_CurrentWindow));
   end;
 
   function ScreenHeight(): Longint;
   begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ScreenHeight');
-    {$ENDIF}
-    if (_screen = nil) then
-    begin
-      RaiseWarning('Screen has not been created. Unable to get screen height.');
-      exit;
-    end;
-    result := sgDriverGraphics.GetScreenHeight();
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ScreenHeight');
-    {$ENDIF}
+    result := WindowHeight(Window(_CurrentWindow));
   end;
 
-  procedure TakeScreenShot(const basename: String);
+  procedure SaveSurface(const image: ImageData; const basename: String);
   var
     path: String;
     filename: String;
@@ -2194,7 +2230,7 @@ implementation
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'TakeScreenShot');
     {$ENDIF}
-    
+
     path := IncludeTrailingPathDelimiter(GetUserDir()) + 'Desktop' + PathDelim;
     if not DirectoryExists(path) then 
       path := IncludeTrailingPathDelimiter(GetUserDir());
@@ -2209,11 +2245,24 @@ implementation
       i := i + 1;
     end;
     
-    ImagesDriver.SaveBitmap(screen, path + filename);
+    sgDriverImages.SaveSurface(@image.surface, path + filename);
     
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'TakeScreenShot');
     {$ENDIF}
+  end;
+
+  procedure TakeScreenShot(wnd: Window; const basename: String);
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if Assigned(wnd) then SaveSurface(w^.image, basename);
+  end;
+
+  procedure TakeScreenShot(const basename: String);
+  begin
+    TakeScreenshot(Window(_CurrentWindow), basename);
   end;
 
   procedure RefreshScreen(); overload;
@@ -2221,22 +2270,28 @@ implementation
     RefreshScreen(-1);
   end;
 
-  procedure RefreshScreen(targetFPS: Longint); overload;
+  procedure RefreshScreen(wnd: Window; targetFPS: Longint); overload;
   var
     nowTime: Longword;
     delta, delayTime: Longword;
+    w: WindowPtr;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'RefreshScreen');
     {$ENDIF}
-    DrawCollectedText(screen);
-    sgDriverGraphics.RefreshScreen(screen);
+
+    w := ToWindowPtr(wnd);
+
+    if not Assigned(w) then exit;
+
+    DrawCollectedText(w);
+    sgDriverGraphics.RefreshWindow(w);
     
     nowTime := GetTicks();
     delta := nowTime - _lastUpdateTime;
     
     //dont sleep if 5ms remaining...
-    while (targetFPS > 0) and ((delta + 5) * targetFPS < 1000) do
+    while (targetFPS > 0) and ((delta + 8) * targetFPS < 1000) do
     begin
       delayTime := (1000 div targetFPS) - delta;
       Delay(delayTime);
@@ -2249,6 +2304,11 @@ implementation
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'RefreshScreen');
     {$ENDIF}
+  end;
+
+  procedure RefreshScreen(targetFPS: Longint); overload;
+  begin
+    RefreshScreen(Window(_CurrentWindow), targetFPS);
   end;
   
   
@@ -2270,19 +2330,7 @@ implementation
       TraceEnter('sgGraphics', 'ColorComponents');
     {$ENDIF}
 
-    {$IFNDEF SWINGAME_OPENGL}
-    if not ImagesDriver.SurfaceExists(screen) then
-    begin
-      RaiseWarning('Estimating color, screen not available.');
-    {$ENDIF}
-      a := (c and $FF000000) shr 24;
-      r := (c and $00FF0000) shr 16;
-      g := (c and $0000FF00) shr 8;
-      b := (c and $000000FF);
-    {$IFNDEF SWINGAME_OPENGL}
-    end;
     sgDriverGraphics.ColorComponents(c, r, g, b, a);
-    {$ENDIF}
 
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'ColorComponents');
@@ -2427,50 +2475,14 @@ implementation
     {$ENDIF}
   end;
   
-  function ColorFrom(bmp: Bitmap; apiColor: Color): Color;
-  var
-    r,g,b,a: Byte;
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ColorFrom');
-    {$ENDIF}
-    if (bmp = nil) or not ImagesDriver.SurfaceExists(screen) then
-    begin
-      RaiseException('Unable to get color as bitmap not specified');
-      exit;
-    end;
-    
-    ColorComponents(apiColor, r, g, b, a);
-    
-    result := sgDriverGraphics.ColorFrom(bmp, r, g, b, a);
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ColorFrom');
-    {$ENDIF}
-  end;
-
   function RGBAColor(red, green, blue, alpha: Byte): Color;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGraphics', 'RGBAColor');
     {$ENDIF}
 
-    {$IFNDEF SWINGAME_OPENGL}
-    if not ImagesDriver.SurfaceExists(screen) then
-    begin
-    //   RaiseWarning('Estimating RGBAColor as the window is not open');
-    {$ENDIF}
-      result := (alpha shl 24) or (red shl 16) or (green shl 8) or (blue);
-      exit;
-    {$IFNDEF SWINGAME_OPENGL}
-    end;
+    result := sgDriverGraphics.RGBAColor(red, green, blue, alpha);
 
-    try
-      result := sgDriverGraphics.RGBAColor(red, green, blue, alpha);
-    except
-      RaiseException('Error occured while trying to get a color from RGBA components');
-      exit;
-    end;
-    {$ENDIF}
     {$IFDEF TRACE}
       TraceExit('sgGraphics', 'RGBAColor');
     {$ENDIF}
@@ -2673,7 +2685,7 @@ implementation
                     aniY := (ScreenHeight() - BitmapCellHeight(aniBmp)) div 2;
                     
                     ClearScreen(ColorWhite);
-                    DrawBitmap(aniBmp, aniX, aniY);
+                    sgImages.DrawBitmap(aniBmp, aniX, aniY);
 
                     f := FontNamed('SwinGameText');
                     txt := 'SwinGame API by Swinburne University of Technology';

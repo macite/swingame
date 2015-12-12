@@ -52,17 +52,6 @@ uses sgTypes;
   /// @csn initNamed:%s withWidth:%s andHeight:%s
   function CreateBitmap(const name: String; width, height: Longint): Bitmap; overload;
   
-  /// Loads a bitmap from file using where the specified transparent color
-  /// is used as a color key for the transparent color.
-  ///
-  /// @lib LoadBitmapWithTransparentColor
-  /// @sn loadBitmapFile:%s colorKeyed:%s withColor:%s
-  ///
-  /// @class Bitmap
-  /// @constructor
-  /// @csn initWithPath:%s withTransparency:%s usingColor:%s
-  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
-
   /// Loads a bitmap from file into a Bitmap variable. This can then be drawn to
   /// the screen. Bitmaps can be of bmp, jpeg, gif, png, etc. Images may also
   /// contain alpha values, which will be drawn correctly by the API. All
@@ -77,19 +66,6 @@ uses sgTypes;
   /// @csn initWithPath:%s
   function LoadBitmap(const filename : String): Bitmap; overload;
 
-  /// Loads a bitmap with a transparent color key. The transparent color is then
-  /// setup as the color key to ensure the image is drawn correctly. Alpha
-  /// values of Images loaded in this way will be ignored. All bitmaps must be
-  /// freed using the `FreeBitmap` once you are finished with them.
-  ///
-  /// @lib LoadBitmapWithTransparentColor(filename, True, transparentColor)
-  /// @sn loadBitmapFile:%s withColorKey:%s
-  ///
-  /// @class Bitmap
-  /// @constructor
-  /// @csn initWithPath:%s transparentColor:%s
-  function LoadTransparentBitmap(const filename : String; transparentColor : Color): Bitmap; overload;
-
   /// Frees a loaded bitmap. Use this when you will no longer be drawing the
   /// bitmap (including within Sprites), and when the program exits.
   ///
@@ -97,7 +73,7 @@ uses sgTypes;
   ///
   /// @class Bitmap
   /// @dispose
-  procedure FreeBitmap(var bitmapToFree : Bitmap);
+  procedure FreeBitmap(bitmapToFree : Bitmap);
   
   
   
@@ -117,20 +93,7 @@ uses sgTypes;
   /// @constructor
   /// @csn initWithName:%s fromFile:%s
   function LoadBitmapNamed(const name, filename: String): Bitmap;
-  
-  /// Loads and returns a bitmap with a given color code use for transparency.
-  /// The supplied ``filename`` is used to locate the Bitmap to load. The supplied
-  /// ``name`` indicates thename to use to refer to this Bitmap in SwinGame. The 
-  /// `Bitmap` can then be retrieved by passing this ``name`` to the `BitmapNamed` function. 
-  ///
-  /// @lib
-  /// @sn loadBitmapNamed:%s toFile:%s colorKey:%s
-  ///
-  /// @class Bitmap
-  /// @constructor
-  /// @csn initWithName:%s fromFile:%s colorKey:%s
-  function LoadTransparentBitmapNamed(const name, filename: String; transparentColor: Color): Bitmap;
-  
+    
   /// Determines if SwinGame has a bitmap loaded for the supplied name.
   /// This checks against all bitmaps loaded, those loaded without a name
   /// are assigned the filename as a default.
@@ -328,77 +291,18 @@ uses sgTypes;
   /// @csn circleCellAtX:%s y:%s
   function BitmapCellCircle(bmp: Bitmap; x, y: Single): Circle; overload;
   
-  
-  
+
 //---------------------------------------------------------------------------
-// Alpha blendings adjusting code
-//---------------------------------------------------------------------------
-  
-  /// Removes any surface level transparency from the supplied bitmap.
-  ///
-  /// @lib
-  ///
-  /// @class Bitmap
-  /// @method MakeOpaque
-  procedure MakeOpaque(bmp: Bitmap);
-  
-  /// Turns on the surface level transparency for the supplied bitmap, 
-  /// and set the transparency value to the percentage supplied in pct.
-  ///
-  /// @lib
-  /// @sn setOpacityOf:%s pct:%s
-  /// 
-  /// @class Bitmap
-  /// @method SetOpacity
-  procedure SetOpacity(bmp: Bitmap; pct: Single);
-  
-  /// Turns on the surface level transparency for the supplied bitmap, the
-  /// transparency value is then set to 0 (fully transparent).
-  ///
-  /// @lib
-  /// @class Bitmap
-  /// @method MakeTransparent
-  procedure MakeTransparent(bmp: Bitmap);
-  
-  
-  
-//---------------------------------------------------------------------------
-// Save
+// Collision Mask
 //---------------------------------------------------------------------------
   
-  /// Saves the bitmap to a png file at the specified location.
-  ///
-  /// @lib
-  /// @sn bitmap:%s saveToPNG:%s
-  ///
-  /// @class Bitmap
-  /// @method SaveToPNG
-  procedure SaveToPNG(bmp: Bitmap; const filename: String);
-    
   /// Setup the passed in bitmap for pixel level collisions.
   ///
   /// @lib
   /// @class Bitmap
   /// @method SetupForCollisions
   procedure SetupBitmapForCollisions(src: Bitmap);
-  
-  
-//---------------------------------------------------------------------------
-// Optimise
-//---------------------------------------------------------------------------
 
-  /// Created bitmaps can be optimised for faster drawing to the screen. This
-  /// optimisation should be called only once after all drawing to the bitmap
-  /// is complete. Optimisation should not be used if the bitmap is to be
-  /// drawn onto in the future. All loaded bitmaps are optimised during loading.
-  ///
-  /// @lib
-  ///
-  /// @class Bitmap
-  /// @method OptimiseBitmap
-  procedure OptimiseBitmap(surface: Bitmap);
-  
-  
   
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - clearing
@@ -562,29 +466,14 @@ uses sgTypes;
   /// @csn saveToFile:%s
   procedure SaveBitmap(src: Bitmap; const filepath: String);
   
-  
-  
-//---------------------------------------------------------------------------
-// Bitmap Transparancy
-//---------------------------------------------------------------------------
-  
-  /// Setting the color passed in to be transparent on the bitmap. This edits the
-  /// passed in bitmap, altering the color to transparent.
-  /// 
-  /// @lib
-  /// @sn bitmap:%s setTransparentColor:%s
-  ///
-  /// @class Bitmap
-  /// @method SetTransparentColor 
-  procedure SetTransparentColor(src: Bitmap; clr:Color);
-  
+    
 //=============================================================================
 implementation
 uses sgResources, sgCamera, sgGeometry, sgGraphics,
      sgDriverImages, sgDriver, sgDrawingOptions,
      stringhash,         // libsrc
      SysUtils, 
-     sgShared, sgTrace, sgBackendTypes;
+     sgShared, sgTrace, sgBackendTypes, sgDriverSDL2Types;
 //=============================================================================
 
 var
@@ -604,7 +493,6 @@ var
   realName: String;
   idx: Longint;
   obj: tResourceContainer;
-  b: BitmapPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'CreateBitmap');
@@ -617,18 +505,19 @@ begin
     exit;
   end;
   
-  New(b);
-  result := b;
-  b^.id := BITMAP_PTR;
-  b^.surface := nil;
+  realName := name;
+  idx := 0;
   
-  ImagesDriver.CreateBitmap(result, width, height);
-
-  if (not Assigned(result)) or (not ImagesDriver.SurfaceExists(result)) then
+  while _Images.containsKey(realName) do
   begin
-    b^.id := NONE_PTR;
-    Dispose(b);
-    result := nil;
+    realName := name + '_' + IntToStr(idx);
+    idx := idx + 1;
+  end;
+
+  result := Bitmap(sgDriverImages.CreateBitmap(realName, width, height));
+
+  if (not Assigned(result)) then
+  begin
     RaiseWarning('Failed to create a bitmap: ' + Driver.GetError());
     exit;
   end;
@@ -638,32 +527,10 @@ begin
   //
   obj := tResourceContainer.Create(result);
   
-  realName := name;
-  idx := 0;
-  
-  while _Images.containsKey(realName) do
-  begin
-    realName := name + '_' + IntToStr(idx);
-    idx := idx + 1;
-  end;
-  
-  b^.width     := width;
-  b^.height    := height;
-  
-  b^.cellW     := width;
-  b^.cellH     := height;
-  b^.cellCols  := 1;
-  b^.cellRows  := 1;
-  b^.cellCount := 1;
-  
-  b^.name      := realName;
-  b^.filename  := '';
-  
-  ImagesDriver.InitBitmapColors(result);
-  
   if not _Images.setValue(realName, obj) then
   begin
     FreeBitmap(result);
+    result := nil;
     RaiseException('Error creating bitmap: ' + realName);
     exit;
   end;
@@ -701,23 +568,17 @@ begin
 
   for i := Low(bitmaps) to High(bitmaps) do
   begin
-    MakeOpaque(bitmaps[i]);
     DrawBitmap(bitmaps[i], (i mod cols) * w, (i div cols) * h, opts);
-    MakeTransparent(bitmaps[i]);
   end;
   
   BitmapSetCellDetails(result, w, h, cols, rows, Length(bitmaps));
 end;
 
-function DoLoadBitmap(const name, filename: String; transparent: Boolean; transparentColor: Color): BitmapPtr;
+function LoadBitmapNamed(const name, filename: String): Bitmap;
 var
   obj: tResourceContainer;
   fn: String;
 begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'LoadBitmap', filename);
-  {$ENDIF}
-  
   if _Images.containsKey(name) then
   begin
     result := BitmapNamed(name);
@@ -739,66 +600,36 @@ begin
     end;
   end;  
   
-  result := ImagesDriver.DoLoadBitmap(fn, transparent, transparentColor);
+  result := Bitmap(sgDriverImages.LoadBitmap(name, fn));
 
   // if it failed to load then exit
-  if not assigned(result) then 
+  if not Assigned(result) then 
   begin
     RaiseWarning('Error loading image ' + fn);
     exit;
   end;
-
-  result^.cellW     := result^.width;
-  result^.cellH     := result^.height;
-  result^.cellCols  := 1;
-  result^.cellRows  := 1;
-  result^.cellCount := 1;
-  result^.name      := name;
-  result^.filename  := fn;
-  SetLength(result^.clipStack, 0);
   
   // Place the bitmap in the _Images hashtable
   obj := tResourceContainer.Create(result);
-  {$IFDEF TRACE}
-    Trace('sgImages', 'Info', 'DoLoadBitmap', 'name = ' + name + ' obj = ' + HexStr(obj) + ' _Images = ' + HexStr(_Images));
-  {$ENDIF}
   if not _Images.setValue(name, obj) then
   begin
     FreeBitmap(result);
     RaiseException('Error loaded Bitmap resource twice: ' + name + ' for file ' + fn);
     exit;
   end;
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'LoadBitmap, result = ' + HexStr(result));
-  {$ENDIF}
 end;
 
-function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
+function LoadBitmap(const filename: String): Bitmap;
 begin
-  result := DoLoadBitmap(filename + ColorToString(transparentColor),filename, transparent, transparentColor);
+  result := Bitmap(LoadBitmap(filename, filename));
 end;
 
-function LoadBitmap(const filename: String): Bitmap; overload;
-begin
-  result := DoLoadBitmap(filename, filename, false, ColorBlack);
-end;
-
-function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
-begin
-  result := LoadBitmap(filename, true, transparentColor);
-end;
-
-procedure FreeBitmap(var bitmapToFree : Bitmap);
+procedure FreeBitmap(bitmapToFree : Bitmap);
 var
   b: BitmapPtr;
 begin
   b := ToBitmapPtr(bitmapToFree);
 
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'FreeBitmap', 'bitmapToFree = ' + HexStr(bitmapToFree));
-  {$ENDIF}
-  
   if Assigned(b) then
   begin    
 
@@ -808,48 +639,16 @@ begin
     //Remove the image from the hashtable
     _Images.remove(BitmapName(bitmapToFree)).Free();
     
-    ImagesDriver.FreeSurface(bitmapToFree);
+    sgDriverImages.FreeBitmap(b);
     
     //Dispose the pointer
     b^.id := NONE_PTR;
     Dispose(b);
   end;
-  
-  bitmapToFree := nil;
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'FreeBitmap');
-  {$ENDIF}
 end;
 
 
 //----------------------------------------------------------------------------
-
-function LoadBitmapNamed(const name, filename: String): Bitmap;
-begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'LoadBitmapNamed', name + ' -> ' + filename);
-  {$ENDIF}
-  
-  result := DoLoadBitmap(name, filename, false, ColorBlack);
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'LoadBitmapNamed');
-  {$ENDIF}
-end;
-
-function LoadTransparentBitmapNamed(const name, filename: String; transparentColor: Color): Bitmap;
-begin
-  {$IFDEF TRACE}
-    TraceEnter('sgImages', 'LoadTransparentBitmapNamed', name + ' -> ' + filename);
-  {$ENDIF}
-  
-  result := DoLoadBitmap(name, filename, true, transparentColor);
-  
-  {$IFDEF TRACE}
-    TraceExit('sgImages', 'LoadTransparentBitmapNamed');
-  {$ENDIF}
-end;
 
 function HasBitmap(const name: String): Boolean;
 begin
@@ -919,10 +718,10 @@ var
 begin
   b := ToBitmapPtr(bmp);
 
-  if not assigned(b) then result := false
-  else result := (Length(b^.nonTransparentPixels) = b^.width)
-      and ((x >= 0) and (x < b^.width))
-      and ((y >= 0) and (y < b^.height))
+  if not Assigned(b) then result := false
+  else result := (Length(b^.nonTransparentPixels) = b^.image.surface.width)
+      and ((x >= 0) and (x < b^.image.surface.width))
+      and ((y >= 0) and (y < b^.image.surface.height))
       and b^.nonTransparentPixels[Round(x), Round(y)];
 end;
 
@@ -988,21 +787,6 @@ end;
 
 //---------------------------------------------------------------------------
 
-procedure MakeOpaque(bmp: Bitmap);
-begin
-  ImagesDriver.MakeOpaque(bmp);
-end;
-
-procedure SetOpacity(bmp: Bitmap; pct: Single);
-begin
-  ImagesDriver.SetOpacity(bmp, pct)
-end;
-
-procedure MakeTransparent(bmp: Bitmap);
-begin
-  ImagesDriver.MakeTransparent(bmp);
-end;
-
 procedure SetupBitmapForCollisions(src: Bitmap);
 var
   b: BitmapPtr;
@@ -1012,15 +796,7 @@ begin
   if not assigned(b) then exit;
   if Length(b^.nonTransparentPixels) <> 0 then exit;
     
-  ImagesDriver.SetNonAlphaPixels(src);
-  OptimiseBitmap(src);
-end;
-
-//---------------------------------------------------------------------------
-
-procedure OptimiseBitmap(surface: Bitmap);
-begin
-  ImagesDriver.OptimiseBitmap(surface);
+  sgDriverImages.SetupCollisionMask(b);
 end;
 
 //---------------------------------------------------------------------------
@@ -1035,15 +811,19 @@ end;
 /// - Draws the src at the x,y location in the destination.
 
 procedure DrawBitmap(src: Bitmap; x, y: Single; const opts: DrawingOptions); overload;
+var
+  b: BitmapPtr;
 begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'DrawBitmap', 'src = ' + HexStr(src));
     try
   {$ENDIF}
 
-  if (not Assigned(opts.dest)) or (not Assigned(src)) then exit;
+  b := ToBitmapPtr(src);
+
+  if (not Assigned(opts.dest)) or (not Assigned(b)) then exit;
   
-  ImagesDriver.BlitSurface(src, x, y, opts)
+  sgDriverImages.DrawBitmap(b, x, y, opts)
 
   {$IFDEF TRACE}
     finally
@@ -1070,8 +850,12 @@ end;
 //---------------------------------------------------------------------------
 
 procedure ClearSurface(dest: Bitmap; toColor: Color); overload;
+var
+  surf: psg_drawing_surface;
 begin
-  ImagesDriver.ClearSurface(dest, toColor);
+  surf := ToSurfacePtr(dest);
+  if Assigned(surf) then
+    sgDriverImages.ClearSurface(surf, toColor);
 end;
 
 procedure ClearSurface(dest: Bitmap); overload;
@@ -1100,7 +884,7 @@ begin
   b := ToBitmapPtr(bmp);
 
   if not Assigned(b) then result := RectangleFrom(0,0,0,0)
-  else result := RectangleFrom(x, y, b^.width, b^.height);
+  else result := RectangleFrom(x, y, b^.image.surface.width, b^.image.surface.height);
 end;
 
 function BitmapRectangle(bmp: Bitmap): Rectangle; overload;
@@ -1123,17 +907,13 @@ begin
   result := BitmapCellRectangle(0, 0, bmp);
 end;
 
-function _BitmapRectangleOfCell(src: BitmapPtr; cell: Longint): Rectangle;
-var
-  b: BitmapPtr;
+function _BitmapRectangleOfCell(b: BitmapPtr; cell: Longint): Rectangle;
 begin
-  b := ToBitmapPtr(src);
-
   if (not assigned(b)) or (cell >= b^.cellCount) then
     result := RectangleFrom(0,0,0,0)
   else if (cell < 0) then
   begin
-    result := RectangleFrom(0,0,BitmapWidth(src),BitmapHeight(src));
+    result := RectangleFrom(0,0,b^.image.surface.width,b^.image.surface.width);
   end
   else
   begin
@@ -1155,7 +935,7 @@ var
 begin
   b := ToBitmapPtr(bmp);
   if not assigned(b) then result := 0
-  else result := b^.width;
+  else result := b^.image.surface.width;
 end;
 
 function BitmapHeight(bmp: Bitmap): Longint; overload;
@@ -1164,7 +944,7 @@ var
 begin
   b := ToBitmapPtr(bmp);
   if not assigned(b) then result := 0
-  else result := b^.height;
+  else result := b^.image.surface.height;
 end;
 
 function BitmapCellWidth(bmp: Bitmap): Longint;
@@ -1260,38 +1040,13 @@ end;
 //---------------------------------------------------------------------------
 
 procedure SaveBitmap(src: Bitmap; const filepath: String);
-begin
-  ImagesDriver.SaveBitmap(src, filepath);
-end;
-
-//---------------------------------------------------------------------------
-
-procedure SetTransparentColor(src: Bitmap; clr:Color);
 var
-  x,y : integer;
-var
-  b: BitmapPtr;
+  surface: psg_drawing_surface;
 begin
-  b := ToBitmapPtr(src);
-  if not assigned(b) then exit;
-  
-  for x:= 0 to b^.Width - 1 do
-  begin
-    for y := 0 to b^.Height - 1 do
-    begin
-      if (GetPixel(src, x, y) = clr) then 
-        DrawPixel(RGBAColor(0,0,0,0),x,y, OptionDrawTo(src));
-    end;
-  end;
+  surface := ToSurfacePtr(src);
+  if Assigned(surface) then
+    sgDriverImages.SaveSurface(surface, filepath);
 end;
-
-procedure SaveToPNG(bmp: Bitmap; const filename: String);
-begin
-  if not assigned(bmp) then exit;
-  
-  ImagesDriver.SaveBitmap(bmp, filename);
-end;
-
 
 //=============================================================================
 

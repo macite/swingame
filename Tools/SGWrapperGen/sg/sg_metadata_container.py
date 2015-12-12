@@ -17,7 +17,7 @@ class SGMetaDataContainer(object):
     def __init__(self, known_tags = None):
         """initialise the container setting up the tags dictionary"""
         self._known_tags = known_tags if known_tags != None else []
-        self._known_tags.extend(['note','name','version','in_file', 'ignore', 'file_line_details', 'meta_comment_line_details', 'doc_group'])
+        self._known_tags.extend(['note','name','version','in_file', 'ignore', 'file_line_details', 'meta_comment_line_details', 'doc_group', 'deprecated'])
         
         self.tags = {}
         self.doc = ""

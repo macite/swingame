@@ -339,11 +339,6 @@ interface
 
 	var
 		_sg_functions: ^sg_interface;
-		// Currently only a single window... TODO: allow multiple windows
-		wind: sg_drawing_surface;
-		wind_open: Boolean = false;
-		_wind_fullscreen: Boolean = false;
-		_wind_border: Boolean = true;
 		
 	function _ToSGColor(clr: Longint) : sg_color;
 

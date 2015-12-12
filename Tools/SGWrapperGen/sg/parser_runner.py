@@ -35,6 +35,7 @@ all_units = [
     ('sgUserInterface', 'UserInterface', '../../CoreSDK/src/sgUserInterface.pas'),
     ('sgArduino', 'Arduino', '../../CoreSDK/src/sgArduino.pas'),
     ('sgDrawingOptions', 'DrawingOptions', '../../CoreSDK/src/sgDrawingOptions.pas'),
+    ('sgWindowManager', 'WindowManager', '../../CoreSDK/src/sgWindowManager.pas'),
 ]
 
 

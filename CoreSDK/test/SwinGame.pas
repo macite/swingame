@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-08 20:30:46.342068
+// SwinGame.pas was generated on 2015-12-12 15:44:57.880688
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -7,7 +7,7 @@
 unit SwinGame;
 
 interface
-uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions;
+uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions, sgWindowManager;
 
   type Point2D = sgTypes.Point2D;
 
@@ -25,6 +25,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type Resolution = sgTypes.Resolution;
 
+  type Wnd = sgTypes.Wnd;
+
+  type Window = sgTypes.Window;
+
   type SoundEffect = sgTypes.SoundEffect;
 
   type Music = sgTypes.Music;
@@ -36,6 +40,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type AnimationScript = sgTypes.AnimationScript;
 
   type Animation = sgTypes.Animation;
+
+  type Bmp = sgTypes.Bmp;
 
   type Bitmap = sgTypes.Bitmap;
 
@@ -507,10 +513,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the current camera position in world coordinates. This is the top
   // left hand corner of the screen.
   function CameraPos(): Point2D; overload;
-
-  // Returns the rectangle that encompases the area of the game world
-  // that is currently on the screen.
-  function CameraScreenRect(): Rectangle; overload;
 
   // Returns the x location of the camera in game coordinates. This represents
   // the left most x value shown on the screen, with the right of the screen
@@ -1278,10 +1280,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // The color ForestGreen
   function ColorForestGreen(): Color; overload;
 
-  // Maps a color from a given bitmap. This is used when determining color
-  // keys for transparent images.
-  function ColorFrom(bmp: Bitmap; apiColor: Color): Color; overload;
-
   // The color Fuchsia
   function ColorFuchsia(): Color; overload;
 
@@ -1582,10 +1580,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // The color YellowGreen
   function ColorYellowGreen(): Color; overload;
 
-  // Returns the rectangle of the currentl clip of bitmap
+  // Returns the rectangle of the clip area of the current window
   function CurrentClip(): Rectangle; overload;
 
-  // Returns the rectangle of the currentl clip of bitmap
+  // Returns the rectangle of the clip area for a window
+  function CurrentClip(wnd: Window): Rectangle; overload;
+
+  // Returns the rectangle of the current clip area for a bitmap
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
 
   // Draw a circle in the game.
@@ -1730,6 +1731,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // the supplied bitmap.
   function GetPixel(bmp: Bitmap; x: Single; y: Single): Color; overload;
 
+  // Returns the color of the pixel at the x,y location on
+  // the supplied window.
+  function GetPixel(wnd: Window; x: Single; y: Single): Color; overload;
+
   // Returns the color of the pixel at the given x,y location.
   function GetPixelFromScreen(x: Single; y: Single): Color; overload;
 
@@ -1749,10 +1754,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the number of resolutions in the list of available resolutions.
   function NumberOfResolutions(): Longint; overload;
 
-  // Opens the graphical window as an 800 x 600 window. See OpenGramhicsWinddow
-  // for more options.
-  procedure OpenGraphicsWindow(const caption: String); overload;
-
   // Opens the graphical window so that it can be drawn onto. You can set the
   // icon for this window using `SetIcon`. The window itself is only drawn when
   // you call `RefreshScreen`. All windows are opened at 32 bits per pixel. You
@@ -1766,14 +1767,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Pop the clipping rectangle of a bitmap.
   procedure PopClip(bmp: Bitmap); overload;
 
-  // Push a clip rectangle to the screen. This can be undone using PopClip.
+  // Pop the clipping rectangle of a bitmap.
+  procedure PopClip(wnd: Window); overload;
+
+  // Push a clip rectangle to the current window. This can be undone using PopClip.
   procedure PushClip(const r: Rectangle); overload;
 
   // Add the clipping rectangle of a bitmap and uses the intersect between the new rectangle and previous clip.
   procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;
 
-  // Push a clip rectangle to the screen. This can be undone using PopClip.
-  procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  // Add the clipping rectangle of a window and uses the intersect between the new rectangle and previous clip.
+  procedure PushClip(wnd: Window; const r: Rectangle); overload;
 
   // Gets a color given its RGBA components.
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -1809,8 +1813,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // approximately meet the targetted frames per second.
   procedure RefreshScreen(TargetFPS: Longint); overload;
 
-  // Reset the clipping rectangle of the screen.
+  // Refresh the display on the passed in window.
+  procedure RefreshScreen(wnd: Window; targetFPS: Longint); overload;
+
+  // Reset the clipping rectangle of the current window.
   procedure ResetClip(); overload;
+
+  // Reset the clipping rectangle on a window.
+  procedure ResetClip(wnd: Window); overload;
 
   // Reset the clipping rectangle on a bitmap.
   procedure ResetClip(bmp: Bitmap); overload;
@@ -1824,17 +1834,14 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns the width of the screen currently displayed.
   function ScreenWidth(): Longint; overload;
 
-  // Set the clip rectangle of the screen.
+  // Set the clip rectangle of the current window.
   procedure SetClip(const r: Rectangle); overload;
 
   // Set the clip rectangle of the bitmap.
   procedure SetClip(bmp: Bitmap; const r: Rectangle); overload;
 
-  // Set the clip rectangle of the screen.
-  procedure SetClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
-
-  // Set the clip rectangle of the bitmap.
-  procedure SetClip(bmp: Bitmap; x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  // Set the clip rectangle of a window.
+  procedure SetClip(wnd: Window; const r: Rectangle); overload;
 
   // Sets the icon for the window. This must be called before openning the
   // graphics window. The icon is loaded as a bitmap, though this can be from
@@ -1968,10 +1975,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure DrawBitmap(const name: String; x: Single; y: Single); overload;
 
   // Draw the bitmap using the passed in options
-  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw the bitmap using the passed in options
-  procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
+  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
 
   // Draw a cell from a bitmap onto the game.
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
@@ -1981,7 +1988,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Frees a loaded bitmap. Use this when you will no longer be drawing the
   // bitmap (including within Sprites), and when the program exits.
-  procedure FreeBitmap(var bitmapToFree: Bitmap); overload;
+  procedure FreeBitmap(bitmapToFree: Bitmap); overload;
 
   // Determines if SwinGame has a bitmap loaded for the supplied name.
   // This checks against all bitmaps loaded, those loaded without a name
@@ -1995,40 +2002,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // them.
   function LoadBitmap(const filename: String): Bitmap; overload;
 
-  // Loads a bitmap from file using where the specified transparent color
-  // is used as a color key for the transparent color.
-  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
-
   // Loads and returns a bitmap. The supplied ``filename`` is used to
   // locate the Bitmap to load. The supplied ``name`` indicates the 
   // name to use to refer to this Bitmap in SwinGame. The `Bitmap` can then be
   // retrieved by passing this ``name`` to the `BitmapNamed` function.
   function LoadBitmapNamed(const name: String; const filename: String): Bitmap; overload;
-
-  // Loads a bitmap with a transparent color key. The transparent color is then
-  // setup as the color key to ensure the image is drawn correctly. Alpha
-  // values of Images loaded in this way will be ignored. All bitmaps must be
-  // freed using the `FreeBitmap` once you are finished with them.
-  function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
-
-  // Loads and returns a bitmap with a given color code use for transparency.
-  // The supplied ``filename`` is used to locate the Bitmap to load. The supplied
-  // ``name`` indicates thename to use to refer to this Bitmap in SwinGame. The 
-  // `Bitmap` can then be retrieved by passing this ``name`` to the `BitmapNamed` function.
-  function LoadTransparentBitmapNamed(const name: String; const filename: String; transparentColor: Color): Bitmap; overload;
-
-  // Removes any surface level transparency from the supplied bitmap.
-  procedure MakeOpaque(bmp: Bitmap); overload;
-
-  // Turns on the surface level transparency for the supplied bitmap, the
-  // transparency value is then set to 0 (fully transparent).
-  procedure MakeTransparent(bmp: Bitmap); overload;
-
-  // Created bitmaps can be optimised for faster drawing to the screen. This
-  // optimisation should be called only once after all drawing to the bitmap
-  // is complete. Optimisation should not be used if the bitmap is to be
-  // drawn onto in the future. All loaded bitmaps are optimised during loading.
-  procedure OptimiseBitmap(surface: Bitmap); overload;
 
   // Checks if a pixel is drawn at the specified x,y location.
   function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
@@ -2042,17 +2020,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Save Bitmap to specific directory.
   procedure SaveBitmap(src: Bitmap; const filepath: String); overload;
-
-  // Saves the bitmap to a png file at the specified location.
-  procedure SaveToPNG(bmp: Bitmap; const filename: String); overload;
-
-  // Turns on the surface level transparency for the supplied bitmap, 
-  // and set the transparency value to the percentage supplied in pct.
-  procedure SetOpacity(bmp: Bitmap; pct: Single); overload;
-
-  // Setting the color passed in to be transparent on the bitmap. This edits the
-  // passed in bitmap, altering the color to transparent.
-  procedure SetTransparentColor(src: Bitmap; clr: Color); overload;
 
   // Setup the passed in bitmap for pixel level collisions.
   procedure SetupBitmapForCollisions(src: Bitmap); overload;
@@ -3672,12 +3639,19 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a DrawingOptions with default values.
   function OptionDefaults(): DrawingOptions; overload;
 
-  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+  // Use this option to draw to a specified Window. Pass dest the Window you want to draw on.
+  function OptionDrawTo(dest: Window): DrawingOptions; overload;
+
+  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on.
   function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
+
+  // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on.
+  // Pass opts the other options you want use.
+  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
 
   // Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
   // Pass opts the other options you want use.
-  function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
+  function OptionDrawTo(dest: Window; const opts: DrawingOptions): DrawingOptions; overload;
 
   // Use this option to flip an image along its X axis.
   function OptionFlipX(): DrawingOptions; overload;
@@ -3756,6 +3730,32 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Use this option to draw in World coordinates -- these are affected by the movement of the camera.
   // Pass opts the other options you want use.
   function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
+
+  // Close a window.
+  procedure CloseWindow(wind: Window); overload;
+
+  // Close a window that you have opened.
+  procedure CloseWindow(const name: String); overload;
+
+  // Is there a window a window with the specified name.
+  function HasWindow(const name: String): Boolean; overload;
+
+  // Opens the window so that it can be drawn onto and used to respond to user
+  // actions. The window itself is only drawn when you call `RefreshScreen`. 
+  //
+  // The first window opened will be the primary window, closing this window
+  // will cause SwinGame to indicate the user wants to quit the program.
+  //
+  // Unless otherwise specified using `DrawingOptions`, all drawing operations 
+  // will draw onto the current window. This starts as the first window opened
+  // but can be changed with `SelectWindow`.
+  function OpenWindow(const caption: String; width: Longint; height: Longint): Window; overload;
+
+  // Save screenshot to specific directory.
+  procedure SaveScreenshot(src: Window; const filepath: String); overload;
+
+  // Get the window with the speficied name.
+  function WindowNamed(const name: String): Window; overload;
 
 
 	procedure LoadDefaultColors();
@@ -4189,11 +4189,6 @@ implementation
   function CameraPos(): Point2D; overload;
   begin
     result := sgCamera.CameraPos();
-  end;
-
-  function CameraScreenRect(): Rectangle; overload;
-  begin
-    result := sgCamera.CameraScreenRect();
   end;
 
   function CameraX(): Single; overload;
@@ -5346,11 +5341,6 @@ implementation
     result := sgGraphics.ColorForestGreen();
   end;
 
-  function ColorFrom(bmp: Bitmap; apiColor: Color): Color; overload;
-  begin
-    result := sgGraphics.ColorFrom(bmp,apiColor);
-  end;
-
   function ColorFuchsia(): Color; overload;
   begin
     result := sgGraphics.ColorFuchsia();
@@ -5856,6 +5846,11 @@ implementation
     result := sgGraphics.CurrentClip();
   end;
 
+  function CurrentClip(wnd: Window): Rectangle; overload;
+  begin
+    result := sgGraphics.CurrentClip(wnd);
+  end;
+
   function CurrentClip(bmp: Bitmap): Rectangle; overload;
   begin
     result := sgGraphics.CurrentClip(bmp);
@@ -6096,6 +6091,11 @@ implementation
     result := sgGraphics.GetPixel(bmp,x,y);
   end;
 
+  function GetPixel(wnd: Window; x: Single; y: Single): Color; overload;
+  begin
+    result := sgGraphics.GetPixel(wnd,x,y);
+  end;
+
   function GetPixelFromScreen(x: Single; y: Single): Color; overload;
   begin
     result := sgGraphics.GetPixelFromScreen(x,y);
@@ -6126,11 +6126,6 @@ implementation
     result := sgGraphics.NumberOfResolutions();
   end;
 
-  procedure OpenGraphicsWindow(const caption: String); overload;
-  begin
-    sgGraphics.OpenGraphicsWindow(caption);
-  end;
-
   procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
   begin
     sgGraphics.OpenGraphicsWindow(caption,width,height);
@@ -6146,6 +6141,11 @@ implementation
     sgGraphics.PopClip(bmp);
   end;
 
+  procedure PopClip(wnd: Window); overload;
+  begin
+    sgGraphics.PopClip(wnd);
+  end;
+
   procedure PushClip(const r: Rectangle); overload;
   begin
     sgGraphics.PushClip(r);
@@ -6156,9 +6156,9 @@ implementation
     sgGraphics.PushClip(bmp,r);
   end;
 
-  procedure PushClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure PushClip(wnd: Window; const r: Rectangle); overload;
   begin
-    sgGraphics.PushClip(x,y,w,h);
+    sgGraphics.PushClip(wnd,r);
   end;
 
   function RGBAColor(red: Byte; green: Byte; blue: Byte; alpha: Byte): Color; overload;
@@ -6206,9 +6206,19 @@ implementation
     sgGraphics.RefreshScreen(TargetFPS);
   end;
 
+  procedure RefreshScreen(wnd: Window; targetFPS: Longint); overload;
+  begin
+    sgGraphics.RefreshScreen(wnd,targetFPS);
+  end;
+
   procedure ResetClip(); overload;
   begin
     sgGraphics.ResetClip();
+  end;
+
+  procedure ResetClip(wnd: Window); overload;
+  begin
+    sgGraphics.ResetClip(wnd);
   end;
 
   procedure ResetClip(bmp: Bitmap); overload;
@@ -6241,14 +6251,9 @@ implementation
     sgGraphics.SetClip(bmp,r);
   end;
 
-  procedure SetClip(x: Longint; y: Longint; w: Longint; h: Longint); overload;
+  procedure SetClip(wnd: Window; const r: Rectangle); overload;
   begin
-    sgGraphics.SetClip(x,y,w,h);
-  end;
-
-  procedure SetClip(bmp: Bitmap; x: Longint; y: Longint; w: Longint; h: Longint); overload;
-  begin
-    sgGraphics.SetClip(bmp,x,y,w,h);
+    sgGraphics.SetClip(wnd,r);
   end;
 
   procedure SetIcon(const filename: String); overload;
@@ -6421,14 +6426,14 @@ implementation
     sgImages.DrawBitmap(name,x,y);
   end;
 
-  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
-  begin
-    sgImages.DrawBitmap(name,x,y,opts);
-  end;
-
   procedure DrawBitmap(src: Bitmap; x: Single; y: Single; const opts: DrawingOptions); overload;
   begin
     sgImages.DrawBitmap(src,x,y,opts);
+  end;
+
+  procedure DrawBitmap(const name: String; x: Single; y: Single; const opts: DrawingOptions); overload;
+  begin
+    sgImages.DrawBitmap(name,x,y,opts);
   end;
 
   procedure DrawCell(src: Bitmap; cell: Longint; x: Single; y: Single); overload;
@@ -6441,7 +6446,7 @@ implementation
     sgImages.DrawCell(src,cell,x,y,opts);
   end;
 
-  procedure FreeBitmap(var bitmapToFree: Bitmap); overload;
+  procedure FreeBitmap(bitmapToFree: Bitmap); overload;
   begin
     sgImages.FreeBitmap(bitmapToFree);
   end;
@@ -6456,39 +6461,9 @@ implementation
     result := sgImages.LoadBitmap(filename);
   end;
 
-  function LoadBitmap(const filename: String; transparent: Boolean; transparentColor: Color): Bitmap; overload;
-  begin
-    result := sgImages.LoadBitmap(filename,transparent,transparentColor);
-  end;
-
   function LoadBitmapNamed(const name: String; const filename: String): Bitmap; overload;
   begin
     result := sgImages.LoadBitmapNamed(name,filename);
-  end;
-
-  function LoadTransparentBitmap(const filename: String; transparentColor: Color): Bitmap; overload;
-  begin
-    result := sgImages.LoadTransparentBitmap(filename,transparentColor);
-  end;
-
-  function LoadTransparentBitmapNamed(const name: String; const filename: String; transparentColor: Color): Bitmap; overload;
-  begin
-    result := sgImages.LoadTransparentBitmapNamed(name,filename,transparentColor);
-  end;
-
-  procedure MakeOpaque(bmp: Bitmap); overload;
-  begin
-    sgImages.MakeOpaque(bmp);
-  end;
-
-  procedure MakeTransparent(bmp: Bitmap); overload;
-  begin
-    sgImages.MakeTransparent(bmp);
-  end;
-
-  procedure OptimiseBitmap(surface: Bitmap); overload;
-  begin
-    sgImages.OptimiseBitmap(surface);
   end;
 
   function PixelDrawnAtPoint(bmp: Bitmap; x: Single; y: Single): Boolean; overload;
@@ -6509,21 +6484,6 @@ implementation
   procedure SaveBitmap(src: Bitmap; const filepath: String); overload;
   begin
     sgImages.SaveBitmap(src,filepath);
-  end;
-
-  procedure SaveToPNG(bmp: Bitmap; const filename: String); overload;
-  begin
-    sgImages.SaveToPNG(bmp,filename);
-  end;
-
-  procedure SetOpacity(bmp: Bitmap; pct: Single); overload;
-  begin
-    sgImages.SetOpacity(bmp,pct);
-  end;
-
-  procedure SetTransparentColor(src: Bitmap; clr: Color); overload;
-  begin
-    sgImages.SetTransparentColor(src,clr);
   end;
 
   procedure SetupBitmapForCollisions(src: Bitmap); overload;
@@ -8781,12 +8741,22 @@ implementation
     result := sgDrawingOptions.OptionDefaults();
   end;
 
+  function OptionDrawTo(dest: Window): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionDrawTo(dest);
+  end;
+
   function OptionDrawTo(dest: Bitmap): DrawingOptions; overload;
   begin
     result := sgDrawingOptions.OptionDrawTo(dest);
   end;
 
   function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions; overload;
+  begin
+    result := sgDrawingOptions.OptionDrawTo(dest,opts);
+  end;
+
+  function OptionDrawTo(dest: Window; const opts: DrawingOptions): DrawingOptions; overload;
   begin
     result := sgDrawingOptions.OptionDrawTo(dest,opts);
   end;
@@ -8899,6 +8869,36 @@ implementation
   function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
   begin
     result := sgDrawingOptions.OptionToWorld(opts);
+  end;
+
+  procedure CloseWindow(wind: Window); overload;
+  begin
+    sgWindowManager.CloseWindow(wind);
+  end;
+
+  procedure CloseWindow(const name: String); overload;
+  begin
+    sgWindowManager.CloseWindow(name);
+  end;
+
+  function HasWindow(const name: String): Boolean; overload;
+  begin
+    result := sgWindowManager.HasWindow(name);
+  end;
+
+  function OpenWindow(const caption: String; width: Longint; height: Longint): Window; overload;
+  begin
+    result := sgWindowManager.OpenWindow(caption,width,height);
+  end;
+
+  procedure SaveScreenshot(src: Window; const filepath: String); overload;
+  begin
+    sgWindowManager.SaveScreenshot(src,filepath);
+  end;
+
+  function WindowNamed(const name: String): Window; overload;
+  begin
+    result := sgWindowManager.WindowNamed(name);
   end;
 
 end.

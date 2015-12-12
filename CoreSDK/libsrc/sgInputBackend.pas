@@ -1,7 +1,7 @@
 unit sgInputBackend;
 
 interface
-  uses sgTypes, sysutils;
+  uses sgTypes, sysutils, sgBackendTypes;
     procedure DoQuit();       // #
     procedure CheckQuit();
     procedure HandleKeydownEvent(kyCode, kyChar : LongInt);     // #
@@ -10,7 +10,7 @@ interface
     procedure ProcessKeyPress(kyCode, kyChar: Longint);
     procedure ProcessTextEntry(const input: String);
     // text reading/draw collection
-    procedure DrawCollectedText(dest: Bitmap);
+    procedure DrawCollectedText(dest: WindowPtr);
     procedure SetText(const text: String);
     procedure InputBackendStartReadingText(textColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
     procedure InputBackendStartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
@@ -281,7 +281,7 @@ implementation
   
   procedure FreeOldSurface();
   begin
-    if imagesDriver.SurfaceExists(_textBitmap) and (not imagesDriver.SameBitmap(_textBitmap, _cursorBitmap)) then
+    if Assigned(_textBitmap) and (_textBitmap <> _cursorBitmap) then
       FreeBitmap(_textBitmap);
   end;
   
@@ -316,7 +316,7 @@ implementation
 
     newStr := '|';
 
-    if imagesDriver.SurfaceExists(_cursorBitmap) then FreeBitmap(_cursorBitmap);
+    if Assigned(_cursorBitmap) then FreeBitmap(_cursorBitmap);
     _cursorBitmap := DrawTextToBitmap(_font, newStr, _foreColor,_backgroundColor);
     _textBitmap := _cursorBitmap;
   end;
@@ -326,15 +326,15 @@ implementation
     InputBackendStartReadingText(textColor,ColorTransparent,maxLength,theFont,area);
   end;
 
-  procedure DrawCollectedText(dest : Bitmap);
+  procedure DrawCollectedText(dest : WindowPtr);
   begin
-    if (not imagesDriver.SurfaceExists(dest)) then exit;
+    if not Assigned(dest) then exit;
 
     if _readingString then
     begin
-      if imagesDriver.SurfaceExists(_textBitmap) then
+      if Assigned(_textBitmap) then
       begin
-        imagesDriver.BlitSurface(_textBitmap, _area.x, _area.y, OptionDrawTo(dest));
+        sgDriverImages.DrawBitmap(ToBitmapPtr(_textBitmap), _area.x, _area.y, OptionDrawTo(Window(dest)));
       end;
     end;
   end;

@@ -39,7 +39,8 @@ _type_switcher = {
     'boolean': 'Boolean',
     'keycode': 'KeyCode',
 
-
+    'wnd': 'Wnd',
+    'bmp':'Bmp',
     
     'linesarray':               'LineSegmentPtr',
     'resolutionarray':          'ResolutionPtr',

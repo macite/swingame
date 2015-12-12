@@ -35,17 +35,30 @@ uses sgTypes;
 /// @lib
 function OptionDefaults(): DrawingOptions;
 
-/// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
+/// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on.
 ///
-/// @lib
+/// @lib OptionDrawToBitmap
 function OptionDrawTo(dest: Bitmap): DrawingOptions;
+
+/// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on.
+/// Pass opts the other options you want use.
+///
+/// @lib OptionDrawToBitmapOpts
+/// @sn optionDrawToBitmap:%s withOptions:%s
+function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions;
+
+/// Use this option to draw to a specified Window. Pass dest the Window you want to draw on.
+///
+/// @lib OptionDrawToWindow
+function OptionDrawTo(dest: Window): DrawingOptions;
 
 /// Use this option to draw to a Bitmap. Pass dest the Bitmap you want to draw on to.
 /// Pass opts the other options you want use.
 ///
-/// @lib OptionDrawToOpts
-/// @sn optionDrawTo:%s withOptions:%s
-function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions;
+/// @lib OptionDrawToWindowOpts
+/// @sn optionDrawToWindow:%s withOptions:%s
+function OptionDrawTo(dest: Window; const opts: DrawingOptions): DrawingOptions;
+
 
 /// Use this option to scale the drawing of bitmaps. You can scale x and y separately.
 ///
@@ -176,7 +189,7 @@ function OptionDefaults(): DrawingOptions;
 begin
 	with result do
 	begin
-		dest 			:= screen;
+		dest 			:= _CurrentWindow;
 		scaleX 			:= 1;
 		scaleY 			:= 1;
 		angle  			:= 0;
@@ -197,6 +210,17 @@ begin
 end;
 
 function OptionDrawTo(dest: Bitmap; const opts: DrawingOptions): DrawingOptions;
+begin
+	result := opts;
+	result.dest := dest;
+end;
+
+function OptionDrawTo(dest: Window): DrawingOptions;
+begin
+	result := OptionDrawTo(dest, OptionDefaults());
+end;
+
+function OptionDrawTo(dest: Window; const opts: DrawingOptions): DrawingOptions;
 begin
 	result := opts;
 	result.dest := dest;

@@ -36,6 +36,7 @@ class SGPasParser():
             'module': self.process_id_attribute,
             'header': self.process_id_attribute,
             'static': self.process_true_attribute,
+            'deprecated': self.process_true_attribute,
             'struct': self.process_id_attribute,
             'lib':self.process_lib_attribute,
             #'has_pointer': self.process_true_attribute,

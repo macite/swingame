@@ -32,7 +32,9 @@ var
 	r: Rectangle;
 	q: Quad;
 begin
-	OpenGraphicsWindow('Sprite Rotation', 600, 600);
+	OpenWindow('Sprite Rotation', 600, 600);
+	OpenWindow('Other Window', 300, 300);
+	
 	sprt := CreateSprite(BitmapNamed('rocket_sprt.png'));
 	SpriteSetMoveFromAnchorPoint(sprt, true);
 	SpriteSetX(sprt, 300);

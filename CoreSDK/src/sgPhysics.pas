@@ -833,8 +833,8 @@ implementation
 
     if (not Assigned(b1)) or (not Assigned(b2)) then result := False
     else result := CollisionWithinBitmapImages(
-                bmp1, x1, y1, b1^.width, b1^.height, 0, 0, 
-                bmp2, x2, y2, b2^.width, b2^.height, 0, 0);
+                bmp1, x1, y1, b1^.image.surface.width, b1^.image.surface.height, 0, 0, 
+                bmp2, x2, y2, b2^.image.surface.width, b2^.image.surface.height, 0, 0);
   end;
   
   function CollisionWithinSpriteImages(s1, s2: Sprite): Boolean;
