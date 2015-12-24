@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-24 12:19:39.246929
+// SwinGame.pas was generated on 2015-12-25 07:18:39.416560
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1681,6 +1681,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Fill a circle onto a destination bitmap.
   procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
+
+  // Fill a circle in the game.
+  procedure FillCircle(clr: Color; const pt: Point2D; radius: Longint); overload;
+
+  // Fill a circle at a given point using the passed in drawing options.
+  procedure FillCircle(clr: Color; const pt: Point2D; radius: Longint; const opts: DrawingOptions); overload;
 
   // Fill a circle onto a destination bitmap.
   procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;
@@ -6030,6 +6036,16 @@ implementation
   procedure FillCircle(clr: Color; const c: Circle; const opts: DrawingOptions); overload;
   begin
     sgGraphics.FillCircle(clr,c,opts);
+  end;
+
+  procedure FillCircle(clr: Color; const pt: Point2D; radius: Longint); overload;
+  begin
+    sgGraphics.FillCircle(clr,pt,radius);
+  end;
+
+  procedure FillCircle(clr: Color; const pt: Point2D; radius: Longint; const opts: DrawingOptions); overload;
+  begin
+    sgGraphics.FillCircle(clr,pt,radius,opts);
   end;
 
   procedure FillCircle(clr: Color; x: Single; y: Single; radius: Single; const opts: DrawingOptions); overload;

@@ -420,6 +420,8 @@ uses sgTypes, sgDriverSDL2Types;
       
       image:      ImageData;
 
+      x, y:       Longint;
+
       open:       Boolean;
       fullscreen: Boolean;
       border:     Boolean;

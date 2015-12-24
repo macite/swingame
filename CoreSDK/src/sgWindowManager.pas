@@ -110,6 +110,11 @@ interface
   /// @lib PrimaryWindowCloseRequested
   function WindowCloseRequested(): Boolean;
 
+  /// Returns the window that the user has focused on.
+  ///
+  /// @lib
+  function WindowWithFocus(): Window;
+
 
 //=============================================================================
 implementation
@@ -269,6 +274,24 @@ begin
     result := Window(_Windows[idx])
   else
     result := nil; 
+end;
+
+function WindowWithFocus(): Window;
+var
+  i: Integer;
+  wp: WindowPtr;
+begin
+  for i := 0 to High(_Windows) do
+  begin
+    wp := _Windows[i];
+    if wp^.eventData.has_focus <> 0 then
+    begin
+      result := Window(wp);
+      exit;
+    end; 
+  end;
+
+  result := Window(_Windows[0]);
 end;
 
 

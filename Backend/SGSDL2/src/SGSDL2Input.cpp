@@ -42,6 +42,11 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
 //            SDL_Log("Window %d moved to %d,%d",
 //                    event->window.windowID, event->window.data1,
 //                    event->window.data2);
+            if (_functions.input_callbacks.handle_window_move)
+            {
+                _functions.input_callbacks.handle_window_move(_sgsdl2_get_window_with_id(event->window.windowID), event->window.data1, event->window.data2);
+            }
+            
             break;
         case SDL_WINDOWEVENT_RESIZED:
             if (_functions.input_callbacks.handle_window_resize)

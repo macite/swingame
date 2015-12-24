@@ -303,6 +303,8 @@ implementation
     result^.fullscreen := false;
     result^.border := true;
 
+    _sg_functions^.input.window_position(@result^.image.surface, @result^.x, @result^.y);
+
     result^.screenRect := RectangleFrom(0,0,screenWidth, screenHeight);
 
     clr := _ToSGColor(RGBAColor(255,255,255,255));

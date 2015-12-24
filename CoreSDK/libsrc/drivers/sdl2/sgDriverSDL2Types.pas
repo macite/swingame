@@ -288,6 +288,7 @@ interface
 				handle_mouse_down : sg_intp_proc;
 				handle_input_text : sg_charp_proc;
 				handle_window_resize: sg_window_xy_proc;
+				handle_window_move: sg_window_xy_proc;
 			end;
 
 		sg_input_interface = record

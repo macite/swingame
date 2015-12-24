@@ -3,8 +3,7 @@ uses SwinGame, sgTypes, SysUtils;
 
 procedure Main();
 var
-	i: Integer;
-	clr: Color;
+	i, active: Integer;
 begin
 	OpenWindow('Window 1', 300, 300);
 	OpenWindow('Window 2', 400, 400);
@@ -17,23 +16,35 @@ begin
 	ClearScreen(ColorIndigo);
 	RefreshScreen();
 
-	clr := ColorIndigo;
-
 	i := 0;
+	active := 1;
 
 	repeat
  		ProcessEvents();
 
  		if KeyTyped(Key1) then
  		begin
- 			SetCurrentWindow('Window 1');
- 			clr := ColorAqua;
+ 			active := 1;
  		end;
 
  		if KeyTyped(Key2) then
  		begin
- 			SetCurrentWindow('Window 2');
- 			clr := ColorIndigo;
+ 			active := 2;
+ 		end;
+
+ 		SetCurrentWindow('Window 1');
+ 		ClearScreen(ColorAqua);
+ 		FillCircle(ColorYellow, MousePosition(), 25);
+ 		RefreshScreen();
+
+ 		SetCurrentWindow('Window 2');
+ 		ClearScreen(ColorIndigo);
+ 		FillCircle(ColorYellow, MousePosition(), 25);
+ 		RefreshScreen();
+
+ 		case active of
+ 		 1: SetCurrentWindow('Window 1');
+ 		 2: SetCurrentWindow('Window 2');
  		end;
 
  		if WindowCloseRequested(WindowNamed('Window 2')) then
@@ -41,8 +52,6 @@ begin
  			CloseWindow(WindowNamed('Window 2'));
  		end;
 
- 		ClearScreen(clr);
- 		FillRectangle(ColorWhite, 0, 0, 100, 100);
  		DrawText(IntToStr(i), ColorBlack, 0, 0);
 		RefreshScreen();
 

@@ -269,6 +269,7 @@ extern "C" {
         sg_charp_proc * handle_input_text;
         
         sg_window_xy_proc * handle_window_resize;
+        sg_window_xy_proc *handle_window_move;
     } sg_input_callbacks;
     
     //

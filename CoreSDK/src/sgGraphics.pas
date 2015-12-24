@@ -373,6 +373,17 @@ interface
   /// @sn fillCircleColor:%s data:%s
   procedure FillCircle(clr : Color; const c: Circle);
   
+  /// Fill a circle at a given point using the passed in drawing options.
+  /// 
+  /// @lib FillCircleAtPointWithOpts
+  /// @sn fillCircleColor:%s at:%s radius:%s opts:%s
+  procedure FillCircle(clr : Color; const pt: Point2D; radius: Longint; const opts : DrawingOptions); overload;
+  
+  /// Fill a circle in the game.
+  ///
+  /// @lib FillCircleAtPoint
+  /// @sn fillCircleColor:%s at:%s radius:%s
+  procedure FillCircle(clr : Color; const pt: Point2D; radius: Longint);
   
   
 //---------------------------------------------------------------------------
@@ -1739,6 +1750,16 @@ implementation
   procedure FillCircle(clr : Color; const c: Circle);
   begin
     FillCircle(clr, c.center.x, c.center.y, c.radius, OptionDefaults());
+  end;
+
+  procedure FillCircle(clr : Color; const pt: Point2D; radius: Longint; const opts : DrawingOptions); overload;
+  begin
+    FillCircle(clr, pt.x, pt.y, radius, opts);
+  end;
+
+  procedure FillCircle(clr : Color; const pt: Point2D; radius: Longint);
+  begin
+    FillCircle(clr, pt.x, pt.y, radius, OptionDefaults());
   end;
 
    //=============================================================================
