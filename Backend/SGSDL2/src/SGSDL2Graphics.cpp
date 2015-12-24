@@ -41,6 +41,13 @@ sg_window_be *_sgsdl2_get_window_with_id(unsigned int window_id)
 {
     SDL_Window *window = SDL_GetWindowFromID(window_id);
     
+    return _sgsdl2_get_window_with_pointer(window);
+}
+
+sg_window_be *_sgsdl2_get_window_with_pointer(pointer p)
+{
+    SDL_Window *window = (SDL_Window *)p;
+    
     for (unsigned int i = 0; i < _sgsdl2_num_open_windows; i++)
     {
         if (window == _sgsdl2_open_windows[i]->window)
@@ -177,11 +184,12 @@ void _sgsdl2_create_initial_window()
     
     // The user cannot draw onto this window!
     _sgsdl2_initial_window->backing = NULL;
+    _sgsdl2_initial_window->surface = NULL;
     
-    _sgsdl2_initial_window->close_requested = false;
-    _sgsdl2_initial_window->has_focus = false;
-    _sgsdl2_initial_window->mouse_over = false;
-    _sgsdl2_initial_window->shown = false;
+    _sgsdl2_initial_window->event_data.close_requested = false;
+    _sgsdl2_initial_window->event_data.has_focus = false;
+    _sgsdl2_initial_window->event_data.mouse_over = false;
+    _sgsdl2_initial_window->event_data.shown = false;
     
     _sgsdl2_initial_window->clipped = false;
     _sgsdl2_initial_window->clip = {0,0,0,0};
@@ -689,10 +697,10 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     window_be->clipped = false;
     window_be->clip = {0,0,0,0};
     
-    window_be->close_requested = false;
-    window_be->has_focus = false;
-    window_be->mouse_over = false;
-    window_be->shown = true;
+    window_be->event_data.close_requested = false;
+    window_be->event_data.has_focus = false;
+    window_be->event_data.mouse_over = false;
+    window_be->event_data.shown = true;
     
     result.kind = SGDS_Window;
     

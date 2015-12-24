@@ -112,7 +112,11 @@ extern "C" {
     // Input related
     //
     typedef unsigned int (sg_mouse_state_fn)(int *x, int *y);
+    typedef void (sg_window_pos_fn)(sg_drawing_surface *surface, int *x, int *y);
     typedef void (sg_surface_xy_proc)(sg_drawing_surface *surface, int x, int y);
+    typedef pointer (pointer_fn)();
+    typedef void (sg_window_xy_proc)(pointer window, int x, int y);
+    typedef sg_window_data (sg_window_data_fn)(sg_drawing_surface *surface);
     
     //
     // Network related
@@ -263,6 +267,8 @@ extern "C" {
         sg_intp_proc * handle_mouse_down;
 
         sg_charp_proc * handle_input_text;
+        
+        sg_window_xy_proc * handle_window_resize;
     } sg_input_callbacks;
     
     //
@@ -281,6 +287,10 @@ extern "C" {
         sg_rectangle_dimensions_proc * start_unicode_text_input; 
         sg_empty_procedure * stop_unicode_text_input;
         
+        pointer_fn * focus_window;
+        sg_window_pos_fn * window_position;
+        
+        sg_window_data_fn * get_window_event_data;
     } sg_input_interface;
 
     //

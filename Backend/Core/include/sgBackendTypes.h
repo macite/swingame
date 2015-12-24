@@ -134,10 +134,20 @@ typedef struct sg_network_connection
     void * _socket;
 } sg_network_connection;
 
+    
+typedef void *pointer;
+
+typedef struct sg_window_data
+{
+    int close_requested;
+    int has_focus;
+    int mouse_over;
+    int shown;
+} sg_window_data;
+    
 #ifdef __cplusplus
 }
 #endif
-
     
 // Stop aligning structs to one byte boundaries
 //#pragma pack(pop)

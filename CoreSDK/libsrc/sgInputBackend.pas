@@ -1,7 +1,7 @@
 unit sgInputBackend;
 
 interface
-  uses sgTypes, sysutils, sgBackendTypes;
+  uses sgTypes, sysutils, sgBackendTypes, sgWindowManager;
     procedure DoQuit();       // #
     procedure CheckQuit();
     procedure HandleKeydownEvent(kyCode, kyChar : LongInt);     // #
@@ -75,7 +75,7 @@ interface
     // _deltaAccelerometer: AccelerometerMotion;
 
 implementation
-  uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics;
+  uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics, sgDriverSDL2Types;
   
   procedure _InitGlobalVars(); 
   begin
@@ -105,9 +105,31 @@ implementation
   end;
   
   procedure CheckQuit();
+  var
+    i, count: Integer;
+    wnd: WindowPtr;
+    data: sg_window_data;
   begin
-    if (InputDriver.CheckQuit()) then
+    count := WindowCount();
+
+    // Check close for each window
+    for i := 0 to count - 1 do
+    begin
+      wnd := WindowPtr(WindowAtIndex(i));
+      if Assigned(wnd) then
+      begin
+        wnd^.eventData := _sg_functions^.input.get_window_event_data(@wnd^.image.surface);
+      end;
+    end;
+
+    if( WasKeyDown(SDLK_Q) and (WasKeyDown(SDLK_LGUI) or WasKeyDown(SDLK_RGUI))) 
+      or
+      (WasKeyDown(SDLK_F4) and ( WasKeyDown(SDLK_RALT) or WasKeyDown(SDLK_LALT)))
+      or 
+      ( Assigned(_PrimaryWindow) and (_sg_functions^.input.window_close_requested(@_PrimaryWindow^.image.surface) <> 0)) then
+    begin
       DoQuit()
+    end;
   end;
   
   procedure ResetMouseState();
@@ -127,7 +149,7 @@ implementation
     SetLength(_KeyJustTyped, 0);
     ResetMouseState();
   
-    InputDriver.ProcessEvents();
+    sgDriverInput.ProcessEvents();
 
     CheckQuit();
   end;

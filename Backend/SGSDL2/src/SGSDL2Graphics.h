@@ -37,10 +37,8 @@ typedef struct sg_window_be
     unsigned int    idx;
     
     // Event data store
-    bool            close_requested;
-    bool            has_focus;
-    bool            mouse_over;
-    bool            shown;
+    sg_window_data  event_data;
+    sg_drawing_surface *surface;
 } sg_window_be;
 
 typedef struct sg_bitmap_be
@@ -56,6 +54,7 @@ typedef struct sg_bitmap_be
 
 
 sg_window_be *_sgsdl2_get_window_with_id(unsigned int window_id);
+sg_window_be *_sgsdl2_get_window_with_pointer(pointer p);
 
 
 #endif /* defined(__sgsdl2__SGSDL2Graphics__) */

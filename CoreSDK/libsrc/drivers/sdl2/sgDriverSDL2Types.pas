@@ -89,6 +89,13 @@ interface
 				_data : pointer;
 			end;
 
+		sg_window_data = record
+		    close_requested: Longint;
+		    has_focus: Longint;
+		    mouse_over: Longint;
+		    shown: Longint;
+    	end;
+
 		sg_font_style = (SG_FONT_STYLE_NORMAL := 0,SG_FONT_STYLE_BOLD := 1,
 			SG_FONT_STYLE_ITALIC := 2,SG_FONT_STYLE_UNDERLINE := 4,
 			SG_FONT_STYLE_STRIKETHROUGH := 8);
@@ -206,8 +213,11 @@ interface
 		// Input related
 		//
 		sg_mouse_state_fn = function(x, y: pint): uint; cdecl;
+		sg_window_pos_fn = procedure (surface: psg_drawing_surface; x, y: pint); cdecl;
 		sg_surface_xy_proc = procedure(surface: psg_drawing_surface; x, y: int); cdecl;
-
+	    pointer_fn = function (): pointer; cdecl;
+    	sg_window_xy_proc = procedure(window: pointer; x, y: Longint); cdecl;
+    	sg_window_data_fn = function(surface: psg_drawing_surface): sg_window_data; cdecl;
 		
 		sg_utils_interface = record
 				delay : sg_single_uint32param_proc;
@@ -277,6 +287,7 @@ interface
 				handle_mouse_up : sg_intp_proc;
 				handle_mouse_down : sg_intp_proc;
 				handle_input_text : sg_charp_proc;
+				handle_window_resize: sg_window_xy_proc;
 			end;
 
 		sg_input_interface = record
@@ -290,6 +301,10 @@ interface
 
 				start_unicode_text_input : sg_rectangle_dimensions_proc;
 				stop_unicode_text_input : sg_empty_procedure;
+
+				focus_window: pointer_fn;
+        		window_position: sg_window_pos_fn;
+        		get_window_event_data: sg_window_data_fn;
 			end;
 
 		sg_text_interface = record

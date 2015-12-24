@@ -100,8 +100,17 @@ void test_events(sg_drawing_surface * window_arr, int sz)
             cout << " - Show mouse" << endl;
         }
         
+        pointer focus = _sg_functions->input.focus_window();
+        
         for (int w = 0; w < sz; w++)
         {
+            if ( focus == window_arr[w]._data )
+            {
+                int wx, wy;
+                _sg_functions->input.window_position(&window_arr[w], &wx, &wy);
+                cout << "Focus on " << window_arr[w].width << "x" << window_arr[w].height << " @" << wx << ":" << wy <<  "\n";
+            }
+            
             _sg_functions->graphics.refresh_window(&window_arr[w]);
         }
     }

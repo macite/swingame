@@ -82,15 +82,27 @@ interface
   procedure SetCurrentWindow(name: String);
 
 
+  ///
+  /// @lib
+  ///
+  function WindowCount(): Longint;
+
+  ///
+  /// @lib
+  ///
+  function WindowAtIndex(idx: Longint): Window;
+
 
 //=============================================================================
 implementation
-uses  SysUtils, StringHash,
+uses  SysUtils,
       sgNamedIndexCollection, sgDriverGraphics, sgDriverImages, sgShared, sgBackendTypes, sgInputBackend,
       sgResources, sgDriverSDL2Types;
 
 // _Windows keeps track of all of the open Windows -- accessed by title
-var _Windows: TStringHash;
+var 
+  _WindowNames: NamedIndexCollection;
+  _Windows: array of WindowPtr;
 
 
 function OpenWindow(const caption: String; width: Longint; height: Longint): Window;
@@ -98,12 +110,11 @@ var
   realCaption: String;
   idx: Longint;
   wind: WindowPtr;
-  obj: tResourceContainer;
 begin
   realCaption := caption;
   idx := 0;
   
-  while _Windows.containsKey(realCaption) do
+  while HasName(_WindowNames, realCaption) do
   begin
     realCaption := caption + ': ' + IntToStr(idx);
     idx := idx + 1;
@@ -112,15 +123,10 @@ begin
   wind := sgDriverGraphics.OpenWindow(realCaption, width, height);
   result := Window(wind);
 
-  obj := tResourceContainer.Create(result);
+  AddName(_WindowNames, realCaption);
 
-  if not _Windows.setValue(realCaption, obj) then
-  begin
-    CloseWindow(result);
-    result := nil;
-    RaiseException('Error opening window  ' + realCaption);
-    exit;
-  end;
+  SetLength(_Windows, Length(_Windows) + 1);
+  _Windows[High(_Windows)] := wind;
 
   if not Assigned(_PrimaryWindow) then
   begin
@@ -132,6 +138,7 @@ end;
 procedure CloseWindow(wind: Window); overload;
 var
   wp: WindowPtr;
+  i, idx: Longint;
 begin
   wp := ToWindowPtr(wind);
   if Assigned(wp) then
@@ -151,6 +158,15 @@ begin
         _CurrentWindow := nil;
     end;
 
+    idx := RemoveName(_WindowNames, wp^.caption);
+    if idx >= 0 then
+    begin
+      for i := idx to High(_Windows) - 1 do
+      begin
+        _Windows[i] := _Windows[i + 1];
+      end;
+    end;
+
     sgDriverGraphics.CloseWindow(wp);
   end;
 end;
@@ -162,25 +178,24 @@ end;
 
 procedure CloseAllWindows();
 begin
-  ReleaseAll(_Windows, @CloseWindow);
+  while Length(_windows) > 0 do
+  begin
+    CloseWindow(_windows[0]);
+  end;
 end;
 
 
 function HasWindow(const name: String): Boolean;
 begin
-  result := _Windows.containsKey(name);
+  result := HasName(_WindowNames, name);
 end;
 
 function WindowNamed(const name: String): Window;
 var
-  tmp : TObject;
+  idx: Longint;
 begin
-  tmp := _Windows.values[name];
-
-  if Assigned(tmp) then
-    result := Window(tResourceContainer(tmp).Resource)
-  else
-    result := nil; 
+  idx := IndexOf(_WindowNames, name);
+  result := WindowAtIndex(idx);
 end;
 
 procedure SaveScreenshot(src: Window; const filepath: String);
@@ -206,6 +221,21 @@ begin
   SetCurrentWindow(WindowNamed(name));
 end;
 
+function WindowCount(): Longint;
+begin
+  result := Length(_Windows);
+end;
+
+
+function WindowAtIndex(idx: Longint): Window;
+begin
+  if (idx >= 0) and (idx <= High(_Windows)) then
+    result := Window(_Windows[idx])
+  else
+    result := nil; 
+end;
+
+
 
 //=============================================================================
 
@@ -213,13 +243,14 @@ initialization
 begin
   InitialiseSwinGame();
   
-  _Windows := TStringHash.Create(False, 10);
+  InitNamedIndexCollection(_WindowNames);
+  SetLength(_Windows, 0);
 end;
 
 finalization
 begin
-  CloseAllWindows();
-  FreeAndNil(_Windows);
+  SetLength(_Windows, 0);
+  FreeNamedIndexCollection(_WindowNames);
 end;
 
 //=============================================================================

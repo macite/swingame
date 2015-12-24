@@ -351,7 +351,7 @@ implementation
             CyclePool();
         {$ENDIF}
     {$endif}
-    InputDriver.GetRelativeMouseState(x, y);
+    sgDriverInput.RelativeMouseState(x, y);
     InputBackendProcessEvents();
     // CheckNetworkActivity();
     {$IFDEF TRACE}
@@ -560,7 +560,7 @@ end;
   begin
     {$IFNDEF IOS}
     x := 0; y := 0;
-    InputDriver.GetMouseState(x, y);
+    sgDriverInput.MouseState(x, y);
     result := VectorTo(x, y);
     {$ELSE}
      result := Vector(LastFingerPosition());
@@ -580,8 +580,8 @@ end;
   procedure ShowMouse(show : Boolean); overload;
   begin
     try
-      if show then InputDriver.ShowCursor(1)
-      else InputDriver.ShowCursor(0);
+      if show then sgDriverInput.ShowCursor(1)
+      else sgDriverInput.ShowCursor(0);
     except
       begin RaiseException('Unable to show or hide mouse'); exit; end;
     end;
@@ -589,19 +589,19 @@ end;
   
   procedure MoveMouse(x, y : Longint);overload;
   begin
-    InputDriver.WarpMouse(x,y);
+    sgDriverInput.WarpMouse(x,y);
     MouseMovement();
   end;
   
   procedure MoveMouse(const point : Point2d);overload;
   begin
-    InputDriver.WarpMouse(Round(point.x), Round(point.y));
+    sgDriverInput.WarpMouse(Round(point.x), Round(point.y));
     MouseMovement();
   end;
   
   function MouseShown(): Boolean;
   begin
-    result := InputDriver.ShowCursor(-1) = 1;
+    result := sgDriverInput.ShowCursor(-1) = 1;
   end;
   
   function MousePosition(): Point2D;
@@ -612,7 +612,7 @@ end;
   begin
     {$IFNDEF IOS}
     x := 0; y := 0;
-    InputDriver.GetMouseState(x, y);
+    sgDriverInput.MouseState(x, y);
     result := PointAt(x, y);
     {$ELSE}
     result := LastFingerPosition(); 
@@ -639,7 +639,7 @@ end;
     
     x := 0; 
     y := 0;
-    InputDriver.GetRelativeMouseState(x, y);
+    sgDriverInput.RelativeMouseState(x, y);
     result := VectorTo(x, y);
 
     {$IFDEF TRACE}
@@ -655,7 +655,7 @@ end;
   begin
     {$IFNDEF IOS}
       x := 0; y := 0;
-      result := (InputDriver.GetMouseState(x, y) and InputDriver.Button(Longint(button))) > 0;
+      result := (sgDriverInput.MouseState(x, y) and Longint(button)) > 0;
     {$ELSE}
       result := MouseClicked(button);
     {$ENDIF}

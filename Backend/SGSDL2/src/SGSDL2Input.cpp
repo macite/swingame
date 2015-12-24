@@ -28,11 +28,11 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
     switch (event->window.event)
     {
         case SDL_WINDOWEVENT_SHOWN:
-            window->shown = true;
+            window->event_data.shown = true;
             //SDL_Log("Window %d shown", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_HIDDEN:
-            window->shown = false;
+            window->event_data.shown = false;
 //            SDL_Log("Window %d hidden", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_EXPOSED:
@@ -44,9 +44,11 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
 //                    event->window.data2);
             break;
         case SDL_WINDOWEVENT_RESIZED:
-//            SDL_Log("Window %d resized to %dx%d",
-//                    event->window.windowID, event->window.data1,
-//                    event->window.data2);
+            if (_functions.input_callbacks.handle_window_resize)
+            {
+                _functions.input_callbacks.handle_window_resize(_sgsdl2_get_window_with_id(event->window.windowID), event->window.data1, event->window.data2);
+            }
+            
             break;
         case SDL_WINDOWEVENT_MINIMIZED:
 //            SDL_Log("Window %d minimized", event->window.windowID);
@@ -58,27 +60,27 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
 //            SDL_Log("Window %d restored", event->window.windowID);
             break;
         case SDL_WINDOWEVENT_ENTER:
-            window->mouse_over = true;
+            window->event_data.mouse_over = true;
 //            SDL_Log("Mouse entered window %d",
 //                    event->window.windowID);
             break;
         case SDL_WINDOWEVENT_LEAVE:
 //            SDL_Log("Mouse left window %d", event->window.windowID);
-            window->mouse_over = false;
+            window->event_data.mouse_over = false;
             break;
         case SDL_WINDOWEVENT_FOCUS_GAINED:
-            window->has_focus = true;
+            window->event_data.has_focus = true;
 //            SDL_Log("Window %d gained keyboard focus",
 //                    event->window.windowID);
             break;
         case SDL_WINDOWEVENT_FOCUS_LOST:
-            window->has_focus = false;
+            window->event_data.has_focus = false;
 //            SDL_Log("Window %d lost keyboard focus",
 //                    event->window.windowID);
             break;
         case SDL_WINDOWEVENT_CLOSE:
 //            SDL_Log("Window %d closed", event->window.windowID);
-            window->close_requested = true;
+            window->event_data.close_requested = true;
             break;
         default:
 //            SDL_Log("Window %d got unknown event %d",
@@ -177,7 +179,7 @@ int sgsdl2_window_close_requested(sg_drawing_surface* surf)
 {
   if (surf->kind == SGDS_Window) 
   {
-    if (((sg_window_be*)surf->_data)->close_requested)
+    if (((sg_window_be*)surf->_data)->event_data.close_requested)
     {
       return -1;
     }
@@ -232,6 +234,55 @@ void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
     }
 }
 
+pointer sgsdl2_focus_window()
+{
+    return _sgsdl2_get_window_with_pointer(SDL_GetMouseFocus());
+}
+
+void sgsdl2_window_position(sg_drawing_surface *surface, int *x, int *y)
+{
+    if ( ! surface || ! surface->_data ) return;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+            
+            SDL_GetWindowPosition(window_be->window, x, y);
+            break;
+        }
+            
+        case SGDS_Bitmap:
+            break;
+            
+        case SGDS_Unknown:
+            break;
+    }
+}
+
+sg_window_data sgsdl2_get_window_event_data(sg_drawing_surface *surface)
+{
+    sg_window_data result = { 0, 0, 0, 0 };
+    
+    if ( ! surface || ! surface->_data ) return result;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+            
+            return window_be->event_data;
+        }
+            
+        default:
+            return result;
+    }
+}
+
 
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
@@ -244,4 +295,7 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.start_unicode_text_input = &sgsdl2_start_unicode_text_input; 
     functions->input.stop_unicode_text_input = &SDL_StopTextInput;
     functions->input.warp_mouse = &sgsdl2_warp_mouse;
+    functions->input.focus_window = &sgsdl2_focus_window;
+    functions->input.window_position = &sgsdl2_window_position;
+    functions->input.get_window_event_data = &sgsdl2_get_window_event_data;
 }

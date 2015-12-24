@@ -19,7 +19,7 @@ interface
   procedure LoadSDL2Driver();
 
 implementation
-	uses sgDriver, sgShared, SysUtils, sgTrace, sgTypes, sgDriverSDL2Types, sgDriverInputSDL2, sgMinSDL2;
+	uses sgDriver, sgShared, SysUtils, sgTrace, sgTypes, sgDriverSDL2Types, sgDriverInput, sgMinSDL2;
 
 	var
 	  _Initialised : Boolean = False;

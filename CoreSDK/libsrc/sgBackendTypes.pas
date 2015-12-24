@@ -81,7 +81,7 @@ uses sgTypes, sgDriverSDL2Types;
     /// @via_pointer
     NamedIndexCollection = packed record
       names: StringArray;   // The names of these ids
-      ids: Pointer;             // A pointer to a TStringHash with this data
+      ids: Pointer;         // A pointer to a TStringHash with this data
     end;
 
     //
@@ -140,7 +140,7 @@ uses sgTypes, sgDriverSDL2Types;
 
     ImageData = packed record
       surface            : sg_drawing_surface;  // The actual bitmap image
-      clipStack            : Array of Rectangle;         // The clipping rectangle history for the bitmap
+      clipStack          : Array of Rectangle;         // The clipping rectangle history for the bitmap
     end;
 
     /// Bitmap data stores the data associated with a Bitmap. Each bitmap contains
@@ -423,6 +423,7 @@ uses sgTypes, sgDriverSDL2Types;
       open:       Boolean;
       fullscreen: Boolean;
       border:     Boolean;
+      eventData:  sg_window_data;
 
       screenRect: Rectangle;
     end;
