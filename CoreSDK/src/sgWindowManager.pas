@@ -92,6 +92,24 @@ interface
   ///
   function WindowAtIndex(idx: Longint): Window;
 
+  /// Checks to see if the window has been asked to close. You need to handle
+  /// this if you want the game to end when the window is closed. This value
+  /// is updated by the `ProcessEvents` routine.
+  ///
+  /// @returns: True if the window has been requested to close.
+  ///
+  /// @lib WindowCloseRequested
+  function WindowCloseRequested(wind: Window): Boolean;
+
+  /// Checks to see if the primary window has been asked to close. You need to handle
+  /// this if you want the game to end when the window is closed. This value
+  /// is updated by the `ProcessEvents` routine.
+  ///
+  /// @returns: True if the window has been requested to close.
+  ///
+  /// @lib PrimaryWindowCloseRequested
+  function WindowCloseRequested(): Boolean;
+
 
 //=============================================================================
 implementation
@@ -196,6 +214,23 @@ var
 begin
   idx := IndexOf(_WindowNames, name);
   result := WindowAtIndex(idx);
+end;
+
+function WindowCloseRequested(wind: Window): Boolean;
+var
+  wp: WindowPtr;
+begin
+  wp := ToWindowPtr(wind);
+  if Assigned(wp) then
+  begin
+    result := wp^.eventData.close_requested <> 0;
+  end
+  else result := false;
+end;
+
+function WindowCloseRequested(): Boolean;
+begin
+  result := WindowCloseRequested(Window(_PrimaryWindow));  
 end;
 
 procedure SaveScreenshot(src: Window; const filepath: String);

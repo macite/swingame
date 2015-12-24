@@ -117,7 +117,7 @@ implementation
   uses 
     SysUtils, Math, Classes, //System
     sgShared, sgTrace, sgInputBackend, //SwinGame shared library code
-    sgResources, sgGeometry, sgImages, sgGraphics, sgDriverTimer, sgInput; //SwinGame
+    sgResources, sgGeometry, sgImages, sgGraphics, sgDriverTimer, sgInput, sgWindowManager; //SwinGame
 //=============================================================================
 
 

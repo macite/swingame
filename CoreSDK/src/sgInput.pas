@@ -29,14 +29,13 @@ interface
 // Window close and Processing events
 //----------------------------------------------------------------------------
   
-  /// Checks to see if the window has been asked to close. You need to handle
-  /// this if you want the game to end when the window is closed. This value
+  /// Checks to see if the user has asked for the application to quit. This value
   /// is updated by the `ProcessEvents` routine.
   ///
-  /// @returns: True if the window has been requested to close.
+  /// @returns: True if the application has been requested to close.
   ///
-  /// @lib WindowCloseRequested
-  function WindowCloseRequested(): Boolean;
+  /// @lib
+  function QuitRequested(): Boolean;
   
   /// ProcessEvents allows the SwinGame API to react to user interactions. This
   /// routine checks the current keyboard and mouse states. This routine must
@@ -328,7 +327,7 @@ implementation
 // Game Loop Essentials
 //----------------------------------------------------------------------------
 
-  function WindowCloseRequested(): Boolean;
+  function QuitRequested(): Boolean;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgInput', 'WindowCloseRequested');

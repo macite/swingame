@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-13 08:18:37.075176
+// SwinGame.pas was generated on 2015-12-24 12:19:39.246929
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -2107,6 +2107,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // - Updates keys down, text input, etc.
   procedure ProcessEvents(); overload;
 
+  // Checks to see if the user has asked for the application to quit. This value
+  // is updated by the `ProcessEvents` routine.
+  function QuitRequested(): Boolean; overload;
+
   // ReadingText indicates if the API is currently reading text from the
   // user. Calling StartReadingText will set this to true, and it becomes
   // false when the user presses enter or escape. At this point you can
@@ -2158,11 +2162,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // user as ASCII. See TextReasAsUNICODE, StartReadingText and ReadingText
   // for more details.
   function TextReadAsASCII(): String; overload;
-
-  // Checks to see if the window has been asked to close. You need to handle
-  // this if you want the game to end when the window is closed. This value
-  // is updated by the `ProcessEvents` routine.
-  function WindowCloseRequested(): Boolean; overload;
 
   // Returns True if two bitmaps have collided using per pixel testing if required. 
   // The ``pt1`` and ``pt2`` (`Point2D`) parameters specify the world location of the bitmaps (``bmp1`` and ``bmp2``).
@@ -3759,6 +3758,22 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // 
   procedure SetCurrentWindow(name: String); overload;
+
+  // 
+  function WindowAtIndex(idx: Longint): Window; overload;
+
+  // Checks to see if the primary window has been asked to close. You need to handle
+  // this if you want the game to end when the window is closed. This value
+  // is updated by the `ProcessEvents` routine.
+  function WindowCloseRequested(): Boolean; overload;
+
+  // Checks to see if the window has been asked to close. You need to handle
+  // this if you want the game to end when the window is closed. This value
+  // is updated by the `ProcessEvents` routine.
+  function WindowCloseRequested(wind: Window): Boolean; overload;
+
+  // 
+  function WindowCount(): Longint; overload;
 
   // Get the window with the speficied name.
   function WindowNamed(const name: String): Window; overload;
@@ -6597,6 +6612,11 @@ implementation
     sgInput.ProcessEvents();
   end;
 
+  function QuitRequested(): Boolean; overload;
+  begin
+    result := sgInput.QuitRequested();
+  end;
+
   function ReadingText(): Boolean; overload;
   begin
     result := sgInput.ReadingText();
@@ -6650,11 +6670,6 @@ implementation
   function TextReadAsASCII(): String; overload;
   begin
     result := sgInput.TextReadAsASCII();
-  end;
-
-  function WindowCloseRequested(): Boolean; overload;
-  begin
-    result := sgInput.WindowCloseRequested();
   end;
 
   function BitmapCollision(bmp1: Bitmap; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D): Boolean; overload;
@@ -8910,6 +8925,26 @@ implementation
   procedure SetCurrentWindow(name: String); overload;
   begin
     sgWindowManager.SetCurrentWindow(name);
+  end;
+
+  function WindowAtIndex(idx: Longint): Window; overload;
+  begin
+    result := sgWindowManager.WindowAtIndex(idx);
+  end;
+
+  function WindowCloseRequested(): Boolean; overload;
+  begin
+    result := sgWindowManager.WindowCloseRequested();
+  end;
+
+  function WindowCloseRequested(wind: Window): Boolean; overload;
+  begin
+    result := sgWindowManager.WindowCloseRequested(wind);
+  end;
+
+  function WindowCount(): Longint; overload;
+  begin
+    result := sgWindowManager.WindowCount();
   end;
 
   function WindowNamed(const name: String): Window; overload;
