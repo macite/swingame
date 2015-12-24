@@ -183,6 +183,7 @@ begin
       begin
         _Windows[i] := _Windows[i + 1];
       end;
+      SetLength(_Windows, Length(_Windows) - 1);
     end;
 
     sgDriverGraphics.CloseWindow(wp);

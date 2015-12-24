@@ -36,6 +36,11 @@ begin
  			clr := ColorIndigo;
  		end;
 
+ 		if WindowCloseRequested(WindowNamed('Window 2')) then
+ 		begin
+ 			CloseWindow(WindowNamed('Window 2'));
+ 		end;
+
  		ClearScreen(clr);
  		FillRectangle(ColorWhite, 0, 0, 100, 100);
  		DrawText(IntToStr(i), ColorBlack, 0, 0);
