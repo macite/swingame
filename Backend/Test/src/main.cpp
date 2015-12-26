@@ -800,7 +800,6 @@ void test_bitmaps(sg_drawing_surface * window_arr, int sz)
 bool test_draw_bitmap_without_window()
 {
     sg_drawing_surface window;
-    window = _sg_functions->graphics.open_window("Test Bitmap Drawing", 600, 600);
 
     cout << "Creating bitmap" << endl;
     
@@ -838,6 +837,7 @@ bool test_draw_bitmap_without_window()
     float src_data[] = {0, 0, static_cast<float>(bmp.width), static_cast<float>(bmp.height)};
     float dst_data[] = {0, 0, 0, 0, 0, 1, 1};
     
+    window = _sg_functions->graphics.open_window("Test Bitmap Drawing", 600, 600);
     _sg_functions->graphics.clear_drawing_surface(&window, {0.0f, 0.0f, 0.0f, 1.0f});
     _sg_functions->image.draw_bitmap( &bmp, &window, src_data, 4, dst_data, 7, SG_FLIP_NONE);
     _sg_functions->graphics.refresh_window(&window);
@@ -983,6 +983,8 @@ bool test_window_operations()
     sg_drawing_surface w[2];
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
+    
+    _sg_functions->input.move_window(&w[1], 0, 0);
     
 
     _sg_functions->graphics.show_border(&w[0], false);

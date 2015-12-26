@@ -288,6 +288,26 @@ sg_window_data sgsdl2_get_window_event_data(sg_drawing_surface *surface)
     }
 }
 
+void sgsdl2_move_window(sg_drawing_surface *surface, int x, int y)
+{
+    if ( ! surface || ! surface->_data ) return;
+    
+    switch (surface->kind)
+    {
+        case SGDS_Window:
+        {
+            sg_window_be * window_be;
+            window_be = (sg_window_be *)surface->_data;
+            
+            SDL_SetWindowPosition(window_be->window, x, y);
+            
+            return;
+        }
+            
+        default: ;
+    }
+}
+
 
 void sgsdl2_load_input_fns(sg_interface *functions)
 {
@@ -303,4 +323,5 @@ void sgsdl2_load_input_fns(sg_interface *functions)
     functions->input.focus_window = &sgsdl2_focus_window;
     functions->input.window_position = &sgsdl2_window_position;
     functions->input.get_window_event_data = &sgsdl2_get_window_event_data;
+    functions->input.move_window = &sgsdl2_move_window;
 }

@@ -165,7 +165,7 @@ void _sgsdl2_create_initial_window()
     _sgsdl2_initial_window = (sg_window_be *) malloc(sizeof(sg_window_be));
     _sgsdl2_initial_window->window = SDL_CreateWindow("SwinGame",
                                          SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 200, 200,
-                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN ); //TODO: Log SDL issue re drawing using hidden windows
+                                         SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN );
     
     if ( ! _sgsdl2_initial_window->window )
     {
@@ -175,7 +175,7 @@ void _sgsdl2_create_initial_window()
     
     _sgsdl2_initial_window->renderer = SDL_CreateRenderer(_sgsdl2_initial_window->window,
                                                          -1,
-                                                         SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE );
+                                                         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_TARGETTEXTURE );
     
     SDL_SetRenderDrawBlendMode(_sgsdl2_initial_window->renderer, SDL_BLENDMODE_BLEND);
     SDL_PumpEvents();
@@ -205,9 +205,10 @@ void _sgsdl2_create_initial_window()
                            static_cast<Uint8>(0.66 * 255),
                            static_cast<Uint8>(1.0 * 255));
     SDL_RenderClear(_sgsdl2_initial_window->renderer);
-    SDL_Rect rect = { 0, 0, 1, 1 };
+    SDL_Rect rect = { 0, 0, 200, 200 };
     SDL_RenderFillRect(_sgsdl2_initial_window->renderer, &rect);
     SDL_RenderPresent(_sgsdl2_initial_window->renderer);
+    SDL_PumpEvents();
     
     SDL_Texture ** textures = NULL;
     
@@ -233,6 +234,7 @@ void _sgsdl2_create_initial_window()
     
     std::cout << "CREATED INITIAL WINDOW" << std::endl;
     _sgsdl2_present_window(_sgsdl2_initial_window);
+    SDL_PumpEvents();
 }
 
 SDL_Texture* _sgsdl2_copy_texture(SDL_Texture *src_tex, SDL_Renderer *src_renderer, SDL_Renderer *dest_renderer)
@@ -672,6 +674,9 @@ bool _sgsdl2_open_window(const char *title, int width, int height, unsigned int 
     return true;
 }
 
+void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, sg_color clr);
+void sgsdl2_refresh_window(sg_drawing_surface *window);
+
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height) 
 {
     sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
@@ -706,6 +711,11 @@ sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
     
     result.width = width;
     result.height = height;
+    
+    sgsdl2_clear_drawing_surface(&result, {1,1,1,1});
+    sgsdl2_refresh_window(&result);
+    
+    SDL_PumpEvents();
 	
     return result;
 }
@@ -804,7 +814,7 @@ void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, sg_color clr)
 
 void _sgsdl2_present_window(sg_window_be *window_be)
 {
-    if ( window_be )
+    if ( window_be && window_be->backing )
     {
         SDL_SetRenderTarget(window_be->renderer, NULL);
         

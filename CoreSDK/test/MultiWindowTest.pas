@@ -16,6 +16,8 @@ begin
 	ClearScreen(ColorIndigo);
 	RefreshScreen();
 
+	MoveWindow('Window 1', WindowX('Window 2') - 100, WindowY('Window 2') - 50);
+
 	i := 0;
 	active := 1;
 

@@ -306,6 +306,7 @@ interface
 				focus_window: pointer_fn;
         		window_position: sg_window_pos_fn;
         		get_window_event_data: sg_window_data_fn;
+        		move_window: sg_surface_xy_proc;
 			end;
 
 		sg_text_interface = record

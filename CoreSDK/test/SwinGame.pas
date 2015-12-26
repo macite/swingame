@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-25 07:18:39.416560
+// SwinGame.pas was generated on 2015-12-27 08:46:56.209992
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -3745,6 +3745,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Is there a window a window with the specified name.
   function HasWindow(const name: String): Boolean; overload;
 
+  // Move the window to a new Position on the screen.
+  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
+
+  // Move the window to a new Position on the screen.
+  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
+
   // Opens the window so that it can be drawn onto and used to respond to user
   // actions. The window itself is only drawn when you call `RefreshScreen`. 
   //
@@ -3783,6 +3789,31 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Get the window with the speficied name.
   function WindowNamed(const name: String): Window; overload;
+
+  // Returns the Position of the window on the desktop.
+  function WindowPosition(name: String): Point2D; overload;
+
+  // Returns the Position of the window on the desktop.
+  function WindowPosition(wind: Window): Point2D; overload;
+
+  // Returns the window that the user has focused on.
+  function WindowWithFocus(): Window; overload;
+
+  // Return the x Position of the window -- the distance from the
+  // left side of the primary desktop.
+  function WindowX(wind: Window): Longint; overload;
+
+  // Return the x Position of the window -- the distance from the
+  // left side of the primary desktop.
+  function WindowX(name: String): Longint; overload;
+
+  // Return the y Position of the window -- the distance from the
+  // top side of the primary desktop.
+  function WindowY(wind: Window): Longint; overload;
+
+  // Return the y Position of the window -- the distance from the
+  // top side of the primary desktop.
+  function WindowY(name: String): Longint; overload;
 
 
 	procedure LoadDefaultColors();
@@ -8923,6 +8954,16 @@ implementation
     result := sgWindowManager.HasWindow(name);
   end;
 
+  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
+  begin
+    sgWindowManager.MoveWindow(wind,x,y);
+  end;
+
+  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
+  begin
+    sgWindowManager.MoveWindow(name,x,y);
+  end;
+
   function OpenWindow(const caption: String; width: Longint; height: Longint): Window; overload;
   begin
     result := sgWindowManager.OpenWindow(caption,width,height);
@@ -8966,6 +9007,41 @@ implementation
   function WindowNamed(const name: String): Window; overload;
   begin
     result := sgWindowManager.WindowNamed(name);
+  end;
+
+  function WindowPosition(name: String): Point2D; overload;
+  begin
+    result := sgWindowManager.WindowPosition(name);
+  end;
+
+  function WindowPosition(wind: Window): Point2D; overload;
+  begin
+    result := sgWindowManager.WindowPosition(wind);
+  end;
+
+  function WindowWithFocus(): Window; overload;
+  begin
+    result := sgWindowManager.WindowWithFocus();
+  end;
+
+  function WindowX(wind: Window): Longint; overload;
+  begin
+    result := sgWindowManager.WindowX(wind);
+  end;
+
+  function WindowX(name: String): Longint; overload;
+  begin
+    result := sgWindowManager.WindowX(name);
+  end;
+
+  function WindowY(wind: Window): Longint; overload;
+  begin
+    result := sgWindowManager.WindowY(wind);
+  end;
+
+  function WindowY(name: String): Longint; overload;
+  begin
+    result := sgWindowManager.WindowY(name);
   end;
 
 end.

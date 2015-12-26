@@ -1,7 +1,7 @@
 unit sgDriverInput;
 
 interface
-  uses sgDriverSDL2Types, sgBackendTypes;
+  uses sgDriverSDL2Types, sgBackendTypes, sgTypes;
 
   function GetInputCallbackFunction() : sg_input_callbacks;
 
@@ -13,9 +13,11 @@ interface
   function MouseState(var x : LongInt; var y : LongInt): Byte; 
   function ShowCursor(toggle : LongInt): LongInt;
   procedure WarpMouse(x,y : Word); 
+  procedure MoveWindow(wnd: WindowPtr; x, y: Longint);
+  function WindowPosition(wnd: WindowPtr): Point2D;
 
 implementation
-  uses sgInputBackend, sgTypes, sgShared, sgWindowManager;
+  uses sgInputBackend, sgShared, sgWindowManager, sgGeometry;
 
   function WindowForPointer(p: Pointer): WindowPtr;
   var
@@ -32,6 +34,20 @@ implementation
       end;
     end;
     result := nil;
+  end;
+
+  procedure MoveWindow(wnd: WindowPtr; x, y: Longint);
+  begin
+    _sg_functions^.input.move_window(@wnd^.image.surface, x, y);
+  end;
+
+  function WindowPosition(wnd: WindowPtr): Point2D;
+  var
+    x, y: Integer;
+  begin
+    _sg_functions^.input.window_position(@wnd^.image.surface, @x, @y);
+    // WriteLn('Window at ', x, ',', y);
+    result := PointAt(x, y);
   end;
 
   function IsKeyPressed(virtKeyCode : LongInt) : Boolean;

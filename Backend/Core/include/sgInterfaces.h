@@ -292,6 +292,7 @@ extern "C" {
         sg_window_pos_fn * window_position;
         
         sg_window_data_fn * get_window_event_data;
+        sg_surface_xy_proc * move_window;
     } sg_input_interface;
 
     //

@@ -108,7 +108,6 @@ implementation
   var
     i, count: Integer;
     wnd: WindowPtr;
-    data: sg_window_data;
   begin
     count := WindowCount();
 

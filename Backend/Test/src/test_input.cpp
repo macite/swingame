@@ -53,6 +53,17 @@ void _callback_handle_input_text(char* text)
   cout << "Text entered: " << text << endl; 
 }
 
+void _callback_handle_window_move(pointer w, int x, int y)
+{
+    cout << "Window Moved to " << x << " " << y << endl;
+}
+
+void _callback_handle_window_resize(pointer wnd, int w, int h)
+{
+    cout << "Window Size Now " << w << " " << h << endl;
+}
+
+
 sg_input_callbacks get_input_callbacks()
 {
     sg_input_callbacks callbacks;
@@ -62,6 +73,8 @@ sg_input_callbacks get_input_callbacks()
     callbacks.handle_key_up = & _callback_handle_key_up;
     callbacks.handle_mouse_up = &_callback_handle_mouse_up;
     callbacks.handle_mouse_down = &_callback_handle_mouse_down;
+    callbacks.handle_window_move = &_callback_handle_window_move;
+    callbacks.handle_window_resize = &_callback_handle_window_resize;
 
     callbacks.handle_input_text = &_callback_handle_input_text; 
 

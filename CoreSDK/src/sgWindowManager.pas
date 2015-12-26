@@ -115,12 +115,55 @@ interface
   /// @lib
   function WindowWithFocus(): Window;
 
+  /// Move the window to a new Position on the screen.
+  ///
+  /// @lib
+  procedure MoveWindow(wind: Window; x, y: Longint);
+
+  /// Move the window to a new Position on the screen.
+  ///
+  /// @lib MoveWindowNamed
+  procedure MoveWindow(name: String; x, y: Longint);
+
+  /// Returns the Position of the window on the desktop.
+  ///
+  /// @lib
+  function WindowPosition(wind: Window): Point2D;
+
+  /// Returns the Position of the window on the desktop.
+  ///
+  /// @lib WindowPositionNamed
+  function WindowPosition(name: String): Point2D;
+
+  /// Return the x Position of the window -- the distance from the
+  /// left side of the primary desktop.
+  ///
+  /// @lib
+  function WindowX(wind: Window): Longint;
+
+  /// Return the x Position of the window -- the distance from the
+  /// left side of the primary desktop.
+  ///
+  /// @lib WindowXNamed
+  function WindowX(name: String): Longint;
+
+  /// Return the y Position of the window -- the distance from the
+  /// top side of the primary desktop.
+  ///
+  /// @lib
+  function WindowY(wind: Window): Longint;
+
+  /// Return the y Position of the window -- the distance from the
+  /// top side of the primary desktop.
+  ///
+  /// @lib WindowYNamed
+  function WindowY(name: String): Longint;
 
 //=============================================================================
 implementation
 uses  SysUtils,
       sgNamedIndexCollection, sgDriverGraphics, sgDriverImages, sgShared, sgBackendTypes, sgInputBackend,
-      sgResources, sgDriverSDL2Types;
+      sgResources, sgDriverSDL2Types, sgDriverInput, sgGeometry;
 
 // _Windows keeps track of all of the open Windows -- accessed by title
 var 
@@ -294,7 +337,65 @@ begin
   result := Window(_Windows[0]);
 end;
 
+procedure MoveWindow(wind: Window; x, y: Longint);
+var
+  wp: WindowPtr;
+  p: Point2D;
+begin
+  wp := ToWindowPtr(wind);
+  if Assigned(wp) then
+  begin
+    sgDriverInput.MoveWindow(wp, x, y);
 
+    // Read in the new Position...
+    p := sgDriverInput.WindowPosition(wp);
+    wp^.x := Round(p.x);
+    wp^.y := Round(p.y);
+  end
+end;
+
+function WindowPosition(wind: Window): Point2D;
+var
+  wp: WindowPtr;
+begin
+  wp := ToWindowPtr(wind);
+  if Assigned(wp) then
+  begin
+    result := sgDriverInput.WindowPosition(wp);
+  end
+  else
+    result := PointAt(0,0);
+end;
+
+function WindowPosition(name: String): Point2D;
+begin
+  result := WindowPosition(WindowNamed(name));
+end;
+
+function WindowX(wind: Window): Longint;
+begin
+  result := Round(WindowPosition(wind).x);
+end;
+
+function WindowX(name: String): Longint;
+begin
+  result := Round(WindowPosition(name).x);
+end;
+
+function WindowY(wind: Window): Longint;
+begin
+  result := Round(WindowPosition(wind).y);
+end;
+
+function WindowY(name: String): Longint;
+begin
+  result := Round(WindowPosition(name).y);
+end;
+
+procedure MoveWindow(name: String; x, y: Longint);
+begin
+  MoveWindow(WindowNamed(name), x, y);
+end;
 
 //=============================================================================
 
