@@ -77,55 +77,9 @@ interface
   /// your game to help us promote the SwinGame API.
   ///
   /// @lib
+  ///
+  /// @deprecated
   procedure ShowSwinGameSplashScreen();
-
-  /// Changes the size of the screen.
-  ///
-  /// @param width, height: The new width and height of the screen
-  ///
-  /// Side Effects:
-  /// - The screen changes to the specified size
-  ///
-  /// @lib
-  /// @sn changeScreenSizeToWidth:%s height:%s
-  procedure ChangeScreenSize(width, height: Longint);
-
-  /// Switches the application to full screen or back from full screen to
-  /// windowed.
-  ///
-  /// Side Effects:
-  /// - The window switched between fullscreen and windowed
-  ///
-  /// @lib
-  procedure ToggleFullScreen();
-  
-  /// Toggle the Window border mode. This enables you to toggle from a bordered
-  /// window to a borderless window.
-  ///
-  /// @lib
-  procedure ToggleWindowBorder();
-  
-  /// Returns the width of the screen currently displayed.
-  ///
-  /// @returns: The screen's width
-  ///
-  /// @lib
-  ///
-  /// @class Graphics
-  /// @static
-  /// @getter ScreenWidth
-  function ScreenWidth(): Longint;
-
-  /// Returns the height of the screen currently displayed.
-  ///
-  /// @returns: The screen's height
-  ///
-  /// @lib
-  ///
-  /// @class Graphics
-  /// @static
-  /// @getter ScreenHeight
-  function ScreenHeight(): Longint;
 
   /// Saves the current screen a bitmap file. The file will be saved into the
   /// current directory.
@@ -2164,82 +2118,6 @@ implementation
   procedure OpenGraphicsWindow(const caption: String; width: Longint; height: Longint); overload;
   begin
     OpenWindow(caption, width, height);
-  end;
-
-  procedure ToggleFullScreen();
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ToggleFullScreen');
-    {$ENDIF}
-
-    if Assigned(_CurrentWindow) then
-      sgDriverGraphics.SetVideoModeFullScreen(_CurrentWindow);
-
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ToggleFullScreen');
-    {$ENDIF}
-  end;
-  
-  procedure ToggleWindowBorder();
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ToggleWindowBorder');
-    {$ENDIF}
-    
-    sgDriverGraphics.SetVideoModeNoFrame(_CurrentWindow);
-
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ToggleWindowBorder');
-    {$ENDIF}
-  end;
-
-  procedure ChangeScreenSize(width, height: Longint);
-  begin
-    {$IFDEF TRACE}
-      TraceEnter('sgGraphics', 'ChangeScreenSize');
-    {$ENDIF}
-    if not Assigned(_CurrentWindow) then exit;
-
-    if (width < 1) or (height < 1) then
-    begin
-      exit; 
-    end;
-
-    if (width = _CurrentWindow^.image.surface.width) and (height = _CurrentWindow^.image.surface.height) then exit;
-
-    sgDriverGraphics.ResizeWindow(_CurrentWindow, width, height);
-
-    {$IFDEF TRACE}
-      TraceExit('sgGraphics', 'ChangeScreenSize');
-    {$ENDIF}
-  end;
-
-  function WindowWidth(wnd: Window): Longint;
-  var
-    w: WindowPtr;
-  begin
-    w := ToWindowPtr(wnd);
-    if not Assigned(w) then result := 0
-    else result := w^.image.surface.width;
-  end;
-
-  function WindowHeight(wnd: Window): Longint;
-  var
-    w: WindowPtr;
-  begin
-    w := ToWindowPtr(wnd);
-    if not Assigned(w) then result := 0
-    else result := w^.image.surface.height;
-  end;
-
-  function ScreenWidth(): Longint;
-  begin
-    result := WindowWidth(Window(_CurrentWindow));
-  end;
-
-  function ScreenHeight(): Longint;
-  begin
-    result := WindowHeight(Window(_CurrentWindow));
   end;
 
   procedure SaveSurface(const image: ImageData; const basename: String);

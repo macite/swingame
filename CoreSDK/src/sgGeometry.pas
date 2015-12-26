@@ -1450,7 +1450,7 @@ implementation
 
   uses
     Classes, SysUtils, Math, sgBackendTypes, GeometryHelper, // system
-    sgCamera, sgGraphics, sgSprites, sgPhysics, sgShared, sgTrace, sgUtils;     // SwinGame
+    sgCamera, sgGraphics, sgSprites, sgPhysics, sgShared, sgTrace, sgUtils, sgWindowManager;     // SwinGame
 
   const
     DEG_TO_RAD = 0.0174532925199432957692369076848861271344287188854172545609;

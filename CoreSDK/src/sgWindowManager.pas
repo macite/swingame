@@ -159,6 +159,90 @@ interface
   /// @lib WindowYNamed
   function WindowY(name: String): Longint;
 
+  /// Returns the width of a window.
+  ///
+  /// @lib
+  function WindowWidth(wind: Window): Longint;
+
+  /// Returns the width of a window.
+  ///
+  /// @lib WindowWidthNamed
+  function WindowWidth(name: String): Longint;
+
+  /// Returns the height of a window.
+  ///
+  /// @lib
+  function WindowHeight(wind: Window): Longint;
+
+  /// Returns the height of a window.
+  ///
+  /// @lib WindowHeightNamed
+  function WindowHeight(name: String): Longint;
+
+  /// Changes the size of the screen.
+  ///
+  /// @param width, height: The new width and height of the screen
+  ///
+  /// Side Effects:
+  /// - The screen changes to the specified size
+  ///
+  /// @lib
+  /// @sn changeScreenSizeToWidth:%s height:%s
+  procedure ChangeScreenSize(width, height: Longint);
+
+  /// Changes the size of the window.
+  ///
+  /// @param width, height: The new width and height of the window
+  ///
+  /// @lib
+  /// @sn changeWindowSize:%s toWidth:%s height:%s
+  procedure ChangeWindowSize(wind: Window; width, height: Longint);
+
+  /// Changes the size of the window.
+  ///
+  /// @param width, height: The new width and height of the window
+  ///
+  /// @lib changeWindowSizeNamed
+  /// @sn changeWindowSizeOfWindowNamed:%s toWidth:%s height:%s
+  procedure ChangeWindowSize(name: String; width, height: Longint);
+
+  /// Switches the application to full screen or back from full screen to
+  /// windowed.
+  ///
+  /// Side Effects:
+  /// - The window switched between fullscreen and windowed
+  ///
+  /// @lib
+  procedure ToggleFullScreen();
+  
+  /// Toggle the Window border mode. This enables you to toggle from a bordered
+  /// window to a borderless window.
+  ///
+  /// @lib
+  procedure ToggleWindowBorder();
+  
+  /// Returns the width of the screen currently displayed.
+  ///
+  /// @returns: The screen's width
+  ///
+  /// @lib
+  ///
+  /// @class Graphics
+  /// @static
+  /// @getter ScreenWidth
+  function ScreenWidth(): Longint;
+
+  /// Returns the height of the screen currently displayed.
+  ///
+  /// @returns: The screen's height
+  ///
+  /// @lib
+  ///
+  /// @class Graphics
+  /// @static
+  /// @getter ScreenHeight
+  function ScreenHeight(): Longint;
+
 //=============================================================================
 implementation
 uses  SysUtils,
@@ -171,231 +255,308 @@ var
   _Windows: array of WindowPtr;
 
 
-function OpenWindow(const caption: String; width: Longint; height: Longint): Window;
-var
-  realCaption: String;
-  idx: Longint;
-  wind: WindowPtr;
-begin
-  realCaption := caption;
-  idx := 0;
-  
-  while HasName(_WindowNames, realCaption) do
+  function OpenWindow(const caption: String; width: Longint; height: Longint): Window;
+  var
+    realCaption: String;
+    idx: Longint;
+    wind: WindowPtr;
   begin
-    realCaption := caption + ': ' + IntToStr(idx);
-    idx := idx + 1;
-  end;
-
-  wind := sgDriverGraphics.OpenWindow(realCaption, width, height);
-  result := Window(wind);
-
-  AddName(_WindowNames, realCaption);
-
-  SetLength(_Windows, Length(_Windows) + 1);
-  _Windows[High(_Windows)] := wind;
-
-  if not Assigned(_PrimaryWindow) then
-  begin
-    _PrimaryWindow := wind;
-    _CurrentWindow := wind;
-  end;
-end;
-
-procedure CloseWindow(wind: Window); overload;
-var
-  wp: WindowPtr;
-  i, idx: Longint;
-begin
-  wp := ToWindowPtr(wind);
-  if Assigned(wp) then
-  begin
-
-    if wp = _CurrentWindow then
+    realCaption := caption;
+    idx := 0;
+    
+    while HasName(_WindowNames, realCaption) do
     begin
-      _CurrentWindow := _PrimaryWindow;
+      realCaption := caption + ': ' + IntToStr(idx);
+      idx := idx + 1;
     end;
 
-    if wp = _PrimaryWindow then
-    begin
-      sgInputBackend._quit := true;
-      _PrimaryWindow := nil;
+    wind := sgDriverGraphics.OpenWindow(realCaption, width, height);
+    result := Window(wind);
 
-      if wp = _CurrentWindow then // in case they ignore the quit!
-        _CurrentWindow := nil;
+    AddName(_WindowNames, realCaption);
+
+    SetLength(_Windows, Length(_Windows) + 1);
+    _Windows[High(_Windows)] := wind;
+
+    if not Assigned(_PrimaryWindow) then
+    begin
+      _PrimaryWindow := wind;
+      _CurrentWindow := wind;
     end;
+  end;
 
-    idx := RemoveName(_WindowNames, wp^.caption);
-    if idx >= 0 then
+  procedure CloseWindow(wind: Window); overload;
+  var
+    wp: WindowPtr;
+    i, idx: Longint;
+  begin
+    wp := ToWindowPtr(wind);
+    if Assigned(wp) then
     begin
-      for i := idx to High(_Windows) - 1 do
+
+      if wp = _CurrentWindow then
       begin
-        _Windows[i] := _Windows[i + 1];
+        _CurrentWindow := _PrimaryWindow;
       end;
-      SetLength(_Windows, Length(_Windows) - 1);
+
+      if wp = _PrimaryWindow then
+      begin
+        sgInputBackend._quit := true;
+        _PrimaryWindow := nil;
+
+        if wp = _CurrentWindow then // in case they ignore the quit!
+          _CurrentWindow := nil;
+      end;
+
+      idx := RemoveName(_WindowNames, wp^.caption);
+      if idx >= 0 then
+      begin
+        for i := idx to High(_Windows) - 1 do
+        begin
+          _Windows[i] := _Windows[i + 1];
+        end;
+        SetLength(_Windows, Length(_Windows) - 1);
+      end;
+
+      sgDriverGraphics.CloseWindow(wp);
+    end;
+  end;
+
+  procedure CloseWindow(const name: String); overload;
+  begin
+    CloseWindow(WindowNamed(name));
+  end;
+
+  procedure CloseAllWindows();
+  begin
+    while Length(_windows) > 0 do
+    begin
+      CloseWindow(_windows[0]);
+    end;
+  end;
+
+
+  function HasWindow(const name: String): Boolean;
+  begin
+    result := HasName(_WindowNames, name);
+  end;
+
+  function WindowNamed(const name: String): Window;
+  var
+    idx: Longint;
+  begin
+    idx := IndexOf(_WindowNames, name);
+    result := WindowAtIndex(idx);
+  end;
+
+  function WindowCloseRequested(wind: Window): Boolean;
+  var
+    wp: WindowPtr;
+  begin
+    wp := ToWindowPtr(wind);
+    if Assigned(wp) then
+    begin
+      result := wp^.eventData.close_requested <> 0;
+    end
+    else result := false;
+  end;
+
+  function WindowCloseRequested(): Boolean;
+  begin
+    result := WindowCloseRequested(Window(_PrimaryWindow));  
+  end;
+
+  procedure SaveScreenshot(src: Window; const filepath: String);
+  var
+    surface: psg_drawing_surface;
+  begin
+    surface := ToSurfacePtr(src);
+    if not assigned(surface) then exit;
+    
+    sgDriverImages.SaveSurface(surface, filepath);
+  end;
+
+  procedure SetCurrentWindow(wnd: Window);
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wnd);
+    if Assigned(w) then _CurrentWindow := w;
+  end;
+
+  procedure SetCurrentWindow(name: String);
+  begin
+    SetCurrentWindow(WindowNamed(name));
+  end;
+
+  function WindowCount(): Longint;
+  begin
+    result := Length(_Windows);
+  end;
+
+
+  function WindowAtIndex(idx: Longint): Window;
+  begin
+    if (idx >= 0) and (idx <= High(_Windows)) then
+      result := Window(_Windows[idx])
+    else
+      result := nil; 
+  end;
+
+  function WindowWithFocus(): Window;
+  var
+    i: Integer;
+    wp: WindowPtr;
+  begin
+    for i := 0 to High(_Windows) do
+    begin
+      wp := _Windows[i];
+      if wp^.eventData.has_focus <> 0 then
+      begin
+        result := Window(wp);
+        exit;
+      end; 
     end;
 
-    sgDriverGraphics.CloseWindow(wp);
+    result := Window(_Windows[0]);
   end;
-end;
 
-procedure CloseWindow(const name: String); overload;
-begin
-  CloseWindow(WindowNamed(name));
-end;
-
-procedure CloseAllWindows();
-begin
-  while Length(_windows) > 0 do
+  procedure MoveWindow(wind: Window; x, y: Longint);
+  var
+    wp: WindowPtr;
+    p: Point2D;
   begin
-    CloseWindow(_windows[0]);
-  end;
-end;
-
-
-function HasWindow(const name: String): Boolean;
-begin
-  result := HasName(_WindowNames, name);
-end;
-
-function WindowNamed(const name: String): Window;
-var
-  idx: Longint;
-begin
-  idx := IndexOf(_WindowNames, name);
-  result := WindowAtIndex(idx);
-end;
-
-function WindowCloseRequested(wind: Window): Boolean;
-var
-  wp: WindowPtr;
-begin
-  wp := ToWindowPtr(wind);
-  if Assigned(wp) then
-  begin
-    result := wp^.eventData.close_requested <> 0;
-  end
-  else result := false;
-end;
-
-function WindowCloseRequested(): Boolean;
-begin
-  result := WindowCloseRequested(Window(_PrimaryWindow));  
-end;
-
-procedure SaveScreenshot(src: Window; const filepath: String);
-var
-  surface: psg_drawing_surface;
-begin
-  surface := ToSurfacePtr(src);
-  if not assigned(surface) then exit;
-  
-  sgDriverImages.SaveSurface(surface, filepath);
-end;
-
-procedure SetCurrentWindow(wnd: Window);
-var
-  w: WindowPtr;
-begin
-  w := ToWindowPtr(wnd);
-  if Assigned(w) then _CurrentWindow := w;
-end;
-
-procedure SetCurrentWindow(name: String);
-begin
-  SetCurrentWindow(WindowNamed(name));
-end;
-
-function WindowCount(): Longint;
-begin
-  result := Length(_Windows);
-end;
-
-
-function WindowAtIndex(idx: Longint): Window;
-begin
-  if (idx >= 0) and (idx <= High(_Windows)) then
-    result := Window(_Windows[idx])
-  else
-    result := nil; 
-end;
-
-function WindowWithFocus(): Window;
-var
-  i: Integer;
-  wp: WindowPtr;
-begin
-  for i := 0 to High(_Windows) do
-  begin
-    wp := _Windows[i];
-    if wp^.eventData.has_focus <> 0 then
+    wp := ToWindowPtr(wind);
+    if Assigned(wp) then
     begin
-      result := Window(wp);
-      exit;
-    end; 
+      sgDriverInput.MoveWindow(wp, x, y);
+
+      // Read in the new Position...
+      p := sgDriverInput.WindowPosition(wp);
+      wp^.x := Round(p.x);
+      wp^.y := Round(p.y);
+    end
   end;
 
-  result := Window(_Windows[0]);
-end;
-
-procedure MoveWindow(wind: Window; x, y: Longint);
-var
-  wp: WindowPtr;
-  p: Point2D;
-begin
-  wp := ToWindowPtr(wind);
-  if Assigned(wp) then
+  function WindowPosition(wind: Window): Point2D;
+  var
+    wp: WindowPtr;
   begin
-    sgDriverInput.MoveWindow(wp, x, y);
+    wp := ToWindowPtr(wind);
+    if Assigned(wp) then
+    begin
+      result := sgDriverInput.WindowPosition(wp);
+    end
+    else
+      result := PointAt(0,0);
+  end;
 
-    // Read in the new Position...
-    p := sgDriverInput.WindowPosition(wp);
-    wp^.x := Round(p.x);
-    wp^.y := Round(p.y);
-  end
-end;
-
-function WindowPosition(wind: Window): Point2D;
-var
-  wp: WindowPtr;
-begin
-  wp := ToWindowPtr(wind);
-  if Assigned(wp) then
+  function WindowPosition(name: String): Point2D;
   begin
-    result := sgDriverInput.WindowPosition(wp);
-  end
-  else
-    result := PointAt(0,0);
-end;
+    result := WindowPosition(WindowNamed(name));
+  end;
 
-function WindowPosition(name: String): Point2D;
-begin
-  result := WindowPosition(WindowNamed(name));
-end;
+  function WindowX(wind: Window): Longint;
+  begin
+    result := Round(WindowPosition(wind).x);
+  end;
 
-function WindowX(wind: Window): Longint;
-begin
-  result := Round(WindowPosition(wind).x);
-end;
+  function WindowX(name: String): Longint;
+  begin
+    result := Round(WindowPosition(name).x);
+  end;
 
-function WindowX(name: String): Longint;
-begin
-  result := Round(WindowPosition(name).x);
-end;
+  function WindowY(wind: Window): Longint;
+  begin
+    result := Round(WindowPosition(wind).y);
+  end;
 
-function WindowY(wind: Window): Longint;
-begin
-  result := Round(WindowPosition(wind).y);
-end;
+  function WindowY(name: String): Longint;
+  begin
+    result := Round(WindowPosition(name).y);
+  end;
 
-function WindowY(name: String): Longint;
-begin
-  result := Round(WindowPosition(name).y);
-end;
+  procedure MoveWindow(name: String; x, y: Longint);
+  begin
+    MoveWindow(WindowNamed(name), x, y);
+  end;
 
-procedure MoveWindow(name: String; x, y: Longint);
-begin
-  MoveWindow(WindowNamed(name), x, y);
-end;
+  procedure ToggleFullScreen();
+  begin
+    if Assigned(_CurrentWindow) then
+      sgDriverGraphics.SetVideoModeFullScreen(_CurrentWindow);
+  end;
+  
+  procedure ToggleWindowBorder();
+  begin
+    sgDriverGraphics.SetVideoModeNoFrame(_CurrentWindow);
+  end;
+
+  procedure ChangeWindowSize(wind: Window; width, height: Longint);
+  var
+    wp: WindowPtr;
+  begin
+    wp := ToWindowPtr(wind);
+
+    if (not Assigned(wp)) or (width < 1) or (height < 1) then
+    begin
+      exit; 
+    end;
+
+    if (width = wp^.image.surface.width) and (height = wp^.image.surface.height) then exit;
+
+    sgDriverGraphics.ResizeWindow(wp, width, height);
+  end;
+
+  procedure ChangeWindowSize(name: String; width, height: Longint);
+  begin
+    ChangeWindowSize(WindowNamed(name), width, height);
+  end;
+
+  procedure ChangeScreenSize(width, height: Longint);
+  begin
+    if not Assigned(_CurrentWindow) then exit;
+
+    ChangeWindowSize(Window(_CurrentWindow), width, height);
+  end;
+
+  function WindowWidth(wind: Window): Longint;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wind);
+    if not Assigned(w) then result := 0
+    else result := w^.image.surface.width;
+  end;
+
+  function WindowWidth(name: String): Longint;
+  begin
+    result := WindowWidth(WindowNamed(name));
+  end;
+
+  function WindowHeight(wind: Window): Longint;
+  var
+    w: WindowPtr;
+  begin
+    w := ToWindowPtr(wind);
+    if not Assigned(w) then result := 0
+    else result := w^.image.surface.height;
+  end;
+
+  function WindowHeight(name: String): Longint;
+  begin
+    result := WindowHeight(WindowNamed(name));
+  end;
+
+  function ScreenWidth(): Longint;
+  begin
+    result := WindowWidth(Window(_CurrentWindow));
+  end;
+
+  function ScreenHeight(): Longint;
+  begin
+    result := WindowHeight(Window(_CurrentWindow));
+  end;
 
 //=============================================================================
 

@@ -245,7 +245,7 @@ interface
 implementation
   uses 
     sgTrace, SysUtils, 
-    sgGraphics, sgGeometry, sgSprites, sgShared, sgImages;
+    sgGraphics, sgGeometry, sgSprites, sgShared, sgImages, sgWindowManager;
 //=============================================================================
 
 var

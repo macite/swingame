@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-27 08:46:56.209992
+// SwinGame.pas was generated on 2015-12-27 09:58:45.081052
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -1130,9 +1130,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Get the brightness of the ``color``.
   function BrightnessOf(c: Color): Single; overload;
 
-  // Changes the size of the screen.
-  procedure ChangeScreenSize(width: Longint; height: Longint); overload;
-
   // Clear the screen black.
   procedure ClearScreen(); overload;
 
@@ -1834,12 +1831,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Get the saturation of the ``color``.
   function SaturationOf(c: Color): Single; overload;
 
-  // Returns the height of the screen currently displayed.
-  function ScreenHeight(): Longint; overload;
-
-  // Returns the width of the screen currently displayed.
-  function ScreenWidth(): Longint; overload;
-
   // Set the clip rectangle of the current window.
   procedure SetClip(const r: Rectangle); overload;
 
@@ -1862,17 +1853,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Saves the current screen a bitmap file. The file will be saved into the
   // current directory.
   procedure TakeScreenshot(const basename: String); overload;
-
-  // Switches the application to full screen or back from full screen to
-  // windowed.
-  //
-  // Side Effects:
-  // - The window switched between fullscreen and windowed
-  procedure ToggleFullScreen(); overload;
-
-  // Toggle the Window border mode. This enables you to toggle from a bordered
-  // window to a borderless window.
-  procedure ToggleWindowBorder(); overload;
 
   // Get the transpareny value of ``color``.
   function TransparencyOf(c: Color): Byte; overload;
@@ -3736,6 +3716,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Pass opts the other options you want use.
   function OptionToWorld(const opts: DrawingOptions): DrawingOptions; overload;
 
+  // Changes the size of the screen.
+  procedure ChangeScreenSize(width: Longint; height: Longint); overload;
+
   // Close a window.
   procedure CloseWindow(wind: Window); overload;
 
@@ -3746,10 +3729,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function HasWindow(const name: String): Boolean; overload;
 
   // Move the window to a new Position on the screen.
-  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
+  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
 
   // Move the window to a new Position on the screen.
-  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
+  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
 
   // Opens the window so that it can be drawn onto and used to respond to user
   // actions. The window itself is only drawn when you call `RefreshScreen`. 
@@ -3765,11 +3748,28 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Save screenshot to specific directory.
   procedure SaveScreenshot(src: Window; const filepath: String); overload;
 
-  // 
-  procedure SetCurrentWindow(wnd: Window); overload;
+  // Returns the height of the screen currently displayed.
+  function ScreenHeight(): Longint; overload;
+
+  // Returns the width of the screen currently displayed.
+  function ScreenWidth(): Longint; overload;
 
   // 
   procedure SetCurrentWindow(name: String); overload;
+
+  // 
+  procedure SetCurrentWindow(wnd: Window); overload;
+
+  // Switches the application to full screen or back from full screen to
+  // windowed.
+  //
+  // Side Effects:
+  // - The window switched between fullscreen and windowed
+  procedure ToggleFullScreen(); overload;
+
+  // Toggle the Window border mode. This enables you to toggle from a bordered
+  // window to a borderless window.
+  procedure ToggleWindowBorder(); overload;
 
   // 
   function WindowAtIndex(idx: Longint): Window; overload;
@@ -3787,14 +3787,26 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // 
   function WindowCount(): Longint; overload;
 
+  // Returns the height of a window.
+  function WindowHeight(name: String): Longint; overload;
+
+  // Returns the height of a window.
+  function WindowHeight(wind: Window): Longint; overload;
+
   // Get the window with the speficied name.
   function WindowNamed(const name: String): Window; overload;
 
   // Returns the Position of the window on the desktop.
-  function WindowPosition(name: String): Point2D; overload;
+  function WindowPosition(wind: Window): Point2D; overload;
 
   // Returns the Position of the window on the desktop.
-  function WindowPosition(wind: Window): Point2D; overload;
+  function WindowPosition(name: String): Point2D; overload;
+
+  // Returns the width of a window.
+  function WindowWidth(wind: Window): Longint; overload;
+
+  // Returns the width of a window.
+  function WindowWidth(name: String): Longint; overload;
 
   // Returns the window that the user has focused on.
   function WindowWithFocus(): Window; overload;
@@ -3809,11 +3821,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Return the y Position of the window -- the distance from the
   // top side of the primary desktop.
-  function WindowY(wind: Window): Longint; overload;
+  function WindowY(name: String): Longint; overload;
 
   // Return the y Position of the window -- the distance from the
   // top side of the primary desktop.
-  function WindowY(name: String): Longint; overload;
+  function WindowY(wind: Window): Longint; overload;
 
 
 	procedure LoadDefaultColors();
@@ -5149,11 +5161,6 @@ implementation
     result := sgGraphics.BrightnessOf(c);
   end;
 
-  procedure ChangeScreenSize(width: Longint; height: Longint); overload;
-  begin
-    sgGraphics.ChangeScreenSize(width,height);
-  end;
-
   procedure ClearScreen(); overload;
   begin
     sgGraphics.ClearScreen();
@@ -6299,16 +6306,6 @@ implementation
     result := sgGraphics.SaturationOf(c);
   end;
 
-  function ScreenHeight(): Longint; overload;
-  begin
-    result := sgGraphics.ScreenHeight();
-  end;
-
-  function ScreenWidth(): Longint; overload;
-  begin
-    result := sgGraphics.ScreenWidth();
-  end;
-
   procedure SetClip(const r: Rectangle); overload;
   begin
     sgGraphics.SetClip(r);
@@ -6337,16 +6334,6 @@ implementation
   procedure TakeScreenshot(const basename: String); overload;
   begin
     sgGraphics.TakeScreenshot(basename);
-  end;
-
-  procedure ToggleFullScreen(); overload;
-  begin
-    sgGraphics.ToggleFullScreen();
-  end;
-
-  procedure ToggleWindowBorder(); overload;
-  begin
-    sgGraphics.ToggleWindowBorder();
   end;
 
   function TransparencyOf(c: Color): Byte; overload;
@@ -8939,6 +8926,11 @@ implementation
     result := sgDrawingOptions.OptionToWorld(opts);
   end;
 
+  procedure ChangeScreenSize(width: Longint; height: Longint); overload;
+  begin
+    sgWindowManager.ChangeScreenSize(width,height);
+  end;
+
   procedure CloseWindow(wind: Window); overload;
   begin
     sgWindowManager.CloseWindow(wind);
@@ -8954,14 +8946,14 @@ implementation
     result := sgWindowManager.HasWindow(name);
   end;
 
-  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
-  begin
-    sgWindowManager.MoveWindow(wind,x,y);
-  end;
-
   procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
   begin
     sgWindowManager.MoveWindow(name,x,y);
+  end;
+
+  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
+  begin
+    sgWindowManager.MoveWindow(wind,x,y);
   end;
 
   function OpenWindow(const caption: String; width: Longint; height: Longint): Window; overload;
@@ -8974,14 +8966,34 @@ implementation
     sgWindowManager.SaveScreenshot(src,filepath);
   end;
 
-  procedure SetCurrentWindow(wnd: Window); overload;
+  function ScreenHeight(): Longint; overload;
   begin
-    sgWindowManager.SetCurrentWindow(wnd);
+    result := sgWindowManager.ScreenHeight();
+  end;
+
+  function ScreenWidth(): Longint; overload;
+  begin
+    result := sgWindowManager.ScreenWidth();
   end;
 
   procedure SetCurrentWindow(name: String); overload;
   begin
     sgWindowManager.SetCurrentWindow(name);
+  end;
+
+  procedure SetCurrentWindow(wnd: Window); overload;
+  begin
+    sgWindowManager.SetCurrentWindow(wnd);
+  end;
+
+  procedure ToggleFullScreen(); overload;
+  begin
+    sgWindowManager.ToggleFullScreen();
+  end;
+
+  procedure ToggleWindowBorder(); overload;
+  begin
+    sgWindowManager.ToggleWindowBorder();
   end;
 
   function WindowAtIndex(idx: Longint): Window; overload;
@@ -9004,9 +9016,24 @@ implementation
     result := sgWindowManager.WindowCount();
   end;
 
+  function WindowHeight(name: String): Longint; overload;
+  begin
+    result := sgWindowManager.WindowHeight(name);
+  end;
+
+  function WindowHeight(wind: Window): Longint; overload;
+  begin
+    result := sgWindowManager.WindowHeight(wind);
+  end;
+
   function WindowNamed(const name: String): Window; overload;
   begin
     result := sgWindowManager.WindowNamed(name);
+  end;
+
+  function WindowPosition(wind: Window): Point2D; overload;
+  begin
+    result := sgWindowManager.WindowPosition(wind);
   end;
 
   function WindowPosition(name: String): Point2D; overload;
@@ -9014,9 +9041,14 @@ implementation
     result := sgWindowManager.WindowPosition(name);
   end;
 
-  function WindowPosition(wind: Window): Point2D; overload;
+  function WindowWidth(wind: Window): Longint; overload;
   begin
-    result := sgWindowManager.WindowPosition(wind);
+    result := sgWindowManager.WindowWidth(wind);
+  end;
+
+  function WindowWidth(name: String): Longint; overload;
+  begin
+    result := sgWindowManager.WindowWidth(name);
   end;
 
   function WindowWithFocus(): Window; overload;
@@ -9034,14 +9066,14 @@ implementation
     result := sgWindowManager.WindowX(name);
   end;
 
-  function WindowY(wind: Window): Longint; overload;
-  begin
-    result := sgWindowManager.WindowY(wind);
-  end;
-
   function WindowY(name: String): Longint; overload;
   begin
     result := sgWindowManager.WindowY(name);
+  end;
+
+  function WindowY(wind: Window): Longint; overload;
+  begin
+    result := sgWindowManager.WindowY(wind);
   end;
 
 end.
