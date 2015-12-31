@@ -557,15 +557,19 @@ implementation
 	/// This function prints "str" with font "font" and color "clrFg"
 	///  * onto a rectangle of color "clrBg".
 	///  * It does not pad the text.
-	procedure PrintStrings(dest: Bitmap; font: FontPtr; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
+	procedure PrintStrings(dest: Pointer; font: FontPtr; const str: String; rc: Rectangle; clrFg, clrBg:Color; flags:FontAlignment) ;
 	var
 		lineSkip, width, height: Longint;
 		lines: StringArray;
 		i, w, h: Longint;
 		x, y: Single;
+		isWindow: Boolean;
 	begin
 		// If there's nothing to draw, return NULL
 		if (Length(str) = 0) or (font = nil) then exit;
+
+		if PtrKind(dest) = WINDOW_PTR then isWindow := true
+		else isWindow := false;
 
 		// Get basic metrics
 		lineSkip  := TextDriver.LineSkip( font );
@@ -584,7 +588,10 @@ implementation
 		end;
 
 		// Clip bitmap
-		PushClip(dest, rc);
+		if isWindow then
+			PushClip(Window(dest), rc)
+		else
+			PushClip(Bitmap(dest), rc);
 
 		x := rc.x;
 		y := 0;
@@ -618,7 +625,10 @@ implementation
 			TextDriver.PrintStrings(dest, font, lines[i], RectangleFrom(x, y, w, h), clrFg, clrBg, flags);
 		end;
 
-		PopClip(dest);
+		if isWindow then
+			PopClip(Window(dest))
+		else
+			PopClip(Bitmap(dest));
 	end;
 
 	function DrawTextToBitmap(font: Font; const str: String; clrFg, backgroundColor : Color) : Bitmap;

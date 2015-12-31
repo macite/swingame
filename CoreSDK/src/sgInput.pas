@@ -507,13 +507,13 @@ end;
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, area);
-    SetText(text);    
+    SetText(_CurrentWindow, text);    
   end;
   
   procedure StartReadingTextWithText(const text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, backGroundColor, maxLength, theFont, area);
-    SetText(text);    
+    SetText(_CurrentWindow, text);    
   end;
   
   
@@ -525,7 +525,7 @@ end;
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, x, y);
-    SetText(text);
+    SetText(_CurrentWindow, text);
   end;
   
   function ReadingText(): Boolean;

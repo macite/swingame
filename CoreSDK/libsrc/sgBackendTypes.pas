@@ -428,6 +428,18 @@ uses sgTypes, sgDriverSDL2Types;
       eventData:  sg_window_data;
 
       screenRect: Rectangle;
+    
+      tempString:       String;
+
+      maxStringLen:     LongInt;
+      textBitmap:       Bitmap;
+      cursorBitmap:     Bitmap;
+      font:             Font;
+      foreColor:        Color;
+      backgroundColor:  Color;
+      area:             Rectangle; // area for input text
+      readingString:    Boolean;
+      textCancelled:    Boolean;
     end;
 
     UnknownDataPtr = ^UnknownData;

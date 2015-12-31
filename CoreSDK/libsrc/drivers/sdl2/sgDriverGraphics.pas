@@ -294,18 +294,36 @@ implementation
   begin
     New(result);
     result^.id := WINDOW_PTR;
+    result^.caption := caption;
 
     result^.image.surface := _sg_functions^.graphics.open_window(PChar(caption), screenWidth, screenHeight);
-    
-    result^.caption := caption;
+    SetLength(result^.image.clipStack, 0);
+
+    _sg_functions^.input.window_position(@result^.image.surface, @result^.x, @result^.y);
 
     result^.open := true;
     result^.fullscreen := false;
     result^.border := true;
 
-    _sg_functions^.input.window_position(@result^.image.surface, @result^.x, @result^.y);
+    result^.eventData.close_requested := 0;
+    result^.eventData.has_focus := 0;
+    result^.eventData.mouse_over := 0;
+    result^.eventData.shown := -1;
 
     result^.screenRect := RectangleFrom(0,0,screenWidth, screenHeight);
+
+    result^.tempString := '';
+    result^.maxStringLen := 0;
+
+    result^.textBitmap := nil;
+    result^.cursorBitmap := nil;
+    result^.font := nil;
+    result^.foreColor := RGBAColor(0, 0, 0, 255);
+    result^.backgroundColor := RGBAColor(255, 255, 255, 255);
+    result^.area := RectangleFrom(0,0,0,0);
+
+    result^.readingString := false;
+    result^.textCancelled := false;
 
     clr := _ToSGColor(RGBAColor(255,255,255,255));
     _sg_functions^.graphics.clear_drawing_surface(@result^.image.surface, clr);

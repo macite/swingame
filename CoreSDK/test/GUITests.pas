@@ -2,7 +2,7 @@ program GUITests;
 //{IFNDEF UNIX} {r GameLauncher.res} {ENDIF}
 
 uses
-  sgUserInterface, sgAudio, sgGraphics, sgResources, sgText, sgGeometry, sgTypes, SysUtils, sgImages, sgInput;
+  SwinGame, sgTypes;
 
 
 procedure __callback__Button1Clicked(r: Region; kind: EventKind);

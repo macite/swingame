@@ -663,8 +663,7 @@ interface
   /// @class Window
   /// @overload PushClip PushClipRect
   /// @csn pushClip:%s
-  procedure PushClip(wnd: Window; const r: Rectangle); overload;  
-
+  procedure PushClip(wnd: Window; const r: Rectangle); overload;
   
   /// Reset the clipping rectangle of the current window.
   /// 

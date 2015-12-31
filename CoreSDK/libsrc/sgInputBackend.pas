@@ -11,7 +11,7 @@ interface
     procedure ProcessTextEntry(const input: String);
     // text reading/draw collection
     procedure DrawCollectedText(dest: WindowPtr);
-    procedure SetText(const text: String);
+    procedure SetText(wind: WindowPtr; const text: String);
     procedure InputBackendStartReadingText(textColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
     procedure InputBackendStartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
     function  InputBackendEndReadingText(): String;
@@ -50,23 +50,13 @@ interface
   var
     _quit:                  Boolean;
     _keyPressed:            Boolean;
-    _textCancelled:         Boolean;
     _justTouched:           Boolean;
     _justMoved:             Boolean;
-    _tempString:            String;
 
     _lastKeyRepeat:         Longint;
     _KeyDown:               Array of KeyDownData;
     _keyJustTyped:          Array of LongInt;
     _KeyReleased:           Array of Longint;
-    _maxStringLen:          LongInt;
-    _textBitmap:            Bitmap;
-    _cursorBitmap:          Bitmap;
-    _font:                  Font;
-    _foreColor:             Color;
-    _backgroundColor:       Color;
-    _area:                  Rectangle;
-    _readingString:         Boolean;
     _ButtonsClicked:        Array [MouseButton] of Boolean;
     _LastFingerPosition:    Point2D;
 
@@ -81,10 +71,6 @@ implementation
   begin
     _quit := false;
     _keyPressed := false;
-    _textBitmap := nil;
-    _cursorBitmap := nil;
-    _readingString := false;
-    _textCancelled := false;
     _lastKeyRepeat := 0;
     _justMoved:= false;
     _justTouched:=false;
@@ -96,12 +82,18 @@ implementation
   
   function EnteredString: String; 
   begin
-    result := _tempString;
+    if Assigned(_CurrentWindow) then
+      result := _CurrentWindow^.tempString
+    else
+      result := '';
   end;
   
   function TextEntryWasCancelled: Boolean; 
   begin
-    result := _textCancelled;
+    if Assigned(_CurrentWindow) then
+      result := _CurrentWindow^.textCancelled
+    else
+      result := false;
   end;
   
   procedure CheckQuit();
@@ -155,7 +147,10 @@ implementation
   
   function isReading() : Boolean;
   begin
-    result := _readingString;
+    if Assigned(_CurrentWindow) then
+      result := _CurrentWindow^.readingString
+    else
+      result := false;
   end;
   
   procedure ProcessKeyReleased (kyCode :  LongInt);
@@ -189,8 +184,6 @@ implementation
     
   end;
 
-
-  
   procedure AddKeyData(kyCode, kyChar: Longint);
   var
     i: Integer;
@@ -233,53 +226,66 @@ implementation
     AddKeyData(kyCode, kyChar);
     ProcessKeyPress(kyCode, kyChar);
   end;
+
+  function WindowPtrWithFocus(): WindowPtr;
+  begin
+    result := ToWindowPtr(WindowWithFocus());
+  end;
   
   procedure ProcessKeyPress(kyCode, kyChar: Longint);
   var
     oldStr : String;
-    
+    focusWindow: WindowPtr;
   begin
-    if _readingString then
+    focusWindow := WindowPtrWithFocus();
+    if not Assigned(focusWindow) then exit;
+
+    if focusWindow^.readingString then
     begin
-      oldStr := _tempString;
+      oldStr := focusWindow^.tempString;
             
       //If the key is not a control character
-      if (kyCode = LongInt(BACKSPACEKey)) and (Length(_tempString) > 0) then
+      if (kyCode = LongInt(BACKSPACEKey)) and (Length(focusWindow^.tempString) > 0) then
       begin
-         _tempString := Copy(_tempString, 1, Length(_tempString) - 1);
+         focusWindow^.tempString := Copy(focusWindow^.tempString, 1, Length(focusWindow^.tempString) - 1);
       end
       else if (kyCode = LongInt(RETURNKey)) or (kyCode = LongInt(KeyPadENTER)) then
       begin
-        _readingString := false;
+        focusWindow^.readingString := false;
       end
       else if kyCode = LongInt(ESCAPEKey) then
       begin
-        _tempString := '';
-        _readingString := false;
-        _textCancelled := true;
+        focusWindow^.tempString := '';
+        focusWindow^.readingString := false;
+        focusWindow^.textCancelled := true;
       end;
       
       //If the string was change
-      if oldStr <> _tempString then
+      if oldStr <> focusWindow^.tempString then
       begin
-        SetText(_tempString);
+        SetText(focusWindow, focusWindow^.tempString);
       end;
     end;
   end;
 
   procedure ProcessTextEntry(const input: String);
+  var
+    focusWindow: WindowPtr;
   begin
-    if _readingString then
+    focusWindow := WindowPtrWithFocus();
+    if not Assigned(focusWindow) then exit;
+
+    if focusWindow^.readingString then
     begin
-      if Length(_tempString) + Length(input) < _maxStringLen then
+      if Length(focusWindow^.tempString) + Length(input) < focusWindow^.maxStringLen then
       begin
-        _tempString += input;
-        SetText(_tempString);
+        focusWindow^.tempString += input;
+        SetText(focusWindow, focusWindow^.tempString);
       end
-      else if Length(_tempString) < _maxStringLen then
+      else if Length(focusWindow^.tempString) < focusWindow^.maxStringLen then
       begin
-        _tempString := _tempString + Copy(input, 1, _maxStringLen - Length(_tempString));
-        SetText(_tempString);
+        focusWindow^.tempString := focusWindow^.tempString + Copy(input, 1, focusWindow^.maxStringLen - Length(focusWindow^.tempString));
+        SetText(focusWindow, focusWindow^.tempString);
       end;
     end;
   end;
@@ -300,46 +306,50 @@ implementation
   end;
   
   
-  procedure FreeOldSurface();
+  procedure FreeOldSurface(wind: WindowPtr);
   begin
-    if Assigned(_textBitmap) and (_textBitmap <> _cursorBitmap) then
-      FreeBitmap(_textBitmap);
+    if Assigned(wind) and Assigned(wind^.textBitmap) and (wind^.textBitmap <> wind^.cursorBitmap) then
+      FreeBitmap(wind^.textBitmap);
   end;
   
-  procedure RenderTextSurface(const text : String);
+  procedure RenderTextSurface(wind: WindowPtr; const text : String);
   var
     outStr: String;
   begin
+    if not Assigned(wind) then exit;
+
     if Length(text) > 0 then
     begin
       outStr := text + '|';
-      FreeOldSurface();
-      _textBitmap := DrawTextToBitmap(_font, outStr, _forecolor, _backgroundColor);
+      FreeOldSurface(wind);
+      wind^.textBitmap := DrawTextToBitmap(wind^.font, outStr, wind^.forecolor, wind^.backgroundColor);
     end
     else
-      _textBitmap := _cursorBitmap;  
+      wind^.textBitmap := wind^.cursorBitmap;  
   end;
   
   procedure InputBackendStartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
   var
     newStr: String;
   begin
-    FreeOldSurface();
+    if not Assigned(_CurrentWindow) then exit;
 
-    _readingString := true;
-    _textCancelled := false;
-    _tempString := '';
-    _maxStringLen := maxLength;
-    _foreColor := textColor;
-    _backgroundColor := backgroundColor;
-    _font := theFont;
-    _area := area;
+    FreeOldSurface(_CurrentWindow);
+
+    _CurrentWindow^.readingString := true;
+    _CurrentWindow^.textCancelled := false;
+    _CurrentWindow^.tempString := '';
+    _CurrentWindow^.maxStringLen := maxLength;
+    _CurrentWindow^.foreColor := textColor;
+    _CurrentWindow^.backgroundColor := backgroundColor;
+    _CurrentWindow^.font := theFont;
+    _CurrentWindow^.area := area;
 
     newStr := '|';
 
-    if Assigned(_cursorBitmap) then FreeBitmap(_cursorBitmap);
-    _cursorBitmap := DrawTextToBitmap(_font, newStr, _foreColor,_backgroundColor);
-    _textBitmap := _cursorBitmap;
+    if Assigned(_CurrentWindow^.cursorBitmap) then FreeBitmap(_CurrentWindow^.cursorBitmap);
+    _CurrentWindow^.cursorBitmap := DrawTextToBitmap(_CurrentWindow^.font, newStr, _CurrentWindow^.foreColor, _CurrentWindow^.backgroundColor);
+    _CurrentWindow^.textBitmap := _CurrentWindow^.cursorBitmap;
   end;
   
   procedure InputBackendStartReadingText(textColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
@@ -351,31 +361,30 @@ implementation
   begin
     if not Assigned(dest) then exit;
 
-    if _readingString then
+    if dest^.readingString then
     begin
-      if Assigned(_textBitmap) then
+      if Assigned(dest^.textBitmap) then
       begin
-        sgDriverImages.DrawBitmap(ToBitmapPtr(_textBitmap), _area.x, _area.y, OptionDrawTo(Window(dest)));
+        sgDriverImages.DrawBitmap(ToBitmapPtr(dest^.textBitmap), dest^.area.x, dest^.area.y, OptionDrawTo(Window(dest)));
       end;
     end;
   end;
   
-
-
-  
-  
-  procedure SetText(const text: String);
+  procedure SetText(wind: WindowPtr; const text: String);
   begin
-    _tempString := text;
+    wind^.tempString := text;
     
     //Render a new text surface
-    RenderTextSurface(_tempString);
+    RenderTextSurface(wind, wind^.tempString);
   end;
   
   function InputBackendEndReadingText(): String;
   begin
-    _readingString := false;
-    result := _tempString;
+    result := '';
+    if not Assigned(_CurrentWindow) then exit;
+
+    _CurrentWindow^.readingString := false;
+    result := _CurrentWindow^.tempString;
   end;
   
   function WasAKeyPressed(): Boolean;

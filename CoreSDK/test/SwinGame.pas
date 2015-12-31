@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2015-12-27 09:58:45.081052
+// SwinGame.pas was generated on 2015-12-31 14:45:18.039255
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -3718,6 +3718,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Changes the size of the screen.
   procedure ChangeScreenSize(width: Longint; height: Longint); overload;
+
+  // Changes the size of the window.
+  procedure ChangeWindowSize(name: String; width: Longint; height: Longint); overload;
+
+  // Changes the size of the window.
+  procedure ChangeWindowSize(wind: Window; width: Longint; height: Longint); overload;
 
   // Close a window.
   procedure CloseWindow(wind: Window); overload;
@@ -8929,6 +8935,16 @@ implementation
   procedure ChangeScreenSize(width: Longint; height: Longint); overload;
   begin
     sgWindowManager.ChangeScreenSize(width,height);
+  end;
+
+  procedure ChangeWindowSize(name: String; width: Longint; height: Longint); overload;
+  begin
+    sgWindowManager.ChangeWindowSize(name,width,height);
+  end;
+
+  procedure ChangeWindowSize(wind: Window; width: Longint; height: Longint); overload;
+  begin
+    sgWindowManager.ChangeWindowSize(wind,width,height);
   end;
 
   procedure CloseWindow(wind: Window); overload;
