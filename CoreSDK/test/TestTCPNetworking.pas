@@ -1,4 +1,4 @@
-program TestSDL_NetServer;
+program TestTCPNetworking;
 uses
   sgNetworking, sgTypes, sgUtils, sgDriverSDL2Types;
 
@@ -33,7 +33,8 @@ var
       while HasMessages(lConA) do
       begin
         msg := ReadMessage(lConA);
-        WriteLn(' -> ', msg.data, ' from ', MessageHost(msg), ':', MessagePort(msg));
+        WriteLn(' -> ', MessageData(msg), ' from ', MessageHost(msg), ':', MessagePort(msg));
+        CloseMessage(msg);
       end;
 
       WriteLn(' Reading messages received for ToSvr client');
@@ -41,7 +42,8 @@ var
       while HasMessages('ToSvr') do
       begin
         msg := ReadMessage('ToSvr');
-        WriteLn(' -> ', msg.data, ' from ', MessageHost(msg), ':', MessagePort(msg));
+        WriteLn(' -> ', MessageData(msg), ' from ', MessageHost(msg), ':', MessagePort(msg));
+        CloseMessage(msg);
       end;
 
       WriteLn(' Reading messages received for server');
@@ -181,7 +183,6 @@ begin
   WriteLn('Close all');
   CloseAllConnections();
   CloseAllServers();
-  Pause();
 end;
 
 begin

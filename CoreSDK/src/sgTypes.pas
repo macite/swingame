@@ -132,8 +132,8 @@ interface
     //   zAxis: Longint;
     // end;
 
-    /// @struct Wnd
-    Wnd = record end;
+    /// @ignore
+    WndIR = record end;
 
     /// The Window type is used to refer to a window that you have opened
     /// in SwinGame. You create new Windows using `OpenWindow` and they can 
@@ -142,7 +142,7 @@ interface
     /// @class Window
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Window = ^Wnd;
+    Window = ^WndIR;
     
     /// The `SoundEffect` type is used to refer to sound effects that can be
     /// played by the SwinGame audio code. Sound effects are loaded with
@@ -230,8 +230,8 @@ interface
     /// @field pointer: pointer
     Animation = Pointer;
     
-    /// @struct Bmp
-    Bmp = record end;
+    /// @ignore
+    BmpIR = record end;
 
     /// The bitmap type is a pointer to a BitmapData. The BitmapData record
     /// contains the data used by the SwinGame API to represent
@@ -243,7 +243,7 @@ interface
     /// @class Bitmap
     /// @pointer_wrapper
     /// @field pointer: pointer
-    Bitmap = ^Bmp;
+    Bitmap = ^BmpIR;
     
     /// Determines the effect of the camera on a drawing operation.
     /// `DrawToScreen` means camera has no affect.
@@ -653,6 +653,64 @@ interface
     /// @pointer_wrapper
     /// @field pointer : Pointer
     ArduinoDevice = Pointer;
+
+    /// @enum ConnectionType
+    ConnectionType = (
+      TCP,
+      UDP,
+      UnknownConnection
+    );
+
+    /// @enum HttpMethod
+    HttpMethod = (
+      HTTP_GET,
+      HTTP_POST,
+      HTTP_PUT,
+      HTTP_DELETE
+    );
+
+    /// @ignore
+    HREQIR = record end;
+    /// @ignore
+    HRESPIR = record end;
+
+    /// @class HttpRequest
+    /// @pointer_wrapper
+    /// @field pointer : Pointer
+    HttpRequest = ^HREQIR;
+
+    /// @class HttpResponse
+    /// @pointer_wrapper
+    /// @field pointer : Pointer
+    HttpResponse = ^HRESPIR;
+
+    /// @ignore
+    CONIR = record end;
+    /// @ignore
+    MSGIR = record end;
+    /// @ignore
+    SVRRIR = record end;
+
+    /// The Pointer to ConnectionData
+    ///
+    /// @class Connection
+    /// @pointer_wrapper
+    /// @field pointer : Pointer
+    Connection  = ^CONIR;
+
+    /// You can use the networking code to send
+    /// Messages between programs over the network.
+    ///
+    /// @struct Message
+    /// @via_pointer
+    /// @field pointer : Pointer
+    Message = ^MSGIR;
+    
+    /// @class ServerSocket
+    /// @pointer_wrapper
+    /// @field pointer : Pointer
+    ServerSocket = ^SVRRIR;
+
 
     
 //=============================================================================

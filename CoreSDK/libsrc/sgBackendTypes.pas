@@ -27,6 +27,12 @@ uses sgTypes, sgDriverSDL2Types;
     TIMER_PTR = 'TIMR';
     FONT_PTR = 'FONT';
     WINDOW_PTR = 'WIND';
+    HTTP_HEADER_PTR = 'HHDR';
+    HTTP_REQUEST_PTR = 'HREQ';
+    HTTP_RESPONSE_PTR = 'HRES';
+    CONNECTION_PTR = 'CONP';
+    MESSAGE_PTR = 'MSGP';
+    SERVER_SOCKET_PTR = 'SVRS';
     NONE_PTR = 'NONE'; // done after clear
 
 
@@ -447,6 +453,78 @@ uses sgTypes, sgDriverSDL2Types;
       id : PointerIdentifier;
     end;
 
+    ConnectionPtr = ^ConnectionData;
+    MessagePtr = ^MessageData;
+    ServerSocketPtr = ^ServerData;
+
+    HttpResponsePtr = ^HttpResponseData;
+
+    HttpHeaderData = record
+      name : String;
+      value: String;
+    end;
+
+    HttpRequestData = packed record
+      id         : PointerIdentifier;
+      requestType: HttpMethod;
+      url        : String;
+      version    : String;
+      headername : StringArray;
+      headervalue: StringArray;
+      body       : String;
+    end;
+
+    HttpResponseData = record
+      id        : PointerIdentifier;
+      protocol  : String;  //eg: HTTP/1.1
+      status    : LongInt;   //eg: 200
+      statusText: String; //eg: OK
+      headers   : array of HttpHeaderData;
+      body      : array of Byte;
+    end;
+
+    MessageData = packed record
+      id        : PointerIdentifier;
+      data      : String;
+      protocol  : ConnectionType;
+      
+      //TCP has a
+      connection: ^ConnectionData;
+
+      //UDP is from
+      host      : String;
+      port      : Word;
+    end;  
+
+    ConnectionData = packed record
+      id              : PointerIdentifier;
+      name            : String;
+      socket          : sg_network_connection;
+      ip              : LongWord;
+      port            : LongInt;
+      open            : Boolean;
+      protocol        : ConnectionType;
+      stringIP        : String;   //Allow for Reconnection
+      messages        : array of MessageData;
+
+      msgLen          : LongInt;  // This data is used to handle splitting of messages
+      partMsgData     : String;   //   over multiple packets
+    end;
+
+    /// @struct ServerData
+    /// @via_pointer
+    ServerData = packed record
+      id              : PointerIdentifier;
+      name            : String;
+      socket          : sg_network_connection; // socket used to accept connections
+      port            : Word;
+      newConnections  : LongInt; // the number of new connections -- reset on new scan for connections
+      protocol        : ConnectionType;
+      connections     : array of ConnectionPtr; // TCP connections
+      messages        : array of MessageData; // UDP messages
+    end;
+
+
   function PtrKind(p: Pointer): PointerIdentifier;
 
   function ToSoundEffectPtr(s: SoundEffect): SoundEffectPtr;
@@ -461,6 +539,10 @@ uses sgTypes, sgDriverSDL2Types;
   function ToTimerPtr(t: Timer): TimerPtr;
   function ToFontPtr(f: Font): FontPtr;
   function ToWindowPtr(w: Window): WindowPtr;
+  function ToConnectionPtr(c: Connection): ConnectionPtr;
+  function ToServerSocketPtr(c: ServerSocket): ServerSocketPtr;
+  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  function ToMessagePtr(c: Message): MessagePtr;
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;
 
@@ -597,6 +679,47 @@ uses sgShared;
       result := nil;
     end;
   end;
+
+  function ToConnectionPtr(c: Connection): ConnectionPtr;
+  begin
+    result := ConnectionPtr(c);
+    if Assigned(result) and (result^.id <> CONNECTION_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Connection that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToServerSocketPtr(c: ServerSocket): ServerSocketPtr;
+  begin
+    result := ServerSocketPtr(c);
+    if Assigned(result) and (result^.id <> SERVER_SOCKET_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Server Socket that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToMessagePtr(c: Message): MessagePtr;
+  begin
+    result := MessagePtr(c);
+    if Assigned(result) and (result^.id <> MESSAGE_PTR) then
+    begin
+      RaiseWarning('Attempted to access a Message that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
+  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  begin
+    result := HttpResponsePtr(c);
+    if Assigned(result) and (result^.id <> HTTP_RESPONSE_PTR) then
+    begin
+      RaiseWarning('Attempted to access a HTTP Response that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
+
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;
   var
