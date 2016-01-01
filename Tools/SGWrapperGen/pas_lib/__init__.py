@@ -39,9 +39,6 @@ _type_switcher = {
     'boolean': 'Boolean',
     'keycode': 'KeyCode',
 
-    'wnd': 'Wnd',
-    'bmp':'Bmp',
-    
     'linesarray':               'LineSegmentPtr',
     'resolutionarray':          'ResolutionPtr',
     'fingerarray':              'FingerPtr',
@@ -67,7 +64,6 @@ _type_switcher = {
 
     #...
     'shapeprototype': 'ShapePrototype',
-    'character': 'Character',
     'shape': 'Shape',
     
     'shapekind':            'ShapeKind',
@@ -82,20 +78,16 @@ _type_switcher = {
     'soundeffect':          'SoundEffect',
     'music':                'Music',
 
+    'window':               'Window',
+
     'panel':                'Panel',
     'region':               'Region',
-    'guiradiogroup':        'GUIRadioGroup',
-    'guilist':              'GUIList',
-    'guicheckbox':          'GUICheckbox',
-    'guitextbox':           'GUITextbox',
-    'guilabel':             'GUILabel',
-    'guielementkind':       'GUIElementKind',
     'eventkind':            'EventKind',
     'filedialogselecttype': 'FileDialogSelectType',
     'guieventcallback':     'GUIEventCallback',
 
-    'messageptr'        :   'MessagePtr',
     'connection'        :   'Connection',
+    'serversocket'        :   'ServerSocket',
     'arduinodevice'     :   'ArduinoDevice',
 
     'httpheader' : 'HttpHeader',

@@ -30,9 +30,10 @@ class SGFile(object):
     def visit(self, visitor, other):
         visitor(self, other)
     
-    def visit_members(self, visitor, other):
+    def visit_members(self, visitor, other, include_ignored = False):
         for member in self.members:
-            visitor(member, other)
+            if ((not member.is_ignored) or include_ignored):
+                visitor(member, other)
     
     def uses_str(self, visitor):
         return '%s;' % ', '.join([ visitor(a_file) for a_file in self.uses ])

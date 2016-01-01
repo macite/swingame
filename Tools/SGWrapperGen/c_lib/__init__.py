@@ -114,6 +114,7 @@ _type_dictionary_creation_data = [
             ('connection',      'connection'),
             ('arduinodevice',   'arduino_device'),
             ('serversocket',    'server_socket'),
+            ('window',          'window'),
 
         ],
         '_type_switcher': {

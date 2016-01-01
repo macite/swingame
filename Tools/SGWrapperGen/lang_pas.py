@@ -238,6 +238,8 @@ def create_pas_code_for_file(the_file, other):
     logger.info('Post Processing %s for PAS signature creation', the_file.name)
     
     for member in the_file.members:
+        if member.is_ignored:
+            continue
         if member.is_class or member.is_struct or member.is_enum or member.is_type:
             # Setup the language data
             member.lang_data['pas'] = LangBasicData(member)

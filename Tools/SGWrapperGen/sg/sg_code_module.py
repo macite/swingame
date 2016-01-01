@@ -247,6 +247,8 @@ class SGCodeModule(SGMetaDataContainer):
             self.is_data_wrapper = the_type.data_wrapper
             self.is_array_wrapper = the_type.array_wrapper
             self.is_fixed_array_wrapper = the_type.fixed_array_wrapper
+        elif the_type.is_ignored:
+            self.is_ignored = True
         else:
             logger.warning('Code Modul: Unknown type kind for %s', self.name)
     
