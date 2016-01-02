@@ -155,28 +155,22 @@ doMacPackage()
     
     echo "  ... Creating Application Bundle"
     
-    macpack -m winforms -n "${GAME_NAME}" -o "${OUT_DIR}" "${OUT_DIR}/${GAME_NAME}.exe"
-    # mkdir "${GAMEAPP_PATH}/Contents/Frameworks"
+    MONO_BUNDLE="${GAMEAPP_PATH}/Contents/MonoBundle"
+
+    mkdir -p "${GAMEAPP_PATH}/Contents/MacOS"
+    mkdir -p "${MONO_BUNDLE}"
+
+    cp "${APP_PATH}/lib/MonoMacLauncher" "${GAMEAPP_PATH}/Contents/MacOS/${GAME_NAME}"
     
-    # echo "  ... Adding Private Frameworks"
-    # cp -R -p "${LIB_DIR}/"*.framework "${GAMEAPP_PATH}/Contents/Frameworks/"
-    # cp -R -p "./lib/SwinGame.dll" "${GAMEAPP_PATH}/Contents/Resources/"
+    cp "${LIB_DIR}/libSGSDK.dylib" "${MONO_BUNDLE}/libSGSDK.dylib"
+    cp -R -p "./lib/SwinGame.dll" "${MONO_BUNDLE}/"
     
-    # pushd . >> /dev/null
-    # cd "${GAMEAPP_PATH}/Contents/Resources"
-    # ln -s ../Frameworks/SGSDK.framework/SGSDK libSGSDK.dylib
-    # ln -s ../Frameworks ./Frameworks #Silly macpac uses ./bin folder
-    # popd >> /dev/null
-    
-    cp "${LIB_DIR}/libSGSDK.dylib" "${GAMEAPP_PATH}/Contents/Resources/libSGSDK.dylib"
-    cp -R -p "./lib/SwinGame.dll" "${GAMEAPP_PATH}/Contents/Resources/"
-    
-    rm -f "${OUT_DIR}/${GAME_NAME}.exe"
+    mv "${OUT_DIR}/${GAME_NAME}.exe" "${MONO_BUNDLE}"
     
     if [ -f "${EXECUTABLE_NAME}.mdb" ]
     then
         echo "  ... Adding Debug Information"
-        mv "${EXECUTABLE_NAME}.mdb" "${PRODUCT_NAME}.app/Contents/Resources"
+        mv "${EXECUTABLE_NAME}.mdb" "${MONO_BUNDLE}"
     fi
     
     echo "  ... Adding Application Information"
@@ -204,6 +198,8 @@ doMacPackage()
             <string>1.0</string>\
             <key>CSResourcesFileMapped</key>\
             <true/>\
+            <key>MonoBundleExecutable</key>\
+            <string>${GAME_NAME}.exe</string>\
     </dict>\
     </plist>" >> "${GAMEAPP_PATH}/Contents/Info.plist"
     
