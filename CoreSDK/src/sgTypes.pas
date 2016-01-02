@@ -669,20 +669,20 @@ interface
       HTTP_DELETE
     );
 
-    /// @ignore
-    HREQIR = record end;
-    /// @ignore
-    HRESPIR = record end;
+    // /// @ignore
+    // HREQIR = record end;
+    // /// @ignore
+    // HRESPIR = record end;
 
-    /// @class HttpRequest
-    /// @pointer_wrapper
-    /// @field pointer : Pointer
-    HttpRequest = ^HREQIR;
+    // /// @class HttpRequest
+    // /// @pointer_wrapper
+    // /// @field pointer : Pointer
+    // HttpRequest = ^HREQIR;
 
-    /// @class HttpResponse
-    /// @pointer_wrapper
-    /// @field pointer : Pointer
-    HttpResponse = ^HRESPIR;
+    // /// @class HttpResponse
+    // /// @pointer_wrapper
+    // /// @field pointer : Pointer
+    // HttpResponse = ^HRESPIR;
 
     /// @ignore
     CONIR = record end;
@@ -701,8 +701,8 @@ interface
     /// You can use the networking code to send
     /// Messages between programs over the network.
     ///
-    /// @struct Message
-    /// @via_pointer
+    /// @class Message
+    /// @pointer_wrapper
     /// @field pointer : Pointer
     Message = ^MSGIR;
     

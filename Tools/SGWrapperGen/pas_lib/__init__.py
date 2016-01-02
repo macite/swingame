@@ -100,6 +100,8 @@ _type_switcher = {
     'message' : 'Message',
     'serversocket': 'ServerSocket',
 
+    'guielementkind': 'GUIElementKind',
+
 }
  
 

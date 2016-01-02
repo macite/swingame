@@ -49,6 +49,9 @@ interface
   /// Close a window.
   ///
   /// @lib
+  ///
+  /// @class Window
+  /// @dispose
   procedure CloseWindow(wind: Window); overload;
 
   /// Is there a window a window with the specified name.
@@ -79,7 +82,7 @@ interface
   ///
   /// @lib SetCurrentWindowNamed
   ///
-  procedure SetCurrentWindow(name: String);
+  procedure SetCurrentWindow(const name: String);
 
 
   ///
@@ -123,7 +126,7 @@ interface
   /// Move the window to a new Position on the screen.
   ///
   /// @lib MoveWindowNamed
-  procedure MoveWindow(name: String; x, y: Longint);
+  procedure MoveWindow(const name: String; x, y: Longint);
 
   /// Returns the Position of the window on the desktop.
   ///
@@ -133,7 +136,7 @@ interface
   /// Returns the Position of the window on the desktop.
   ///
   /// @lib WindowPositionNamed
-  function WindowPosition(name: String): Point2D;
+  function WindowPosition(const name: String): Point2D;
 
   /// Return the x Position of the window -- the distance from the
   /// left side of the primary desktop.
@@ -145,7 +148,7 @@ interface
   /// left side of the primary desktop.
   ///
   /// @lib WindowXNamed
-  function WindowX(name: String): Longint;
+  function WindowX(const name: String): Longint;
 
   /// Return the y Position of the window -- the distance from the
   /// top side of the primary desktop.
@@ -157,7 +160,7 @@ interface
   /// top side of the primary desktop.
   ///
   /// @lib WindowYNamed
-  function WindowY(name: String): Longint;
+  function WindowY(const name: String): Longint;
 
   /// Returns the width of a window.
   ///
@@ -167,7 +170,7 @@ interface
   /// Returns the width of a window.
   ///
   /// @lib WindowWidthNamed
-  function WindowWidth(name: String): Longint;
+  function WindowWidth(const name: String): Longint;
 
   /// Returns the height of a window.
   ///
@@ -177,7 +180,7 @@ interface
   /// Returns the height of a window.
   ///
   /// @lib WindowHeightNamed
-  function WindowHeight(name: String): Longint;
+  function WindowHeight(const name: String): Longint;
 
   /// Changes the size of the screen.
   ///
@@ -204,7 +207,7 @@ interface
   ///
   /// @lib changeWindowSizeNamed
   /// @sn changeWindowSizeOfWindowNamed:%s toWidth:%s height:%s
-  procedure ChangeWindowSize(name: String; width, height: Longint);
+  procedure ChangeWindowSize(const name: String; width, height: Longint);
 
   /// Switches the application to full screen or back from full screen to
   /// windowed.
@@ -384,7 +387,7 @@ var
     if Assigned(w) then _CurrentWindow := w;
   end;
 
-  procedure SetCurrentWindow(name: String);
+  procedure SetCurrentWindow(const name: String);
   begin
     SetCurrentWindow(WindowNamed(name));
   end;
@@ -451,7 +454,7 @@ var
       result := PointAt(0,0);
   end;
 
-  function WindowPosition(name: String): Point2D;
+  function WindowPosition(const name: String): Point2D;
   begin
     result := WindowPosition(WindowNamed(name));
   end;
@@ -461,7 +464,7 @@ var
     result := Round(WindowPosition(wind).x);
   end;
 
-  function WindowX(name: String): Longint;
+  function WindowX(const name: String): Longint;
   begin
     result := Round(WindowPosition(name).x);
   end;
@@ -471,12 +474,12 @@ var
     result := Round(WindowPosition(wind).y);
   end;
 
-  function WindowY(name: String): Longint;
+  function WindowY(const name: String): Longint;
   begin
     result := Round(WindowPosition(name).y);
   end;
 
-  procedure MoveWindow(name: String; x, y: Longint);
+  procedure MoveWindow(const name: String; x, y: Longint);
   begin
     MoveWindow(WindowNamed(name), x, y);
   end;
@@ -508,7 +511,7 @@ var
     sgDriverGraphics.ResizeWindow(wp, width, height);
   end;
 
-  procedure ChangeWindowSize(name: String; width, height: Longint);
+  procedure ChangeWindowSize(const name: String; width, height: Longint);
   begin
     ChangeWindowSize(WindowNamed(name), width, height);
   end;
@@ -529,7 +532,7 @@ var
     else result := w^.image.surface.width;
   end;
 
-  function WindowWidth(name: String): Longint;
+  function WindowWidth(const name: String): Longint;
   begin
     result := WindowWidth(WindowNamed(name));
   end;
@@ -543,7 +546,7 @@ var
     else result := w^.image.surface.height;
   end;
 
-  function WindowHeight(name: String): Longint;
+  function WindowHeight(const name: String): Longint;
   begin
     result := WindowHeight(WindowNamed(name));
   end;

@@ -36,7 +36,11 @@ namespace SwinGameSDK
         GUITextbox,           
         GUILabel,
         Connection,
+        ServerSocket,
         ArduinoDevice,
+        Window,
+        Message,
+        HttpRequest,
         Copy,
 		
     }

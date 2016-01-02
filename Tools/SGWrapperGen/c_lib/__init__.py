@@ -115,7 +115,7 @@ _type_dictionary_creation_data = [
             ('arduinodevice',   'arduino_device'),
             ('serversocket',    'server_socket'),
             ('window',          'window'),
-
+            ('message',         'message'),
         ],
         '_type_switcher': {
             None:       '#2# ',
@@ -162,7 +162,6 @@ _type_dictionary_creation_data = [
           ('region',          'region'),
           ('httpheader',      'http_header'),
           ('httprequest',     'http_request'),
-          ('message',         'message'),
           ('httpresponse',    'http_response'),
       ],
       '_type_switcher': {
@@ -301,6 +300,8 @@ _type_dictionary_creation_data = [
             ('bitmapcell',          'bitmap_cell'),
             ('guilistitem',         'guilist_item'),
             ('drawingoptions',      'drawing_options'),
+            ('quad',                'quad'),
+            ('resolution',          'resolution'),
         ],
         '_type_switcher': {
             None:       '#2# ', #used for _byval methods
@@ -385,6 +386,7 @@ _type_dictionary_creation_data = [
           
             ('point2d[0..2]',                           'point2d %s[3]'),
             ('single[0..2][0..2]',                      'float %s[3][3]'),
+            ('point2d[0..3]',                           'point2d %s[4]'),
             
             ('pttf_font',                               'void *'),
             ('pmix_chunk',                              'void *'),

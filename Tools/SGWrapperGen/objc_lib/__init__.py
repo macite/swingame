@@ -52,8 +52,6 @@ _type_switcher = {
         'point2darray':     'NSArray *',
         'shapearray':       'NSArray *',
         
-        'pointer': 'id',
-        
         'color': 'color',
         
         #function pointers
@@ -408,6 +406,33 @@ local_variable_switcher = {
 # dictionaries in a consistent manner
 #
 _type_dictionary_creation_data = [
+    #void pointer in structs
+    {
+        # List of Types, 
+        'identifiers':  [   
+                ('pointer', 'id' ),
+            ],
+        '_type_switcher': {
+                None:       '#2#',
+                # 'const':    '',
+                # 'var':      '#2# *',
+                # 'out':      '',
+                'return':   '#2# ',
+            },
+        '_data_switcher': {
+                # 'return_val': '[#2# createWithId:%s]',
+                # 'arg_val':  '',
+                # 'arg_lit_val': '',
+            },
+        'local_variable_switcher': {
+                # 'declare': '#2# *%(var)s;\n    ',
+                # 'length-of': '',
+                # 'initialise-param': '',
+                # 'process-param': '',
+                # 'process-out-param': '',
+                # 'process-result': '\n    return %(var)s;',
+            },
+    },
     #pointer types
     {
         # List of Types, 
@@ -425,6 +450,7 @@ _type_dictionary_creation_data = [
                 ('connection',      'SGConnection'      ),
                 ('arduinodevice',   'SGArduinoDevice'   ),
                 ('serversocket',    'SGServerSocket'),
+                ('window',          'SGWindow'),
             ],
         '_type_switcher': {
                 None:       '#2# *',
@@ -478,6 +504,8 @@ _type_dictionary_creation_data = [
     {
         'identifiers': [
                 # type key, objc name, prefix for switching, c-type, post-fix for switching
+                ('quad', 'SGQuad', 'quad', 'quad', 'Quad'),
+                ('resolution', 'SGResolution', 'resolution', 'resolution', 'Resolution'),
                 ('bitmapcell', 'SGBitmapCell', 'bitmapCell', 'bitmap_cell', 'BitmapCell'),
                 ('rectangle', 'SGRectangle', 'rectangle', 'rectangle', 'Rectangle'),
                 ('triangle', 'SGTriangle', 'triangle', 'triangle', 'Triangle'),

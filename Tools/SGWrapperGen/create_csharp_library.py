@@ -49,6 +49,44 @@ _pointer_wrapper_class_header = ''
 _no_free_pointer_wrapper_class_header = ''
 
 _fixed_properties = {
+        "Quad" : {
+            "points": """
+internal fixed float _points[8];
+public Point2D[] Points
+{
+    get
+    {
+        Point2D[] result = new Point2D[4];
+        unsafe
+        {
+            fixed (float *p = _points)
+            {
+                for(int i = 0; i < 4; i++)
+                {
+                    result[i]._x = p[i * 2];
+                    result[i]._y = p[i * 2 + 1];
+                }
+            }
+        }
+        return result;
+    }
+    set
+    {
+        unsafe
+        {
+            fixed (float *p = _points)
+            {
+                for(int i = 0; i < (4 > value.Length ? value.Length : 4); i++)
+                {
+                    p[i * 2] = value[i]._x;
+                    p[i * 2 + 1] = value[i]._y;
+                }
+            }
+        }        
+    }
+}
+"""
+    },  #end Quad
         "Triangle" : {
             "points": """
 internal fixed float _points[6];
@@ -152,13 +190,10 @@ _type_switcher = {
         'guicheckbox':          'GUICheckbox %s',
         'guitextbox':           'GUITextbox %s',
         'guilabel':             'GUILabel %s',
-        'connection':           'Connection %s',
         'arduinodevice':        'ArduinoDevice %s',
-        'serversocket':         'ServerSocket %s',
         
         
         'bitmap': 'Bitmap %s',
-        'pointer': 'IntPtr %s',
         'single[0..2][0..2]': 'float %s[3][3]',
         # '^bitmapdata': 'BitmapData *%s',
         # '^spritedata': 'SpriteData *%s',
@@ -169,7 +204,6 @@ _type_switcher = {
         'longint[0..n - 1]': 'int[] %s',
         'vector': 'Vector %s',
         'point2d': 'Point2D %s',
-        'point2d[0..2]': 'Point2D %s[3]',
         'point2d[0..n - 1]': 'Point2D[] %s',
         'linesegment': 'LineSegment %s',
         
@@ -188,10 +222,7 @@ _type_switcher = {
         'maptile': 'MapTile %s',
         'circle': 'Circle %s',
         'point2darray': 'Point2D[] %s',
-        
-        'messageptr':          'void *%s',
-
-        
+                
         #Functions
         'freenotifier': 'FreeNotifier %s',
         'spriteeventhandler':   'SpriteEventHandler %s',
@@ -243,10 +274,7 @@ _type_switcher = {
         'guicheckbox':              'GUICheckbox %s',
         'guitextbox':              'GUITextbox %s',
         'guilabel':              'GUILabel %s',
-        'connection':           'Connection %s', 
         'arduinodevice':        'ArduinoDevice %s',
-        'serversocket':         'ServerSocket %s',
-        'httprequest':          'HttpRequest %s',
 
         'string':       'ref string %s',
         'rectangle':    'ref Rectangle %s',
@@ -279,7 +307,6 @@ _type_switcher = {
         'matrix2d':         'Matrix2D %s',
         'bitmapcell':       'BitmapCell %s',
         'directionangles':  'DirectionAngles %s',
-        'serversocket':     'ServerSocket %s',
         'drawingoptions':   'DrawingOptions %s',
         
         #Resources
@@ -302,7 +329,6 @@ _type_switcher = {
         'guicheckbox':   'GUICheckbox %s',
         'guitextbox':    'GUITextbox %s',
         'guilabel':      'GUILabel %s',
-        'connection':   'Connection %s',  
         'arduinodevice':        'ArduinoDevice %s',
         
         #Arrays
@@ -361,7 +387,6 @@ _data_switcher = {
         'guicheckbox':              'GUICheckbox.Create( %s)',
         'guitextbox':              'GUITextbox.Create( %s)',
         'guilabel':              'GUILabel.Create( %s)',
-        'connection':           'Connection.Create(%s)',  
         'arduinodevice':        'ArduinoDevice.Create(%s)',        
     },
     #Argument with a parameter value
@@ -409,9 +434,7 @@ _adapter_type_switcher = {
         'guicheckbox':          'IntPtr %s',
         'guitextbox':           'IntPtr %s',
         'guilabel':             'IntPtr %s',        
-        'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
-        'serversocket':         'IntPtr %s',
         
         #Structs
         'triangle':     'Triangle %s',
@@ -464,11 +487,7 @@ _adapter_type_switcher = {
         'guicheckbox':          'IntPtr %s',
         'guitextbox':           'IntPtr %s',
         'guilabel':             'IntPtr %s',    
-        'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
-
-        'serversocket':         'IntPtr %s',
-        
               
         'bitmap': 'IntPtr %s',
         
@@ -567,9 +586,7 @@ _adapter_type_switcher = {
         'guicheckbox':          'ref IntPtr %s',
         'guitextbox':           'ref IntPtr %s',
         'guilabel':             'ref IntPtr %s',    
-        'connection':           'ref IntPtr %s',  
         'arduinodevice':        'ref IntPtr %s',
-        'serversocket':         'ref IntPtr %s',
         
         
         'string':               'StringBuilder %s',
@@ -599,9 +616,7 @@ _adapter_type_switcher = {
         'guicheckbox':          'ref IntPtr %s',
         'guitextbox':           'ref IntPtr %s',
         'guilabel':             'ref IntPtr %s',    
-        'connection':           'ref IntPtr %s',  
         'arduinodevice':        'ref IntPtr %s',
-        'serversocket':         'ref IntPtr %s',
                       
         'string':               '[MarshalAs(UnmanagedType.LPStr), In, Out] StringBuilder %s',
         
@@ -673,9 +688,7 @@ _adapter_type_switcher = {
         'guicheckbox':          'IntPtr %s',
         'guitextbox':           'IntPtr %s',
         'guilabel':             'IntPtr %s',    
-        'connection':           'IntPtr %s',  
         'arduinodevice':        'IntPtr %s',
-        'serversocket':         'IntPtr %s',
 
         'drawingoptions':       'DrawingOptions %s',
         
@@ -734,8 +747,8 @@ _struct_type_switcher = {
     'single[0..2][0..2]': '[ MarshalAs( UnmanagedType.ByValArray, SizeConst=9 )]\ninternal fixed float _%s[9]',
     'single[0..2][0..2] property': 'internal float[,] _%s',
 
-    'point2d[0..2]': '[ MarshalAs( UnmanagedType.ByValArray, SizeConst=3 )]\ninternal fixed Point2D _%s[3]',
     'point2d[0..2] property': 'internal Point2D[] _%s',
+    'point2d[0..3] property': 'internal Point2D[] _%s',
     
     'linesegment': 'internal LineSegment _%s',
 
@@ -770,6 +783,7 @@ _other = {
 _type_dicts = {
     '_type_switcher': _type_switcher, 
     '_adapter_type_switcher': _adapter_type_switcher,
+    '_data_switcher': _data_switcher,
     '_other': _other,
 }
 
@@ -818,12 +832,62 @@ _type_dictionary_creation_data = [
             '_struct_type_switcher': 'internal #2# _%s',
         }
     },
+    # Fixed size arrays
+    {
+        'identifiers': [
+            ('point2d[0..3]',       'Point2D',  '[4]', '4'),
+            ('point2d[0..2]',       'Point2D',  '[3]', '3'),
+        ],
+        '_type_switcher': {
+            None:       '#2# %s#3#',
+        },
+        '_data_switcher': {
+        },
+        '_adapter_type_switcher': {
+        },
+        '_other': {
+            '_struct_type_switcher': '[ MarshalAs( UnmanagedType.ByValArray, SizeConst=#4# )]\ninternal fixed Point2D _%s#3#',
+        }
+    },
     # objects -- records accessed via pointer
     {
          'identifiers': [
-            ('connection', 'Connection')
+            ('serversocket',    'ServerSocket'),
+            ('connection',      'Connection'),
+            ('window',          'Window'),
+            ('httprequest',     'HttpRequest'),
+            ('httpresponse',    'HttpResponse'),
+            ('message',         'Message'),
         ],
         '_type_switcher': {
+            None:           '#2# %s',
+            'var':          '#2# %s',
+            'return':       '#2# %s',
+        },
+        '_data_switcher': {
+            'return_val':   '#2#.Create(%s)',
+        },
+        '_adapter_type_switcher': {
+            None:       'IntPtr %s',
+            'return':   'IntPtr %s',
+            'var':      'ref IntPtr %s',   
+            'lib_':     'IntPtr %s',
+            'lib_var':  'ref IntPtr %s',
+        },
+        '_other': {
+            '_struct_type_switcher': 'internal #2# _%s'
+        }
+    },
+    # pointer -- unknown pointer
+    {
+         'identifiers': [
+            ('pointer', 'IntPtr'),
+        ],
+        '_type_switcher': {
+            None: '#2# %s',
+            'return': '#2# %s',
+        },
+        '_data_switcher': {
         },
         '_adapter_type_switcher': {
         },
@@ -834,13 +898,16 @@ _type_dictionary_creation_data = [
     # structs/records
     {
         'identifiers': [
-            ('httprequest',     'HttpRequest'),
-            ('httpresponse',    'HttpResponse'),
-            ('message',         'Message'),
+            ('quad',        'Quad'),
+            ('resolution',  'Resolution'),
         ],
         '_type_switcher': {
+            'var':      'ref #2# %s',
             'const':    '#2# %s',
             'return':   '#2# %s',
+        },
+        '_data_switcher': {
+
         },
         '_adapter_type_switcher': {
             'lib_var':  'ref #2# %s',
@@ -888,8 +955,8 @@ _type_dictionary_creation_data = [
 
         },
         '_adapter_type_switcher': {
-            None:       '#2# %s',
-            'lib_':     '#2# %s',
+            None:       'int %s',
+            'lib_':     'int %s',
             # 'const':    '',
             # 'lib_const':    '',
             # 'var':      'ref #3# %s',
@@ -898,7 +965,7 @@ _type_dictionary_creation_data = [
             # 'lib_out':  '[Out] out #3# %s',
             # 'result':   '',
             # 'lib_result':   '',
-            'return':   '#2# %s',
+            'return':   'int %s',
         },
         '_other': {
             '_struct_type_switcher': 'internal #2# _%s',
@@ -914,6 +981,7 @@ def _add_to_dict(into_dict, details_dict, ident_tupple):
         to_ins = val
         for idx,part in enumerate(ident_tupple):
             to_ins = to_ins.replace('#%d#' % (idx + 1), ident_tupple[idx] if not ident_tupple[idx] is None else '')
+
         # print 'inserting -> ', key, ':', to_ins
         
         if  ident_tupple[0] in into_dict[key]:
@@ -928,7 +996,7 @@ def build_type_dictionary(type_dictionary_creation_data, dicts):
     my_keys = dicts.keys()
     
     for type_mapping in type_dictionary_creation_data:
-        #print type_mapping
+        # print type_mapping
         # Process each type in this type mapping
         for identifier_tupple in type_mapping['identifiers']:
             for a_key in my_keys:
@@ -1623,7 +1691,7 @@ def write_cs_type_for(member, other):
     if member.is_class:
         #convert to resource pointer
         if member.is_pointer_wrapper:
-            print member, member.fields
+            # print member, member.fields
             assert len(member.fields) == 1
             
             write_sg_class(member, other)
@@ -1676,6 +1744,8 @@ def write_cs_lib_module(the_file):
 
     #process all types first so they appear at the top of the header files
     for member in the_file.members:
+        if member.is_ignored:
+            continue
         if member.is_module or member.is_header or (member.is_type and not member.data_type.is_procedure):
             pass
         elif member.is_class or member.is_struct or member.is_enum or member.data_type.is_procedure:

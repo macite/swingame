@@ -139,7 +139,7 @@ interface
     ///
     /// @class AnimationScript
     /// @getter AnimationCount
-    function AnimationCount(script: animationScript): Integer;
+    function AnimationCount(script: animationScript): Longint;
     
     
 //----------------------------------------------------------------------------
@@ -1073,7 +1073,7 @@ begin
     {$ENDIF}
 end;
 
-function AnimationCount(script: animationScript): Integer;
+function AnimationCount(script: animationScript): Longint;
 var
     a: AnimationScriptPtr;
 begin

@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2016-01-02 10:34:03.935549
+// SwinGame.pas was generated on 2016-01-02 12:18:09.318669
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -97,14 +97,6 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type HttpMethod = sgTypes.HttpMethod;
 
-  type HREQIR = sgTypes.HREQIR;
-
-  type HRESPIR = sgTypes.HRESPIR;
-
-  type HttpRequest = sgTypes.HttpRequest;
-
-  type HttpResponse = sgTypes.HttpResponse;
-
   type CONIR = sgTypes.CONIR;
 
   type MSGIR = sgTypes.MSGIR;
@@ -118,7 +110,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   type ServerSocket = sgTypes.ServerSocket;
 
   // Returns the number of Animations within an Animation Script.
-  function AnimationCount(script: AnimationScript): Integer; overload;
+  function AnimationCount(script: AnimationScript): Longint; overload;
 
   // Returns the current cell (the part of the image or sprite) of this animation.
   // This can be used to animate an image or sprite.
@@ -1018,7 +1010,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ScaleRotateTranslateMatrix(const scale: Point2D; deg: Single; const translate: Point2D): Matrix2D; overload;
 
   // Change the location of a point on a Quad.
-  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2D); overload;
+  procedure SetQuadPoint(var q: Quad; idx: Longint; value: Point2D); overload;
 
   // Returns the sine of the passed in angle (in degrees).
   function Sine(angle: Single): Single; overload;
@@ -2273,6 +2265,12 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Converts an Integer to a Hex value and returns it as a string.
   function DecToHex(aDec: Longword): String; overload;
 
+  // Closes the connection and frees resources.
+  procedure FreeConnection(var aConnection: Connection); overload;
+
+  // Frees the server.
+  procedure FreeServer(var svr: ServerSocket); overload;
+
   // Checks if any messages have been received for any open connections. 
   // Messages received are added to the connection they were received from.
   function HasMessages(): Boolean; overload;
@@ -2319,7 +2317,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function LastConnection(const name: String): Connection; overload;
 
   // Gets the connection used to send the message (TCP only).
-  function MessageConnection(const msg: Message): Connection; overload;
+  function MessageConnection(msg: Message): Connection; overload;
 
   // Gets the number of messages waiting to be read from this connection
   function MessageCount(aConnection: Connection): Longint; overload;
@@ -2331,16 +2329,16 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function MessageCount(svr: ServerSocket): Longint; overload;
 
   // Gets the data from a Message. This will be a string.
-  function MessageData(const msg: Message): String; overload;
+  function MessageData(msg: Message): String; overload;
 
   // Gets the host that sent the message.
-  function MessageHost(const msg: Message): String; overload;
+  function MessageHost(msg: Message): String; overload;
 
   // Gets the port that the host sent the message from.
-  function MessagePort(const msg: Message): Word; overload;
+  function MessagePort(msg: Message): Word; overload;
 
   // Gets the protocol that was used to send the Message.
-  function MessageProtocol(const msg: Message): ConnectionType; overload;
+  function MessageProtocol(msg: Message): ConnectionType; overload;
 
   // Returns the caller's IP.
   function MyIP(): String; overload;
@@ -3998,7 +3996,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ChangeScreenSize(width: Longint; height: Longint); overload;
 
   // Changes the size of the window.
-  procedure ChangeWindowSize(name: String; width: Longint; height: Longint); overload;
+  procedure ChangeWindowSize(const name: String; width: Longint; height: Longint); overload;
 
   // Changes the size of the window.
   procedure ChangeWindowSize(wind: Window; width: Longint; height: Longint); overload;
@@ -4013,10 +4011,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function HasWindow(const name: String): Boolean; overload;
 
   // Move the window to a new Position on the screen.
-  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
+  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
 
   // Move the window to a new Position on the screen.
-  procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
+  procedure MoveWindow(const name: String; x: Longint; y: Longint); overload;
 
   // Opens the window so that it can be drawn onto and used to respond to user
   // actions. The window itself is only drawn when you call `RefreshScreen`. 
@@ -4039,7 +4037,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function ScreenWidth(): Longint; overload;
 
   // 
-  procedure SetCurrentWindow(name: String); overload;
+  procedure SetCurrentWindow(const name: String); overload;
 
   // 
   procedure SetCurrentWindow(wnd: Window); overload;
@@ -4072,10 +4070,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function WindowCount(): Longint; overload;
 
   // Returns the height of a window.
-  function WindowHeight(name: String): Longint; overload;
+  function WindowHeight(wind: Window): Longint; overload;
 
   // Returns the height of a window.
-  function WindowHeight(wind: Window): Longint; overload;
+  function WindowHeight(const name: String): Longint; overload;
 
   // Get the window with the speficied name.
   function WindowNamed(const name: String): Window; overload;
@@ -4084,13 +4082,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function WindowPosition(wind: Window): Point2D; overload;
 
   // Returns the Position of the window on the desktop.
-  function WindowPosition(name: String): Point2D; overload;
+  function WindowPosition(const name: String): Point2D; overload;
 
   // Returns the width of a window.
   function WindowWidth(wind: Window): Longint; overload;
 
   // Returns the width of a window.
-  function WindowWidth(name: String): Longint; overload;
+  function WindowWidth(const name: String): Longint; overload;
 
   // Returns the window that the user has focused on.
   function WindowWithFocus(): Window; overload;
@@ -4101,11 +4099,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Return the x Position of the window -- the distance from the
   // left side of the primary desktop.
-  function WindowX(name: String): Longint; overload;
+  function WindowX(const name: String): Longint; overload;
 
   // Return the y Position of the window -- the distance from the
   // top side of the primary desktop.
-  function WindowY(name: String): Longint; overload;
+  function WindowY(const name: String): Longint; overload;
 
   // Return the y Position of the window -- the distance from the
   // top side of the primary desktop.
@@ -4120,7 +4118,7 @@ implementation
 	begin
 	end;
 
-  function AnimationCount(script: AnimationScript): Integer; overload;
+  function AnimationCount(script: AnimationScript): Longint; overload;
   begin
     result := sgAnimations.AnimationCount(script);
   end;
@@ -5245,7 +5243,7 @@ implementation
     result := sgGeometry.ScaleRotateTranslateMatrix(scale,deg,translate);
   end;
 
-  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2D); overload;
+  procedure SetQuadPoint(var q: Quad; idx: Longint; value: Point2D); overload;
   begin
     sgGeometry.SetQuadPoint(q,idx,value);
   end;
@@ -7130,6 +7128,16 @@ implementation
     result := sgNetworking.DecToHex(aDec);
   end;
 
+  procedure FreeConnection(var aConnection: Connection); overload;
+  begin
+    sgNetworking.FreeConnection(aConnection);
+  end;
+
+  procedure FreeServer(var svr: ServerSocket); overload;
+  begin
+    sgNetworking.FreeServer(svr);
+  end;
+
   function HasMessages(): Boolean; overload;
   begin
     result := sgNetworking.HasMessages();
@@ -7185,7 +7193,7 @@ implementation
     result := sgNetworking.LastConnection(name);
   end;
 
-  function MessageConnection(const msg: Message): Connection; overload;
+  function MessageConnection(msg: Message): Connection; overload;
   begin
     result := sgNetworking.MessageConnection(msg);
   end;
@@ -7205,22 +7213,22 @@ implementation
     result := sgNetworking.MessageCount(svr);
   end;
 
-  function MessageData(const msg: Message): String; overload;
+  function MessageData(msg: Message): String; overload;
   begin
     result := sgNetworking.MessageData(msg);
   end;
 
-  function MessageHost(const msg: Message): String; overload;
+  function MessageHost(msg: Message): String; overload;
   begin
     result := sgNetworking.MessageHost(msg);
   end;
 
-  function MessagePort(const msg: Message): Word; overload;
+  function MessagePort(msg: Message): Word; overload;
   begin
     result := sgNetworking.MessagePort(msg);
   end;
 
-  function MessageProtocol(const msg: Message): ConnectionType; overload;
+  function MessageProtocol(msg: Message): ConnectionType; overload;
   begin
     result := sgNetworking.MessageProtocol(msg);
   end;
@@ -9560,7 +9568,7 @@ implementation
     sgWindowManager.ChangeScreenSize(width,height);
   end;
 
-  procedure ChangeWindowSize(name: String; width: Longint; height: Longint); overload;
+  procedure ChangeWindowSize(const name: String; width: Longint; height: Longint); overload;
   begin
     sgWindowManager.ChangeWindowSize(name,width,height);
   end;
@@ -9585,14 +9593,14 @@ implementation
     result := sgWindowManager.HasWindow(name);
   end;
 
-  procedure MoveWindow(name: String; x: Longint; y: Longint); overload;
-  begin
-    sgWindowManager.MoveWindow(name,x,y);
-  end;
-
   procedure MoveWindow(wind: Window; x: Longint; y: Longint); overload;
   begin
     sgWindowManager.MoveWindow(wind,x,y);
+  end;
+
+  procedure MoveWindow(const name: String; x: Longint; y: Longint); overload;
+  begin
+    sgWindowManager.MoveWindow(name,x,y);
   end;
 
   function OpenWindow(const caption: String; width: Longint; height: Longint): Window; overload;
@@ -9615,7 +9623,7 @@ implementation
     result := sgWindowManager.ScreenWidth();
   end;
 
-  procedure SetCurrentWindow(name: String); overload;
+  procedure SetCurrentWindow(const name: String); overload;
   begin
     sgWindowManager.SetCurrentWindow(name);
   end;
@@ -9655,14 +9663,14 @@ implementation
     result := sgWindowManager.WindowCount();
   end;
 
-  function WindowHeight(name: String): Longint; overload;
-  begin
-    result := sgWindowManager.WindowHeight(name);
-  end;
-
   function WindowHeight(wind: Window): Longint; overload;
   begin
     result := sgWindowManager.WindowHeight(wind);
+  end;
+
+  function WindowHeight(const name: String): Longint; overload;
+  begin
+    result := sgWindowManager.WindowHeight(name);
   end;
 
   function WindowNamed(const name: String): Window; overload;
@@ -9675,7 +9683,7 @@ implementation
     result := sgWindowManager.WindowPosition(wind);
   end;
 
-  function WindowPosition(name: String): Point2D; overload;
+  function WindowPosition(const name: String): Point2D; overload;
   begin
     result := sgWindowManager.WindowPosition(name);
   end;
@@ -9685,7 +9693,7 @@ implementation
     result := sgWindowManager.WindowWidth(wind);
   end;
 
-  function WindowWidth(name: String): Longint; overload;
+  function WindowWidth(const name: String): Longint; overload;
   begin
     result := sgWindowManager.WindowWidth(name);
   end;
@@ -9700,12 +9708,12 @@ implementation
     result := sgWindowManager.WindowX(wind);
   end;
 
-  function WindowX(name: String): Longint; overload;
+  function WindowX(const name: String): Longint; overload;
   begin
     result := sgWindowManager.WindowX(name);
   end;
 
-  function WindowY(name: String): Longint; overload;
+  function WindowY(const name: String): Longint; overload;
   begin
     result := sgWindowManager.WindowY(name);
   end;

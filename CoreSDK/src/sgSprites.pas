@@ -1327,7 +1327,7 @@ interface
   /// @lib
   ///
   /// @class Sprite
-  /// @getter ValueNameAt
+  /// @method ValueNameAt
   function SpriteValueName(s: Sprite; idx: Longint): String; 
   
   /// Returns the sprite's value at the index specified

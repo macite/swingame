@@ -163,6 +163,7 @@ def _do_create_pas_library_code(method):
     
     method_alias = method.alias('pas')
     
+    # print method
     data = method_alias.to_keyed_dict(pas_library_param_visitor, lang_key='pas', arg_visitor = pas_library_arg_visitor)
     
     if method_alias.was_function:

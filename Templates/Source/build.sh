@@ -377,7 +377,7 @@ doMacCompile()
     ARCH="$1"
     LINK_OPTS="$2"
     
-    FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
+    FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework CoreVideo -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
     
     # FRAMEWORKS=`cd ${LIB_DIR};ls -d *.framework | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
 

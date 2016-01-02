@@ -395,7 +395,7 @@ interface
   ///
   /// @lib
   /// @sn quad:%s setPoint:%s to:%s
-  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2d);
+  procedure SetQuadPoint(var q: Quad; idx: Longint; value: Point2d);
 
   /// Returns a rectangle from a given x,y location with a given width
   /// and height.
@@ -4364,7 +4364,7 @@ implementation
   ///
   /// @lib
   /// @sn quad:%s setPoint:%s to:%s
-  procedure SetQuadPoint(var q: Quad; idx: Integer; value: Point2d);
+  procedure SetQuadPoint(var q: Quad; idx: Longint; value: Point2d);
   begin
     if (idx < 0) or (idx > 3) then exit; 
     q.points[idx] := value;

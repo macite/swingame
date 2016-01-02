@@ -185,6 +185,9 @@ uses sgTypes;
   /// used by the message.
   ///
   /// @lib
+  ///
+  /// @class Message
+  /// @dispose
   procedure CloseMessage(msg: Message);
 
   /// This procedure checks for any network activity.
@@ -397,7 +400,7 @@ uses sgTypes;
   ///
   /// @class Message
   /// @getter Data
-  function MessageData(const msg: Message): String;
+  function MessageData(msg: Message): String;
 
   /// Gets the protocol that was used to send the Message.
   ///
@@ -405,7 +408,7 @@ uses sgTypes;
   ///
   /// @class Message
   /// @getter Protocol
-  function MessageProtocol(const msg: Message): ConnectionType;
+  function MessageProtocol(msg: Message): ConnectionType;
 
   /// Gets the connection used to send the message (TCP only).
   ///
@@ -413,7 +416,7 @@ uses sgTypes;
   ///
   /// @class Message
   /// @getter Connection
-  function MessageConnection(const msg: Message): Connection;
+  function MessageConnection(msg: Message): Connection;
 
   /// Gets the host that sent the message.
   ///
@@ -421,7 +424,7 @@ uses sgTypes;
   ///
   /// @class Message
   /// @getter Host
-  function MessageHost(const msg: Message): String;
+  function MessageHost(msg: Message): String;
 
   /// Gets the port that the host sent the message from.
   ///
@@ -429,7 +432,7 @@ uses sgTypes;
   ///
   /// @class Message
   /// @getter Port
-  function MessagePort(const msg: Message): Word;
+  function MessagePort(msg: Message): Word;
 
 
 //----------------------------------------------------------------------------
@@ -492,6 +495,16 @@ uses sgTypes;
   /// @lib CloseServerNamed
   function CloseServer ( const name: String ) : Boolean;
 
+  /// Frees the server.
+  ///
+  /// @lib
+  ///
+  /// @class ServerSocket
+  /// @dispose
+  ///
+  /// @deprecated
+  procedure FreeServer(var svr: ServerSocket);
+
   /// Closes the specified connection.
   ///
   /// @param aConnection  The Connection to close
@@ -501,6 +514,16 @@ uses sgTypes;
   /// @class Connection
   /// @method Close
   function CloseConnection (var aConnection : Connection) : Boolean;
+
+  /// Closes the connection and frees resources.
+  ///
+  /// @deprecated
+  ///
+  /// @class Connection
+  /// @dispose
+  ///
+  /// @lib
+  procedure FreeConnection(var aConnection : Connection);
 
   /// Closes the specified connection.
   ///
@@ -1542,6 +1565,12 @@ var
     svr := nil;
   end;
 
+  procedure FreeServer( var svr: ServerSocket );
+  begin
+    CloseServer(svr);
+  end;
+
+
   function CloseServer ( const name: String ) : Boolean;
   var
     svr: ServerSocket;
@@ -2125,7 +2154,7 @@ var
 // Message methods
 //----------------------------------------------------------------------------
 
-  function MessageData(const msg: MessagePtr): String;
+  function MessageData(msg: MessagePtr): String;
   begin
     if Assigned(msg) then
       result := msg^.data
@@ -2133,12 +2162,12 @@ var
       result := '';
   end;
 
-  function MessageData(const msg: Message): String;
+  function MessageData(msg: Message): String;
   begin
     result := MessageData(ToMessagePtr(msg));
   end;
 
-  function MessageProtocol(const msg: MessagePtr): ConnectionType;
+  function MessageProtocol(msg: MessagePtr): ConnectionType;
   begin
     if Assigned(msg) then
       result := msg^.protocol
@@ -2146,12 +2175,12 @@ var
       result := UnknownConnection;
   end;
 
-  function MessageProtocol(const msg: Message): ConnectionType;
+  function MessageProtocol(msg: Message): ConnectionType;
   begin
     result := MessageProtocol(ToMessagePtr(msg));
   end;
 
-  function MessageConnection(const msg: MessagePtr): ConnectionPtr;
+  function MessageConnection(msg: MessagePtr): ConnectionPtr;
   begin
     if Assigned(msg) then
       result := msg^.connection
@@ -2159,12 +2188,12 @@ var
       result := nil;
   end;
 
-  function MessageConnection(const msg: Message): Connection;
+  function MessageConnection(msg: Message): Connection;
   begin
     result := Connection( MessageConnection(ToMessagePtr(msg)) );
   end;
 
-  function MessageHost(const msg: MessagePtr): String;
+  function MessageHost(msg: MessagePtr): String;
   begin
     if Assigned(msg) then
       result := msg^.host
@@ -2172,12 +2201,12 @@ var
       result := '';
   end;
 
-  function MessageHost(const msg: Message): String;
+  function MessageHost(msg: Message): String;
   begin
     result := MessageHost(ToMessagePtr(msg));
   end;
 
-  function MessagePort(const msg: MessagePtr): Word;
+  function MessagePort(msg: MessagePtr): Word;
   begin
     if Assigned(msg) then
       result := msg^.port
@@ -2185,7 +2214,7 @@ var
       result := 0;
   end;
 
-  function MessagePort(const msg: Message): Word;
+  function MessagePort(msg: Message): Word;
   begin
     result := MessagePort(ToMessagePtr(msg));
   end;
@@ -2230,6 +2259,11 @@ var
   function CloseConnection(var aConnection : Connection) : Boolean;
   begin
     result := CloseConnection(ToConnectionPtr(aConnection));
+  end;
+
+  procedure FreeConnection(var aConnection : Connection);
+  begin
+    CloseConnection(aConnection);
   end;
 
   function CloseConnection(aConnection : ConnectionPtr) : Boolean;

@@ -541,7 +541,7 @@ uses sgTypes, sgDriverSDL2Types;
   function ToWindowPtr(w: Window): WindowPtr;
   function ToConnectionPtr(c: Connection): ConnectionPtr;
   function ToServerSocketPtr(c: ServerSocket): ServerSocketPtr;
-  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  // function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
   function ToMessagePtr(c: Message): MessagePtr;
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;
@@ -710,15 +710,15 @@ uses sgShared;
     end;
   end;
 
-  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
-  begin
-    result := HttpResponsePtr(c);
-    if Assigned(result) and (result^.id <> HTTP_RESPONSE_PTR) then
-    begin
-      RaiseWarning('Attempted to access a HTTP Response that appears to be an invalid pointer');
-      result := nil;
-    end;
-  end;
+  // function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  // begin
+  //   result := HttpResponsePtr(c);
+  //   if Assigned(result) and (result^.id <> HTTP_RESPONSE_PTR) then
+  //   begin
+  //     RaiseWarning('Attempted to access a HTTP Response that appears to be an invalid pointer');
+  //     result := nil;
+  //   end;
+  // end;
 
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;

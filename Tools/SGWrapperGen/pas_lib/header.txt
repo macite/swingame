@@ -6,7 +6,7 @@
 
 
 library %(name)s;
-  uses SysUtils, Strings, sgTrace, sgShared,
+  uses SysUtils, Strings, sgTrace, sgShared, sgBackendTypes,
     %(uses)s
   
   type 
@@ -17,7 +17,7 @@ library %(name)s;
     LineSegmentPtr  = ^LineSegment;
     BitmapPtr       = ^Bitmap;
     TrianglePtr     = ^Triangle;
-    FingerPtr       = ^Finger;
+    //FingerPtr       = ^Finger;
     ResolutionPtr   = ^Resolution;
   
   
@@ -212,17 +212,17 @@ library %(name)s;
     end;
   end;
   
-  procedure FingerCopyToPtr(const arr: FingerArray; len: Longint; data: FingerPtr);
-  var
-    i: Longint;
-  begin
-    if len < Length(arr) then raise Exception.Create('Error in array size to call expected length to be ' + IntToStr(len));
-    
-    for i := Low(arr) to High(arr) do
-    begin
-      (data + i)^ := arr[i];
-    end;
-  end;
+  // procedure FingerCopyToPtr(const arr: FingerArray; len: Longint; data: FingerPtr);
+  // var
+  //   i: Longint;
+  // begin
+  //   if len < Length(arr) then raise Exception.Create('Error in array size to call expected length to be ' + IntToStr(len));
+  //   
+  //   for i := Low(arr) to High(arr) do
+  //   begin
+  //     (data + i)^ := arr[i];
+  //   end;
+  // end;
   
   procedure StringCopyFromPtr(str: StringPtr; len: Longint; out arr: StringArray);
   var
