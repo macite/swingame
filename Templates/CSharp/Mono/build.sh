@@ -174,33 +174,33 @@ doMacPackage()
     fi
     
     echo "  ... Adding Application Information"
-    echo "<?xml version='1.0' encoding='UTF-8'?>\
-    <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
-    <plist version=\"1.0\">\
-    <dict>\
-            <key>CFBundleDevelopmentRegion</key>\
-            <string>English</string>\
-            <key>CFBundleExecutable</key>\
-            <string>${GAME_NAME}</string>\
-            <key>CFBundleIconFile</key>\
-            <string>${ICON}</string>\
-            <key>CFBundleIdentifier</key>\
-            <string>au.edu.swinburne.${GAME_NAME}</string>\
-            <key>CFBundleInfoDictionaryVersion</key>\
-            <string>6.0</string>\
-            <key>CFBundleName</key>\
-            <string>${GAME_NAME}</string>\
-            <key>CFBundlePackageType</key>\
-            <string>APPL</string>\
-            <key>CFBundleSignature</key>\
-            <string>SWIN</string>\
-            <key>CFBundleVersion</key>\
-            <string>1.0</string>\
-            <key>CSResourcesFileMapped</key>\
-            <true/>\
-            <key>MonoBundleExecutable</key>\
-            <string>${GAME_NAME}.exe</string>\
-    </dict>\
+    echo "<?xml version='1.0' encoding='UTF-8'?>\n\
+    <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n\
+    <plist version=\"1.0\">\n\
+    <dict>\n\
+            <key>CFBundleDevelopmentRegion</key>\n\
+            <string>English</string>\n\
+            <key>CFBundleExecutable</key>\n\
+            <string>${GAME_NAME}</string>\n\
+            <key>CFBundleIconFile</key>\n\
+            <string>${ICON}</string>\n\
+            <key>CFBundleIdentifier</key>\n\
+            <string>au.edu.swinburne.${GAME_NAME}</string>\n\
+            <key>CFBundleInfoDictionaryVersion</key>\n\
+            <string>6.0</string>\n\
+            <key>CFBundleName</key>\n\
+            <string>${GAME_NAME}</string>\n\
+            <key>CFBundlePackageType</key>\n\
+            <string>APPL</string>\n\
+            <key>CFBundleSignature</key>\n\
+            <string>SWIN</string>\n\
+            <key>CFBundleVersion</key>\n\
+            <string>1.0</string>\n\
+            <key>CSResourcesFileMapped</key>\n\
+            <true/>\n\
+            <key>MonoBundleExecutable</key>\n\
+            <string>${GAME_NAME}.exe</string>\n\
+    </dict>\n\
     </plist>" >> "${GAMEAPP_PATH}/Contents/Info.plist"
     
     echo "APPLSWIN" >> "${GAMEAPP_PATH}/Contents/PkgInfo"
