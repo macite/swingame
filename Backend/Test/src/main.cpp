@@ -1156,7 +1156,7 @@ void test_fullscreen()
 
 int main(int argc, const char * argv[])
 {
-    srand (time(NULL));
+    srand ((unsigned int)time(NULL));
     cout << "Starting driver backend test" << endl;
 
     if ( ! test_core_functions() )

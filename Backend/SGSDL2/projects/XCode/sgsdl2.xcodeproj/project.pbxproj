@@ -23,13 +23,10 @@
 		943177FB1856CE8C00A0D403 /* test_audio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9499C69C184C5F2B00B71B41 /* test_audio.cpp */; };
 		94390FE6188792FF0061DC61 /* BATTLEST.TTF in CopyFiles */ = {isa = PBXBuildFile; fileRef = 94390FE5188792EC0061DC61 /* BATTLEST.TTF */; };
 		945088541AF3184300B124B1 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 945088531AF3184300B124B1 /* CoreVideo.framework */; };
-		945088551AF3186E00B124B1 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 945088531AF3184300B124B1 /* CoreVideo.framework */; };
 		9450885A1AF363C200B124B1 /* SGSDL2Web.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 945088581AF363C200B124B1 /* SGSDL2Web.cpp */; };
 		9450885B1AF363C200B124B1 /* SGSDL2Web.h in Headers */ = {isa = PBXBuildFile; fileRef = 945088591AF363C200B124B1 /* SGSDL2Web.h */; };
-		9450885D1AF369F800B124B1 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9450885C1AF369F800B124B1 /* libcurl.dylib */; };
-		9450885E1AF36A0600B124B1 /* libcurl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9450885C1AF369F800B124B1 /* libcurl.dylib */; };
 		945BB7A01857C5B000148796 /* test_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 945BB79E1857C5B000148796 /* test_input.cpp */; };
-		94653B5B1BD5E2FD00C4479A /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94653B5A1BD5E2FD00C4479A /* libz.a */; settings = {ASSET_TAGS = (); }; };
+		94653B5B1BD5E2FD00C4479A /* libz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94653B5A1BD5E2FD00C4479A /* libz.a */; };
 		94653B641BD5E45A00C4479A /* libbz2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 94653B631BD5E45A00C4479A /* libbz2.a */; };
 		9471BD9E183B717900BE3771 /* SGSDL2Core.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9471BD9C183B717900BE3771 /* SGSDL2Core.cpp */; };
 		9471BD9F183B717900BE3771 /* SGSDL2Core.h in Headers */ = {isa = PBXBuildFile; fileRef = 9471BD9D183B717900BE3771 /* SGSDL2Core.h */; };
@@ -142,7 +139,6 @@
 		945088531AF3184300B124B1 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = ../../../../../../../../System/Library/Frameworks/CoreVideo.framework; sourceTree = "<group>"; };
 		945088581AF363C200B124B1 /* SGSDL2Web.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SGSDL2Web.cpp; path = ../../src/SGSDL2Web.cpp; sourceTree = "<group>"; };
 		945088591AF363C200B124B1 /* SGSDL2Web.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SGSDL2Web.h; path = ../../src/SGSDL2Web.h; sourceTree = "<group>"; };
-		9450885C1AF369F800B124B1 /* libcurl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcurl.dylib; path = usr/lib/libcurl.dylib; sourceTree = SDKROOT; };
 		945BB79E1857C5B000148796 /* test_input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_input.cpp; path = ../../../Test/src/test_input.cpp; sourceTree = "<group>"; };
 		945BB79F1857C5B000148796 /* test_input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_input.h; path = ../../../Test/src/test_input.h; sourceTree = "<group>"; };
 		94653B5A1BD5E2FD00C4479A /* libz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz.a; path = ../../lib/mac/libz.a; sourceTree = "<group>"; };
@@ -201,7 +197,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9450885D1AF369F800B124B1 /* libcurl.dylib in Frameworks */,
 				9471BDB4183B732800BE3771 /* libFLAC.a in Frameworks */,
 				94821627184CA04300C89CBE /* libogg.a in Frameworks */,
 				94821628184CA04300C89CBE /* libvorbis.a in Frameworks */,
@@ -229,9 +224,6 @@
 			files = (
 				94AA4C381BD70353004B0275 /* libsgsdl2.a in Frameworks */,
 				94AA4C361BD701F9004B0275 /* CoreVideo.framework in Frameworks */,
-				9450885E1AF36A0600B124B1 /* libcurl.dylib in Frameworks */,
-				94FEB5171858302500AFF9D7 /* libz.dylib in Frameworks */,
-				94FEB5151858301A00AFF9D7 /* libbz2.dylib in Frameworks */,
 				942DBEEA183C218300876830 /* AudioToolbox.framework in Frameworks */,
 				942DBEEB183C218600876830 /* AudioUnit.framework in Frameworks */,
 				942DBEE7183C217B00876830 /* Carbon.framework in Frameworks */,
@@ -267,7 +259,6 @@
 		9471BD83183B6E5700BE3771 = {
 			isa = PBXGroup;
 			children = (
-				9450885C1AF369F800B124B1 /* libcurl.dylib */,
 				9471BDA1183B72A900BE3771 /* Libraries */,
 				9471BDA0183B727700BE3771 /* Test */,
 				9471BD96183B70E400BE3771 /* SGSDL2 */,
@@ -359,8 +350,6 @@
 			children = (
 				94AA4C341BD701A6004B0275 /* CoreFoundation.framework */,
 				94AA4C321BD6E6C8004B0275 /* CoreVideo.framework */,
-				94FEB5161858302500AFF9D7 /* libz.dylib */,
-				94FEB51318582FEE00AFF9D7 /* libbz2.dylib */,
 				942DBEE5183C213300876830 /* Carbon.framework */,
 				942DBEE1183C211C00876830 /* OpenGL.framework */,
 				942DBEDF183C211100876830 /* IOKit.framework */,
@@ -497,7 +486,7 @@
 		9471BD84183B6E5700BE3771 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Andrew Cain";
 				TargetAttributes = {
 					94AA4BF71BD6E00C004B0275 = {
@@ -597,7 +586,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -636,7 +625,6 @@
 		9471BD91183B6E5700BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
@@ -677,6 +665,7 @@
 					/usr/local/Cellar/curl/7.39.0/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -684,7 +673,6 @@
 		9471BD92183B6E5700BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_ANALYZER_SECURITY_FLOATLOOPCOUNTER = YES;
 				CLANG_ANALYZER_SECURITY_INSECUREAPI_STRCPY = YES;
 				CLANG_WARN_CXX0X_EXTENSIONS = YES;
@@ -726,6 +714,7 @@
 					/usr/local/Cellar/curl/7.39.0/lib,
 				);
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -733,7 +722,6 @@
 		9471BDCB183B737000BE3771 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -750,6 +738,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
@@ -759,7 +748,6 @@
 		9471BDCC183B737000BE3771 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -772,6 +760,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "-lcurl";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 				VALID_ARCHS = "i386 x86_64";
@@ -849,6 +838,7 @@
 				94AA4BFD1BD6E00C004B0275 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
