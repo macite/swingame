@@ -131,12 +131,6 @@ extern "C" {
     typedef void (sg_read_udp_fn)(sg_network_connection *con, unsigned int *host, unsigned short *port, char *buffer, unsigned int *size);
     
     //
-    // Web related
-    //
-    typedef void (sg_http_get_fn) (const char *url, unsigned short port);
-    typedef void (sg_http_post_fn) (const char *url, unsigned short port, const char *body);
-    
-    //
     // Utility relation functions
     //
     // - delay = Function to delay by a specified number of milliseconds.
@@ -341,10 +335,40 @@ extern "C" {
         sg_read_udp_fn * read_udp_message;
     } sg_network_interface;
 
+    //
+    // Web related
+    //
+
+    typedef enum sg_http_method
+    {
+        HTTP_GET,
+        HTTP_POST,
+        HTTP_PUT,
+        HTTP_DELETE
+    } sg_http_method;
+    
+    typedef struct sg_http_request
+    {
+        sg_http_method request_type;
+        const char *url;
+        unsigned short port;
+        const char *body;
+    } sg_http_request;
+    
+    typedef struct sg_http_response
+    {
+        long status;
+        unsigned int size;
+        char *data;
+    } sg_http_response;
+
+    typedef sg_http_response (sg_http_request_fn) (sg_http_request request);
+    typedef void (sg_free_response_fn) (sg_http_response * response);
+    
     typedef struct sg_web_interface
     {
-        sg_http_get_fn * http_get;
-        sg_http_post_fn * http_post;
+        sg_http_request_fn * http_request;
+        sg_free_response_fn * free_response;
     } sg_web_interface;
     
     //

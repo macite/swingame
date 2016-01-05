@@ -20,8 +20,33 @@ void test_web()
 {
     cout << "Testing SwinGame web functions" << endl;
     
-    _sg_functions->web.http_get("http://swinburne.edu.au", 80);
-    _sg_functions->web.http_post("http://127.0.0.1:3000/api/auth", 3000, "{\"username\":\"acain\",\"password\":\"password\",\"remember\":true}");
+    sg_http_request get_request = { HTTP_GET, "http://swinburne.edu.au", 80, NULL };
+    sg_http_response get_response;
+
+    get_response = _sg_functions->web.http_request(get_request);
+    
+    printf("GET RESPONSE = %ld\n%s\n\n", get_response.status, get_response.data);
+    
+    sg_http_request post_request = { HTTP_POST, "http://127.0.0.1:3000/api/auth", 3000, "{\"username\":\"acain\",\"password\":\"password\",\"remember\":true}" };
+    sg_http_response post_response;
+    
+    post_response = _sg_functions->web.http_request(post_request);
+    
+    printf("POST RESPONSE = %ld\n%s\n\n", post_response.status, post_response.data);
+
+    sg_http_request put_request = { HTTP_PUT, "http://127.0.0.1:3000/api/auth/zExXS_nc3x9wEb96aWxq", 3000, "{\"username\":\"acain\"}" };
+    sg_http_response put_response;
+    
+    put_response = _sg_functions->web.http_request(put_request);
+    
+    printf("PUT RESPONSE = %ld\n%s\n\n", put_response.status, put_response.data);
+
+    sg_http_request delete_request = { HTTP_DELETE, "http://127.0.0.1:3000/api/auth/zExXS_nc3x9wEb96aWxq", 3000, "{\"username\":\"acain\"}" };
+    sg_http_response delete_response;
+    
+    delete_response = _sg_functions->web.http_request(delete_request);
+    
+    printf("DELETE RESPONSE = %ld\n%s\n\n", delete_response.status, delete_response.data);
 }
 
 void test_network()

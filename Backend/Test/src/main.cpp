@@ -1173,7 +1173,8 @@ int main(int argc, const char * argv[])
 
     int test_run = 0; 
     int test_drawing_run = INT_MAX; 
-    scanf("%d", &test_run); 
+    scanf("%d", &test_run);
+    
     if (test_run == 0) 
     {
       test_run |= 255; 
@@ -1236,7 +1237,7 @@ int main(int argc, const char * argv[])
     
     if (test_run & NETWORK)
     {
-        //test_network();
+        test_network();
     }
     
     _sg_functions->finalise();
