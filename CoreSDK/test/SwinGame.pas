@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2016-01-02 12:18:09.318669
+// SwinGame.pas was generated on 2016-01-07 12:34:12.936109
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -7,7 +7,7 @@
 unit SwinGame;
 
 interface
-uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions, sgWindowManager;
+uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages, sgInput, sgNetworking, sgWeb, sgPhysics, sgResources, sgSprites, sgText, sgTimers, sgUtils, sgUserInterface, sgArduino, sgDrawingOptions, sgWindowManager;
 
   type Point2D = sgTypes.Point2D;
 
@@ -95,7 +95,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   type ConnectionType = sgTypes.ConnectionType;
 
-  type HttpMethod = sgTypes.HttpMethod;
+  type HRESPIR = sgTypes.HRESPIR;
+
+  type HttpResponse = sgTypes.HttpResponse;
 
   type CONIR = sgTypes.CONIR;
 
@@ -2424,6 +2426,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Indicates the maximum size of a UDP message.
   function UDPPacketSize(): Longint; overload;
+
+  // Perform a get request for the resourse at the specified host, path and port.
+  function HttpGet(const url: String; port: Word): HttpResponse; overload;
+
+  // Perform a post request to the specified host, with the supplied body.
+  function HttpPost(const url: String; port: Word; const body: String): HttpResponse; overload;
+
+  // Converts the body of an HttpResponse to a string.
+  function HttpResponseBodyAsString(httpData: HttpResponse): String; overload;
 
   // Returns True if two bitmaps have collided using per pixel testing if required. 
   // The ``pt1`` and ``pt2`` (`Point2D`) parameters specify the world location of the bitmaps (``bmp1`` and ``bmp2``).
@@ -7341,6 +7352,21 @@ implementation
   function UDPPacketSize(): Longint; overload;
   begin
     result := sgNetworking.UDPPacketSize();
+  end;
+
+  function HttpGet(const url: String; port: Word): HttpResponse; overload;
+  begin
+    result := sgWeb.HttpGet(url,port);
+  end;
+
+  function HttpPost(const url: String; port: Word; const body: String): HttpResponse; overload;
+  begin
+    result := sgWeb.HttpPost(url,port,body);
+  end;
+
+  function HttpResponseBodyAsString(httpData: HttpResponse): String; overload;
+  begin
+    result := sgWeb.HttpResponseBodyAsString(httpData);
   end;
 
   function BitmapCollision(bmp1: Bitmap; const pt1: Point2D; bmp2: Bitmap; const pt2: Point2D): Boolean; overload;

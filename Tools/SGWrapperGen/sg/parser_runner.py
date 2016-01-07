@@ -26,6 +26,7 @@ all_units = [
     ('sgImages', 'Images', '../../CoreSDK/src/sgImages.pas'),
     ('sgInput', 'Input', '../../CoreSDK/src/sgInput.pas'),
     ('sgNetworking', 'Networking', '../../CoreSDK/src/sgNetworking.pas'),
+    ('sgWeb', 'Web', '../../CoreSDK/src/sgWeb.pas'),
     ('sgPhysics', 'Physics', '../../CoreSDK/src/sgPhysics.pas'),
     ('sgResources', 'Resources', '../../CoreSDK/src/sgResources.pas'),
     ('sgSprites', 'Sprites', '../../CoreSDK/src/sgSprites.pas'),

@@ -357,7 +357,7 @@ extern "C" {
     
     typedef struct sg_http_response
     {
-        long status;
+        unsigned short status;
         unsigned int size;
         char *data;
     } sg_http_response;

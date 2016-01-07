@@ -27,7 +27,7 @@ uses sgTypes, sgDriverSDL2Types;
     TIMER_PTR = 'TIMR';
     FONT_PTR = 'FONT';
     WINDOW_PTR = 'WIND';
-    HTTP_HEADER_PTR = 'HHDR';
+    // HTTP_HEADER_PTR = 'HHDR';
     HTTP_REQUEST_PTR = 'HREQ';
     HTTP_RESPONSE_PTR = 'HRES';
     CONNECTION_PTR = 'CONP';
@@ -466,7 +466,7 @@ uses sgTypes, sgDriverSDL2Types;
 
     HttpRequestData = packed record
       id         : PointerIdentifier;
-      requestType: HttpMethod;
+      // requestType: HttpMethod;
       url        : String;
       version    : String;
       headername : StringArray;
@@ -475,12 +475,8 @@ uses sgTypes, sgDriverSDL2Types;
     end;
 
     HttpResponseData = record
-      id        : PointerIdentifier;
-      protocol  : String;  //eg: HTTP/1.1
-      status    : LongInt;   //eg: 200
-      statusText: String; //eg: OK
-      headers   : array of HttpHeaderData;
-      body      : array of Byte;
+      id    : PointerIdentifier;
+      data  : sg_http_response;
     end;
 
     MessageData = packed record
@@ -541,7 +537,7 @@ uses sgTypes, sgDriverSDL2Types;
   function ToWindowPtr(w: Window): WindowPtr;
   function ToConnectionPtr(c: Connection): ConnectionPtr;
   function ToServerSocketPtr(c: ServerSocket): ServerSocketPtr;
-  // function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
   function ToMessagePtr(c: Message): MessagePtr;
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;
@@ -710,15 +706,15 @@ uses sgShared;
     end;
   end;
 
-  // function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
-  // begin
-  //   result := HttpResponsePtr(c);
-  //   if Assigned(result) and (result^.id <> HTTP_RESPONSE_PTR) then
-  //   begin
-  //     RaiseWarning('Attempted to access a HTTP Response that appears to be an invalid pointer');
-  //     result := nil;
-  //   end;
-  // end;
+  function ToHttpResponsePtr(c: HttpResponse): HttpResponsePtr;
+  begin
+    result := HttpResponsePtr(c);
+    if Assigned(result) and (result^.id <> HTTP_RESPONSE_PTR) then
+    begin
+      RaiseWarning('Attempted to access a HTTP Response that appears to be an invalid pointer');
+      result := nil;
+    end;
+  end;
 
 
   function ToSurfacePtr(p: Pointer): psg_drawing_surface;

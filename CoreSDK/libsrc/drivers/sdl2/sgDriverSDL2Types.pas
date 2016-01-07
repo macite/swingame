@@ -336,6 +336,37 @@ interface
 
 (* Const before type ignored *)
 
+	sg_http_method = (
+	        HTTP_GET,
+	        HTTP_POST,
+	        HTTP_PUT,
+	        HTTP_DELETE
+    	);
+    
+    sg_http_request = record
+        request_type: sg_http_method;
+        url: PChar;
+        port: Word;
+        body: PChar;
+    end;
+    
+    sg_http_response = record
+        status: Word;
+        size: uint;
+        data: PChar;
+    end;
+
+    psg_http_response = ^sg_http_response;
+
+    sg_http_request_fn = function (request: sg_http_request): sg_http_response; cdecl;
+    sg_free_response_fn = procedure (response: psg_http_response); cdecl;
+    
+    sg_web_interface = record
+        http_request: sg_http_request_fn;
+        free_response: sg_free_response_fn;
+    end;
+
+
 		sg_interface = record
 				has_error : longint;
 				current_error : ^char;
@@ -348,6 +379,7 @@ interface
 				text : sg_text_interface;
 				utils : sg_utils_interface;
 				network : sg_network_interface;
+				web : sg_web_interface;
 				input_callbacks : sg_input_callbacks;
 				read_system_data : sg_system_data_fn;
 			end;

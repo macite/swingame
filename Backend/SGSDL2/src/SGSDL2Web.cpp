@@ -127,7 +127,9 @@ sg_http_response sgsdl2_http_post(const char *host, unsigned short port, const c
     }
     else
     {
-        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &result.status);
+        long status;
+        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &status);
+        result.status = static_cast<unsigned short>(status);
     }
     
     /* cleanup curl stuff */
@@ -172,7 +174,9 @@ sg_http_response sgsdl2_http_get(const char *host, unsigned short port)
     }
     else
     {
-        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &result.status);
+        long status;
+        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &status);
+        result.status = static_cast<unsigned short>(status);
     }
     
     /* cleanup curl stuff */
@@ -237,7 +241,9 @@ sg_http_response sgsdl2_http_put(const char *host, unsigned short port, const ch
     }
     else
     {
-        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &result.status);
+        long status;
+        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &status);
+        result.status = static_cast<unsigned short>(status);
     }
     
     // free headers
@@ -294,7 +300,9 @@ sg_http_response sgsdl2_http_delete(const char *host, unsigned short port, const
     }
     else
     {
-        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &result.status);
+        long status;
+        curl_easy_getinfo(curl_handle, CURLINFO_RESPONSE_CODE, &status);
+        result.status = static_cast<unsigned short>(status);
     }
     
     // free headers

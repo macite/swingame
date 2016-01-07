@@ -340,7 +340,7 @@ void _sgsdl2_get_pixels_from_renderer(SDL_Renderer *renderer, int x, int y, int 
     SDL_Rect rect = {x, y, w, h};
 
     // textures appear flipped by default and need to have their pixels inverted
-    int *raw_pixels = (int*)malloc( sizeof(int) * w * h);
+    int *raw_pixels = (int*)malloc( sizeof(int) * static_cast<unsigned long>(w * h) );
     SDL_RenderReadPixels(renderer, &rect, SDL_PIXELFORMAT_RGBA8888, raw_pixels, w * 4);
 
     for (int row = 0; row < h; row++)

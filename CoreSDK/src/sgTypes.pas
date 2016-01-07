@@ -661,28 +661,23 @@ interface
       UnknownConnection
     );
 
-    /// @enum HttpMethod
-    HttpMethod = (
-      HTTP_GET,
-      HTTP_POST,
-      HTTP_PUT,
-      HTTP_DELETE
-    );
-
     // /// @ignore
     // HREQIR = record end;
-    // /// @ignore
-    // HRESPIR = record end;
+    
+    /// @ignore
+    HRESPIR = record end;
 
     // /// @class HttpRequest
     // /// @pointer_wrapper
     // /// @field pointer : Pointer
     // HttpRequest = ^HREQIR;
 
-    // /// @class HttpResponse
-    // /// @pointer_wrapper
-    // /// @field pointer : Pointer
-    // HttpResponse = ^HRESPIR;
+    /// The HttpResponse contains the data that is the response to a http request.
+    ///
+    /// @class HttpResponse
+    /// @pointer_wrapper
+    /// @field pointer : Pointer
+    HttpResponse = ^HRESPIR;
 
     /// @ignore
     CONIR = record end;
