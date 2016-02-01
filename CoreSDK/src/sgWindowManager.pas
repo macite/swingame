@@ -359,7 +359,7 @@ var
     wp := ToWindowPtr(wind);
     if Assigned(wp) then
     begin
-      result := wp^.eventData.close_requested <> 0;
+      result := (wp^.eventData.close_requested <> 0) or HasQuit();
     end
     else result := false;
   end;
