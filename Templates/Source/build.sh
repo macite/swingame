@@ -258,7 +258,7 @@ elif [ "$OS" = "$MAC" ]; then
     # Set lib dir
     LIB_DIR="${APP_PATH}/staticlib/mac"
     
-    PAS_FLAGS="${PAS_FLAGS} -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\" -k\"-lcurl\""
 
     #
     # Setup framework/dylib details
