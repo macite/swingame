@@ -40,6 +40,15 @@ interface
   function HttpPost(const url: String; port: Word; const body: String): HttpResponse;
 
 
+  /// Free the resources used by the HttpResponse.
+  ///
+  /// @lib
+  ///
+  /// @class HttpResponse
+  /// @dispose
+  procedure FreeHttpResponse(var response: HttpResponse);
+  
+
 implementation
   uses sgDriverWeb, sgDriverSDL2Types, sgBackendTypes, sgShared;
 
@@ -108,6 +117,15 @@ implementation
     response^.id := HTTP_RESPONSE_PTR;
     response^.data := MakeRequest(HTTP_POST, url, port, body);
     result := HttpResponse(response);
+  end;
+
+  procedure FreeHttpResponse(var response: HttpResponse);
+  var
+    toFree: HttpResponsePtr;
+  begin
+    toFree = ToHttpResponsePtr(response);
+    if Assigned(toFree) then Dispose(toFree);
+    response := nil;
   end;
 
 

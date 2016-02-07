@@ -41,6 +41,7 @@ namespace SwinGameSDK
         Window,
         Message,
         HttpRequest,
+        HttpResponse,
         Copy,
 		
     }

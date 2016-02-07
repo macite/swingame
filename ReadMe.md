@@ -21,11 +21,34 @@ SwinGame SDK is divided into multiple sections:
 
 ## Building SwinGame
 
-Requires 
+Requires
+- Free Pascal Compiler
+- C/C++ Compiler
 - bash
 - Python 2.6
 - C# Compiler (mono)
 
+### Building the back end library
+
+The back end library is a C/C++ project that links SwinGame to lower level libraries. Externally it exports a single function `sg_load` that loads and returns a struct that contains function pointers to the back end routines. This function is called by the front end library and the function pointers used to access routines in the linked libraries.
+
+Before building the library you need to access the external projects. These can be downloaded using the `setup.sh` script in `Backend/SGSDL2/external`. You also need to access the static libraries related to these. On MacOS the static libraries are stored within the project at `Backend\SGSDL2\lib\mac` (these need to be kept up to date as SDL changes). With Linux and Windows, these libraries can be installed using scripts.
+
+1. Windows: using **MSYS2**
+1.1. `pacman --needed -Sy bash pacman pacman-mirrors msys2-runtime`
+1.2  `pacman -Su`
+1.3  `pacman -S mingw32/mingw-w64-i686-SDL2 mingw64/mingw-w64-x86_64-SDL2 mingw64/mingw-w64-x86_64-SDL2_gfx mingw32/mingw-w64-i686-SDL2_gfx mingw32/mingw-w64-i686-SDL2_image mingw64/mingw-w64-x86_64-SDL2_image mingw32/mingw-w64-i686-SDL2_mixer mingw64/mingw-w64-x86_64-SDL2_mixer mingw32/mingw-w64-i686-SDL2_net mingw64/mingw-w64-x86_64-SDL2_net mingw32/mingw-w64-i686-SDL2_ttf mingw64/mingw-w64-x86_64-SDL2_ttf mingw32/mingw-w64-i686-curl mingw64/mingw-w64-x86_64-curl pkg-config msys/libcurl-devel`
+1.4 Replace the libSDL2_Mixer.a and related files with the **Developer** versions from SDL website
+1.4 Replace libcurl libraries with those from libcurl website
+1.5 Compile 32 and 64 bit versions from `Backend/SGSDL2/projects/bash`
+2. Linux:
+1.1 `apt-get install 
+
+On MacOS use the provided XCode project at `Backend/SGSDL2/projects/XCode`, build the static library it contains and archive. Extract the static library from the archive and place in `CoreSDK/staticlib/mac`
+
+On Linux use the `build.sh` bash script in `Backend
+
+### Building the front end library
 All the libraries are built from the command line (using bash - install MSYS on windows).
 
 The building scripts are in Tools/Scripts.
