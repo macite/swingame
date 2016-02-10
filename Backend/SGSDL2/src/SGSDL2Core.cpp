@@ -38,7 +38,7 @@ void init_sgsdl2()
     done_init = true;
 
     clear_error();
-    if ( -1 == SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO ) )
+    if ( -1 == SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) )
     {
         // fatal error so...
         // no other functions can now be called
