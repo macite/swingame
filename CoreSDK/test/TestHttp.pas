@@ -11,7 +11,8 @@ begin
 	// WriteLn(HostIP('swin.edu.au'));
 	// WriteLn(HostName('127.0.0.1'));
 
-	// WriteLn( HttpResponseBodyAsString( HttpGet('wiki.freepascal.org', 80, '/cardinal') ) );
+	WriteLn( HttpResponseBodyAsString( HttpGet('http://wiki.freepascal.org/cardinal', 80) ) );
+	WriteLn( HttpResponseBodyAsString( HttpGet('https://google.com', 443) ) );
 
 	json := HttpResponseBodyAsString( HttpPost('http://localhost/api/auth', 3000, '{"username":"acain","password":"password","remember":true}'));
 	WriteLn(1, json);
