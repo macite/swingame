@@ -26,7 +26,7 @@ staticlib_folder   = coresdk_folder + "staticlib"
 #     },
 #     "lib" : {
 #         "Mac OS X"  : os.path.join(lib_folder, "mac"),
-#         "Windows"  : os.path.join(lib_folder, "win"),
+#         "Windows"  : os.path.join(lib_folder, "win32"),
 #     }
 # }
 #
@@ -180,8 +180,17 @@ def bndl_vsproj(specificdist_folder, dist_dict):
 
     output_line('Moving dll in SwinGame C# project')
 
-    sgsdk = os.path.join(specificdist_folder, 'lib', 'win', 'SGSDK.dll')
+    sgsdk = os.path.join(specificdist_folder, 'lib', 'win32', 'SGSDK.dll')
     sgsdk_dest = os.path.join(specificdist_folder, 'lib', 'SGSDK.dll')
+
+    # print sgsdk, sgsdk_dest
+    if os.path.exists(sgsdk):
+      run_bash('mv', [sgsdk, sgsdk_dest] )
+    else:
+      print >> sys.stderr, 'Missing Windows DLL for C# projects'
+
+    sgsdk = os.path.join(specificdist_folder, 'lib', 'win32', 'libsgsdl2.dll')
+    sgsdk_dest = os.path.join(specificdist_folder, 'lib', 'libsgsdl2.dll')
 
     # print sgsdk, sgsdk_dest
     if os.path.exists(sgsdk):
