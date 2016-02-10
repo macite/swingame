@@ -5,7 +5,7 @@ unit sgDriverSDL2;
 //
 //
 //
-// 
+//
 //
 // Notes:
 //		- Pascal PChar is equivalent to a C-type string
@@ -15,7 +15,7 @@ unit sgDriverSDL2;
 //
 //=============================================================================
 interface
-  
+
   procedure LoadSDL2Driver();
 
 implementation
@@ -23,10 +23,10 @@ implementation
 
 	var
 	  _Initialised : Boolean = False;
-    
+
     //TODO: Move the array to SwinGame - init it from driver
     _KeyCode     : array[0..327] of LongInt;
-	
+
   procedure InitKeyCodes();
   begin
     _KeyCode[LongInt(UnknownKey)]    := LongInt(SDLK_UNKNOWN);
@@ -68,9 +68,9 @@ implementation
     _KeyCode[LongInt(GreaterKey)]    := LongInt(SDLK_GREATER);
     _KeyCode[LongInt(QuestionKey)]   := LongInt(SDLK_QUESTION);
     _KeyCode[LongInt(AtKey)]         := LongInt(SDLK_AT);
-    
+
     // Skip uppercase letters
-    
+
     _KeyCode[LongInt(LeftBracketKey)]  := LongInt(SDLK_LEFTBRACKET);
     _KeyCode[LongInt(BackSlashKey)]    := LongInt(SDLK_BACKSLASH);           //Hopeful
     _KeyCode[LongInt(RightBracketKey)] := LongInt(SDLK_RIGHTBRACKET);
@@ -103,12 +103,12 @@ implementation
     _KeyCode[LongInt(XKey)]            := LongInt(SDLK_x);
     _KeyCode[LongInt(YKey)]            := LongInt(SDLK_y);
     _KeyCode[LongInt(ZKey)]            := LongInt(SDLK_z);
-    
+
     _KeyCode[LongInt(DeleteKey)]       := LongInt(SDLK_DELETE);
-    
+
     // End of ASCII mapped keysyms
-    
-    // Numeric keypad    
+
+    // Numeric keypad
     _KeyCode[LongInt(KeyPad0)]         := LongInt(SDLK_KP_0);
     _KeyCode[LongInt(KeyPad1)]         := LongInt(SDLK_KP_1);
     _KeyCode[LongInt(KeyPad2)]         := LongInt(SDLK_KP_2);
@@ -126,8 +126,8 @@ implementation
     _KeyCode[LongInt(KeyPadPlus)]     := LongInt(SDLK_KP_PLUS);
     _KeyCode[LongInt(KeyPadEnter)]    := LongInt(SDLK_KP_ENTER);
     _KeyCode[LongInt(KeyPadEquals)]   := LongInt(SDLK_KP_EQUALS);
-    
-    // Arrows + Home/End pad    
+
+    // Arrows + Home/End pad
     _KeyCode[LongInt(UpKey)]       := LongInt(SDLK_UP);
     _KeyCode[LongInt(DownKey)]     := LongInt(SDLK_DOWN);
     _KeyCode[LongInt(RightKey)]    := LongInt(SDLK_RIGHT);
@@ -137,8 +137,8 @@ implementation
     _KeyCode[LongInt(EndKey)]      := LongInt(SDLK_END);
     _KeyCode[LongInt(PageUpKey)]   := LongInt(SDLK_PAGEUP);
     _KeyCode[LongInt(PageDownKey)] := LongInt(SDLK_PAGEDOWN);
-    
-    // Function keys    
+
+    // Function keys
     _KeyCode[LongInt(F1Key)]  := LongInt(SDLK_F1);
     _KeyCode[LongInt(F2Key)]  := LongInt(SDLK_F2);
     _KeyCode[LongInt(F3Key)]  := LongInt(SDLK_F3);
@@ -154,8 +154,8 @@ implementation
     _KeyCode[LongInt(F13Key)] := LongInt(SDLK_F13);
     _KeyCode[LongInt(F14Key)] := LongInt(SDLK_F14);
     _KeyCode[LongInt(F15Key)] := LongInt(SDLK_F15);
-    
-    // Key state modifier keys    
+
+    // Key state modifier keys
     _KeyCode[LongInt(NumLockKey)]   := LongInt(SDLK_NUMLOCKCLEAR);
     _KeyCode[LongInt(CapsLockKey)]  := LongInt(SDLK_CAPSLOCK);
     _KeyCode[LongInt(ScrollLockKey)] := LongInt(SDLK_SCROLLLOCK);
@@ -170,7 +170,7 @@ implementation
     _KeyCode[LongInt(LeftSuperKey)]    := LongInt(SDLK_LSUPER); // Left "Windows" key
     _KeyCode[LongInt(RightSuperKey)]    := LongInt(SDLK_RSUPER); // Right "Windows" key
     _KeyCode[LongInt(ModeKey)]      := LongInt(SDLK_MODE); // "Alt Gr" key
-    
+
     // Miscellaneous function keys
     _KeyCode[LongInt(HelpKey)]   := LongInt(SDLK_HELP);
     _KeyCode[LongInt(SysReqKey)] := LongInt(SDLK_SYSREQ);
@@ -185,33 +185,35 @@ implementation
     _KeyCode[LongInt(WindowsKey)]   := LongInt(SDLK_LSUPER);
     _KeyCode[LongInt(OptionKey)]    := LongInt(SDLK_LALT);
   end;
- 
+
   //TODO: move this to SwinGame
   function GetKeyCodeProcedure(val : LongInt) : LongInt;
   begin
     result := _KeyCode[val];
   end;
-	
+
 	function GetErrorProcedure() : PChar;
 	begin
 		result := 'ERROR TEXT'; //TODO: add this
 	end;
-  
-  procedure QuitProcedure(); 
+
+  procedure QuitProcedure();
   begin
     //TODO: add this
   end;
-  
-  procedure InitProcedure(); 
+
+  procedure InitProcedure();
   begin
     if _Initialised then exit;
     _Initialised := true;
-    
+
     InitKeyCodes();
+    // WriteLn('pre init');
     _sg_functions^.init();
+    // WriteLn('post init');
   end;
-  
-  
+
+
 	procedure LoadSDL2Driver();
     var
         callbacks: sg_input_callbacks;
