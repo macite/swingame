@@ -5,7 +5,7 @@
 
 /// SwinGame Web code allows you to create and access web resources. You can create a simple web server
 /// or access web pages and applications.
-/// 
+///
 /// @module Web
 /// @static
 
@@ -47,7 +47,7 @@ interface
   /// @class HttpResponse
   /// @dispose
   procedure FreeHttpResponse(var response: HttpResponse);
-  
+
 
 implementation
   uses sgDriverWeb, sgDriverSDL2Types, sgBackendTypes, sgShared;
@@ -80,7 +80,7 @@ implementation
   //   host6: THostEntry6;
   // begin
   //   result := '';
-  //   if GetHostbyAddr(in_addr(StrToHostAddr(address)), host) 
+  //   if GetHostbyAddr(in_addr(StrToHostAddr(address)), host)
   //     or ResolveHostbyAddr(in_addr(StrToHostAddr(address)), host) then
   //     result := host.Name
   //   else if ResolveHostbyAddr6(StrToHostAddr6(address), host6) then
@@ -123,7 +123,7 @@ implementation
   var
     toFree: HttpResponsePtr;
   begin
-    toFree = ToHttpResponsePtr(response);
+    toFree := ToHttpResponsePtr(response);
     if Assigned(toFree) then Dispose(toFree);
     response := nil;
   end;
