@@ -19,7 +19,7 @@ fi
 # Step 2: Move to the directory containing the script
 #
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
-APP_PATH=`cd "$APP_PATH"; pwd` 
+APP_PATH=`cd "$APP_PATH"; pwd`
 cd "$APP_PATH"
 FULL_APP_PATH=$APP_PATH
 APP_PATH="."
@@ -28,8 +28,8 @@ APP_PATH="."
 # Step 3: Setup options
 #
 EXTRA_OPTS="-O1 -fPIC -Sewn -vwn -dSWINGAME_LIB"
-VERSION_NO=3.0
-VERSION=3.0
+VERSION_NO=4.0
+VERSION=4.0
 CLEAN="N"
 INSTALL="N"
 
@@ -49,7 +49,7 @@ STATIC_NAME="sgsdk-sdl2.a"
 Usage()
 {
     echo "Usage: ./build.sh [-c] [-d] [-i] [-h] [-IOS] [-framework] [-static] [version]"
-    echo 
+    echo
     echo "Creates and Compiles the native SGSDK library."
     echo
     echo "Options:"
@@ -61,7 +61,7 @@ Usage()
     echo
     echo "Requires:"
     echo " - Free Pascal Compiler"
-    
+
     if [ "$OS" = "$LIN" ]; then
         echo " - SDL dev"
         echo " - SDL-image dev"
@@ -100,17 +100,17 @@ locateIOSSDK()
 
   fileList=$(find "." -maxdepth 1 -type d -name iPhoneSimulator\*.sdk)
   # FILE_COUNT=$(echo "$fileList" | tr " " "\n" | wc -l)
-  
+
   # if [ ${FILE_COUNT} = 1 ]; then
   IOS_SIM_SDK_DIR="${BASE_IOS_SIM}"`echo $fileList | awk '{split($0,names," "); idx=1; while(names[idx+1] != "") { idx++ } printf("%s",names[idx])}' | sed "s|[.]/|/|"`
   # else
   #   echo "Select the iOS Simulator to use"
   #   PS3="File number: "
-  
+
   #   select fileName in $fileList; do
   #       if [ -n "$fileName" ]; then
   #           IOS_SIM_SDK_DIR="${BASE_IOS_SIM}${fileName}"
-  #       fi      
+  #       fi
   #       break
   #   done
   # fi
@@ -125,17 +125,17 @@ locateIOSSDK()
 
   fileList=$(find "." -maxdepth 1 -type d -name iPhone\*.sdk)
   # FILE_COUNT=$(echo "$fileList" | tr " " "\n" | wc -l)
-  
+
   # if [ ${FILE_COUNT} = 1 ]; then
   IOS_DEV_SDK_DIR="${BASE_IOS_DEV}"`echo ${fileList[0]} | awk '{split($0,names," "); idx=1; while(names[idx+1] != "") { idx++ } printf("%s",names[idx])}' | sed "s|[.]/|/|"`
   # else
   #   echo "Select the iOS version to use"
   #   PS3="File number: "
-  
+
   #   select fileName in $fileList; do
   #       if [ -n "$fileName" ]; then
   #           IOS_DEV_SDK_DIR="${BASE_IOS_DEV}${fileName}"
-  #       fi      
+  #       fi
   #       break
   #   done
   # fi
@@ -146,18 +146,22 @@ locateIOSSDK()
   # echo ${IOS_DEV_SDK_DIR}
 }
 
-while getopts chdif:I:b:g:s: o
+# Flags to indicate which architecture for Windows only
+SG_WIN32=true
+SG_WIN64=false
+
+while getopts chdif:I:b:g:s:w: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
     h)  Usage ;;
     f)  if [ "${OPTARG}" = "ramework" ]; then
             FRAMEWORK=true
-        fi 
+        fi
         ;;
     s)  if [ "${OPTARG}" = "tatic" ]; then
             STATIC=true
-        fi 
+        fi
         ;;
     d)  EXTRA_OPTS="-vwn -gw -dTRACE -dSWINGAME_LIB"
         DEBUG="Y" ;;
@@ -165,6 +169,14 @@ do
             IOS=true
         fi;;
     i)  INSTALL="Y";;
+    w)  if [ "${OPTARG}" = "in32" ]; then
+            SG_WIN32=true
+            SG_WIN64=false
+        elif [ "${OPTARG}" = "in64" ]; then
+            SG_WIN32=false
+            SG_WIN64=true
+        fi
+        ;;
     [?]) print >&2 "Usage: $0 [-c] [-d] [-i] [-h] [version]"
          exit -1;;
     esac
@@ -206,17 +218,17 @@ if [ ${IOS} = true ]; then
 
   IPHONE_SDK_ARM="${IOS_DEV_SDK_DIR}"
   IPHONE_SDK_SIM="${IOS_SIM_SDK_DIR}"
-  
+
   if [ ! -d ${IPHONE_SDK_ARM} ]; then
     echo "Unable to find iOS SDK"
     exit -1
   fi
-  
+
   if [ ! -d ${IPHONE_SDK_SIM} ]; then
     echo "Unable to find iOS Simulator SDK"
     exit -1
   fi
-  
+
   #check for the compilers...
   PPC_386_BIN=`which ppc386 2>> /dev/null`
   if [ -z "$PPC_386_BIN" ]; then
@@ -224,14 +236,14 @@ if [ ${IOS} = true ]; then
     open "http://sourceforge.net/projects/freepascal/files/Mac%20OS%20X/2.6.0/"
     exit -1
   fi
-  
+
   PPC_ARM_BIN=`which ppcarm 2>> /dev/null`
   if [ -z "$PPC_ARM_BIN" ]; then
     echo "Unable to find a Pascal ARM compiler. Install fpc-arm-iOS compiler."
     open "http://sourceforge.net/projects/freepascal/files/Mac%20OS%20X/2.6.0/"
     exit -1
   fi
-  
+
   STATIC_NAME="libSGSDK.a"
   OUT_DIR="${APP_PATH}/bin/ios"
   FULL_OUT_DIR="${FULL_APP_PATH}/bin/ios"
@@ -239,7 +251,7 @@ if [ ${IOS} = true ]; then
   # HEADER_DIR="${VERSION_DIR}/Headers"
   # RESOURCES_DIR="${VERSION_DIR}/Resources"
   # CURRENT_DIR="${OUT_DIR}/SGSDK.framework/Versions/Current"
-  
+
   LIB_DIR="${APP_PATH}/staticlib/godly/ios"
 
 elif [ "$OS" = "$MAC" ]; then
@@ -254,10 +266,10 @@ elif [ "$OS" = "$MAC" ]; then
     HEADER_DIR="${VERSION_DIR}/Headers"
     RESOURCES_DIR="${VERSION_DIR}/Resources"
     CURRENT_DIR="${OUT_DIR}/SGSDK.framework/Versions/Current"
-    
+
     # Set lib dir
     LIB_DIR="${APP_PATH}/staticlib/mac"
-    
+
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\" -k\"-lcurl\""
 
     #
@@ -270,19 +282,28 @@ elif [ "$OS" = "$MAC" ]; then
       OUT_FILE="libSGSDK.dylib"
       INSTALL_NAME="@rpath/${OUT_FILE}"
     fi
-    
+
 elif [ "$OS" = "$WIN" ]; then
-    OUT_DIR="${APP_PATH}/bin/Win"
-    FULL_OUT_DIR="${FULL_APP_PATH}/bin/Win"
-    
-    if [ ${SDL_13} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    elif [ ${OPENGL} = true ]; then
-      LIB_DIR="${APP_PATH}/lib/sdl13/win"
+    if [ ${SG_WIN32} = true ]; then
+      LIB_DIR="${APP_PATH}/lib/win32"
+      OUT_DIR="${APP_PATH}/bin/win32"
+      FULL_OUT_DIR="${FULL_APP_PATH}/bin/win32"
     else
-      LIB_DIR="${APP_PATH}/lib/win"
+      LIB_DIR="${APP_PATH}/lib/win64"
+      OUT_DIR="${APP_PATH}/bin/win64"
+      FULL_OUT_DIR="${FULL_APP_PATH}/bin/win64"
+
+      FPC_BIN=`which ppcrossx64`
+      if [ -z "${FPC_BIN}" ]; then
+          echo
+          echo "I cannot find the 64bit Free Pascal Compiler."
+          echo "Please make sure you have installed it"
+          echo " - use the default location (no spaces in path)"
+          echo " - also restarted your computer after install"
+          exit -1
+      fi
     fi
-    
+
     # FPC paths require c:/
     SDK_SRC_DIR=`echo $SDK_SRC_DIR | sed 's/\/\(.\)\//\1:\//'`
     OUT_DIR=`echo $OUT_DIR | sed 's/\/\(.\)\//\1:\//'`
@@ -357,7 +378,7 @@ CleanTmp()
     if [ -d "${TMP_DIR}" ]
     then
         rm -rf "${TMP_DIR}"
-    fi 
+    fi
 }
 
 PrepareTmp()
@@ -373,12 +394,12 @@ PrepareTmp()
 doMacCompile()
 {
     PrepareTmp
-    
+
     ARCH="$1"
     LINK_OPTS="$2"
-    
+
     FRAMEWORKS='-framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework CoreVideo -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
-    
+
     # FRAMEWORKS=`cd ${LIB_DIR};ls -d *.framework | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
 
     STATIC_LIBS=`cd ${LIB_DIR};ls -f *.a | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-l%s ", substr(patharr[idx],4)) }'`
@@ -386,18 +407,18 @@ doMacCompile()
     if [ "*$DEBUG*" = "**" ] ; then
         EXTRA_OPTS="$EXTRA_OPTS -Xs"
     fi
-    
+
     # Compile...
     "${FPC_BIN}" ${PAS_FLAGS} -S2 -Sh ${EXTRA_OPTS} -FE"${TMP_DIR}" -FU"${TMP_DIR}" -k"$LINK_OPTS -L'${TMP_DIR}' -F'${LIB_DIR}' -current_version '${VERSION_NO}'" -k"-lbz2" -k"-lstdc++" -k"-install_name '${INSTALL_NAME}'" -k"-rpath @loader_path/../Frameworks -rpath @executable_path/../Frameworks -rpath ../Frameworks -rpath ." -k"-L ${LIB_DIR}" -k"${STATIC_LIBS}" -k" ${FRAMEWORKS} -framework Cocoa" "${SDK_SRC_DIR}/SGSDK.pas"  >> "${LOG_FILE}"
     if [ $? != 0 ]; then echo "Error compiling SGSDK"; cat "${LOG_FILE}"; exit 1; fi
     rm -f "${LOG_FILE}"
-    
+
     mv ${TMP_DIR}/libSGSDK.dylib ${OUT_DIR}/libSGSDK${1}.dylib
 }
 
 DoExitCompile ()
-{ 
-    echo "An error occurred while compiling"; 
+{
+    echo "An error occurred while compiling";
     cat tmp/out.log
 
     if [ "$OS" = "$LIN" ]; then
@@ -406,7 +427,7 @@ DoExitCompile ()
         echo "sudo apt-get install fpc curl libsdl1.2-dev libsdl-gfx1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl-net* libsmpeg*"
     fi
 
-    exit 1;  
+    exit 1;
 }
 
 doIOSCompile()
@@ -414,33 +435,33 @@ doIOSCompile()
     TMP_DIR="${APP_PATH}/tmp/ios"
     PrepareTmp
     mkdir "${TMP_DIR}/arm" "${TMP_DIR}/i386"
-    
+
     "${PPC_ARM_BIN}" -Cn -gw -S2 -Sew -Cparmv7 -Cfvfpv2 -Sh ${SG_INC} -XX -k-ios_version_min -k5.0 -XR"${IPHONE_SDK_ARM}" -gltw -FE"${TMP_DIR}/arm" -FU"${TMP_DIR}/arm" -Fi"src" -Fu"${LIB_DIR}" -k"/usr/lib/libbz2.dylib" -k"${LIB_DIR}/*.a" -k"-framework AudioToolbox -framework QuartzCore -framework OpenGLES -framework CoreGraphics" -k"-framework MobileCoreServices" -k"-framework ImageIO" -k"-framework UIKit -framework Foundation -framework CoreAudio" -k-no_order_inits -XMSDL_main -dIOS -dSWINGAME_OPENGL -dSWINGAME_SDL13 -o"${TMP_DIR}/SGSDK.arm" "${SDK_SRC_DIR}/SGSDK.pas" > ${LOG_FILE} 2> ${LOG_FILE}
     if [ $? != 0 ]; then
-       DoExitCompile; 
+       DoExitCompile;
     fi
-    
+
     ar -rcs ${TMP_DIR}/${STATIC_NAME}.arm ${TMP_DIR}/arm/*.o
-    
-    
+
+
     "${PPC_386_BIN}" -Tiphonesim -WP7.0 -Cn -gw -S2 -Sew -Sh ${SG_INC} -XX -XR"${IPHONE_SDK_SIM}" -gltw -FE"${TMP_DIR}/i386" -FU"${TMP_DIR}/i386" -Fi"src" -Fu"${LIB_DIR}" -k"/usr/lib/libbz2.dylib" -k"${LIB_DIR}/*.a" -o"${TMP_DIR}/${GAME_NAME}.i386" "${SDK_SRC_DIR}/SGSDK.pas" -k-framework -kAudioToolbox -k-framework -kQuartzCore -k-framework -kOpenGLES -k-framework -kCoreGraphics -k"-framework MobileCoreServices" -k"-framework ImageIO" -k-framework -kUIKit -k-framework -kFoundation -k-framework -kCoreAudio -k-no_order_inits -XMSDL_main -dIOS -dSWINGAME_OPENGL -dSWINGAME_SDL13 > ${LOG_FILE} 2> ${LOG_FILE}
     if [ $? != 0 ]; then
        DoExitCompile;
     fi
-    
+
     ar -rcs ${TMP_DIR}/${STATIC_NAME}.i386 ${TMP_DIR}/i386/*.o
-    
+
     lipo -create -output "${OUT_DIR}/${STATIC_NAME}" "${TMP_DIR}/${STATIC_NAME}.i386" "${TMP_DIR}/${STATIC_NAME}.arm" > ${LOG_FILE} 2> ${LOG_FILE}
 }
 
-# 
+#
 # Create fat dylib containing x64 and i386 code
-# 
+#
 doLipo()
 {
     echo "  ... Creating Universal Binary"
     lipo -arch ${1} "${OUT_DIR}/libSGSDK${1}.dylib" -arch ${2} "${OUT_DIR}/libSGSDK${2}.dylib" -output "${OUT_DIR}/libSGSDK.dylib" -create
-    
+
     rm -rf "${OUT_DIR}/libSGSDK${1}.dylib"
     rm -rf "${OUT_DIR}/libSGSDK${2}.dylib"
 }
@@ -460,15 +481,15 @@ doCreateFramework()
         rm -rf "${OUT_DIR}/SGSDK.framework/Versions/${VERSION}"
         ADD_SYMLINKS="N"
     fi
-    
+
     mkdir "${VERSION_DIR}"
     mkdir "${HEADER_DIR}"
     mkdir "${RESOURCES_DIR}"
-    
+
     cp "${SDK_SRC_DIR}/SGSDK.h" "${HEADER_DIR}/SGSDK.h"
     cp "${SDK_SRC_DIR}/Types.h" "${HEADER_DIR}/Types.h"
     mv "${OUT_DIR}/libSGSDK.dylib" "${VERSION_DIR}/SGSDK"
-    
+
     echo "<?xml version='1.0' encoding='UTF-8'?>\
     <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
     <plist version=\"1.0\">\
@@ -491,7 +512,7 @@ doCreateFramework()
             <string>SWIN</string>\
     </dict>\
     </plist>" >> "${RESOURCES_DIR}/Info.plist"
-    
+
     cd "${OUT_DIR}/SGSDK.framework"
     #link is relative to Current link...
     if [ -d ./Versions/Current ]
@@ -499,7 +520,7 @@ doCreateFramework()
         rm ./Versions/Current
     fi
     ln -f -s "./${VERSION}" "./Versions/Current"
-    
+
     if [ $ADD_SYMLINKS = "Y" ]
     then
         ln -f -s "./Versions/Current/Resources" "./Resources"
@@ -517,24 +538,24 @@ then
     then
         mkdir -p "${OUT_DIR}"
     fi
-    
+
     if [ "$OS" = "$MAC" ]; then
         DisplayHeader
-        
+
         if [ ${IOS} = true ]; then
           doIOSCompile
           echo "  Finished"
           echo "--------------------------------------------------"
           exit
         fi
-        
+
         HAS_i386=false
         HAS_x64=false
-        
+
         OS_VER=`sw_vers -productVersion | awk -F . '{print $1"."$2}'`
         OS_VER_MINOR=`sw_vers -productVersion | awk -F . '{print $2}'`
         XCODE_PREFIX=''
-        
+
         USR_PATHS='/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr'
         if [ ! -d $USR_PATHS ]; then
           USR_PATHS='/usr'
@@ -547,15 +568,15 @@ then
             XCODE_PREFIX='/Applications/Xcode.app/Contents'
           fi
         fi
-        
+
         if [ -f "${USR_PATHS}/libexec/as/i386/as" ]; then
             HAS_i386=true
         fi
-        
+
         if [ -f "${USR_PATHS}/libexec/as/x86_64/as" ]; then
             HAS_x64=true
         fi
-        
+
         PAS_FLAGS="$PAS_FLAGS -WM10.7"
 
         SDK_PATH="${XCODE_PREFIX}/Developer/SDKs/MacOSX${OS_VER}.sdk"
@@ -564,38 +585,38 @@ then
             exit -1
         fi
         SDK_FLAGS="-syslibroot ${SDK_PATH} -macosx_version_min 10.7"
-        
+
         echo "  ... Compiling Library"
-        
+
         if [[ $HAS_i386 = true && $HAS_x64 = true ]]; then
             echo "  ... Building Universal Binary"
-            
+
             #Compile i386 version of library
             FPC_BIN=`which ppc386`
             doMacCompile "i386" "$SDK_FLAGS"
-            
+
             #Compile ppc version of library
             FPC_BIN=`which ppcx64`
             doMacCompile "x86_64" "$SDK_FLAGS"
-            
+
             #Combine into a fat dylib
             doLipo "i386" "x86_64"
         else
             #Compile i386 version of library
             FPC_BIN=`which ppc386`
             doMacCompile "i386" "$SDK_FLAGS"
-            
+
             mv ${OUT_DIR}/libSGSDKi386.dylib ${OUT_DIR}/libSGSDK.dylib
         fi
-        
+
         if [ $STATIC = true ]; then
              ar -rcs ${OUT_DIR}/${STATIC_NAME} ${TMP_DIR}/*.o
         fi
-        
+
         #Convert into a Framework
         if [ ${FRAMEWORK} = true ]; then
             doCreateFramework
-            
+
             if [ ! $INSTALL = "N" ]
             then
                 echo "  ... Installing SwinGame"
@@ -603,13 +624,13 @@ then
                 then
                     mkdir -p "${INSTALL_DIR}"
                 fi
-        
+
                 doCopyFramework()
                 {
                     # $1 = framework
                     # $2 = dest
                     fwk_name=${1##*/} # ## = delete longest match for */... ie all but file name
-            
+
                     if [ -d "${2}/${fwk_name}" ]
                     then
                         #framework exists at destn, just copy the version details
@@ -619,7 +640,7 @@ then
                         cp -p -R "$1" "$2"
                     fi
                 }
-        
+
                 doCopyFramework "${FULL_OUT_DIR}"/SGSDK.framework "${INSTALL_DIR}"
                 for file in `find ${LIB_DIR} -depth 1 | grep [.]framework$`
                 do
@@ -627,30 +648,30 @@ then
                 done
             fi # install
         else #not framework = dylib
-            mv ${OUT_DIR}/libSGSDK.dylib ${OUT_DIR}/libSGSDK${NAME_SUFFIX}.dylib 
+            mv ${OUT_DIR}/libSGSDK.dylib ${OUT_DIR}/libSGSDK${NAME_SUFFIX}.dylib
         fi # framework
-    
-    elif [ "$OS" = "$WIN" ] 
+
+    elif [ "$OS" = "$WIN" ]
     then
         DisplayHeader
-        
+
         PrepareTmp
-        
-        fpc -Mobjfpc -Sh $EXTRA_OPTS -FE"${TMP_DIR}" -FU"${TMP_DIR}" "${SDK_SRC_DIR}/SGSDK.pas" >> "${LOG_FILE}"
+
+        ${FPC_BIN} -S2 -Sh $EXTRA_OPTS -FE"${TMP_DIR}" -FU"${TMP_DIR}" "${SDK_SRC_DIR}/SGSDK.pas" >> "${LOG_FILE}"
         if [ $? != 0 ]; then echo "Error compiling SGSDK"; cat "${LOG_FILE}"; exit 1; fi
-        
+
         mv "${TMP_DIR}/SGSDK.dll" "${OUT_DIR}/SGSDK.dll"
 
         if [ ! $INSTALL = "N" ]
         then
             echo "  ... Installing SwinGame"
-            
+
             cp -p -f "${OUT_DIR}/SGSDK.dll" ${INSTALL_DIR}
         fi
-        CleanTmp 
+        CleanTmp
     else #os = Linux
         DisplayHeader
-        
+
         PrepareTmp
 
         echo "  ... Compiling Library"
@@ -660,7 +681,7 @@ then
         mv "${TMP_DIR}/libSGSDK.so" "${OUT_DIR}/libSGSDK.so.${VERSION}"
         ln -s -f "${OUT_DIR}/libSGSDK.so.${VERSION}" "${OUT_DIR}/libsgsdk.so"
         ln -s -f "${OUT_DIR}/libSGSDK.so.${VERSION}" "${OUT_DIR}/libSGSDK.so"
-        
+
         if [ ! $INSTALL = "N" ]
         then
             echo "  ... Installing SwinGame"
