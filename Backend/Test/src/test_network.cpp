@@ -9,6 +9,7 @@
 #include "test_network.h"
 
 #include <iostream>
+#include <stdio.h>
 
 #include "sgInterfaces.h"
 
