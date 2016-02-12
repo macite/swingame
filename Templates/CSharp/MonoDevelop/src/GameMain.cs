@@ -1,6 +1,11 @@
+//
+// Note: In Windows, ensure that you are compiling with the Mono compiler.
+// In MonoDevelop (Xamarin Studio) this is found in Tools - Options... -> .NET Runtimes.
+//
+
 using System;
 using SwinGameSDK;
-using SwinGameSDK.SwinGame;
+using static SwinGameSDK.SwinGame;
 
 namespace MyGame
 {
