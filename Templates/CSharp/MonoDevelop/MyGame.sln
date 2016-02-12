@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGame", "MyGame.csproj", "{871B5A90-103A-46A5-BBB9-07C02B9851D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGame", "MyGame.csproj", "{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyGame - Mac", "MyGameMac.csproj", "{871B5A90-103A-46A5-BBB9-07C02B9851D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,13 +14,13 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Mac|x86.ActiveCfg = Debug-Mac|x86
 		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Mac|x86.Build.0 = Debug-Mac|x86
-		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Unix|x86.ActiveCfg = Debug-Unix|x86
-		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Unix|x86.Build.0 = Debug-Unix|x86
-		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Windows|x86.ActiveCfg = Debug-Windows|x86
-		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Windows|x86.Build.0 = Debug-Windows|x86
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|x86.ActiveCfg = Debug-Unix|x86
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|x86.Build.0 = Debug-Unix|x86
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Windows|x86.ActiveCfg = Debug-Windows|x86
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Windows|x86.Build.0 = Debug-Windows|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = MyGame.csproj
+		StartupItem = MyGameMac.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None

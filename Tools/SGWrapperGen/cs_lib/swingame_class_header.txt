@@ -14,3 +14,17 @@ namespace SwinGameSDK
 {
 	public static class SwinGame
 	{
+		[DllImport("kernel32.dll")]
+		public static extern IntPtr LoadLibrary(string dllToLoad);
+
+		static SwinGame()
+		{
+			// On Windows: load the library from the path to the executable
+			int p = (int)Environment.OSVersion.Platform;
+			if ( (p != 4) && (p != 6) && (p!=128) )
+			{
+				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\libSGSDL2.dll");
+				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\SGSDK.dll");
+			}
+		}
+
