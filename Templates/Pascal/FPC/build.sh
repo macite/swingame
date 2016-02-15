@@ -120,7 +120,7 @@ shift $((${OPTIND}-1))
 if [ "$OS" = "$MAC" ]; then
     TMP_DIR="${TMP_DIR}/mac"
     LIB_DIR="${APP_PATH}/lib/mac"
-    PAS_FLAGS="-dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\""
+    PAS_FLAGS="-dSWINGAME_SDL2 -k\"-lz\" -k\"-lbz2\" -k\"-lstdc++\" -k\"-lm\" -k\"-lc\" -k\"-lc++\" -k\"-lcurl\""
 elif [ "$OS" = "$WIN" ]; then
     if [ ${SG_WIN32} = true ]; then
       LIB_DIR="${APP_PATH}/lib/win32"
@@ -201,11 +201,11 @@ doBasicMacCompile()
     mkdir -p ${TMP_DIR}
     echo "  ... Compiling $GAME_MAIN"
 
-    FRAMEWORKS='-framework Cocoa -framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback'
+    FRAMEWORKS='-framework Cocoa -framework AudioToolbox -framework AudioUnit -framework CoreAudio -framework IOKit -framework OpenGL -framework Carbon -framework ForceFeedback -framework CoreVideo'
 
     STATIC_LIBS=`cd ${LIB_DIR};ls -f *.a | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-l%s ", substr(patharr[idx],4)) }'`
 
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -S2 -Sh -FE"${OUT_DIR}" -FU"${TMP_DIR}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"-F'${LIB_DIR}' ${FRAMEWORKS}" -k"${STATIC_LIBS}" -o"${GAME_NAME}" "${SRC_DIR}/${GAME_MAIN}" > "${LOG_FILE}"
+    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -S2 -Sh -FE"${OUT_DIR}" -FU"${TMP_DIR}" -Fu"${LIB_DIR}" -Fi"${SRC_DIR}" -k"-F'${LIB_DIR}' ${FRAMEWORKS}" -k"${STATIC_LIBS}" -o"${GAME_NAME}" "${SRC_DIR}/${GAME_MAIN}" > "${LOG_FILE}"  2> "${LOG_FILE}"
     if [ $? != 0 ]; then DoExitCompile; fi
 }
 
