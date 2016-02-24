@@ -77,6 +77,10 @@ def create_sgsdk_library():
 
     output_line('Copying code to dist source directory')
     copy_coresdk_to_dist_source()
+    
+    output_line('Copy backend code to sgsdl2 directory')
+    sgsdl_pack_script = swingame_path + 'Backend/pack.sh'
+    run_bash(sgsdl_pack_script, [])
 
     output_line('Setting version to %s' % sg_version )
     rewrite_versions()
