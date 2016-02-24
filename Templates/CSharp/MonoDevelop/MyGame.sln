@@ -9,13 +9,13 @@ Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug-Mac|x86 = Debug-Mac|x86
 		Debug-Windows|x86 = Debug-Windows|x86
-		Debug-Unix|x86 = Debug-Unix|x86
+		Debug-Unix|AnyCPU = Debug-Unix|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Mac|x86.ActiveCfg = Debug-Mac|x86
 		{871B5A90-103A-46A5-BBB9-07C02B9851D1}.Debug-Mac|x86.Build.0 = Debug-Mac|x86
-		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|x86.ActiveCfg = Debug-Unix|x86
-		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|x86.Build.0 = Debug-Unix|x86
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|AnyCPU.ActiveCfg = Debug-Unix|Any CPU
+		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Unix|AnyCPU.Build.0 = Debug-Unix|Any CPU
 		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Windows|x86.ActiveCfg = Debug-Windows|x86
 		{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}.Debug-Windows|x86.Build.0 = Debug-Windows|x86
 	EndGlobalSection
