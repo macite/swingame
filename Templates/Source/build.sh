@@ -687,6 +687,7 @@ then
       echo "  ... Installing SwinGame -- needs sudo permission"
       cd "$FULL_APP_PATH"
       sudo install "${OUT_DIR}"/libSGSDK.* "${INSTALL_DIR}"
+      sudo install "${OUT_DIR}"/libsgsdk.* "${INSTALL_DIR}"
 
       if [ ! -d ${HEADER_DIR} ]
       then
