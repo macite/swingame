@@ -38,6 +38,7 @@ void init_sgsdl2()
     done_init = true;
 
     clear_error();
+    cout << "pre init" << endl;
     if ( -1 == SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) )
     {
         // fatal error so...
@@ -47,6 +48,7 @@ void init_sgsdl2()
         set_error_state(SDL_GetError());
         return;
     }
+    cout << "post init" << endl;
 
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
