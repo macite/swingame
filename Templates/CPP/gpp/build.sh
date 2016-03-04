@@ -17,7 +17,7 @@ fi
 
 # Move to src dir
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
-APP_PATH=`cd "$APP_PATH"; pwd` 
+APP_PATH=`cd "$APP_PATH"; pwd`
 cd "$APP_PATH"
 
 GAME_NAME=${APP_PATH##*/}
@@ -44,19 +44,30 @@ else
 fi
 
 if [ "$OS" = "$WIN" ]; then
-    C_FLAGS="$C_FLAGS -march=i386"
-fi
-
-#Locate the compiler...
-GCC_BIN=`which clang 2>> /dev/null`
-if [ -z "$GCC_BIN" ]; then
-    #try locating gcc
-    GCC_BIN=`which g++`
-    
+    #Locate the compiler...
+    GCC_BIN=`which g++ 2>> /dev/null`
     if [ -z "$GCC_BIN" ]; then
-        #no compiler found :(
-        echo "Unable to find a C compiler. Install either clang or gcc."
-        exit -1
+        #try locating gcc
+        GCC_BIN=`which clang`
+
+        if [ -z "$GCC_BIN" ]; then
+            #no compiler found :(
+            echo "Unable to find a C compiler. Install either clang or gcc."
+            exit -1
+        fi
+    fi
+else
+    #Locate the compiler...
+    GCC_BIN=`which clang 2>> /dev/null`
+    if [ -z "$GCC_BIN" ]; then
+        #try locating gcc
+        GCC_BIN=`which g++`
+
+        if [ -z "$GCC_BIN" ]; then
+            #no compiler found :(
+            echo "Unable to find a C compiler. Install either clang or gcc."
+            exit -1
+        fi
     fi
 fi
 
@@ -71,7 +82,7 @@ SDL_13=false
 Usage()
 {
     echo "Usage: [-c] [-h] [-r] [name]"
-    echo 
+    echo
     echo "Compiles your game into an executable application."
     echo "Output is located in $OUT_DIR."
     echo
@@ -84,23 +95,25 @@ Usage()
 
 RELEASE=""
 
-while getopts chrg:b: o
+# Flags to indicate which architecture for Windows only
+SG_WIN32=true
+SG_WIN64=false
+
+while getopts chri:w: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-            OPENGL=false
-        fi 
-        ;;
     h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            SDL13=false
-            OPENGL=true
-        fi 
-        ;;
     r)  RELEASE="Y" ;;
-    ?)  Usage
+    i)  ICON="$OPTARG";;
+    w)  if [ "${OPTARG}" = "in32" ]; then
+            SG_WIN32=true
+            SG_WIN64=false
+        elif [ "${OPTARG}" = "in64" ]; then
+            SG_WIN32=false
+            SG_WIN64=true
+        fi
+        ;;
     esac
 done
 
@@ -138,20 +151,17 @@ if [ "$OS" = "$MAC" ]; then
       LIB_DIR="${APP_PATH}/lib/mac"
     fi
 elif [ "$OS" = "$WIN" ]; then
-    #
-    # This needs 1.3 versions of SDL for Windows...
-    # along with function sdl_gfx, sdl_ttf, sdl_image, sdl_mixer
-    #
-    
-    # if [ ${SDL_13} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # elif [ ${OPENGL} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # else
-    SDL_13=false
-    OPENGL=false
-    LIB_DIR="${APP_PATH}/lib/win"
-    # fi
+    if [ ${SG_WIN32} = true ]; then
+      LIB_DIR="${APP_PATH}/lib/win32"
+      TMP_DIR="${TMP_DIR}/win32"
+      C_FLAGS="${C_FLAGS} -march=i386"
+      ARCH_FLAG="-march=i386"
+    else
+      LIB_DIR="${APP_PATH}/lib/win64"
+      TMP_DIR="${TMP_DIR}/win64"
+      C_FLAGS="${C_FLAGS} -march=x86-64"
+      ARCH_FLAG="-march=x86-64"
+    fi
 else #linux
     LIB_DIR="/usr/lib"
 fi
@@ -194,9 +204,9 @@ doCompile()
     name=$2
     out_file=$3
     extra_opts=$4
-    
+
     if [ ! -f $out_file ] || [ $file -nt $out_file ]; then
-        echo "      ... Compiling ${name}"    
+        echo "      ... Compiling ${name}"
         ${GCC_BIN} -c ${extra_opts} ${SG_INC} ${C_FLAGS} -o "${out_file}" "${file}" >> ${LOG_FILE}
         if [ $? != 0 ]; then echo "Error compiling"; cat ${LOG_FILE}; exit 1; fi
     fi
@@ -221,13 +231,13 @@ doBasicMacCompile()
         doCompile "${file}" "${name}" "${out_file}" "-arch i386"
 
     done
-    
+
     doCompileGameMain "-arch i386"
-    
+
     #Assemble all of the .s files
     echo "  ... Creating game"
     FRAMEWORKS=`ls -d ${LIB_DIR}/*.framework | awk -F . '{split($2,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
-    
+
     ${GCC_BIN} -F${LIB_DIR} ${FRAMEWORKS} -Wl,-rpath,@loader_path/../Frameworks -arch i386 -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR}/${1} -maxdepth 1 -name \*.o`
     if [ $? != 0 ]; then echo "Error creating game"; exit 1; fi
 }
@@ -239,7 +249,7 @@ doBasicMacCompile()
 doMacCompile()
 {
     mkdir -p "${TMP_DIR}/${1}"
-    
+
     echo "  ... Compiling for $1"
     for file in `find ${LIBSRC_DIR} | grep [.]cpp$` ; do
         name=${file##*/} # ## = delete longest match for */... ie all but file name
@@ -247,21 +257,21 @@ doMacCompile()
         out_file="${TMP_DIR}/${1}/${name}.o"
         doCompile "${file}" "${name}" "${out_file}" "-arch ${1}"
     done
-    
+
     doCompileGameMain "-arch ${1}"
-    
+
     #Assemble all of the .s files
     echo "  ... Creating game for $1"
     FRAMEWORKS=`ls -d ${LIB_DIR}/*.framework | awk -F . '{split($2,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("-framework %s ", patharr[idx]) }'`
-    
+
     ${GCC_BIN} -F${LIB_DIR} ${FRAMEWORKS} -Wl,-rpath,@loader_path/../Frameworks -arch $1 $2 -o "${TMP_DIR}/${1}/${GAME_NAME}" `find ${TMP_DIR}/${1} -maxdepth 1 -name \*.o`
-    
+
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
-# 
+#
 # Create fat executable (i386 + ppc)
-# 
+#
 doLipo()
 {
     echo "  ... Creating Universal Binary"
@@ -277,7 +287,7 @@ doMacPackage()
     fi
 
     echo "  ... Creating Application Bundle"
-    
+
     mkdir "${GAMEAPP_PATH}"
     mkdir "${GAMEAPP_PATH}/Contents"
     mkdir "${GAMEAPP_PATH}/Contents/MacOS"
@@ -287,7 +297,7 @@ doMacPackage()
     echo "  ... Added Private Frameworks"
     cp -R -p "${LIB_DIR}/"*.framework "${GAMEAPP_PATH}/Contents/Frameworks/"
 
-    mv "${OUT_DIR}/${GAME_NAME}" "${GAMEAPP_PATH}/Contents/MacOS/" 
+    mv "${OUT_DIR}/${GAME_NAME}" "${GAMEAPP_PATH}/Contents/MacOS/"
     echo "<?xml version='1.0' encoding='UTF-8'?>\
     <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
     <plist version=\"1.0\">\
@@ -328,12 +338,12 @@ doLinuxCompile()
         name=${name%%.cpp} # %% = delete longest match from back, i.e. extract .cpp
         doCompile "${file}" "${name}" "${TMP_DIR}/${name}.o" ""
     done
-    
+
     doCompileGameMain ""
-    
+
     #Assemble all of the .s files
     echo "  ... Creating game"
-    
+
     ${GCC_BIN} -L${LIB_DIR} -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
@@ -351,12 +361,12 @@ doWindowsCompile()
         name=${name%%.cpp} # %% = delete longest match from back, i.e. extract .cpp
         doCompile "${file}" "${name}" "${TMP_DIR}/${name}.o" ""
     done
-    
+
     doCompileGameMain ""
-    
+
     #Assemble all of the .s files
     echo "  ... Creating game"
-    ${GCC_BIN} -L${LIB_DIR} -static-libstdc++ -static-libgcc -march=i386 -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
+    ${GCC_BIN} -L${LIB_DIR} ${ARCH_FLAG} -static-libstdc++ -static-libgcc -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
@@ -364,7 +374,7 @@ doWindowsPackage()
 {
     echo "  ... Copying libraries"
     cp -p -f "${LIB_DIR}"/*.dll "${OUT_DIR}"
-    
+
     RESOURCE_DIR=${FULL_OUT_DIR}/Resources
 }
 
@@ -372,9 +382,9 @@ copyWithoutSVN()
 {
     FROM_DIR=$1
     TO_DIR=$2
-    
+
     cd "${FROM_DIR}"
-    
+
     # Create directory structure
     find . -mindepth 1 -type d ! -path \*.svn\* -exec sh -c "if [ ! -d '${TO_DIR}/{}' ]; then mkdir -p '${TO_DIR}/{}' ; fi" \;
     # Copy files and links
@@ -387,7 +397,7 @@ copyWithoutSVN()
 doCopyResources()
 {
     echo "  ... Copying Resources into $GAME_NAME"
-    
+
     copyWithoutSVN "${APP_PATH}/Resources" "${RESOURCE_DIR}"
 }
 
@@ -399,24 +409,24 @@ locateGameMain()
   cd "${SRC_DIR}"
   fileList=$(find "." -maxdepth 1 -type f -name \*.cpp)
   FILE_COUNT=$(echo "$fileList" | tr " " "\n" | wc -l)
-  
+
   if [ ${FILE_COUNT} = 1 ]; then
     GAME_MAIN=${fileList[0]}
   else
     echo "Select the file to compile for your game"
     PS3="File number: "
-  
+
     select fileName in $fileList; do
         if [ -n "$fileName" ]; then
             GAME_MAIN=${fileName}
         fi
-      
+
         break
     done
   fi
-  
+
   cd "${FULL_APP_PATH}"
-  
+
   if [ ! -f "${SRC_DIR}/${GAME_MAIN}" ]; then
     echo "Cannot find file to compile, was looking for ${GAME_MAIN}"
     exit -1
@@ -432,7 +442,7 @@ then
     then
         mkdir -p "${OUT_DIR}"
     fi
-    
+
     echo "--------------------------------------------------"
     echo "          Creating $GAME_NAME"
     echo "          for $OS"
@@ -443,32 +453,32 @@ then
     echo "--------------------------------------------------"
     echo "  ... Creating ${GAME_NAME}"
 
-    
+
     if [ "$OS" = "$MAC" ]; then
         HAS_PPC=false
         HAS_i386=false
         HAS_LEOPARD_SDK=false
         OS_VER=`sw_vers -productVersion | awk -F . '{print $1"."$2}'`
-        
+
         if [ -f /usr/libexec/as/ppc/as ]; then
             HAS_PPC=true
         fi
-        
+
         if [ -f /usr/libexec/as/i386/as ]; then
             HAS_i386=true
         fi
-        
+
         if [ -d /Developer/SDKs/MacOSX10.5.sdk ]; then
             HAS_LEOPARD_SDK=true
         fi
-        
+
         if [ $OS_VER = '10.5' ]; then
             HAS_LEOPARD_SDK=true
         fi
-        
+
         if [[ $HAS_i386 = true && $HAS_PPC = true && $HAS_LEOPARD_SDK ]]; then
             echo "  ... Building Universal Binary"
-            
+
             if [ $OS_VER = '10.5' ]; then
                 doMacCompile "i386" ""
                 doMacCompile "ppc" ""
@@ -476,12 +486,12 @@ then
                 doMacCompile "i386" "-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5"
                 doMacCompile "ppc" "-isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.5"
             fi
-            
+
             doLipo "i386" "ppc"
         else
             doBasicMacCompile
         fi
-        
+
         doMacPackage
     elif [ "$OS" = "$LIN" ]; then
         doLinuxCompile
@@ -490,7 +500,7 @@ then
         doWindowsCompile
         doWindowsPackage
     fi
-    
+
     doCopyResources
 else
     CleanTmp

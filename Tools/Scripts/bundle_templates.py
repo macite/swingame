@@ -74,7 +74,7 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
 
     # print("\n  Copying lib files...")
     if copy_lib_dir:
-        lib_folder =    coresdk_folder + copy_lib_dir
+        lib_folder = coresdk_folder + copy_lib_dir
         copy_without_git(lib_folder, specific_dist_lib_folder, overwrite = False)
     else:
         for lib_from, lib_to in dist_dict['libs']:

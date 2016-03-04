@@ -98,7 +98,7 @@ sg_http_response sgsdl2_http_post(const char *host, unsigned short port, const c
 
     curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, body);
 
-    curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_easy_setopt(curl_handle, CURLOPT_SSL_VERIFYPEER, 0L);
 
     // header list
     struct curl_slist *list = NULL;
