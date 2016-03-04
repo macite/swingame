@@ -2,18 +2,19 @@
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug-Unix</Configuration>
-    <ProjectTypeGuids>{948B3504-5B70-4649-8FE4-BDE1FB46EC69};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{871B5A90-103A-46A5-BBB9-07C02B9851D1}</ProjectGuid>
+    <ProjectGuid>{A9DCAC72-BC77-4C33-BE70-BBFD31D7C798}</ProjectGuid>
     <RootNamespace>MyGame</RootNamespace>
     <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <AssemblyName>MyGame</AssemblyName>
     <SuppressXamMacUpsell>True</SuppressXamMacUpsell>
     <SuppressXamMacMigration>True</SuppressXamMacMigration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputType>Exe</OutputType>
+    <ApplicationIcon>Resources\SwinGame.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Unix|x86' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Unix|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +23,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <PlatformTarget>x86</PlatformTarget>
     <EnableCodeSigning>false</EnableCodeSigning>
     <CreatePackage>false</CreatePackage>
     <EnablePackageSigning>false</EnablePackageSigning>
@@ -31,22 +31,17 @@
     <UseRefCounting>false</UseRefCounting>
     <Profiling>false</Profiling>
     <OutputType>WinExe</OutputType>
-    <AssemblyName>MyGame</AssemblyName>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="BeforeBuild" command="lib/makelib.sh" workingdir="${ProjectDir}/lib" />
+        <Command type="AfterClean" command="lib/cleanlib.sh" workingdir="${ProjectDir}/lib" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug-Mac|AnyCPU' ">
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug-Mac</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <EnableCodeSigning>false</EnableCodeSigning>
-    <Profiling>false</Profiling>
-    <UseRefCounting>false</UseRefCounting>
-    <UseSGen>false</UseSGen>
-    <AssemblyName>MyGameMac</AssemblyName>
-    <EnablePackageSigning>false</EnablePackageSigning>
-    <CreatePackage>false</CreatePackage>
-    <IncludeMonoRuntime>false</IncludeMonoRuntime>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PrepareForRunDependsOn>$(PrepareForRunDependsOn);CopyLibsToOut</PrepareForRunDependsOn>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="src\" />
     <Folder Include="Resources\" />
@@ -64,18 +59,9 @@
     <None Include="Resources\**\*.*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <WinLibraryFiles Include="lib\win32\*.dll" />
-    <None Include="Info.plist">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <UnxLibs Include="lib\linux\*.so" />
   </ItemGroup>
-  <Target Name="CopyWinFiles">
-    <Copy SourceFiles="@(WinLibraryFiles)" DestinationFolder="$(OutDir)" />
+  <Target Name="CopyLibsToOut">
+    <Copy SourceFiles="@(UnxLibs)" DestinationFolder="$(OutDir)" />
   </Target>
-  <ItemGroup>
-    <NativeReference Include="lib\mac\libSGSDK.dylib">
-      <IsCxx>False</IsCxx>
-      <Kind>Dynamic</Kind>
-    </NativeReference>
-  </ItemGroup>
 </Project>

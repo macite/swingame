@@ -90,6 +90,14 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
 
     # print("--------------------------------------------------")
 
+    # Add linux library to all.. if linux is included
+    if "Linux" in dist_dict['os']:
+        linux_template_folder = template_folder + "Linux/"
+        swin_shutil.copyfile(linux_template_folder+"makelib.sh", specificdist_folder+"lib/makelib.sh")
+        swin_shutil.copyfile(linux_template_folder+"cleanlib.sh", specificdist_folder+"lib/cleanlib.sh")
+        swin_shutil.copyfile(dist_folder+"sgsdk_source.zip", specificdist_folder+"lib/sgsdk_source.zip")
+
+
     if use_sgsdk:
         # print "copying library"
         dist_source_folder = swingame_path + "Dist/Source/"
@@ -108,7 +116,6 @@ def assemble_dist(language, dist_dict, use_sgsdk, part_from, use_dylib):
                     print >> sys.stderr, 'Missing static libraries for mac'
                 else:
                     swin_shutil.copyfile(dist_source_folder+"bin/ios/libSGSDK.a", specificdist_folder+"lib/ios/libSGSDK.a")
-
 
         if "Mac OS X" in dist_dict['os']:
             #

@@ -140,30 +140,22 @@ else
 fi
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
-      TMP_DIR="${TMP_DIR}/badass"
-      LIB_DIR="${APP_PATH}/lib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-        TMP_DIR="${TMP_DIR}/godly"
-      LIB_DIR="${APP_PATH}/lib/godly/mac"
-    else
-      TMP_DIR="${TMP_DIR}/sdl12"
-      LIB_DIR="${APP_PATH}/lib/mac"
-    fi
+    TMP_DIR="${TMP_DIR}/mac"
+    LIB_DIR="${APP_PATH}/lib/mac"
 elif [ "$OS" = "$WIN" ]; then
     if [ ${SG_WIN32} = true ]; then
+      C_FLAGS="$C_FLAGS -march=i386"
+      ARCH_FLAG="-march=i386"
       LIB_DIR="${APP_PATH}/lib/win32"
       TMP_DIR="${TMP_DIR}/win32"
-      C_FLAGS="${C_FLAGS} -march=i386"
-      ARCH_FLAG="-march=i386"
     else
+      C_FLAGS="$C_FLAGS -march=x86-64"
+      ARCH_FLAG="-march=x86-64"
       LIB_DIR="${APP_PATH}/lib/win64"
       TMP_DIR="${TMP_DIR}/win64"
-      C_FLAGS="${C_FLAGS} -march=x86-64"
-      ARCH_FLAG="-march=x86-64"
     fi
 else #linux
-    LIB_DIR="/usr/lib"
+    LIB_DIR="${FULL_APP_PATH}/lib/linux"
 fi
 
 if [ -f "${LOG_FILE}" ]
@@ -332,8 +324,10 @@ doMacPackage()
 
 doLinuxCompile()
 {
+    "${APP_PATH}/lib/makelib.sh"
+    
     mkdir -p "${TMP_DIR}"
-    for file in `find ${LIBSRC_DIR} | grep [.]cpp$`; do
+    for file in `find ${LIBSRC_DIR} -maxdepth 1 | grep [.]cpp$`; do
         name=${file##*/} # ## = delete longest match for */... ie all but file name
         name=${name%%.cpp} # %% = delete longest match from back, i.e. extract .cpp
         doCompile "${file}" "${name}" "${TMP_DIR}/${name}.o" ""
@@ -344,12 +338,14 @@ doLinuxCompile()
     #Assemble all of the .s files
     echo "  ... Creating game"
 
-    ${GCC_BIN} -L${LIB_DIR} -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
+    ${GCC_BIN} -Wl,-rpath=\$ORIGIN,--enable-new-dtags -L${LIB_DIR} -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdl2 -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
 doLinuxPackage()
 {
+    cp -p -f "${LIB_DIR}"/libsgsdk.so "${FULL_OUT_DIR}"/libSGSDK.so
+    cp -p -f "${LIB_DIR}"/libsgsdl2.so "${FULL_OUT_DIR}"/
     RESOURCE_DIR="${FULL_OUT_DIR}/Resources"
 }
 
@@ -366,7 +362,7 @@ doWindowsCompile()
 
     #Assemble all of the .s files
     echo "  ... Creating game"
-    ${GCC_BIN} -L${LIB_DIR} ${ARCH_FLAG} -static-libstdc++ -static-libgcc -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
+    ${GCC_BIN} -L${LIB_DIR} ${ARCH_FLAG} -static-libstdc++ -static-libgcc -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdl2 -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 

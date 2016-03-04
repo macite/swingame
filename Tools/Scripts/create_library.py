@@ -57,10 +57,26 @@ def copy_coresdk_to_dist_source():
     flat_copy_without_git(lib_src_folder, dist_source_src_folder)
     flat_copy_without_git(src_folder, dist_source_src_folder)
 
+def make_linux_sgsdk_source():
+    dist_source_folder =            dist_folder + "Source/"
+    dist_sgsdk_source_folder =      dist_folder + "sgsdk_source/"
+    dist_sgsdk_source_bin =         dist_folder + "sgsdk_source/bin"
+    dist_sgsdk_source_lib =         dist_folder + "sgsdk_source/lib"
+    dist_sgsdk_source_staticlib =   dist_folder + "sgsdk_source/staticlib"
+    dist_sgsdk_source_zip =         dist_folder + "sgsdk_source.zip"
+
+    copy_without_git(dist_source_folder, dist_sgsdk_source_folder)
+    run_bash("rm", ["-rf", dist_sgsdk_source_bin ])
+    run_bash("rm", ["-rf", dist_sgsdk_source_lib ])
+    run_bash("rm", ["-rf", dist_sgsdk_source_staticlib ])
+    os.chdir(dist_folder)
+    run_bash("zip", ["-r", dist_sgsdk_source_zip, "sgsdk_source"])
+    
+
 
 _sgsdk_creation_script_options = {
     # 'Mac OS X': [ ['-IOS'], ['-badass','-static'], ['-godly','-static'], ['-static'], ['-badass','-framework'], ['-godly','-framework'], [ '-framework' ]],     # default must be last (for framework creation)
-    'Mac OS X': [ [ '-framework' ], None, ['-static']],     # default must be last (for framework creation)
+    'Mac OS X': [ [ '-framework' ], None, ['-static']],     # default must be last (for framework
     'Windows':  [ [ '-win32' ], [ '-win64' ] ],
     'Linux':  [None],
 }
@@ -90,6 +106,9 @@ def create_sgsdk_library():
 
     for opt in option_list:
         run_bash(sgsdk_build_script, opt)
+
+    # Now package up the sgsdk_source for linux
+    make_linux_sgsdk_source()
 
 
 if __name__ == '__main__':

@@ -13,7 +13,7 @@
 
 /// The graphics code of SwinGame is used to draw primitive shapes to the screen
 /// or onto bitmaps.
-/// 
+///
 /// @module Graphics
 /// @static
 unit sgGraphics;
@@ -108,7 +108,7 @@ interface
   /// @lib RefreshScreen
   procedure RefreshScreen(); overload;
   
-  /// Refresh with a target FPS. This will delay a period of time that will 
+  /// Refresh with a target FPS. This will delay a period of time that will
   /// approximately meet the targetted frames per second.
   ///
   /// @lib RefreshScreenRestrictFPS
@@ -275,21 +275,21 @@ interface
 //---------------------------------------------------------------------------
   
   /// Draw a circle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawCircleOpts
   /// @sn drawCircleColor:%s atX:%s y:%s radius:%s opts:%s
   procedure DrawCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
   /// Draw a circle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn drawCircleColor:%s atX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
   procedure DrawCircle(clr : Color; x, y, radius : Single);
 
   /// Draw a circle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawCircleStructOpts
   /// @sn drawCircleColor:%s data:%s opts:%s
   procedure DrawCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
@@ -302,21 +302,21 @@ interface
 
 
   /// Fill a circle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillCircleOpts
   /// @sn fillCircleColor:%s atX:%s y:%s radius:%s opts:%s
   procedure FillCircle(clr : Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   
   /// Fill a circle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn fillCircleColor:%s atX:%s y:%s radius:%s
   ///
   /// @doc_idx 0
   procedure FillCircle(clr : Color; x, y, radius : Single);
 
   /// Fill a circle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillCircleStructOpts
   /// @sn fillCircleColor:%s data:%s opts:%s
   procedure FillCircle(clr : Color; const c: Circle; const opts : DrawingOptions); overload;
@@ -328,7 +328,7 @@ interface
   procedure FillCircle(clr : Color; const c: Circle);
   
   /// Fill a circle at a given point using the passed in drawing options.
-  /// 
+  ///
   /// @lib FillCircleAtPointWithOpts
   /// @sn fillCircleColor:%s at:%s radius:%s opts:%s
   procedure FillCircle(clr : Color; const pt: Point2D; radius: Longint; const opts : DrawingOptions); overload;
@@ -345,21 +345,21 @@ interface
 //---------------------------------------------------------------------------
   
   /// Draw a triangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawTriangleOpts
   /// @sn drawTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   
   /// Draw a triangle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn drawTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
   ///
   /// @doc_idx 0
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
 
   /// Draw a triangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawTriangleStructOpts
   /// @sn drawTriangleColor:%s data:%s opts:%s
   procedure DrawTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
@@ -372,21 +372,21 @@ interface
 
 
   /// Fill a triangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillTriangleOpts
   /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s opts:%s
   procedure FillTriangle(clr: Color;  x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   
   /// Fill a triangle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn fillTriangleColor:%s atX1:%s y1:%s x2:%s y2:%s x3:%s y3:%s
   ///
   /// @doc_idx 0
   procedure FillTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single);
 
   /// Fill a triangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillTriangleStructOpts
   /// @sn fillTriangleColor:%s data:%s opts:%s
   procedure FillTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
@@ -402,13 +402,13 @@ interface
 //---------------------------------------------------------------------------
   
   /// Clear the screen black.
-  /// 
+  ///
   /// @lib ClearScreen
   /// @sn clearScreen
   procedure ClearScreen(); overload;
   
   /// Clear the screen to a specified color.
-  /// 
+  ///
   /// @lib ClearScreenTo
   /// @sn clearScreen:%s
   procedure ClearScreen(toColor : Color); overload;
@@ -433,14 +433,14 @@ interface
   procedure DrawPixel(clr: Color; const position: Point2D); overload;
 
   /// Draw a pixel with options.
-  /// 
+  ///
   /// @lib DrawPixelOpts
   /// @sn drawPixel:%s atX:%s y:%s opts:%s
   /// @doc_details
   procedure DrawPixel(clr: Color; x, y: Single; const opts: DrawingOptions); overload;
   
   /// Draw a pixel with options.
-  /// 
+  ///
   /// @lib DrawPixelAtPointOpts
   /// @sn drawPixel:%s at:%s opts:%s
   /// @doc_details
@@ -452,21 +452,21 @@ interface
 //---------------------------------------------------------------------------
   
   /// Draw a rectangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawRectangleOpts
   /// @sn drawRectangleColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure DrawRectangle(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Draw a rectangle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn drawRectangleColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure DrawRectangle(clr : Color; x, y, width, height : Single);
 
   /// Draw a rectangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawRectangleStructOpts
   /// @sn drawRectangleColor:%s data:%s opts:%s
   procedure DrawRectangle(clr : Color; const rect: Rectangle; const opts : DrawingOptions); overload;
@@ -503,21 +503,21 @@ interface
 
 
   /// Fill a rectangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillRectangleOpts
   /// @sn fillRectangleColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure FillRectangle(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Fill a rectangle in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn FillRectangleColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure FillRectangle(clr : Color; x, y, width, height : Single);
 
   /// Fill a rectangle onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillRectangleStructOpts
   /// @sn fillRectangleColor:%s data:%s opts:%s
   procedure FillRectangle(clr : Color; const rect: Rectangle; const opts : DrawingOptions); overload;
@@ -535,21 +535,21 @@ interface
 //---------------------------------------------------------------------------
   
   /// Draw a line with the provided DrawingOptions.
-  /// 
+  ///
   /// @lib DrawLineOpts
   /// @sn drawLineColor:%s fromX:%s y:%s toX:%s y:%s opts:%s
   procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
   
   /// Draw a line in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn drawLineColor:%s fromX:%s y:%s toX:%s y:%s
   ///
   /// @doc_idx 0
   procedure DrawLine(clr : Color; x1, y1, x2, y2: Single);
 
   /// Draw a line in the game from one point to another point.
-  /// 
+  ///
   /// @lib DrawLinePt2PtOpts
   /// @sn drawLineColor:%s fromPt:%s toPt:%s opts:%s
   procedure DrawLine(clr: Color; const fromPt, toPt: Point2D; const opts : DrawingOptions);
@@ -563,7 +563,7 @@ interface
   procedure DrawLine(clr : Color; const fromPt, toPt: Point2D);
 
   /// Draw a line onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawLineStructOpts
   /// @sn drawLineColor:%s data:%s opts:%s
   procedure DrawLine(clr : Color; const l : LineSegment; const opts : DrawingOptions); overload;
@@ -581,21 +581,21 @@ interface
 //---------------------------------------------------------------------------
 
   /// Draw a ellipse onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawEllipseOpts
   /// @sn drawEllipseColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Draw a ellipse in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn drawEllipseColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure DrawEllipse(clr : Color; xPos, yPos, width, height: Single);
 
   /// Draw a ellipse onto a destination bitmap.
-  /// 
+  ///
   /// @lib DrawEllipseStructOpts
   /// @sn drawEllipseColor:%s data:%s opts:%s
   procedure DrawEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
@@ -608,21 +608,21 @@ interface
 
 
   /// Fill a ellipse onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillEllipseOpts
   /// @sn fillEllipseColor:%s atX:%s y:%s width:%s height:%s opts:%s
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single; const opts : DrawingOptions); overload;
   
   /// Fill a ellipse in the game.
   ///
-  /// @lib 
+  /// @lib
   /// @sn fillEllipseColor:%s atX:%s y:%s width:%s height:%s
   ///
   /// @doc_idx 0
   procedure FillEllipse(clr : Color; xPos, yPos, width, height: Single);
 
   /// Fill a ellipse onto a destination bitmap.
-  /// 
+  ///
   /// @lib FillEllipseStructOpts
   /// @sn fillEllipseColor:%s data:%s opts:%s
   procedure FillEllipse(clr : Color; const rec: Rectangle; const opts : DrawingOptions); overload;
@@ -646,17 +646,17 @@ interface
   procedure PushClip(const r: Rectangle); overload;
 
   /// Add the clipping rectangle of a bitmap and uses the intersect between the new rectangle and previous clip.
-  /// 
+  ///
   /// @lib PushClipRectForBitmap
   /// @sn bitmap:%s PushClipRect:%s
   ///
   /// @class Bitmap
   /// @overload PushClip PushClipRect
   /// @csn pushClip:%s
-  procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;  
+  procedure PushClip(bmp: Bitmap; const r: Rectangle); overload;
 
   /// Add the clipping rectangle of a window and uses the intersect between the new rectangle and previous clip.
-  /// 
+  ///
   /// @lib PushClipRectForWindow
   /// @sn window:%s PushClipRect:%s
   ///
@@ -666,7 +666,7 @@ interface
   procedure PushClip(wnd: Window; const r: Rectangle); overload;
   
   /// Reset the clipping rectangle of the current window.
-  /// 
+  ///
   /// @lib
   procedure ResetClip(); overload;
 
@@ -698,7 +698,7 @@ interface
   /// Set the clip rectangle of a window.
   ///
   /// @lib SetClipForWindow
-  /// @sn bitmap:%s setClip:%s
+  /// @sn window:%s setClip:%s
   ///
   /// @class Window
   /// @method SetClip
@@ -716,7 +716,7 @@ interface
   procedure PopClip(); overload;
 
   /// Pop the clipping rectangle of a bitmap.
-  /// 
+  ///
   /// @lib PopClipForBitmap
   /// @sn popClipForBitmap:%s
   ///
@@ -725,7 +725,7 @@ interface
   procedure PopClip(bmp: Bitmap); overload;
 
   /// Pop the clipping rectangle of a bitmap.
-  /// 
+  ///
   /// @lib PopClipForWindow
   /// @sn popClipForWindow:%s
   ///
@@ -764,7 +764,7 @@ interface
   
   /// Returns the color of the pixel at the x,y location on
   /// the supplied bitmap.
-  /// 
+  ///
   /// @lib GetPixelFromBitmap
   /// @sn bitmap:%s colorAtX:%s y:%s
   ///
@@ -775,7 +775,7 @@ interface
 
   /// Returns the color of the pixel at the x,y location on
   /// the supplied window.
-  /// 
+  ///
   /// @lib GetPixelFromWindow
   /// @sn WindowPixelColor:%s x:%s y:%s
   ///
@@ -799,7 +799,7 @@ interface
   /// The color Swinburne Red
   ///
   /// @lib
-  function ColorSwinburneRed(): Color;  
+  function ColorSwinburneRed(): Color;
 
   /// The color Grey
   ///
@@ -1527,7 +1527,7 @@ implementation
 //=============================================================================
 
   uses Math, Classes, SysUtils, // system
-       sgTrace, 
+       sgTrace,
        sgCamera, sgShared, sgGeometry, sgResources, sgImages, sgUtils, sgDriverGraphics, sgDriver, sgDriverImages, sgInput, sgAudio, sgText, sgAnimations, sgDrawingOptions,
        sgInputBackend, sgBackendTypes, sgWindowManager, sgDriverSDL2Types;
 
@@ -1608,8 +1608,8 @@ implementation
   procedure DrawTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
     DrawTriangle(clr,
-                 tri.points[0].x, tri.points[0].y, 
-                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[0].x, tri.points[0].y,
+                 tri.points[1].x, tri.points[1].y,
                  tri.points[2].x, tri.points[2].y,
                  opts);
   end;
@@ -1617,8 +1617,8 @@ implementation
   procedure DrawTriangle(clr : Color; const tri: Triangle);
   begin
     DrawTriangle(clr,
-                 tri.points[0].x, tri.points[0].y, 
-                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[0].x, tri.points[0].y,
+                 tri.points[1].x, tri.points[1].y,
                  tri.points[2].x, tri.points[2].y,
                  OptionDefaults());
   end;
@@ -1631,8 +1631,8 @@ implementation
   procedure FillTriangle(clr : Color; const tri: Triangle; const opts : DrawingOptions); overload;
   begin
     FillTriangle(clr,
-                 tri.points[0].x, tri.points[0].y, 
-                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[0].x, tri.points[0].y,
+                 tri.points[1].x, tri.points[1].y,
                  tri.points[2].x, tri.points[2].y,
                  opts);
   end;
@@ -1640,8 +1640,8 @@ implementation
   procedure FillTriangle(clr : Color; const tri: Triangle);
   begin
     FillTriangle(clr,
-                 tri.points[0].x, tri.points[0].y, 
-                 tri.points[1].x, tri.points[1].y, 
+                 tri.points[0].x, tri.points[0].y,
+                 tri.points[1].x, tri.points[1].y,
                  tri.points[2].x, tri.points[2].y,
                  OptionDefaults());
   end;
@@ -1813,50 +1813,50 @@ implementation
 
   procedure DrawTriangle(clr : Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions);
   begin
-      if opts.dest = nil then 
-      begin 
+      if opts.dest = nil then
+      begin
         RaiseWarning('DrawTriangle - No destination bitmap supplied');
-        exit; 
+        exit;
       end;
     sgDriverGraphics.DrawTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
 
   procedure FillTriangle(clr: Color; x1, y1, x2, y2, x3, y3: Single; const opts : DrawingOptions); overload;
   begin
-      if opts.dest = nil then 
-      begin 
+      if opts.dest = nil then
+      begin
         RaiseWarning('FillTriangle - No destination bitmap supplied');
-        exit; 
+        exit;
       end;
     sgDriverGraphics.FillTriangle(clr, x1, y1, x2, y2, x3, y3, opts);
   end;
   
   procedure DrawCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions); overload;
   begin
-      if opts.dest = nil then 
-      begin 
+      if opts.dest = nil then
+      begin
         RaiseWarning('DrawCircle - No destination bitmap supplied');
-        exit; 
+        exit;
       end;
     sgDriverGraphics.DrawCircle(clr, x, y, radius, opts);
   end;
 
   procedure FillCircle(clr: Color; x, y, radius: Single; const opts : DrawingOptions);
   begin
-     if opts.dest = nil then 
-      begin 
+     if opts.dest = nil then
+      begin
         RaiseWarning('FillCircle - No destination bitmap supplied');
-        exit; 
+        exit;
       end;
     sgDriverGraphics.FillCircle(clr, x, y, radius, opts);
   end;
 
   procedure DrawLine(clr: Color; xPosStart, yPosStart, xPosEnd, yPosEnd: Single; const opts : DrawingOptions);
   begin
-    if opts.dest = nil then 
-      begin 
+    if opts.dest = nil then
+      begin
         RaiseWarning('DrawLine - No destination bitmap supplied');
-        exit; 
+        exit;
       end;
     sgDriverGraphics.DrawLine(clr, xPosStart, yPosStart, xPosEnd, yPosEnd, opts);
   end;
@@ -2130,7 +2130,7 @@ implementation
     {$ENDIF}
 
     path := IncludeTrailingPathDelimiter(GetUserDir()) + 'Desktop' + PathDelim;
-    if not DirectoryExists(path) then 
+    if not DirectoryExists(path) then
       path := IncludeTrailingPathDelimiter(GetUserDir());
     
     filename := basename + '.png';
@@ -2195,7 +2195,7 @@ implementation
       Delay(delayTime);
       nowTime := GetTicks();
       delta := nowTime - _lastUpdateTime;
-    end;  
+    end;
 
     _UpdateFPSData(delta);
     _lastUpdateTime := nowTime;
@@ -2620,7 +2620,7 @@ implementation
                     RefreshScreen();
                     InnerProcessEvents();
                     if isSkip then break;
-                    Delay(15);                  
+                    Delay(15);
                 end;
                 ClearScreen(ColorWhite);
                 RefreshScreen();
@@ -3392,7 +3392,7 @@ implementation
       result := RGBAColor(154, 205, 50, 255);
     end;
 
-    function ColorSwinburneRed(): Color;  
+    function ColorSwinburneRed(): Color;
     begin
       result := RGBAColor(237, 36, 25, 255);
     end;

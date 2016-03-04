@@ -1,2 +1,0 @@
-ExcludeList.txt
-install.cmd

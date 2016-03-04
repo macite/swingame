@@ -124,12 +124,14 @@ def flat_copy_without_git(src, dest):
 # ======================================================================
 
 def make_sh_exec(specificdist_folder, dist_dict):
-  for filename in os.listdir(specificdist_folder):
-    if filename[-3:] == ".sh":
-      try:
-        run_bash("chmod", ["a+x", specificdist_folder + filename])
-      except:
-        print "Failed to make scripts executable"
+    for filename in os.listdir(specificdist_folder):
+        if os.path.isdir(os.path.join(specificdist_folder, filename)):
+            make_sh_exec(os.path.join(specificdist_folder, filename), dist_dict)
+        elif filename[-3:] == ".sh":
+            try:
+                run_bash("chmod", ["a+x", os.path.join(specificdist_folder, filename)])
+            except:
+                print "Failed to make scripts executable"
 
 def rename_c_to_cpp(specificdist_folder, dist_dict):
     """Rename the C files CPP."""
@@ -313,64 +315,8 @@ template_details = {
                   },
                   {
                     'lang':          'CPP',
-                    'target':        'NetBeans',
-                    'os':            ['Linux','Mac OS X','Windows'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'CodeBlocks-Linux',
-                    'os':            ['Linux'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'CodeBlocks-Mac',
-                    'os':            ['Mac OS X'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'CodeBlocks-Win',
-                    'os':            ['Windows'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'Eclipse-Mac',
-                    'os':            ['Mac OS X'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'Eclipse-Windows',
-                    'os':            ['Windows'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
                     'target':        'VisualStudio',
                     'os':            ['Windows'],
-                    'lib':           'lib',
-                    'staticsgsdk':    False,
-                    'post_copy':      rename_c_to_cpp
-                  },
-                  {
-                    'lang':          'CPP',
-                    'target':        'xcode 4',
-                    'os':            ['Mac OS X'],
                     'lib':           'lib',
                     'staticsgsdk':    False,
                     'post_copy':      rename_c_to_cpp
@@ -381,18 +327,6 @@ template_details = {
                     'lib':        'lib',
                     'staticsgsdk':    False,
                     'post_copy':      make_sh_exec
-                  },
-                  {
-                    'target':     'xcode 3',
-                    'os':         ['Mac OS X'],
-                    'lib':        'lib',
-                    'staticsgsdk':    False,
-                  },
-                  {
-                      'target':       'xcode 4',
-                      'os':           [ 'Mac OS X' ],
-                      'lib':          'lib',
-                      'staticsgsdk':  False,
                   },
                   # {
                   #   'target':       'iOS',
@@ -416,18 +350,6 @@ template_details = {
                       'lib':          'lib',
                       'staticsgsdk':  False,
                       'post_copy':    make_sh_exec
-                  },
-                  {
-                      'target':       'xcode 3',
-                      'os':           [ 'Mac OS X' ],
-                      'lib':          'lib',
-                      'staticsgsdk':  False,
-                  },
-                  {
-                      'target':       'xcode 4',
-                      'os':           [ 'Mac OS X' ],
-                      'lib':          'lib',
-                      'staticsgsdk':  False,
                   },
               ],
               'pre_copy_script': None,
@@ -459,6 +381,7 @@ template_details = {
                   'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
+                  'post_copy':      make_sh_exec
                 },
                 {
                   'source':         'VS13',
@@ -472,6 +395,7 @@ template_details = {
                   'os':             [ 'Mac OS X', 'Windows', 'Linux' ],
                   'lib':            'lib',
                   'staticsgsdk':    False,
+                  'post_copy':      make_sh_exec
                 },
                 {
                   'target':         'vs08',

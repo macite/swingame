@@ -17,14 +17,29 @@ namespace SwinGameSDK
 		[DllImport("kernel32.dll")]
 		public static extern IntPtr LoadLibrary(string dllToLoad);
 
+		[DllImport("libdl.so")]
+		public static extern IntPtr dlopen(string filename, int flags);
+
+		const int RTLD_NOW = 2; // for dlopen's flags
+
 		static SwinGame()
 		{
 			// On Windows: load the library from the path to the executable
 			int p = (int)Environment.OSVersion.Platform;
 			if ( (p != 4) && (p != 6) && (p!=128) )
 			{
+				System.Console.WriteLine("Loading sgsdl2");
 				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\libSGSDL2.dll");
+				System.Console.WriteLine("Loading SGSDK");
 				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\SGSDK.dll");
+				System.Console.WriteLine("Native libraries loaded");
+			}
+			else if ( (p != 6) && System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdl2.so")) // linux not MacOS
+			{
+				System.Console.WriteLine("Loading sgsdl2");
+				IntPtr moduleHandle = dlopen(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdl2.so", RTLD_NOW);
+				System.Console.WriteLine("Loading SGSDK");
+				moduleHandle = dlopen(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdk.so", RTLD_NOW);
+				System.Console.WriteLine("Native libraries loaded");
 			}
 		}
-

@@ -44,7 +44,6 @@ IOS=false
 SG_WIN32=true
 SG_WIN64=false
 
-
 #
 # Step 4: Usage message and process command line arguments
 #
@@ -398,7 +397,7 @@ doMacCompile()
   if [ ${DEBUG} = true ] ; then
     EXTRA_OPTS="$EXTRA_OPTS -Xs"
   fi
-
+  
   # Compile...
   "${FPC_BIN}" ${PAS_FLAGS} -S2 -Sh ${EXTRA_OPTS} -FE"${TMP_DIR}" -FU"${TMP_DIR}" -k"$LINK_OPTS -L'${TMP_DIR}' -F'${LIB_DIR}' -current_version '${VERSION_NO}'" -k"-lbz2" -k"-lstdc++" -k"-install_name '${INSTALL_NAME}'" -k"-rpath @loader_path/../Frameworks -rpath @executable_path/../Frameworks -rpath ../Frameworks -rpath ." -k"-L ${LIB_DIR}" -k"${STATIC_LIBS}" -k" ${FRAMEWORKS} -framework Cocoa" "${SDK_SRC_DIR}/SGSDK.pas"  >> "${LOG_FILE}"
   
@@ -406,6 +405,10 @@ doMacCompile()
   rm -f "${LOG_FILE}"
 
   mv ${TMP_DIR}/libSGSDK.dylib ${OUT_DIR}/libSGSDK${1}.dylib
+  
+  if [ $STATIC = true ]; then
+    ar -rcs ${OUT_DIR}/${STATIC_NAME}.${ARCH} ${TMP_DIR}/*.o
+  fi
 }
 
 DoExitCompile ()
@@ -457,6 +460,12 @@ doLipo()
 
   rm -rf "${OUT_DIR}/libSGSDK${1}.dylib"
   rm -rf "${OUT_DIR}/libSGSDK${2}.dylib"
+  
+  if [ $STATIC = true ]; then
+    lipo -arch ${1} "${OUT_DIR}/${STATIC_NAME}.${1}" -arch ${2} "${OUT_DIR}/${STATIC_NAME}.${2}" -output "${OUT_DIR}/${STATIC_NAME}" -create
+    rm -f "${OUT_DIR}/${STATIC_NAME}.${1}"
+    rm -f "${OUT_DIR}/${STATIC_NAME}.${2}"
+  fi
 }
 
 #
@@ -602,11 +611,12 @@ then
       doMacCompile "i386" "$SDK_FLAGS"
 
       mv ${OUT_DIR}/libSGSDKi386.dylib ${OUT_DIR}/libSGSDK.dylib
+
+      if [ $STATIC = true ]; then
+        ar -rcs ${OUT_DIR}/${STATIC_NAME} ${TMP_DIR}/*.o
+      fi
     fi
 
-    if [ $STATIC = true ]; then
-      ar -rcs ${OUT_DIR}/${STATIC_NAME} ${TMP_DIR}/*.o
-    fi
 
     #Convert into a Framework
     if [ ${FRAMEWORK} = true ]; then
@@ -666,16 +676,19 @@ then
     CleanTmp
   else #os = Linux
     DisplayHeader
-
-    if [ ! -e "/usr/lib/libsgsdl2.so" ]; then
-      echo "Building and installing SGSDL2..."
+    
+    if [ ! -e "/usr/lib/libsgsdl2.so" ] && [ ! -e "$APP_PATH/sgsdl2/libsgsdl2.so" ]; then
       "$APP_PATH/sgsdl2/build.sh"
+    fi
+
+    if [ -e "$APP_PATH/sgsdl2/libsgsdl2.so" ]; then
+      EXTRA_OPTS="${EXTRA_OPTS} -Fl$APP_PATH/sgsdl2"
     fi
 
     PrepareTmp
 
     echo "  ... Compiling Library"
-    fpc -Mobjfpc -Sh $EXTRA_OPTS -FE"${TMP_DIR}" -FU"${TMP_DIR}" "${SDK_SRC_DIR}/SGSDK.pas" >> ${LOG_FILE}
+    fpc -S2 -k"-rpath=\$ORIGIN" -Sh $EXTRA_OPTS -FE"${TMP_DIR}" -FU"${TMP_DIR}" "${SDK_SRC_DIR}/SGSDK.pas" >> ${LOG_FILE}
     if [ $? != 0 ]; then echo "Error compiling SGSDK"; cat ${LOG_FILE}; exit 1; fi
 
     mv "${TMP_DIR}/libSGSDK.so" "${OUT_DIR}/libSGSDK.so.${VERSION}"
@@ -713,7 +726,7 @@ else
 fi
 
 rm -f ${LOG_FILE}
-rm -rf ${TMP_DIR} 2>>/dev/null
+# rm -rf ${TMP_DIR} 2>>/dev/null
 
 echo "  Finished"
 echo "--------------------------------------------------"

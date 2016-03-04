@@ -21,6 +21,7 @@ APP_PATH=`cd "$APP_PATH"; pwd`
 cd "$APP_PATH"
 
 GAME_NAME=${APP_PATH##*/}
+
 if [ "$OS" = "$MAC" ]; then
     ICON="SwinGame.icns"
 else
@@ -141,8 +142,9 @@ elif [ "$OS" = "$WIN" ]; then
     fi
     PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k-L'${LIB_DIR}' -k-lsgsdl2"
 else
+    LIB_DIR="${FULL_APP_PATH}/lib/linux"
     TMP_DIR="${TMP_DIR}/unx"
-    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k\"-lm\" -k\"-lc\" -k\"-lsgsdl2\""
+    PAS_FLAGS="${PAS_FLAGS} -dSWINGAME_SDL2 -k-lm -k-lc"
 fi
 
 #
@@ -263,10 +265,11 @@ doMacPackage()
 
 doLinuxCompile()
 {
+    "${APP_PATH}/lib/makelib.sh"
     mkdir -p ${TMP_DIR}
     echo "  ... Compiling $GAME_MAIN"
 
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o"${GAME_NAME}" ${SRC_DIR}/${GAME_MAIN} > ${LOG_FILE}
+    ${FPC_BIN}  -Fl"${LIB_DIR}" -k"-rpath=\$ORIGIN --enable-new-dtags" ${PAS_FLAGS} ${SG_INC} -S2 -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o"${GAME_NAME}" ${SRC_DIR}/${GAME_MAIN} > "${LOG_FILE}" 2> "${LOG_FILE}"
     if [ $? != 0 ]; then
         DoExitCompile;
     fi
@@ -274,6 +277,7 @@ doLinuxCompile()
 
 doLinuxPackage()
 {
+    cp -p -f "${FULL_APP_PATH}/lib/linux"/*.so "${FULL_OUT_DIR}"
     RESOURCE_DIR="${FULL_OUT_DIR}/Resources"
 }
 
@@ -298,7 +302,7 @@ doWindowsCompile()
     windres ${SRC_DIR}/SwinGame.rc ${SRC_DIR}/GameLauncher.res
     if [ $? != 0 ]; then DoExitCompile; fi
 
-    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o"${GAME_NAME}.exe" ${SRC_DIR}/${GAME_MAIN} > ${LOG_FILE}
+    ${FPC_BIN}  ${PAS_FLAGS} ${SG_INC} -Mobjfpc -Sh -FE${OUT_DIR} -FU${TMP_DIR} -Fu${LIB_DIR} -Fi${SRC_DIR} -o"${GAME_NAME}.exe" ${SRC_DIR}/${GAME_MAIN} > "${LOG_FILE}" 2> "${LOG_FILE}"
     if [ $? != 0 ]; then DoExitCompile; fi
 
 }

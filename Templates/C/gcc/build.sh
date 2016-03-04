@@ -23,7 +23,7 @@ fi
 
 # Move to src dir
 APP_PATH=`echo $0 | awk '{split($0,patharr,"/"); idx=1; while(patharr[idx+1] != "") { if (patharr[idx] != "/") {printf("%s/", patharr[idx]); idx++ }} }'`
-APP_PATH=`cd "$APP_PATH"; pwd` 
+APP_PATH=`cd "$APP_PATH"; pwd`
 cd "$APP_PATH"
 
 GAME_NAME=${APP_PATH##*/}
@@ -43,20 +43,32 @@ LOG_FILE="${APP_PATH}/out.log"
 C_FLAGS="-std=c99"
 SG_INC="-I${APP_PATH}/lib/"
 
-if [ "$OS" = "$WIN" ]; then
-    C_FLAGS="$C_FLAGS -march=i386"
-fi
-
 #Locate the compiler...
-GCC_BIN=`which clang 2>> /dev/null`
-if [ -z "$GCC_BIN" ]; then
-    #try locating gcc
-    GCC_BIN=`which gcc`
-    
+if [ "$OS" = "$WIN" ]; then
+    #Locate the compiler...
+    GCC_BIN=`which gcc 2>> /dev/null`
     if [ -z "$GCC_BIN" ]; then
-        #no compiler found :(
-        echo "Unable to find a C compiler. Install either clang or gcc."
-        exit -1
+        #try locating gcc
+        GCC_BIN=`which clang`
+
+        if [ -z "$GCC_BIN" ]; then
+            #no compiler found :(
+            echo "Unable to find a C compiler. Install either clang or gcc."
+            exit -1
+        fi
+    fi
+else
+    #Locate the compiler...
+    GCC_BIN=`which clang 2>> /dev/null`
+    if [ -z "$GCC_BIN" ]; then
+        #try locating gcc
+        GCC_BIN=`which gcc`
+
+        if [ -z "$GCC_BIN" ]; then
+            #no compiler found :(
+            echo "Unable to find a C compiler. Install either clang or gcc."
+            exit -1
+        fi
     fi
 fi
 
@@ -71,7 +83,7 @@ SDL_13=false
 Usage()
 {
     echo "Usage: [-c] [-h] [-r] [name]"
-    echo 
+    echo
     echo "Compiles your game into an executable application."
     echo "Output is located in $OUT_DIR."
     echo
@@ -82,23 +94,26 @@ Usage()
     exit 0
 }
 
+# Flags to indicate which architecture for Windows only
+SG_WIN32=true
+SG_WIN64=false
+
 RELEASE=""
 
-while getopts chrg:b: o
+while getopts chrw: o
 do
     case "$o" in
     c)  CLEAN="Y" ;;
-    b)  if [ "${OPTARG}" = "adass" ]; then
-            SDL_13=true
-        fi 
-        ;;
     h)  Usage ;;
-    g)  if [ "${OPTARG}" = "odly" ]; then
-            OPENGL=true
-        fi 
-        ;;
     r)  RELEASE="Y" ;;
-    ?)  Usage
+    w)  if [ "${OPTARG}" = "in32" ]; then
+            SG_WIN32=true
+            SG_WIN64=false
+        elif [ "${OPTARG}" = "in64" ]; then
+            SG_WIN32=false
+            SG_WIN64=true
+        fi
+        ;;
     esac
 done
 
@@ -125,32 +140,20 @@ else
 fi
 
 if [ "$OS" = "$MAC" ]; then
-    if [ ${SDL_13} = true ]; then
-      TMP_DIR="${TMP_DIR}/badass"
-      LIB_DIR="${APP_PATH}/lib/sdl13/mac"
-    elif [ ${OPENGL} = true ]; then
-        TMP_DIR="${TMP_DIR}/godly"
-      LIB_DIR="${APP_PATH}/lib/godly/mac"
-    else
-      TMP_DIR="${TMP_DIR}/sdl12"
-      LIB_DIR="${APP_PATH}/lib/mac"
-    fi
+    TMP_DIR="${TMP_DIR}/mac"
+    LIB_DIR="${APP_PATH}/lib/mac"
 elif [ "$OS" = "$WIN" ]; then
-    #
-    # This needs 1.3 versions of SDL for Windows...
-    # along with functional sdl_gfx, sdl_ttf, sdl_image, sdl_mixer
-    #
-    
-    # if [ ${SDL_13} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # elif [ ${OPENGL} = true ]; then
-    #   LIB_DIR="${APP_PATH}/lib/sdl13/win"
-    # else
-    LIB_DIR="${APP_PATH}/lib/win"
-    OPENGL=false
-    SDL_13=false
+    if [ ${SG_WIN32} = true ]; then
+      C_FLAGS="$C_FLAGS -march=i386"
+      LIB_DIR="${APP_PATH}/lib/win32"
+      TMP_DIR="${TMP_DIR}/win32"
+    else
+      C_FLAGS="$C_FLAGS -march=x86-64"
+      LIB_DIR="${APP_PATH}/lib/win64"
+      TMP_DIR="${TMP_DIR}/win64"
+    fi
 else #linux
-    LIB_DIR="/usr/lib"
+    LIB_DIR="${FULL_APP_PATH}/lib/linux"
 fi
 
 if [ -f "${LOG_FILE}" ]
@@ -193,7 +196,7 @@ doCompile()
     extra_opts=$4
     
     if [ ! -f $out_file ] || [ $file -nt $out_file ]; then
-        echo "      ... Compiling ${name}"    
+        echo "      ... Compiling ${name}"
         ${GCC_BIN} -c ${extra_opts} ${SG_INC} ${C_FLAGS} -o "${out_file}" "${file}" >> ${LOG_FILE}
         if [ $? != 0 ]; then echo "Error compiling"; cat ${LOG_FILE}; exit 1; fi
     fi
@@ -256,9 +259,9 @@ doMacCompile()
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
-# 
+#
 # Create fat executable (i386 + ppc)
-# 
+#
 doLipo()
 {
     echo "  ... Creating Universal Binary"
@@ -284,7 +287,7 @@ doMacPackage()
     echo "  ... Added Private Frameworks"
     cp -R -p "${LIB_DIR}/"*.framework "${GAMEAPP_PATH}/Contents/Frameworks/"
 
-    mv "${OUT_DIR}/${GAME_NAME}" "${GAMEAPP_PATH}/Contents/MacOS/" 
+    mv "${OUT_DIR}/${GAME_NAME}" "${GAMEAPP_PATH}/Contents/MacOS/"
     echo "<?xml version='1.0' encoding='UTF-8'?>\
     <!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\
     <plist version=\"1.0\">\
@@ -319,8 +322,10 @@ doMacPackage()
 
 doLinuxCompile()
 {
+    "${APP_PATH}/lib/makelib.sh"
+    
     mkdir -p "${TMP_DIR}"
-    for file in `find ${LIBSRC_DIR} | grep [.]c$`; do
+    for file in `find ${LIBSRC_DIR} -maxdepth 1 | grep [.]c$`; do
         name=${file##*/} # ## = delete longest match for */... ie all but file name
         name=${name%%.c} # %% = delete longest match from back, i.e. extract .c
         doCompile "${file}" "${name}" "${TMP_DIR}/${name}.o" ""
@@ -331,12 +336,14 @@ doLinuxCompile()
     #Assemble all of the .s files
     echo "  ... Creating game"
     
-    ${GCC_BIN} -L${LIB_DIR} -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
+    ${GCC_BIN} -Wl,-rpath=\$ORIGIN,--enable-new-dtags -L${LIB_DIR} -o "${OUT_DIR}/${GAME_NAME}" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdl2 -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
 doLinuxPackage()
 {
+    cp -p -f "${LIB_DIR}"/libsgsdk.so "${FULL_OUT_DIR}"/libSGSDK.so
+    cp -p -f "${LIB_DIR}"/libsgsdl2.so "${FULL_OUT_DIR}"/
     RESOURCE_DIR="${FULL_OUT_DIR}/Resources"
 }
 
@@ -353,7 +360,7 @@ doWindowsCompile()
     
     #Assemble all of the .s files
     echo "  ... Creating game"
-    ${GCC_BIN} -L${LIB_DIR} -static-libgcc -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
+    ${GCC_BIN} ${C_FLAGS} -L${LIB_DIR} -static-libgcc -o "${OUT_DIR}/${GAME_NAME}.exe" `find ${TMP_DIR} -maxdepth 1 -name \*.o` -lsgsdk
     if [ $? != 0 ]; then echo "Error creating game"; cat ${LOG_FILE}; exit 1; fi
 }
 
@@ -497,7 +504,6 @@ else
 fi
 
 #remove temp files on success
-rm -f ${LOG_FILE} 2>> /dev/null
 
 echo "  Finished"
 echo "--------------------------------------------------"
