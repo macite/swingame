@@ -17,7 +17,7 @@ interface
   type
     /// A Point2D represents an location in Cartesian coordinates (x,y).
     /// The x value represents the distance from the left edge of the window or bitmap, increasing
-    /// in value as you travel right. The y value represents the distance from the top 
+    /// in value as you travel right. The y value represents the distance from the top
     /// edge of the window or bitmap, and increases as you travel down toward the bottom.
     ///
     /// Point2D is a great way to keep track of the location of something in a 2D space like
@@ -35,7 +35,7 @@ interface
     ///
     /// Vector is a great way to represent movement or forces. You could use a vector to track
     /// how much a character moves each update (as the Vector stores the direction and distance).
-    /// Similarly, you could use a Vector to represent gravity or other forces. You can then 
+    /// Similarly, you could use a Vector to represent gravity or other forces. You can then
     /// add a number of force vectors together to get a final force to be applied to a character.
     ///
     /// @struct Vector
@@ -43,13 +43,13 @@ interface
     /// @field y: Single
     /// @sameas Point2D
     Vector = Point2D;
-    
-    /// Rectangles are simple rectangle shapes that exist at a point and have a set width 
+
+    /// Rectangles are simple rectangle shapes that exist at a point and have a set width
     /// and height. This means that the rectangle always has edges that follow the sides of
     /// the Window or Bitmap (so they are aligned with the x and y axes). The rectangle's
-    /// position is its top left corner - it then extends to the right and down from 
+    /// position is its top left corner - it then extends to the right and down from
     /// this position.
-    ///       
+    ///
     /// @struct Rectangle
     Rectangle = packed record
       x, y: Single;
@@ -59,7 +59,7 @@ interface
     /// Quads (Quadrilaterals) are shapes with 4 sides, but unlike `Rectangle`, these shapes can have axis that
     /// do not line up with screen/bitmap axis.
     ///
-    /// Points should be constructed with the top left as the first point, top right as the second, 
+    /// Points should be constructed with the top left as the first point, top right as the second,
     /// bottom left as the third, and bottom right as the last point. Other orders may give unexpected
     /// outcomes.
     ///
@@ -86,11 +86,11 @@ interface
         startPoint: Point2D;
         endPoint: Point2D;
     end;
-    
+
     /// A Triangle consists of three points -- one for each of the points on the triangle
     ///
     /// @struct Triangle
-    Triangle = packed record 
+    Triangle = packed record
       points : array [0..2] of Point2D;
     end;
 
@@ -108,12 +108,12 @@ interface
     //   down : Boolean;
     // end;
 
-    
+
     // /// @type FingerArray
     // /// @array_wrapper
     // /// @field data: array of Finger
     // FingerArray = Array of Finger;
-      
+
 
 
     /// Each Resolution value has a format, as well as refresh rate, width and height.
@@ -124,7 +124,7 @@ interface
       format : Longword;
       refreshRate, width, height: Longint;
     end;
-        
+
     // /// @struct AccelerometerMotion
     // AccelerometerMotion = packed record
     //   xAxis: Longint;
@@ -136,14 +136,14 @@ interface
     WndIR = record end;
 
     /// The Window type is used to refer to a window that you have opened
-    /// in SwinGame. You create new Windows using `OpenWindow` and they can 
+    /// in SwinGame. You create new Windows using `OpenWindow` and they can
     /// be closed using `CloseWindow`.
     ///
     /// @class Window
     /// @pointer_wrapper
     /// @field pointer: pointer
     Window = ^WndIR;
-    
+
     /// The `SoundEffect` type is used to refer to sound effects that can be
     /// played by the SwinGame audio code. Sound effects are loaded with
     /// `LoadSoundEffect`, played using `PlaySoundEffect`, and must be
@@ -165,8 +165,8 @@ interface
     /// @pointer_wrapper
     /// @field pointer: pointer
     SoundEffect = Pointer;
-    
-    
+
+
     /// The Music type is used to refer to music that can be
     /// played by the SwinGame audio code. Music files are loaded with
     /// `LoadMusic`, played using `PlayMusic`, and must be
@@ -182,7 +182,7 @@ interface
     Music = Pointer;
 
     /// In SwinGame, Matrices can be used to combine together a number of
-    /// operations that need to be performed on Vectors. You can translate, 
+    /// operations that need to be performed on Vectors. You can translate,
     /// rotate and scale, and combine these together into a single matrix
     /// that can then be applied to vectors and points.
     ///
@@ -201,7 +201,7 @@ interface
     /// @data_wrapper
     /// @field data: Longword
     Color = Longword;
-    
+
     /// An Animation Script stores a number of animations. Each animation is
     /// a list of frames linked together in the order they are to be performed.
     /// Each frame has the cell to draw, the duration it should be drawn for and
@@ -212,16 +212,16 @@ interface
     /// @pointer_wrapper
     /// @field pointer: pointer
     AnimationScript = Pointer;
-        
+
     /// An Animation stores all of the details about animating a single image. It
     /// includes the current animation frame (which has the cell to be drawn, and
-    /// the number of updates, the next frame, etc) and the number of times this has 
+    /// the number of updates, the next frame, etc) and the number of times this has
     /// been updated.
     ///
     /// When you update an animation it checks its `AnimationScript` to determine if it
-    /// should move to the next frame. 
+    /// should move to the next frame.
     ///
-    /// When draw a bitmap with an animation, the animation is used to determine the 
+    /// When draw a bitmap with an animation, the animation is used to determine the
     /// current cell to draw. This will change over time as the Animation is updated
     /// and it moves between the frames of the `AnimationScript`.
     ///
@@ -229,7 +229,7 @@ interface
     /// @pointer_wrapper
     /// @field pointer: pointer
     Animation = Pointer;
-    
+
     /// @ignore
     BmpIR = record end;
 
@@ -244,11 +244,11 @@ interface
     /// @pointer_wrapper
     /// @field pointer: pointer
     Bitmap = ^BmpIR;
-    
+
     /// Determines the effect of the camera on a drawing operation.
     /// `DrawToScreen` means camera has no affect.
     /// `DrawToWorld` means camera has an affect.
-    /// `DrawDefault` means camera has an affect only if drawn to the screen. 
+    /// `DrawDefault` means camera has an affect only if drawn to the screen.
     /// @enum DrawingDest
     DrawingDest = (
         DrawToScreen, // no camera effect
@@ -256,7 +256,7 @@ interface
         DrawDefault   // camera effect on screen, but not on bitmaps
       );
 
-    /// The drawing options struct contains the data that can 
+    /// The drawing options struct contains the data that can
     /// be used to provide different options to various drawing
     /// operations.
     ///
@@ -275,7 +275,7 @@ interface
       camera: DrawingDest;      // Draw to world or screen coordinates (camera has effect?)
       lineWidth: Longint;       // Specify the width of line drawings.
     end;
-        
+
     /// The CollisionSide enumeration is used to indicate the side a collision
     /// has occurred on.
     ///
@@ -291,7 +291,7 @@ interface
       BottomRight,
       None
     );
-    
+
     /// Use this with the resource path functions to get the path to a
     /// given resource. Using these functions ensures that your resource
     /// paths are correct across different platforms
@@ -309,21 +309,21 @@ interface
       PanelResource,        //                Panel must be > sound + bitmap
       OtherResource
     );
-    
+
     /// @enum CollisionTestKind
     CollisionTestKind = (
         PixelCollisions,
         // ShapeCollision,
         AABBCollisions
       );
-    
+
     /// This enumeration contains a list of all of the different kinds of
     /// events that a Sprite can raise. When the event is raised the assocated
     /// SpriteEventKind value passed to the event handler to indicate the
     /// kind of event that has occurred.
     ///
     /// @enum SpriteEventKind
-    SpriteEventKind = ( 
+    SpriteEventKind = (
       SpriteArrivedEvent,            // Sprite has arrived at the end of a move
       SpriteAnimationEndedEvent,     // The Sprite's animation has ended (not looped)
       SpriteTouchedEvent,            // The Sprite was touched
@@ -345,7 +345,7 @@ interface
     /// to receive events from a Sprite.
     ///
     /// @type SpriteEventHandler
-    SpriteEventHandler = procedure (s: Sprite; evt: SpriteEventKind); 
+    SpriteEventHandler = procedure (s: Sprite; evt: SpriteEventKind);
 
     /// SpriteFunctions are used with SpritePacks to provide a procedure to be
     /// called for each of the Sprites in the SpritePack.
@@ -354,21 +354,21 @@ interface
     SpriteFunction = procedure(s: Sprite);
 
     /// SpriteSingleFunctions are used with SpritePacks to provide a procedure to be
-    /// called for each of the Sprites in the SpritePack. This version allows a 
+    /// called for each of the Sprites in the SpritePack. This version allows a
     /// single value to be passed as a parameter along with the call.
     ///
     /// @type SpriteSingleFunction
     SpriteSingleFunction = procedure(s: Sprite; val: Single);
-    
+
     /// A timer can be used to track how much time has elapsed since the timer
     /// was started. In games this can be used to ensure the game runs at the
     /// right speed regardless of the framerate of the users computer.
-    /// 
+    ///
     /// @class Timer
     /// @pointer_wrapper
     /// @field pointer: pointer
     Timer = Pointer;
-        
+
     /// Fonts are used to render text to bitmaps and to the screen.
     /// Fonts must be loaded using the CreateFont routine. Also see the
     /// DrawText and DrawTextLines routines.
@@ -402,7 +402,7 @@ interface
         AlignCenter = 2,
         AlignRight  = 4
       );
-    
+
     /// A mouse can have many different types of buttons. Most people know
     /// about the simple Left and Right buttons, but there is also a Middle
     /// button (sometimes part of a scoll wheel). Scroll wheel movement is also
@@ -415,8 +415,6 @@ interface
       LeftButton,
       MiddleButton,
       RightButton,
-      WheelUpButton,
-      WheelDownButton,
       MouseX1Button,
       MouseX2Button
     );
@@ -445,16 +443,16 @@ interface
       MinusKey = 45,
       PeriodKey = 46,
       SlashKey = 47,
-      Key0 = 48,
-      Key1 = 49,
-      Key2 = 50,
-      Key3 = 51,
-      Key4 = 52,
-      Key5 = 53,
-      Key6 = 54,
-      Key7 = 55,
-      Key8 = 56,
-      Key9 = 57,
+      Num0Key = 48,
+      Num1Key = 49,
+      Num2Key = 50,
+      Num3Key = 51,
+      Num4Key = 52,
+      Num5Key = 53,
+      Num6Key = 54,
+      Num7Key = 55,
+      Num8Key = 56,
+      Num9Key = 57,
       ColonKey = 58,
       SemiColonKey = 59,
       LessKey = 60,
@@ -568,7 +566,7 @@ interface
       SysReqKey = 317,
       MenuKey = 319,
       PowerKey = 320, // Power Macintosh power key
-      
+
       // Simplified Keys
       ShiftKey = 321,
       CtrlKey = 322,
@@ -578,26 +576,26 @@ interface
       WindowsKey = 326,
       OptionKey = 327
     );
-    
+
     /// The FreeNotifier is a function pointer used to notify user programs of
     /// swingame resources being freed. This should not be used by user programs.
     ///
     /// @type FreeNotifier
     FreeNotifier = procedure (p: Pointer); cdecl;
-    
+
     /// GUIElementKind is an enum of all the GUI element types (such as buttons,
     /// labels and textboxes).
-    /// 
+    ///
     ///
     /// @enum GUIElementKind
-    GUIElementKind = ( 
-      gkLabel = 1, 
-      gkButton = 2, 
-      gkCheckBox = 4, 
-      gkRadioGroup = 8, 
-      gkTextBox = 16, 
+    GUIElementKind = (
+      gkLabel = 1,
+      gkButton = 2,
+      gkCheckBox = 4,
+      gkRadioGroup = 8,
+      gkTextBox = 16,
       gkList = 32,
-      gkAnyKind = 63 // = (1 or 2 or 4 or 8 or 16 or 32) 
+      gkAnyKind = 63 // = (1 or 2 or 4 or 8 or 16 or 32)
       );
 
     /// The Event kind is an enum of all the events that could happen to a gui element
@@ -612,21 +610,21 @@ interface
     /// The file dialog select type is an enum of how a file dialog displays files/directories
     ///
     /// @enum FileDialogSelectType
-    FileDialogSelectType = ( 
-      fdFiles = 1, 
-      fdDirectories = 2, 
+    FileDialogSelectType = (
+      fdFiles = 1,
+      fdDirectories = 2,
       fdFilesAndDirectories = 3 // = (1 or 2)
       );
-    
-    /// In SwinGame a Panel is an input area that contains a number of GUI elements (like a 
-    /// Window in the operating system). You can have a number of Panels open at once and 
+
+    /// In SwinGame a Panel is an input area that contains a number of GUI elements (like a
+    /// Window in the operating system). You can have a number of Panels open at once and
     /// they are drawn with DrawInterface and UpdateInterface.
     ///
     /// @class Panel
     /// @pointer_wrapper
     /// @field pointer: Pointer
     Panel = Pointer;
-    
+
     /// Region is the area within a panel and is used to represent the positions of the
     /// different kinds of elements you want to appear for the user to interact with.
     ///
@@ -635,16 +633,16 @@ interface
     /// @no_free_pointer_wrapper
     /// @field pointer: Pointer
     Region = Pointer;
-    
-    /// GUIEventCallback is a callback function for gui events in SwinGame. 
+
+    /// GUIEventCallback is a callback function for gui events in SwinGame.
     /// This callback will be passed the region where the event occurred and
     /// the kind of event it was. You can then use this to trigger actions within
     /// your program. These callbacks are called as part of the process that
-    /// runs within `UpdateInterface`. 
+    /// runs within `UpdateInterface`.
     ///
     /// @type GUIEventCallback
     GUIEventCallback = procedure (r: Region; kind: EventKind);
-    
+
     /// A serial connection to an Arduino device. You can use this to send
     /// and receive data from the Sketch you have running within your
     /// Arduino device.
@@ -663,7 +661,7 @@ interface
 
     // /// @ignore
     // HREQIR = record end;
-    
+
     /// @ignore
     HRESPIR = record end;
 
@@ -700,14 +698,14 @@ interface
     /// @pointer_wrapper
     /// @field pointer : Pointer
     Message = ^MSGIR;
-    
+
     /// @class ServerSocket
     /// @pointer_wrapper
     /// @field pointer : Pointer
     ServerSocket = ^SVRRIR;
 
 
-    
+
 //=============================================================================
 implementation
 //=============================================================================

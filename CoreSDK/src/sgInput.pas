@@ -11,8 +11,8 @@
 
 
 /// Responsible for input event processing for mouse and keyboard events. This
-/// includes mouse visibility, mouse movement and button clicks (including the 
-/// scroll wheel as button "click" events) and keyboard events for text input 
+/// includes mouse visibility, mouse movement and button clicks (including the
+/// scroll wheel as button "click" events) and keyboard events for text input
 /// and key state checking.
 ///
 /// @module Input
@@ -24,11 +24,11 @@ interface
 //=============================================================================
 
   uses sgTypes;
-  
+
 //----------------------------------------------------------------------------
 // Window close and Processing events
 //----------------------------------------------------------------------------
-  
+
   /// Checks to see if the user has asked for the application to quit. This value
   /// is updated by the `ProcessEvents` routine.
   ///
@@ -36,7 +36,7 @@ interface
   ///
   /// @lib
   function QuitRequested(): Boolean;
-  
+
   /// ProcessEvents allows the SwinGame API to react to user interactions. This
   /// routine checks the current keyboard and mouse states. This routine must
   /// be called frequently within your game loop to enable user interaction.
@@ -47,13 +47,13 @@ interface
   ///
   /// @lib ProcessEvents
   procedure ProcessEvents();
-  
-  
-  
+
+
+
 //----------------------------------------------------------------------------
 // Mouse position
 //----------------------------------------------------------------------------
-  
+
   /// Returns The current window position of the mouse as a `Vector`
   ///
   /// @lib
@@ -63,131 +63,131 @@ interface
   ///
   /// @lib
   function MousePosition(): Point2D;
-  
+
   /// Returns the current x value of the mouse's position.
   ///
   /// @lib
   function MouseX(): Single;
-  
+
   /// Returns the current y value of the mouse's position.
   ///
   /// @lib
   function MouseY(): Single;
-  
-  /// Returns the amount of accumulated mouse movement, since the last time 
-  /// `ProcessEvents` was called, as a `Vector`. 
-  /// 
+
+  /// Returns the amount of accumulated mouse movement, since the last time
+  /// `ProcessEvents` was called, as a `Vector`.
+  ///
   /// @lib
   function MouseMovement(): Vector;
-  
+
   /// Returns ``true`` if the specified button is currently pressed down.
-  /// 
+  ///
   /// @lib
   function MouseDown(button: MouseButton): Boolean;
-  
+
   /// Returns ``true`` if the specified button is currently up.
-  /// 
+  ///
   /// @lib
   function MouseUp(button: MouseButton): Boolean;
-  
+
   /// Returns true if the specified button was clicked since the last time
   /// `ProcessEvents` was called
-  /// 
+  ///
   /// @lib
   function MouseClicked(button: MouseButton): Boolean;
-  
+
   /// Moves the mouse cursor to the specified screen location.
-  /// 
+  ///
   /// @lib
   /// @sn moveMouseToX:%s y:%s
   procedure MoveMouse(x, y : Longint); overload;
-    
+
   /// Moves the mouse cursor to the specified screen location.
-  /// 
+  ///
   /// @lib MoveMouseToPoint
   procedure MoveMouse(const point: Point2D);overload;
-  
-  /// Tells the mouse cursor to be visible if it was previously hidden with 
+
+  /// Tells the mouse cursor to be visible if it was previously hidden with
   /// by a `HideMouse` or `SetMouseVisible`(False) call.
   ///
   /// @lib
   procedure ShowMouse(); overload;
-    
+
   /// Used to explicitly set the mouse cursors visible state (if it is showing
   /// in the window or not) based on the show parameter.
   ///
   /// @lib SetMouseVisible
   /// @sn showMouse:%s
   procedure ShowMouse(show : Boolean); overload;
-    
-  /// Tells the mouse cursor to hide (no longer visible) if it is currently 
+
+  /// Tells the mouse cursor to hide (no longer visible) if it is currently
   /// showing. Use `ShowMouse` to make the mouse cursor visible again.
   ///
   /// @lib
   procedure HideMouse();
-  
+
   /// Returns ``true`` if the mouse is currently visible, ``false`` if not.
-  /// 
+  ///
   /// @lib
   function MouseShown(): Boolean;
-  
-  /// Start reading text within an area. Entry is 
+
+  /// Start reading text within an area. Entry is
   /// completed when the user presses ENTER, and aborted with ESCAPE.
-  /// If the user aborts entry the result is an empty string, and TextEntryCancelled 
-  /// will return true. Text entry is updated during `ProcessEvents`, and text is drawn 
+  /// If the user aborts entry the result is an empty string, and TextEntryCancelled
+  /// will return true. Text entry is updated during `ProcessEvents`, and text is drawn
   /// to the screen as part of the `RefreshScreen` call.
   ///
   /// @lib StartReadingTextWithinArea
   /// @sn startReadingTextColor:%s maxLen:%s font:%s area:%s
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
-    
 
-  
+
+
   /// The same as `StartReadingText` but with an additional ``text`` parameter
-  /// that is displayed as default text to the user.  
+  /// that is displayed as default text to the user.
   ///
   /// @lib StartReadingTextWithTextInArea
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s area:%s
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
-    
-  
+
+
   /// The same as `StartReadingTextWithText` but with ``text`` and ``bgColor`` parameter
-  /// that is displayed as default text to the user.  
+  /// that is displayed as default text to the user.
   ///
   /// @lib StartReadingTextWithTextAndColorInArea
-  /// @sn startReadingTextWith:%s color:%s bgColor:%s maxLen:%s font:%s area:%s  
+  /// @sn startReadingTextWith:%s color:%s bgColor:%s maxLen:%s font:%s area:%s
   procedure StartReadingTextWithText(const text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
-  
-  /// Starts the reading of a string of characters from the user. Entry is 
+
+  /// Starts the reading of a string of characters from the user. Entry is
   /// completed when the user presses ENTER, and aborted with ESCAPE.
-  /// If the user aborts entry the result is an empty string, and TextEntryCancelled will return true. 
-  /// Text entry is updated during `ProcessEvents`, and text is drawn to the screen as part 
+  /// If the user aborts entry the result is an empty string, and TextEntryCancelled will return true.
+  /// Text entry is updated during `ProcessEvents`, and text is drawn to the screen as part
   /// of the `RefreshScreen` call.
   ///
   /// @lib
   /// @sn startReadingTextColor:%s maxLen:%s font:%s x:%s y:%s
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
-  
+
   /// The same as `StartReadingText` but with an additional ``text`` parameter
-  /// that is displayed as default text to the user.  
+  /// that is displayed as default text to the user.
   ///
   /// @lib StartReadingTextWithText
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s x:%s y:%s
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
-  
+
   /// The same as `StartReadingText` but with an additional ``text`` parameter
-  /// that is displayed as default text to the user.  
+  /// that is displayed as default text to the user.
   ///
   /// @lib StartReadingTextWithTextAtPt
   /// @sn startReadingTextWith:%s color:%s maxLen:%s font:%s at:%s
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
-  
-  /// Returns the string that has been read since `StartReadingText` or 
+
+  /// Returns the string that has been read since `StartReadingText` or
   /// `StartReadingTextWithText` was called.
   ///
   /// @lib
   function EndReadingText(): String;
-  
+
   /// ReadingText indicates if the API is currently reading text from the
   /// user. Calling StartReadingText will set this to true, and it becomes
   /// false when the user presses enter or escape. At this point you can
@@ -195,26 +195,26 @@ interface
   ///
   /// @lib
   function ReadingText(): Boolean;
-  
+
   /// Returns true if the text entry started with `StartReadingText` was cancelled.
   ///
   /// @lib
   function TextEntryCancelled(): Boolean;
-  
+
   /// TextReadAsASCII allows you to read the value of the string entered by the
   /// user as ASCII. See TextReasAsUNICODE, StartReadingText and ReadingText
   /// for more details.
   ///
   /// @lib
   function TextReadAsASCII(): String;
-  
+
   /// Returns true when the key requested is being held down. This is updated
   /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
   /// to specify the key to be checked.
   ///
   /// @lib
   function KeyDown(key: KeyCode): Boolean;
-  
+
   /// Returns true when the key requested is just pressed down. This is updated
   /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
   /// to specify the key to be checked. this will only occur once for that key that is
@@ -222,48 +222,48 @@ interface
   ///
   /// @lib
   function KeyTyped(key: KeyCode): Boolean;
-  
-  /// Returns true if the specified key was released since the last time 
-  /// `ProcessEvents` was called. This occurs only once for the key that is 
+
+  /// Returns true if the specified key was released since the last time
+  /// `ProcessEvents` was called. This occurs only once for the key that is
   /// released and will not return true again until the key is pressed down and
   /// released again.
   ///
   /// @lib
   function KeyReleased(key: KeyCode): Boolean;
-  
-  /// Checks to see if any key has been pressed since the last time 
+
+  /// Checks to see if any key has been pressed since the last time
   /// `ProcessEvents` was called.
   ///
   /// @lib
   function AnyKeyPressed(): Boolean;
-  
-  /// The KeyName function returns a string name for a given `KeyCode`. For 
+
+  /// The KeyName function returns a string name for a given `KeyCode`. For
   /// example, CommaKey returns the string 'Comma'. This function could be used
   /// to display more meaningful key names for configuring game controls, etc.
   ///
   /// @lib
   function KeyName(key: KeyCode): String;
-  
-  
+
+
   /// Returns false when the key requested is being held down. This is updated
   /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
   /// to specify the key to be checked.
   ///
   /// @lib
   function KeyUp(key: KeyCode): Boolean;
-  
+
   // /// Returns the number of fingers that are currently
   // /// on the screen.
   // ///
   // /// @lib
   // function NumberOfFingersOnScreen() : LongInt;
-  
+
   // /// Returns an Array of Fingers that are on the screen.
   // ///
   // /// @lib
   // /// @length NumberOfFingersOnScreen
   // function FingersOnScreen() : FingerArray;
-  
+
   // /// Returns false when the key requested is being held down. This is updated
   // /// as part of the `ProcessEvents` call. Use the key codes from `KeyCode`
   // /// to specify the key to be checked.
@@ -295,7 +295,7 @@ interface
   // ///
   // /// @lib
   // function DeviceMovedInZAxis() : Single;
-  
+
   // // /// returns a boolean indicating if the screen was touched.
   // // /// @lib
   // // function ScreenTouched() : Boolean;
@@ -359,7 +359,7 @@ implementation
   end;
 
 //============//
-//    iOS    //   
+//    iOS    //
 //===========//
 
 //Keyboard
@@ -468,7 +468,7 @@ end;
   begin
     result := WasKeyDown(Driver.GetKeyCode(Longint(key)));
   end;
-  
+
   function KeyTyped(key: KeyCode): Boolean;
   begin
     result := WasKeyJustTyped(Driver.GetKeyCode(Longint(key)));
@@ -480,77 +480,77 @@ end;
   end;
 
   //---------------------------------------------------------------------------
-  
+
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     if theFont = nil then begin RaiseException('The specified font to start reading text is nil'); exit; end;
     if maxLength <= 0 then begin RaiseException('Minimum length to start reading text is 1'); exit; end;
     if ReadingText() then begin RaiseException('Already reading text, cannot start reading text again.'); exit; end;
-    
+
     InputBackendStartReadingText(textColor, maxLength, theFont, area);
   end;
-  
+
   procedure StartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     if theFont = nil then begin RaiseException('The specified font to start reading text is nil'); exit; end;
     if maxLength <= 0 then begin RaiseException('Minimum length to start reading text is 1'); exit; end;
     if ReadingText() then begin RaiseException('Already reading text, cannot start reading text again.'); exit; end;
-    
+
     InputBackendStartReadingText(textColor,backgroundColor, maxLength, theFont, area);
   end;
-  
+
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, RectangleFrom(x, y, TextWidth(theFont, StringOfChar('M', maxLength)), TextHeight(theFont, 'M')));
   end;
-  
+
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, area);
-    SetText(_CurrentWindow, text);    
+    SetText(_CurrentWindow, text);
   end;
-  
+
   procedure StartReadingTextWithText(const text: String; textColor, backGroundColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
   begin
     StartReadingText(textColor, backGroundColor, maxLength, theFont, area);
-    SetText(_CurrentWindow, text);    
+    SetText(_CurrentWindow, text);
   end;
-  
-  
+
+
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; const pt: Point2D); overload;
   begin
     StartReadingTextWithText(text, textColor, maxLength, theFont, RoundInt(pt.x), RoundInt(pt.y));
   end;
-  
+
   procedure StartReadingTextWithText(const text: String; textColor: Color; maxLength: Longint; theFont: Font; x, y: Longint); overload;
   begin
     StartReadingText(textColor, maxLength, theFont, x, y);
     SetText(_CurrentWindow, text);
   end;
-  
+
   function ReadingText(): Boolean;
   begin
     result := IsReading();
   end;
-  
+
   function TextEntryCancelled(): Boolean;
   begin
     result := TextEntryWasCancelled();
   end;
-  
+
   function EndReadingText(): String;
   begin
     result := InputBackendEndReadingText();
   end;
-  
+
   function TextReadAsASCII(): String;
   begin
     result := EnteredString();
   end;
-  
-  
+
+
   //---------------------------------------------------------------------------
-  
+
   function MousePositionAsVector(): Vector;
   {$IFNDEF IOS}
   var
@@ -570,12 +570,12 @@ end;
   begin
     ShowMouse(true);
   end;
-  
+
   procedure HideMouse();
   begin
     ShowMouse(false);
   end;
-  
+
   procedure ShowMouse(show : Boolean); overload;
   begin
     try
@@ -585,24 +585,24 @@ end;
       begin RaiseException('Unable to show or hide mouse'); exit; end;
     end;
   end;
-  
+
   procedure MoveMouse(x, y : Longint);overload;
   begin
     sgDriverInput.WarpMouse(x,y);
     MouseMovement();
   end;
-  
+
   procedure MoveMouse(const point : Point2d);overload;
   begin
     sgDriverInput.WarpMouse(Round(point.x), Round(point.y));
     MouseMovement();
   end;
-  
+
   function MouseShown(): Boolean;
   begin
     result := sgDriverInput.ShowCursor(-1) = 1;
   end;
-  
+
   function MousePosition(): Point2D;
   {$IFNDEF IOS}
   var
@@ -614,20 +614,20 @@ end;
     sgDriverInput.MouseState(x, y);
     result := PointAt(x, y);
     {$ELSE}
-    result := LastFingerPosition(); 
-    {$ENDIF} 
+    result := LastFingerPosition();
+    {$ENDIF}
   end;
-  
+
   function MouseX(): Single;
   begin
     result := MousePosition().x;
   end;
-  
+
   function MouseY(): Single;
   begin
     result := MousePosition().y;
   end;
-  
+
   function MouseMovement(): Vector;
   var
     x, y: Longint;
@@ -635,8 +635,8 @@ end;
     {$IFDEF TRACE}
       TraceEnter('sgInput', 'MouseMovement');
     {$ENDIF}
-    
-    x := 0; 
+
+    x := 0;
     y := 0;
     sgDriverInput.RelativeMouseState(x, y);
     result := VectorTo(x, y);
@@ -645,7 +645,7 @@ end;
       TraceExit('sgInput', 'MouseMovement');
     {$ENDIF}
   end;
-  
+
   function MouseDown(button: MouseButton): Boolean;
   {$IFNDEF IOS}
   var
@@ -659,18 +659,18 @@ end;
       result := MouseClicked(button);
     {$ENDIF}
   end;
-  
+
   function MouseUp(button: MouseButton): Boolean;
   begin
     result := not MouseDown(button);
   end;
-  
+
   function MouseClicked(button: MouseButton): Boolean;
   begin
     result := _ButtonsClicked[button];
   end;
-  
-  
+
+
 
   function KeyName(key: KeyCode): String;
   begin
@@ -697,25 +697,25 @@ end;
       MinusKey      : result := 'Minus';
       PeriodKey     : result := 'Period';
       SlashKey      : result := 'Slash';
-      Key0: result := '0';
-      Key1: result := '1';
-      Key2: result := '2';
-      Key3: result := '3';
-      Key4: result := '4';
-      Key5: result := '5';
-      Key6: result := '6';
-      Key7: result := '7';
-      Key8: result := '8';
-      Key9: result := '9';
-      ColonKey     : result := 'Colon';
-      SemicolonKey : result := 'Semicolon';
-      LessKey      : result := 'Less';
-      EqualsKey    : result := 'Equals';
-      GreaterKey   : result := 'Greater';
-      QuestionKey  : result := 'Question';
-      AtKey        : result := 'At';
+      Num0Key       : result := '0';
+      Num1Key       : result := '1';
+      Num2Key       : result := '2';
+      Num3Key       : result := '3';
+      Num4Key       : result := '4';
+      Num5Key       : result := '5';
+      Num6Key       : result := '6';
+      Num7Key       : result := '7';
+      Num8Key       : result := '8';
+      Num9Key       : result := '9';
+      ColonKey      : result := 'Colon';
+      SemicolonKey  : result := 'Semicolon';
+      LessKey       : result := 'Less';
+      EqualsKey     : result := 'Equals';
+      GreaterKey    : result := 'Greater';
+      QuestionKey   : result := 'Question';
+      AtKey         : result := 'At';
 
-      // Skip uppercase letters 
+      // Skip uppercase letters
 
       LeftBracketKey  : result := 'Left Bracket';
       BackslashKey    : result := 'Backslash';
