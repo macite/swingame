@@ -18,5 +18,7 @@ extern bool _fatal_error;
 
 void set_error_state();
 
+void internal_sgsdl2_init();
+
 
 #endif /* defined(__sgsdl2__SGSDL2Core__) */

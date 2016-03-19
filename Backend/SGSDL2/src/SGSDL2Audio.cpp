@@ -16,6 +16,7 @@
 
 #include "SGSDL2Audio.h"
 #include "sgBackendUtils.h"
+#include "SGSDL2Core.h"
 
 #define SG_MAX_CHANNELS 64
 
@@ -30,6 +31,7 @@ void sgsdl2_init_audio()
 
 void sgsdl2_open_audio()
 {
+    internal_sgsdl2_init();
     if ( Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 4096 ) < 0 )
     {
         set_error_state("Unable to load audio. Mix_OpenAudio failed.");
@@ -73,6 +75,7 @@ int sgsdl2_get_channel(sg_sound_data *sound)
 
 sg_sound_data sgsdl2_load_sound_data(const char * filename, sg_sound_kind kind)
 {
+    internal_sgsdl2_init();
     sg_sound_data result = { SGSD_UNKNOWN, NULL } ;
     
     result.kind = kind;
@@ -237,11 +240,13 @@ void sgsdl2_fade_out(sg_sound_data *sound, int ms)
 
 void sgsdl2_fade_all_sound_effects_out(int ms)
 {
+    internal_sgsdl2_init();
     Mix_FadeOutChannel(-1, ms);
 }
 
 void sgsdl2_fade_music_out(int ms)
 {
+    internal_sgsdl2_init();
     Mix_FadeOutMusic(ms);
     _current_music = NULL;
 }
@@ -250,11 +255,13 @@ void sgsdl2_fade_music_out(int ms)
 
 void sgsdl2_set_music_vol(float vol)
 {
+    internal_sgsdl2_init();
     Mix_VolumeMusic( static_cast<int>(MIX_MAX_VOLUME * vol) );
 }
 
 float sgsdl2_music_vol()
 {
+    internal_sgsdl2_init();
     return Mix_VolumeMusic(-1) / (float)MIX_MAX_VOLUME;
 }
 
@@ -298,11 +305,13 @@ void sgsdl2_set_sound_volume(sg_sound_data *sound, float vol)
 
 void sgsdl2_pause_music()
 {
+    internal_sgsdl2_init();
     Mix_PauseMusic();
 }
 
 void sgsdl2_resume_music()
 {
+    internal_sgsdl2_init();
     if ( Mix_PausedMusic() )
     {
         Mix_ResumeMusic();
@@ -311,6 +320,7 @@ void sgsdl2_resume_music()
 
 void sgsdl2_stop_music()
 {
+    internal_sgsdl2_init();
     Mix_HaltMusic();
 }
 
@@ -343,6 +353,7 @@ void sgsdl2_stop_sound(sg_sound_data *sound)
 
 float sgsdl2_music_playing()
 {
+    internal_sgsdl2_init();
     if ( Mix_PlayingMusic() ) {
         return -1.0f;
     }
@@ -361,6 +372,8 @@ sg_sound_data * sgsdl2_current_music()
 
 void sgsdl2_load_audio_fns(sg_interface *functions)
 {
+    _current_music = NULL;
+    
     functions->audio.open_audio = & sgsdl2_open_audio;
     functions->audio.close_audio = & sgsdl2_close_audio;
     functions->audio.load_sound_data = & sgsdl2_load_sound_data;

@@ -28,18 +28,18 @@ namespace SwinGameSDK
 			int p = (int)Environment.OSVersion.Platform;
 			if ( (p != 4) && (p != 6) && (p!=128) )
 			{
-				System.Console.WriteLine("Loading sgsdl2");
+				//System.Console.WriteLine("Loading sgsdl2");
 				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\libSGSDL2.dll");
-				System.Console.WriteLine("Loading SGSDK");
+				//System.Console.WriteLine("Loading SGSDK");
 				LoadLibrary (System.AppDomain.CurrentDomain.BaseDirectory + "\\SGSDK.dll");
-				System.Console.WriteLine("Native libraries loaded");
+				//System.Console.WriteLine("Native libraries loaded");
 			}
 			else if ( (p != 6) && System.IO.File.Exists(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdl2.so")) // linux not MacOS
 			{
-				System.Console.WriteLine("Loading sgsdl2");
+				//System.Console.WriteLine("Loading sgsdl2");
 				IntPtr moduleHandle = dlopen(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdl2.so", RTLD_NOW);
-				System.Console.WriteLine("Loading SGSDK");
+				//System.Console.WriteLine("Loading SGSDK");
 				moduleHandle = dlopen(System.AppDomain.CurrentDomain.BaseDirectory + "/libsgsdk.so", RTLD_NOW);
-				System.Console.WriteLine("Native libraries loaded");
+				//System.Console.WriteLine("Native libraries loaded");
 			}
 		}

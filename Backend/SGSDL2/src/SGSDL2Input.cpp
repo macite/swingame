@@ -12,6 +12,7 @@
 #include <SDL.h>
 #endif
 
+#include "SGSDL2Core.h"
 #include "SGSDL2Input.h"
 #include "SGSDL2Graphics.h"
 
@@ -96,6 +97,7 @@ void _sgsdl2_handle_window_event(SDL_Event * event)
 
 void sgsdl2_process_events()
 {
+    internal_sgsdl2_init();
     SDL_Event event;
     
     while (SDL_WaitEventTimeout(&event, 0))
@@ -194,6 +196,8 @@ int sgsdl2_window_close_requested(sg_drawing_surface* surf)
 
 int sgsdl2_key_pressed(int key_code)
 {
+    internal_sgsdl2_init();
+    
     const Uint8 *keys;
     int key_scancode = SDL_GetScancodeFromKey(key_code);
     int sz;
@@ -210,10 +214,11 @@ int sgsdl2_key_pressed(int key_code)
 
 void sgsdl2_start_unicode_text_input(int x, int y, int w, int h)
 {
-  SDL_Rect rect = {x,y,w,h};  
-  SDL_SetTextInputRect(&rect);
+    internal_sgsdl2_init();
+    SDL_Rect rect = {x,y,w,h};
+    SDL_SetTextInputRect(&rect);
 
-  SDL_StartTextInput(); 
+    SDL_StartTextInput(); 
 }
 
 void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
@@ -241,6 +246,7 @@ void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
 
 pointer sgsdl2_focus_window()
 {
+    internal_sgsdl2_init();
     return _sgsdl2_get_window_with_pointer(SDL_GetMouseFocus());
 }
 

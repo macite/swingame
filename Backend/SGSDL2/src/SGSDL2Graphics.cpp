@@ -22,6 +22,7 @@
 #include "png.h"
 #include <string.h>
 
+#include "SGSDL2Core.h"
 #include "SGSDL2Graphics.h"
 #include "sgBackendUtils.h"
 
@@ -679,6 +680,7 @@ void sgsdl2_refresh_window(sg_drawing_surface *window);
 
 sg_drawing_surface sgsdl2_open_window(const char *title, int width, int height)
 {
+    internal_sgsdl2_init();
     sg_drawing_surface  result = { SGDS_Unknown, 0, 0, NULL };
 
     sg_window_be *      window_be;
@@ -1766,6 +1768,7 @@ void sgsdl2_load_graphics_fns(sg_interface * functions)
 
 sg_drawing_surface sgsdl2_create_bitmap(int width, int height)
 {
+    internal_sgsdl2_init();
     if ( _sgsdl2_num_open_windows == 0 ) _sgsdl2_create_initial_window();
 
     sg_drawing_surface result = { SGDS_Unknown, 0, 0, NULL };
@@ -1802,6 +1805,7 @@ sg_drawing_surface sgsdl2_create_bitmap(int width, int height)
 
 sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
 {
+    internal_sgsdl2_init();
     sg_drawing_surface result = { SGDS_Unknown, 0, 0, NULL };
 
     SDL_Surface *surface;

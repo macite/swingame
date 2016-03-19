@@ -21,6 +21,8 @@
 #include "SGSDL2Graphics.h"
 #include "sgBackendTypes.h"
 
+#include "SGSDL2Core.h"
+
 void sgsdl2_init_text()
 {
     if (TTF_Init() == -1)
@@ -37,6 +39,8 @@ void sgsdl2_finalize_text()
 
 sg_font_data sgsdl2_load_font(const char * filename, int font_size)
 {
+    internal_sgsdl2_init();
+    
     sg_font_data font;
     font.kind = SGFT_TTF;
     font._data = TTF_OpenFont(filename, font_size);
@@ -88,6 +92,7 @@ void _sgsdl2_draw_bitmap_text( sg_drawing_surface * surface,
                                const char * text,
                                sg_color clr )
 {
+    internal_sgsdl2_init();
     unsigned int count = _sgsdl2_renderer_count(surface);
     
     for (unsigned int i = 0; i < count; i++)

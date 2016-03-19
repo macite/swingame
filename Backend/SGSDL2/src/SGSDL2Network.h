@@ -14,5 +14,6 @@
 
 
 void sgsdl2_load_network_fns(sg_interface *functions);
+void sg_network_init();
 
 #endif /* defined(__sgsdl2__SGSDL2Network__) */

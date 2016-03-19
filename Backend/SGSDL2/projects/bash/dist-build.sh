@@ -16,9 +16,15 @@ if [ ! -f "$CLANG" ]; then
   exit 1
 fi
 
-SDL_CFG=`which sdl-config`
+SDL_CFG=`which sdl2-config`
 if [ ! -f "$SDL_CFG" ]; then
-  echo "Could not find SDL. Ensure that all required libraries are installed."
+  echo "Could not find SDL2. Ensure that all required libraries are installed."
+  exit 1
+fi
+
+CRL_CFG=`which curl-config`
+if [ ! -f "$CRL_CFG" ]; then
+  echo "Could not fild libcurl-dev. Ensure all required libraries are installed"
   exit 1
 fi
 
@@ -40,7 +46,7 @@ shift $((${OPTIND}-1))
 
 # Now lets build this library :)
 echo "  ... Compiling libsgsdl2.so"
-clang++ -shared -Wl,-soname,libsgsdl2.so,-rpath=\$ORIGIN -fPIC -std=c++11 -Weverything -Wno-padded -Wno-missing-prototypes -Wno-c++98-compat -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_gfx -lSDL2_ttf -lSDL2_net -lcurl -I./include/ ./src/*.cpp -o libsgsdl2.so -g > out.log 2> out.log
+clang++ -shared -Wl,-soname,libsgsdl2.so,-rpath=\$ORIGIN -fPIC -std=c++11 -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_gfx -lSDL2_ttf -lSDL2_net -lcurl -I./include/ `sdl2-config --cflags` `curl-config --cflags` ./src/*.cpp -o libsgsdl2.so -g > out.log 2> out.log
 
 if [ $? != 0 ]; then echo "Error compiling libsgsdl2.so"; cat out.log; exit 1; fi
 

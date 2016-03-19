@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Andrew Cain. All rights reserved.
 //
 
+#include "SGSDL2Core.h"
 #include "SGSDL2Web.h"
 
 #include <stdio.h>
@@ -317,6 +318,8 @@ sg_http_response sgsdl2_http_delete(const char *host, unsigned short port, const
 
 sg_http_response sgsdl2_http_request(sg_http_request request)
 {
+    internal_sgsdl2_init();
+    
     switch (request.request_type) {
         case HTTP_GET:
             return sgsdl2_http_get(request.url, request.port);

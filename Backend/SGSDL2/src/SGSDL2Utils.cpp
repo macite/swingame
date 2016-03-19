@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
+#include "SGSDL2Core.h"
 #include "SGSDL2Utils.h"
 
 #ifdef __linux__
@@ -16,11 +17,13 @@
 
 void sgsdl2_delay(unsigned int ms)
 {
+    internal_sgsdl2_init();
     SDL_Delay(ms);
 }
 
 unsigned int sgsdl2_get_ticks()
 {
+    internal_sgsdl2_init();
     return SDL_GetTicks();
 }
 

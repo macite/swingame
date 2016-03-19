@@ -33,22 +33,26 @@ void sgsdk_setup_displays();
 
 void init_sgsdl2()
 {
+}
+
+void internal_sgsdl2_init()
+{
     static bool done_init = false;
     if ( done_init ) return;
     done_init = true;
 
     clear_error();
-    cout << "pre init" << endl;
-    if ( -1 == SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) )
-    {
-        // fatal error so...
-        // no other functions can now be called
-        clear_functions();
-
-        set_error_state(SDL_GetError());
-        return;
-    }
-    cout << "post init" << endl;
+//    cout << "pre init" << endl;
+     if ( -1 == SDL_Init( SDL_INIT_EVERYTHING ) )
+     {
+         // fatal error so...
+         // no other functions can now be called
+         clear_functions();
+    
+         set_error_state(SDL_GetError());
+         return;
+     }
+//    cout << "post init" << endl;
 
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
@@ -77,6 +81,8 @@ void init_sgsdl2()
 //    printf("Network port C a-4: %p\n", _functions.network.network_port);
 
     sgsdk2_init_web();
+    
+    sg_network_init();
 }
 
 void sgsdk2_setup_display(int idx, sg_display &disp)
@@ -169,6 +175,7 @@ void sgsdk_setup_displays()
 
 sg_system_data * sgsdl2_read_system_data()
 {
+    internal_sgsdl2_init();
     return &_sgsdk_system_data;
 }
 

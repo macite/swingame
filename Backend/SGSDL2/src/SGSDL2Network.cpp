@@ -21,11 +21,26 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "SGSDL2Core.h"
+
 // This set keeps track of all of the sockets to see if there is activity
 SDLNet_SocketSet _sockets; // allocate on setup of functions.
 
+void sg_network_init()
+{
+    SDLNet_Init();
+    _sockets = SDLNet_AllocSocketSet(1024);
+    if(!_sockets)
+    {
+        printf("Error allocating network resources\n");
+        exit(1);
+    }
+}
+
 sg_network_connection sgsdl2_open_udp_connection(unsigned short port)
 {
+    internal_sgsdl2_init();
+    
     UDPsocket svr;
     
     sg_network_connection result;
@@ -51,6 +66,8 @@ sg_network_connection sgsdl2_open_udp_connection(unsigned short port)
 
 sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned short port)
 {
+    internal_sgsdl2_init();
+    
     IPaddress addr;
     TCPsocket client;
     
@@ -81,6 +98,7 @@ sg_network_connection sgsdl2_open_tcp_connection(const char *host, unsigned shor
 
 int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
 {
+    // not entry point...
 //    printf("Sending %d\n", size);
     int sent = 0;
     if ((TCPsocket)con->_socket)
@@ -94,6 +112,7 @@ int sgsdl2_send_bytes(sg_network_connection *con, char *buffer, int size)
 
 int sgsdl2_send_udp_message(sg_network_connection *con, const char *host, unsigned short port, const char *buffer, int size)
 {
+    // Not entry point.
     UDPpacket packet;
     SDLNet_ResolveHost(&packet.address, host, port);
   
@@ -130,11 +149,13 @@ void sgsdl2_read_udp_message(sg_network_connection *con, unsigned int *host, uns
 
 int sgsdl2_read_bytes(sg_network_connection *con, char *buffer, int size)
 {
+    // not entry point
     return SDLNet_TCP_Recv((TCPsocket)con->_socket, buffer, size);
 }
 
 void sgsdl2_close_connection(sg_network_connection *con)
 {
+    // not entry point
     if ( con->kind == SGCK_TCP )
     {
         SDLNet_TCP_DelSocket(_sockets, (TCPsocket)con->_socket);
@@ -188,6 +209,7 @@ sg_network_connection sgsdl2_accept_connection(sg_network_connection *con)
 
 unsigned int sgsdl2_network_has_data()
 {
+    internal_sgsdl2_init();
     if (SDLNet_CheckSockets(_sockets, 0) > 0) return 1;
     else return 0;
 }
@@ -205,14 +227,6 @@ unsigned int sgsdl2_connection_has_data(sg_network_connection *con)
 
 void sgsdl2_load_network_fns(sg_interface *functions)
 {
-    SDLNet_Init();
-    _sockets = SDLNet_AllocSocketSet(1024);
-    if(!_sockets)
-    {
-        printf("Error allocating network resources\n");
-        exit(1);
-    }
-    
     functions->network.open_tcp_connection = &sgsdl2_open_tcp_connection;
     functions->network.open_udp_connection = &sgsdl2_open_udp_connection;
     functions->network.read_bytes = &sgsdl2_read_bytes;
