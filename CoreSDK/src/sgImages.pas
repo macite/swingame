@@ -25,9 +25,9 @@ uses sgTypes;
 //----------------------------------------------------------------------------
 // Bitmap loading routines
 //----------------------------------------------------------------------------
-  
+
   /// Creates a bitmap in memory that is the specified width and height (in pixels).
-  /// The new bitmap is initially transparent and can be used as the target 
+  /// The new bitmap is initially transparent and can be used as the target
   /// for various drawing operations. Once you have drawn the desired image onto
   /// the bitmap you can call OptimiseBitmap to optimise the surface.
   ///
@@ -38,9 +38,9 @@ uses sgTypes;
   /// @constructor
   /// @csn initWithWidth:%s andHeight:%s
   function CreateBitmap(width, height: Longint): Bitmap; overload;
-  
+
   /// Creates a bitmap in memory that is the specified width and height (in pixels).
-  /// The new bitmap is initially transparent and can be used as the target 
+  /// The new bitmap is initially transparent and can be used as the target
   /// for various drawing operations. Once you have drawn the desired image onto
   /// the bitmap you can call OptimiseBitmap to optimise the surface.
   ///
@@ -51,13 +51,13 @@ uses sgTypes;
   /// @constructor
   /// @csn initNamed:%s withWidth:%s andHeight:%s
   function CreateBitmap(const name: String; width, height: Longint): Bitmap; overload;
-  
+
   /// Loads a bitmap from file into a Bitmap variable. This can then be drawn to
   /// the screen. Bitmaps can be of bmp, jpeg, gif, png, etc. Images may also
   /// contain alpha values, which will be drawn correctly by the API. All
   /// bitmaps must be freed using the FreeBitmap once you are finished with
   /// them.
-  /// 
+  ///
   /// @lib
   /// @sn loadBitmapFile:%s
   ///
@@ -74,17 +74,17 @@ uses sgTypes;
   /// @class Bitmap
   /// @dispose
   procedure FreeBitmap(bitmapToFree : Bitmap);
-  
-  
-  
+
+
+
 //----------------------------------------------------------------------------
 // Bitmap mapping routines
 //----------------------------------------------------------------------------
-  
+
   /// Loads and returns a bitmap. The supplied ``filename`` is used to
-  /// locate the Bitmap to load. The supplied ``name`` indicates the 
+  /// locate the Bitmap to load. The supplied ``name`` indicates the
   /// name to use to refer to this Bitmap in SwinGame. The `Bitmap` can then be
-  /// retrieved by passing this ``name`` to the `BitmapNamed` function. 
+  /// retrieved by passing this ``name`` to the `BitmapNamed` function.
   ///
   /// @lib
   /// @sn loadBitmapNamed:%s fromFile:%s
@@ -93,37 +93,37 @@ uses sgTypes;
   /// @constructor
   /// @csn initWithName:%s fromFile:%s
   function LoadBitmapNamed(const name, filename: String): Bitmap;
-    
+
   /// Determines if SwinGame has a bitmap loaded for the supplied name.
   /// This checks against all bitmaps loaded, those loaded without a name
   /// are assigned the filename as a default.
   ///
   /// @lib
   function HasBitmap(const name: String): Boolean;
-  
+
   /// Returns the `Bitmap` that has been loaded with the specified name,
   /// see `LoadBitmapNamed`.
   ///
   /// @lib
   function BitmapNamed(const name: String): Bitmap;
-  
+
   /// Releases the SwinGame resources associated with the bitmap of the
   /// specified ``name``.
   ///
   /// @lib
   procedure ReleaseBitmap(const name: String);
-  
+
   /// Releases all of the bitmaps that have been loaded.
   ///
   /// @lib
   procedure ReleaseAllBitmaps();
-  
-  
-  
+
+
+
 //---------------------------------------------------------------------------
 // Bitmap querying functions
 //---------------------------------------------------------------------------
-  
+
   /// Returns the width of the entire bitmap.
   ///
   /// @lib
@@ -131,23 +131,23 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter Width
   function BitmapWidth(bmp: Bitmap): Longint; overload;
-  
+
   /// Returns the height of the entire bitmap.
-  /// 
+  ///
   /// @lib
-  /// 
+  ///
   /// @class Bitmap
   /// @getter Height
   function BitmapHeight(bmp: Bitmap): Longint; overload;
-  
+
   /// Returns the width of a cell within the bitmap.
-  /// 
+  ///
   /// @lib
-  /// 
+  ///
   /// @class Bitmap
   /// @getter CellWidth
   function BitmapCellWidth(bmp: Bitmap): Longint;
-  
+
   /// Returns the height of a cell within the bitmap.
   ///
   /// @lib
@@ -157,19 +157,19 @@ uses sgTypes;
   function BitmapCellHeight(bmp: Bitmap): Longint;
 
   /// Checks if a pixel is drawn at the specified x,y location.
-  /// 
+  ///
   /// @lib
   /// @sn pixelOf:%s drawnAtX:%s y:%s
   ///
   /// @class Bitmap
-  /// @method PixelDrawnAtPoint  
+  /// @method PixelDrawnAtPoint
   /// @csn pixelDrawnAtX:%s y:%s
   function PixelDrawnAtPoint(bmp: Bitmap; x, y: Single): Boolean;
-  
-  /// This is used to define the number of cells in a bitmap, and 
+
+  /// This is used to define the number of cells in a bitmap, and
   /// their width and height. The cells are
-  /// traversed in rows so that the format would be [0 - 1 - 2] 
-  /// [3 - 4 - 5] etc. The count can be used to restrict which of the 
+  /// traversed in rows so that the format would be [0 - 1 - 2]
+  /// [3 - 4 - 5] etc. The count can be used to restrict which of the
   /// parts of the bitmap actually contain cells that can be drawn.
   ///
   /// @lib
@@ -179,7 +179,7 @@ uses sgTypes;
   /// @method SetCellDetails
   /// @csn setCellWidth:%s height:%s columns:%s rows:%s count:%s
   procedure BitmapSetCellDetails(bmp: Bitmap; width, height, columns, rows, count: Longint);
-  
+
   /// Returns the number of cells in the specified bitmap.
   ///
   /// @lib
@@ -187,7 +187,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter CellCount
   function BitmapCellCount(bmp: Bitmap): Longint;
-  
+
   /// Returns the number of rows of cells in the specified bitmap.
   ///
   /// @lib
@@ -195,7 +195,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter CellRows
   function BitmapCellRows(bmp: Bitmap): Longint;
-  
+
   /// Returns the number of columns of cells in the specified bitmap.
   ///
   /// @lib
@@ -203,7 +203,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter CellColumns
   function BitmapCellColumns(bmp: Bitmap): Longint;
-  
+
   /// Are the two bitmaps of a similar format that they could be used in
   /// place of each other. This returns true if they have the same cell
   /// details (count, width, and height).
@@ -214,7 +214,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @method interchangableWith
   function BitmapsInterchangable(bmp1, bmp2: Bitmap): Boolean;
-  
+
   /// Returns the name of the bitmap
   ///
   /// @lib
@@ -222,7 +222,7 @@ uses sgTypes;
   /// @class Bitmap
   /// @getter Name
   function BitmapName(bmp:Bitmap): string;
-  
+
   /// Returns the Filename of the bitmap
   ///
   /// @lib
@@ -231,33 +231,33 @@ uses sgTypes;
   /// @getter Filename
   function BitmapFilename(bmp:Bitmap): string;
 
-  
+
 //----------------------------------------------------------------------------
 // Bitmap -> Circle
 //----------------------------------------------------------------------------
-  
+
   /// Creates a circle from within a bitmap, uses the larger of the width and
   /// height.
   ///
   /// @lib
   /// @sn circleFrombitmap:%s atPt:%s
-  /// 
+  ///
   /// @class Bitmap
   /// @method ToCircle
   /// @csn circleAtPt:%s
   function BitmapCircle(bmp: Bitmap; const pt: Point2D): Circle; overload;
-  
+
   /// Creates a circle from within a bitmap, uses the larger of the width and
   /// height.
   ///
   /// @lib BitmapCircleXY
   /// @sn circleFromBitmap:%s atX:%s y:%s
-  /// 
+  ///
   /// @class Bitmap
   /// @overload ToCircle ToCircleXY
   /// @csn circleAtX:%s y:%s
   function BitmapCircle(bmp: Bitmap; x, y: Single): Circle; overload;
-  
+
   /// Creates a circle from within a cell in a bitmap, uses the larger of the width and
   /// height.
   ///
@@ -266,7 +266,7 @@ uses sgTypes;
   ///
   /// @class Bitmap
   /// @method ToCellCircle
-  /// @csn circleCellAtPT:%s 
+  /// @csn circleCellAtPT:%s
   function BitmapCellCircle(bmp: Bitmap; const pt: Point2D): Circle; overload;
 
   /// Creates a circle that will encompass a cell of the passed in bitmap if it
@@ -279,7 +279,7 @@ uses sgTypes;
   /// @method ToCellCircle
   /// @csn circleCellAtPT:%s scale:%s
   function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
-  
+
   /// Creates a circle from within a cell in a bitmap, uses the larger of the width and
   /// height.
   ///
@@ -290,12 +290,12 @@ uses sgTypes;
   /// @overload ToCellCircle ToCellCircleXY
   /// @csn circleCellAtX:%s y:%s
   function BitmapCellCircle(bmp: Bitmap; x, y: Single): Circle; overload;
-  
+
 
 //---------------------------------------------------------------------------
 // Collision Mask
 //---------------------------------------------------------------------------
-  
+
   /// Setup the passed in bitmap for pixel level collisions.
   ///
   /// @lib
@@ -303,11 +303,11 @@ uses sgTypes;
   /// @method SetupForCollisions
   procedure SetupBitmapForCollisions(src: Bitmap);
 
-  
+
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - clearing
 //---------------------------------------------------------------------------
-  
+
   /// Clear the drawing on the Bitmap to the passed in color.
   ///
   /// @lib
@@ -317,7 +317,7 @@ uses sgTypes;
   /// @overload ClearSurface ClearSurfaceToColor
   /// @csn clearSurfaceTo:%s
   procedure ClearSurface(dest: Bitmap; toColor: Color); overload;
-  
+
   /// Clears the drawing on the Bitmap to black.
   ///
   /// @lib ClearSurfaceToBlack
@@ -325,15 +325,15 @@ uses sgTypes;
   /// @class Bitmap
   /// @method ClearSurface
   procedure ClearSurface(dest: Bitmap); overload;
-  
-  
-  
+
+
+
 //---------------------------------------------------------------------------
 // Bitmap -> Rectangle functions
 //---------------------------------------------------------------------------
-  
+
   /// Returns a bounding rectangle for the bitmap.
-  /// 
+  ///
   /// @lib BitmapRectXY
   /// @sn rectangleAtX:%s y:%s forBitmap:%s
   ///
@@ -342,18 +342,18 @@ uses sgTypes;
   /// @self 3
   /// @csn toRectangleAtX:%s y:%s
   function BitmapRectangle(x, y: Single; bmp: Bitmap): Rectangle; overload;
-  
+
   /// Returns a bounding rectangle for the bitmap, at the origin.
-  /// 
+  ///
   /// @lib BitmapRectAtOrigin
   ///
   /// @class Bitmap
   /// @overload ToRectangle ToRectangleAtOrigin
   /// @csn toRectangleAtOrigin
   function BitmapRectangle(bmp: Bitmap): Rectangle; overload;
-  
+
   /// Returns a bounding rectangle for a cell of the bitmap at the origin.
-  /// 
+  ///
   /// @lib BitmapCellRectangleAtOrigin
   /// @sn rectangleForBitmapCellAtOrigin:%s
   ///
@@ -361,9 +361,9 @@ uses sgTypes;
   /// @overload ToCellRectangle ToCellRectangleAtOrigin
   /// @csn toRectangleForCellAtOrigin
   function BitmapCellRectangle(bmp: Bitmap): Rectangle; overload;
-  
+
   /// Returns a rectangle for a cell of the bitmap at the indicated point.
-  /// 
+  ///
   /// @lib BitmapCellRectangleXY
   /// @sn rectangleForCellAtX:%s y:%s forBitmapCell:%s
   ///
@@ -372,20 +372,20 @@ uses sgTypes;
   /// @self 3
   /// @csn toRectangleForCellAtX:%s y:%s
   function BitmapCellRectangle(x, y: Single; bmp: Bitmap): Rectangle; overload;
-  
+
   /// Returns a rectangle for the location of the indicated cell within the
   /// bitmap.
-  /// 
+  ///
   /// @lib
   /// @sn bitmap:%s rectangleOfCell:%s
-  /// 
+  ///
   /// @class Bitmap
   /// @method CellRectangle
   /// @csn rectangleCell:%s
   function BitmapRectangleOfCell(src: Bitmap; cell: Longint): Rectangle;
-  
-  
-  
+
+
+
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - onto bitmap
 //---------------------------------------------------------------------------
@@ -405,12 +405,12 @@ uses sgTypes;
   /// @lib DrawBitmapNamedWithOpts
   /// @sn drawBitmapNamed:%s atX:%s y:%s withOptions:%s
   procedure DrawBitmap(const name: String; x, y: Single; const opts: DrawingOptions); overload;
-  
+
 
 //---------------------------------------------------------------------------
 // Bitmap drawing routines - standard
 //---------------------------------------------------------------------------
-  
+
   /// Draw the passed in bitmap onto the game.
   ///
   /// @lib
@@ -422,7 +422,7 @@ uses sgTypes;
   ///
   /// @doc_idx 0
   procedure DrawBitmap(src : Bitmap; x, y : Single); overload;
-  
+
   /// Draw the named bitmap onto the game.
   ///
   /// @lib DrawBitmapNamed
@@ -430,7 +430,7 @@ uses sgTypes;
   ///
   /// @doc_idx 1
   procedure DrawBitmap(const name: String; x, y : Single); overload;
-  
+
   /// Draw a cell from a bitmap onto the game.
   ///
   /// @lib DrawCellOpts
@@ -440,7 +440,7 @@ uses sgTypes;
   /// @method DrawCell
   /// @csn drawCell:%s atX:%s y:%s opts:%s
   procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single; const opts : DrawingOptions); overload;
-  
+
   /// Draw a cell from a bitmap onto the game.
   ///
   /// @lib DrawCell
@@ -451,13 +451,13 @@ uses sgTypes;
   /// @csn drawCell:%s atX:%s y:%s
   procedure DrawCell(src: Bitmap; cell: Longint; x, y: Single); overload;
 
-    
+
 //---------------------------------------------------------------------------
 // Bitmap Saving
 //---------------------------------------------------------------------------
-  
+
   /// Save Bitmap to specific directory.
-  /// 
+  ///
   /// @lib
   /// @sn bitmap:%s saveToFile:%s
   ///
@@ -465,14 +465,14 @@ uses sgTypes;
   /// @method Save
   /// @csn saveToFile:%s
   procedure SaveBitmap(src: Bitmap; const filepath: String);
-  
-    
+
+
 //=============================================================================
 implementation
 uses sgResources, sgCamera, sgGeometry, sgGraphics,
      sgDriverImages, sgDriver, sgDrawingOptions,
      stringhash,         // libsrc
-     SysUtils, 
+     SysUtils,
      sgShared, sgTrace, sgBackendTypes, sgDriverSDL2Types;
 //=============================================================================
 
@@ -498,16 +498,16 @@ begin
     TraceEnter('sgImages', 'CreateBitmap');
   {$ENDIF}
   result := nil;
-  
+
   if (width < 1) or (height < 1) then
   begin
     RaiseWarning('Bitmap width and height must be greater then 0');
     exit;
   end;
-  
+
   realName := name;
   idx := 0;
-  
+
   while _Images.containsKey(realName) do
   begin
     realName := name + '_' + IntToStr(idx);
@@ -526,7 +526,7 @@ begin
   // Place the bitmap in the _Images hashtable
   //
   obj := tResourceContainer.Create(result);
-  
+
   if not _Images.setValue(realName, obj) then
   begin
     FreeBitmap(result);
@@ -534,7 +534,7 @@ begin
     RaiseException('Error creating bitmap: ' + realName);
     exit;
   end;
-  
+
   {$IFDEF TRACE}
     TraceExit('sgImages', 'CreateBitmap', realName + ' = ' + HexStr(result));
   {$ENDIF}
@@ -548,21 +548,21 @@ begin
   result := nil;
   w := 0;
   h := 0;
-  
+
   for i := Low(bitmaps) to High(bitmaps) do
   begin
     if BitmapWidth(bitmaps[i]) > w then w := BitmapWidth(bitmaps[i]);
     if BitmapHeight(bitmaps[i]) > h then h := BitmapWidth(bitmaps[i]);
   end;
-  
+
   if Length(bitmaps) < 1 then exit;
   if cols < 1 then exit;
   if (w = 0) or (h = 0) then exit;
-  
+
   rows := Length(bitmaps) div cols;
-  if Length(bitmaps) mod cols > 0 then 
+  if Length(bitmaps) mod cols > 0 then
     rows += 1;
-  
+
   result := CreateBitmap(w * cols, h * rows);
   opts := OptionDrawTo(result);
 
@@ -570,7 +570,7 @@ begin
   begin
     DrawBitmap(bitmaps[i], (i mod cols) * w, (i div cols) * h, opts);
   end;
-  
+
   BitmapSetCellDetails(result, w, h, cols, rows, Length(bitmaps));
 end;
 
@@ -584,31 +584,31 @@ begin
     result := BitmapNamed(name);
     exit;
   end;
-  
+
   result := nil; //start at nil to exit cleanly on error
-  
+
   fn := filename;
   // Check for file
   if not FileExists(fn) then
   begin
     fn := PathToResource(fn, BitmapResource);
-    
+
     if not FileExists(fn) then
     begin
       RaiseWarning('Unable to locate bitmap ' + fn);
       exit;
     end;
-  end;  
-  
+  end;
+
   result := Bitmap(sgDriverImages.LoadBitmap(name, fn));
 
   // if it failed to load then exit
-  if not Assigned(result) then 
+  if not Assigned(result) then
   begin
     RaiseWarning('Error loading image ' + fn);
     exit;
   end;
-  
+
   // Place the bitmap in the _Images hashtable
   obj := tResourceContainer.Create(result);
   if not _Images.setValue(name, obj) then
@@ -621,7 +621,7 @@ end;
 
 function LoadBitmap(const filename: String): Bitmap;
 begin
-  result := Bitmap(LoadBitmap(filename, filename));
+  result := LoadBitmapNamed(filename, filename);
 end;
 
 procedure FreeBitmap(bitmapToFree : Bitmap);
@@ -631,16 +631,16 @@ begin
   b := ToBitmapPtr(bitmapToFree);
 
   if Assigned(b) then
-  begin    
+  begin
 
     //Notify others that this is now gone!
     CallFreeNotifier(bitmapToFree);
-    
+
     //Remove the image from the hashtable
     _Images.remove(BitmapName(bitmapToFree)).Free();
-    
+
     sgDriverImages.FreeBitmap(b);
-    
+
     //Dispose the pointer
     b^.id := NONE_PTR;
     Dispose(b);
@@ -668,7 +668,7 @@ begin
   if assigned(tmp) then
     result := Bitmap(tResourceContainer(tmp).Resource)
   else
-  begin 
+  begin
     filename := PathToResource(name, BitmapResource);
 
     if FileExists(name) or FileExists(filename) then
@@ -680,8 +680,8 @@ begin
       RaiseWarning('Unable to find bitmap named: ' + name);
       result := nil;
     end;
-  end; 
-  
+  end;
+
   {$IFDEF TRACE}
     TraceExit('sgImages', 'BitmapNamed = ' + HexStr(result));
   {$ENDIF}
@@ -694,7 +694,7 @@ begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'ReleaseBitmap', 'name = ' + name);
   {$ENDIF}
-  
+
   bmp := BitmapNamed(name);
   if (assigned(bmp)) then
   begin
@@ -731,7 +731,7 @@ var
 begin
   b := ToBitmapPtr(bmp);
   if not Assigned(b) then exit;
-  
+
   b^.cellW     := width;
   b^.cellH     := height;
   b^.cellCols  := columns;
@@ -795,7 +795,7 @@ begin
 
   if not assigned(b) then exit;
   if Length(b^.nonTransparentPixels) <> 0 then exit;
-    
+
   sgDriverImages.SetupCollisionMask(b);
 end;
 
@@ -822,7 +822,7 @@ begin
   b := ToBitmapPtr(src);
 
   if (not Assigned(opts.dest)) or (not Assigned(b)) then exit;
-  
+
   sgDriverImages.DrawBitmap(b, x, y, opts)
 
   {$IFDEF TRACE}
@@ -995,14 +995,14 @@ begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'BitmapCircle', '');
   {$ENDIF}
-  
+
   result.center := pt;
-  
+
   if BitmapWidth(bmp) > BitmapHeight(bmp) then
     result.radius := RoundInt(BitmapWidth(bmp) / 2.0)
   else
     result.radius := RoundInt(BitmapHeight(bmp) / 2.0);
-  
+
   {$IFDEF TRACE}
     TraceExit('sgImages', 'BitmapCircle', '');
   {$ENDIF}
@@ -1016,7 +1016,7 @@ end;
 
 function BitmapCellCircle(bmp: Bitmap; const pt: Point2D): Circle; overload;
 begin
-  result := BitmapCellCircle(bmp, pt, 1.0);  
+  result := BitmapCellCircle(bmp, pt, 1.0);
 end;
 
 function BitmapCellCircle(bmp: Bitmap; const pt: Point2D; scale: Single): Circle; overload;
@@ -1024,14 +1024,14 @@ begin
   {$IFDEF TRACE}
     TraceEnter('sgImages', 'BitmapCellCircle', '');
   {$ENDIF}
-  
+
   result.center := pt;
-  
+
   if BitmapCellWidth(bmp) > BitmapCellHeight(bmp) then
     result.radius := Abs(RoundInt(BitmapCellWidth(bmp) / 2.0) * scale)
   else
     result.radius := Abs(RoundInt(BitmapCellHeight(bmp) / 2.0) * scale);
-  
+
   {$IFDEF TRACE}
     TraceExit('sgImages', 'BitmapCellCircle', '');
   {$ENDIF}
@@ -1055,16 +1055,16 @@ end;
     {$IFDEF TRACE}
       TraceEnter('sgImages', 'initialization');
     {$ENDIF}
-    
+
     InitialiseSwinGame();
-    
+
     _Images := TStringHash.Create(False, 1024);
-    
+
     {$IFDEF TRACE}
       TraceExit('sgImages', 'initialization');
     {$ENDIF}
   end;
-  
+
   finalization
   begin
     ReleaseAllBitmaps();
