@@ -9,7 +9,7 @@ begin
 	scale := SpriteScale(s);
 	w := SpriteLayerWidth(s, 0);
 	h := SpriteLayerHeight(s, 0);
-	
+
 	anchorMatrix := TranslationMatrix(SpriteAnchorPoint(s));
 
 	result := IdentityMatrix();
@@ -21,7 +21,7 @@ begin
 	newY := SpriteY(s) - (h * scale / 2.0) + (h / 2.0);
 	result := MatrixMultiply(TranslationMatrix(newX / scale, newY / scale), result);
 
-	result := MatrixMultiply(ScaleMatrix(scale), result);	
+	result := MatrixMultiply(ScaleMatrix(scale), result);
 end;
 
 procedure Main();
@@ -34,7 +34,7 @@ var
 begin
 	OpenWindow('Sprite Rotation', 600, 600);
 	OpenWindow('Other Window', 300, 300);
-	
+
 	sprt := CreateSprite(BitmapNamed('rocket_sprt.png'));
 	SpriteSetMoveFromAnchorPoint(sprt, true);
 	SpriteSetX(sprt, 300);
@@ -97,8 +97,8 @@ begin
 			end;
 		end;
 
-		if KeyTyped(Key0) then SpriteSetRotation(sprt, -9045);
-		if KeyTyped(Key9) then SpriteSetRotation(sprt, 9045);
+		if KeyTyped(Num0Key) then SpriteSetRotation(sprt, 0);
+		if KeyTyped(Num9Key) then SpriteSetRotation(sprt, 45);
 
 		tri := initTri;
 		triB := initTriB;
@@ -113,10 +113,10 @@ begin
 		ApplyMatrix(SpriteLocationMatrix(s2), triB);
 		FillTriangle(ColorBlue, tri);
 		FillTriangle(ColorBlue, triB);
-		FillQuad(ColorBrown, q);
+		// FillQuad(RGBAColor(0,0,255,62), q);
 
 		if SpriteRectCollision(sprt, r) then
-			FillRectangle(ColorPurple, r)
+			FillRectangle(ColorPink, r)
 		else
 			DrawRectangle(ColorPurple, r);
 

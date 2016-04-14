@@ -33,11 +33,14 @@ f:105,4,1,
 f:106,8,1,
 f:107,12,1,
 
+m:[108-111],[0-3],12,108
+
 //sound
 s:0,boing,comedy_boing.wav
 s:4,boing,comedy_boing.wav
 s:8,boing,comedy_boing.wav
 s:12,boing,comedy_boing.wav
+//s:108,boing,comedy_boing.wav
 
 s:16,MoonWalkFront,breakdance.wav
 s:20,MoonWalkFront,breakdance.wav
@@ -45,6 +48,8 @@ s:24,MoonWalkFront,breakdance.wav
 s:28,MoonWalkFront,breakdance.wav
 
 s:32,dance,dancingFrog.wav
+
+s:
 
 //identifiers
 i:WalkFront,0
@@ -58,6 +63,8 @@ i:MoonWalkRight,24
 i:MoonWalkBack,28
 
 i:Dance,32
+
+i:LoopFrontWalk,108
 
 i:StandFront,16
 i:StandLeft,17
