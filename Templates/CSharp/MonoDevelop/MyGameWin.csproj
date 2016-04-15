@@ -40,7 +40,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\**\*.cs" />
+    <Compile Include="src\GameMain.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="SwinGame">
