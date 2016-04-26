@@ -34,7 +34,7 @@ SRC_DIR="${APP_PATH}/src"
 
 LOG_FILE="${APP_PATH}/out.log"
 
-C_FLAGS="-x c++"
+C_FLAGS="-std=c++11"
 SG_INC="-I${APP_PATH}/lib/"
 
 if [ "$OS" = "$MAC" ]; then
@@ -47,25 +47,25 @@ if [ "$OS" = "$WIN" ]; then
     #Locate the compiler...
     GCC_BIN=`which g++ 2>> /dev/null`
     if [ -z "$GCC_BIN" ]; then
-        #try locating gcc
-        GCC_BIN=`which clang`
+        #try locating clang++
+        GCC_BIN=`which clang++`
 
         if [ -z "$GCC_BIN" ]; then
             #no compiler found :(
-            echo "Unable to find a C compiler. Install either clang or gcc."
+            echo "Unable to find a C++ compiler. Install either clang++ or g++."
             exit -1
         fi
     fi
 else
     #Locate the compiler...
-    GCC_BIN=`which clang 2>> /dev/null`
+    GCC_BIN=`which clang++ 2>> /dev/null`
     if [ -z "$GCC_BIN" ]; then
-        #try locating gcc
+        #try locating g++
         GCC_BIN=`which g++`
 
         if [ -z "$GCC_BIN" ]; then
             #no compiler found :(
-            echo "Unable to find a C compiler. Install either clang or gcc."
+            echo "Unable to find a C++ compiler. Install either clang++ or g++."
             exit -1
         fi
     fi
@@ -73,23 +73,19 @@ fi
 
 CLEAN="N"
 
-#
-# Library versions
-#
-OPENGL=false
-SDL_13=false
-
 Usage()
 {
-    echo "Usage: [-c] [-h] [-r] [name]"
+    echo "Usage: [-c] [-h] [-r] [-win32|-win64] [name]"
     echo
     echo "Compiles your game into an executable application."
     echo "Output is located in $OUT_DIR."
     echo
     echo "Options:"
-    echo " -c   Perform a clean rather than a build"
-    echo " -h   Show this help message"
-    echo " -r   Create a release build"
+    echo " -c     Perform a clean rather than a build"
+    echo " -h     Show this help message"
+    echo " -r     Create a release build"
+    echo " -win32 Create a 32bit windows executable (windows only - default)"
+    echo " -win64 Create a 64bit windows executable (windows only)"
     exit 0
 }
 
@@ -162,17 +158,6 @@ if [ -f "${LOG_FILE}" ]
 then
     rm -f "${LOG_FILE}"
 fi
-
-DoDriverMessage()
-{
-  if [ ${SDL_13} = true ]; then
-    echo "  ... Using SDL 1.3 Driver"
-  elif [ ${OPENGL} = true ]; then
-    echo "  ... Using OpenGL Driver"
-  else
-    echo "  ... Using SDL 1.2 Driver"
-  fi
-}
 
 CleanTmp()
 {
@@ -325,7 +310,7 @@ doMacPackage()
 doLinuxCompile()
 {
     "${APP_PATH}/lib/makelib.sh"
-    
+
     mkdir -p "${TMP_DIR}"
     for file in `find ${LIBSRC_DIR} -maxdepth 1 | grep [.]cpp$`; do
         name=${file##*/} # ## = delete longest match for */... ie all but file name
