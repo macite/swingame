@@ -552,7 +552,7 @@ begin
   for i := Low(bitmaps) to High(bitmaps) do
   begin
     if BitmapWidth(bitmaps[i]) > w then w := BitmapWidth(bitmaps[i]);
-    if BitmapHeight(bitmaps[i]) > h then h := BitmapWidth(bitmaps[i]);
+    if BitmapHeight(bitmaps[i]) > h then h := BitmapHeight(bitmaps[i]);
   end;
 
   if Length(bitmaps) < 1 then exit;
