@@ -1453,31 +1453,59 @@ Uint32 _get_pixel(SDL_Surface *surface, int x, int y)
         + x * surface->format->BytesPerPixel;
 
     if(x < 0 || y < 0 || x >= surface->w || y >= surface->h) return 0;
+    
+    uint32_t color;
 
     switch(surface->format->BytesPerPixel) {
         case 1:
-            return *p;
+            color = *p;
+            break;
         case 2:
-            return *(Uint16 *)p;
+            color = *(Uint16 *)p;
+            break;
         case 3:
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
-            return static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
+            color = static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
 #else
-            return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
+            color = static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
 #endif
+            break;
         case 4:
-            uint32_t color;
-            uint8_t r, g, b, a;
             color = *(Uint32 *)p;
-
-            r = (uint8_t)((color & surface->format->Rmask) >> (surface->format->Rshift));
-            g = (uint8_t)((color & surface->format->Gmask) >> (surface->format->Gshift));
-            b = (uint8_t)((color & surface->format->Bmask) >> (surface->format->Bshift));
-            a = (uint8_t)((color & surface->format->Amask) >> (surface->format->Ashift));
-            return (uint32_t)(r << 24 | g << 16 | b << 8 | a);
+            break;
         default:
-            return 0;
+            color = 0;
     }
+    
+    uint8_t r, g, b, a;
+    
+    SDL_GetRGBA(color, surface->format, &r, &g, &b, &a);
+    return (uint32_t)(r << 24 | g << 16 | b << 8 | a);
+
+//    switch(surface->format->BytesPerPixel) {
+//        case 1:
+//            return *p;
+//        case 2:
+//            return *(Uint16 *)p;
+//        case 3:
+//#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+//            return static_cast<Uint32>(p[0] << 16 | p[1] << 8 | p[2]);
+//#else
+//            return static_cast<Uint32>(p[0] | p[1] << 8 | p[2] << 16);
+//#endif
+//        case 4:
+//            uint32_t color;
+//            uint8_t r, g, b, a;
+//            color = *(Uint32 *)p;
+//
+//            r = (uint8_t)((color & surface->format->Rmask) >> (surface->format->Rshift));
+//            g = (uint8_t)((color & surface->format->Gmask) >> (surface->format->Gshift));
+//            b = (uint8_t)((color & surface->format->Bmask) >> (surface->format->Bshift));
+//            a = (uint8_t)((color & surface->format->Amask) >> (surface->format->Ashift));
+//            return (uint32_t)(r << 24 | g << 16 | b << 8 | a);
+//        default:
+//            return 0;
+//    }
 }
 
 //
