@@ -49,7 +49,7 @@ void sgsdl2_close_font(sg_font_data* font)
 {
     if (font->_data) 
     {
-        TTF_CloseFont((TTF_Font*)font->_data);
+        TTF_CloseFont(static_cast<TTF_Font *>(font->_data));
         font->kind = SGFT_UNKNOWN; 
         font->_data = NULL; 
     }
@@ -57,22 +57,22 @@ void sgsdl2_close_font(sg_font_data* font)
 
 int sgsdl2_text_line_skip(sg_font_data* font) 
 { 
-    return TTF_FontLineSkip((TTF_Font*)font->_data);
+    return TTF_FontLineSkip(static_cast<TTF_Font *>(font->_data));
 }
 
 int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h) 
 {
-    return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
+    return TTF_SizeText(static_cast<TTF_Font *>(font->_data), text, w, h); 
 }
 
 void sgsdl2_set_font_style(sg_font_data* font,int style) 
 {
-    TTF_SetFontStyle((TTF_Font*)font->_data, style); 
+    TTF_SetFontStyle(static_cast<TTF_Font *>(font->_data), style); 
 }
 
 int sgsdl2_get_font_style(sg_font_data* font) 
 {
-    return TTF_GetFontStyle((TTF_Font*)font->_data); 
+    return TTF_GetFontStyle(static_cast<TTF_Font *>(font->_data)); 
 }
 
 void _sgsdl2_draw_bitmap_text( sg_drawing_surface * surface,
@@ -120,7 +120,7 @@ void sgsdl2_draw_text(
     sdl_color.b = static_cast<Uint8>(clr.b * 255);
     sdl_color.a = static_cast<Uint8>(clr.a * 255);
     
-    text_surface = TTF_RenderText_Blended((TTF_Font*)font->_data, text, sdl_color);
+    text_surface = TTF_RenderText_Blended(static_cast<TTF_Font *>(font->_data), text, sdl_color);
 
     if (text_surface == NULL)
     {
@@ -141,8 +141,8 @@ void sgsdl2_draw_text(
             else
             {
                 SDL_Rect rect;
-                rect.x = (int)x;
-                rect.y = (int)y;
+                rect.x = static_cast<int>(x);
+                rect.y = static_cast<int>(y);
                 rect.w = text_surface->w;
                 rect.h = text_surface->h;
 
