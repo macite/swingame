@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#ifndef __sgsdl2__SGSDL2Input__
-#define __sgsdl2__SGSDL2Input__
+#ifndef sgsdl2_SGSDL2Input_h
+#define sgsdl2_SGSDL2Input_h
 
 #include "sgInterfaces.h"
 

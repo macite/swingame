@@ -5,8 +5,8 @@
 //  Created by James Armstrong on 11/12/2013.
 //
 
-#ifndef __sgsdl2__SGSDL2Text__
-#define __sgsdl2__SGSDL2Text__
+#ifndef sgsdl2_SGSDL2Text_h
+#define sgsdl2_SGSDL2Text_h
 
 #include "sgInterfaces.h"
 

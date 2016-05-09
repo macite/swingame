@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#ifndef __sgsdl2__sgBackendUtils__
-#define __sgsdl2__sgBackendUtils__
+#ifndef sgsdl2_sgBackendUtils_h
+#define sgsdl2_sgBackendUtils_h
 
 #include "sgInterfaces.h"
 
