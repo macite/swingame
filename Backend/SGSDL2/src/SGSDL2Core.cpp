@@ -105,7 +105,7 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
         if ( add )
         {
             disp.num_modes++;
-            sg_mode * new_modes = (sg_mode*) realloc(disp.modes, disp.num_modes * sizeof(sg_mode));
+            sg_mode * new_modes = static_cast<sg_mode *>(realloc(disp.modes, disp.num_modes * sizeof(sg_mode)));
             if ( new_modes == NULL )
             {
                 set_error_state("Out of memory loading video modes.");
@@ -132,7 +132,7 @@ void sgsdk_setup_displays()
       exit(-1);
     }
     _sgsdk_system_data.num_displays = static_cast<unsigned int>(num_displays);
-    _sgsdk_system_data.displays = (sg_display *)malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays);
+    _sgsdk_system_data.displays = static_cast<sg_display *>(malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays));
     
     for (unsigned int i = 0; i < _sgsdk_system_data.num_displays; i++)
     {

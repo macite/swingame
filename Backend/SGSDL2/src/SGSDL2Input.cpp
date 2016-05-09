@@ -177,7 +177,7 @@ int sgsdl2_window_close_requested(sg_drawing_surface* surf)
 {
   if (surf->kind == SGDS_Window) 
   {
-    if (((sg_window_be*)surf->_data)->close_requested)
+    if (static_cast<sg_window_be*>(surf->_data)->close_requested)
     {
       return -1;
     }
@@ -218,7 +218,7 @@ void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
         case SGDS_Window:
         {
             sg_window_be * window_be;
-            window_be = (sg_window_be *)surface->_data;
+            window_be = static_cast<sg_window_be *>(surface->_data);
 
             SDL_WarpMouseInWindow(window_be->window, x, y);
             break;
