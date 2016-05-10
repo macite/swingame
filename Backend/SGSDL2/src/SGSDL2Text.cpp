@@ -40,7 +40,7 @@ void sgsdl2_finalize_text()
 sg_font_data sgsdl2_load_font(const char * filename, int font_size)
 {
     internal_sgsdl2_init();
-    
+
     sg_font_data font;
     font.kind = SGFT_TTF;
     font._data = TTF_OpenFont(filename, font_size);
@@ -49,40 +49,40 @@ sg_font_data sgsdl2_load_font(const char * filename, int font_size)
 
 void sgsdl2_close_font(sg_font_data* font)
 {
-    if (font && font->_data) 
+    if (font && font->_data)
     {
-        TTF_CloseFont((TTF_Font*)font->_data);
-        font->kind = SGFT_UNKNOWN; 
-        font->_data = NULL; 
+        TTF_CloseFont(static_cast<TTF_Font *>(font->_data));
+        font->kind = SGFT_UNKNOWN;
+        font->_data = NULL;
     }
 }
 
-int sgsdl2_text_line_skip(sg_font_data* font) 
-{ 
+int sgsdl2_text_line_skip(sg_font_data* font)
+{
     if (font && font->_data)
-        return TTF_FontLineSkip((TTF_Font*)font->_data);
+        return TTF_FontLineSkip(static_cast<TTF_Font *>(font->_data));
     else
         return 0;
 }
 
-int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h) 
+int sgsdl2_text_size(sg_font_data* font, char* text, int* w, int* h)
 {
     if (font && font->_data)
-        return TTF_SizeText((TTF_Font*)font->_data, text, w, h); 
+        return TTF_SizeText(static_cast<TTF_Font *>(font->_data), text, w, h);
     else
         return 0;
 }
 
-void sgsdl2_set_font_style(sg_font_data* font,int style) 
+void sgsdl2_set_font_style(sg_font_data* font,int style)
 {
     if (font && font->_data)
-        TTF_SetFontStyle((TTF_Font*)font->_data, style); 
+        TTF_SetFontStyle(static_cast<TTF_Font *>(font->_data), style);
 }
 
-int sgsdl2_get_font_style(sg_font_data* font) 
+int sgsdl2_get_font_style(sg_font_data* font)
 {
     if (font && font->_data)
-        return TTF_GetFontStyle((TTF_Font*)font->_data); 
+        return TTF_GetFontStyle(static_cast<TTF_Font *>(font->_data));
     else
         return 0;
 }
@@ -94,7 +94,7 @@ void _sgsdl2_draw_bitmap_text( sg_drawing_surface * surface,
 {
     internal_sgsdl2_init();
     unsigned int count = _sgsdl2_renderer_count(surface);
-    
+
     for (unsigned int i = 0; i < count; i++)
     {
         SDL_Renderer *renderer = _sgsdl2_prepared_renderer(surface, i);
@@ -108,14 +108,14 @@ void _sgsdl2_draw_bitmap_text( sg_drawing_surface * surface,
                    static_cast<Uint8>(clr.a * 255) );
         _sgsdl2_complete_render(surface, i);
     }
-        
+
 }
-    
+
 void sgsdl2_draw_text(
-        sg_drawing_surface * surface, 
-        sg_font_data* font, 
-        float x, float y, 
-        const char * text, 
+        sg_drawing_surface * surface,
+        sg_font_data* font,
+        float x, float y,
+        const char * text,
         sg_color clr)
 {
     if (!font) // draw bitmap based text -- no font
@@ -124,7 +124,7 @@ void sgsdl2_draw_text(
         return;
     }
     if (! (font && font->_data)) return; // error with font
-    
+
     SDL_Surface * text_surface = NULL;
     SDL_Texture * text_texture = NULL;
 
@@ -133,8 +133,8 @@ void sgsdl2_draw_text(
     sdl_color.g = static_cast<Uint8>(clr.g * 255);
     sdl_color.b = static_cast<Uint8>(clr.b * 255);
     sdl_color.a = static_cast<Uint8>(clr.a * 255);
-    
-    text_surface = TTF_RenderText_Blended((TTF_Font*)font->_data, text, sdl_color);
+
+    text_surface = TTF_RenderText_Blended(static_cast<TTF_Font *>(font->_data), text, sdl_color);
 
     if (text_surface == NULL)
     {
@@ -155,15 +155,15 @@ void sgsdl2_draw_text(
             else
             {
                 SDL_Rect rect;
-                rect.x = (int)x;
-                rect.y = (int)y;
+                rect.x = static_cast<int>(x);
+                rect.y = static_cast<int>(y);
                 rect.w = text_surface->w;
                 rect.h = text_surface->h;
 
                 SDL_RenderCopy(renderer, text_texture, NULL, &rect);
 
                 _sgsdl2_complete_render(surface, i);
-                
+
                 SDL_DestroyTexture(text_texture);
             }
         }
@@ -175,9 +175,9 @@ void sgsdl2_load_text_fns(sg_interface *functions)
 {
     functions->text.load_font = &sgsdl2_load_font;
     functions->text.close_font = &sgsdl2_close_font;
-    functions->text.text_line_skip = &sgsdl2_text_line_skip; 
-    functions->text.text_size = &sgsdl2_text_size; 
-    functions->text.get_font_style = &sgsdl2_get_font_style; 
-    functions->text.set_font_style = &sgsdl2_set_font_style; 
+    functions->text.text_line_skip = &sgsdl2_text_line_skip;
+    functions->text.text_size = &sgsdl2_text_size;
+    functions->text.get_font_style = &sgsdl2_get_font_style;
+    functions->text.set_font_style = &sgsdl2_set_font_style;
     functions->text.draw_text = &sgsdl2_draw_text;
 }

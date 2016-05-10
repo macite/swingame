@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#ifndef __sgsdl2__SGSDL2Graphics__
-#define __sgsdl2__SGSDL2Graphics__
+#ifndef sgsdl2_SGSDL2Graphics_h
+#define sgsdl2_SGSDL2Graphics_h
 
 #ifdef __linux__
 #include <SDL2/SDL.h>

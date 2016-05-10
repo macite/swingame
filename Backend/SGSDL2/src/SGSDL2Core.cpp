@@ -48,7 +48,7 @@ void internal_sgsdl2_init()
          // fatal error so...
          // no other functions can now be called
          clear_functions();
-    
+
          set_error_state(SDL_GetError());
          return;
      }
@@ -81,7 +81,7 @@ void internal_sgsdl2_init()
 //    printf("Network port C a-4: %p\n", _functions.network.network_port);
 
     sgsdk2_init_web();
-    
+
     sg_network_init();
 }
 
@@ -125,7 +125,7 @@ void sgsdk2_setup_display(int idx, sg_display &disp)
         if ( add )
         {
             disp.num_modes++;
-            sg_mode * new_modes = (sg_mode*) realloc(disp.modes, disp.num_modes * sizeof(sg_mode));
+            sg_mode * new_modes = static_cast<sg_mode *>(realloc(disp.modes, disp.num_modes * sizeof(sg_mode)));
             if ( new_modes == NULL )
             {
                 set_error_state("Out of memory loading video modes.");
@@ -163,7 +163,7 @@ void sgsdk_setup_displays()
 //    printf("num displays is: %d\n", _sgsdk_system_data.num_displays);
 //    printf("num displays: %p\n", &_sgsdk_system_data.num_displays);
 //    printf("ports: %p\n", &_functions.network.network_port);
-    _sgsdk_system_data.displays = (sg_display *)malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays);
+    _sgsdk_system_data.displays = static_cast<sg_display *>(malloc(sizeof(sg_display) * _sgsdk_system_data.num_displays));
 
     for (unsigned int i = 0; i < _sgsdk_system_data.num_displays; i++)
     {

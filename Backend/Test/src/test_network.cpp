@@ -67,8 +67,8 @@ void test_network()
 
     cout << "Sending 'hello'" << endl;
 
-    _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
-    _sg_functions->network.read_bytes(&client_to_svr, buffer, 1024);
+    cout << "send response: " << _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
+    cout << "read response: " << _sg_functions->network.read_bytes(&client_to_svr, buffer, 1024);
 
     cout << "Read " << buffer << endl;
 
@@ -78,10 +78,10 @@ void test_network()
     cin >> i;
 
     cout << "sending again..." << endl;
-    _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
+    cout << "send response: " << _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
 
     cout << "enter a number: ";
     cin >> i;
     cout << "sending again..." << endl;
-    _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
+    cout << "send response: " << _sg_functions->network.send_bytes(&svr_to_client, buffer, 1024);
 }

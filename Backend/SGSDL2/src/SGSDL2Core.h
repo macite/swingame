@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Andrew Cain. All rights reserved.
 //
 
-#ifndef __sgsdl2__SGSDL2Core__
-#define __sgsdl2__SGSDL2Core__
+#ifndef sgsdl2_SGSDL2Core_h
+#define sgsdl2_SGSDL2Core_h
 
 
 //
