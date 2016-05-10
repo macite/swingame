@@ -234,7 +234,7 @@ void _sgsdl2_create_initial_window()
         }
     }
 
-    std::cout << "CREATED INITIAL WINDOW" << std::endl;
+//    std::cout << "CREATED INITIAL WINDOW" << std::endl;
     _sgsdl2_present_window(_sgsdl2_initial_window);
     SDL_PumpEvents();
 }
