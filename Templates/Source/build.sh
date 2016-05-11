@@ -127,7 +127,7 @@ locateIOSSDK()
     echo "Unable to locate XCode iPhoneSimulator. Ensure you have XCode 4+ at ${BASE_IOS_SIM}"
     exit -1
   fi
-  
+
   if [ ! -d "$BASE_IOS_DEV" ]; then
     echo "Unable to locate XCode iPhoneSimulator. Ensure you have XCode 4+ at ${BASE_IOS_DEV}"
     exit -1
@@ -343,13 +343,13 @@ DisplayHeader()
   echo "--------------------------------------------------"
   echo "  Running script from $FULL_APP_PATH"
   echo "  Saving output to $OUT_DIR"
-  
+
   if [ "$OS" = "$MAC" ]; then
     echo "  Copying Frameworks from ${LIB_DIR}"
   elif [ "$OS" = "$WIN" ]; then
     echo "  Copying libraries from ${LIB_DIR}"
   fi
-  
+
   echo "  Compiling with $EXTRA_OPTS"
   if [ $INSTALL = true ]; then
     echo "  Installing to $INSTALL_DIR"
@@ -357,7 +357,7 @@ DisplayHeader()
       echo "  Copying headers to $HEADER_DIR"
     fi
   fi
-  
+
   echo "--------------------------------------------------"
   DoDriverMessage
 }
@@ -397,15 +397,15 @@ doMacCompile()
   if [ ${DEBUG} = true ] ; then
     EXTRA_OPTS="$EXTRA_OPTS -Xs"
   fi
-  
+
   # Compile...
   "${FPC_BIN}" ${PAS_FLAGS} -S2 -Sh ${EXTRA_OPTS} -FE"${TMP_DIR}" -FU"${TMP_DIR}" -k"$LINK_OPTS -L'${TMP_DIR}' -F'${LIB_DIR}' -current_version '${VERSION_NO}'" -k"-lbz2" -k"-lstdc++" -k"-install_name '${INSTALL_NAME}'" -k"-rpath @loader_path/../Frameworks -rpath @executable_path/../Frameworks -rpath ../Frameworks -rpath ." -k"-L ${LIB_DIR}" -k"${STATIC_LIBS}" -k" ${FRAMEWORKS} -framework Cocoa" "${SDK_SRC_DIR}/SGSDK.pas"  >> "${LOG_FILE}"
-  
+
   if [ $? != 0 ]; then echo "Error compiling SGSDK"; cat "${LOG_FILE}"; exit 1; fi
   rm -f "${LOG_FILE}"
 
   mv ${TMP_DIR}/libSGSDK.dylib ${OUT_DIR}/libSGSDK${1}.dylib
-  
+
   if [ $STATIC = true ]; then
     ar -rcs ${OUT_DIR}/${STATIC_NAME}.${ARCH} ${TMP_DIR}/*.o
   fi
@@ -419,7 +419,7 @@ DoExitCompile ()
   if [ "$OS" = "$LIN" ]; then
     echo ""
     echo "Make sure you have the required libraries installed:"
-    echo "sudo apt-get install fpc curl libsdl1.2-dev libsdl-gfx1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl-net* libsmpeg*"
+    echo "sudo apt-get install build-essential fpc clang curl libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev libcurl-dev"
   fi
 
   exit 1;
@@ -432,7 +432,7 @@ doIOSCompile()
   mkdir "${TMP_DIR}/arm" "${TMP_DIR}/i386"
 
   "${PPC_ARM_BIN}" -Cn -gw -S2 -Sew -Cparmv7 -Cfvfpv2 -Sh ${SG_INC} -XX -k-ios_version_min -k5.0 -XR"${IPHONE_SDK_ARM}" -gltw -FE"${TMP_DIR}/arm" -FU"${TMP_DIR}/arm" -Fi"src" -Fu"${LIB_DIR}" -k"/usr/lib/libbz2.dylib" -k"${LIB_DIR}/*.a" -k"-framework AudioToolbox -framework QuartzCore -framework OpenGLES -framework CoreGraphics" -k"-framework MobileCoreServices" -k"-framework ImageIO" -k"-framework UIKit -framework Foundation -framework CoreAudio" -k-no_order_inits -XMSDL_main -dIOS -dSWINGAME_OPENGL -dSWINGAME_SDL13 -o"${TMP_DIR}/SGSDK.arm" "${SDK_SRC_DIR}/SGSDK.pas" > ${LOG_FILE} 2> ${LOG_FILE}
-  
+
   if [ $? != 0 ]; then
     DoExitCompile;
   fi
@@ -440,7 +440,7 @@ doIOSCompile()
   ar -rcs ${TMP_DIR}/${STATIC_NAME}.arm ${TMP_DIR}/arm/*.o
 
   "${PPC_386_BIN}" -Tiphonesim -WP7.0 -Cn -gw -S2 -Sew -Sh ${SG_INC} -XX -XR"${IPHONE_SDK_SIM}" -gltw -FE"${TMP_DIR}/i386" -FU"${TMP_DIR}/i386" -Fi"src" -Fu"${LIB_DIR}" -k"/usr/lib/libbz2.dylib" -k"${LIB_DIR}/*.a" -o"${TMP_DIR}/${GAME_NAME}.i386" "${SDK_SRC_DIR}/SGSDK.pas" -k-framework -kAudioToolbox -k-framework -kQuartzCore -k-framework -kOpenGLES -k-framework -kCoreGraphics -k"-framework MobileCoreServices" -k"-framework ImageIO" -k-framework -kUIKit -k-framework -kFoundation -k-framework -kCoreAudio -k-no_order_inits -XMSDL_main -dIOS -dSWINGAME_OPENGL -dSWINGAME_SDL13 > ${LOG_FILE} 2> ${LOG_FILE}
-  
+
   if [ $? != 0 ]; then
     DoExitCompile;
   fi
@@ -460,7 +460,7 @@ doLipo()
 
   rm -rf "${OUT_DIR}/libSGSDK${1}.dylib"
   rm -rf "${OUT_DIR}/libSGSDK${2}.dylib"
-  
+
   if [ $STATIC = true ]; then
     lipo -arch ${1} "${OUT_DIR}/${STATIC_NAME}.${1}" -arch ${2} "${OUT_DIR}/${STATIC_NAME}.${2}" -output "${OUT_DIR}/${STATIC_NAME}" -create
     rm -f "${OUT_DIR}/${STATIC_NAME}.${1}"
@@ -474,7 +474,7 @@ doLipo()
 doCreateFramework()
 {
   echo "  ... Creating Framework version ${VERSION}"
-  
+
   if [ ! -d "${OUT_DIR}/SGSDK.framework" ]
   then
     mkdir "${OUT_DIR}/SGSDK.framework"
@@ -547,7 +547,7 @@ then
 
     if [ ${IOS} = true ]; then
       doIOSCompile
-      
+
       echo "  Finished"
       echo "--------------------------------------------------"
       exit
@@ -676,9 +676,10 @@ then
     CleanTmp
   else #os = Linux
     DisplayHeader
-    
+
     if [ ! -e "/usr/lib/libsgsdl2.so" ] && [ ! -e "$APP_PATH/sgsdl2/libsgsdl2.so" ]; then
       "$APP_PATH/sgsdl2/build.sh"
+      if [ $? != 0 ]; then echo "Error compiling libsgsdl2.so"; exit 1; fi
     fi
 
     if [ -e "$APP_PATH/sgsdl2/libsgsdl2.so" ]; then
