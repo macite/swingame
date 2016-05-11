@@ -10,4 +10,11 @@ cp ../../SGSDL2/projects/bash/libSGSDL2-64.dll* .
 
 g++ -std=c++11 ../src/*.cpp -I../../SGSDL2/src/ -I../../Core/src/ \
 -I../../Core/include/ -I/usr/include/SDL2 \
--L. -lSGSDL2-64 -g -o RunTests.out
+ -static-libstdc++ -static-libgcc \
+ -L. -lSGSDL2-64 \
+ -Wl,-Bstatic -lstdc++ -lpthread \
+ -g -o RunTests.out
+
+cp RunTests.out ../Resources/RunTests.exe
+cp ../../SGSDL2/projects/bash/libSGSDL2-64.dll* ../Resources
+cp ../../SGSDL2/lib/win64/*.dll ../Resources
