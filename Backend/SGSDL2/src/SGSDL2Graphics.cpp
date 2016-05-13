@@ -1398,10 +1398,10 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, float *data, int data_sz)
             window_be = static_cast<sg_window_be *>(surface->_data);
 
             window_be->clipped = true;
-            #ifdef WINDOWS
-              window_be->clip = { x1, y1, w, h };
-            #else
+            #ifdef __APPLE__
               window_be->clip = { x1, surface->height - y1 - h, w, h };
+            #else
+              window_be->clip = { x1, y1, w, h };
             #endif
 
             //Should be: window_be->clip = { x1, y1, w, h };
