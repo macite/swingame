@@ -5,7 +5,7 @@ rm RunTests.out
 # -lsgsdl2 -g -o RunTests.out
 # ./RunTests.out
 
-cp ../../SGSDL2/projects/bash/libSGSDL2-64.dll* .
+cp ../../SGSDL2/projects/bash/libSGSDL2-64.dll .
 # cp ../../SGSDL2/projects/bash/libsgsdl2.a .
 
 g++ -std=c++11 ../src/*.cpp -I../../SGSDL2/src/ -I../../Core/src/ \

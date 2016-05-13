@@ -1,2 +1,3 @@
 *.dll
+*.dll.a
 RunTests.*
