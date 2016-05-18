@@ -654,7 +654,7 @@ end;
   begin
     {$IFNDEF IOS}
       x := 0; y := 0;
-      result := (sgDriverInput.MouseState(x, y) and Longint(button)) > 0;
+      result := (sgDriverInput.MouseState(x, y) and Byte(1 shl (Byte(button) - 1))) > 0;
     {$ELSE}
       result := MouseClicked(button);
     {$ENDIF}

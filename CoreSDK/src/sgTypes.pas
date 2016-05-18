@@ -405,9 +405,7 @@ interface
 
     /// A mouse can have many different types of buttons. Most people know
     /// about the simple Left and Right buttons, but there is also a Middle
-    /// button (sometimes part of a scoll wheel). Scroll wheel movement is also
-    /// treated as mouse button "clicks" of either the wheel "up" or "down"
-    /// buttons.
+    /// button (sometimes part of a scoll wheel).
     ///
     /// @enum MouseButton
     MouseButton = (

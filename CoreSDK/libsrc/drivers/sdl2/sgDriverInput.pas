@@ -10,9 +10,9 @@ interface
   function IsKeyPressed(virtKeyCode : LongInt) : Boolean;
   procedure ProcessEvents();
   function RelativeMouseState(var x : LongInt; var y : LongInt) : Byte;
-  function MouseState(var x : LongInt; var y : LongInt): Byte; 
+  function MouseState(var x : LongInt; var y : LongInt): Byte;
   function ShowCursor(toggle : LongInt): LongInt;
-  procedure WarpMouse(x,y : Word); 
+  procedure WarpMouse(x,y : Word);
   procedure MoveWindow(wnd: WindowPtr; x, y: Longint);
   function WindowPosition(wnd: WindowPtr): Point2D;
 
@@ -54,18 +54,18 @@ implementation
   begin
     result := _sg_functions^.input.key_pressed(virtKeyCode) <> 0;
   end;
-  
+
   procedure ProcessEvents();
   begin
     _sg_functions^.input.process_events();
   end;
-  
+
   function RelativeMouseState(var x : LongInt; var y : LongInt) : Byte;
   begin
     result := _sg_functions^.input.mouse_relative_state(@x, @y);
   end;
 
-  function MouseState(var x : LongInt; var y : LongInt): Byte; 
+  function MouseState(var x : LongInt; var y : LongInt): Byte;
   var
     wind: Window;
   begin
@@ -79,13 +79,13 @@ implementation
       // WriteLn('Changing X: focus ', ToWindowPtr(wind)^.x, ' to ', _CurrentWindow^.x);
     end;
   end;
-  
+
   function ShowCursor(toggle : LongInt):LongInt;
   begin
     result := _sg_functions^.input.mouse_cursor_state(toggle);
   end;
-  
-  procedure WarpMouse(x,y : Word); 
+
+  procedure WarpMouse(x,y : Word);
   begin
     if Assigned(_CurrentWindow) then
       _sg_functions^.input.warp_mouse(@_CurrentWindow^.image.surface, x, y);
@@ -154,5 +154,5 @@ implementation
     result.handle_window_resize := @HandleWindowResize;
     result.handle_window_move   := @HandleWindowMove;
   end;
-  
+
 end.
