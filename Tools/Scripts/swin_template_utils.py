@@ -117,7 +117,7 @@ def flat_copy_without_git(src, dest):
         for f in files:
             if(root.find('.git*') == -1):
                 fullpath = os.path.join(root, f)
-                swin_shutil.copy(fullpath,dest)
+                swin_shutil.copy(fullpath, dest)
 
 # ======================================================================
 # = Language specific function called within the Template details dict =

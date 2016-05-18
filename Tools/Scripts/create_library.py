@@ -50,6 +50,8 @@ def copy_coresdk_to_dist_source():
     dist_source_lib_folder =        dist_source_folder + "lib/"
     dist_source_staticlib_folder =  dist_source_folder + "staticlib/"
 
+
+
     copy_without_git(template_source_folder, dist_source_folder)
     copy_without_git(lib_folder, dist_source_lib_folder, overwrite = False)
     copy_without_git(staticlib_folder, dist_source_staticlib_folder, overwrite = False)
@@ -71,7 +73,7 @@ def make_linux_sgsdk_source():
     run_bash("rm", ["-rf", dist_sgsdk_source_staticlib ])
     os.chdir(dist_folder)
     run_bash("zip", ["-r", dist_sgsdk_source_zip, "sgsdk_source"])
-    
+
 
 
 _sgsdk_creation_script_options = {
@@ -93,7 +95,10 @@ def create_sgsdk_library():
 
     output_line('Copying code to dist source directory')
     copy_coresdk_to_dist_source()
-    
+
+    output_line('Copying Windows backend libs')
+    run_bash(swingame_path + 'Tools/Scripts/get_win_libs.sh', [])
+
     output_line('Copy backend code to sgsdl2 directory')
     sgsdl_pack_script = swingame_path + 'Backend/pack.sh'
     run_bash(sgsdl_pack_script, [])
