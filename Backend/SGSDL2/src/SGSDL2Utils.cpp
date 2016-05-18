@@ -17,13 +17,12 @@
 
 void sgsdl2_delay(unsigned int ms)
 {
-    internal_sgsdl2_init();
     SDL_Delay(ms);
 }
 
 unsigned int sgsdl2_get_ticks()
 {
-    internal_sgsdl2_init();
+    //ok without SDL init... and called on load
     return SDL_GetTicks();
 }
 
