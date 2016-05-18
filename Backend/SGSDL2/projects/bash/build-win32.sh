@@ -42,4 +42,5 @@ g++ -m32 ${INC_SDL} -L/mingw32/bin -Wl,-Bdynamic ${DLLS} -shared -DBUILDING_DLL 
 
 cp libSGSDL2-32.dll ../../../../CoreSDK/lib/win32/libSGSDL2.dll
 cp libSGSDL2-32.dll.a ../../../../CoreSDK/lib/win32/libSGSDL2.dll.a
+cp ../../lib/win32/*.dll ../../../../CoreSDK/lib/win32/
 # cp libSGSDL2-32.a ../../../../CoreSDK/staticlib/win32/libSGSDL2.a
