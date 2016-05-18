@@ -91,6 +91,7 @@ extern "C" {
 
     typedef void (sg_sound_float_proc)(sg_sound_data *sound, float val);
     typedef void (sg_intp_proc)( int ms );
+    typedef void (sg_int_intp_proc)( int x, int y );
     typedef void (sg_floatp_proc)( float val );
 
     typedef float (sg_float_fn)( );
@@ -268,6 +269,7 @@ extern "C" {
 
         sg_intp_proc * handle_mouse_up;
         sg_intp_proc * handle_mouse_down;
+        sg_int_intp_proc * handle_mouse_wheel;
 
         sg_charp_proc * handle_input_text;
 

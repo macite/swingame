@@ -174,6 +174,7 @@ interface
 		sg_sound_fade_out_proc = procedure(sound: psg_sound_data; ms: int); cdecl;
 		sg_sound_float_proc = procedure(sound: psg_sound_data; val: float); cdecl;
 		sg_intp_proc = procedure(ms: int); cdecl;
+    sg_int_intp_proc = procedure(x, y: int); cdecl;
 		sg_floatp_proc = procedure(val: float); cdecl;
 		sg_float_fn = function(): float; cdecl;
 		sg_int_intp_fn = function(val: int): int; cdecl;
@@ -188,7 +189,7 @@ interface
 		//
 		sg_uint_fn = function(): uint; cdecl;
 
-		// 
+		//
 		// Image related
 		//
 		sg_load_surface_fn = function(title: pchar): sg_drawing_surface; cdecl;
@@ -218,7 +219,7 @@ interface
 	    pointer_fn = function (): pointer; cdecl;
     	sg_window_xy_proc = procedure(window: pointer; x, y: Longint); cdecl;
     	sg_window_data_fn = function(surface: psg_drawing_surface): sg_window_data; cdecl;
-		
+
 		sg_utils_interface = record
 				delay : sg_single_uint32param_proc;
 				get_ticks : sg_uint_fn;
@@ -286,6 +287,7 @@ interface
 				handle_key_up : sg_intp_proc;
 				handle_mouse_up : sg_intp_proc;
 				handle_mouse_down : sg_intp_proc;
+        handle_mouse_wheel : sg_int_intp_proc;
 				handle_input_text : sg_charp_proc;
 				handle_window_resize: sg_window_xy_proc;
 				handle_window_move: sg_window_xy_proc;
@@ -342,14 +344,14 @@ interface
 	        HTTP_PUT,
 	        HTTP_DELETE
     	);
-    
+
     sg_http_request = record
         request_type: sg_http_method;
         url: PChar;
         port: Word;
         body: PChar;
     end;
-    
+
     sg_http_response = record
         status: Word;
         size: uint;
@@ -360,7 +362,7 @@ interface
 
     sg_http_request_fn = function (request: sg_http_request): sg_http_response; cdecl;
     sg_free_response_fn = procedure (response: psg_http_response); cdecl;
-    
+
     sg_web_interface = record
         http_request: sg_http_request_fn;
         free_response: sg_free_response_fn;
@@ -388,7 +390,7 @@ interface
 
 	var
 		_sg_functions: ^sg_interface;
-		
+
 	function _ToSGColor(clr: Longint) : sg_color;
 
 
@@ -639,7 +641,7 @@ implementation
 		result.g := ((clr and $0000ff00) shr  8) / 255.0;
 		result.b := ((clr and $000000ff)       ) / 255.0;
 	end;
-		
+
 
 
 

@@ -106,6 +106,11 @@ implementation
     ProcessMouseEvent(code);
   end;
 
+  procedure ProcessMouseWheelCallback(x, y: Longint); cdecl;
+  begin
+    ProcessMouseWheelEvent(x, y);
+  end;
+
   procedure DoQuitCallback(); cdecl;
   begin
     DoQuit();
@@ -150,6 +155,7 @@ implementation
     result.handle_key_up        := @HandleKeyupEventCallback;
     result.handle_mouse_up      := @ProcessMouseEventCallback; // click occurs on up
     result.handle_mouse_down    := nil;
+    result.handle_mouse_wheel   := @ProcessMouseWheelCallback; // click occurs on up
     result.handle_input_text    := @HandleInputTextCallback;
     result.handle_window_resize := @HandleWindowResize;
     result.handle_window_move   := @HandleWindowMove;

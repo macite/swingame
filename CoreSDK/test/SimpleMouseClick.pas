@@ -4,6 +4,7 @@ uses SwinGame, sgTypes;
 procedure Main();
 var
   clr: Color;
+  scroll: Vector;
 begin
   OpenWindow('SimpleMouseClick', 600, 600);
 
@@ -20,6 +21,10 @@ begin
     if MouseUp(LeftButton) then DrawText('Left Button Up', ColorBlack, 10, 10);
     if MouseDown(RightButton) then DrawText('Right Button Down', ColorBlack, 10, 30);
     if MouseUp(RightButton) then DrawText('Right Button Up', ColorBlack, 10, 30);
+
+    scroll := MouseWheelScroll();
+
+    DrawText('Scroll ' + VectorToString(scroll), ColorBlack, 10, 50);
 
     RefreshScreen();
   until WindowCloseRequested();

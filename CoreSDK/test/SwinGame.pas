@@ -1,4 +1,4 @@
-// SwinGame.pas was generated on 2016-01-07 12:34:12.936109
+// SwinGame.pas was generated on 2016-05-18 15:40:10.114231
 // 
 // This is a wrapper unit that exposes all of the SwinGame API in a single
 // location. To create a SwinGame project all you should need to use is
@@ -611,7 +611,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Translate a screen y value (based on the camera) to a world y value
   function ToWorldY(screenY: Single): Single; overload;
 
-  // Adds the two parameter vectors (``v1`` and ``v2``) together and returns 
+  // Adds the two parameter vectors (``v1`` and ``v2``) together and returns
   // the result as a new `Vector`.
   function AddVectors(const v1: Vector; const v2: Vector): Vector; overload;
 
@@ -681,8 +681,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a line from pt1 to pt2.
   function CreateLine(const pt1: Point2D; const pt2: Point2D): LineSegment; overload;
 
-  // Returns a new `Vector` created from the start and end points of a 
-  // `LineSegment`. Useful for calculating angle vectors or extracting a 
+  // Returns a new `Vector` created from the start and end points of a
+  // `LineSegment`. Useful for calculating angle vectors or extracting a
   // normal vector (see `LineNormal`) for the line.
   function CreateLineAsVector(const line: LineSegment): Vector; overload;
 
@@ -722,7 +722,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a triangle made up of the three points passed in.
   function CreateTriangle(const a: Point2D; const b: Point2D; const c: Point2D): Triangle; overload;
 
-  // Returns a new `Vector` created using the angle and magnitude (length). 
+  // Returns a new `Vector` created using the angle and magnitude (length).
   // The angle and magnitude are scalar values and the angle is in degrees.
   function CreateVectorFromAngle(angle: Single; magnitude: Single): Vector; overload;
 
@@ -735,7 +735,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a vector from the specified point to the specified rectangle.
   function CreateVectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
 
-  // Returns a `Vector` created from the difference from the ``p1`` to 
+  // Returns a `Vector` created from the difference from the ``p1`` to
   // the second ``p2`` points (`Point2D`).
   function CreateVectorFromPoints(const p1: Point2D; const p2: Point2D): Vector; overload;
 
@@ -784,8 +784,8 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // specified limit value.
   function LimitVector(const v: Vector; limit: Single): Vector; overload;
 
-  // Returns a new `Vector` created from the start and end points of a 
-  // `LineSegment`. Useful for calculating angle vectors or extracting a 
+  // Returns a new `Vector` created from the start and end points of a
+  // `LineSegment`. Useful for calculating angle vectors or extracting a
   // normal vector (see `LineNormal`) for the line.
   function LineAsVector(const line: LineSegment): Vector; overload;
 
@@ -838,13 +838,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Calculate the inverse of a matrix.
   function MatrixInverse(const m: Matrix2D): Matrix2D; overload;
 
-  // Multiplies the `Vector` parameter ``v`` with the `Matrix2D` ``m`` and 
-  // returns the result as a `Vector`. Use this to transform the vector with 
+  // Multiplies the `Vector` parameter ``v`` with the `Matrix2D` ``m`` and
+  // returns the result as a `Vector`. Use this to transform the vector with
   // the matrix (to apply scaling, rotation or translation effects).
   function MatrixMultiply(const m: Matrix2D; const v: Vector): Vector; overload;
 
   // Multiplies the two `Matrix2D` parameters, ``m1`` by ``m2``, and returns
-  // the result as a new `Matrix2D`. Use this to combine the effects to two 
+  // the result as a new `Matrix2D`. Use this to combine the effects to two
   // matrix transformations.
   function MatrixMultiply(const m1: Matrix2D; const m2: Matrix2D): Matrix2D; overload;
 
@@ -1058,7 +1058,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Calculates the angle of a vector.
   function VectorAngle(const v: Vector): Single; overload;
 
-  // Returns a new `Vector` created using the angle and magnitude (length). 
+  // Returns a new `Vector` created using the angle and magnitude (length).
   // The angle and magnitude are scalar values and the angle is in degrees.
   function VectorFromAngle(angle: Single; magnitude: Single): Vector; overload;
 
@@ -1071,7 +1071,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a vector from the specified point to the specified rectangle.
   function VectorFromPointToRect(x: Single; y: Single; rectX: Single; rectY: Single; rectWidth: Single; rectHeight: Single): Vector; overload;
 
-  // Returns a `Vector` created from the difference from the ``p1`` to 
+  // Returns a `Vector` created from the difference from the ``p1`` to
   // the second ``p2`` points (`Point2D`).
   function VectorFromPoints(const p1: Point2D; const p2: Point2D): Vector; overload;
 
@@ -1085,11 +1085,11 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // parameter ``v`` are zero.
   function VectorIsZero(const v: Vector): Boolean; overload;
 
-  // Returns the magnitude (or "length") of the parameter vector (v) as a 
+  // Returns the magnitude (or "length") of the parameter vector (v) as a
   // scalar value.
   function VectorMagnitude(const v: Vector): Single; overload;
 
-  // Returns the squared magnitude (or "length") of the parameter vector (v) as a 
+  // Returns the squared magnitude (or "length") of the parameter vector (v) as a
   // scalar value.
   function VectorMagnitudeSq(const v: Vector): Single; overload;
 
@@ -1120,14 +1120,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns a new `Vector` using the ``x`` and ``y`` values provided.
   function VectorTo(x: Single; y: Single): Vector; overload;
 
-  // Creates a new `Vector` with the ``x`` and ``y`` values provided, and will 
-  // invert the ``y`` value if the ``invertY`` parameter is True. The inversion 
-  // of the ``y`` value provides a convienient option for handling screen 
+  // Creates a new `Vector` with the ``x`` and ``y`` values provided, and will
+  // invert the ``y`` value if the ``invertY`` parameter is True. The inversion
+  // of the ``y`` value provides a convienient option for handling screen
   // related vectors.
   function VectorTo(x: Single; y: Single; invertY: Boolean): Vector; overload;
 
   // Returns a new `Vector` using the x and y value of a Point2D parameter.
   function VectorToPoint(const p1: Point2D): Vector; overload;
+
+  // Get a text description of the Vector.
+  function VectorToString(const v: Vector): String; overload;
 
   // Determines if two vectors are equal.
   function VectorsEqual(const v1: Vector; const v2: Vector): Boolean; overload;
@@ -1830,7 +1833,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // - The current drawing is shown on the screen.
   procedure RefreshScreen(); overload;
 
-  // Refresh with a target FPS. This will delay a period of time that will 
+  // Refresh with a target FPS. This will delay a period of time that will
   // approximately meet the targetted frames per second.
   procedure RefreshScreen(TargetFPS: Longint); overload;
 
@@ -1939,10 +1942,10 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // bitmap.
   function BitmapRectangleOfCell(src: Bitmap; cell: Longint): Rectangle; overload;
 
-  // This is used to define the number of cells in a bitmap, and 
+  // This is used to define the number of cells in a bitmap, and
   // their width and height. The cells are
-  // traversed in rows so that the format would be [0 - 1 - 2] 
-  // [3 - 4 - 5] etc. The count can be used to restrict which of the 
+  // traversed in rows so that the format would be [0 - 1 - 2]
+  // [3 - 4 - 5] etc. The count can be used to restrict which of the
   // parts of the bitmap actually contain cells that can be drawn.
   procedure BitmapSetCellDetails(bmp: Bitmap; width: Longint; height: Longint; columns: Longint; rows: Longint; count: Longint); overload;
 
@@ -1961,13 +1964,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   procedure ClearSurface(dest: Bitmap; toColor: Color); overload;
 
   // Creates a bitmap in memory that is the specified width and height (in pixels).
-  // The new bitmap is initially transparent and can be used as the target 
+  // The new bitmap is initially transparent and can be used as the target
   // for various drawing operations. Once you have drawn the desired image onto
   // the bitmap you can call OptimiseBitmap to optimise the surface.
   function CreateBitmap(width: Longint; height: Longint): Bitmap; overload;
 
   // Creates a bitmap in memory that is the specified width and height (in pixels).
-  // The new bitmap is initially transparent and can be used as the target 
+  // The new bitmap is initially transparent and can be used as the target
   // for various drawing operations. Once you have drawn the desired image onto
   // the bitmap you can call OptimiseBitmap to optimise the surface.
   function CreateBitmap(const name: String; width: Longint; height: Longint): Bitmap; overload;
@@ -2007,7 +2010,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   function LoadBitmap(const filename: String): Bitmap; overload;
 
   // Loads and returns a bitmap. The supplied ``filename`` is used to
-  // locate the Bitmap to load. The supplied ``name`` indicates the 
+  // locate the Bitmap to load. The supplied ``name`` indicates the
   // name to use to refer to this Bitmap in SwinGame. The `Bitmap` can then be
   // retrieved by passing this ``name`` to the `BitmapNamed` function.
   function LoadBitmapNamed(const name: String; const filename: String): Bitmap; overload;
@@ -2028,15 +2031,15 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Setup the passed in bitmap for pixel level collisions.
   procedure SetupBitmapForCollisions(src: Bitmap); overload;
 
-  // Checks to see if any key has been pressed since the last time 
+  // Checks to see if any key has been pressed since the last time
   // `ProcessEvents` was called.
   function AnyKeyPressed(): Boolean; overload;
 
-  // Returns the string that has been read since `StartReadingText` or 
+  // Returns the string that has been read since `StartReadingText` or
   // `StartReadingTextWithText` was called.
   function EndReadingText(): String; overload;
 
-  // Tells the mouse cursor to hide (no longer visible) if it is currently 
+  // Tells the mouse cursor to hide (no longer visible) if it is currently
   // showing. Use `ShowMouse` to make the mouse cursor visible again.
   procedure HideMouse(); overload;
 
@@ -2045,13 +2048,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // to specify the key to be checked.
   function KeyDown(key: KeyCode): Boolean; overload;
 
-  // The KeyName function returns a string name for a given `KeyCode`. For 
+  // The KeyName function returns a string name for a given `KeyCode`. For
   // example, CommaKey returns the string 'Comma'. This function could be used
   // to display more meaningful key names for configuring game controls, etc.
   function KeyName(key: KeyCode): String; overload;
 
-  // Returns true if the specified key was released since the last time 
-  // `ProcessEvents` was called. This occurs only once for the key that is 
+  // Returns true if the specified key was released since the last time
+  // `ProcessEvents` was called. This occurs only once for the key that is
   // released and will not return true again until the key is pressed down and
   // released again.
   function KeyReleased(key: KeyCode): Boolean; overload;
@@ -2074,7 +2077,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // Returns ``true`` if the specified button is currently pressed down.
   function MouseDown(button: MouseButton): Boolean; overload;
 
-  // Returns the amount of accumulated mouse movement, since the last time 
+  // Returns the amount of accumulated mouse movement, since the last time
   // `ProcessEvents` was called, as a `Vector`.
   function MouseMovement(): Vector; overload;
 
@@ -2089,6 +2092,13 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Returns ``true`` if the specified button is currently up.
   function MouseUp(button: MouseButton): Boolean; overload;
+
+  // Returns the amount the mouse wheel was scrolled since the last call
+  // to `ProcessEvents`. The result is a vector containing the x and y
+  // amounts scrolled. Scroll left generates a negative x, scroll right a
+  // positive x. Scroll backward is negative y, scroll forward positive y.
+  // Note that on MacOS the directions may be inverted by OS settings.
+  function MouseWheelScroll(): Vector; overload;
 
   // Returns the current x value of the mouse's position.
   function MouseX(): Single; overload;
@@ -2121,7 +2131,7 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // read the string entered as either ASCII or Unicode.
   function ReadingText(): Boolean; overload;
 
-  // Tells the mouse cursor to be visible if it was previously hidden with 
+  // Tells the mouse cursor to be visible if it was previously hidden with
   // by a `HideMouse` or `SetMouseVisible`(False) call.
   procedure ShowMouse(); overload;
 
@@ -2129,17 +2139,17 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
   // in the window or not) based on the show parameter.
   procedure ShowMouse(show: Boolean); overload;
 
-  // Start reading text within an area. Entry is 
+  // Start reading text within an area. Entry is
   // completed when the user presses ENTER, and aborted with ESCAPE.
-  // If the user aborts entry the result is an empty string, and TextEntryCancelled 
-  // will return true. Text entry is updated during `ProcessEvents`, and text is drawn 
+  // If the user aborts entry the result is an empty string, and TextEntryCancelled
+  // will return true. Text entry is updated during `ProcessEvents`, and text is drawn
   // to the screen as part of the `RefreshScreen` call.
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; const area: Rectangle); overload;
 
-  // Starts the reading of a string of characters from the user. Entry is 
+  // Starts the reading of a string of characters from the user. Entry is
   // completed when the user presses ENTER, and aborted with ESCAPE.
-  // If the user aborts entry the result is an empty string, and TextEntryCancelled will return true. 
-  // Text entry is updated during `ProcessEvents`, and text is drawn to the screen as part 
+  // If the user aborts entry the result is an empty string, and TextEntryCancelled will return true.
+  // Text entry is updated during `ProcessEvents`, and text is drawn to the screen as part
   // of the `RefreshScreen` call.
   procedure StartReadingText(textColor: Color; maxLength: Longint; theFont: Font; x: Longint; y: Longint); overload;
 
@@ -2426,6 +2436,9 @@ uses sgTypes, sgAnimations, sgAudio, sgCamera, sgGeometry, sgGraphics, sgImages,
 
   // Indicates the maximum size of a UDP message.
   function UDPPacketSize(): Longint; overload;
+
+  // Free the resources used by the HttpResponse.
+  procedure FreeHttpResponse(var response: HttpResponse); overload;
 
   // Perform a get request for the resourse at the specified host, path and port.
   function HttpGet(const url: String; port: Word): HttpResponse; overload;
@@ -5424,6 +5437,11 @@ implementation
     result := sgGeometry.VectorToPoint(p1);
   end;
 
+  function VectorToString(const v: Vector): String; overload;
+  begin
+    result := sgGeometry.VectorToString(v);
+  end;
+
   function VectorsEqual(const v1: Vector; const v2: Vector): Boolean; overload;
   begin
     result := sgGeometry.VectorsEqual(v1,v2);
@@ -6914,6 +6932,11 @@ implementation
     result := sgInput.MouseUp(button);
   end;
 
+  function MouseWheelScroll(): Vector; overload;
+  begin
+    result := sgInput.MouseWheelScroll();
+  end;
+
   function MouseX(): Single; overload;
   begin
     result := sgInput.MouseX();
@@ -7352,6 +7375,11 @@ implementation
   function UDPPacketSize(): Longint; overload;
   begin
     result := sgNetworking.UDPPacketSize();
+  end;
+
+  procedure FreeHttpResponse(var response: HttpResponse); overload;
+  begin
+    sgWeb.FreeHttpResponse(response);
   end;
 
   function HttpGet(const url: String; port: Word): HttpResponse; overload;

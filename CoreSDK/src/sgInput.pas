@@ -80,6 +80,15 @@ interface
   /// @lib
   function MouseMovement(): Vector;
 
+  /// Returns the amount the mouse wheel was scrolled since the last call
+  /// to `ProcessEvents`. The result is a vector containing the x and y
+  /// amounts scrolled. Scroll left generates a negative x, scroll right a
+  /// positive x. Scroll backward is negative y, scroll forward positive y.
+  /// Note that on MacOS the directions may be inverted by OS settings.
+  ///
+  /// @lib
+  function MouseWheelScroll(): Vector;
+
   /// Returns ``true`` if the specified button is currently pressed down.
   ///
   /// @lib
@@ -644,6 +653,11 @@ end;
     {$IFDEF TRACE}
       TraceExit('sgInput', 'MouseMovement');
     {$ENDIF}
+  end;
+
+  function MouseWheelScroll(): Vector;
+  begin
+    result := sgInputBackend._WheelScroll;
   end;
 
   function MouseDown(button: MouseButton): Boolean;

@@ -21,10 +21,11 @@ interface
     // event register/process Quit
     procedure InputBackendProcessEvents();
     procedure ProcessMouseEvent(button: Byte);
+    procedure ProcessMouseWheelEvent(x, y: Longint);
     function HasQuit(): Boolean;
     function isReading() : Boolean;
-    function EnteredString: String; 
-    function TextEntryWasCancelled: Boolean; 
+    function EnteredString: String;
+    function TextEntryWasCancelled: Boolean;
     function WasKeyDown(kyCode : LongInt) : Boolean;
     function WasKeyJustTyped(kyCode : LongInt) : Boolean;
     // procedure HandleTouchEvent(const fingers : FingerArray; down, up: Boolean);
@@ -46,7 +47,7 @@ interface
       code:     Longint;
       keyChar:  Longint;
     end;
-     
+
   var
     _quit:                  Boolean;
     _keyPressed:            Boolean;
@@ -59,15 +60,16 @@ interface
     _KeyReleased:           Array of Longint;
     _ButtonsClicked:        Array [MouseButton] of Boolean;
     _LastFingerPosition:    Point2D;
+    _WheelScroll:           Vector;
 
     //IOS Variables
     // _fingers:            FingerArray;
     // _deltaAccelerometer: AccelerometerMotion;
 
 implementation
-  uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics, sgDriverSDL2Types;
-  
-  procedure _InitGlobalVars(); 
+  uses sgDrawingOptions, sgDriverInput, sgDriverTimer, sgSharedUtils, sgDriverImages, sgImages, sgText, sgShared, sgGraphics {$IFDEF IOS},sgDriveriOS{$ENDIF}, sgDriverGraphics, sgDriverSDL2Types, sgGeometry;
+
+  procedure _InitGlobalVars();
   begin
     _quit := false;
     _keyPressed := false;
@@ -77,25 +79,26 @@ implementation
     _LastFingerPosition.x :=0;
     _LastFingerPosition.y :=0;
     SetLength(_KeyDown, 0);
+    _WheelScroll := VectorTo(0,0);
     // SetLength(_fingers, 0);
   end;
-  
-  function EnteredString: String; 
+
+  function EnteredString: String;
   begin
     if Assigned(_CurrentWindow) then
       result := _CurrentWindow^.tempString
     else
       result := '';
   end;
-  
-  function TextEntryWasCancelled: Boolean; 
+
+  function TextEntryWasCancelled: Boolean;
   begin
     if Assigned(_CurrentWindow) then
       result := _CurrentWindow^.textCancelled
     else
       result := false;
   end;
-  
+
   procedure CheckQuit();
   var
     i, count: Integer;
@@ -113,24 +116,25 @@ implementation
       end;
     end;
 
-    if( WasKeyDown(SDLK_Q) and (WasKeyDown(SDLK_LGUI) or WasKeyDown(SDLK_RGUI))) 
+    if( WasKeyDown(SDLK_Q) and (WasKeyDown(SDLK_LGUI) or WasKeyDown(SDLK_RGUI)))
       or
       (WasKeyDown(SDLK_F4) and ( WasKeyDown(SDLK_RALT) or WasKeyDown(SDLK_LALT)))
-      or 
+      or
       ( Assigned(_PrimaryWindow) and (_sg_functions^.input.window_close_requested(@_PrimaryWindow^.image.surface) <> 0)) then
     begin
       DoQuit()
     end;
   end;
-  
+
   procedure ResetMouseState();
   var
     b: MouseButton;
   begin
+    _WheelScroll := VectorTo(0,0);
     for b := LeftButton to MouseX2Button do
       _ButtonsClicked[b] := false;
   end;
-  
+
   procedure InputBackendProcessEvents();
   begin
     _justTouched := false;
@@ -139,12 +143,12 @@ implementation
     SetLength(_KeyReleased, 0);
     SetLength(_KeyJustTyped, 0);
     ResetMouseState();
-  
+
     sgDriverInput.ProcessEvents();
 
     CheckQuit();
   end;
-  
+
   function isReading() : Boolean;
   begin
     if Assigned(_CurrentWindow) then
@@ -152,13 +156,13 @@ implementation
     else
       result := false;
   end;
-  
+
   procedure ProcessKeyReleased (kyCode :  LongInt);
   begin
     SetLength(_KeyReleased, Length(_KeyReleased) + 1);
     _KeyReleased[High(_KeyReleased)] := kyCode;
   end;
-  
+
   procedure HandleKeyupEvent(kyCode: LongInt);
   var
     i, keyAt: Integer;
@@ -172,16 +176,16 @@ implementation
         break;
       end;
     end;
-    
+
     if keyAt = -1 then exit;
     for i := keyAt to High(_KeyDown) -1 do
     begin
       _KeyDown[i] := _KeyDown[i + 1];
     end;
     SetLength(_KeyDown, Length(_KeyDown) - 1);
-    
+
     ProcessKeyReleased(kyCode);
-    
+
   end;
 
   procedure AddKeyData(kyCode, kyChar: Longint);
@@ -189,14 +193,14 @@ implementation
     i: Integer;
   begin
     // if (kyCode = LongInt(LSHIFTKey)) or (kyCode = LongInt(RSHIFTKey)) then exit;
-    
+
     for i := 0 to High(_KeyDown) do
     begin
       if _KeyDown[i].code = kyCode then exit;
     end;
-    
+
     SetLength(_KeyDown, Length(_KeyDown) + 1);
-    
+
     with _KeyDown[High(_KeyDown)] do
     begin
       downAt  := TimerDriver.GetTicks();
@@ -204,7 +208,7 @@ implementation
       keyChar := kyChar;
     end;
   end;
-  
+
   procedure ProcessKeyJustTyped(kyCode : LongInt);
   var
   i : Integer;
@@ -216,13 +220,13 @@ implementation
     SetLength(_KeyJustTyped, Length(_KeyJustTyped) + 1);
     _KeyJustTyped[High(_KeyJustTyped)] := kyCode;
   end;
-  
+
   procedure HandleKeydownEvent(kyCode, kyChar : LongInt);
   begin
     _keyPressed := true;
-  
+
     ProcessKeyJustTyped(kyCode);
-    
+
     AddKeyData(kyCode, kyChar);
     ProcessKeyPress(kyCode, kyChar);
   end;
@@ -231,7 +235,7 @@ implementation
   begin
     result := ToWindowPtr(WindowWithFocus());
   end;
-  
+
   procedure ProcessKeyPress(kyCode, kyChar: Longint);
   var
     oldStr : String;
@@ -243,7 +247,7 @@ implementation
     if focusWindow^.readingString then
     begin
       oldStr := focusWindow^.tempString;
-            
+
       //If the key is not a control character
       if (kyCode = LongInt(BACKSPACEKey)) and (Length(focusWindow^.tempString) > 0) then
       begin
@@ -259,7 +263,7 @@ implementation
         focusWindow^.readingString := false;
         focusWindow^.textCancelled := true;
       end;
-      
+
       //If the string was change
       if oldStr <> focusWindow^.tempString then
       begin
@@ -289,7 +293,12 @@ implementation
       end;
     end;
   end;
-  
+
+  procedure ProcessMouseWheelEvent(x, y: Longint);
+  begin
+    _WheelScroll := VectorTo(x, y);
+  end;
+
   procedure ProcessMouseEvent(button: Byte);
   begin
     if( WithinRange(length(_ButtonsClicked), button )) then
@@ -304,14 +313,14 @@ implementation
       _ButtonsClicked[MouseButton(button)] := true;
     end;
   end;
-  
-  
+
+
   procedure FreeOldSurface(wind: WindowPtr);
   begin
     if Assigned(wind) and Assigned(wind^.textBitmap) and (wind^.textBitmap <> wind^.cursorBitmap) then
       FreeBitmap(wind^.textBitmap);
   end;
-  
+
   procedure RenderTextSurface(wind: WindowPtr; const text : String);
   var
     outStr: String;
@@ -325,9 +334,9 @@ implementation
       wind^.textBitmap := DrawTextToBitmap(wind^.font, outStr, wind^.forecolor, wind^.backgroundColor);
     end
     else
-      wind^.textBitmap := wind^.cursorBitmap;  
+      wind^.textBitmap := wind^.cursorBitmap;
   end;
-  
+
   procedure InputBackendStartReadingText(textColor, backgroundColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
   var
     newStr: String;
@@ -351,7 +360,7 @@ implementation
     _CurrentWindow^.cursorBitmap := DrawTextToBitmap(_CurrentWindow^.font, newStr, _CurrentWindow^.foreColor, _CurrentWindow^.backgroundColor);
     _CurrentWindow^.textBitmap := _CurrentWindow^.cursorBitmap;
   end;
-  
+
   procedure InputBackendStartReadingText(textColor: Color; maxLength: Longint; theFont: Font; area: Rectangle);overload;
   begin
     InputBackendStartReadingText(textColor,ColorTransparent,maxLength,theFont,area);
@@ -369,15 +378,15 @@ implementation
       end;
     end;
   end;
-  
+
   procedure SetText(wind: WindowPtr; const text: String);
   begin
     wind^.tempString := text;
-    
+
     //Render a new text surface
     RenderTextSurface(wind, wind^.tempString);
   end;
-  
+
   function InputBackendEndReadingText(): String;
   begin
     result := '';
@@ -386,27 +395,27 @@ implementation
     _CurrentWindow^.readingString := false;
     result := _CurrentWindow^.tempString;
   end;
-  
+
   function WasAKeyPressed(): Boolean;
   begin
     result := _keyPressed;
   end;
-  
+
   procedure DoQuit();
   begin
     _quit := true;
   end;
-  
+
   function HasQuit(): Boolean;
   begin
     result := _quit;
   end;
-  
+
   function WasKeyReleased(kyCode: Longint): Boolean;
   var i: Longint;
   begin
     result := false;
-  
+
     for i := 0 to High(_KeyReleased) do
     begin
       if _KeyReleased[i] = kyCode then
@@ -430,7 +439,7 @@ implementation
       end;
     end;
   end;
-  
+
   function WasKeyDown(kyCode : LongInt) : Boolean;
   var
   i : Integer;
@@ -447,21 +456,21 @@ implementation
   end;
 
   //iOS Procedures
-  
+
   // function FingerToString(finger: Finger): String;
   // begin
   //   result := 'Finger: ' + IntToStr(finger.id) +
-  //             ' x: ' + FloatToStr(finger.position.x) +     
-  //             ' y: ' + FloatToStr(finger.position.y) +    
-  //             ' dx: ' + FloatToStr(finger.positionDelta.x) + 
+  //             ' x: ' + FloatToStr(finger.position.x) +
+  //             ' y: ' + FloatToStr(finger.position.y) +
+  //             ' dx: ' + FloatToStr(finger.positionDelta.x) +
   //             ' dy: ' + FloatToStr(finger.positionDelta.y) +
   //             ' lx: ' + FloatToStr(finger.lastPosition.x) +
   //             ' ly: ' + FloatToStr(finger.lastPosition.y) +
-  //             ' p: ' + FloatToStr(finger.pressure) + 
+  //             ' p: ' + FloatToStr(finger.pressure) +
   //             // ' lp: ' + FloatToStr(finger.lastPressure) +
   //             ' d: ' + BoolToStr(finger.down);
   // end;
-  
+
   // function FingerInArray(const f: Finger; const fingers: FingerArray): Boolean;
   // var
   //   i: Integer;
@@ -542,14 +551,14 @@ implementation
   //   // WriteLn('HandleTouchEvent');
   //   // for i := 0 to High(finger) do
   //   //    WriteLn('Touch event', down, ' ', FingerToString(finger[i]));
-    
+
   //   if length(_fingers) > 0 then
   //   begin
   //     _LastFingerPosition.x := _fingers[0].position.x;
   //     _LastFingerPosition.y := _fingers[0].position.y;
   //   end;
   // end;
-  
+
   // function LastFingerPosition():Point2D;
   // begin
   //   result := _LastFingerPosition;
@@ -569,7 +578,7 @@ implementation
   // procedure HandleAxisMotionEvent(Accelerometer :  AccelerometerMotion);
   // begin
   //   _justMoved := true;
-  //   _deltaAccelerometer := Accelerometer;    
+  //   _deltaAccelerometer := Accelerometer;
   // end;
 
   // function GetDeltaXAxis():LongInt;
@@ -587,7 +596,7 @@ implementation
   //     result := _deltaAccelerometer.yAxis;
   //   {$ENDIF}
   // end;
-  
+
   // function GetDeltaZAxis():LongInt;
   // begin
   //   result := 0;
@@ -595,7 +604,7 @@ implementation
   //     result := _deltaAccelerometer.zAxis;
   //   {$ENDIF}
   // end;
-  
+
   // function GetNormalisedDeltaXAxis():Single;
   // begin
   //   result := 0;
@@ -611,7 +620,7 @@ implementation
   //   result := iOSDriver.AxisToG(_deltaAccelerometer.yAxis);
   // {$ENDIF}
   // end;
-  
+
   // function GetNormalisedDeltaZAxis():Single;
   // begin
   //   result := 0;
@@ -630,7 +639,7 @@ implementation
   //   result := _justMoved;
   // end;
 
-  
+
 initialization
     _InitGlobalVars();
 end.

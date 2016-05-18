@@ -159,6 +159,16 @@ void sgsdl2_process_events()
                 }
                 break;
             }
+            
+            case SDL_MOUSEWHEEL:
+            {
+                if (_functions.input_callbacks.handle_mouse_wheel)
+                {
+                    _functions.input_callbacks.handle_mouse_wheel(event.wheel.x, event.wheel.y);
+                }
+                break;
+            }
+            
             case SDL_TEXTEDITING:
             {
                 if (_functions.input_callbacks.handle_input_text)
