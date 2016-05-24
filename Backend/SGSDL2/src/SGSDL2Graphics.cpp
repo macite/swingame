@@ -1849,7 +1849,7 @@ sg_drawing_surface sgsdl2_create_bitmap(int width, int height)
         SDL_SetTextureBlendMode(data->texture[i], SDL_BLENDMODE_BLEND);
 
         _sgsdl2_set_renderer_target(i, data);
-        SDL_SetRenderDrawColor(_sgsdl2_open_windows[i]->renderer, 255, 255, 255, 255);
+          SDL_SetRenderDrawColor(_sgsdl2_open_windows[i]->renderer, 255, 255, 255, 0);
         SDL_RenderClear(_sgsdl2_open_windows[i]->renderer);
         _sgsdl2_restore_default_render_target(i, data);
     }
