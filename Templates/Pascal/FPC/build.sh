@@ -178,7 +178,7 @@ DoExitCompile ()
     if [ "$OS" = "$LIN" ]; then
         echo ""
         echo "Make sure you have the required libraries installed:"
-        echo "sudo apt-get install fpc curl libsdl1.2-dev libsdl-gfx1.2-dev libsdl-image1.2-dev libsdl-mixer1.2-dev libsdl-ttf2.0-dev libsdl-net* libsmpeg*"
+        echo "sudo apt-get install build-essential fpc clang curl libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev libcurl-dev"
     fi
 
     exit 1;
