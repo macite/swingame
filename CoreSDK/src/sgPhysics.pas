@@ -1192,6 +1192,15 @@ implementation
     spriteCenter := CenterPoint(s);
     mvmt := sp^.velocity;
 
+    // A not moving sprite cannot "collide" as it is stationary
+    // We are then unable to determine where the collision did
+    // occur...
+    if VectorMagnitude(mvmt) = 0 then
+    begin
+      RaiseWarning('Attempting to perform sprite collision without sprite velocity.');
+      exit;
+    end;
+
     outVec := VectorOutOfCircleFromCircle(SpriteCollisionCircle(s), c, mvmt);
     // Back out of circle
     MoveSprite(s, outVec);

@@ -934,6 +934,9 @@ interface
   /// vector ``v`` provided. The concept of a "normal" vector is usually
   /// extracted from (or associated with) a line. See `LineNormal`.
   ///
+  /// Note: when passed a zero or null vector (a vector with no
+  /// magnitude or direction) then this function returns a zero/null vector.
+  ///
   /// @lib
   /// @sn vectorNormal:%s
   ///
@@ -1979,15 +1982,25 @@ implementation
 
   function VectorNormal(const v: Vector): Vector;
   var
-    tmp: Single;
+    magnitude: Single;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'VectorNormal(const v: Vector): Vector', '');
     {$ENDIF}
 
-    tmp := Sqrt( (v.x * v.x) + (v.y * v.y) );
-    result.x := -v.y / tmp;
-    result.y :=  v.x / tmp;
+    // magnitude calculated in place to
+    magnitude := VectorMagnitude( v );
+    if magnitude > 0 then
+    begin
+      result.x := -v.y / magnitude;
+      result.y :=  v.x / magnitude;
+    end
+    else
+    begin
+      // Return the zero/null vector
+      RaiseWarning('Attempting to get normal of zero/null vector. This is usually an error.');
+      result := v;
+    end;
 
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'VectorNormal(const v: Vector): Vector', '');

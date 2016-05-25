@@ -19,7 +19,7 @@ uses sgGeometry, sgTrace, sgShared;
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'LineIntersectsLines(const line: LineSegment', '');
     {$ENDIF}
-    
+
     for i := 0 to High(lines) do
     begin
       if LineIntersectionPoint(line, lines[i], pt) and PointOnLine(pt, lines[i]) and PointOnLine(pt, line) then
@@ -29,7 +29,7 @@ uses sgGeometry, sgTrace, sgShared;
       end;
     end;
     result := false;
-    
+
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'LineIntersectsLines(const line: LineSegment', '');
     {$ENDIF}
@@ -40,25 +40,25 @@ uses sgGeometry, sgTrace, sgShared;
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'LinesFrom(const tri: Triangle): LinesArray', '');
     {$ENDIF}
-    
+
     SetLength(result, 3);
     result[0] := LineFrom(tri.points[0], tri.points[1]);
     result[1] := LineFrom(tri.points[1], tri.points[2]);
     result[2] := LineFrom(tri.points[2], tri.points[0]);
-    
+
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'LinesFrom(const tri: Triangle): LinesArray', '');
     {$ENDIF}
   end;
- 
+
   function LinesFrom(const rect: Rectangle): LinesArray; overload;
   begin
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', 'LinesFrom(const rect: Rectangle): LinesArray', '');
     {$ENDIF}
-    
+
     SetLength(result, 4);
-    
+
     with rect do
     begin
       result[0] := LineFrom(x, y, x + width, y);
@@ -66,7 +66,7 @@ uses sgGeometry, sgTrace, sgShared;
       result[2] := LineFrom(x + width, y, x + width, y + height);
       result[3] := LineFrom(x, y + height, x + width, y + height);
     end;
-    
+
     {$IFDEF TRACE}
       TraceExit('sgGeometry', 'LinesFrom(const rect: Rectangle): LinesArray', '');
     {$ENDIF}
@@ -89,7 +89,17 @@ uses sgGeometry, sgTrace, sgShared;
     {$IFDEF TRACE}
       TraceEnter('sgGeometry', '_VectorOverLinesFromCircle(const c: Circle', '');
     {$ENDIF}
-    
+
+    // If there is no velocity then we cannot determine
+    // the hit location etc. Return a 0,0 vector.
+    if VectorMagnitude(velocity) = 0 then
+    begin
+      RaiseWarning('Attempting to determine collision with a zero/null vector.');
+      // velocity has no magnitude, so it can be returned
+      result := velocity;
+      exit;
+    end;
+
     // Cast ray searching for points back from shape
     ray := InvertVector(velocity);
     normalMvmt := VectorNormal(velocity);
@@ -114,18 +124,18 @@ uses sgGeometry, sgTrace, sgShared;
       WidestPoints(c, normalMvmt, tmp[0], tmp[1]);
       //tmp 2 and tmp 3 are the closest and furthest points from the line
       WidestPoints(c, normalLine, tmp[2], tmp[3]);
-      
+
       // for both points...
       for j := 0 to 3 do
       begin
         //DrawCircle(ColorWhite, tmp[j], 2);
-        
+
         // Cast a ray back from the test points to find line pts... out on ptOnLine
         if RayIntersectionPoint(tmp[j], ray, lines[i], ptOnLine) then
         begin
           //DrawCircle(ColorRed, ptOnLine, 1);
           //DrawLine(ColorRed, tmp[j], ptOnLine);
-          
+
           chkPts[hits].ptOnLine := ptOnLine;
           chkPts[hits].ptOnCircle := tmp[j];
           hits := hits + 1;
@@ -170,10 +180,10 @@ uses sgGeometry, sgTrace, sgShared;
         end;
       end;
     end;
-    
+
     result.x := Ceiling(vOut.x);
     result.y := Ceiling(vOut.y);
-    
+
     {$IFDEF TRACE}
       TraceExit('sgGeometry', '_VectorOverLinesFromCircle(const c: Circle', '');
     {$ENDIF}

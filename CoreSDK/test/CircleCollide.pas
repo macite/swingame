@@ -230,6 +230,8 @@ begin
     if CircleRectCollision(CircleAt(temp, r2), rect) then
     begin
       DrawCircle(ColorBlue, temp.x, temp.y, r2);
+      mouseOut := VectorOutOfRectFromCircle(CircleAt(temp, r2), rect, mouseMvmt);
+      DrawCircle(ColorGreen, temp.x + mouseOut.x, temp.y  + mouseOut.y, r2);
     end
     else if CircleCircleCollision(CircleAt(temp, r2), CircleAt(c1, r1)) then
     begin
