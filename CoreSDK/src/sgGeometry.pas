@@ -1985,7 +1985,13 @@ implementation
       TraceEnter('sgGeometry', 'VectorNormal(const v: Vector): Vector', '');
     {$ENDIF}
 
-    tmp := Sqrt( (v.x * v.x) + (v.y * v.y) );
+    tmp := VectorMagnitude(v);
+    if tmp = 0 then
+    begin
+      // input vector is zero, so tmp can be any positive value; result still zero
+      tmp := 1;
+    end;
+    
     result.x := -v.y / tmp;
     result.y :=  v.x / tmp;
 
