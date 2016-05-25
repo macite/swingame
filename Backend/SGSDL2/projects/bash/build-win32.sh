@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALL_SDL2_LIBS="-L../../lib/win32 -L/mingw32/lib -L/usr/lib -lSDL2 -lSDL2main -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL2_net -lSDL2_gfx -Wl,--no-undefined"
+ALL_SDL2_LIBS="-L../../lib/win32 -L/mingw32/lib -L/usr/lib -lSDL2main -Wl,--no-undefined"
 
 DLLS=`cd ../../lib/win32;ls -d *.dll | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("../../lib/win32/%s.dll ", patharr[idx]) }'`
 
@@ -8,11 +8,11 @@ echo $DLLS
 
 INC_SDL="-I/mingw32/include -I/mingw32/include/libpng16 -I../../external/SDL/include -I../../external/SDL_gfx -I../../external/SDL_image -I../../external/SDL_mixer -I../../external/SDL_net -I../../external/SDL_ttf -I../../lib/win_inc"
 
-OTHER_LIB="-ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -limm32 -loleaut32 -lshell32 -lversion -luuid -lws2_32 -lole32 -lwinmm -liphlpapi -lstdc++ -lpthread"
+OTHER_LIB="-lstdc++ -lpthread"
 
 echo $ALL_SDL2_LIBS
 echo "Creating shared library"
-g++ -m32 ${INC_SDL} -L/mingw32/bin -Wl,-Bdynamic ${DLLS} -shared -DBUILDING_DLL -std=c++11 -o libSGSDL2-32.dll -L/mingw32/lib -I/mingw32/include -I/mingw32/include/SDL2 -I../../../Core/include/ -I../../../Core/src ../../../SGSDL2/src/*.cpp ../../../Core/src/*.cpp -Wl,-Bstatic -static-libstdc++ -static-libgcc ${ALL_SDL2_LIBS} ${OTHER_LIB} -Wl,--out-implib,libSGSDL2-32.dll.a
+g++ -m32 -static-libstdc++ -static-libgcc ${INC_SDL} -L/mingw32/bin -Wl,-Bdynamic ${DLLS} -shared -DBUILDING_DLL -std=c++11 -o libSGSDL2-32.dll -L/mingw32/lib -I/mingw32/include -I/mingw32/include/SDL2 -I../../../Core/include/ -I../../../Core/src ../../../SGSDL2/src/*.cpp ../../../Core/src/*.cpp -Wl,-Bstatic ${ALL_SDL2_LIBS} ${OTHER_LIB} -static-libstdc++ -static-libgcc -Wl,--out-implib,libSGSDL2-32.dll.a -static-libstdc++ -static-libgcc
 
 
 

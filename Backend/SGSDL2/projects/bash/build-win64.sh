@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ALL_SDL2_LIBS="-L../../lib/win64 -L/mingw64/lib -L/usr/lib -lSDL2 -lSDL2main -lSDL2_mixer -lSDL2_image -lSDL2_ttf -lSDL2_net -lSDL2_gfx -Wl,--no-undefined"
+ALL_SDL2_LIBS="-L../../lib/win64 -L/mingw64/lib -L/usr/lib -lSDL2main -Wl,--no-undefined"
 
 DLLS=`cd ../../lib/win64;ls -d *.dll | awk -F . '{split($1,patharr,"/"); idx=1; while(patharr[idx+1] != "") { idx++ } printf("../../lib/win64/%s.dll ", patharr[idx]) }'`
 
@@ -42,6 +42,6 @@ g++ -m64 ${INC_SDL} -L/mingw64/bin -Wl,-Bdynamic ${DLLS} -shared -DBUILDING_DLL 
 
 cp libSGSDL2-64.dll ../../../../CoreSDK/lib/win64/libSGSDL2.dll
 cp libSGSDL2-64.dll.a ../../../../CoreSDK/lib/win64/libSGSDL2.dll.a
-cp ../../lib/win64/*.dll ../../../../CoreSDK/lib/win64/
+cp ../../lib/win64/*.dll ../../../../CoreSDK/lib/win64
 
 # cp libSGSDL2-64.a ../../../../CoreSDK/staticlib/win64/libSGSDL2.a
