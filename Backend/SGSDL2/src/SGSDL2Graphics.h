@@ -44,13 +44,19 @@ typedef struct sg_window_be
 typedef struct sg_bitmap_be
 {
     // 1 texture per open window
-    SDL_Texture **  texture;
+    SDL_Texture **      texture;
+    SDL_Surface *       surface;
+    bool                clipped;
+    SDL_Rect            clip;
+    
+    bool                drawable; // can be drawn on
+} sg_bitmap_be;
+
+typedef struct sg_pixbuf_be
+{
     SDL_Surface *   surface;
     bool            clipped;
-    SDL_Rect        clip;
-    
-    bool            drawable; // can be drawn on
-} sg_bitmap_be;
+} sg_pixbuf_be;
 
 
 sg_window_be *_sgsdl2_get_window_with_id(unsigned int window_id);

@@ -24,7 +24,7 @@ typedef enum sg_drawing_surface_kind
 {
     SGDS_Unknown = 0,   // Unknown, so do not draw onto this!
     SGDS_Window = 1,    // A window
-    SGDS_Bitmap = 2     // A surface, bitmap, or texture
+    SGDS_Pixbuf = 3
 } sg_drawing_surface_kind;
 
 //

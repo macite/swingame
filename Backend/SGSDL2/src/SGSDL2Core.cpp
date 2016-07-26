@@ -215,6 +215,7 @@ sg_interface * sg_load(sg_input_callbacks callbacks)
     sgsdl2_load_audio_fns(&_functions);
     sgsdl2_load_graphics_fns(&_functions);
     sgsdl2_load_image_fns(&_functions);
+    sgsdl2_load_pixbuf_fns(&_functions);
     sgsdl2_load_input_fns(&_functions);
     sgsdl2_load_text_fns(&_functions);
     sgsdl2_load_util_fns(&_functions);

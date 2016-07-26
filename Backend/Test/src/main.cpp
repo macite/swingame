@@ -43,17 +43,19 @@ enum test_options
 enum test_drawing_options 
 {
     TEST_COLORS = 1,
-    TEST_READ_PIXELS = 2, 
-    TEST_POSITIONS = 4, 
-    TEST_ALPHA = 8, 
-    TEST_CLIP = 16, 
-    TEST_PIXELS = 32, 
-    TEST_SHAPES = 64, 
-    TEST_RESIZE = 128, 
+    TEST_READ_PIXELS = 2,
+    TEST_POSITIONS = 4,
+    TEST_ALPHA = 8,
+    TEST_CLIP = 16,
+    TEST_PIXELS = 32,
+    TEST_SHAPES = 64,
+    TEST_RESIZE = 128,
     TEST_LINES = 256,
-    TEST_BITMAPS = 512, 
+    TEST_BITMAPS = 512,
     TEST_INPUT = 1024,
-    TEST_FULLSCREEN = 2048
+    TEST_FULLSCREEN = 2048,
+    TEST_DIRECT_PIXSPEED = 4096,
+    TEST_PIXBUF = 8192
 };
 
 void print_options() 
@@ -83,6 +85,8 @@ void print_drawing_options()
     cout << "512: test bitmaps "  << endl; 
     cout << "1024: test input "  << endl; 
     cout << "2048: test fullscreen "  << endl; 
+    cout << "4096: test direct pixel drawing speed "  << endl; 
+    cout << "8192: test pixbuf "  << endl; 
 }
 
 
@@ -921,13 +925,23 @@ bool test_basic_drawing(int drawing_test_run)
     {
         test_pixels( &window, 1);
     }
+
+    if (drawing_test_run & TEST_DIRECT_PIXSPEED)
+    {
+        test_direct_pixel_speed( &window, 1);
+    }
+
+    if (drawing_test_run & TEST_PIXBUF)
+    {
+        test_pixbuf( &window, 1);
+    }
     
     if (drawing_test_run & TEST_FULLSCREEN) 
     {
         _sg_functions->graphics.show_fullscreen(&window, true);
 
         test_rects( &window, 1);
-        
+
         _sg_functions->graphics.show_fullscreen(&window, false);
     }
     
@@ -1174,7 +1188,7 @@ int main(int argc, const char * argv[])
     int test_run = 0; 
     int test_drawing_run = INT_MAX; 
     scanf("%d", &test_run);
-    
+
     if (test_run == 0) 
     {
       test_run |= 255; 
