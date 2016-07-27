@@ -42,7 +42,7 @@ enum test_options
 
 enum test_drawing_options 
 {
-    TEST_COLORS = 1,
+    TEST_COLORS = 1, 
     TEST_READ_PIXELS = 2, 
     TEST_POSITIONS = 4, 
     TEST_ALPHA = 8, 
@@ -53,7 +53,9 @@ enum test_drawing_options
     TEST_LINES = 256,
     TEST_BITMAPS = 512, 
     TEST_INPUT = 1024,
-    TEST_FULLSCREEN = 2048
+    TEST_FULLSCREEN = 2048,
+    TEST_DIRECT_PIXSPEED = 4096,
+    TEST_BITMAP_PIXSPEED = 8192
 };
 
 void print_options() 
@@ -83,6 +85,8 @@ void print_drawing_options()
     cout << "512: test bitmaps "  << endl; 
     cout << "1024: test input "  << endl; 
     cout << "2048: test fullscreen "  << endl; 
+    cout << "4096: test direct pixel drawing speed "  << endl; 
+    cout << "8192: test bitmap pixel drawing speed "  << endl; 
 }
 
 
@@ -408,8 +412,93 @@ void test_pixels(sg_drawing_surface *window_arr, int sz)
         
         _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
         refresh_or_draw(&window_arr[w]);
-	_sg_functions->input.process_events();
+        _sg_functions->input.process_events();
     }
+}
+
+
+void test_direct_pixel_speed(sg_drawing_surface *window_arr, int sz)
+{
+    _sg_functions->input.process_events();
+    for (int cnt = 0; cnt < 5; cnt++)
+    {
+        for (int w = 0; w < sz; w++)
+        {
+            float data[] = {0,0};
+
+            int start_time = _sg_functions->utils.get_ticks();
+            for (int y = 0; y < 600; y++)
+            {
+                for (int x = 0; x < 800; x++)
+                {
+                    data[0] = x;
+                    data[1] = y;
+                    _sg_functions->graphics.draw_pixel(&window_arr[w], {1.0,0,0,1.0}, data, 2 );
+                }
+            }
+
+            int end_time = _sg_functions->utils.get_ticks();
+
+            _sg_functions->input.process_events();
+            refresh_or_draw(&window_arr[w]);
+
+            cout << "Direct pixel drawing time for window " << w
+                 << " was " << end_time - start_time << "ms" << endl;
+        }
+    } 
+    cout << endl;
+}
+
+void test_bitmap_pixel_speed(sg_drawing_surface *window_arr, int sz)
+{
+	_sg_functions->input.process_events();
+    for (int w = 0; w < sz; w++)
+    {
+        _sg_functions->graphics.clear_drawing_surface(&window_arr[w], {1.0, 1.0, 1.0, 1.0});
+        refresh_or_draw(&window_arr[w]);
+    _sg_functions->input.process_events();
+    }
+    
+    _sg_functions->input.process_events();
+    sg_drawing_surface bitmap = _sg_functions->image.create_bitmap(800, 600);
+    for (int cnt = 0; cnt < 5; cnt++)
+    {
+        for (int w = 0; w < sz; w++)
+        {
+            float data[2];
+            int start_time = _sg_functions->utils.get_ticks();
+
+            _sg_functions->graphics.clear_drawing_surface( &bitmap, {1,1,1,1} );
+
+            for (int y = 0; y < 600; y++)
+            {
+                for (int x = 0; x < 800; x++)
+                {
+                    data[0] = x;
+                    data[1] = y;
+                    _sg_functions->graphics.draw_pixel(&bitmap, {0,0,1,1}, data, 2 );
+                }
+            }
+
+            int mid_time = _sg_functions->utils.get_ticks();
+
+            float srcDat[] = { 0, 0, 0, 0, 0, 1, 1 };
+            float dstDat[] = { 0, 0, 0, 0 };
+
+            _sg_functions->image.draw_bitmap(&bitmap, &window_arr[w],srcDat,7,dstDat,4,SG_FLIP_NONE);
+
+            int end_time = _sg_functions->utils.get_ticks();
+
+            _sg_functions->input.process_events();
+            refresh_or_draw(&window_arr[w]);
+
+            cout << "Pixel drawing time to bitmap was " << mid_time - start_time << "ms" << endl;
+            cout << "Drawing time from bitmap to window " << w  << " was "
+                 << end_time - mid_time << "ms" << endl;
+        }
+    }
+    _sg_functions->graphics.close_drawing_surface(&bitmap);
+    cout << endl;
 }
 
 
@@ -927,7 +1016,7 @@ bool test_basic_drawing(int drawing_test_run)
         _sg_functions->graphics.show_fullscreen(&window, true);
 
         test_rects( &window, 1);
-        
+
         _sg_functions->graphics.show_fullscreen(&window, false);
     }
     
@@ -983,18 +1072,18 @@ bool test_window_operations()
     sg_drawing_surface w[2];
     w[0] = _sg_functions->graphics.open_window("Window 1", 800, 600);
     w[1] = _sg_functions->graphics.open_window("Window 2", 300, 300);
-    
+
     _sg_functions->input.move_window(&w[1], 0, 0);
-    
+
 
     _sg_functions->graphics.show_border(&w[0], false);
-    
+
     if ( w[0].width != 800 ) cout << " >> Error with w[0] width! " << w[0].width << endl;
     if ( w[1].width != 300 ) cout << " >> Error with w[1] width! " << w[1].width << endl;
-    
+
     if ( w[0].height != 600 ) cout << " >> Error with w[0] height! " << w[0].height << endl;
     if ( w[1].height != 300 ) cout << " >> Error with w[1] height! " << w[1].height << endl;
-    
+
     test_colors(w, 2);
     test_clip(w, 2);
     test_pixels(w, 2);
@@ -1004,7 +1093,7 @@ bool test_window_operations()
     test_ellipses(w, 2);
     test_lines(w, 2);
     test_bitmaps(w, 2);
-    
+
     test_input(w, 2);
 
     _sg_functions->graphics.close_drawing_surface(&w[0]);
@@ -1174,7 +1263,7 @@ int main(int argc, const char * argv[])
     int test_run = 0; 
     int test_drawing_run = INT_MAX; 
     scanf("%d", &test_run);
-    
+
     if (test_run == 0) 
     {
       test_run |= 255; 
@@ -1187,13 +1276,13 @@ int main(int argc, const char * argv[])
     }
 
     output_system_details();
-    
+
     if (test_run & BASIC_DRAWING && ! test_draw_bitmap_without_window() )
     {
         cout << "Drawing to bitmap without window failed..." << endl;
         return -1;
     }
-    
+
     if (test_run & BASIC_DRAWING && ! test_basic_drawing(test_drawing_run) )
     {
         cout << "Basic drawing failed with error: " << endl;
@@ -1234,7 +1323,7 @@ int main(int argc, const char * argv[])
     {
         test_text();
     }
-    
+
     if (test_run & NETWORK)
     {
         test_network();

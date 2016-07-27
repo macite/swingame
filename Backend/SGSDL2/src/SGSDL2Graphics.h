@@ -27,6 +27,13 @@ unsigned int _sgsdl2_renderer_count(sg_drawing_surface *surface);
 SDL_Renderer * _sgsdl2_prepared_renderer(sg_drawing_surface* surface, unsigned int idx);
 void _sgsdl2_complete_render(sg_drawing_surface* surface, unsigned int idx);
 
+typedef enum sg_bitmap_draw_loc
+{
+    SG_BITMAP_TEXTURE,
+    SG_BITMAP_SURFACE,
+    SG_BITMAP_NONE
+} sg_bitmap_draw_loc;
+
 typedef struct sg_window_be
 {
     SDL_Window *    window;
@@ -44,12 +51,13 @@ typedef struct sg_window_be
 typedef struct sg_bitmap_be
 {
     // 1 texture per open window
-    SDL_Texture **  texture;
-    SDL_Surface *   surface;
-    bool            clipped;
-    SDL_Rect        clip;
+    SDL_Texture **      texture;
+    SDL_Surface *       surface;
+    sg_bitmap_draw_loc  last_draw_loc;
+    bool                clipped;
+    SDL_Rect            clip;
     
-    bool            drawable; // can be drawn on
+    bool                drawable; // can be drawn on
 } sg_bitmap_be;
 
 
