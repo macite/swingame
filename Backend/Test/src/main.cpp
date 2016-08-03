@@ -426,9 +426,8 @@ void test_direct_pixel_speed(sg_drawing_surface *window_arr, int sz)
         for (int w = 0; w < sz; w++)
         {
             float data[] = {0,0};
-
             int start_time = _sg_functions->utils.get_ticks();
-            for (int y = 0; y < 600; y++)
+            for (int y = 0; y < (120 * cnt); y++)
             {
                 for (int x = 0; x < 800; x++)
                 {
@@ -444,7 +443,7 @@ void test_direct_pixel_speed(sg_drawing_surface *window_arr, int sz)
             refresh_or_draw(&window_arr[w]);
 
             cout << "    Direct pixel drawing time for window " << w
-                 << " was " << end_time - start_time << "ms" << endl;
+                 << " with area of 800x" << cnt * 120 << " was " << end_time - start_time << "ms" << endl;
         }
     }
     cout << endl;
@@ -472,7 +471,7 @@ void test_bitmap_pixel_speed(sg_drawing_surface *window_arr, int sz)
 
             _sg_functions->graphics.clear_drawing_surface( &bitmap, {1,1,1,1} );
 
-            for (int y = 0; y < 600; y++)
+            for (int y = 0; y < (120 * cnt); y++)
             {
                 for (int x = 0; x < 800; x++)
                 {
@@ -973,6 +972,11 @@ bool test_basic_drawing(int drawing_test_run)
 {
     cout << "Testing Basic Drawing!" << endl;
     cout << drawing_test_run << endl;
+
+    if (!drawing_test_run)
+    {
+        drawing_test_run = -1;
+    }
 
     sg_drawing_surface window;
     window = _sg_functions->graphics.open_window("Test Basic Drawing", 800, 600);
