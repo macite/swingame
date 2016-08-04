@@ -24,6 +24,7 @@ typedef enum sg_drawing_surface_kind
 {
     SGDS_Unknown = 0,   // Unknown, so do not draw onto this!
     SGDS_Window = 1,    // A window
+    SGDS_Bitmap = 2,
     SGDS_Pixbuf = 3
 } sg_drawing_surface_kind;
 
@@ -38,7 +39,7 @@ typedef struct sg_drawing_surface
     sg_drawing_surface_kind kind;
     int width;
     int height;
-    
+
     // private data used by the backend
     void * _data;
 } sg_drawing_surface;
@@ -65,7 +66,7 @@ typedef struct sg_display
     unsigned int    format;
     unsigned int    num_modes;
     sg_mode *       modes;
-    
+
     // private data used by the backend
     void * _data;
 } sg_display;
@@ -84,7 +85,7 @@ typedef struct sg_system_data
     unsigned int    num_displays;
     sg_display    * displays;
     sg_audiospec    audio_specs;
-    
+
 } sg_system_data;
 
 typedef enum sg_font_kind
@@ -114,7 +115,7 @@ typedef enum sg_sound_kind
 typedef struct sg_sound_data
 {
     sg_sound_kind kind;
-    
+
     // private data used by backend
     void * _data;
 } sg_sound_data;
@@ -129,12 +130,12 @@ typedef enum sg_connection_kind
 typedef struct sg_network_connection
 {
     sg_connection_kind kind;
-    
+
     // private data used by the backend
     void * _socket;
 } sg_network_connection;
 
-    
+
 typedef void *pointer;
 
 typedef struct sg_window_data
@@ -144,11 +145,11 @@ typedef struct sg_window_data
     int mouse_over;
     int shown;
 } sg_window_data;
-    
+
 #ifdef __cplusplus
 }
 #endif
-    
+
 // Stop aligning structs to one byte boundaries
 //#pragma pack(pop)
 

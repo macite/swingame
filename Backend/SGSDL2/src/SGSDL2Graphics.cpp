@@ -1025,7 +1025,7 @@ void sgsdl2_clear_drawing_surface(sg_drawing_surface *surface, sg_color clr)
         case SGDS_Pixbuf:
             _sgsdl2_clear_pixbuf(surface, clr);
             break;
-            
+
         case SGDS_Unknown:
             break;
     }
@@ -1419,7 +1419,7 @@ void sgsdl2_draw_pixel(sg_drawing_surface *surface, sg_color clr, float *data, i
         _set_pixel(static_cast<sg_pixbuf_be *>(surface->_data)->surface, clr, x1, y1);
         return;
     }
-    
+
     unsigned int count = _sgsdl2_renderer_count(surface);
 
     for (unsigned int i = 0; i < count; i++)
@@ -1657,10 +1657,10 @@ void sgsdl2_set_clip_rect(sg_drawing_surface *surface, float *data, int data_sz)
             pixbuf_be->clipped = true;
 
             #ifdef WINDOWS
-              pixbuf_be->clip = { x1, y1, w, h };
+              pixbuf_be->surface->clip_rect = { x1, y1, w, h };
             #else
               //HACK: Current hack to fix SDL clip rect error
-              pixbuf_be->clip = { x1, surface->height - h - y1, w, h };
+              pixbuf_be->surface->clip_rect = { x1, surface->height - h - y1, w, h };
             #endif
 
             break;
@@ -1716,7 +1716,7 @@ void sgsdl2_clear_clip_rect(sg_drawing_surface *surface)
 
             break;
         }
-      
+
         case SGDS_Unknown:
             break;
     }
@@ -2030,7 +2030,7 @@ sg_drawing_surface sgsdl2_create_bitmap(int width, int height)
     sg_drawing_surface result = { SGDS_Unknown, 0, 0, NULL };
 
     result.kind = SGDS_Bitmap;
-    
+
     sg_bitmap_be *data = static_cast<sg_bitmap_be *>(malloc(sizeof(sg_bitmap_be)));
 
     result._data = data;
@@ -2072,7 +2072,7 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
         std::cout << "error loading image " << IMG_GetError() << std::endl;
         return result;
     }
-    
+
     sg_bitmap_be *data = static_cast<sg_bitmap_be *>(malloc(sizeof(sg_bitmap_be)));
 
     result._data = data;
@@ -2294,7 +2294,7 @@ void sgsdl2_draw_pixbuf( sg_drawing_surface * src, sg_drawing_surface * dst, flo
 	// Adjust centre to be relative to the bitmap centre rather than top-left
 	centre_x = (centre_x * scale_x) + dst_rect.w / 2.0f;
 	centre_y = (centre_y * scale_y) + dst_rect.h / 2.0f;
-	
+
     unsigned int count = _sgsdl2_renderer_count(dst);
 
     for (unsigned int i = 0; i < count; i++)
@@ -2322,7 +2322,7 @@ void sgsdl2_draw_pixbuf( sg_drawing_surface * src, sg_drawing_surface * dst, flo
             static_cast<int>(centre_y)
         };
 		SDL_RendererFlip sdl_flip = static_cast<SDL_RendererFlip>((flip == SG_FLIP_BOTH) ? (SDL_FLIP_HORIZONTAL | SDL_FLIP_VERTICAL) : flip); //SDL does not have a FLIP_BOTH
-		
+
 		//Render
         SDL_RenderCopyEx(renderer, srcT, &src_rect, &dst_rect, angle, &centre, sdl_flip);
 

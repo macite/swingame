@@ -21,6 +21,7 @@
 
 void sgsdl2_load_graphics_fns(sg_interface *functions);
 void sgsdl2_load_image_fns(sg_interface *functions);
+void sgsdl2_load_pixbuf_fns(sg_interface *functions);
 void sgsdl2_finalise_graphics();
 
 unsigned int _sgsdl2_renderer_count(sg_drawing_surface *surface);
@@ -35,7 +36,7 @@ typedef struct sg_window_be
     bool            clipped;
     SDL_Rect        clip;
     unsigned int    idx;
-    
+
     // Event data store
     sg_window_data  event_data;
     sg_drawing_surface *surface;
@@ -48,7 +49,7 @@ typedef struct sg_bitmap_be
     SDL_Surface *       surface;
     bool                clipped;
     SDL_Rect            clip;
-    
+
     bool                drawable; // can be drawn on
 } sg_bitmap_be;
 
