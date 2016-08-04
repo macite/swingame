@@ -1918,6 +1918,8 @@ sg_drawing_surface sgsdl2_load_bitmap(const char * filename)
 
     bitmap->last_draw_loc = SG_BITMAP_SURFACE;
 
+    SDL_FreeSurface(surface);
+
     return result;
 }
 
