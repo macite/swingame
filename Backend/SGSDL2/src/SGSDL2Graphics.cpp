@@ -1865,7 +1865,6 @@ sg_drawing_surface sgsdl2_create_bitmap(int width, int height)
     data->clipped = false;
     data->clip = {0, 0, width, height};
 
-    data->drawable = true;
     data->last_draw_loc = SG_BITMAP_NONE;
 
     data->surface = SDL_CreateRGBSurface(0, width, height, 32, 0xff000000, 0xff0000, 0xff00, 0xff);

@@ -42,7 +42,7 @@ typedef struct sg_window_be
     bool            clipped;
     SDL_Rect        clip;
     unsigned int    idx;
-    
+
     // Event data store
     sg_window_data  event_data;
     sg_drawing_surface *surface;
@@ -56,8 +56,6 @@ typedef struct sg_bitmap_be
     sg_bitmap_draw_loc  last_draw_loc;
     bool                clipped;
     SDL_Rect            clip;
-    
-    bool                drawable; // can be drawn on
 } sg_bitmap_be;
 
 
