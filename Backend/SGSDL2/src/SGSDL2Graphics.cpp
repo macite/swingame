@@ -289,16 +289,6 @@ void _sgsdl2_add_window(sg_window_be * window)
     }
 }
 
-bool _sgsdl2_has_open_bitmap_without_surface()
-{
-    for (uint i = 0; i < _sgsdl2_num_open_bitmaps; i++)
-    {
-        if ( ! _sgsdl2_open_bitmaps[i]->surface ) return true;
-    }
-
-    return false;
-}
-
 void _sgsdl2_get_pixels_from_renderer(SDL_Renderer *renderer, int x, int y, int w, int h, int *pixels)
 {
     SDL_Rect rect = {x, y, w, h};
@@ -387,7 +377,7 @@ void _sgsdl2_remove_window(sg_window_be * window_be)
         exit(-1);
     }
 
-    if ( _sgsdl2_num_open_windows == 1 && _sgsdl2_has_open_bitmap_without_surface() )
+    if ( _sgsdl2_num_open_windows == 1 )
     {
         // Need to keep a window open to retain the bitmap surface
         _sgsdl2_bitmaps_to_surface();
