@@ -2,10 +2,10 @@
 {
     get
     {
-        return this._%(field_name)s;
+        return this._%(getter_name)s;
     }
     set
     {
-        _%(field_name)s = value;
+        _%(field_name)s = %(setter_trans)s;
     }
 }
