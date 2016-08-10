@@ -31,12 +31,13 @@ _type_switcher = {
     'rectangle': 'Rectangle',
     'quad': 'Quad',
     'sprite': 'Sprite',
-    
+
     'font': 'Font',
     'fontalignment': 'FontAlignment',
     'fontstyle': 'FontStyle',
     'mousebutton': 'MouseButton',
     'boolean': 'Boolean',
+    'longbool': 'LongBool',
     'keycode': 'KeyCode',
 
     'linesarray':               'LineSegmentPtr',
@@ -65,12 +66,12 @@ _type_switcher = {
     #...
     'shapeprototype': 'ShapePrototype',
     'shape': 'Shape',
-    
+
     'shapekind':            'ShapeKind',
     'animation':            'Animation',
     'animationscript':      'AnimationScript',
     'collisiontestkind':    'CollisionTestKind',
-    
+
     'bitmapcell':           'BitmapCell',
     'finger':               'Finger',
     'resolution':           'Resolution',
@@ -103,27 +104,26 @@ _type_switcher = {
     'guielementkind': 'GUIElementKind',
 
 }
- 
+
 
 def main():
     '''Load all of the files in this directory into attributes of this module.'''
-    (path, script_file) = os.path.split(sys.modules[__name__].__file__) 
+    (path, script_file) = os.path.split(sys.modules[__name__].__file__)
     dirList=os.listdir(path)
-    
+
     for f in dirList:
         if '.py' in f or f[0] == '.' : continue
-        
+
         (dirName, fileName) = os.path.split(f)
         key = fileName.replace('.', '_')
         #print key
-        
+
         fin = open(path + '/' + f)
         data = fin.read()
         fin.close()
-        
+
         setattr(sys.modules[__name__], key, data)
-    
+
 
 
 main()
-

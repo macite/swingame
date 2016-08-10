@@ -771,6 +771,7 @@ _struct_type_switcher = {
     'bitmapcell': 'internal BitmapCell _%s',
 
     'boolean property': 'public bool %s',
+    'longbool property': 'public bool %s',
 }
 
 
@@ -837,6 +838,7 @@ _type_dictionary_creation_data = [
     {
         'identifiers': [
             ('boolean',     'bool',     'int'),
+            ('longbool',    'bool',     'int'),
         ],
         '_type_switcher': {
             None:       '#2# %s',

@@ -268,9 +268,9 @@ interface
       angle : Single;           // Angle for rotations
       anchoroffsetX : Single;   // Centre point for rotations
       anchoroffsetY : Single;   //
-      flipX : Boolean;          // Flip data
-      flipY : Boolean;          //
-      isPart : Boolean;         // Draw just a part?
+      flipX : LongBool;         // Flip data
+      flipY : LongBool;         //
+      isPart : LongBool;        // Draw just a part?
       part : Rectangle;         // Part to draw
       camera: DrawingDest;      // Draw to world or screen coordinates (camera has effect?)
       lineWidth: Longint;       // Specify the width of line drawings.

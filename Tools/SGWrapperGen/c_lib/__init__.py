@@ -17,7 +17,8 @@ _val_switcher = {
 
 _data_switcher = {
     #Pascal type: what values of this type switch to %s = data value
-    'Boolean': '%s != 0'
+    'Boolean': '%s != 0',
+    'LongBool': '%s != 0'
 }
 
 _type_switcher = {
@@ -45,18 +46,18 @@ _adapter_type_switcher = {
 }
 
 _type_dicts = {
-    '_type_switcher': _type_switcher, 
+    '_type_switcher': _type_switcher,
     '_adapter_type_switcher': _adapter_type_switcher,
     }
 
 #
 # The _type_dictionary_creation_data contains the data used to build
 # the dictionaries for creating the type conversion details.
-# 
+#
 # This cant use standard template string (%s) as the string values
 # must contain the %s for the dictionary. So the string must have
 # the #2# replaced by the 2nd element of the tupple eg.
-# 
+#
 # The data in the identifiers list of tupples is merged into the
 # dictionaries indicated by the remaining keys. The #1# values are
 # taken from the tupples within the identifiers list. This allows
@@ -68,6 +69,7 @@ _type_dictionary_creation_data = [
     {
         'identifiers': [
             ('boolean',     'bool'),
+            ('longbool',    'int32_t'),
             ('byte',        'unsigned char'),
             ('longword',    'uint32_t'),
             ('single',      'float'),
@@ -96,7 +98,7 @@ _type_dictionary_creation_data = [
             'return':   '#2#',
         }
     },
-    # resource types 
+    # resource types
     {
         'identifiers': [
             ('soundeffect',     'sound_effect'),
@@ -131,7 +133,7 @@ _type_dictionary_creation_data = [
             'return':       '#2#',
         }
     },
-    # message 
+    # message
     {
         'identifiers': [
             ('messageptr',      'struct _message_link *'),
@@ -205,7 +207,7 @@ _type_dictionary_creation_data = [
             ('spritefunction',       'sprite_function'),
             ('spritesinglefunction', 'sprite_single_function'),
 
-            
+
         ],
         '_type_switcher': {
             None:       '#2# ',
@@ -306,7 +308,7 @@ _type_dictionary_creation_data = [
         '_type_switcher': {
             None:       '#2# ', #used for _byval methods
             'const':    'const #2# *', #const parameters in Pascal are passed by reference
-            'const-cpp':    'const #2# &', 
+            'const-cpp':    'const #2# &',
             'var':      '#2# *',
             'var-cpp':      '#2# &',
             'out':      '#2# *',
@@ -383,17 +385,17 @@ _type_dictionary_creation_data = [
             ('message[0..n - 1]',                       'message *'),
             ('connection[0..n - 1]',                    'connection *'),
             ('httpheader[0..n - 1]',                    'http_header *'),
-          
+
             ('point2d[0..2]',                           'point2d %s[3]'),
             ('single[0..2][0..2]',                      'float %s[3][3]'),
             ('point2d[0..3]',                           'point2d %s[4]'),
-            
+
             ('pttf_font',                               'void *'),
             ('pmix_chunk',                              'void *'),
             ('pmix_music',                              'void *'),
             ('psdl_surface',                            'void *'),
             ('shapedrawingfn',                          'void *'),
-            
+
             ('namedindexcollection',                    'named_index_collection ',),
             # ('animationframe',                          'animation_frame '),
         ],
@@ -413,18 +415,18 @@ def _add_to_dict(into_dict, details_dict, ident_tupple):
         for idx,part in enumerate(ident_tupple):
             to_ins = to_ins.replace('#%d#' % (idx + 1), ident_tupple[idx] if not ident_tupple[idx] is None else '')
         # print 'inserting -> ', key, ':', to_ins
-        
+
         if  ident_tupple[0] in into_dict[key]:
             print 'ERROR: Adding into type dictionary : ', into_dict[key][ident_tupple[0]]
             print 'key: ', key, 'type', ident_tupple[0]
             assert False
-        
+
         into_dict[key][ident_tupple[0]] = to_ins
 
 def build_type_dictionary(type_dictionary_creation_data, dicts):
     """Builds the conversion dictionary."""
     my_keys = dicts.keys()
-    
+
     for type_mapping in type_dictionary_creation_data:
         #print type_mapping
         # Process each type in this type mapping
@@ -436,25 +438,25 @@ def build_type_dictionary(type_dictionary_creation_data, dicts):
 
 def main():
     '''Load all of the files in this directory into attributes of this module.'''
-    (path, script_file) = os.path.split(sys.modules[__name__].__file__) 
+    (path, script_file) = os.path.split(sys.modules[__name__].__file__)
     dirList=os.listdir(path)
-    
+
     for f in dirList:
         if '.py' in f or f[0] == '.' : continue
-        
+
         (dirName, fileName) = os.path.split(f)
         key = fileName.replace('.', '_')
         #print key
-        
+
         fin = open(path + '/' + f)
         data = fin.read()
         fin.close()
-        
+
         setattr(sys.modules[__name__], key, data)
-    
+
     build_type_dictionary(_type_dictionary_creation_data, _type_dicts)
-    
+
     # print _type_switcher
-    
+
 
 main()

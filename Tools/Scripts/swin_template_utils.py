@@ -337,23 +337,23 @@ template_details = {
               ],
               'pre_copy_script': None,
           },
-      'ObjC': {
-              'script':       'create_objc_library.py',
-
-              'use_sgsdk':    True,
-              'libsgsdk':     False,
-
-              'copy_dist':    [
-                  {
-                      'target':       'gcc',
-                      'os':           [ 'Mac OS X' ],
-                      'lib':          'lib',
-                      'staticsgsdk':  False,
-                      'post_copy':    make_sh_exec
-                  },
-              ],
-              'pre_copy_script': None,
-           },
+    #   'ObjC': {
+    #           'script':       'create_objc_library.py',
+      #
+    #           'use_sgsdk':    True,
+    #           'libsgsdk':     False,
+      #
+    #           'copy_dist':    [
+    #               {
+    #                   'target':       'gcc',
+    #                   'os':           [ 'Mac OS X' ],
+    #                   'lib':          'lib',
+    #                   'staticsgsdk':  False,
+    #                   'post_copy':    make_sh_exec
+    #               },
+    #           ],
+    #           'pre_copy_script': None,
+    #        },
     'CSharp':   {
             'script':       'create_csharp_library.py',
             'use_sgsdk':    True,
