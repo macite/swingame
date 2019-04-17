@@ -1,3 +1,7 @@
+So long and thanks for all the fish!
+
+SwinGame is no longer an active project. There was a large re-write of this to make it easier to create cross platform and cross language versions. The new product is [SplashKit](https://splashkit.io) - this supports a similar interface to SwinGame, but is faster and easier to work with.
+
 # SwinGame 
 
 SwinGame aims to be a simple 2D game development library targetted at beginner programmers who want to get started making games ASAP!
