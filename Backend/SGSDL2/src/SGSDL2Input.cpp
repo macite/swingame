@@ -247,8 +247,7 @@ void sgsdl2_warp_mouse(sg_drawing_surface *surface, int x, int y)
         }
 
         case SGDS_Bitmap:
-            break;
-
+        case SGDS_Pixbuf:
         case SGDS_Unknown:
             break;
     }
@@ -276,8 +275,7 @@ void sgsdl2_window_position(sg_drawing_surface *surface, int *x, int *y)
         }
 
         case SGDS_Bitmap:
-            break;
-
+        case SGDS_Pixbuf:
         case SGDS_Unknown:
             break;
     }

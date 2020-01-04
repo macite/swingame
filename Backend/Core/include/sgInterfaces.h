@@ -162,6 +162,17 @@ extern "C" {
         sg_drawing_surface_surface_proc * draw_bitmap;
     } sg_image_interface;
 
+    // Pixbuf related functions
+    //
+    // = creating and drawing pixbufs
+    //
+    typedef struct sg_pixbuf_interface
+    {
+        sg_create_surface_fn * create_pixbuf;
+        sg_drawing_surface_surface_proc * draw_pixbuf;
+
+    } sg_pixbuf_interface;
+
     //
     // Audio related functions
     //
@@ -403,6 +414,7 @@ extern "C" {
         sg_audio_interface      audio;
         sg_graphics_interface   graphics;
         sg_image_interface      image;
+        sg_pixbuf_interface     pixbuf;
         sg_input_interface      input;
         sg_text_interface       text;
         sg_utils_interface      utils;
